@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EF.Core.Expansion.Dynamic" Version="1.0.0" />
+    <PackageReference Include="Funcular.DotNetCore.IdGenerators.Net" Version="1.0.0" />
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy $(TargetPath) $(SolutionDir)Lib /y" />
+  </Target>
+
+</Project>

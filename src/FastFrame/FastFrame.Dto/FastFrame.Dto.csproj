@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FastFrame.Entity\FastFrame.Entity.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Dtos\Dtos.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Dtos.txt</LastGenOutput>
+    </None>
+    <None Update="Dtos\Dtos.txt">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Dtos.tt</DependentUpon>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+</Project>

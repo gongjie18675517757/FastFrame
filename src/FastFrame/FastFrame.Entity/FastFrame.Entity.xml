@@ -1,0 +1,124 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>FastFrame.Entity</name>
+    </assembly>
+    <members>
+        <member name="P:FastFrame.Entity.BaseEntity.Id">
+            <summary>
+            主键
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.BaseEntity.OrganizeId">
+            <summary>
+            组织
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.BaseEntity.IsDeleted">
+            <summary>
+            删除码
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.IEntity.Id">
+             <summary>
+            主键
+             </summary>
+        </member>
+        <member name="P:FastFrame.Entity.IEntity.OrganizeId">
+            <summary>
+            组织
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.IEntity.IsDeleted">
+            <summary>
+            删除
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.System.Foreign">
+            <summary>
+            表外键信息
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.System.Foreign.EntityId">
+            <summary>
+            数据行ID
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.System.Foreign.CreateUserId">
+            <summary>
+            创建人
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.System.Foreign.CreateTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.System.Foreign.ModifyUserId">
+            <summary>
+            修改人
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.System.Foreign.ModifyTime">
+            <summary>
+            修改时间
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.System.User">
+            <summary>
+            登陆用户
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.System.User.Account">
+            <summary>
+            帐号
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.System.User.Password">
+            <summary>
+            密码
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.System.User.EncryptionKey">
+            <summary>
+            密钥
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.System.User.Name">
+            <summary>
+            姓名
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.System.User.Email">
+            <summary>
+            邮箱
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.System.User.PhoneNumber">
+            <summary>
+            手机号码
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.System.User.HandIconId">
+            <summary>
+            头像
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.System.User.IsAdmin">
+            <summary>
+            是否管理员
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.System.User.IsDisabled">
+            <summary>
+            是否禁用
+            </summary>      
+        </member>
+        <member name="M:FastFrame.Entity.System.User.GeneratePassword(System.String)">
+            <summary>
+            生成密码
+            </summary>
+            <param name="password"></param>
+        </member>
+    </members>
+</doc>

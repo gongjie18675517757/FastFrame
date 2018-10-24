@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -7,6 +8,10 @@ namespace FastFrame.Infrastructure
 {
     public static class Extension
     {
+        public static void WriteCodeLine(this StreamWriter writer, string line, int tagCount = 0)
+        {
+            writer.WriteLine($"{new string('\t', tagCount)}{line}");
+        }
         /// <summary>
         /// 判空
         /// </summary>

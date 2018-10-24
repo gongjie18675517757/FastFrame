@@ -12,7 +12,7 @@ using EF.Core.Expansion.Dynamic;
 using FastFrame.Infrastructure;
 
 namespace FastFrame.Repository
-{ 
+{
     public abstract class BaseRepository<T> : BaseUnitOrWork, IRepository<T> where T : class, IEntity
     {
         private readonly DataBase context;
@@ -31,11 +31,11 @@ namespace FastFrame.Repository
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public async Task<T> AddAsync(T entity)
+        public virtual async Task<T> AddAsync(T entity)
         {
             /*验证唯一性+关联性*/
-            entity.Id = Infrastructure.IdGenerate.NetId();
-            entity.OrganizeId = currUser.OrganizeId;
+            entity.Id = IdGenerate.NetId();
+            entity.OrganizeId = currentUserProvider.GetCurrOrganizeId();
             await Verification(entity);
             await context.Set<Entity.System.Foreign>().AddAsync(new Entity.System.Foreign()
             {
@@ -43,7 +43,7 @@ namespace FastFrame.Repository
                 Id = Infrastructure.IdGenerate.NetId(),
                 CreateTime = DateTime.Now,
                 CreateUserId = currUser.Id,
-                OrganizeId = currUser.OrganizeId,
+                OrganizeId = currentUserProvider.GetCurrOrganizeId(),
             });
 
             var entityEntry = context.Entry(entity);
@@ -51,7 +51,12 @@ namespace FastFrame.Repository
             return entityEntry.Entity;
         }
 
-        public async Task Verification(T entity)
+        /// <summary>
+        /// 验证数据
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public virtual async Task Verification(T entity)
         {
             /*验证唯一性
              *1,组合唯一
@@ -93,7 +98,7 @@ namespace FastFrame.Repository
         /// 删除
         /// </summary>
         /// <param name="entity"></param>
-        public async Task Delete(T entity)
+        public virtual async Task Delete(T entity)
         {
             //context.Set<T>().Remove(entity);
             entity.IsDeleted = true;
@@ -109,34 +114,46 @@ namespace FastFrame.Repository
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task DeleteAsync(string id)
+        public virtual async Task DeleteAsync(string id)
         {
             var entity = await Queryable.FirstOrDefaultAsync(x => x.Id == id);
             await Delete(entity);
-        } 
+        }
 
         /// <summary>
         /// 获取单条数据
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<T> GetAsync(string id)
+        public virtual async Task<T> GetAsync(string id)
         {
             return await Queryable.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         /// <summary>
-        /// 获取查询表达式
+        /// 查询表达式
         /// </summary>
         /// <returns></returns>
-        public IQueryable<T> Queryable => context.Set<T>().Where(x => x.OrganizeId == currUser.OrganizeId);
+        public virtual IQueryable<T> Queryable
+        {
+            get
+            {
+                if (currUser != null && currUser.IsRoot)
+                    return context.Set<T>();
+                else
+                {
+                    var organizeId = currentUserProvider.GetCurrOrganizeId();
+                    return context.Set<T>().Where(x => x.OrganizeId == organizeId);
+                }
+            }
+        }
 
         /// <summary>
         /// 更新数据
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public async Task<T> Update(T entity)
+        public virtual async Task<T> Update(T entity)
         {
             /*需要验证唯一性和关联性*/
             var foreign = await context.Set<Entity.System.Foreign>().FirstOrDefaultAsync(x => x.EntityId == entity.Id);

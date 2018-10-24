@@ -37,17 +37,4 @@ namespace FastFrame.UnitTest
             Assert.AreEqual(id.Length, 25);
         }
     }
-
-    [TestClass]
-    public class Test_T4Help
-    {
-        [TestMethod]
-        public void Test_GetClassSummary()
-        {
-            var type = typeof(Entity.System.Foreign);
-            var path = @"D:\CoreProject\FastFrame\src\FastFrame\Lib";
-            var summany = T4Help.GetClassSummary(type, path);
-            Assert.AreEqual("表外键信息", summany);
-        }
-    }
 }

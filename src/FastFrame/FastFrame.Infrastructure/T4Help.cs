@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Reflection;
+
 
 namespace FastFrame.Infrastructure
-{
+{ 
     public class T4Help
     {
         /// <summary>
@@ -18,6 +20,45 @@ namespace FastFrame.Infrastructure
             return baseType.Assembly.GetTypes().Where(x => baseType.IsAssignableFrom(x) && x.IsClass && !x.IsAbstract);
         }
 
+        /// <summary>
+        /// 返回有标记导出的实体
+        /// </summary>
+        /// <param name="baseType"></param>
+        /// <returns></returns>
+        public static IEnumerable<Type> GetExportTypes(Type baseType)
+        {
+            return GetClassTypes(baseType).Where(x => x.GetCustomAttribute<Attrs.ExportAttribute>() != null);
+        }
+
+        /// <summary>
+        /// 获取类型名称
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static string GetTypeName(Type type)
+        {
+            var name = type.Name;
+            var isNullable = false;
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+            {
+                name = type.GetGenericArguments()[0].Name;
+                isNullable = true;
+            }
+            switch (name)
+            {
+                case "String":
+                    name = "string";
+                    break;
+                case "Boolean":
+                    name = "bool";
+                    break;
+                default:
+                    break;
+            }
+            return isNullable ? $"Nullable<{name}>" : name;
+        }
+
+       
         /// <summary>
         /// 判断文件是否存在过
         /// </summary>
@@ -53,6 +94,17 @@ namespace FastFrame.Infrastructure
         public static string GetClassSummary(Type type, string basePath)
         {
             return DescriptionHelp.GetDescription(type, basePath);
+        }
+
+        /// <summary>
+        /// 返回属性注释
+        /// </summary>
+        /// <param name="property"></param>
+        /// <param name="basePath"></param>
+        /// <returns></returns>
+        public static string GetPropertySummary(PropertyInfo property, string basePath)
+        {
+            return DescriptionHelp.GetPropSummary(property.DeclaringType, property, basePath);
         }
     }
 

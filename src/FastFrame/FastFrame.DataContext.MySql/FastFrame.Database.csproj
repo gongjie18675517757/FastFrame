@@ -13,10 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Mapping\Mapping.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Mapping.cs</LastGenOutput>
-    </None>
     <None Update="Mapping\Mapping.txt">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -29,11 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Mapping\Mapping.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Mapping.tt</DependentUpon>
-    </Compile>
+    <Folder Include="Mapping\Templates\" />
   </ItemGroup>
 
 </Project>

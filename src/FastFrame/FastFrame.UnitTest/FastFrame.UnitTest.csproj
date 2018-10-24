@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FastFrame.CodeGenerate\FastFrame.CodeGenerate.csproj" />
     <ProjectReference Include="..\FastFrame.Entity\FastFrame.Entity.csproj" />
     <ProjectReference Include="..\FastFrame.Infrastructure\FastFrame.Infrastructure.csproj" />
   </ItemGroup>

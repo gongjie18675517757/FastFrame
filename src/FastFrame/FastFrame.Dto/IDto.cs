@@ -6,8 +6,7 @@ namespace FastFrame.Dto
     /// DTO接口
     /// </summary>
     public interface IDto
-    {
-        string Id { get;  }
+    { 
     }
 
     /// <summary>

@@ -20,11 +20,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Public", "Public", "{5DDE01
 		Manager.ttinclude = Manager.ttinclude
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastFrame.Repository", "FastFrame.Repository\FastFrame.Repository.csproj", "{5C775ED6-4182-4471-AFF8-E12B3DF73F27}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastFrame.Repository", "FastFrame.Repository\FastFrame.Repository.csproj", "{5C775ED6-4182-4471-AFF8-E12B3DF73F27}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AppDomain", "AppDomain", "{C7D68A04-C6AD-48AC-8F76-7BAA002530AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastFrame.Dto", "FastFrame.Dto\FastFrame.Dto.csproj", "{3E00DA93-7DBD-4819-8642-14731F90619B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastFrame.Dto", "FastFrame.Dto\FastFrame.Dto.csproj", "{3E00DA93-7DBD-4819-8642-14731F90619B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastFrame.CodeGenerate", "FastFrame.CodeGenerate\FastFrame.CodeGenerate.csproj", "{0BA0FF0C-ADF8-4FF3-98A6-5729C0CF8FDF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -60,6 +62,10 @@ Global
 		{3E00DA93-7DBD-4819-8642-14731F90619B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E00DA93-7DBD-4819-8642-14731F90619B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E00DA93-7DBD-4819-8642-14731F90619B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BA0FF0C-ADF8-4FF3-98A6-5729C0CF8FDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BA0FF0C-ADF8-4FF3-98A6-5729C0CF8FDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BA0FF0C-ADF8-4FF3-98A6-5729C0CF8FDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BA0FF0C-ADF8-4FF3-98A6-5729C0CF8FDF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -71,6 +77,7 @@ Global
 		{A6A0AB4F-AA5B-40ED-8D09-D981DF4C645D} = {8386A041-B6D5-4E5F-BABF-8DCCACCB063F}
 		{5C775ED6-4182-4471-AFF8-E12B3DF73F27} = {8386A041-B6D5-4E5F-BABF-8DCCACCB063F}
 		{3E00DA93-7DBD-4819-8642-14731F90619B} = {C7D68A04-C6AD-48AC-8F76-7BAA002530AD}
+		{0BA0FF0C-ADF8-4FF3-98A6-5729C0CF8FDF} = {5DDE019E-F818-470A-AA6F-95A42B093B9A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E0D29037-9AA7-4E46-AEC3-3A0D6A866D02}

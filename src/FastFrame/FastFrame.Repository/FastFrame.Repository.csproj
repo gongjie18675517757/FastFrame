@@ -5,23 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="IRepository\Repository.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Repository.tt</DependentUpon>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\FastFrame.DataContext.MySql\FastFrame.Database.csproj" />
     <ProjectReference Include="..\FastFrame.Entity\FastFrame.Entity.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="IRepository\Repository.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Repository.cs</LastGenOutput>
-    </None>
   </ItemGroup>
 
   <ItemGroup>
@@ -29,11 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="IRepository\Repository.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Repository.tt</DependentUpon>
-    </Compile>
+    <Folder Include="Repository\" />
   </ItemGroup>
 
 </Project>

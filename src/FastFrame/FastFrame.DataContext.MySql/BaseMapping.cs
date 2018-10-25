@@ -1,5 +1,6 @@
 ﻿using FastFrame.Entity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -39,7 +40,12 @@ namespace FastFrame.Database
 
                     /*非ID字段，且没有指定长度的，默认200*/
                     else if (item.GetCustomAttribute<StringLengthAttribute>() == null)
-                        prop.HasMaxLength(200); 
+                        prop.HasMaxLength(200);
+                }
+
+                if (item.PropertyType.IsEnum)
+                {
+                    prop.HasConversion<string>();
                 }
             }
         }

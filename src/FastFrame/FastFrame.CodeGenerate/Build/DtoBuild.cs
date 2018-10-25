@@ -22,7 +22,7 @@ namespace FastFrame.CodeGenerate.Build
         {
             foreach (var type in GetTypes())
             {
-                if (type.GetCustomAttribute<ExportAttribute>() == null)
+                if (type.GetCustomAttribute <ExcludeAttribute> () != null)
                     continue;
 
                 yield return GetTargetInfo(type);
@@ -51,7 +51,9 @@ namespace FastFrame.CodeGenerate.Build
                 ImportNames = new string[] {
                         $"FastFrame.Entity.{areaNameSpace}",
                         "FastFrame.Infrastructure.Attrs",
-                        "global::System.ComponentModel.DataAnnotations" },
+                        "global::System.ComponentModel.DataAnnotations",
+                        "FastFrame.Entity.Enums"
+                    },
                 Summary = T4Help.GetClassSummary(type, XmlDocDir),
                 Name = $"{type.Name}Dto",
                 BaseNames = new string[] { $"BaseDto<{type.Name}>" },
@@ -67,7 +69,9 @@ namespace FastFrame.CodeGenerate.Build
         {
             foreach (var item in type.GetProperties())
             {
-                if (item.GetCustomAttribute<Infrastructure.Attrs.ExcludeAttribute>() != null)
+                if (item.Name == "Id")
+                    continue;
+                if (item.GetCustomAttribute<ExcludeAttribute>() != null)
                     continue;
 
                 yield return new PropInfo()

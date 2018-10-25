@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace FastFrame.Entity.System
+namespace FastFrame.Entity.Basis
 {
     /// <summary>
     /// 表外键信息
     /// </summary>
+    [Exclude]
     public class Foreign : BaseEntity
     {
         /// <summary>

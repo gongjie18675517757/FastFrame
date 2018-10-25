@@ -6,14 +6,15 @@ namespace FastFrame.Dto
     /// DTO接口
     /// </summary>
     public interface IDto
-    { 
+    {
+        string Id { get; }
     }
 
     /// <summary>
     /// DTO接口
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IDto<T> where T : class, IEntity
+    public interface IDto<T> : IDto where T : class, IEntity
     {
 
     }

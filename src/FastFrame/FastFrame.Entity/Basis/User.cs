@@ -3,7 +3,7 @@ using FastFrame.Infrastructure.Attrs;
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace FastFrame.Entity.System
+namespace FastFrame.Entity.Basis
 {
     /// <summary>
     /// 登陆用户
@@ -62,6 +62,14 @@ namespace FastFrame.Entity.System
         /// </summary>
         [ReadOnly]
         public bool IsAdmin { get; set; }
+
+        /// <summary>
+        /// 是否超级管理员
+        /// </summary>
+        [Hide]
+        [ReadOnly]
+        [Exclude]
+        public bool IsRoot { get; set; }
 
         /// <summary>
         /// 是否禁用

@@ -25,13 +25,13 @@ namespace FastFrame.Repository
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        Task<T> Update(T entity);
+        Task<T> UpdateAsync(T entity);
 
         /// <summary>
         /// 删除
         /// </summary>
         /// <param name="entity"></param>
-        Task Delete(T entity);
+        Task DeleteAsync(T entity);
 
         /// <summary>
         /// 删除

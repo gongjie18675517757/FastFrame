@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FastFrame.Repository
 {
-    public abstract class BaseUnitOrWork : IUnitOfWork
+    public  class BaseUnitOrWork : IUnitOfWork
     {
         private readonly DataBase context;
 

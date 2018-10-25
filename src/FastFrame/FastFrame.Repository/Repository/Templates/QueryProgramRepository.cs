@@ -4,11 +4,11 @@ namespace FastFrame.Repository.Basis
 	using FastFrame.Database; 
 	using FastFrame.Infrastructure.Interface; 
 	/// <summary>
-	///表外键信息[数据访问] 
+	///查询方案[数据访问] 
 	/// <summary>
-	public partial class ForeignRepository:BaseRepository<Foreign>,IRepository<Foreign>
+	public partial class QueryProgramRepository:BaseRepository<QueryProgram>,IRepository<QueryProgram>
 	{
-		public ForeignRepository(DataBase context,ICurrentUserProvider currentUserProvider)
+		public QueryProgramRepository(DataBase context,ICurrentUserProvider currentUserProvider)
 			:base(context,currentUserProvider)
 		{
 		}

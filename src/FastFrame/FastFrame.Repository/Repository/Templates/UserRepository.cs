@@ -1,6 +1,6 @@
-namespace FastFrame.Repository.System
+namespace FastFrame.Repository.Basis
 {
-	using FastFrame.Entity.System; 
+	using FastFrame.Entity.Basis; 
 	using FastFrame.Database; 
 	using FastFrame.Infrastructure.Interface; 
 	/// <summary>

@@ -2,9 +2,9 @@ namespace FastFrame.Database.Mapping.Basis
 {
 	using FastFrame.Entity.Basis; 
 	/// <summary>
-	///表外键信息 
+	///员工表 
 	/// <summary>
-	public partial class ForeignMapping:BaseMapping<Foreign>
+	public partial class EmployeeMapping:BaseMapping<Employee>
 	{
 	}
 }

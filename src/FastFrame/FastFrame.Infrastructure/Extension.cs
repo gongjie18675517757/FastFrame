@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -57,6 +60,82 @@ namespace FastFrame.Infrastructure
         public static object GetValue(this object @in, string propName)
         {
             return @in.GetType().GetProperty(propName).GetValue(@in, null);
+        }
+
+        /// <summary>
+        /// 属性映射
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <typeparam name="TTarget"></typeparam>
+        /// <param name="sources"></param>
+        /// <returns></returns>
+        public static IQueryable<TTarget> MapTo<TSource, TTarget>(this IQueryable<TSource> sources)
+        {
+            var expression = ExpressionExtended<TSource, TTarget>.GetMapToExpression();
+            return sources.Select(expression);
+        }
+
+        /// <summary>
+        /// 属性映射
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <typeparam name="TTarget"></typeparam>
+        /// <param name="sources"></param>
+        /// <returns></returns>
+        public static TTarget MapTo<TSource, TTarget>(this TSource sources)
+        {
+            var func = ExpressionExtended<TSource, TTarget>.GetMapToDelegate();
+            return func(sources);
+        }
+
+        /// <summary>
+        /// 属性映射
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <typeparam name="TTarget"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="target"></param>
+        public static void MapSet<TSource, TTarget>(this TSource source, TTarget target)
+        {
+            var @delegate = ExpressionExtended<TSource, TTarget>.GetMapSetDelegate();
+            @delegate(source, target);
+        }
+
+        /// <summary>
+        /// 序列化
+        /// </summary>
+        /// <param name="in"></param>
+        /// <returns></returns>
+        public static string ToJson(this object @in) => @in == null ? "{}" : JsonConvert.SerializeObject(@in);
+
+        /// <summary>
+        /// 反序列化
+        /// </summary>
+        /// <param name="in"></param>
+        /// <returns></returns>
+        public static JObject ToJObject(this string @in)
+            => @in.IsNullOrWhiteSpace() ? new JObject() : (JObject)JsonConvert.DeserializeObject(@in);
+
+        /// <summary>
+        /// 反序列化
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="in"></param>
+        /// <returns></returns>
+        public static T ToObject<T>(this string @in)
+        {
+            if (@in.IsNullOrWhiteSpace())
+            {
+                return default(T);
+            }
+            try
+            {
+                return JsonConvert.DeserializeObject<T>(@in);
+            }
+            catch (Exception)
+            {
+                return default(T);
+            }
         }
     }
 }

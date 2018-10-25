@@ -1,5 +1,5 @@
 ﻿using FastFrame.Entity;
-using FastFrame.Entity.System;
+using FastFrame.Entity.Basis;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 

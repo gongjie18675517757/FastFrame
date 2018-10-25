@@ -6,7 +6,7 @@ namespace FastFrame.Dto
     /// <summary>
     /// 基类DTO
     /// </summary>
-    public abstract class BaseDto:IDto
+    public abstract class BaseDto : IDto
     {
         /// <summary>
         /// 创建人
@@ -37,14 +37,16 @@ namespace FastFrame.Dto
         /// 修改时间
         /// </summary>
         public DateTime ModifyTime { get; set; }
+
+        public string Id { get; set; }
     }
 
     /// <summary>
     /// 基类DTO
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class BaseDto<T>: BaseDto,IDto<T> where T : class, IEntity
-    { 
-        
+    public abstract class BaseDto<T> : BaseDto, IDto<T> where T : class, IEntity
+    {
+
     }
 }

@@ -5,32 +5,22 @@ namespace FastFrame.Dto.Basis
 	using global::System.ComponentModel.DataAnnotations; 
 	using FastFrame.Entity.Enums; 
 	/// <summary>
-	///登陆用户 
+	///员工表 
 	/// <summary>
-	[Unique("Account")]
-	[RelatedField("Account","Name")]
-	public partial class UserDto:BaseDto<User>
+	[RelatedField("EnCode","Name")]
+	public partial class EmployeeDto:BaseDto<Employee>
 	{
 		/// <summary>
-		///帐号 
+		///编码 
 		/// <summary>
-		[StringLength(50)]
+		[StringLength(20)]
 		[Required()]
-		[Unique()]
-		public string Account {get;set;}
+		public string EnCode {get;set;}
 		
 		/// <summary>
-		///密码 
+		///名称 
 		/// <summary>
-		[StringLength(50)]
-		[Required()]
-		[Hide(HideMark.List)]
-		public string Password {get;set;}
-		
-		/// <summary>
-		///姓名 
-		/// <summary>
-		[StringLength(50)]
+		[StringLength(20)]
 		[Required()]
 		public string Name {get;set;}
 		
@@ -38,7 +28,6 @@ namespace FastFrame.Dto.Basis
 		///邮箱 
 		/// <summary>
 		[StringLength(50)]
-		[Unique()]
 		[EmailAddress()]
 		public string Email {get;set;}
 		
@@ -46,28 +35,25 @@ namespace FastFrame.Dto.Basis
 		///手机号码 
 		/// <summary>
 		[StringLength(20)]
-		[Unique()]
 		[Phone()]
 		public string PhoneNumber {get;set;}
 		
 		/// <summary>
-		///头像 
+		///性别 
 		/// <summary>
-		[StringLength(200)]
-		[Hide(HideMark.All)]
-		public string HandIconId {get;set;}
+		public GenderMark Gender {get;set;}
 		
 		/// <summary>
-		///是否管理员 
+		///用户 
 		/// <summary>
-		[ReadOnly(ReadOnlyMark.All)]
-		public bool IsAdmin {get;set;}
+		[RelatedTo(typeof(User))]
+		public string User_Id {get;set;}
 		
 		/// <summary>
-		///是否禁用 
+		///部门 
 		/// <summary>
-		[ReadOnly(ReadOnlyMark.All)]
-		public bool IsDisabled {get;set;}
+		[RelatedTo(typeof(Dept))]
+		public string Dept_Id {get;set;}
 		
 		/// <summary>
 		///组织 

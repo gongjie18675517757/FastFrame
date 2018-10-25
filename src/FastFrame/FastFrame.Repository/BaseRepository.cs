@@ -10,10 +10,11 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using EF.Core.Expansion.Dynamic;
 using FastFrame.Infrastructure;
+using FastFrame.Entity.Basis;
 
 namespace FastFrame.Repository
 {
-    public abstract class BaseRepository<T> : BaseUnitOrWork, IRepository<T> where T : class, IEntity
+    public  class BaseRepository<T> : BaseUnitOrWork, IRepository<T> where T : class, IEntity
     {
         private readonly DataBase context;
         private readonly ICurrentUserProvider currentUserProvider;
@@ -37,10 +38,10 @@ namespace FastFrame.Repository
             entity.Id = IdGenerate.NetId();
             entity.OrganizeId = currentUserProvider.GetCurrOrganizeId();
             await Verification(entity);
-            await context.Set<Entity.System.Foreign>().AddAsync(new Entity.System.Foreign()
+            await context.Set<Foreign>().AddAsync(new Foreign()
             {
                 EntityId = entity.Id,
-                Id = Infrastructure.IdGenerate.NetId(),
+                Id = IdGenerate.NetId(),
                 CreateTime = DateTime.Now,
                 CreateUserId = currUser.Id,
                 OrganizeId = currentUserProvider.GetCurrOrganizeId(),
@@ -98,11 +99,11 @@ namespace FastFrame.Repository
         /// 删除
         /// </summary>
         /// <param name="entity"></param>
-        public virtual async Task Delete(T entity)
+        public virtual async Task DeleteAsync(T entity)
         {
             //context.Set<T>().Remove(entity);
             entity.IsDeleted = true;
-            var foreign = await context.Set<Entity.System.Foreign>().FirstOrDefaultAsync(x => x.EntityId == entity.Id);
+            var foreign = await context.Set<Foreign>().FirstOrDefaultAsync(x => x.EntityId == entity.Id);
             foreign.ModifyUserId = currUser.Id;
             foreign.ModifyTime = DateTime.Now;
             context.Entry(foreign).State = EntityState.Modified;
@@ -117,7 +118,7 @@ namespace FastFrame.Repository
         public virtual async Task DeleteAsync(string id)
         {
             var entity = await Queryable.FirstOrDefaultAsync(x => x.Id == id);
-            await Delete(entity);
+            await DeleteAsync(entity);
         }
 
         /// <summary>
@@ -153,10 +154,10 @@ namespace FastFrame.Repository
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public virtual async Task<T> Update(T entity)
+        public virtual async Task<T> UpdateAsync(T entity)
         {
             /*需要验证唯一性和关联性*/
-            var foreign = await context.Set<Entity.System.Foreign>().FirstOrDefaultAsync(x => x.EntityId == entity.Id);
+            var foreign = await context.Set<Foreign>().FirstOrDefaultAsync(x => x.EntityId == entity.Id);
 
             foreign.ModifyUserId = currUser.Id;
             foreign.ModifyTime = DateTime.Now;

@@ -1,6 +1,6 @@
-﻿namespace FastFrame.Database.Mapping.System
+﻿namespace FastFrame.Database.Mapping.Basis
 {
-    using FastFrame.Entity.System;
+    using FastFrame.Entity.Basis;
     using Microsoft.EntityFrameworkCore;
 
     /// <summary>

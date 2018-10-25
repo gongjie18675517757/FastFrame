@@ -6,7 +6,9 @@
 
   <ItemGroup>
     <PackageReference Include="EF.Core.Expansion.Dynamic" Version="1.0.0" />
-    <PackageReference Include="Funcular.DotNetCore.IdGenerators.Net" Version="1.0.0" /> 
+    <PackageReference Include="Funcular.DotNetCore.IdGenerators.Net" Version="1.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="ZKWeb.System.Drawing" Version="4.0.1" /> 
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

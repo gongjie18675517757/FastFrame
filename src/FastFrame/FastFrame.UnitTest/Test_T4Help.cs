@@ -1,8 +1,7 @@
-﻿using FastFrame.Entity.System;
+﻿using FastFrame.Entity.Basis;
 using FastFrame.Infrastructure;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Linq;
 
 namespace FastFrame.UnitTest
 {
@@ -12,7 +11,7 @@ namespace FastFrame.UnitTest
         [TestMethod]
         public void Test_GetClassSummary()
         {
-            var type = typeof(Entity.System.Foreign);
+            var type = typeof(Foreign);
             var path = @"D:\CoreProject\FastFrame\src\FastFrame\Lib";
             var summany = T4Help.GetClassSummary(type, path);
             Assert.AreEqual("表外键信息", summany);

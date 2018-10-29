@@ -23,11 +23,6 @@
         /// <summary>
         /// 是否超级用户
         /// </summary>
-        bool IsRoot { get; set; }
-
-        /// <summary>
-        /// 组织ID
-        /// </summary>
-        string OrganizeId { get; }
+        bool IsRoot { get; set; } 
     } 
 }

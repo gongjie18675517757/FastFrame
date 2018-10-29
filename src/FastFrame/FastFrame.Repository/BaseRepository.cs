@@ -14,7 +14,7 @@ using FastFrame.Entity.Basis;
 
 namespace FastFrame.Repository
 {
-    public  class BaseRepository<T> : BaseUnitOrWork, IRepository<T> where T : class, IEntity
+    public abstract class BaseRepository<T> : BaseUnitOrWork, IRepository<T> where T : class, IEntity
     {
         private readonly DataBase context;
         private readonly ICurrentUserProvider currentUserProvider;

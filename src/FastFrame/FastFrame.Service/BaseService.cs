@@ -103,7 +103,7 @@ namespace FastFrame.Service
         /// </summary>
         /// <param name="pageInfo"></param>
         /// <returns></returns>
-        public async Task<PageList<TDto>> GetListAsync(PageInfo pageInfo)
+        public async Task<PageList<TDto>> GetListAsync(PagePara pageInfo)
         {
             var query = Query().DynamicQuery(pageInfo.Condition);
             return new PageList<TDto>()
@@ -165,7 +165,7 @@ namespace FastFrame.Service
         /// <param name="propName"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public async Task<bool> VerifyUnique(string propName, string value)
+        public async Task<bool> VerifyUnique(string id, string propName, string value)
         {
             return !await repository.Queryable.DynamicQuery(new QueryCondition()
             {
@@ -178,7 +178,13 @@ namespace FastFrame.Service
                             Compare = "==",
                             Value = value,
                             Name = propName
-                        }
+                        },
+                         new CompareCondition()
+                         {
+                             Compare="!=",
+                             Value=id,
+                             Name="Id"
+                         }
                     }
                 }
             }).AnyAsync();

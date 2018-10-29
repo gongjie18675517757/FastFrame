@@ -67,5 +67,5 @@ namespace FastFrame.Service.Basis
 			return query;
 		}
 		#endregion
-	}
+	} 
 }

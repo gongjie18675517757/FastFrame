@@ -1,4 +1,6 @@
-﻿namespace FastFrame.Infrastructure.Interface
+﻿using System;
+
+namespace FastFrame.Infrastructure.Interface
 {
     /// <summary>
     /// 服务加载器[IServiceProvider]
@@ -6,5 +8,7 @@
     public interface IScopeServiceLoader
     {
         T GetService<T>();
+
+        object GetService(Type type);
     }
 }

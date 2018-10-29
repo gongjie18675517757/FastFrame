@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FastFrame.Entity.Basis;
+using FastFrame.Infrastructure.Interface;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -22,10 +25,13 @@ namespace FastFrame.Application.Controllers
         }
 
         [HttpGet]
-        public async Task<string> GetTest()
+        public async Task<User> GetTest()
         {
-            var guid = Guid.NewGuid().ToString();
-            return await Task.FromResult(guid);
+            var currentUserProvider = serviceProvider.GetService<ICurrentUserProvider>();
+
+            var u = new User();
+            u.Account = currentUserProvider.GetCurrOrganizeId();
+            return await Task.FromResult(u);
         }
 
         [HttpGet]

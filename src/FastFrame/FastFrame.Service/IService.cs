@@ -11,7 +11,13 @@ namespace FastFrame.Service
     /// </summary>
     public interface IService
     {
-
+        /// <summary>
+        /// 验证唯一性
+        /// </summary>
+        /// <param name="propName"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        Task<bool> VerifyUnique(string id,string propName, string value);
     }
 
     /// <summary>
@@ -56,16 +62,6 @@ namespace FastFrame.Service
         /// </summary>
         /// <param name="pageInfo"></param>
         /// <returns></returns>
-        Task<PageList<TDto>> GetListAsync(PageInfo pageInfo);
-
-        /// <summary>
-        /// 验证唯一性
-        /// </summary>
-        /// <param name="propName"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        Task<bool> VerifyUnique(string propName, string value);
-    }
-
-    
+        Task<PageList<TDto>> GetListAsync(PagePara pageInfo);  
+    }  
 }

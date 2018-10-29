@@ -6,9 +6,9 @@ using System.Text;
 namespace FastFrame.Infrastructure
 {
     /// <summary>
-    /// 分页信息
+    /// 查询列表参数
     /// </summary>
-    public class PageInfo: IPageQueryParameter
+    public class PagePara: IPageQueryParameter
     {
         private int _pageIndex = 1;
         private int _pageSize = 10;

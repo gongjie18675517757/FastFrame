@@ -16,9 +16,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastFrame.Database", "FastFrame.DataContext.MySql\FastFrame.Database.csproj", "{A6A0AB4F-AA5B-40ED-8D09-D981DF4C645D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Public", "Public", "{5DDE019E-F818-470A-AA6F-95A42B093B9A}"
-	ProjectSection(SolutionItems) = preProject
-		Manager.ttinclude = Manager.ttinclude
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastFrame.Repository", "FastFrame.Repository\FastFrame.Repository.csproj", "{5C775ED6-4182-4471-AFF8-E12B3DF73F27}"
 EndProject

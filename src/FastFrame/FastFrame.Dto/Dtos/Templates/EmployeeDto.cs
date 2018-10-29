@@ -10,6 +10,11 @@ namespace FastFrame.Dto.Basis
 	[RelatedField("EnCode","Name")]
 	public partial class EmployeeDto:BaseDto<Employee>
 	{
+		#region 字段
+		#endregion
+		#region 构造函数
+		#endregion
+		#region 属性
 		/// <summary>
 		///编码 
 		/// <summary>
@@ -50,20 +55,37 @@ namespace FastFrame.Dto.Basis
 		public string User_Id {get;set;}
 		
 		/// <summary>
+		///用户帐号 
+		/// <summary>
+		[RelatedFrom(nameof(User_Id),nameof(User.Account),true)]
+		public string User_Account {get;set;}
+		
+		/// <summary>
+		///用户姓名 
+		/// <summary>
+		[RelatedFrom(nameof(User_Id),nameof(User.Name),false)]
+		public string User_Name {get;set;}
+		
+		/// <summary>
 		///部门 
 		/// <summary>
 		[RelatedTo(typeof(Dept))]
 		public string Dept_Id {get;set;}
 		
 		/// <summary>
-		///组织 
+		///部门编码 
 		/// <summary>
-		public string OrganizeId {get;set;}
+		[RelatedFrom(nameof(Dept_Id),nameof(Dept.EnCode),true)]
+		public string Dept_EnCode {get;set;}
 		
 		/// <summary>
-		///删除码 
+		///部门名称 
 		/// <summary>
-		public bool IsDeleted {get;set;}
+		[RelatedFrom(nameof(Dept_Id),nameof(Dept.Name),false)]
+		public string Dept_Name {get;set;}
 		
+		#endregion
+		#region 方法
+		#endregion
 	}
 }

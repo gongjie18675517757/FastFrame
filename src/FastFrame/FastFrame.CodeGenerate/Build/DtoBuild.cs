@@ -22,7 +22,7 @@ namespace FastFrame.CodeGenerate.Build
         {
             foreach (var type in GetTypes())
             {
-                if (type.GetCustomAttribute <ExcludeAttribute> () != null)
+                if (type.GetCustomAttribute<ExcludeAttribute>() != null)
                     continue;
 
                 yield return GetTargetInfo(type);
@@ -74,13 +74,57 @@ namespace FastFrame.CodeGenerate.Build
                 if (item.GetCustomAttribute<ExcludeAttribute>() != null)
                     continue;
 
+                var summary = T4Help.GetPropertySummary(item, XmlDocDir);
+
                 yield return new PropInfo()
                 {
-                    Summary = T4Help.GetPropertySummary(item, XmlDocDir),
+                    Summary = summary,
                     AttrInfos = GetAttrInfos(item),
                     TypeName = T4Help.GetTypeName(item.PropertyType),
                     Name = item.Name
                 };
+                if (TryGetAttribute<RelatedToAttribute>(item, out var relatedToAttribute)
+                    && TryGetAttribute<RelatedFieldAttribute>(relatedToAttribute.RelatedType, out var relatedFieldAttribute))
+                {
+                    var prop = relatedToAttribute.RelatedType.GetProperty(relatedFieldAttribute.DefaultName);
+                    if (prop != null)
+                    {
+                        yield return new PropInfo()
+                        {
+                            Summary = $"{summary}{T4Help.GetPropertySummary(prop, XmlDocDir)}",
+                            AttrInfos = new AttrInfo[] {
+                                new AttrInfo()
+                                {
+                                    Name="RelatedFrom",
+                                    Parameters=new string[]{ $"nameof({item.Name})",$"nameof({relatedToAttribute.RelatedType.Name}.{prop.Name})","true"}
+                                }
+                            },
+                            Name = $"{item.Name.Replace("Id", "")}{prop.Name}",
+                            TypeName = T4Help.GetTypeName(prop.PropertyType)
+                        };
+                    }
+
+                    foreach (var fieldName in relatedFieldAttribute.OtherNames)
+                    {
+                        prop = relatedToAttribute.RelatedType.GetProperty(fieldName);
+                        if (prop != null)
+                        {
+                            yield return new PropInfo()
+                            {
+                                Summary = $"{summary}{T4Help.GetPropertySummary(prop, XmlDocDir)}",
+                                AttrInfos = new AttrInfo[] {
+                                new AttrInfo()
+                                {
+                                    Name="RelatedFrom",
+                                    Parameters=new string[]{ $"nameof({item.Name})",$"nameof({relatedToAttribute.RelatedType.Name}.{prop.Name})","false"}
+                                }
+                            },
+                                Name = $"{item.Name.Replace("Id", "")}{prop.Name}",
+                                TypeName = T4Help.GetTypeName(prop.PropertyType)
+                            };
+                        }
+                    }
+                }
             }
         }
 
@@ -166,6 +210,14 @@ namespace FastFrame.CodeGenerate.Build
         public bool TryGetAttribute<T>(PropertyInfo propertyInfo, out T attr) where T : Attribute
         {
             attr = propertyInfo.GetCustomAttribute<T>();
+            if (attr != null)
+                return true;
+            return false;
+        }
+
+        public bool TryGetAttribute<T>(Type type, out T attr) where T : Attribute
+        {
+            attr = type.GetCustomAttribute<T>();
             if (attr != null)
                 return true;
             return false;

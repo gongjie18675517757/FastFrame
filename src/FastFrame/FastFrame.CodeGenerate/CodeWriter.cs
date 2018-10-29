@@ -52,7 +52,16 @@ namespace FastFrame.CodeGenerate
                         /*类开始*/
                         write.WriteCodeLine($"{{", 1);
 
+                        /*字段*/
+                        write.WriteCodeLine("#region 字段",2);
+                        foreach (var field in target.FieldInfos)
+                        {
+                            write.WriteCodeLine($"private readonly {field.TypeName} {field.FieldName};", 2);
+                        }
+                        write.WriteCodeLine("#endregion",2);
+
                         /*构造函数*/
+                        write.WriteCodeLine("#region 构造函数",2);
                         if (target.Constructor != null)
                         {
                             write.WriteCodeLine($"public {target.Name}({string.Join(",", target.Constructor.Parms.Select(x => $"{x.TypeName} {x.DefineName}"))})", 2);
@@ -71,8 +80,10 @@ namespace FastFrame.CodeGenerate
                             /*构造函数结束*/
                             write.WriteCodeLine($"}}", 2);
                         }
+                        write.WriteCodeLine("#endregion",2);
 
                         /*属性列表*/
+                        write.WriteCodeLine("#region 属性",2);                    
                         foreach (var prop in target.PropInfos)
                         {
                             /*属性说明*/
@@ -92,9 +103,11 @@ namespace FastFrame.CodeGenerate
                             /*空行*/
                             write.WriteCodeLine($"", 2);
                         }
+                        write.WriteCodeLine("#endregion",2);
 
 
                         /*方法列表*/
+                        write.WriteCodeLine("#region 方法",2);
                         foreach (var method in target.MethodInfos)
                         {
                             write.WriteCodeLine($"{method.Modifier} { (method.IsOverride ? "override" : "") } {method.ResultTypeName} {method.MethodName}({string.Join(",", method.Parms.Select(x => $"{x.TypeName} {x.DefineName}"))}) ", 2);
@@ -102,7 +115,7 @@ namespace FastFrame.CodeGenerate
                             write.WriteCodeLine($"{{", 2);
 
                             /*方法代码块*/
-                            foreach (var block in target.Constructor.CodeBlock)
+                            foreach (var block in method.CodeBlock)
                             {
                                 write.WriteCodeLine(block, 3);
                             }
@@ -110,6 +123,7 @@ namespace FastFrame.CodeGenerate
                             /*方法结束*/
                             write.WriteCodeLine($"}}", 2);
                         }
+                        write.WriteCodeLine("#endregion",2);
 
                         /*类结束*/
                         write.WriteCodeLine($"}}", 1);

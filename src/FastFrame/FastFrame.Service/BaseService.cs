@@ -9,28 +9,27 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using EF.Core.Expansion.Dynamic;
+using FastFrame.Infrastructure.Interface;
 
 namespace FastFrame.Service
 {
-    public abstract class BaseService
-    {
-
-    }
-
     /// <summary>
     /// 服务层基类
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TDto"></typeparam>
-    public abstract class BaseService<TEntity, TDto> : BaseService, IService<TEntity, TDto>
+    public abstract class BaseService<TEntity, TDto> : IService<TEntity, TDto>
         where TEntity : class, IEntity, new()
         where TDto : class, IDto<TEntity>, new()
     {
         private readonly BaseRepository<TEntity> repository;
 
-        public BaseService(BaseRepository<TEntity> repository)
+        public IScopeServiceLoader Loader { get; }
+
+        public BaseService(BaseRepository<TEntity> repository, IScopeServiceLoader loader)
         {
             this.repository = repository;
+            Loader = loader;
         }
 
         /// <summary>
@@ -122,7 +121,7 @@ namespace FastFrame.Service
         /// </summary>
         /// <returns></returns>
         protected virtual IQueryable<TDto> Query() => QueryMain();
-         
+
         /// <summary>
         /// 主查询表达式
         /// </summary>

@@ -10,12 +10,29 @@ namespace FastFrame.Dto.Basis
 	[RelatedField("EnCode","Name")]
 	public partial class MenuDto:BaseDto<Menu>
 	{
+		#region 字段
+		#endregion
+		#region 构造函数
+		#endregion
+		#region 属性
 		/// <summary>
 		///上级菜单 
 		/// <summary>
 		[StringLength(50)]
 		[RelatedTo(typeof(Menu))]
 		public string Parent_Id {get;set;}
+		
+		/// <summary>
+		///上级菜单编码 
+		/// <summary>
+		[RelatedFrom(nameof(Parent_Id),nameof(Menu.EnCode),true)]
+		public string Parent_EnCode {get;set;}
+		
+		/// <summary>
+		///上级菜单名称 
+		/// <summary>
+		[RelatedFrom(nameof(Parent_Id),nameof(Menu.Name),false)]
+		public string Parent_Name {get;set;}
 		
 		/// <summary>
 		///编码 
@@ -49,15 +66,8 @@ namespace FastFrame.Dto.Basis
 		[StringLength(50)]
 		public string Path {get;set;}
 		
-		/// <summary>
-		///组织 
-		/// <summary>
-		public string OrganizeId {get;set;}
-		
-		/// <summary>
-		///删除码 
-		/// <summary>
-		public bool IsDeleted {get;set;}
-		
+		#endregion
+		#region 方法
+		#endregion
 	}
 }

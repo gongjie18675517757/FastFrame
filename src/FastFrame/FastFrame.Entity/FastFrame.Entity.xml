@@ -11,7 +11,7 @@
         </member>
         <member name="P:FastFrame.Entity.Basis.Dept.Parent_Id">
             <summary>
-            上级部门
+            上级
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Basis.Dept.EnCode">
@@ -21,12 +21,12 @@
         </member>
         <member name="P:FastFrame.Entity.Basis.Dept.Name">
             <summary>
-            部门名称
+            名称
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Basis.Dept.Supervisor_Id">
             <summary>
-            部门主管
+            主管
             </summary>
         </member>
         <member name="T:FastFrame.Entity.Basis.Employee">
@@ -227,6 +227,11 @@
         <member name="P:FastFrame.Entity.Basis.User.IsAdmin">
             <summary>
             是否管理员
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.User.IsRoot">
+            <summary>
+            是否超级管理员
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Basis.User.IsDisabled">

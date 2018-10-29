@@ -10,12 +10,29 @@ namespace FastFrame.Dto.Basis
 	[RelatedField("EnCode","Name")]
 	public partial class DeptDto:BaseDto<Dept>
 	{
+		#region 字段
+		#endregion
+		#region 构造函数
+		#endregion
+		#region 属性
 		/// <summary>
-		///上级部门 
+		///上级 
 		/// <summary>
 		[StringLength(50)]
 		[RelatedTo(typeof(Dept))]
 		public string Parent_Id {get;set;}
+		
+		/// <summary>
+		///上级编码 
+		/// <summary>
+		[RelatedFrom(nameof(Parent_Id),nameof(Dept.EnCode),true)]
+		public string Parent_EnCode {get;set;}
+		
+		/// <summary>
+		///上级名称 
+		/// <summary>
+		[RelatedFrom(nameof(Parent_Id),nameof(Dept.Name),false)]
+		public string Parent_Name {get;set;}
 		
 		/// <summary>
 		///编码 
@@ -26,28 +43,33 @@ namespace FastFrame.Dto.Basis
 		public string EnCode {get;set;}
 		
 		/// <summary>
-		///部门名称 
+		///名称 
 		/// <summary>
 		[StringLength(50)]
 		[Required()]
 		public string Name {get;set;}
 		
 		/// <summary>
-		///部门主管 
+		///主管 
 		/// <summary>
 		[StringLength(50)]
 		[RelatedTo(typeof(Employee))]
 		public string Supervisor_Id {get;set;}
 		
 		/// <summary>
-		///组织 
+		///主管编码 
 		/// <summary>
-		public string OrganizeId {get;set;}
+		[RelatedFrom(nameof(Supervisor_Id),nameof(Employee.EnCode),true)]
+		public string Supervisor_EnCode {get;set;}
 		
 		/// <summary>
-		///删除码 
+		///主管名称 
 		/// <summary>
-		public bool IsDeleted {get;set;}
+		[RelatedFrom(nameof(Supervisor_Id),nameof(Employee.Name),false)]
+		public string Supervisor_Name {get;set;}
 		
+		#endregion
+		#region 方法
+		#endregion
 	}
 }

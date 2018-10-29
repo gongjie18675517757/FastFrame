@@ -61,5 +61,10 @@ namespace FastFrame.CodeGenerate.Info
         /// 方法列表
         /// </summary>
         public IEnumerable<MethodInfo> MethodInfos { get; set; } = new MethodInfo[] { };
-    } 
+
+        /// <summary>
+        /// 字段列表
+        /// </summary>
+        public IEnumerable<FieldInfo> FieldInfos { get; set; } = new FieldInfo[] { };
+    }
 }

@@ -11,6 +11,11 @@ namespace FastFrame.Dto.Basis
 	[RelatedField("Account","Name")]
 	public partial class UserDto:BaseDto<User>
 	{
+		#region 字段
+		#endregion
+		#region 构造函数
+		#endregion
+		#region 属性
 		/// <summary>
 		///帐号 
 		/// <summary>
@@ -20,19 +25,19 @@ namespace FastFrame.Dto.Basis
 		public string Account {get;set;}
 		
 		/// <summary>
+		///姓名 
+		/// <summary>
+		[StringLength(50)]
+		[Required()]
+		public string Name {get;set;}
+		
+		/// <summary>
 		///密码 
 		/// <summary>
 		[StringLength(50)]
 		[Required()]
 		[Hide(HideMark.List)]
 		public string Password {get;set;}
-		
-		/// <summary>
-		///姓名 
-		/// <summary>
-		[StringLength(50)]
-		[Required()]
-		public string Name {get;set;}
 		
 		/// <summary>
 		///邮箱 
@@ -69,15 +74,8 @@ namespace FastFrame.Dto.Basis
 		[ReadOnly(ReadOnlyMark.All)]
 		public bool IsDisabled {get;set;}
 		
-		/// <summary>
-		///组织 
-		/// <summary>
-		public string OrganizeId {get;set;}
-		
-		/// <summary>
-		///删除码 
-		/// <summary>
-		public bool IsDeleted {get;set;}
-		
+		#endregion
+		#region 方法
+		#endregion
 	}
 }

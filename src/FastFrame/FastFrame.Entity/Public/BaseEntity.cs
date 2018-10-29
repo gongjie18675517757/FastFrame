@@ -10,11 +10,13 @@
         /// <summary>
         /// 组织
         /// </summary>
+        [Infrastructure.Attrs.Exclude]
         public string OrganizeId { get; set; }
 
         /// <summary>
         /// 删除码
         /// </summary>
+        [Infrastructure.Attrs.Exclude]
         public bool IsDeleted { get; set; }
     }
 }

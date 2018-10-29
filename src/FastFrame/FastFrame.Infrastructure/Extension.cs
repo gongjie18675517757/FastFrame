@@ -15,6 +15,14 @@ namespace FastFrame.Infrastructure
         {
             writer.WriteLine($"{new string('\t', tagCount)}{line}");
         }
+
+        public static string ToFirstLower(this string @this)
+        {
+            var arr = @this.ToArray();
+            arr[0] = char.ToLower(arr[0]);
+            return new string(arr);
+        }
+
         /// <summary>
         /// 判空
         /// </summary>

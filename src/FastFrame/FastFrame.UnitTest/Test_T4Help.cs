@@ -23,7 +23,7 @@ namespace FastFrame.UnitTest
             var name = T4Help.GetTypeName(typeof(Nullable<int>));
             Assert.AreEqual("Nullable<Int32>", name);
             name = T4Help.GetTypeName(typeof(string));
-            Assert.AreEqual("String", name);
+            Assert.AreEqual("string", name);
         } 
     }
 }

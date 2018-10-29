@@ -38,6 +38,7 @@ namespace FastFrame.Dto
         /// </summary>
         public DateTime ModifyTime { get; set; }
 
+
         public string Id { get; set; }
     }
 

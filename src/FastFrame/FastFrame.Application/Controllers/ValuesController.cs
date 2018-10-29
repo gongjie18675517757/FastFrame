@@ -8,9 +8,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace FastFrame.Application.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ValuesController : ControllerBase
+    //[Route("api/[controller]")]
+    //[ApiController]
+    public class ValuesController : Controller
     {
         private readonly IServiceProvider serviceProvider;
         private readonly IHubContext<Hubs.ChatHub> hubContext;
@@ -20,20 +20,25 @@ namespace FastFrame.Application.Controllers
             this.serviceProvider = serviceProvider;
             this.hubContext = hubContext;
         }
-        // GET api/values
+
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public async Task<string> GetTest()
         {
-            var x = serviceProvider.GetService<IHubContext<Hubs.ChatHub>>();
-            var boolx = x == hubContext;
+            var guid = Guid.NewGuid().ToString();
+            return await Task.FromResult(guid);
+        }
+
+        [HttpGet]
+        public ActionResult<IEnumerable<string>> GetList()
+        {
             return new string[] { "value1", "value2" };
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+
+        [HttpGet]
+        public ActionResult<string> Get(int id = 0)
         {
-            return "value";
+            return id.ToString();
         }
 
         // POST api/values
@@ -54,4 +59,6 @@ namespace FastFrame.Application.Controllers
         {
         }
     }
+
+
 }

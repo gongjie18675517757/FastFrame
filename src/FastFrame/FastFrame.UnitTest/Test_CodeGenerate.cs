@@ -8,15 +8,30 @@ namespace FastFrame.UnitTest
     [TestClass]
     public class Test_CodeGenerate
     {
+        [Infrastructure.Attrs.RelatedField("EnCode", "Name")]
+        class TestEntity1 : BaseEntity
+        {
+            public string EnCode { get; set; }
+
+            public string Name { get; set; }
+        }
+
+        class TestEntity2 : BaseEntity
+        {
+            [Infrastructure.Attrs.RelatedTo(typeof(TestEntity1))]
+            public string TestEntity1_Id { get; set; }
+        }
+
         [TestMethod]
         public void TestDtoBuild()
         {
-            var dtoBuild= new CodeGenerate.Build.DtoBuild(@"D:\CoreProject\FastFrame\src\FastFrame", typeof(IEntity));
-            var userTargetInfo= dtoBuild.GetTargetInfo(typeof(User));
-
-            var x = typeof(User).GetCustomAttributes(typeof(Infrastructure.Attrs.UniqueAttribute), true);
-
-            Assert.AreEqual(2, userTargetInfo.AttrInfos.Count());
+            var dtoBuild = new CodeGenerate.Build.DtoBuild(@"D:\CoreProject\FastFrame\src\FastFrame", typeof(IEntity));
+            var targetInfo = dtoBuild.GetTargetInfo(typeof(TestEntity2));
+            Assert.AreEqual(3, targetInfo.PropInfos.Count());
+            var prop = targetInfo.PropInfos.FirstOrDefault(x => x.Name == "TestEntity1_EnCode");
+            Assert.AreNotEqual(null, prop);
+            prop = targetInfo.PropInfos.FirstOrDefault(x => x.Name == "TestEntity1_Name");
+            Assert.AreNotEqual(null, prop);
         }
     }
 }

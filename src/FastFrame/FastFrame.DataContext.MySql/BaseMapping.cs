@@ -18,6 +18,7 @@ namespace FastFrame.Database
             entity.ToTable($"{currNameSpace}_{entityType.Name}");
             /*指定主键*/
             entity.HasKey(x => x.Id);
+            entity.Property(x => x.Id).ValueGeneratedNever();
             entity.HasIndex(x => x.OrganizeId).HasName("Index_OrganizeId");
 
             /*过滤掉软删除的*/

@@ -41,7 +41,9 @@ namespace FastFrame.Application
                 routes.MapHub<ChatHub>("/hub/chat");                
             });
           
-            app.UseMvc();
+            app.UseMvc(r=> {
+                r.MapRoute("defaultApi", "api/{controller=values}/{action}/{id?}");                
+            });
         }
     }
 }

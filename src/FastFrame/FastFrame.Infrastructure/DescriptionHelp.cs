@@ -28,8 +28,10 @@ namespace FastFrame.Infrastructure
         {
             var assemblyPath = type.Assembly.Location;
             var assemblyName = Path.GetFileNameWithoutExtension(assemblyPath);
-            path = Path.Combine(path, assemblyName+".xml");
-            return GetXmlDocument(path);
+            path = Path.Combine(path, assemblyName + ".xml");
+            if (File.Exists(path))
+                return GetXmlDocument(path);
+            else return null;
         }
 
         /// <summary>
@@ -74,6 +76,8 @@ namespace FastFrame.Infrastructure
         public static string GetPropSummary(Type entitytype, PropertyInfo property, string path)
         {
             var doc = GetXmlDocument(entitytype, path);
+            if (doc == null)
+                return "";
             var node = doc.SelectSingleNode("/doc/members/member[@name=\"" + "P:" + entitytype.FullName + "." + property.Name + "\"]/summary");
             if (node != null)
                 return node.InnerText.Trim();
@@ -92,6 +96,8 @@ namespace FastFrame.Infrastructure
         public static string GetEnumSummary(Type enumType, string enumValue, string path)
         {
             var doc = GetXmlDocument(enumType, path);
+            if (doc == null)
+                return "";
             var node = doc.SelectSingleNode("/doc/members/member[@name=\"" + "F:" + enumType.FullName + "." + enumValue + "\"]/summary");
             if (node != null)
                 return node.InnerText.Trim();

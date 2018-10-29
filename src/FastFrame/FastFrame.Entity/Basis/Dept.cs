@@ -12,7 +12,7 @@ namespace FastFrame.Entity.Basis
     public class Dept : BaseEntity
     {
         /// <summary>
-        /// 上级部门
+        /// 上级
         /// </summary>
         [StringLength(50),RelatedTo(typeof(Dept))]
         public string Parent_Id { get; set; }
@@ -24,13 +24,13 @@ namespace FastFrame.Entity.Basis
         public string EnCode { get; set; }
 
         /// <summary>
-        /// 部门名称
+        /// 名称
         /// </summary>
         [StringLength(50), Required]
         public string Name { get; set; }
 
         /// <summary>
-        /// 部门主管
+        /// 主管
         /// </summary>
         [StringLength(50),RelatedTo(typeof(Employee))]
         public string Supervisor_Id { get; set; }

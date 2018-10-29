@@ -17,5 +17,5 @@ namespace FastFrame.Infrastructure.Attrs
         /// 被关联的类型
         /// </summary>
         public Type RelatedType { get; }
-    } 
+    }
 }

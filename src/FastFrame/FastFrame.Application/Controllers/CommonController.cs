@@ -4,11 +4,13 @@ using FastFrame.Infrastructure.Interface;
 using FastFrame.Service;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FastFrame.Application.Controllers
 {
-    public class CommonController : Controller
+    public class CommonController : BaseController
     {
         private readonly IScopeServiceLoader scopeServiceLoader;
         private readonly ITypeProvider typeProvider;
@@ -17,6 +19,12 @@ namespace FastFrame.Application.Controllers
         {
             this.scopeServiceLoader = scopeServiceLoader;
             this.typeProvider = typeProvider;
+        }
+
+        [HttpGet]
+        public IEnumerable<CurrUser> Get()
+        {
+            return Enumerable.Range(1, 100).Select(x => new CurrUser());
         }
 
         /// <summary>

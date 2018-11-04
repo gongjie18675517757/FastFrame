@@ -20,20 +20,22 @@ namespace FastFrame.Repository
         /// <returns></returns>
         public int Commit()
         {
-            using (var bt = context.Database.BeginTransaction())
+            try
             {
-                try
-                {
-                    int count = context.SaveChanges();
-                    bt.Commit();
-                    return count;
-                }
-                catch (Exception ex)
-                {
-                    bt.Rollback();
-                    throw ex;
-                }
+                int count = context.SaveChanges();
+                //bt.Commit();
+                return count;
             }
+            catch (Exception ex)
+            {
+                //bt.Rollback();
+                throw ex;
+            }
+
+            //using (var bt = context.Database.BeginTransaction())
+            //{
+                
+            //}
         }
 
         /// <summary>
@@ -42,20 +44,21 @@ namespace FastFrame.Repository
         /// <returns></returns>
         public async Task<int> CommmitAsync()
         {
-            using (var bt = await context.Database.BeginTransactionAsync())
+            try
             {
-                try
-                {
-                    int count = await context.SaveChangesAsync();
-                    bt.Commit();
-                    return count;
-                }
-                catch (Exception ex)
-                {
-                    bt.Rollback();
-                    throw ex;
-                }
+                int count = await context.SaveChangesAsync();
+                //bt.Commit();
+                return count;
             }
+            catch (Exception ex)
+            {
+                //bt.Rollback();
+                throw ex;
+            }
+            //using (var bt = await context.Database.BeginTransactionAsync())
+            //{
+
+            //}
         }
     }
 }

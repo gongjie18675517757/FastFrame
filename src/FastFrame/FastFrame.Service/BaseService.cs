@@ -37,7 +37,7 @@ namespace FastFrame.Service
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public virtual Task OnAddNewBefore(TDto input, TEntity entity) => Task.CompletedTask;
+        protected virtual Task OnAdding(TDto input, TEntity entity) => Task.CompletedTask;
 
         /// <summary>
         /// 新增
@@ -52,7 +52,7 @@ namespace FastFrame.Service
             }
 
             var entity = input.MapTo<TDto, TEntity>();
-            await OnAddNewBefore(input, entity);
+            await OnAdding(input, entity);
             await repository.AddAsync(entity);
             await repository.CommmitAsync();
 
@@ -64,7 +64,7 @@ namespace FastFrame.Service
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public virtual Task OnDeleteBefore(TEntity input) => Task.CompletedTask;
+        protected virtual Task OnDeleteing(TEntity input) => Task.CompletedTask;
 
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace FastFrame.Service
             foreach (var id in ids)
             {
                 var entity = await repository.GetAsync(id);
-                await OnDeleteBefore(entity);
+                await OnDeleteing(entity);
                 if (entity == null)
                     throw new Exception("ID不正确");
                 await repository.DeleteAsync(entity);
@@ -136,7 +136,7 @@ namespace FastFrame.Service
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public virtual Task OnUpdateBefore(TDto input, TEntity entity) => Task.CompletedTask;
+        protected virtual Task OnUpdateing(TDto input, TEntity entity) => Task.CompletedTask;
 
         /// <summary>
         /// 更新
@@ -151,7 +151,7 @@ namespace FastFrame.Service
             }
             var entity = await repository.GetAsync(input.Id);
             input.MapSet(entity);
-            await OnUpdateBefore(input, entity);
+            await OnUpdateing(input, entity);
 
             await repository.UpdateAsync(entity);
             await repository.CommmitAsync();

@@ -184,6 +184,31 @@
             比较的值
             </summary>
         </member>
+        <member name="T:FastFrame.Entity.Basis.Resource">
+            <summary>
+            资源
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.Resource.Name">
+            <summary>
+            资源名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.Resource.Size">
+            <summary>
+            资源大小
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.Resource.Path">
+            <summary>
+            相对路径
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.Resource.ContentType">
+            <summary>
+            资源标识
+            </summary>
+        </member>
         <member name="T:FastFrame.Entity.Basis.User">
             <summary>
             登陆用户

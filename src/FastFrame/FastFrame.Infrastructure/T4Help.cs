@@ -52,6 +52,12 @@ namespace FastFrame.Infrastructure
                 case "Boolean":
                     name = "bool";
                     break;
+                case "Int64":
+                    name = "long";
+                    break;
+                case "Int32":
+                    name = "int";
+                    break;
                 default:
                     break;
             }

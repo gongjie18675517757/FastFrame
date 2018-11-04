@@ -1,4 +1,4 @@
-namespace FastFrame.Service.Basis
+namespace FastFrame.Service.Services.Basis
 {
 	using FastFrame.Repository.Basis; 
 	using FastFrame.Entity.Basis; 

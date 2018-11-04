@@ -1,25 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using EasyCaching.Core.Internal;
+using EasyCaching.Redis;
+using EasyCaching.Serialization.Json;
 using FastFrame.Application.Hubs;
 using FastFrame.Application.Privder;
 using FastFrame.Infrastructure.Interface;
+using FastFrame.Repository;
+using FastFrame.Service;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
-using FastFrame.Service;
-using FastFrame.Repository;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.AspNetCore.Http;
+using Swashbuckle.AspNetCore.Swagger;
+using System;
+using System.Diagnostics;
 
 namespace FastFrame.Application
 {
@@ -34,10 +34,23 @@ namespace FastFrame.Application
 
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
-        { 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
-                .AddJsonOptions(options => {                   
-                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;                
+        {
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                // This lambda determines whether user consent for non-essential cookies 
+                // is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+
+            services.AddMvc(opts =>
+            {
+                opts.Filters.Add<GlobalFilter>();
+            })
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                .AddJsonOptions(options =>
+                {
+                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                     options.SerializerSettings.ContractResolver = new DefaultContractResolver();
                     options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm";
                     options.SerializerSettings.NullValueHandling = NullValueHandling.Include;
@@ -49,18 +62,46 @@ namespace FastFrame.Application
                .AddDebug((categoryName, logLevel) => (logLevel == LogLevel.Information) && (categoryName == DbLoggerCategory.Database.Command.Name))
               .AddConsole((categoryName, logLevel) => (logLevel == LogLevel.Information) && (categoryName == DbLoggerCategory.Database.Command.Name));
 
+            services.AddOptions();
+
+            services.Configure<ResourceOption>(Configuration.GetSection("ResourceOption"));
+            //services.Configure<RedisConfig>(Configuration.GetSection("RedisConfig"));
+
             services
-                .AddSingleton<IHttpContextAccessor, HttpContextAccessor>()
+                .AddHttpContextAccessor()
                 .AddDbContextPool<Database.DataBase>(o =>
                 {
                     o.UseMySql(Configuration.GetConnectionString("Local_Mysql")).UseLoggerFactory(Mlogger);
+                    //o.UseInMemoryDatabase("Local_Mysql");
                 })
                 .AddSingleton<ITypeProvider, TypeProvider>()
-                .AddScoped<IScopeServiceLoader, ScopeServiceLoader>()  
-                .AddScoped<ICurrentUserProvider, CurrentUserProvider>() 
+                .AddScoped<IScopeServiceLoader, ScopeServiceLoader>()
+                .AddScoped<ICurrentUserProvider, CurrentUserProvider>()
+                .AddScoped<IResourceProvider, ResourceProvider>()
                 .AddServices()
                 .AddRepository();
 
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new Info
+                {
+                    Version = "v1",
+                    Title = "MsSystem API"
+                });
+                options.DescribeAllEnumsAsStrings();
+                ////Determine base path for the application.  
+                //var basePath = PlatformServices.Default.Application.ApplicationBasePath;
+                ////Set the comments path for the swagger json and ui.  
+                //var xmlPath = Path.Combine(basePath, "MsSystem.API.xml");
+                //options.IncludeXmlComments(xmlPath);
+            });
+
+            services.AddDefaultRedisCache(option =>
+            {
+                option.DBConfig.Endpoints.Add(new ServerEndPoint("127.0.0.1", 6379));
+                option.DBConfig.Password = "";
+            });
+            services.AddDefaultJsonSerializer();
             return services.BuildServiceProvider();
         }
 
@@ -76,10 +117,41 @@ namespace FastFrame.Application
                 routes.MapHub<ChatHub>("/hub/chat");
             });
 
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "MsSystem API V1");
+            });
+
+
+            app.Use(async (context, next) =>
+            { 
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+                if (context.Request.Path.Value == "/")
+                    context.Response.Redirect("/index.html");
+                else
+                {
+                    try
+                    {
+                        await next.Invoke();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                }
+                stopwatch.Stop(); 
+
+                context.Response.Headers.Add("ElapsedMilliseconds", stopwatch.ElapsedMilliseconds.ToString());
+            });
+
+            app.UseStaticFiles();
             app.UseMvc(r =>
             {
                 r.MapRoute("defaultApi", "api/{organize?}/{controller=values}/{action}/{id?}/");
             });
+             
         }
-    }
+    } 
 }

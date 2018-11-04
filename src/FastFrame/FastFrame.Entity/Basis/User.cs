@@ -1,5 +1,6 @@
 ﻿using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Attrs;
+using FastFrame.Infrastructure.Interface;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -17,6 +18,7 @@ namespace FastFrame.Entity.Basis
         /// 帐号
         /// </summary>
         [StringLength(50), Required, Unique]
+        [ReadOnly(ReadOnlyMark.Edit)]
         public string Account { get; set; }
 
         /// <summary>
@@ -99,4 +101,7 @@ namespace FastFrame.Entity.Basis
             return $"{EncryptionKey}{password}".ToMD5() == Password;
         }
     }
+
+    
+    
 }

@@ -43,7 +43,7 @@ namespace FastFrame.Repository
                 EntityId = entity.Id,
                 Id = IdGenerate.NetId(),
                 CreateTime = DateTime.Now,
-                CreateUserId = currUser.Id,
+                CreateUserId = currUser?.Id,
                 OrganizeId = currentUserProvider.GetCurrOrganizeId(),
             });
 
@@ -104,7 +104,7 @@ namespace FastFrame.Repository
             //context.Set<T>().Remove(entity);
             entity.IsDeleted = true;
             var foreign = await context.Set<Foreign>().FirstOrDefaultAsync(x => x.EntityId == entity.Id);
-            foreign.ModifyUserId = currUser.Id;
+            foreign.ModifyUserId = currUser?.Id;
             foreign.ModifyTime = DateTime.Now;
             context.Entry(foreign).State = EntityState.Modified;
             context.Entry(entity).State = EntityState.Modified;
@@ -159,7 +159,7 @@ namespace FastFrame.Repository
             /*需要验证唯一性和关联性*/
             var foreign = await context.Set<Foreign>().FirstOrDefaultAsync(x => x.EntityId == entity.Id);
 
-            foreign.ModifyUserId = currUser.Id;
+            foreign.ModifyUserId = currUser?.Id;
             foreign.ModifyTime = DateTime.Now;
             context.Entry(foreign).State = EntityState.Modified;
             var entityEntry = context.Entry(entity);

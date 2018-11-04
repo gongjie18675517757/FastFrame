@@ -2,6 +2,8 @@
 using FastFrame.Infrastructure;
 using System;
 using System.Collections.Generic;
+using ConstructorInfo = FastFrame.CodeGenerate.Info.ConstructorInfo;
+using ParameterInfo = FastFrame.CodeGenerate.Info.ParameterInfo;
 
 namespace FastFrame.CodeGenerate.Build
 {
@@ -26,7 +28,7 @@ namespace FastFrame.CodeGenerate.Build
                         "FastFrame.Database",
                         "FastFrame.Infrastructure.Interface"
                     },
-                    Summary = T4Help.GetClassSummary(type, XmlDocDir)+"[数据访问]",
+                    Summary = T4Help.GetClassSummary(type, XmlDocDir) + "[数据访问]",
                     Name = $"{type.Name}Repository",
                     BaseNames = new string[] { $"BaseRepository<{type.Name}>", $"IRepository<{type.Name}>" },
                     Path = $"{TargetPath}",
@@ -43,4 +45,5 @@ namespace FastFrame.CodeGenerate.Build
             }
         }
     }
+
 }

@@ -22,6 +22,7 @@ namespace FastFrame.Dto.Basis
 		[StringLength(50)]
 		[Required()]
 		[Unique()]
+		[ReadOnly(ReadOnlyMark.Edit)]
 		public string Account {get;set;}
 		
 		/// <summary>

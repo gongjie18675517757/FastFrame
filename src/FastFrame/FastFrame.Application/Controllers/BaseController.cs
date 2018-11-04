@@ -8,21 +8,26 @@ using System.Threading.Tasks;
 
 namespace FastFrame.Application.Controllers
 {
-    public abstract class BaseController : Controller
+    [ApiController]
+    [Route("api/[controller]/[action]")] 
+    public abstract class BaseController : ControllerBase
     {
-    }
-
+    } 
 
     public abstract class BaseController<TEntity, TDto> : BaseController
         where TEntity : class, IEntity, new()
         where TDto : class, IDto<TEntity>, new()
     {
-        public BaseController(IService<TEntity, TDto> service)
-        {
-            this.Service = service;
-        }
+        private readonly IService<TEntity, TDto> service;
 
-        public IService<TEntity, TDto> Service { get; }
+        public Infrastructure.Interface.IScopeServiceLoader ServiceLoader { get; }
+
+        public BaseController(IService<TEntity, TDto> service,Infrastructure.Interface.IScopeServiceLoader serviceLoader)
+        {
+            this.service = service;
+            ServiceLoader = serviceLoader;
+        }
+         
 
         /// <summary>
         /// 添加
@@ -31,9 +36,9 @@ namespace FastFrame.Application.Controllers
         /// <returns></returns>
         [Permission("Add", "添加")]
         [HttpPost]
-        public async Task<TDto> Post([FromBody]TDto @input)
+        public virtual async Task<TDto> Post([FromBody]TDto @input)
         {
-            return await Service.AddAsync(@input);
+            return await service.AddAsync(@input);
         }
 
         /// <summary>
@@ -42,9 +47,9 @@ namespace FastFrame.Application.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete, Permission("Delete", "删除")]
-        public async Task Delete([FromQuery]string id)
+        public virtual async Task Delete([FromQuery]string id)
         {
-            await Service.DeleteAsync(id);
+            await service.DeleteAsync(id);
         }
 
         /// <summary>
@@ -53,9 +58,9 @@ namespace FastFrame.Application.Controllers
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPut, Permission("Update", "修改")]
-        public async Task<TDto> Modify([FromBody]TDto @input)
+        public virtual async Task<TDto> Modify([FromBody]TDto @input)
         {
-            return await Service.UpdateAsync(@input);
+            return await service.UpdateAsync(@input);
         }
 
         /// <summary>
@@ -64,9 +69,9 @@ namespace FastFrame.Application.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet, Permission("Get", "查看")]
-        public async Task<TDto> Get([FromQuery]string id)
+        public virtual async Task<TDto> Get([FromQuery]string id)
         {
-            return await Service.GetAsync(id);
+            return await service.GetAsync(id);
         }
 
         /// <summary>
@@ -75,9 +80,9 @@ namespace FastFrame.Application.Controllers
         /// <param name="pageInfo"></param>
         /// <returns></returns>
         [HttpPost, Permission("List", "列表")]
-        public async Task<PageList<TDto>> List([FromBody]PagePara pageInfo)
+        public virtual async Task<PageList<TDto>> List([FromBody]PagePara pageInfo)
         {
-            return await Service.GetListAsync(pageInfo);
+            return await service.GetListAsync(pageInfo);
         }
     }
 }

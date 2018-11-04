@@ -67,7 +67,7 @@ namespace FastFrame.CodeGenerate.Build
 
             return new TargetInfo()
             {
-                NamespaceName = $"FastFrame.Service.{areaName}",
+                NamespaceName = $"FastFrame.Service.Services.{areaName}",
                 ImportNames = importNames,
                 Name = $"{type.Name}Service",
                 CategoryName = "class",

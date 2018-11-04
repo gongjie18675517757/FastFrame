@@ -1,4 +1,4 @@
-namespace FastFrame.Service.Basis
+namespace FastFrame.Service.Services.Basis
 {
 	using FastFrame.Repository.Basis; 
 	using FastFrame.Entity.Basis; 
@@ -48,9 +48,9 @@ namespace FastFrame.Service.Basis
 					from user3 in t_user3.DefaultIfEmpty()
 					 select new DeptDto
 					{
+						Parent_Id=dept.Parent_Id,
 						EnCode=dept.EnCode,
 						Name=dept.Name,
-						Parent_Id=dept.Parent_Id,
 						Supervisor_Id=dept.Supervisor_Id,
 						Id=dept.Id,
 						Parent_EnCode=parent_Id.EnCode,
@@ -67,5 +67,5 @@ namespace FastFrame.Service.Basis
 			return query;
 		}
 		#endregion
-	} 
+	}
 }

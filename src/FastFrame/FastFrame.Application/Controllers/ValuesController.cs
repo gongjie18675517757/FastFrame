@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FastFrame.Entity.Basis;
 using FastFrame.Infrastructure.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.SignalR;
@@ -11,9 +12,10 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace FastFrame.Application.Controllers
 {
-    //[Route("api/[controller]")]
-    //[ApiController]
-    public class ValuesController : Controller
+    [Route("api/[controller]")]
+    [AllowAnonymous]
+    [ApiController]
+    public class ValuesController : ControllerBase
     {
         private readonly IServiceProvider serviceProvider;
         private readonly IHubContext<Hubs.ChatHub> hubContext;
@@ -25,7 +27,7 @@ namespace FastFrame.Application.Controllers
         }
 
         [HttpGet]
-        public async Task<User> GetTest()
+        public async Task<User> Get()
         {
             var currentUserProvider = serviceProvider.GetService<ICurrentUserProvider>();
 
@@ -34,14 +36,14 @@ namespace FastFrame.Application.Controllers
             return await Task.FromResult(u);
         }
 
-        [HttpGet]
-        public ActionResult<IEnumerable<string>> GetList()
-        {
-            return new string[] { "value1", "value2" };
-        }
+        //[HttpGet]
+        //public ActionResult<IEnumerable<string>> GetList()
+        //{
+        //    return new string[] { "value1", "value2" };
+        //}
 
 
-        [HttpGet]
+        [HttpGet("{id}")]
         public ActionResult<string> Get(int id = 0)
         {
             return id.ToString();
@@ -65,6 +67,4 @@ namespace FastFrame.Application.Controllers
         {
         }
     }
-
-
 }

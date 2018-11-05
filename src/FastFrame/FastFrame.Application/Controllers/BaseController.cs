@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace FastFrame.Application.Controllers
 {
     [ApiController]
-    [Route("api/[controller]/[action]")] 
+    [Route("api/[controller]/[action]")]
     public abstract class BaseController : ControllerBase
     {
     } 

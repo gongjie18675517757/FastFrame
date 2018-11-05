@@ -21,7 +21,7 @@ namespace FastFrame.Dto
         /// <summary>
         /// 创建时间
         /// </summary> 
-        public DateTime CreateTime { get; set; }
+        public DateTime? CreateTime { get; set; }
 
         /// <summary>
         /// 修改人
@@ -36,7 +36,7 @@ namespace FastFrame.Dto
         /// <summary>
         /// 修改时间
         /// </summary>
-        public DateTime ModifyTime { get; set; }
+        public DateTime? ModifyTime { get; set; }
 
 
         public string Id { get; set; }

@@ -158,10 +158,12 @@ namespace FastFrame.Repository
         {
             /*需要验证唯一性和关联性*/
             var foreign = await context.Set<Foreign>().FirstOrDefaultAsync(x => x.EntityId == entity.Id);
-
-            foreign.ModifyUserId = currUser?.Id;
-            foreign.ModifyTime = DateTime.Now;
-            context.Entry(foreign).State = EntityState.Modified;
+            if (foreign != null)
+            {
+                foreign.ModifyUserId = currUser?.Id;
+                foreign.ModifyTime = DateTime.Now;
+                context.Entry(foreign).State = EntityState.Modified;
+            } 
             var entityEntry = context.Entry(entity);
             entityEntry.State = EntityState.Modified;
             return entityEntry.Entity;

@@ -31,6 +31,7 @@ namespace FastFrame.Service.Services.Basis
                 throw new Exception("用户不存在");
             user.IsAdmin = !user.IsAdmin;
             await userRepository.UpdateAsync(user);
+            await userRepository.CommmitAsync();
             return await GetAsync(id);
         }
 
@@ -48,6 +49,8 @@ namespace FastFrame.Service.Services.Basis
                 throw new Exception("用户不存在");
             user.IsDisabled = !user.IsDisabled;
             await userRepository.UpdateAsync(user);
+            await userRepository.CommmitAsync();
+
             return await GetAsync(id);
         }
     }

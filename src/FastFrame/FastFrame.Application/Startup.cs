@@ -17,9 +17,10 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
-using Swashbuckle.AspNetCore.Swagger;
+using Swashbuckle.Swagger.Model;
 using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace FastFrame.Application
 {
@@ -83,10 +84,12 @@ namespace FastFrame.Application
 
             services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("v1", new Info
+                options.SingleApiVersion(new Info
                 {
                     Version = "v1",
-                    Title = "MsSystem API"
+                    Title = "API文档",
+                    Description = "快速开发平台API文档",
+                    TermsOfService = "None",
                 });
                 options.DescribeAllEnumsAsStrings();
                 ////Determine base path for the application.  
@@ -115,43 +118,29 @@ namespace FastFrame.Application
             app.UseSignalR(routes =>
             {
                 routes.MapHub<ChatHub>("/hub/chat");
-            });
-
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "MsSystem API V1");
-            });
-
-
+            }); 
             app.Use(async (context, next) =>
-            { 
+            {
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
+                context.Response.OnStarting(() =>
+                {
+                    stopwatch.Stop();
+                    context.Response.Headers.Add("ElapsedMilliseconds", stopwatch.ElapsedMilliseconds.ToString());
+                    return Task.CompletedTask;
+                });
                 if (context.Request.Path.Value == "/")
                     context.Response.Redirect("/index.html");
-                else
-                {
-                    try
-                    {
-                        await next.Invoke();
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
-                }
-                stopwatch.Stop(); 
-
-                context.Response.Headers.Add("ElapsedMilliseconds", stopwatch.ElapsedMilliseconds.ToString());
+                await next.Invoke();
             });
-
-            app.UseStaticFiles();
-            app.UseMvc(r =>
-            {
-                r.MapRoute("defaultApi", "api/{organize?}/{controller=values}/{action}/{id?}/");
-            });
-             
+            app.UseStaticFiles(); 
+            app.UseMvc();
+            //app.UseRouter(r =>
+            //{
+            //    r.MapRoute("defaultApi", "api/{organize?}/{controller=values}/{action}/{id?}/");
+            //});
+            app.UseSwagger();
+            app.UseSwaggerUi();
         }
-    } 
+    }
 }

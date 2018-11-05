@@ -38,6 +38,8 @@ namespace FastFrame.Service.Services
             var user = await userRepository.Queryable.Where(x => x.Account == input.Account).FirstOrDefaultAsync();
             if (user?.VerificationPassword(input.Password) == true)
             {
+                if (user.IsDisabled)
+                    throw new Exception("帐号已被停用");
                 var curr = new CurrUser()
                 {
                     IsAdmin = user.IsAdmin,

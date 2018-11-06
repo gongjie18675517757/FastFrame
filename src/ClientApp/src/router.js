@@ -7,14 +7,15 @@ import {
 Vue.use(Router)
 
 
-const load = (path = "") => {
+const load = (path, url) => {
+  path = path || ''
   let paths = path.split('/')
   let name = paths[paths.length - 1].toLowerCase()
   paths = paths.map(a => changeChar(a, x => x.toUpperCase()))
   path = paths.join('/');
 
   return {
-    path: `/${name}`,
+    path: url || `/${name}`,
     name: name,
     component: () =>
       import(`./views${path}.vue`)
@@ -26,6 +27,7 @@ export default new Router({
       name: 'home',
       component: Home,
       children: [
+        load('/index/index','/'),
         load('/about'),
         load('/page1/page1-1'),
         load('/page1/page1-2'),

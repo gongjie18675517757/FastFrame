@@ -11,21 +11,21 @@ namespace FastFrame.Repository
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<T> GetAsync(string id);
+        ValueTask<T> GetAsync(string id);
 
         /// <summary>
         /// 添加数据
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        Task<T> AddAsync(T entity);
+        ValueTask<T> AddAsync(T entity);
 
         /// <summary>
         /// 更新数据
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        Task<T> UpdateAsync(T entity);
+        ValueTask<T> UpdateAsync(T entity);
 
         /// <summary>
         /// 删除

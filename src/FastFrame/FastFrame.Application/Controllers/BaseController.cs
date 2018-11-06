@@ -36,7 +36,7 @@ namespace FastFrame.Application.Controllers
         /// <returns></returns>
         [Permission("Add", "添加")]
         [HttpPost]
-        public virtual async Task<TDto> Post([FromBody]TDto @input)
+        public virtual async ValueTask<TDto> Post([FromBody]TDto @input)
         {
             return await service.AddAsync(@input);
         }
@@ -58,7 +58,7 @@ namespace FastFrame.Application.Controllers
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPut, Permission("Update", "修改")]
-        public virtual async Task<TDto> Modify([FromBody]TDto @input)
+        public virtual async ValueTask<TDto> Modify([FromBody]TDto @input)
         {
             return await service.UpdateAsync(@input);
         }
@@ -69,7 +69,7 @@ namespace FastFrame.Application.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet, Permission("Get", "查看")]
-        public virtual async Task<TDto> Get([FromQuery]string id)
+        public virtual async ValueTask<TDto> Get([FromQuery]string id)
         {
             return await service.GetAsync(id);
         }
@@ -80,7 +80,7 @@ namespace FastFrame.Application.Controllers
         /// <param name="pageInfo"></param>
         /// <returns></returns>
         [HttpPost, Permission("List", "列表")]
-        public virtual async Task<PageList<TDto>> List([FromBody]PagePara pageInfo)
+        public virtual async ValueTask<PageList<TDto>> List([FromBody]PagePara pageInfo)
         {
             return await service.GetListAsync(pageInfo);
         }

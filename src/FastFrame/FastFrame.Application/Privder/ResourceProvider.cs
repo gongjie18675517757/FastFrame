@@ -18,7 +18,7 @@ namespace FastFrame.Application.Privder
         {
             this.option = option;
         }
-        public async Task<Stream> GetResource(string path)
+        public async ValueTask<Stream> GetResource(string path)
         {
             await Task.CompletedTask;
             path = Path.Combine(option.Value.BasePath, path);
@@ -27,7 +27,7 @@ namespace FastFrame.Application.Privder
             return null;
         }
 
-        public async Task<string> SetResource(Stream stream)
+        public async ValueTask<string> SetResource(Stream stream)
         {
             var dirPath = Path.Combine(option.Value.BasePath,
                     $"{DateTime.Now.Year}",

@@ -23,7 +23,7 @@ namespace FastFrame.Service.Services
             this.userRepository = userRepository;
             this.currentUserProvider = currentUserProvider;
         }
-        public Task<bool> VerifyUnique(string id, string propName, string value)
+        public ValueTask<bool> VerifyUnique(string id, string propName, string value)
         {
             throw new NotImplementedException();
         }
@@ -33,7 +33,7 @@ namespace FastFrame.Service.Services
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<CurrUser> LoginAsync(LoginInput input)
+        public async ValueTask<CurrUser> LoginAsync(LoginInput input)
         {
             var user = await userRepository.Queryable.Where(x => x.Account == input.Account).FirstOrDefaultAsync();
             if (user?.VerificationPassword(input.Password) == true)
@@ -60,7 +60,7 @@ namespace FastFrame.Service.Services
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<UserDto> UpdateUserInfo(UserDto input)
+        public async ValueTask<UserDto> UpdateUserInfo(UserDto input)
         {
             var userId = currentUserProvider.GetCurrUser().Id;
             var user = await userRepository.GetAsync(userId);
@@ -79,7 +79,7 @@ namespace FastFrame.Service.Services
         /// 获取当前用户
         /// </summary>
         /// <returns></returns>
-        public async Task<UserDto> GetCurrentAsync()
+        public async ValueTask<UserDto> GetCurrentAsync()
         {
             var curr = currentUserProvider.GetCurrUser();
             if (curr == null)

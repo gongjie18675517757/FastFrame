@@ -12,9 +12,9 @@ namespace FastFrame.Application.Controllers.Basis
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpPut]
-        public async Task<UserDto> ToogleAdminIdentity(string id)
+        public async ValueTask<UserDto> ToogleAdminIdentity(string id)
         {
-            return await service.ToogleAdminIdentity(id);
+            return await service.ToogleAdminIdentity(id); 
         }
         /// <summary>
         /// 切换禁用状态
@@ -22,7 +22,7 @@ namespace FastFrame.Application.Controllers.Basis
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpPut]
-        public async Task<UserDto> ToogleDisabled(string id)
+        public async ValueTask<UserDto> ToogleDisabled(string id)
         {
             return await service.ToogleDisabled(id);
         }

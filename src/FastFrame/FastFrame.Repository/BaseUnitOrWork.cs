@@ -42,7 +42,7 @@ namespace FastFrame.Repository
         /// 事务保存
         /// </summary>
         /// <returns></returns>
-        public async Task<int> CommmitAsync()
+        public async ValueTask<int> CommmitAsync()
         {
             try
             {

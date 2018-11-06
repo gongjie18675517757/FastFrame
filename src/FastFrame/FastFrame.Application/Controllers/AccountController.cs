@@ -29,7 +29,7 @@ namespace FastFrame.Application.Controllers
         /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
-        public async Task<CurrUser> Login([FromBody]LoginInput input)
+        public async ValueTask<CurrUser> Login([FromBody]LoginInput input)
         {
             return await service.LoginAsync(input);
         }
@@ -40,7 +40,7 @@ namespace FastFrame.Application.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<UserDto> GetCurrent()
+        public async ValueTask<UserDto> GetCurrent()
         {
             return await service.GetCurrentAsync();
         }
@@ -50,7 +50,7 @@ namespace FastFrame.Application.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPut]
-        public async Task<UserDto> UpdateCurrUserInfo(UserDto input)
+        public async ValueTask<UserDto> UpdateCurrUserInfo(UserDto input)
         {
             return await service.UpdateUserInfo(input);
         }

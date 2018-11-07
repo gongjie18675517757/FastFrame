@@ -9,6 +9,12 @@
         <v-divider></v-divider>
         <v-form ref="form">
           <v-card-text>
+            <v-subheader class="subheader">头像</v-subheader>
+            <v-flex xs12 sm6 md8 align-center justify-center layout text-xs-center>
+              <v-avatar size="100" color="grey lighten-4" @click="uploadImg" class="handIcon" title="更换">
+                <img src="@/assets/timg.jpg" alt="avatar">
+              </v-avatar>
+            </v-flex>
             <v-text-field v-model="form.Account" label="帐号" readonly required></v-text-field>
             <v-text-field
               :rules="[rules.required,rules.length(3,50)]"
@@ -25,23 +31,23 @@
             ></v-text-field>
             <v-text-field v-model="form.Email" :rules="[rules.email]" label="邮箱" required></v-text-field>
             <v-text-field v-model="form.PhoneNumber" :rules="[rules.phone]" label="手机号码" required></v-text-field>
-          </v-card-text>
-        </v-form>
-        <v-divider class="mt-5"></v-divider>
-        <v-card-actions>
-          <!-- <v-btn flat>取消</v-btn> -->
-          <v-spacer></v-spacer>
-          <!-- <v-slide-x-reverse-transition>
+            <v-divider class="mt-5"></v-divider>
+            <v-card-actions>
+              <!-- <v-btn flat>取消</v-btn> -->
+              <v-spacer></v-spacer>
+              <!-- <v-slide-x-reverse-transition>
             <v-tooltip v-if="formHasErrors" left>
               <v-btn slot="activator" icon class="my-0" @click="resetForm">
                 <v-icon>refresh</v-icon>
               </v-btn>
               <span>Refresh form</span>
             </v-tooltip>
-          </v-slide-x-reverse-transition>-->
+              </v-slide-x-reverse-transition>-->
 
-          <v-btn color="primary" flat @click="submit" :loading="submiting">保存</v-btn>
-        </v-card-actions>
+              <v-btn color="primary" flat @click="submit" :loading="submiting">保存</v-btn>
+            </v-card-actions>
+          </v-card-text>
+        </v-form>
       </v-card>
     </v-flex>
   </v-layout>
@@ -62,11 +68,19 @@ export default {
       submiting: false
     }
   },
+  computed: {
+    handIcon() {
+      let id = this.form.HandIconId
+      return id ? `/api/resource/get/${id}` : '@/assets/timg.jpg'
+    }
+  },
   async created() {
     let request = await this.$http.get('/api/account/GetCurrent')
     this.form = request
   },
   methods: {
+    async uploadImg(){ 
+    },
     async submit() {
       this.submiting = true
       try {
@@ -89,8 +103,14 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .form {
   padding: 5px;
+}
+.subheader {
+  padding: 0px;
+}
+.handIcon{
+  cursor: pointer;  
 }
 </style>

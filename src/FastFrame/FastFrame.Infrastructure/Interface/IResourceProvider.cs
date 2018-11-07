@@ -13,13 +13,13 @@ namespace FastFrame.Infrastructure.Interface
         /// </summary>
         /// <param name="stream"></param>
         /// <returns></returns>
-        ValueTask<string> SetResource(Stream stream);
+        Task<string> SetResource(Stream stream);
 
         /// <summary>
         /// 打开资源
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        ValueTask<Stream> GetResource(string path);
+        Task<Stream> GetResource(string path);
     } 
 }

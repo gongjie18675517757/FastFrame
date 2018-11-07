@@ -54,7 +54,7 @@ namespace FastFrame.Application.Privder
             });
         }
 
-        public async Task LogOut(ICurrUser currUser)
+        public async Task LogOut()
         {
             var token = GetToken();
             await cachingProvider.RemoveAsync(currUser.ToKen);

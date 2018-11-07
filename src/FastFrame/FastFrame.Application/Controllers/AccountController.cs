@@ -16,10 +16,12 @@ namespace FastFrame.Application.Controllers
     public class AccountController : BaseController
     {
         private readonly AccountService service;
+        private readonly ICurrentUserProvider currentUserProvider;
 
-        public AccountController(AccountService service)
+        public AccountController(AccountService service, ICurrentUserProvider currentUserProvider)
         {
             this.service = service;
+            this.currentUserProvider = currentUserProvider;
         }
 
         /// <summary>
@@ -29,18 +31,27 @@ namespace FastFrame.Application.Controllers
         /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
-        public async ValueTask<CurrUser> Login([FromBody]LoginInput input)
+        public async Task<CurrUser> Login([FromBody]LoginInput input)
         {
             return await service.LoginAsync(input);
         }
 
+        /// <summary>
+        /// 登出
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task LogOut()
+        {
+            await currentUserProvider.LogOut();
+        }
 
         /// <summary>
         /// 获取当前用户
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async ValueTask<UserDto> GetCurrent()
+        public async Task<UserDto> GetCurrent()
         {
             return await service.GetCurrentAsync();
         }
@@ -50,7 +61,7 @@ namespace FastFrame.Application.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPut]
-        public async ValueTask<UserDto> UpdateCurrUserInfo(UserDto input)
+        public async Task<UserDto> UpdateCurrUserInfo([FromBody]UserDto input)
         {
             return await service.UpdateUserInfo(input);
         }

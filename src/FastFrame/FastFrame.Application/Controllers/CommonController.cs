@@ -35,7 +35,7 @@ namespace FastFrame.Application.Controllers
         /// <param name="value"></param>
         /// <returns></returns>
         [HttpGet]
-        public async ValueTask<bool> VerificationUnique(string id, [FromQuery]string moduleName, [FromQuery]string propName, [FromQuery]string value)
+        public async Task<bool> VerificationUnique(string id, [FromQuery]string moduleName, [FromQuery]string propName, [FromQuery]string value)
         {
             var entityType = typeProvider.GetTypeByName(moduleName);
             var areaName = T4Help.GenerateNameSpace(entityType, "");

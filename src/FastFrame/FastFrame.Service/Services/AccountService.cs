@@ -23,7 +23,7 @@ namespace FastFrame.Service.Services
             this.userRepository = userRepository;
             this.currentUserProvider = currentUserProvider;
         }
-        public ValueTask<bool> VerifyUnique(string id, string propName, string value)
+        public Task<bool> VerifyUnique(string id, string propName, string value)
         {
             throw new NotImplementedException();
         }
@@ -33,7 +33,7 @@ namespace FastFrame.Service.Services
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async ValueTask<CurrUser> LoginAsync(LoginInput input)
+        public async Task<CurrUser> LoginAsync(LoginInput input)
         {
             var user = await userRepository.Queryable.Where(x => x.Account == input.Account).FirstOrDefaultAsync();
             if (user?.VerificationPassword(input.Password) == true)
@@ -57,10 +57,9 @@ namespace FastFrame.Service.Services
 
         /// <summary>
         /// 更新用户信息
-        /// </summary>
-        /// <param name="input"></param>
+        /// </summary> 
         /// <returns></returns>
-        public async ValueTask<UserDto> UpdateUserInfo(UserDto input)
+        public async Task<UserDto> UpdateUserInfo(UserDto input)
         {
             var userId = currentUserProvider.GetCurrUser().Id;
             var user = await userRepository.GetAsync(userId);
@@ -71,7 +70,13 @@ namespace FastFrame.Service.Services
                 input.Email,
                 input.HandIconId,
             }.MapSet(user);
+            if (input.Password != user.Password)
+            {
+                user.Password = input.Password;
+                user.GeneratePassword();
+            }
             await userRepository.UpdateAsync(user);
+            await userRepository.CommmitAsync();
             return await GetCurrentAsync();
         }
 
@@ -79,7 +84,7 @@ namespace FastFrame.Service.Services
         /// 获取当前用户
         /// </summary>
         /// <returns></returns>
-        public async ValueTask<UserDto> GetCurrentAsync()
+        public async Task<UserDto> GetCurrentAsync()
         {
             var curr = currentUserProvider.GetCurrUser();
             if (curr == null)

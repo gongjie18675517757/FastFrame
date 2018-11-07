@@ -14,6 +14,6 @@ namespace FastFrame.Repository
         /// 异步提交
         /// </summary>
         /// <returns></returns>
-        ValueTask<int> CommmitAsync();
+        Task<int> CommmitAsync();
     }
 }

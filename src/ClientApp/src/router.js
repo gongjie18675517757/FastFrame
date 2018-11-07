@@ -29,6 +29,7 @@ export default new Router({
       children: [
         load('/index/index','/'),
         load('/about'),
+        load('/userCenter'),
         load('/page1/page1-1'),
         load('/page1/page1-2'),
       ]

@@ -44,7 +44,7 @@ namespace FastFrame.Service
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async ValueTask<TDto> AddAsync(TDto input)
+        public async Task<TDto> AddAsync(TDto input)
         {
             if (input == null)
             {
@@ -90,7 +90,7 @@ namespace FastFrame.Service
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async ValueTask<TDto> GetAsync(string id)
+        public async Task<TDto> GetAsync(string id)
         {
             var entity = await Query().FirstOrDefaultAsync(x => x.Id == id);
             if (entity == null)
@@ -103,7 +103,7 @@ namespace FastFrame.Service
         /// </summary>
         /// <param name="pageInfo"></param>
         /// <returns></returns>
-        public async ValueTask<PageList<TDto>> GetListAsync(PagePara pageInfo)
+        public async Task<PageList<TDto>> GetListAsync(PagePara pageInfo)
         {
             var query = Query().DynamicQuery(pageInfo.Condition);
             return new PageList<TDto>()
@@ -143,7 +143,7 @@ namespace FastFrame.Service
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async ValueTask<TDto> UpdateAsync(TDto input)
+        public async Task<TDto> UpdateAsync(TDto input)
         {
             if (input == null)
             {
@@ -165,7 +165,7 @@ namespace FastFrame.Service
         /// <param name="propName"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public async ValueTask<bool> VerifyUnique(string id, string propName, string value)
+        public async Task<bool> VerifyUnique(string id, string propName, string value)
         {
             return !await repository.Queryable.DynamicQuery(new QueryCondition()
             {

@@ -12,7 +12,7 @@ namespace FastFrame.Application.Controllers.Basis
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpPut]
-        public async ValueTask<UserDto> ToogleAdminIdentity(string id)
+        public async Task<UserDto> ToogleAdminIdentity(string id)
         {
             return await service.ToogleAdminIdentity(id); 
         }
@@ -22,7 +22,7 @@ namespace FastFrame.Application.Controllers.Basis
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpPut]
-        public async ValueTask<UserDto> ToogleDisabled(string id)
+        public async Task<UserDto> ToogleDisabled(string id)
         {
             return await service.ToogleDisabled(id);
         }

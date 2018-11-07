@@ -34,6 +34,6 @@ namespace FastFrame.Infrastructure.Interface
         /// </summary>
         /// <param name="currUser"></param>
         /// <returns></returns>
-        Task LogOut(ICurrUser currUser);
+        Task LogOut();
     }
 }

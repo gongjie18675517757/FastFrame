@@ -26,7 +26,7 @@ namespace FastFrame.Application.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public async ValueTask<IEnumerable<ResourceDto>> Post()
+        public async Task<IEnumerable<ResourceDto>> Post()
         {
             if (Request.Form.Files.Count == 0)
                 throw new System.Exception("无有效文件!");
@@ -52,7 +52,7 @@ namespace FastFrame.Application.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
-        public async ValueTask<IActionResult> Get(string id)
+        public async Task<IActionResult> Get(string id)
         {
             var resource = await resourceService.GetAsync(id);
             if (resource == null)

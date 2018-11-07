@@ -17,7 +17,7 @@ namespace FastFrame.Service
         /// <param name="propName"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        ValueTask<bool> VerifyUnique(string id,string propName, string value);
+        Task<bool> VerifyUnique(string id,string propName, string value);
     }
 
     /// <summary>
@@ -34,7 +34,7 @@ namespace FastFrame.Service
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        ValueTask<TDto> AddAsync(TDto input); 
+        Task<TDto> AddAsync(TDto input); 
 
         /// <summary>
         /// 删除
@@ -48,20 +48,20 @@ namespace FastFrame.Service
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        ValueTask<TDto> UpdateAsync(TDto input);
+        Task<TDto> UpdateAsync(TDto input);
 
         /// <summary>
         /// 获取单条数据
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        ValueTask<TDto> GetAsync(string id);
+        Task<TDto> GetAsync(string id);
 
         /// <summary>
         /// 获取列表数据
         /// </summary>
         /// <param name="pageInfo"></param>
         /// <returns></returns>
-        ValueTask<PageList<TDto>> GetListAsync(PagePara pageInfo);  
+        Task<PageList<TDto>> GetListAsync(PagePara pageInfo);  
     }  
 }

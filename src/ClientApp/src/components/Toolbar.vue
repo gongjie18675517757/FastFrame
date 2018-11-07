@@ -33,8 +33,7 @@
       <v-list class="pa-0">
         <v-list-tile
           v-for="(item,index) in items"
-          :to="!item.href ? { name: item.name } : null"
-          :href="item.href"
+          :to="item.href"
           @click="item.click"
           ripple="ripple"
           :disabled="item.disabled"
@@ -69,27 +68,25 @@ export default {
       items: [
         {
           icon: 'account_circle',
-          href: '#',
           title: '个人中心',
           click: e => {
-            console.log(e)
+            this.$router.push('/userCenter')
           }
-        },
+        }, 
         {
           icon: 'settings',
-          href: '#',
-          title: '设置',
+          title: '更换头像',
           click: e => {
-            console.log(e)
+            this.rightDrawer = true
           }
         },
         {
           icon: 'fullscreen_exit',
-          href: '#',
           title: '注销',
-          click: e => {
+          click: async e => {
             this.$store.commit('logout')
             this.$router.push('/login')
+            this.$http.post()
           }
         }
       ]

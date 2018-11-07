@@ -32,7 +32,7 @@ namespace FastFrame.Repository
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public virtual async ValueTask<T> AddAsync(T entity)
+        public virtual async Task<T> AddAsync(T entity)
         {
             /*验证唯一性+关联性*/
             entity.Id = IdGenerate.NetId();
@@ -126,7 +126,7 @@ namespace FastFrame.Repository
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public virtual async ValueTask<T> GetAsync(string id)
+        public virtual async Task<T> GetAsync(string id)
         {
             return await Queryable.FirstOrDefaultAsync(x => x.Id == id);
         }
@@ -154,7 +154,7 @@ namespace FastFrame.Repository
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public virtual async ValueTask<T> UpdateAsync(T entity)
+        public virtual async Task<T> UpdateAsync(T entity)
         {
             /*需要验证唯一性和关联性*/
             var foreign = await context.Set<Foreign>().FirstOrDefaultAsync(x => x.EntityId == entity.Id);

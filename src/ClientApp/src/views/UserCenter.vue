@@ -11,8 +11,14 @@
           <v-card-text>
             <v-subheader class="subheader">头像</v-subheader>
             <v-flex xs12 sm6 md8 align-center justify-center layout text-xs-center>
-              <v-avatar size="100" color="grey lighten-4" @click="uploadImg" class="handIcon" title="更换">
-                <img src="@/assets/timg.jpg" alt="avatar">
+              <v-avatar
+                size="100"
+                color="grey lighten-4"
+                @click="uploadImg"
+                class="handIcon"
+                title="更换"
+              >
+                <img :src="handIcon" alt="avatar">
               </v-avatar>
             </v-flex>
             <v-text-field v-model="form.Account" label="帐号" readonly required></v-text-field>
@@ -55,7 +61,8 @@
 
 <script>
 import rules from '@/rules'
-import { alert } from '@/utils'
+import timg from '@/assets/timg.jpg'
+import { alert, upload } from '@/utils'
 export default {
   data() {
     return {
@@ -71,7 +78,7 @@ export default {
   computed: {
     handIcon() {
       let id = this.form.HandIconId
-      return id ? `/api/resource/get/${id}` : '@/assets/timg.jpg'
+      return id ? `/api/resource/get/${id}` : timg
     }
   },
   async created() {
@@ -79,7 +86,10 @@ export default {
     this.form = request
   },
   methods: {
-    async uploadImg(){ 
+    async uploadImg() {
+      let accept = 'image/gif, image/jpeg'
+      let resources = await upload({ accept })
+      this.form.HandIconId = resources[0].Id
     },
     async submit() {
       this.submiting = true
@@ -103,14 +113,11 @@ export default {
 }
 </script>
 
-<style scoped>
-.form {
-  padding: 5px;
-}
+<style scoped> 
 .subheader {
   padding: 0px;
 }
-.handIcon{
-  cursor: pointer;  
+.handIcon {
+  cursor: pointer;
 }
 </style>

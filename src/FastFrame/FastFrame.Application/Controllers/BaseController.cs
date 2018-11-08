@@ -12,7 +12,7 @@ namespace FastFrame.Application.Controllers
     [Route("api/[controller]/[action]")]
     public abstract class BaseController : ControllerBase
     {
-    } 
+    }
 
     public abstract class BaseController<TEntity, TDto> : BaseController
         where TEntity : class, IEntity, new()
@@ -22,12 +22,12 @@ namespace FastFrame.Application.Controllers
 
         public Infrastructure.Interface.IScopeServiceLoader ServiceLoader { get; }
 
-        public BaseController(IService<TEntity, TDto> service,Infrastructure.Interface.IScopeServiceLoader serviceLoader)
+        public BaseController(IService<TEntity, TDto> service, Infrastructure.Interface.IScopeServiceLoader serviceLoader)
         {
             this.service = service;
             ServiceLoader = serviceLoader;
         }
-         
+
 
         /// <summary>
         /// 添加
@@ -46,8 +46,8 @@ namespace FastFrame.Application.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete, Permission("Delete", "删除")]
-        public virtual async Task Delete([FromQuery]string id)
+        [HttpDelete("{id}"), Permission("Delete", "删除")]
+        public virtual async Task Delete(string id)
         {
             await service.DeleteAsync(id);
         }
@@ -68,8 +68,9 @@ namespace FastFrame.Application.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet, Permission("Get", "查看")]
-        public virtual async Task<TDto> Get([FromQuery]string id)
+        [Permission("Get", "查看")]
+        [HttpGet("{id}")]
+        public virtual async Task<TDto> Get(string id)
         {
             return await service.GetAsync(id);
         }

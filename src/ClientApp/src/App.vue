@@ -17,4 +17,7 @@ export default {
 </script>
 
 <style>
+.form {
+  padding: 5px;
+}
 </style>

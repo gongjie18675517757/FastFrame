@@ -34,7 +34,7 @@ namespace FastFrame.Application.Controllers
         /// <param name="propName"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet("{id}")]
         public async Task<bool> VerificationUnique(string id, [FromQuery]string moduleName, [FromQuery]string propName, [FromQuery]string value)
         {
             var entityType = typeProvider.GetTypeByName(moduleName);

@@ -51,7 +51,7 @@ namespace FastFrame.Application.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {
             var resource = await resourceService.GetAsync(id);

@@ -29,20 +29,23 @@ namespace FastFrame.Application.Privder
 
         public async Task<string> SetResource(Stream stream)
         {
-            var dirPath = Path.Combine(option.Value.BasePath,
+            var relativelyPath = Path.Combine(
                     $"{DateTime.Now.Year}",
                     $"{DateTime.Now.Month}",
                     $"{DateTime.Now.Day}");
+            var dirPath = Path.Combine(option.Value.BasePath, relativelyPath);
+
             if (!Directory.Exists(dirPath))
                 Directory.CreateDirectory(dirPath);
 
-            var path = Path.Combine(dirPath, $"{IdGenerate.NetId()}");
+            relativelyPath = Path.Combine(relativelyPath, $"{IdGenerate.NetId()}");
+            var path = Path.Combine(option.Value.BasePath, relativelyPath);
             using (var fileStream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.Write))
             {
                 stream.Position = 0;
                 await stream.CopyToAsync(fileStream);
             }
-            return path;
+            return relativelyPath;
         }
     }
 }

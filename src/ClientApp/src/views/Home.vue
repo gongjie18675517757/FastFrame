@@ -21,14 +21,13 @@ export default {
     Setting,
     Menus,
     Toolbar
-  },  
+  },
   data() {
     return {
-      fixed: false, 
+      fixed: false,
       title: 'XXX管理后台'
     }
-  },
-  methods: {}
+  }, 
 }
 </script>
 <style scoped>

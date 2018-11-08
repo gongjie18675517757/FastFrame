@@ -1,4 +1,5 @@
 import axios from 'axios'
+import router from '@/router'
 import {
   alert
 } from './utils';
@@ -18,10 +19,12 @@ axios.interceptors.request.use(function (config) {
 
 
 axios.interceptors.response.use(function (response) {
-
   return response.data;
 }, function (error) {
-  if (error.response && error.response.data) {
+
+  if (error.response.status == 401) {
+
+  } else if (error.response && error.response.data) {
     let data = error.response.data
     for (const key of Object.keys(data)) {
       let item = data[key]
@@ -29,7 +32,7 @@ axios.interceptors.response.use(function (response) {
         data[key].forEach(err => {
           alert.error(err)
         })
-      } else {
+      } else if (typeof item == 'string') {
         alert.error(item)
       }
     }

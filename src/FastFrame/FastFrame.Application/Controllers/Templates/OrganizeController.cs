@@ -6,7 +6,7 @@ namespace FastFrame.Application.Controllers.Basis
 	using FastFrame.Infrastructure.Interface; 
 	/// <summary>
 	///组织信息 
-	/// <summary>
+	/// </summary>
 	public partial class OrganizeController:BaseController<Organize, OrganizeDto>
 	{
 		#region 字段

@@ -10,11 +10,13 @@ import './hubs/chatHub'
 import $http from '@/http.js'
 import utils from './utils';
 
+import Btn from '@/components/Btn.vue'
 
 
 Vue.config.productionTip = false
 Vue.prototype.$eventBus = utils.eventBus
 Vue.prototype.$http = $http
+Vue.component('a-btn', Btn)
 
 new Vue({
   router,

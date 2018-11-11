@@ -13,14 +13,17 @@ namespace FastFrame.Application.Privder
     {
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly IEasyCachingProvider cachingProvider;
+        private readonly IDescriptionProvider descriptionProvider;
         private string tokenName = "_code";
         private string token;
         private ICurrUser currUser;
 
-        public CurrentUserProvider(IHttpContextAccessor httpContextAccessor, IEasyCachingProvider cachingProvider)
+        public CurrentUserProvider(IHttpContextAccessor httpContextAccessor, 
+            IEasyCachingProvider cachingProvider,IDescriptionProvider descriptionProvider)
         {
             this.httpContextAccessor = httpContextAccessor;
             this.cachingProvider = cachingProvider;
+            this.descriptionProvider = descriptionProvider;
         }
         public string GetCurrOrganizeId()
         {
@@ -40,6 +43,11 @@ namespace FastFrame.Application.Privder
                 }
             }
             return currUser;
+        }
+
+        public IDescriptionProvider GetDescriptionProvider()
+        {
+            return descriptionProvider;
         }
 
         public async Task Login(ICurrUser currUser)

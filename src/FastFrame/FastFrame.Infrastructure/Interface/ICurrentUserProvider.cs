@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -34,6 +33,6 @@ namespace FastFrame.Infrastructure.Interface
         /// </summary>
         /// <param name="currUser"></param>
         /// <returns></returns>
-        Task LogOut();
+        Task LogOut(); 
     }
 }

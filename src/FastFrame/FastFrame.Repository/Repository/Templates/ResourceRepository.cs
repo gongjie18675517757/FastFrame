@@ -5,7 +5,7 @@ namespace FastFrame.Repository.Basis
 	using FastFrame.Infrastructure.Interface; 
 	/// <summary>
 	///资源[数据访问] 
-	/// <summary>
+	/// </summary>
 	public partial class ResourceRepository:BaseRepository<Resource>,IRepository<Resource>
 	{
 		#region 字段

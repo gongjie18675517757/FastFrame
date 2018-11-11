@@ -33,7 +33,8 @@ namespace FastFrame.Application.Privder
 
         public Type GetTypeByName(string name)
         {
-            typeDic.TryGetValue(name, out var type);
+            GetTypes();
+            typeDic.TryGetValue(name.ToLower(), out var type);
             return type;
         }
     }

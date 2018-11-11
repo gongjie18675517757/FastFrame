@@ -27,7 +27,7 @@
     <v-menu offset-y origin="center center" :nudge-bottom="10" transition="scale-transition">
       <v-btn icon large flat slot="activator">
         <v-avatar size="30px">
-          <img src="@/assets/timg.jpg" alt="">
+          <img :src="handIcon" alt="">
         </v-avatar>
       </v-btn>
       <v-list class="pa-0">
@@ -55,6 +55,7 @@
 
 <script>
 import Notification from '@/components/Notification.vue'
+import timg from '@/assets/timg.jpg'
 export default {
   components: {
     Notification
@@ -93,6 +94,10 @@ export default {
     }
   },
   computed: {
+    handIcon(){
+      let iconId=this.$store.state.currUser.HandIconId;
+      return iconId?`/api/resource/get/${iconId}`:timg
+    },
     notifyCount() {
       return this.$store.state.notifys.length
     },

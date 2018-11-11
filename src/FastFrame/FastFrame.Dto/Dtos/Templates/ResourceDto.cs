@@ -6,7 +6,7 @@ namespace FastFrame.Dto.Basis
 	using FastFrame.Entity.Enums; 
 	/// <summary>
 	///资源 
-	/// <summary>
+	/// </summary>
 	public partial class ResourceDto:BaseDto<Resource>
 	{
 		#region 字段
@@ -16,24 +16,24 @@ namespace FastFrame.Dto.Basis
 		#region 属性
 		/// <summary>
 		///资源名称 
-		/// <summary>
+		/// </summary>
 		[StringLength(150)]
 		public string Name {get;set;}
 		
 		/// <summary>
 		///资源大小 
-		/// <summary>
+		/// </summary>
 		public long Size {get;set;}
 		
 		/// <summary>
 		///相对路径 
-		/// <summary>
+		/// </summary>
 		[StringLength(150)]
 		public string Path {get;set;}
 		
 		/// <summary>
 		///资源标识 
-		/// <summary>
+		/// </summary>
 		public string ContentType {get;set;}
 		
 		#endregion

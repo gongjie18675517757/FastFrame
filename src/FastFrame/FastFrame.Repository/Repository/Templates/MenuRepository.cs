@@ -5,7 +5,7 @@ namespace FastFrame.Repository.Basis
 	using FastFrame.Infrastructure.Interface; 
 	/// <summary>
 	///菜单[数据访问] 
-	/// <summary>
+	/// </summary>
 	public partial class MenuRepository:BaseRepository<Menu>,IRepository<Menu>
 	{
 		#region 字段

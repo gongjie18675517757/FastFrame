@@ -11,13 +11,17 @@ namespace FastFrame.Service
     /// </summary>
     public interface IService
     {
+    }
+
+    public interface IVerifyUniqueService
+    {
         /// <summary>
         /// 验证唯一性
         /// </summary>
         /// <param name="propName"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        Task<bool> VerifyUnique(string id,string propName, string value);
+        Task<bool> VerifyUnique(UniqueInput uniqueInput);
     }
 
     /// <summary>
@@ -25,7 +29,7 @@ namespace FastFrame.Service
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TDto"></typeparam>
-    public interface IService<TEntity, TDto> : IService
+    public interface IService<TEntity, TDto> : IVerifyUniqueService, IService
         where TEntity : class, IEntity, new()
         where TDto : class, IDto<TEntity>, new()
     {
@@ -34,7 +38,7 @@ namespace FastFrame.Service
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task<TDto> AddAsync(TDto input); 
+        Task<TDto> AddAsync(TDto input);
 
         /// <summary>
         /// 删除
@@ -62,6 +66,6 @@ namespace FastFrame.Service
         /// </summary>
         /// <param name="pageInfo"></param>
         /// <returns></returns>
-        Task<PageList<TDto>> GetListAsync(PagePara pageInfo);  
-    }  
+        Task<PageList<TDto>> GetListAsync(PagePara pageInfo);
+    }
 }

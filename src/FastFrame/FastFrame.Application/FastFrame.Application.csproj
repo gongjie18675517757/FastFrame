@@ -5,6 +5,10 @@
     <UserSecretsId>baa687c8-fef2-457d-b3b8-191741af27e2</UserSecretsId>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
     <Folder Include="Controllers\Templates\" />
   </ItemGroup>

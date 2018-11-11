@@ -6,7 +6,7 @@ namespace FastFrame.Application.Controllers.Basis
 	using FastFrame.Infrastructure.Interface; 
 	/// <summary>
 	///部门 
-	/// <summary>
+	/// </summary>
 	public partial class DeptController:BaseController<Dept, DeptDto>
 	{
 		#region 字段

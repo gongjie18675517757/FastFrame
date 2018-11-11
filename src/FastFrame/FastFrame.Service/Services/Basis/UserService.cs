@@ -1,4 +1,5 @@
 ﻿using FastFrame.Dto.Basis;
+using FastFrame.Entity.Basis;
 using FastFrame.Infrastructure.Interface;
 using FastFrame.Repository.Basis;
 using System;
@@ -17,6 +18,13 @@ namespace FastFrame.Service.Services.Basis
         {
             this.currentUserProvider = currentUserProvider;
         }
+
+        protected override Task OnAdding(UserDto input, User entity)
+        {
+            entity.GeneratePassword();
+            return base.OnAdding(input, entity);
+        }
+
         /// <summary>
         /// 切换管理员身份
         /// </summary>

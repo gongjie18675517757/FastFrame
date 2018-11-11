@@ -6,7 +6,7 @@ namespace FastFrame.Dto.Basis
 	using FastFrame.Entity.Enums; 
 	/// <summary>
 	///查询方案 
-	/// <summary>
+	/// </summary>
 	public partial class QueryProgramDto:BaseDto<QueryProgram>
 	{
 		#region 字段
@@ -16,21 +16,21 @@ namespace FastFrame.Dto.Basis
 		#region 属性
 		/// <summary>
 		///模块名称 
-		/// <summary>
+		/// </summary>
 		[StringLength(50)]
 		[Required()]
 		public string ModuleName {get;set;}
 		
 		/// <summary>
 		///方案名称 
-		/// <summary>
+		/// </summary>
 		[StringLength(50)]
 		[Required()]
 		public string Name {get;set;}
 		
 		/// <summary>
 		///是否公共方案 
-		/// <summary>
+		/// </summary>
 		public bool IsPublic {get;set;}
 		
 		#endregion

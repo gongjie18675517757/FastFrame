@@ -73,6 +73,25 @@ function sleep(millisecond = 0) {
     })
 }
 
+let lockSet = new Set()
+
+/**
+ * 互斥锁
+ * @param {*} lockObj 
+ */
+async function lock(lockObj = {}) {
+    while (lockSet.has(lockObj)) {
+        await sleep(100)
+    }
+    lockSet.add(lockObj)
+    return {
+        freed() {
+            lockSet.delete(lockObj)
+        }
+    }
+}
+
+
 /**
  * 映射
  * @param {*} arr 
@@ -150,7 +169,8 @@ export {
     eventBus,
     alert,
     upload,
-    mapMany
+    mapMany,
+    lock
 }
 
 export default {
@@ -160,5 +180,6 @@ export default {
     eventBus,
     alert,
     upload,
-    mapMany
+    mapMany,
+    lock
 }

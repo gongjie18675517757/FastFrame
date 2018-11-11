@@ -7,7 +7,7 @@ namespace FastFrame.Service.Services.Basis
 	using System.Linq; 
 	/// <summary>
 	///员工表 服务类 
-	/// <summary>
+	/// </summary>
 	public partial class EmployeeService:BaseService<Employee, EmployeeDto>
 	{
 		#region 字段

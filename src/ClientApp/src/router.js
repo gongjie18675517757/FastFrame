@@ -26,7 +26,7 @@ let load = (path, url) => {
 let areas = {
   Basis: {
     User: {
-      Index: '列表',
+      List: '列表',
       Add: '添加'
     }
   }

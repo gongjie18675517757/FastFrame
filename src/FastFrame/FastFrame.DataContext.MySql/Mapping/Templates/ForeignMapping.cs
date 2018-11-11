@@ -3,7 +3,7 @@ namespace FastFrame.Database.Mapping.Basis
 	using FastFrame.Entity.Basis; 
 	/// <summary>
 	///表外键信息 
-	/// <summary>
+	/// </summary>
 	public partial class ForeignMapping:BaseMapping<Foreign>
 	{
 		#region 字段

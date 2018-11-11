@@ -6,7 +6,7 @@ namespace FastFrame.Application.Controllers.Basis
 	using FastFrame.Infrastructure.Interface; 
 	/// <summary>
 	///登陆用户 
-	/// <summary>
+	/// </summary>
 	public partial class UserController:BaseController<User, UserDto>
 	{
 		#region 字段

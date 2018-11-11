@@ -7,7 +7,7 @@ namespace FastFrame.Service.Services.Basis
 	using System.Linq; 
 	/// <summary>
 	///组织信息 服务类 
-	/// <summary>
+	/// </summary>
 	public partial class OrganizeService:BaseService<Organize, OrganizeDto>
 	{
 		#region 字段

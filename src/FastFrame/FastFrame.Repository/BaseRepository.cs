@@ -1,16 +1,14 @@
 ﻿using FastFrame.Database;
 using FastFrame.Entity;
+using FastFrame.Entity.Basis;
+using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Attrs;
 using FastFrame.Infrastructure.Interface;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Reflection;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using EF.Core.Expansion.Dynamic;
-using FastFrame.Infrastructure;
-using FastFrame.Entity.Basis;
+using System.Threading.Tasks;
 
 namespace FastFrame.Repository
 {
@@ -69,24 +67,21 @@ namespace FastFrame.Repository
                 var names = uniqueAttribute.UniqueNames;
                 var exist = await Queryable.DynamicQuery(new QueryCondition()
                 {
-                    Filter = new Filter()
+                    Filters = names.Select(x => new Filter()
                     {
-                        CompareConditions = names.Select(x => new CompareCondition()
-                        {
-                            Compare = "==",
-                            Name = x,
-                            Value = entity.GetValue(x)?.ToString()
-                        }).Concat(new[] {
-                            new CompareCondition()
+                        Compare = "==",
+                        Name = x,
+                        Value = entity.GetValue(x)?.ToString()
+                    }).Concat(new[] {
+                            new Filter()
                             {
                                 Compare="!=",
                                 Value=entity.Id,
                                 Name="Id",
                             }
                         })
-                    }
                 }).AnyAsync();
-                if (exist) throw new Exception("重复");
+                if (exist) throw new UniqueException(typeof(T), names);
             }
 
 
@@ -163,7 +158,7 @@ namespace FastFrame.Repository
                 foreign.ModifyUserId = currUser?.Id;
                 foreign.ModifyTime = DateTime.Now;
                 context.Entry(foreign).State = EntityState.Modified;
-            } 
+            }
             var entityEntry = context.Entry(entity);
             entityEntry.State = EntityState.Modified;
             return entityEntry.Entity;

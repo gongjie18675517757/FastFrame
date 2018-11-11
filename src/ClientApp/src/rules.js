@@ -1,25 +1,50 @@
-function required(value) {
-  return !!value || '必填项'
+/**
+ * 必填验证
+ * @param {*} fieldDescription 
+ */
+function required(fieldDescription) {
+  return function (value) {
+    return !!value || `${fieldDescription}是必填的`
+  }
 }
-
-function email(value) {
+/**
+ * 邮箱验证
+ * @param {*} fieldDescription 
+ */
+function email(fieldDescription = '邮箱地址无效') {
   const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return !value || pattern.test(value) || '不是有效的Email值';
+  return function (value) {
+    return !value || pattern.test(value) || fieldDescription;
+  }
 }
 
-function length(min, max) {
-  return v => !v || (v && v.length >= min && v.length < max) || `长度不正确,(${min}-${max})`
+/**
+ * 长度验证
+ * @param {*} fieldDescription 
+ * @param {*} min 
+ * @param {*} max 
+ */
+function stringLength(fieldDescription, min, max) {
+  return function (value) {
+    return !value || (value && value.length >= min && value.length < max) || `${fieldDescription}长度要求在[${min},${max}]之间`
+  }
 }
 
-function phone(value) {
+/**
+ * 手机号验证
+ * @param {*} fieldDescription 
+ */
+function phone(fieldDescription = '手机号码无效') {
   const pattern = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
-  return !value || pattern.test(value) || '不是有效的手机号码';
+  return function (value) {
+    return !value || pattern.test(value) || fieldDescription;
+  }
 }
 
 
 export default {
   required,
   email,
-  length,
+  stringLength,
   phone
 }

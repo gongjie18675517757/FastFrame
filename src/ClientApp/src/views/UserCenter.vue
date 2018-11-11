@@ -1,6 +1,6 @@
 <template>
   <v-layout justify-center app class="form">
-    <v-flex xs12 sm10 md8 lg6>
+    <v-flex xs12 sm10 md8>
       <v-card>
         <v-toolbar flat dense card color="transparent">
           <v-toolbar-title>个人中心</v-toolbar-title>

@@ -6,7 +6,7 @@ namespace FastFrame.Dto.Basis
 	using FastFrame.Entity.Enums; 
 	/// <summary>
 	///组织信息 
-	/// <summary>
+	/// </summary>
 	public partial class OrganizeDto:BaseDto<Organize>
 	{
 		#region 字段
@@ -16,7 +16,7 @@ namespace FastFrame.Dto.Basis
 		#region 属性
 		/// <summary>
 		/// 
-		/// <summary>
+		/// </summary>
 		[StringLength(50)]
 		[Required()]
 		public string Name {get;set;}

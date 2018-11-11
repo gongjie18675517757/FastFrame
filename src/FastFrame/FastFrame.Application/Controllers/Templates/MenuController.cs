@@ -6,7 +6,7 @@ namespace FastFrame.Application.Controllers.Basis
 	using FastFrame.Infrastructure.Interface; 
 	/// <summary>
 	///菜单 
-	/// <summary>
+	/// </summary>
 	public partial class MenuController:BaseController<Menu, MenuDto>
 	{
 		#region 字段

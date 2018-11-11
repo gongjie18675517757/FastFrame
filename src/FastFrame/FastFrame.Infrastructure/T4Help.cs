@@ -30,6 +30,15 @@ namespace FastFrame.Infrastructure
             return GetClassTypes(baseType).Where(x => x.GetCustomAttribute<Attrs.ExportAttribute>() != null);
         }
 
+        public static Type GetNullableType(Type type)
+        { 
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+            {
+                return type.GetGenericArguments()[0];
+            }
+            return type;
+        }
+
         /// <summary>
         /// 获取类型名称
         /// </summary>

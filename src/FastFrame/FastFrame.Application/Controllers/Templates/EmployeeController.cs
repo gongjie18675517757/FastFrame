@@ -6,7 +6,7 @@ namespace FastFrame.Application.Controllers.Basis
 	using FastFrame.Infrastructure.Interface; 
 	/// <summary>
 	///员工表 
-	/// <summary>
+	/// </summary>
 	public partial class EmployeeController:BaseController<Employee, EmployeeDto>
 	{
 		#region 字段

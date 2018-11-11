@@ -1,4 +1,5 @@
-﻿using FastFrame.Infrastructure.Interface;
+﻿using FastFrame.Infrastructure.Attrs;
+using FastFrame.Infrastructure.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -11,12 +12,14 @@ namespace FastFrame.Application.Privder
     public class GlobalFilter : IAsyncExceptionFilter, IAsyncAuthorizationFilter
     {
         private readonly ICurrentUserProvider operaterProvider;
+        private readonly IDescriptionProvider descriptionProvider;
         private const string StopwatchName = "Stopwatch";
 
-        public GlobalFilter(ICurrentUserProvider operaterProvider)
+        public GlobalFilter(ICurrentUserProvider operaterProvider, IDescriptionProvider descriptionProvider)
         {
             this.operaterProvider = operaterProvider;
-        }  
+            this.descriptionProvider = descriptionProvider;
+        }
         /// <summary>
         /// 权限验证
         /// </summary>
@@ -46,9 +49,25 @@ namespace FastFrame.Application.Privder
             /*写入Log*/
             //context.HttpContext.Response.ContentType = "application/json;charset=utf-8";
             context.HttpContext.Response.StatusCode = 400;
-            context.Result = new ObjectResult(new { Message = context.Exception.Message });
-            context.HttpContext.Response.StatusCode = 401;
-            await Task.CompletedTask;
-        } 
+            var ex = context.Exception;
+            if (ex is UniqueException uniqueException)
+            {
+                var typeDescription = await descriptionProvider.GetClassDescription(uniqueException.Type);
+                var propDescriptions = new string[uniqueException.PropNames.Length];
+                for (int i = 0; i < uniqueException.PropNames.Length; i++)
+                {
+                    propDescriptions[i] = await descriptionProvider.GetPropertyDescription(uniqueException.Type, uniqueException.PropNames[i]);
+
+                }
+                context.Result = new ObjectResult(new { Message = $"{typeDescription}:{string.Join("+", propDescriptions)} 重复!" });
+            }
+            else
+            {
+                context.Result = new ObjectResult(new { Message = context.Exception.Message });
+#if DEBUG
+                context.Result = new ObjectResult(new { Message = context.Exception});
+#endif
+            }
+        }
     }
 }

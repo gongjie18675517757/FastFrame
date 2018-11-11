@@ -1,15 +1,12 @@
 ﻿using FastFrame.Dto;
 using FastFrame.Entity;
 using FastFrame.Infrastructure;
+using FastFrame.Infrastructure.Interface;
 using FastFrame.Repository;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
-using EF.Core.Expansion.Dynamic;
-using FastFrame.Infrastructure.Interface;
 
 namespace FastFrame.Service
 {
@@ -109,7 +106,7 @@ namespace FastFrame.Service
             return new PageList<TDto>()
             {
                 Total = await query.CountAsync(),
-                Data = await query.DynamicSort(pageInfo.Sortings)
+                Data = await query.DynamicSort(pageInfo.SortInfo)
                     .Skip(pageInfo.PageSize * (pageInfo.PageIndex - 1))
                     .Take(pageInfo.PageSize)
                     .ToListAsync(),
@@ -165,28 +162,23 @@ namespace FastFrame.Service
         /// <param name="propName"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public async Task<bool> VerifyUnique(string id, string propName, string value)
+        public async Task<bool> VerifyUnique(UniqueInput input)
         {
-            return !await repository.Queryable.DynamicQuery(new QueryCondition()
+            var filters = input.KeyValues.Select(x => new Filter()
             {
-                Filter = new Filter()
-                {
-                    CompareConditions = new[]
-                    {
-                         new CompareCondition()
-                        {
-                            Compare = "==",
-                            Value = value,
-                            Name = propName
-                        },
-                         new CompareCondition()
-                         {
-                             Compare="!=",
-                             Value=id,
-                             Name="Id"
-                         }
-                    }
-                }
+                Compare = "==",
+                Value = x.Value,
+                Name = x.Key
+            }).ToList();
+            filters.Add(new Filter()
+            {
+                Compare = "!=",
+                Value = input.Id,
+                Name = "Id"
+            });
+            return await repository.Queryable.DynamicQuery(new QueryCondition()
+            {
+                Filters = filters
             }).AnyAsync();
         }
     }

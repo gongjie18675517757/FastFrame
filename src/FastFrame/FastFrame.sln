@@ -25,7 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastFrame.Dto", "FastFrame.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastFrame.CodeGenerate", "FastFrame.CodeGenerate\FastFrame.CodeGenerate.csproj", "{0BA0FF0C-ADF8-4FF3-98A6-5729C0CF8FDF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastFrame.Service", "FastFrame.Service\FastFrame.Service.csproj", "{793E1492-50E8-47E3-9391-BFCE246F9B8F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastFrame.Service", "FastFrame.Service\FastFrame.Service.csproj", "{793E1492-50E8-47E3-9391-BFCE246F9B8F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

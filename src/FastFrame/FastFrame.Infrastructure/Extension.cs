@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -11,6 +12,52 @@ namespace FastFrame.Infrastructure
 {
     public static class Extension
     {
+        public static IQueryable<T> DynamicSort<T>(this IQueryable<T> query, SortInfo sortInfo)
+        {
+            if (query == null)
+            {
+                throw new ArgumentNullException(nameof(query));
+            }
+
+            if (sortInfo == null)
+            {
+                sortInfo = new SortInfo()
+                {
+                    Name = "Id",
+                    Mode = "asc"
+                };
+            }
+
+            return query.OrderBy($"{sortInfo.Name} {sortInfo.Mode}");
+        }
+        public static IQueryable<T> DynamicQuery<T>(this IQueryable<T> query, QueryCondition condition)
+        {
+            if (query == null)
+            {
+                throw new ArgumentNullException(nameof(query));
+            }
+
+            if (condition == null)
+            {
+                return query;
+            }
+
+            if (!condition.KeyWord.IsNullOrWhiteSpace())
+            {
+                var props = typeof(T).GetProperties().Where(x => x.PropertyType == typeof(string) && !x.Name.EndsWith("Id"));
+                query = query.Where(string.Join(" or ", props.Select(x => $"{x.Name}.Contains(@0)")), condition.KeyWord);
+            }
+
+            foreach (var item in condition.Filters)
+            {
+                if (item.Compare.ToLower() == "$")
+                    query = query.Where($"{item.Name} .Contains(@0)", item.Value);
+                else
+                    query = query.Where($"{item.Name} {item.Compare} @0", item.Value);
+            }
+
+            return query;
+        }
         public static void WriteCodeLine(this StreamWriter writer, string line, int tagCount = 0)
         {
             writer.WriteLine($"{new string('\t', tagCount)}{line}");

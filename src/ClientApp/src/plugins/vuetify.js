@@ -25,7 +25,8 @@ import {
   VDataTable,
   VProgressLinear,
   VChip,
-  VCheckbox
+  VCheckbox,
+  VSwitch
 } from 'vuetify'
 import 'vuetify/src/stylus/app.styl'
 import zhHans from 'vuetify/es5/locale/zh-Hans'
@@ -57,7 +58,8 @@ Vue.use(Vuetify, {
     VDataTable,
     VProgressLinear,
     VChip,
-    VCheckbox
+    VCheckbox,
+    VSwitch
   },
   // theme: {
   //   primary: '#ee44aa',

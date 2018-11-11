@@ -20,4 +20,7 @@ export default {
 .form {
   padding: 5px;
 }
+.v-card__title{
+  padding: 2px;
+}
 </style>

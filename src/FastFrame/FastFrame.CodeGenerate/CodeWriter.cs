@@ -38,7 +38,7 @@ namespace FastFrame.CodeGenerate
                         /*类说明*/
                         write.WriteCodeLine($"/// <summary>", 1);
                         write.WriteCodeLine($"///{target.Summary} ", 1);
-                        write.WriteCodeLine($"/// <summary>", 1);
+                        write.WriteCodeLine($"/// </summary>", 1);
 
                         /*类特性*/
                         foreach (var attr in target.AttrInfos)
@@ -89,7 +89,7 @@ namespace FastFrame.CodeGenerate
                             /*属性说明*/
                             write.WriteCodeLine($"/// <summary>", 2);
                             write.WriteCodeLine($"///{prop.Summary} ", 2);
-                            write.WriteCodeLine($"/// <summary>", 2);
+                            write.WriteCodeLine($"/// </summary>", 2);
 
                             /*属性特性*/
                             foreach (var attr in prop.AttrInfos)

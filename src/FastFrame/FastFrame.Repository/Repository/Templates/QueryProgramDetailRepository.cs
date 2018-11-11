@@ -5,7 +5,7 @@ namespace FastFrame.Repository.Basis
 	using FastFrame.Infrastructure.Interface; 
 	/// <summary>
 	///查询方案明细[数据访问] 
-	/// <summary>
+	/// </summary>
 	public partial class QueryProgramDetailRepository:BaseRepository<QueryProgramDetail>,IRepository<QueryProgramDetail>
 	{
 		#region 字段

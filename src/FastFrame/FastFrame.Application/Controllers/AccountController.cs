@@ -29,7 +29,7 @@ namespace FastFrame.Application.Controllers
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpPost] 
         [AllowAnonymous]
         public async Task<CurrUser> Login([FromBody]LoginInput input)
         {
@@ -40,7 +40,7 @@ namespace FastFrame.Application.Controllers
         /// 登出
         /// </summary>
         /// <returns></returns>
-        [HttpPost]
+        [HttpPost]       
         public async Task LogOut()
         {
             await currentUserProvider.LogOut();

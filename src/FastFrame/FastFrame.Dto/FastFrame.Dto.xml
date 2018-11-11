@@ -1,0 +1,345 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>FastFrame.Dto</name>
+    </assembly>
+    <members>
+        <member name="T:FastFrame.Dto.BaseDto">
+            <summary>
+            基类DTO
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.BaseDto.CreateAccount">
+            <summary>
+            创建人
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.BaseDto.CreateName">
+            <summary>
+            创建人姓名
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.BaseDto.CreateTime">
+            <summary>
+            创建时间
+            </summary> 
+        </member>
+        <member name="P:FastFrame.Dto.BaseDto.ModifyAccount">
+            <summary>
+            修改人
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.BaseDto.ModifyName">
+            <summary>
+            修改人姓名
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.BaseDto.ModifyTime">
+            <summary>
+            修改时间
+            </summary>
+        </member>
+        <member name="T:FastFrame.Dto.BaseDto`1">
+            <summary>
+            基类DTO
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:FastFrame.Dto.Dtos.LoginInput.Account">
+            <summary>
+            帐号
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Dtos.LoginInput.Password">
+            <summary>
+            密码
+            </summary>
+        </member>
+        <member name="T:FastFrame.Dto.Basis.DeptDto">
+             <summary>
+            部门 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.DeptDto.Parent_Id">
+             <summary>
+            上级 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.DeptDto.Parent_EnCode">
+             <summary>
+            上级编码 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.DeptDto.Parent_Name">
+             <summary>
+            上级名称 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.DeptDto.EnCode">
+             <summary>
+            编码 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.DeptDto.Name">
+             <summary>
+            名称 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.DeptDto.Supervisor_Id">
+             <summary>
+            主管 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.DeptDto.Supervisor_EnCode">
+             <summary>
+            主管编码 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.DeptDto.Supervisor_Name">
+             <summary>
+            主管名称 
+             </summary>
+        </member>
+        <member name="T:FastFrame.Dto.Basis.EmployeeDto">
+             <summary>
+            员工表 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.EmployeeDto.EnCode">
+             <summary>
+            编码 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.EmployeeDto.Name">
+             <summary>
+            名称 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.EmployeeDto.Email">
+             <summary>
+            邮箱 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.EmployeeDto.PhoneNumber">
+             <summary>
+            手机号码 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.EmployeeDto.Gender">
+             <summary>
+            性别 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.EmployeeDto.User_Id">
+             <summary>
+            用户 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.EmployeeDto.User_Account">
+             <summary>
+            用户帐号 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.EmployeeDto.User_Name">
+             <summary>
+            用户姓名 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.EmployeeDto.Dept_Id">
+             <summary>
+            部门 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.EmployeeDto.Dept_EnCode">
+             <summary>
+            部门编码 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.EmployeeDto.Dept_Name">
+             <summary>
+            部门名称 
+             </summary>
+        </member>
+        <member name="T:FastFrame.Dto.Basis.MenuDto">
+             <summary>
+            菜单 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.MenuDto.Parent_Id">
+             <summary>
+            上级菜单 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.MenuDto.Parent_EnCode">
+             <summary>
+            上级菜单编码 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.MenuDto.Parent_Name">
+             <summary>
+            上级菜单名称 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.MenuDto.EnCode">
+             <summary>
+            编码 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.MenuDto.Name">
+             <summary>
+            名称 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.MenuDto.Title">
+             <summary>
+            标题 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.MenuDto.Icon">
+             <summary>
+            图标 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.MenuDto.Path">
+             <summary>
+            路径 
+             </summary>
+        </member>
+        <member name="T:FastFrame.Dto.Basis.OrganizeDto">
+             <summary>
+            组织信息 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.OrganizeDto.Name">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:FastFrame.Dto.Basis.QueryProgramDetailDto">
+             <summary>
+            查询方案明细 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.QueryProgramDetailDto.SearchProgram_Id">
+             <summary>
+            方案ID 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.QueryProgramDetailDto.Name">
+             <summary>
+            条件名称 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.QueryProgramDetailDto.Compare">
+             <summary>
+            比较操作符 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.QueryProgramDetailDto.Value">
+             <summary>
+            比较的值 
+             </summary>
+        </member>
+        <member name="T:FastFrame.Dto.Basis.QueryProgramDto">
+             <summary>
+            查询方案 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.QueryProgramDto.ModuleName">
+             <summary>
+            模块名称 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.QueryProgramDto.Name">
+             <summary>
+            方案名称 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.QueryProgramDto.IsPublic">
+             <summary>
+            是否公共方案 
+             </summary>
+        </member>
+        <member name="T:FastFrame.Dto.Basis.ResourceDto">
+             <summary>
+            资源 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.ResourceDto.Name">
+             <summary>
+            资源名称 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.ResourceDto.Size">
+             <summary>
+            资源大小 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.ResourceDto.Path">
+             <summary>
+            相对路径 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.ResourceDto.ContentType">
+             <summary>
+            资源标识 
+             </summary>
+        </member>
+        <member name="T:FastFrame.Dto.Basis.UserDto">
+             <summary>
+            登陆用户 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.UserDto.Account">
+             <summary>
+            帐号 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.UserDto.Name">
+             <summary>
+            姓名 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.UserDto.Password">
+             <summary>
+            密码 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.UserDto.Email">
+             <summary>
+            邮箱 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.UserDto.PhoneNumber">
+             <summary>
+            手机号码 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.UserDto.HandIconId">
+             <summary>
+            头像 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.UserDto.IsAdmin">
+             <summary>
+            是否管理员 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.UserDto.IsDisabled">
+             <summary>
+            是否禁用 
+             </summary>
+        </member>
+        <member name="T:FastFrame.Dto.IDto">
+            <summary>
+            DTO接口
+            </summary>
+        </member>
+        <member name="T:FastFrame.Dto.IDto`1">
+            <summary>
+            DTO接口
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+    </members>
+</doc>

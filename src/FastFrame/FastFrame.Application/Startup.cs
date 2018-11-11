@@ -79,6 +79,7 @@ namespace FastFrame.Application
                 .AddScoped<IScopeServiceLoader, ScopeServiceLoader>()
                 .AddScoped<ICurrentUserProvider, CurrentUserProvider>()
                 .AddScoped<IResourceProvider, ResourceProvider>()
+                .AddScoped<IDescriptionProvider, DescriptionProvider>()
                 .AddServices()
                 .AddRepository();
 

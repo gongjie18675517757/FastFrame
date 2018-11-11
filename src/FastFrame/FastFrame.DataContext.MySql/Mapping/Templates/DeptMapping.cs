@@ -3,7 +3,7 @@ namespace FastFrame.Database.Mapping.Basis
 	using FastFrame.Entity.Basis; 
 	/// <summary>
 	///部门 
-	/// <summary>
+	/// </summary>
 	public partial class DeptMapping:BaseMapping<Dept>
 	{
 		#region 字段

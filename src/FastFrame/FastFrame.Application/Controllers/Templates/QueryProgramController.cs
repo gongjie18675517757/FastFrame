@@ -6,7 +6,7 @@ namespace FastFrame.Application.Controllers.Basis
 	using FastFrame.Infrastructure.Interface; 
 	/// <summary>
 	///查询方案 
-	/// <summary>
+	/// </summary>
 	public partial class QueryProgramController:BaseController<QueryProgram, QueryProgramDto>
 	{
 		#region 字段

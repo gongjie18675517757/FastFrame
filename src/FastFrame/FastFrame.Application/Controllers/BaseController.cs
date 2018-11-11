@@ -80,7 +80,7 @@ namespace FastFrame.Application.Controllers
         /// </summary>
         /// <param name="pageInfo"></param>
         /// <returns></returns>
-        [HttpPost, Permission("List", "列表")]
+        [HttpPost, Permission("List", "列表")]   
         public virtual async Task<PageList<TDto>> List([FromBody]PagePara pageInfo)
         {
             return await service.GetListAsync(pageInfo);

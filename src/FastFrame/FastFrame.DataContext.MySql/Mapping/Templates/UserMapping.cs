@@ -3,7 +3,7 @@ namespace FastFrame.Database.Mapping.Basis
 	using FastFrame.Entity.Basis; 
 	/// <summary>
 	///登陆用户 
-	/// <summary>
+	/// </summary>
 	public partial class UserMapping:BaseMapping<User>
 	{
 		#region 字段

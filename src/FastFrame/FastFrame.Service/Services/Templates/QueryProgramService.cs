@@ -7,7 +7,7 @@ namespace FastFrame.Service.Services.Basis
 	using System.Linq; 
 	/// <summary>
 	///查询方案 服务类 
-	/// <summary>
+	/// </summary>
 	public partial class QueryProgramService:BaseService<QueryProgram, QueryProgramDto>
 	{
 		#region 字段

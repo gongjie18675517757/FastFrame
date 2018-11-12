@@ -10,13 +10,7 @@ namespace FastFrame.Entity.Basis
     [Tree(nameof(Parent_Id))]
     [RelatedField( nameof(EnCode),nameof(Name))]
     public class Menu:BaseEntity
-    {
-        /// <summary>
-        /// 上级菜单
-        /// </summary>
-        [StringLength(50), RelatedTo(typeof(Menu))]
-        public string Parent_Id { get; set; }
-
+    {  
         /// <summary>
         /// 编码
         /// </summary>
@@ -28,6 +22,12 @@ namespace FastFrame.Entity.Basis
         /// </summary>
         [StringLength(50),Required]
         public string Name { get; set; }
+
+        /// <summary>
+        /// 上级菜单
+        /// </summary>
+        [StringLength(50), RelatedTo(typeof(Menu))]
+        public string Parent_Id { get; set; }
 
         /// <summary>
         /// 标题

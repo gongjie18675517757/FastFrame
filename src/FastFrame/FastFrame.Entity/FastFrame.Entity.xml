@@ -9,11 +9,6 @@
             部门
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Basis.Dept.Parent_Id">
-            <summary>
-            上级
-            </summary>
-        </member>
         <member name="P:FastFrame.Entity.Basis.Dept.EnCode">
             <summary>
             编码
@@ -22,6 +17,11 @@
         <member name="P:FastFrame.Entity.Basis.Dept.Name">
             <summary>
             名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.Dept.Parent_Id">
+            <summary>
+            上级
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Basis.Dept.Supervisor_Id">
@@ -104,11 +104,6 @@
             菜单
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Basis.Menu.Parent_Id">
-            <summary>
-            上级菜单
-            </summary>
-        </member>
         <member name="P:FastFrame.Entity.Basis.Menu.EnCode">
             <summary>
             编码
@@ -117,6 +112,11 @@
         <member name="P:FastFrame.Entity.Basis.Menu.Name">
             <summary>
             名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.Menu.Parent_Id">
+            <summary>
+            上级菜单
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Basis.Menu.Title">
@@ -144,14 +144,14 @@
             查询方案
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Basis.QueryProgram.ModuleName">
-            <summary>
-            模块名称
-            </summary>
-        </member>
         <member name="P:FastFrame.Entity.Basis.QueryProgram.Name">
             <summary>
             方案名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.QueryProgram.ModuleName">
+            <summary>
+            模块名称
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Basis.QueryProgram.IsPublic">

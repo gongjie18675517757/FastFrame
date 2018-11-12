@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace FastFrame.Infrastructure.Attrs
 {
@@ -13,5 +15,7 @@ namespace FastFrame.Infrastructure.Attrs
 
         public string DefaultName { get; }
         public string[] OtherNames { get; }
+
+        public IEnumerable<string> FieldNames => new[] { DefaultName }.Concat(OtherNames);
     }
 }

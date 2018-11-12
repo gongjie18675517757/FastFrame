@@ -17,7 +17,7 @@ namespace FastFrame.Infrastructure
         /// <summary>
         /// 每页数量
         /// </summary>
-        public int PageSize { get => _pageSize < 0 ? 10 : _pageSize; set => _pageSize = value; } 
+        public int PageSize { get => _pageSize < 0 ? 10 : _pageSize; set => _pageSize = value; }
 
         /// <summary>
         /// 查询条件
@@ -53,7 +53,7 @@ namespace FastFrame.Infrastructure
         /// <summary>
         /// 条件
         /// </summary>
-        public IEnumerable<Filter> Filters { get; set; }
+        public IEnumerable<Filter> Filters { get; set; } = new List<Filter>();
     }
 
     public class Filter

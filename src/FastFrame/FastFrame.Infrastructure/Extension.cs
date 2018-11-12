@@ -50,10 +50,17 @@ namespace FastFrame.Infrastructure
 
             foreach (var item in condition.Filters)
             {
+                var conds = item.Name.Split(";".ToArray());
                 if (item.Compare.ToLower() == "$")
-                    query = query.Where($"{item.Name} .Contains(@0)", item.Value);
+                {
+                    var queryStr = string.Join(" or ", conds.Select(x => $"{x} .Contains(@0)"));
+                    query = query.Where(queryStr, item.Value);
+                }
                 else
+                {
+                    var queryStr = string.Join(" or ", conds.Select(x => $"{x} {item.Compare} @0"));
                     query = query.Where($"{item.Name} {item.Compare} @0", item.Value);
+                }
             }
 
             return query;

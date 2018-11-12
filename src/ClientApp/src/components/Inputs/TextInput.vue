@@ -19,12 +19,26 @@
       :disabled="evalDisabled"
       @change="change"
     ></v-checkbox>
+    <SearchInput
+      v-if="evalType=='remoteSelect'"
+      v-model="model[Name]"
+      :model="model"
+      :disabled="evalDisabled"
+      :label="Description"
+      :rules="evalRules"
+      :Relate="Relate"
+      @change="change"
+    />
   </v-flex>
 </template>
 
 <script>
+import SearchInput from './SearchInput.vue'
 import rules from '@/rules'
 export default {
+  components: {
+    SearchInput
+  },
   props: {
     model: {
       type: Object,
@@ -37,6 +51,7 @@ export default {
       default: function() {}
     },
     ModuleName: String,
+    Relate: String,
     Type: {
       type: String,
       default: 'text'
@@ -67,10 +82,17 @@ export default {
       if (this.Name == 'Password') {
         return 'password'
       }
+      if (this.Relate) {
+        return 'remoteSelect'
+      }
+      if (this.Name.endsWith('Id')) {
+        return
+      }
       if (this.Type == 'String') {
         return 'text'
       }
-      return this.Type
+
+      return '' //this.Type
     },
     evalDisabled() {
       return (

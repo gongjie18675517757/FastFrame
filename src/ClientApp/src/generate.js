@@ -49,11 +49,11 @@ async function getColumns(name = '') {
     Name: ModuleName
   } = await getModuleStrut(name)
   return FieldInfoStruts.filter(f => {
-    return f.Hide != 'list' && f.Hide != 'all' && !f.Name.endsWith('Id')
+    return f.Hide != 'list' && f.Hide != 'all'
   }).map(f => {
     return {
       ...f,
-      ModuleName
+      ModuleName,      
     }
   })
 }
@@ -64,7 +64,7 @@ async function getFormItems(name = '') {
     Name: ModuleName
   } = await getModuleStrut(name)
   return FieldInfoStruts.filter(f => {
-    return f.Hide != 'form' && f.Hide != 'all' && !f.Name.endsWith('Id')
+    return f.Hide != 'form' && f.Hide != 'all'
   }).map(f => {
     return {
       ...f,

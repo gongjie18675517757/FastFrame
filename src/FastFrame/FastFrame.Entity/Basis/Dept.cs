@@ -10,13 +10,7 @@ namespace FastFrame.Entity.Basis
     [RelatedField(nameof(EnCode), nameof(Name))]
     [Tree(nameof(Parent_Id))]
     public class Dept : BaseEntity
-    {
-        /// <summary>
-        /// 上级
-        /// </summary>
-        [StringLength(50),RelatedTo(typeof(Dept))]
-        public string Parent_Id { get; set; }
-
+    { 
         /// <summary>
         /// 编码
         /// </summary>
@@ -28,6 +22,12 @@ namespace FastFrame.Entity.Basis
         /// </summary>
         [StringLength(50), Required]
         public string Name { get; set; }
+
+        /// <summary>
+        /// 上级
+        /// </summary>
+        [StringLength(50), RelatedTo(typeof(Dept))]
+        public string Parent_Id { get; set; }
 
         /// <summary>
         /// 主管

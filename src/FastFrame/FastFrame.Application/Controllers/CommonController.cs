@@ -51,11 +51,15 @@ namespace FastFrame.Application.Controllers
             return await service.VerifyUnique(uniqueInput);
         }
 
+        /// <summary>
+        /// 生成模块结构
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         [HttpGet("{name}")]
         public async Task<ModuleStruct> ModuleStruts(string name)
         {
-            var fullName = $"{name}";
-            var type = typeof(IEntity).Assembly.GetTypes().FirstOrDefault(x => x.Name.ToLower() == fullName);
+            var type = typeProvider.GetTypeByName(name);
             var fieldInfoStructs = new List<FieldInfoStrut>();
 
             var instance = type.Assembly.CreateInstance(type.FullName);
@@ -72,9 +76,13 @@ namespace FastFrame.Application.Controllers
                 /*只读标记*/
                 TryGetAttribute<ReadOnlyAttribute>(x, out var readOnlyAttribute);
 
+                /*关联标记*/
+                TryGetAttribute<RelatedToAttribute>(x, out var relatedToAttribute);
+
                 /*实际类型*/
                 var nullableType = T4Help.GetNullableType(x.PropertyType);
 
+                /*字段信息*/
                 fieldInfoStructs.Add(new FieldInfoStrut()
                 {
                     Name = x.Name,
@@ -83,33 +91,47 @@ namespace FastFrame.Application.Controllers
                     Hide = hideAttribute?.HideMark,
                     Readonly = readOnlyAttribute?.ReadOnlyMark,
                     DefaultValue = instance.GetValue(x.Name),
-                    Rules = GetRules(x)
+                    Rules = GetRules(x),
+                    Relate = relatedToAttribute?.RelatedType.Name
                 });
             }
+
+            TryGetAttribute<RelatedFieldAttribute>(type, out var relatedFieldAttribute);
+
+            /*模块信息*/
             return new ModuleStruct()
             {
                 Name = type.Name,
                 Description = await descriptionProvider.GetClassDescription(type),
-                FieldInfoStruts = fieldInfoStructs
+                FieldInfoStruts = fieldInfoStructs,
+                RelateFields = relatedFieldAttribute?.FieldNames
             };
         }
+
 
         private IEnumerable<Rule> GetRules(PropertyInfo prop)
         {
             if (TryGetAttribute<RequiredAttribute>(prop, out var requiredAttribute))
                 yield return new Rule("required");
             if (TryGetAttribute<StringLengthAttribute>(prop, out var stringLengthAttribute))
-                yield return new Rule("stringLength", 
+                yield return new Rule("stringLength",
                     stringLengthAttribute.MinimumLength.ToString(),
                     stringLengthAttribute.MaximumLength.ToString());
             if (TryGetAttribute<UniqueAttribute>(prop, out var uniqueAttribute))
                 yield return new Rule("unique");
         }
 
-
         private bool TryGetAttribute<T>(PropertyInfo propertyInfo, out T attr) where T : Attribute
         {
             attr = propertyInfo.GetCustomAttribute<T>();
+            if (attr != null)
+                return true;
+            return false;
+        }
+
+        private bool TryGetAttribute<T>(Type type, out T attr) where T : Attribute
+        {
+            attr = type.GetCustomAttribute<T>();
             if (attr != null)
                 return true;
             return false;
@@ -132,6 +154,11 @@ namespace FastFrame.Application.Controllers
         /// 字段列表
         /// </summary>
         public List<FieldInfoStrut> FieldInfoStruts { get; set; }
+
+        /// <summary>
+        /// 被关联时显示的字段列表
+        /// </summary>
+        public IEnumerable<string> RelateFields { get; internal set; }
     }
 
     public class FieldInfoStrut
@@ -143,6 +170,7 @@ namespace FastFrame.Application.Controllers
         public ReadOnlyMark? Readonly { get; internal set; }
         public object DefaultValue { get; internal set; }
         public IEnumerable<Rule> Rules { get; internal set; }
+        public string Relate { get; internal set; }
     }
 
     public class Rule
@@ -154,7 +182,7 @@ namespace FastFrame.Application.Controllers
         }
 
         public string RuleName { get; }
-      
+
         public string[] RulePars { get; }
     }
 }

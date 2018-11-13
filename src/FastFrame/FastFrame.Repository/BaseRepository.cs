@@ -7,6 +7,7 @@ using FastFrame.Infrastructure.Interface;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -83,11 +84,20 @@ namespace FastFrame.Repository
                 }).AnyAsync();
                 if (exist) throw new UniqueException(typeof(T), names);
             }
-
-
-            /*验证关联性*/
-
-            await Task.CompletedTask;
+            foreach (var prop in typeof(T).GetProperties())
+            {
+                if (prop.GetCustomAttribute<UniqueAttribute>() is UniqueAttribute uniqueAttribute)
+                {
+                    var value = entity.GetValue(prop.Name)?.ToString();
+                    if (!value.IsNullOrWhiteSpace())
+                    {
+                        var any = await Queryable.Where($"{prop.Name}=@0 and Id!=@1", value, entity.Id).AnyAsync();
+                        if (any)
+                            throw new UniqueException(typeof(T), new string[] { prop.Name });
+                    }
+                }
+            }
+            /*验证关联性*/ 
         }
 
         /// <summary>

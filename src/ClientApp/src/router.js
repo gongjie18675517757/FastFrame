@@ -42,7 +42,7 @@ function loadAreas() {
           path: `/${moduleName.toLowerCase()}/${name.toLowerCase()}`,
           name: `${moduleName}_${name}`.toLowerCase(),
           component: () =>
-            import(`./views/${moduleName}/${name}.vue`)
+            import(`@/views/${areaKey}/${moduleName}/${name}.vue`)
         }
       })
     })

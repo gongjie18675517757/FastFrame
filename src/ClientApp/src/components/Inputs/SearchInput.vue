@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import generate from '@/generate'
+import { getModuleStrut } from '@/generate'
 export default {
   props: {
     model: Object,
@@ -73,10 +73,8 @@ export default {
       fields: []
     }
   },
-  async created() {
-    console.log('this.Relate:', this.Relate)
-
-    let { RelateFields } = await generate.getModuleStrut(this.Relate)
+  async created() { 
+    let { RelateFields } = await getModuleStrut(this.Relate)
     this.fields = RelateFields
   },
   watch: {

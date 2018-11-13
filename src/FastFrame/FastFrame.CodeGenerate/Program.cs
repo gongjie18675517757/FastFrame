@@ -24,9 +24,6 @@ namespace FastFrame.CodeGenerate
                 var codeBuild = (BaseCodeBuild)obj;
                 writer.Run(codeBuild);
             }
-
         }
     }
-
-
 }

@@ -2,13 +2,14 @@ import {
   lock
 } from '@/utils'
 import $http from '@/http'
+import rules from '@/rules'
 let moduleStruts = {}
 
 /**
  * 获取模块结构
  * @param {*} name
  */
-async function getModuleStrut(name = '') {
+export async function getModuleStrut(name = '') {
   name = name.toLowerCase()
   let localLock = await lock(name)
   try {
@@ -28,7 +29,7 @@ async function getModuleStrut(name = '') {
  * 获取模块表单
  * @param {*} name
  */
-async function getDefaultModel(name = '') {
+export async function getDefaultModel(name = '') {
   let {
     FieldInfoStruts
   } = await getModuleStrut(name)
@@ -43,22 +44,39 @@ async function getDefaultModel(name = '') {
  * 获取列表列
  * @param {*} name
  */
-async function getColumns(name = '') {
+export async function getColumns(name = '') {
   let {
     FieldInfoStruts,
+    RelateFields,
     Name: ModuleName
   } = await getModuleStrut(name)
-  return FieldInfoStruts.filter(f => {
-    return f.Hide != 'list' && f.Hide != 'all'
+  let columns = FieldInfoStruts.filter(f => {
+    return f.Hide != 'list' && f.Hide != 'all' && (!f.Name.endsWith('Id') || f.Relate)
   }).map(f => {
     return {
       ...f,
-      ModuleName,      
+      ModuleName
     }
   })
+  for (const col of columns) {
+    if (col.Relate) {
+      let {
+        RelateFields: fields
+      } = await getModuleStrut(col.Relate)
+      col.Relate = fields
+    }
+    if (RelateFields.length > 0 && RelateFields[0] == col.Name) {
+      col.IsLink = true
+    }
+  }
+  return columns
 }
 
-async function getFormItems(name = '') {
+/**
+ * 获取表单列表
+ * @param {*} name
+ */
+export async function getFormItems(name = '') {
   let {
     FieldInfoStruts,
     Name: ModuleName
@@ -73,16 +91,30 @@ async function getFormItems(name = '') {
   })
 }
 
-export {
-  getModuleStrut,
-  getDefaultModel,
-  getColumns,
-  getFormItems
-}
+/**
+ * 获取表单验证列表
+ * @param {*} name
+ */
+export async function getRules(name = '') {
+  let {
+    FieldInfoStruts
+  } = await getModuleStrut(name)
+  let obj = {}
+  for (const {
+      Rules,
+      Description,
+      Name
+    } of FieldInfoStruts) {
+    let evalRules = Rules.map(r => {
+      if (rules[r.RuleName]) {
+        return rules[r.RuleName](Description, ...r.RulePars)
+      }
+    }).filter(r => !!r)
+    if (Name.includes('Email')) evalRules.push(rules.email.call())
+    if (Name.includes('Phone')) evalRules.push(rules.phone.call())
 
-export default {
-  getModuleStrut,
-  getDefaultModel,
-  getColumns,
-  getFormItems
+    obj[Name] = evalRules
+  }
+
+  return obj
 }

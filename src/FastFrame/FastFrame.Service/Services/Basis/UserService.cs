@@ -25,6 +25,15 @@ namespace FastFrame.Service.Services.Basis
             return base.OnAdding(input, entity);
         }
 
+        protected override async Task OnDeleteing(User input)
+        {
+            await base.OnDeleteing(input);
+            if (input.IsRoot)
+                throw new Exception("该帐号不可以删除!");
+            if (input.IsAdmin)
+                throw new Exception("管理员帐号不可以删除!");
+        }
+
         /// <summary>
         /// 切换管理员身份
         /// </summary>

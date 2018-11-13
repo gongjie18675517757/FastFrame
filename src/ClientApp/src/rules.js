@@ -1,3 +1,4 @@
+import $http from '@/http'
 /**
  * 必填验证
  * @param {*} fieldDescription 
@@ -41,10 +42,40 @@ function phone(fieldDescription = '手机号码无效') {
   }
 }
 
+/**
+ * 唯一验证
+ * @param {*} fieldDescription 
+ * @param {*} moduleName 
+ * @param {*} name 
+ */
+function unique(fieldDescription, moduleName, name) {
+  return function (value, form) {
+    return true
+    // let postData = {
+    //   Id: form.Id,
+    //   ModuleName: moduleName,
+    //   KeyValues: [{
+    //     Key: name,
+    //     Value: value
+    //   }]
+    // }
+    // return new Promise((resolve, reject) => {
+    //   $http.post(`/api/Common/VerififyUnique`, postData).then(data => {
+    //     if (data) {
+    //       resolve(`${fieldDescription}重复!`)
+    //     } else {
+    //       resolve(true)
+    //     }
+    //   }).catch(reject) 
+    // }) 
+  }
+}
+
 
 export default {
   required,
   email,
   stringLength,
-  phone
+  phone,
+  unique
 }

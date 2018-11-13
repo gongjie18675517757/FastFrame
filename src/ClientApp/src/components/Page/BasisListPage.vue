@@ -4,16 +4,23 @@
       <v-flex lg12>
         <v-card>
           <v-toolbar flat dense card color="transparent">
-            <v-toolbar-title>用户列表</v-toolbar-title>
+            <v-toolbar-title>{{moduleInfo.direction}}列表</v-toolbar-title>
             <v-spacer></v-spacer>
-            <a-btn to="/user/add">添加</a-btn>
+            <a-btn :to="path.add">添加</a-btn>
             <a-btn @click="remove" :disabled="selection.length==0">删除</a-btn>
           </v-toolbar>
           <v-divider></v-divider>
           <v-card-title>
             <!-- <a-btn to="/user/add">添加</a-btn> -->
             <v-spacer></v-spacer>
-            <v-text-field append-icon="search" label="搜索" single-line hide-details v-model="search" @change="loadList"></v-text-field>
+            <v-text-field
+              append-icon="search"
+              label="搜索"
+              single-line
+              hide-details
+              v-model="search"
+              @change="loadList"
+            ></v-text-field>
           </v-card-title>
           <v-divider></v-divider>
           <v-card-text class="pa-0">
@@ -31,18 +38,18 @@
                 <td>
                   <v-checkbox primary hide-details v-model="props.selected"></v-checkbox>
                 </td>
-                <td>
+                <!-- <td>
                   <v-avatar size="32">
                     <img
                       :src="props.item.HandIconId?'/api/resource/get/'+props.item.HandIconId:timg"
                     >
                   </v-avatar>
+                </td>-->
+                <td v-for="col in columns" :key="col.Name">
+                  <span v-if="col.Type=='Boolean'">{{ props.item[col.Name]?'是':'否' }}</span>
+                  <span v-else-if="col.Relate">{{ props.item[col.Name] }}</span>
+                  <span v-else-if="col.Type=='String'">{{ props.item[col.Name] }}</span>
                 </td>
-                <td>{{ props.item.Account }}</td>
-                <td>{{ props.item.Name }}</td>
-                <td>{{ props.item.Email }}</td>
-                <td>{{ props.item.PhoneNumber }}</td>
-                <td>{{ props.item.IsDisabled }}</td>
                 <td>
                   <v-btn depressed outline icon fab dark color="primary" small>
                     <v-icon>edit</v-icon>
@@ -62,59 +69,61 @@
 </template>
 
 <script>
-import timg from '@/assets/timg.jpg'
+import { getColumns } from '@/generate'
 export default {
+  props: {
+    moduleInfo: {
+      type: Object,
+      default: function() {
+        return {
+          name: '',
+          direction: ''
+        }
+      }
+    }
+  },
   data() {
     return {
-      timg,
       search: '',
       selection: [],
       pager: {},
       loading: false,
       total: 0,
-      headers: [
-        {
-          text: '#',
-          value: '',
-          sortable: false
-        },
-        {
-          text: '头像',
-          value: 'HandIconId',
-          sortable: false
-        },
-        {
-          text: '帐号',
-          value: 'Account'
-        },
-        {
-          text: '名称',
-          value: 'Name'
-        },
-        {
-          text: '邮箱',
-          value: 'Email'
-        },
-        {
-          text: '手机号',
-          value: 'PhoneNumber'
-        },
-        {
-          text: '禁用?',
-          value: 'IsDisabled'
-        },
-        {
-          text: 'Action',
-          sortable: false,
-          value: ''
-        }
-      ],
+
+      headers: [],
+      columns: [],
       items: []
     }
   },
-  created() {
-    
-  }, 
+  computed: {
+    path() {
+      return {
+        add: `/${this.moduleInfo.name}/add`
+      }
+    }
+  },
+  async created() {
+    let cols = await getColumns(this.moduleInfo.name)
+    this.headers = [
+      {
+        text: '#',
+        value: '',
+        sortable: false
+      },
+      ...cols.map(c => {
+        return {
+          text: c.Description,
+          value: c.Name
+        }
+      }),
+      {
+        text: '操作',
+        sortable: false,
+        value: ''
+      }
+    ]
+    this.columns = cols
+  },
   methods: {
     remove() {},
     async loadList() {
@@ -126,21 +135,17 @@ export default {
         PageSize: rowsPerPage,
         Condition: {
           KeyWord: this.search
-          // Filters: [
-          //   {
-          //     Name: 'string',
-          //     Compare: 'string',
-          //     Value: 'string'
-          //   }
-          // ]
         },
         SortInfo: {
-          Name: sortBy,
+          Name: sortBy || 'Id',
           Mode: descending ? 'asc' : 'desc'
         }
       }
       try {
-        let { Total, Data } = await this.$http.post('/api/user/list', pageInfo)
+        let { Total, Data } = await this.$http.post(
+          '/api/' + this.moduleInfo.name + '/list',
+          pageInfo
+        )
         this.items = Data
         this.total = Total
       } finally {

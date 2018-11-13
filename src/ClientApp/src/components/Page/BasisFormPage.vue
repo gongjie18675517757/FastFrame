@@ -33,7 +33,15 @@
         <v-form ref="form">
           <v-card-text>
             <component :is="singleLine?'v-flex':'v-layout'" wrap="">
-              <TextInput v-for="item in options" :key="item.Name" :model="form" v-bind="item"/>
+              <TextInput
+                v-for="item in options"
+                :key="item.Name"
+                :model="form"
+                v-bind="item"
+                :rules="getRules(item)"
+              />
+            </component>
+            <component :is="singleLine?'v-flex':'v-layout'" wrap="">
               <TextInput
                 v-if="showMamageField && form.Id"
                 v-for="item in manageOptions"
@@ -57,20 +65,30 @@
 <script>
 import TextInput from '@/components/Inputs/TextInput.vue'
 import timg from '@/assets/timg.jpg'
-import { alert } from '@/utils' 
-import { getDefaultModel, getFormItems } from '@/generate'
+import { alert, mapMany } from '@/utils'
+import { getDefaultModel, getFormItems, getRules } from '@/generate'
 export default {
   components: {
     TextInput
   },
+  props: {
+    moduleInfo: {
+      type: Object,
+      default: function() {
+        return {
+          name: '',
+          direction: ''
+        }
+      }
+    }
+  },
   data() {
     return {
-      moduleInfo:{
-        name:'Dept',
-        direction: '部门',
-      }, 
+      timg: timg,
+
       form: {},
       options: [],
+      rules: {},
       manageOptions: [
         { Name: 'CreateName', Description: '创建人' },
         { Name: 'CreateTime', Description: '创建时间' },
@@ -91,10 +109,14 @@ export default {
   },
   async created() {
     let moduleName = this.moduleInfo.name
+    this.rules = await getRules(moduleName)
     this.form = await getDefaultModel(moduleName)
     this.options = await getFormItems(moduleName)
   },
   methods: {
+    getRules(item) {
+      return this.rules[item.Name].filter(f => f.length == 1)
+    },
     goList() {
       this.$router.push(`/${this.moduleInfo.name}/list`)
     },
@@ -104,9 +126,11 @@ export default {
         if (!this.$refs.form.validate()) {
           throw new Error('请填写完整信息')
         }
-        let data = await this.$http.post(`/api/${this.moduleInfo.name}/post`, this.form)
+        let data = await this.$http.post(
+          `/api/${this.moduleInfo.name}/post`,
+          this.form
+        )
         this.form = data
-        list.push(data)
         alert.success('添加成功')
         this.goList()
       } catch (error) {

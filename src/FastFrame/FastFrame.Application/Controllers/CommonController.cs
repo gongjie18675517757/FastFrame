@@ -118,7 +118,7 @@ namespace FastFrame.Application.Controllers
                     stringLengthAttribute.MinimumLength.ToString(),
                     stringLengthAttribute.MaximumLength.ToString());
             if (TryGetAttribute<UniqueAttribute>(prop, out var uniqueAttribute))
-                yield return new Rule("unique");
+                yield return new Rule("unique",prop.DeclaringType.Name,prop.Name);
         }
 
         private bool TryGetAttribute<T>(PropertyInfo propertyInfo, out T attr) where T : Attribute

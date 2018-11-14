@@ -27,13 +27,12 @@ namespace FastFrame.Application.Privder
         /// <returns></returns>
         public Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
-            //if (!context.Filters.Any(x => x.GetType() == typeof(AllowAnonymousFilter)))
+            if (!context.Filters.Any(x => x.GetType() == typeof(AllowAnonymousFilter)))
             {
                 if (operaterProvider.GetCurrUser() == null)
                 {
-                    //context.HttpContext.Response.ContentType = "application/json;charset=utf-8";
-                    //context.Result = new ObjectResult(new { Message = "未登陆" });
-                    //context.HttpContext.Response.StatusCode = 401;
+                    context.HttpContext.Response.StatusCode = 401;
+                    context.Result = new ObjectResult(new { Message = "未登陆" }); 
                 }
             }
             return Task.CompletedTask;

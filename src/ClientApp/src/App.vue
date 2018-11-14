@@ -1,6 +1,6 @@
 <template>
   <div>
-    <router-view/>
+    <router-view v-if="resufreshed"/>
     <Alert/>
   </div>
 </template>
@@ -9,10 +9,25 @@
 import Alert from '@/components/Alert.vue'
 export default {
   components: { Alert },
-  data() {
-    return {}
+  provide() {
+    return {
+      reload: this.resufresh
+    }
   },
-  created() {}
+  data() {
+    return {
+      resufreshed: true
+    }
+  },
+  created() {},
+  methods: {
+    resufresh() {
+      this.resufreshed = false
+      this.$nextTick(function() {
+        this.resufreshed = true
+      })
+    }
+  }
 }
 </script>
 
@@ -20,7 +35,7 @@ export default {
 .form {
   padding: 5px;
 }
-.v-card__title{
+.v-card__title {
   padding: 2px;
 }
 </style>

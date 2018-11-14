@@ -6,8 +6,38 @@
           <v-toolbar flat dense card color="transparent">
             <v-toolbar-title>{{moduleInfo.direction}}列表</v-toolbar-title>
             <v-spacer></v-spacer>
-            <a-btn :to="path.add">添加</a-btn>
-            <a-btn @click="remove" :disabled="selection.length==0">删除</a-btn>
+            <v-btn icon @click="refresh">
+              <v-icon>refresh</v-icon>
+            </v-btn>
+            <a-btn @click="toEdit({})" icon>
+              <v-icon>playlist_add</v-icon>
+            </a-btn>
+            <a-btn @click="remove()" :disabled="selection.length==0" icon>
+              <v-icon>delete_forever</v-icon>
+            </a-btn>
+            <v-menu offset-y>
+              <v-btn icon slot="activator">
+                <v-icon>more_vert</v-icon>
+              </v-btn>
+              <v-list>
+                <v-list-tile>
+                  <v-list-tile-action>
+                    <v-checkbox v-model="dialogMode"></v-checkbox>
+                  </v-list-tile-action>
+                  <v-list-tile-content>
+                    <v-list-tile-title>弹出模式</v-list-tile-title>
+                  </v-list-tile-content>
+                </v-list-tile>
+                <v-list-tile>
+                  <v-list-tile-action>
+                    <v-checkbox v-model="showMamageField"></v-checkbox>
+                  </v-list-tile-action>
+                  <v-list-tile-content>
+                    <v-list-tile-title>显示管理字段</v-list-tile-title>
+                  </v-list-tile-content>
+                </v-list-tile>
+              </v-list>
+            </v-menu>
           </v-toolbar>
           <v-divider></v-divider>
           <v-card-title>
@@ -47,14 +77,16 @@
                 </td>-->
                 <td v-for="col in columns" :key="col.Name">
                   <span v-if="col.Type=='Boolean'">{{ props.item[col.Name]?'是':'否' }}</span>
-                  <span v-else-if="col.Relate">{{ props.item[col.Name] }}</span>
+                  <span v-else-if="col.Relate">
+                    <span>{{getRelateText({column:col,row:props.item})}}</span>
+                  </span>
                   <span v-else-if="col.Type=='String'">{{ props.item[col.Name] }}</span>
                 </td>
                 <td>
-                  <v-btn depressed outline icon fab dark color="primary" small>
+                  <v-btn outline icon color="primary" @click="toEdit(props.item)">
                     <v-icon>edit</v-icon>
                   </v-btn>
-                  <v-btn depressed outline icon fab dark color="pink" small>
+                  <v-btn outline icon color="pink" @click="remove(props.item.Id)">
                     <v-icon>delete</v-icon>
                   </v-btn>
                 </td>
@@ -65,6 +97,9 @@
         </v-card>
       </v-flex>
     </v-layout>
+    <v-dialog v-if="dialog" v-model="dialog" persistent>
+      <component :is="template" @success="success" :pars="pars"/>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -76,12 +111,14 @@ export default {
       type: Object,
       default: function() {
         return {
+          area: '',
           name: '',
           direction: ''
         }
       }
     }
   },
+  inject: ['reload'],
   data() {
     return {
       search: '',
@@ -90,6 +127,12 @@ export default {
       loading: false,
       total: 0,
 
+      dialog: false,
+      dialogMode: true,
+      showMamageField: false,
+      pars: {},
+      template: () =>
+        import(`@/views/${this.moduleInfo.area}/${this.moduleInfo.name}/Add`),
       headers: [],
       columns: [],
       items: []
@@ -125,7 +168,41 @@ export default {
     this.columns = cols
   },
   methods: {
-    remove() {},
+    refresh() {
+      this.reload()
+    },
+    toEdit({ Id } = {}) {
+      let url = `${this.path.add}?q=${Id}`
+      if (this.dialogMode) {
+        this.pars = {
+          id: Id
+        }
+        this.dialog = true
+      } else {
+        this.$router.push(url)
+      }
+    },
+    async remove(key) {
+      let ids = []
+      if (key) {
+        ids = [key]
+      } else {
+        ids = this.selection.map(r => r.Id)
+      }
+      for (const id of ids) {
+        try {
+          await this.$http.delete(`/api/${this.moduleInfo.name}/delete/${id}`)
+          let index = this.items.findIndex(r => r.Id == id)
+          this.items.splice(index, 1)
+        } finally {
+        }
+      }
+    },
+    getRelateText({ column, row }) {
+      let tempName = column.Name.replace('_Id', '')
+      let name = column.Relate[0]
+      return row[`${tempName}_${name}`]
+    },
     async loadList() {
       this.loading = true
       let { page, rowsPerPage, sortBy, descending } = this.pager,
@@ -150,6 +227,17 @@ export default {
         this.total = Total
       } finally {
         this.loading = false
+      }
+    },
+    success(data) {
+      this.dialog = false
+      if (data && data.Id) {
+        let index = this.items.findIndex(x => x.Id == data.Id)
+        if (index != -1) {
+          this.items.splice(index, 1, data)
+        } else {
+          this.items.splice(0, 0, data)
+        }
       }
     }
   }

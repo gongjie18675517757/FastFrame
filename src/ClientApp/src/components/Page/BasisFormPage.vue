@@ -7,7 +7,7 @@
           <v-spacer></v-spacer>
           <v-menu offset-y>
             <v-btn icon slot="activator">
-              <v-icon>settings</v-icon>
+              <v-icon>more_vert</v-icon>
             </v-btn>
             <v-list>
               <v-list-tile>
@@ -77,7 +77,8 @@ export default {
       default: function() {
         return {
           name: '',
-          direction: ''
+          direction: '',
+          pars: {}
         }
       }
     }
@@ -107,17 +108,44 @@ export default {
       showMamageField: false
     }
   },
-  async created() {
+
+  watch: {
+    $route: function() {
+      this.load()
+    }
+  },
+  async mounted() {
     let moduleName = this.moduleInfo.name
     this.rules = await getRules(moduleName)
-    this.form = await getDefaultModel(moduleName)
+    await this.load()
     this.options = await getFormItems(moduleName)
   },
   methods: {
+    getId() {
+      let { q: id } = this.$route.query
+      if (this.moduleInfo.pars && this.moduleInfo.pars.id) {
+        return this.moduleInfo.pars.id
+      } else {
+        let { q: id } = this.$route.query
+        return id
+      }
+    },
+    async load() {
+      let id = this.getId()
+      if (id) {
+        this.form = await this.$http.get(
+          `/api/${this.moduleInfo.name}/get/${id}`
+        )
+      } else {
+        let moduleName = this.moduleInfo.name
+        this.form = await getDefaultModel(moduleName)
+      }
+    },
     getRules(item) {
       return this.rules[item.Name].filter(f => f.length == 1)
     },
     goList() {
+      this.$emit('success')
       this.$router.push(`/${this.moduleInfo.name}/list`)
     },
     async submit() {
@@ -126,11 +154,20 @@ export default {
         if (!this.$refs.form.validate()) {
           throw new Error('请填写完整信息')
         }
-        let data = await this.$http.post(
-          `/api/${this.moduleInfo.name}/post`,
-          this.form
-        )
-        this.form = data
+        let id = this.getId()
+        let data
+        if (!id) {
+          data = await this.$http.post(
+            `/api/${this.moduleInfo.name}/post`,
+            this.form
+          )
+        } else {
+          data = await this.$http.put(
+            `/api/${this.moduleInfo.name}/put`,
+            this.form
+          )
+        }
+        this.$emit('success', data)
         alert.success('添加成功')
         this.goList()
       } catch (error) {

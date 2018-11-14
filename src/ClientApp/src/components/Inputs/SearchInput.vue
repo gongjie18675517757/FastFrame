@@ -58,6 +58,7 @@ export default {
     disabled: Boolean,
     label: String,
 
+    Name: String,
     ModuleName: String,
     Relate: {
       type: String,
@@ -73,9 +74,20 @@ export default {
       fields: []
     }
   },
-  async created() { 
+  async created() {
     let { RelateFields } = await getModuleStrut(this.Relate)
     this.fields = RelateFields
+    if (this.value) {
+      let obj = { Id: this.value }
+      let nameTemp = this.Name.replace('_Id', '')
+      for (const fieldName of RelateFields) {
+        let name = `${nameTemp}_${fieldName}`
+        obj[name] = this.model[name]
+        obj[fieldName] = this.model[name]
+      }
+      this.select = obj
+      this.items=[obj]
+    }
   },
   watch: {
     search(v) {
@@ -101,6 +113,7 @@ export default {
     },
     change($event) {
       this.$emit('change', $event)
+      this.$emit('input', $event.Id) 
     }
   }
 }

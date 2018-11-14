@@ -8,7 +8,7 @@ namespace FastFrame.Entity.Basis
     /// </summary>
     [Export]
     [Tree(nameof(Parent_Id))]
-    [RelatedField( nameof(EnCode),nameof(Name))]
+    [RelatedField(nameof(Name), nameof(EnCode))]
     public class Menu:BaseEntity
     {  
         /// <summary>

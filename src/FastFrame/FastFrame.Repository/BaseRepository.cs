@@ -97,7 +97,7 @@ namespace FastFrame.Repository
                     }
                 }
             }
-            /*验证关联性*/ 
+            /*验证关联性*/
         }
 
         /// <summary>
@@ -106,13 +106,14 @@ namespace FastFrame.Repository
         /// <param name="entity"></param>
         public virtual async Task DeleteAsync(T entity)
         {
-            //context.Set<T>().Remove(entity);
-            entity.IsDeleted = true;
+            context.Set<T>().Remove(entity);
+            //entity.IsDeleted = true;
             var foreign = await context.Set<Foreign>().FirstOrDefaultAsync(x => x.EntityId == entity.Id);
-            foreign.ModifyUserId = currUser?.Id;
-            foreign.ModifyTime = DateTime.Now;
-            context.Entry(foreign).State = EntityState.Modified;
-            context.Entry(entity).State = EntityState.Modified;
+            //foreign.ModifyUserId = currUser?.Id;
+            //foreign.ModifyTime = DateTime.Now;
+            //context.Entry(foreign).State = EntityState.Modified;
+            //context.Entry(entity).State = EntityState.Modified;
+            context.Set<Foreign>().Remove(foreign);
         }
 
         /// <summary>

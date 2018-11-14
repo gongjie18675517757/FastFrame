@@ -27,6 +27,10 @@ let areas = {
   Basis: {
     User: {
       List: '列表',
+      Add: '添加',
+    },
+    Dept: {
+      List: '列表',
       Add: '添加'
     }
   }

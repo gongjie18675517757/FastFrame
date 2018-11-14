@@ -1,6 +1,6 @@
 <template>
   <span>
-    <v-btn v-bind="$attrs" @click="handleClick" outline color="indigo">
+    <v-btn v-bind="$attrs" @click="handleClick">
       <slot></slot>
     </v-btn>
   </span>
@@ -11,8 +11,7 @@ export default {
   props: {
     authority: String
   },
-  created() {
-    console.log(this)
+  created() {    
   },
   methods: {
     handleClick($event) {

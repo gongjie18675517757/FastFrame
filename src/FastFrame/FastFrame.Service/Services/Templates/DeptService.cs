@@ -48,9 +48,9 @@ namespace FastFrame.Service.Services.Basis
 					from user3 in t_user3.DefaultIfEmpty()
 					 select new DeptDto
 					{
-						Parent_Id=dept.Parent_Id,
 						EnCode=dept.EnCode,
 						Name=dept.Name,
+						Parent_Id=dept.Parent_Id,
 						Supervisor_Id=dept.Supervisor_Id,
 						Id=dept.Id,
 						Parent_EnCode=parent_Id.EnCode,

@@ -8,7 +8,7 @@ namespace FastFrame.Entity.Basis
     /// 员工表
     /// </summary>
     [Export]
-    [RelatedField(nameof(EnCode),nameof(Name))]
+    [RelatedField(nameof(Name), nameof(EnCode))]
     public class Employee : BaseEntity
     { 
         /// <summary>

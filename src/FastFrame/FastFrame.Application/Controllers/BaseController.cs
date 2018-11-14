@@ -58,7 +58,7 @@ namespace FastFrame.Application.Controllers
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPut, Permission("Update", "修改")]
-        public virtual async Task<TDto> Modify([FromBody]TDto @input)
+        public virtual async Task<TDto> Put([FromBody]TDto @input)
         {
             return await service.UpdateAsync(@input);
         }

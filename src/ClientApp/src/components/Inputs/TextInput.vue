@@ -22,6 +22,7 @@
     <SearchInput
       v-if="evalType=='remoteSelect'"
       v-model="model[Name]"
+      :Name="Name"
       :model="model"
       :disabled="evalDisabled"
       :label="Description"

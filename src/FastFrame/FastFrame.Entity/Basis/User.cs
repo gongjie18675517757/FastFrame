@@ -10,7 +10,7 @@ namespace FastFrame.Entity.Basis
     /// 登陆用户
     /// </summary>
     [Export]
-    [RelatedField(nameof(Account), nameof(Name))]
+    [RelatedField(nameof(Name), nameof(Account))]
     [Unique(nameof(Account))]
     public class User : BaseEntity
     {

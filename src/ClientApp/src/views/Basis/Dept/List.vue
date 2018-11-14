@@ -12,9 +12,9 @@ export default {
     return {
       page: {
         moduleInfo: {
-          area: 'Basis',
-          name: 'User',
-          direction: '用户'
+          area:'Basis',
+          name: 'Dept',
+          direction: '部门'
         }
       }
     }

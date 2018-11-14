@@ -60,6 +60,16 @@
             部门 
              </summary>
         </member>
+        <member name="P:FastFrame.Dto.Basis.DeptDto.EnCode">
+             <summary>
+            编码 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.DeptDto.Name">
+             <summary>
+            名称 
+             </summary>
+        </member>
         <member name="P:FastFrame.Dto.Basis.DeptDto.Parent_Id">
              <summary>
             上级 
@@ -73,16 +83,6 @@
         <member name="P:FastFrame.Dto.Basis.DeptDto.Parent_Name">
              <summary>
             上级名称 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.DeptDto.EnCode">
-             <summary>
-            编码 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.DeptDto.Name">
-             <summary>
-            名称 
              </summary>
         </member>
         <member name="P:FastFrame.Dto.Basis.DeptDto.Supervisor_Id">
@@ -165,6 +165,16 @@
             菜单 
              </summary>
         </member>
+        <member name="P:FastFrame.Dto.Basis.MenuDto.EnCode">
+             <summary>
+            编码 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.MenuDto.Name">
+             <summary>
+            名称 
+             </summary>
+        </member>
         <member name="P:FastFrame.Dto.Basis.MenuDto.Parent_Id">
              <summary>
             上级菜单 
@@ -178,16 +188,6 @@
         <member name="P:FastFrame.Dto.Basis.MenuDto.Parent_Name">
              <summary>
             上级菜单名称 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.MenuDto.EnCode">
-             <summary>
-            编码 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.MenuDto.Name">
-             <summary>
-            名称 
              </summary>
         </member>
         <member name="P:FastFrame.Dto.Basis.MenuDto.Title">
@@ -245,14 +245,14 @@
             查询方案 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.QueryProgramDto.ModuleName">
-             <summary>
-            模块名称 
-             </summary>
-        </member>
         <member name="P:FastFrame.Dto.Basis.QueryProgramDto.Name">
              <summary>
             方案名称 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.QueryProgramDto.ModuleName">
+             <summary>
+            模块名称 
              </summary>
         </member>
         <member name="P:FastFrame.Dto.Basis.QueryProgramDto.IsPublic">

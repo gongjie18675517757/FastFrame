@@ -43,9 +43,9 @@ namespace FastFrame.Service.Services.Basis
 					from user3 in t_user3.DefaultIfEmpty()
 					 select new MenuDto
 					{
-						Parent_Id=menu.Parent_Id,
 						EnCode=menu.EnCode,
 						Name=menu.Name,
+						Parent_Id=menu.Parent_Id,
 						Title=menu.Title,
 						Icon=menu.Icon,
 						Path=menu.Path,

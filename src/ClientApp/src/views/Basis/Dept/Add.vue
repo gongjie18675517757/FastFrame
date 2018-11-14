@@ -1,7 +1,6 @@
 <template>
   <Page v-bind="page" @success="$emit('success',$event)"/>
 </template>
-</template>
 
 <script>
 import Page from '@/components/Page/BasisFormPage.vue'
@@ -14,8 +13,8 @@ export default {
       page: {
         moduleInfo: {
           area: 'Basis',
-          name: 'User',
-          direction: '用户',
+          name: 'Dept',
+          direction: '部门',
           ...this.$attrs
         }
       }

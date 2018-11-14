@@ -7,10 +7,10 @@ namespace FastFrame.Entity.Basis
     /// 部门
     /// </summary>
     [Export]
-    [RelatedField(nameof(EnCode), nameof(Name))]
+    [RelatedField(nameof(Name), nameof(EnCode))]
     [Tree(nameof(Parent_Id))]
     public class Dept : BaseEntity
-    { 
+    {
         /// <summary>
         /// 编码
         /// </summary>
@@ -32,7 +32,7 @@ namespace FastFrame.Entity.Basis
         /// <summary>
         /// 主管
         /// </summary>
-        [StringLength(50),RelatedTo(typeof(Employee))]
+        [StringLength(50), RelatedTo(typeof(Employee))]
         public string Supervisor_Id { get; set; }
     }
 }

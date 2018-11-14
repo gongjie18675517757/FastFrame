@@ -41,8 +41,8 @@ namespace FastFrame.Service.Services.Basis
 					from user3 in t_user3.DefaultIfEmpty()
 					 select new QueryProgramDto
 					{
-						ModuleName=queryProgram.ModuleName,
 						Name=queryProgram.Name,
+						ModuleName=queryProgram.ModuleName,
 						IsPublic=queryProgram.IsPublic,
 						Id=queryProgram.Id,
 						CreateAccount = user2.Account,

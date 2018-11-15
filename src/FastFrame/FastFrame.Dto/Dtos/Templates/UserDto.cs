@@ -8,7 +8,7 @@ namespace FastFrame.Dto.Basis
 	///登陆用户 
 	/// </summary>
 	[Unique("Account")]
-	[RelatedField("Account","Name")]
+	[RelatedField("Name","Account")]
 	public partial class UserDto:BaseDto<User>
 	{
 		#region 字段
@@ -17,6 +17,13 @@ namespace FastFrame.Dto.Basis
 		#endregion
 		#region 属性
 		/// <summary>
+		///姓名 
+		/// </summary>
+		[StringLength(50)]
+		[Required()]
+		public string Name {get;set;}
+		
+		/// <summary>
 		///帐号 
 		/// </summary>
 		[StringLength(50)]
@@ -24,13 +31,6 @@ namespace FastFrame.Dto.Basis
 		[Unique()]
 		[ReadOnly(ReadOnlyMark.Edit)]
 		public string Account {get;set;}
-		
-		/// <summary>
-		///姓名 
-		/// </summary>
-		[StringLength(50)]
-		[Required()]
-		public string Name {get;set;}
 		
 		/// <summary>
 		///密码 

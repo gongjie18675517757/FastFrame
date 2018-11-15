@@ -49,18 +49,18 @@ namespace FastFrame.Service.Services.Basis
 					from user3 in t_user3.DefaultIfEmpty()
 					 select new EmployeeDto
 					{
-						EnCode=employee.EnCode,
 						Name=employee.Name,
+						EnCode=employee.EnCode,
 						Email=employee.Email,
 						PhoneNumber=employee.PhoneNumber,
 						Gender=employee.Gender,
 						User_Id=employee.User_Id,
 						Dept_Id=employee.Dept_Id,
 						Id=employee.Id,
-						User_Account=user_Id.Account,
 						User_Name=user_Id.Name,
-						Dept_EnCode=dept_Id.EnCode,
+						User_Account=user_Id.Account,
 						Dept_Name=dept_Id.Name,
+						Dept_EnCode=dept_Id.EnCode,
 						CreateAccount = user2.Account,
 						CreateName = user2.Name,
 						CreateTime = foreing.CreateTime,

@@ -80,7 +80,7 @@
                   <span v-else-if="col.Relate">
                     <span>{{getRelateText({column:col,row:props.item})}}</span>
                   </span>
-                  <span v-else-if="col.Type=='String'">{{ props.item[col.Name] }}</span>
+                  <span v-else>{{ props.item[col.Name] }}</span>
                 </td>
                 <td>
                   <v-btn outline icon color="primary" @click="toEdit(props.item)">
@@ -97,7 +97,7 @@
         </v-card>
       </v-flex>
     </v-layout>
-    <v-dialog v-if="dialog" v-model="dialog" persistent>
+    <v-dialog v-if="dialog" v-model="dialog" persistent scrollable >
       <component :is="template" @success="success" :pars="pars"/>
     </v-dialog>
   </v-container>
@@ -133,8 +133,7 @@ export default {
       pars: {},
       template: () =>
         import(`@/views/${this.moduleInfo.area}/${this.moduleInfo.name}/Add`),
-      headers: [],
-      columns: [],
+      cols: [],
       items: []
     }
   },
@@ -143,35 +142,45 @@ export default {
       return {
         add: `/${this.moduleInfo.name}/add`
       }
+    },
+    headers() {
+      return [
+        {
+          text: '#',
+          value: '',
+          sortable: false
+        },
+        ...this.columns.map(c => {
+          return {
+            text: c.Description,
+            value: c.Name
+          }
+        }),
+        {
+          text: '操作',
+          sortable: false,
+          value: ''
+        }
+      ]
+    },
+    columns() {
+      let adminColumns = [
+        { Name: 'CreateName', Description: '创建人' },
+        { Name: 'CreateTime', Description: '创建时间' },
+        { Name: 'ModifyName', Description: '修改人' },
+        { Name: 'ModifyTime', Description: '修改时间' }
+      ]
+      return [...this.cols, ...(this.showMamageField ? adminColumns : [])]
     }
   },
   async created() {
-    let cols = await getColumns(this.moduleInfo.name)
-    this.headers = [
-      {
-        text: '#',
-        value: '',
-        sortable: false
-      },
-      ...cols.map(c => {
-        return {
-          text: c.Description,
-          value: c.Name
-        }
-      }),
-      {
-        text: '操作',
-        sortable: false,
-        value: ''
-      }
-    ]
-    this.columns = cols
+    this.cols = await getColumns(this.moduleInfo.name)
   },
   methods: {
     refresh() {
       this.reload()
     },
-    toEdit({ Id } = {}) {
+    toEdit({ Id = '' } = {}) {
       let url = `${this.path.add}?q=${Id}`
       if (this.dialogMode) {
         this.pars = {

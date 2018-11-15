@@ -135,6 +135,6 @@ namespace FastFrame.CodeGenerate
                     }
                 }
             }
-        }
+        } 
     }
 }

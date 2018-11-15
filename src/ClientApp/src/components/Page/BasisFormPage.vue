@@ -3,7 +3,7 @@
     <v-flex lg12>
       <v-card>
         <v-toolbar flat dense card color="transparent">
-          <v-toolbar-title>添加{{moduleInfo.direction}}</v-toolbar-title>
+          <v-toolbar-title>{{title}}{{moduleInfo.direction}}</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-menu offset-y>
             <v-btn icon slot="activator">
@@ -71,6 +71,7 @@ export default {
   components: {
     TextInput
   },
+
   props: {
     moduleInfo: {
       type: Object,
@@ -85,8 +86,6 @@ export default {
   },
   data() {
     return {
-      timg: timg,
-
       form: {},
       options: [],
       rules: {},
@@ -104,14 +103,19 @@ export default {
         }
       }),
       submiting: false,
-      singleLine: true,
+      singleLine: false,
       showMamageField: false
     }
   },
-
   watch: {
     $route: function() {
       this.load()
+    }
+  },
+  computed: {
+    title() {
+      if (!this.getId()) return '新增'
+      else return '查看'
     }
   },
   async mounted() {

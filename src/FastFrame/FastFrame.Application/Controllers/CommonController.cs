@@ -5,6 +5,7 @@ using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Attrs;
 using FastFrame.Infrastructure.Interface;
 using FastFrame.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -29,9 +30,10 @@ namespace FastFrame.Application.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<CurrUser> Get()
+        [AllowAnonymous]
+        public IEnumerable<string> Get(int count=1)
         {
-            return Enumerable.Range(1, 100).Select(x => new CurrUser());
+            return Enumerable.Range(1, count).Select(x => IdGenerate.NetId());
         }
 
         /// <summary>

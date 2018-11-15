@@ -139,6 +139,21 @@
             组织信息
             </summary>
         </member>
+        <member name="P:FastFrame.Entity.Basis.Organize.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.Organize.EnCode">
+            <summary>
+            编码
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.Organize.Host">
+            <summary>
+            域名
+            </summary>
+        </member>
         <member name="T:FastFrame.Entity.Basis.QueryProgram">
             <summary>
             查询方案

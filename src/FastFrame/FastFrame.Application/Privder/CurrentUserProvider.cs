@@ -6,6 +6,7 @@ using System;
 using System.Threading.Tasks;
 using System.Linq;
 using EasyCaching.Core;
+using FastFrame.Entity.Basis;
 
 namespace FastFrame.Application.Privder
 {
@@ -14,20 +15,23 @@ namespace FastFrame.Application.Privder
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly IEasyCachingProvider cachingProvider;
         private readonly IDescriptionProvider descriptionProvider;
+        private readonly Database.DataBase dataBase;
         private string tokenName = "_code";
         private string token;
         private ICurrUser currUser;
 
         public CurrentUserProvider(IHttpContextAccessor httpContextAccessor, 
-            IEasyCachingProvider cachingProvider,IDescriptionProvider descriptionProvider)
+            IEasyCachingProvider cachingProvider,IDescriptionProvider descriptionProvider,Database.DataBase dataBase)
         {
             this.httpContextAccessor = httpContextAccessor;
             this.cachingProvider = cachingProvider;
             this.descriptionProvider = descriptionProvider;
+            this.dataBase = dataBase;
         }
         public string GetCurrOrganizeId()
         {
-            return httpContextAccessor.HttpContext.GetRouteValue("organize")?.ToString();
+            var host = httpContextAccessor.HttpContext.Request.Host.Value;
+            return dataBase.Set<Organize>().Where(x => x.Host == host).FirstOrDefault()?.Id; 
         }
 
         public ICurrUser GetCurrUser()
@@ -43,12 +47,7 @@ namespace FastFrame.Application.Privder
                 }
             }
             return currUser;
-        }
-
-        public IDescriptionProvider GetDescriptionProvider()
-        {
-            return descriptionProvider;
-        }
+        } 
 
         public async Task Login(ICurrUser currUser)
         {

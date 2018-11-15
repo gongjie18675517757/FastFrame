@@ -39,8 +39,8 @@ namespace FastFrame.Service.Services.Basis
 					from user3 in t_user3.DefaultIfEmpty()
 					 select new UserDto
 					{
-						Account=user.Account,
 						Name=user.Name,
+						Account=user.Account,
 						Password=user.Password,
 						Email=user.Email,
 						PhoneNumber=user.PhoneNumber,

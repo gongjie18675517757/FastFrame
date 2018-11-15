@@ -7,7 +7,7 @@ namespace FastFrame.Dto.Basis
 	/// <summary>
 	///菜单 
 	/// </summary>
-	[RelatedField("EnCode","Name")]
+	[RelatedField("Name","EnCode")]
 	public partial class MenuDto:BaseDto<Menu>
 	{
 		#region 字段
@@ -37,16 +37,16 @@ namespace FastFrame.Dto.Basis
 		public string Parent_Id {get;set;}
 		
 		/// <summary>
-		///上级菜单编码 
-		/// </summary>
-		[RelatedFrom(nameof(Parent_Id),nameof(Menu.EnCode),true)]
-		public string Parent_EnCode {get;set;}
-		
-		/// <summary>
 		///上级菜单名称 
 		/// </summary>
-		[RelatedFrom(nameof(Parent_Id),nameof(Menu.Name),false)]
+		[RelatedFrom(nameof(Parent_Id),nameof(Menu.Name),true)]
 		public string Parent_Name {get;set;}
+		
+		/// <summary>
+		///上级菜单编码 
+		/// </summary>
+		[RelatedFrom(nameof(Parent_Id),nameof(Menu.EnCode),false)]
+		public string Parent_EnCode {get;set;}
 		
 		/// <summary>
 		///标题 

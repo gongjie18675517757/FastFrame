@@ -7,7 +7,7 @@ namespace FastFrame.Dto.Basis
 	/// <summary>
 	///员工表 
 	/// </summary>
-	[RelatedField("EnCode","Name")]
+	[RelatedField("Name","EnCode")]
 	public partial class EmployeeDto:BaseDto<Employee>
 	{
 		#region 字段
@@ -16,18 +16,18 @@ namespace FastFrame.Dto.Basis
 		#endregion
 		#region 属性
 		/// <summary>
-		///编码 
-		/// </summary>
-		[StringLength(20)]
-		[Required()]
-		public string EnCode {get;set;}
-		
-		/// <summary>
 		///名称 
 		/// </summary>
 		[StringLength(20)]
 		[Required()]
 		public string Name {get;set;}
+		
+		/// <summary>
+		///编码 
+		/// </summary>
+		[StringLength(20)]
+		[Required()]
+		public string EnCode {get;set;}
 		
 		/// <summary>
 		///邮箱 
@@ -55,16 +55,16 @@ namespace FastFrame.Dto.Basis
 		public string User_Id {get;set;}
 		
 		/// <summary>
-		///用户帐号 
-		/// </summary>
-		[RelatedFrom(nameof(User_Id),nameof(User.Account),true)]
-		public string User_Account {get;set;}
-		
-		/// <summary>
 		///用户姓名 
 		/// </summary>
-		[RelatedFrom(nameof(User_Id),nameof(User.Name),false)]
+		[RelatedFrom(nameof(User_Id),nameof(User.Name),true)]
 		public string User_Name {get;set;}
+		
+		/// <summary>
+		///用户帐号 
+		/// </summary>
+		[RelatedFrom(nameof(User_Id),nameof(User.Account),false)]
+		public string User_Account {get;set;}
 		
 		/// <summary>
 		///部门 
@@ -73,16 +73,16 @@ namespace FastFrame.Dto.Basis
 		public string Dept_Id {get;set;}
 		
 		/// <summary>
-		///部门编码 
-		/// </summary>
-		[RelatedFrom(nameof(Dept_Id),nameof(Dept.EnCode),true)]
-		public string Dept_EnCode {get;set;}
-		
-		/// <summary>
 		///部门名称 
 		/// </summary>
-		[RelatedFrom(nameof(Dept_Id),nameof(Dept.Name),false)]
+		[RelatedFrom(nameof(Dept_Id),nameof(Dept.Name),true)]
 		public string Dept_Name {get;set;}
+		
+		/// <summary>
+		///部门编码 
+		/// </summary>
+		[RelatedFrom(nameof(Dept_Id),nameof(Dept.EnCode),false)]
+		public string Dept_EnCode {get;set;}
 		
 		#endregion
 		#region 方法

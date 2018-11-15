@@ -7,7 +7,7 @@ namespace FastFrame.Dto.Basis
 	/// <summary>
 	///部门 
 	/// </summary>
-	[RelatedField("EnCode","Name")]
+	[RelatedField("Name","EnCode")]
 	public partial class DeptDto:BaseDto<Dept>
 	{
 		#region 字段
@@ -38,16 +38,16 @@ namespace FastFrame.Dto.Basis
 		public string Parent_Id {get;set;}
 		
 		/// <summary>
-		///上级编码 
-		/// </summary>
-		[RelatedFrom(nameof(Parent_Id),nameof(Dept.EnCode),true)]
-		public string Parent_EnCode {get;set;}
-		
-		/// <summary>
 		///上级名称 
 		/// </summary>
-		[RelatedFrom(nameof(Parent_Id),nameof(Dept.Name),false)]
+		[RelatedFrom(nameof(Parent_Id),nameof(Dept.Name),true)]
 		public string Parent_Name {get;set;}
+		
+		/// <summary>
+		///上级编码 
+		/// </summary>
+		[RelatedFrom(nameof(Parent_Id),nameof(Dept.EnCode),false)]
+		public string Parent_EnCode {get;set;}
 		
 		/// <summary>
 		///主管 
@@ -57,16 +57,16 @@ namespace FastFrame.Dto.Basis
 		public string Supervisor_Id {get;set;}
 		
 		/// <summary>
-		///主管编码 
-		/// </summary>
-		[RelatedFrom(nameof(Supervisor_Id),nameof(Employee.EnCode),true)]
-		public string Supervisor_EnCode {get;set;}
-		
-		/// <summary>
 		///主管名称 
 		/// </summary>
-		[RelatedFrom(nameof(Supervisor_Id),nameof(Employee.Name),false)]
+		[RelatedFrom(nameof(Supervisor_Id),nameof(Employee.Name),true)]
 		public string Supervisor_Name {get;set;}
+		
+		/// <summary>
+		///主管编码 
+		/// </summary>
+		[RelatedFrom(nameof(Supervisor_Id),nameof(Employee.EnCode),false)]
+		public string Supervisor_EnCode {get;set;}
 		
 		#endregion
 		#region 方法

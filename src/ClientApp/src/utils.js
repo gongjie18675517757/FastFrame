@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import $http from '@/http.js'
+import $http from '@/http.js' 
 
 /**
  * 事件总线

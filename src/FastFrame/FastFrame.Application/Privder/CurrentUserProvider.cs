@@ -20,8 +20,8 @@ namespace FastFrame.Application.Privder
         private string token;
         private ICurrUser currUser;
 
-        public CurrentUserProvider(IHttpContextAccessor httpContextAccessor, 
-            IEasyCachingProvider cachingProvider,IDescriptionProvider descriptionProvider,Database.DataBase dataBase)
+        public CurrentUserProvider(IHttpContextAccessor httpContextAccessor,
+            IEasyCachingProvider cachingProvider, IDescriptionProvider descriptionProvider, Database.DataBase dataBase)
         {
             this.httpContextAccessor = httpContextAccessor;
             this.cachingProvider = cachingProvider;
@@ -30,8 +30,18 @@ namespace FastFrame.Application.Privder
         }
         public string GetCurrOrganizeId()
         {
-            var host = httpContextAccessor.HttpContext.Request.Host.Value;
-            return dataBase.Set<Organize>().Where(x => x.Host == host).FirstOrDefault()?.Id; 
+            string host;
+            if(httpContextAccessor.HttpContext.Request.Headers.TryGetValue("Referer", out var sv) && sv.Any())
+            {
+                var arr = sv.ToArray();
+                host = arr.FirstOrDefault();
+            }
+            else
+            {
+                host = httpContextAccessor.HttpContext.Request.Host.Value;
+            }
+            host = new Uri(host).Authority; 
+            return dataBase.Set<OrganizeHost>().Where(x => x.Host == host).FirstOrDefault()?.OrganizeId;
         }
 
         public ICurrUser GetCurrUser()
@@ -47,7 +57,7 @@ namespace FastFrame.Application.Privder
                 }
             }
             return currUser;
-        } 
+        }
 
         public async Task Login(ICurrUser currUser)
         {

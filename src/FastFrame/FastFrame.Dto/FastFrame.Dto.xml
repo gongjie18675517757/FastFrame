@@ -211,9 +211,14 @@
              </summary>
         </member>
         <member name="P:FastFrame.Dto.Basis.OrganizeDto.Name">
-            <summary>
-            
-            </summary>
+             <summary>
+            名称 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.OrganizeDto.EnCode">
+             <summary>
+            编码 
+             </summary>
         </member>
         <member name="T:FastFrame.Dto.Basis.QueryProgramDetailDto">
              <summary>

@@ -42,6 +42,7 @@ namespace FastFrame.Service.Services.Basis
 					 select new OrganizeDto
 					{
 						Name=organize.Name,
+						EnCode=organize.EnCode,
 						Id=organize.Id,
 						CreateAccount = user2.Account,
 						CreateName = user2.Name,

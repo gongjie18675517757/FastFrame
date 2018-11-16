@@ -3,14 +3,16 @@ using System;
 using FastFrame.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FastFrame.Database.Migrations
 {
     [DbContext(typeof(DataBase))]
-    partial class DataBaseModelSnapshot : ModelSnapshot
+    [Migration("20181116144149_181116")]
+    partial class _181116
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -202,6 +204,11 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(50)
                         .IsUnicode(true);
 
+                    b.Property<string>("Host")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .IsUnicode(true);
+
                     b.Property<bool>("IsDeleted");
 
                     b.Property<string>("Name")
@@ -221,37 +228,7 @@ namespace FastFrame.Database.Migrations
                     b.ToTable("Basis_Organize");
 
                     b.HasData(
-                        new { Id = "00F6P5G2VC2SAP1UJV7HTBYGU", EnCode = "default", IsDeleted = false, Name = "默认组织", OrganizeId = "00F6P5G2VC2SAP1UJV7HTBYGU" }
-                    );
-                });
-
-            modelBuilder.Entity("FastFrame.Entity.Basis.OrganizeHost", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(25)
-                        .IsUnicode(true);
-
-                    b.Property<string>("Host")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .IsUnicode(true);
-
-                    b.Property<bool>("IsDeleted");
-
-                    b.Property<string>("OrganizeId")
-                        .HasMaxLength(25)
-                        .IsUnicode(true);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrganizeId")
-                        .HasName("Index_OrganizeId");
-
-                    b.ToTable("Basis_OrganizeHost");
-
-                    b.HasData(
-                        new { Id = "00F6P5G2VC2SAP1UJV7HTBYGB", Host = "192.168.1.100:8081", IsDeleted = false, OrganizeId = "00F6P5G2VC2SAP1UJV7HTBYGU" },
-                        new { Id = "00F6P5G2VC2SAP1UJV7HTBYGc", Host = "192.168.1.100:82", IsDeleted = false, OrganizeId = "00F6P5G2VC2SAP1UJV7HTBYGU" }
+                        new { Id = "00F6P5G2VC2SAP1UJV7HTBYGU", EnCode = "default", Host = "192.168.1.100:8081", IsDeleted = false, Name = "默认组织", OrganizeId = "00F6P5G2VC2SAP1UJV7HTBYGU" }
                     );
                 });
 
@@ -419,7 +396,7 @@ namespace FastFrame.Database.Migrations
                     b.ToTable("Basis_User");
 
                     b.HasData(
-                        new { Id = "00F6P5G2VC2SAP1UJV7HTBYGA", Account = "admin", Email = "gongjie@qq.com", EncryptionKey = "f2ddd9711d0c6c633acc2dbcc6f5aef3", IsAdmin = true, IsDeleted = false, IsDisabled = false, IsRoot = true, Name = "超级管理员", OrganizeId = "00F6P5G2VC2SAP1UJV7HTBYGU", Password = "05ab47835362dc6509373865e21f54e8", PhoneNumber = "18675517757" }
+                        new { Id = "00F6P5G2VC2SAP1UJV7HTBYGA", Account = "admin", Email = "gongjie@qq.com", EncryptionKey = "a8ddba3bfd03736639d2af50ec03b2a6", IsAdmin = true, IsDeleted = false, IsDisabled = false, IsRoot = true, Name = "超级管理员", OrganizeId = "00F6P5G2VC2SAP1UJV7HTBYGU", Password = "b40424eb4e24df54aa41d9783ec94d1c", PhoneNumber = "18675517757" }
                     );
                 });
 #pragma warning restore 612, 618

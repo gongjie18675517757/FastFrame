@@ -32,7 +32,8 @@ export default new Vuex.Store({
         icon: 'email',
         timeLabel: '1小时前'
       }
-    ]
+    ],
+    dialogs: []
   },
   mutations: {
     login(state, payload) {
@@ -46,9 +47,21 @@ export default new Vuex.Store({
     },
     toggleRightDrawer(state, payload) {
       state.rightDrawer = payload.value
+    },
+    showDialog(state, payload) {
+      state.dialogs.push({
+        key: payload.key || new Date().getTime(),
+        render: payload.render
+      })
+    },
+    hideDialog(state, payload) {
+      let index = state.dialogs.findIndex(r => x.key == payload.key || x.render == payload.render)
+      if (index != -1)
+        state.dialogs.splice(index, 1)
     }
+
   },
   actions: {
-
+    
   }
 })

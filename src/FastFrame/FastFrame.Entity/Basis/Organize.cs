@@ -21,13 +21,6 @@ namespace FastFrame.Entity.Basis
         /// </summary>
         [StringLength(50)]
         [Required]
-        public string EnCode { get; set; }
-
-        /// <summary>
-        /// 域名
-        /// </summary>
-        [StringLength(200)]
-        [Required]
-        public string Host { get; set; } 
+        public string EnCode { get; set; } 
     }
 }

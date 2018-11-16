@@ -15,11 +15,18 @@ namespace FastFrame.Dto.Basis
 		#endregion
 		#region 属性
 		/// <summary>
-		/// 
+		///名称 
 		/// </summary>
 		[StringLength(50)]
 		[Required()]
 		public string Name {get;set;}
+		
+		/// <summary>
+		///编码 
+		/// </summary>
+		[StringLength(50)]
+		[Required()]
+		public string EnCode {get;set;}
 		
 		#endregion
 		#region 方法

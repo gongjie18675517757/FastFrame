@@ -39,7 +39,7 @@
                                 </v-form>
                             </v-card-text>
                             <v-card-actions>
-                                <v-btn block color="primary" @click="login" :loading="loading">Login</v-btn>
+                                <v-btn block color="primary" @click="login" :loading="loading">登陆</v-btn>
                             </v-card-actions>
                         </v-card>
                     </v-flex>

@@ -149,7 +149,7 @@
             编码
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Basis.Organize.Host">
+        <member name="P:FastFrame.Entity.Basis.OrganizeHost.Host">
             <summary>
             域名
             </summary>

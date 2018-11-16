@@ -10,12 +10,12 @@
             base.ModelCreating(modelBuilder);
             var user = new User()
             {
-                Account = "root",
+                Account = "admin",
                 Password = "123456",
                 Email = "gongjie@qq.com",
                 Id = "00F6P5G2VC2SAP1UJV7HTBYGA",
                 IsAdmin = true,
-                OrganizeId = "root",
+                OrganizeId = "00F6P5G2VC2SAP1UJV7HTBYGU",
                 IsRoot = true,
                 Name = "超级管理员",
                 PhoneNumber = "18675517757",
@@ -23,22 +23,6 @@
             user.GeneratePassword();
             modelBuilder.Entity<User>().HasData(new User[] {
                 user
-            });
-        }
-    }
-
-    public partial class OrganizeMapping
-    {
-        public override void ModelCreating(ModelBuilder modelBuilder)
-        {
-            base.ModelCreating(modelBuilder);
-            modelBuilder.Entity<Organize>().HasData(new Organize()
-            {
-                EnCode = "default",
-                Host = "192.168.1.100:8081",
-                Id = "00F6P5G2VC2SAP1UJV7HTBYGU",
-                Name="默认组织",
-                OrganizeId= "00F6P5G2VC2SAP1UJV7HTBYGU"
             });
         }
     }

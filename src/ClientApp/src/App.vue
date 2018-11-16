@@ -2,6 +2,7 @@
   <div>
     <router-view v-if="resufreshed"/>
     <Alert/>
+    <component v-for="dialog in dialogs" :key="dialog.key" :is="dialog.render"/>
   </div>
 </template>
 
@@ -17,6 +18,11 @@ export default {
   data() {
     return {
       resufreshed: true
+    }
+  },
+  computed: {
+    dialogs() {
+      return this.$store.state.dialogs
     }
   },
   created() {},

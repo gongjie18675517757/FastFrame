@@ -13,8 +13,8 @@
     <template slot="no-data">
       <v-list-tile>
         <v-list-tile-title>
-          请输入关键字
-          <strong>搜索</strong>
+          请输入关键字,或者
+          <strong><a @click="openDialog">搜索</a></strong>
         </v-list-tile-title>
       </v-list-tile>
     </template>
@@ -114,6 +114,9 @@ export default {
     change($event) {
       this.$emit('change', $event)
       this.$emit('input', $event.Id) 
+    },
+    openDialog(e){
+      console.log(e); 
     }
   }
 }

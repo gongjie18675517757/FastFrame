@@ -5,14 +5,14 @@
         <v-toolbar flat dense card color="transparent">
           <v-toolbar-title>{{title}}{{moduleInfo.direction}}</v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-btn icon v-if="getId() && !changed" @click="canEdit=!canEdit">
+          <v-btn icon v-if="getId() && !changed" @click="canEdit=!canEdit" title="修改">
             <v-icon>edit</v-icon>
           </v-btn>
-          <v-btn icon @click="refresh">
+          <v-btn icon @click="refresh" title="刷新">
             <v-icon>refresh</v-icon>
           </v-btn>
           <v-menu offset-y>
-            <v-btn icon slot="activator">
+            <v-btn icon slot="activator" title="设置">
               <v-icon>more_vert</v-icon>
             </v-btn>
             <v-list>
@@ -62,7 +62,13 @@
             <v-card-actions>
               <v-btn flat @click="cancel">取消</v-btn>
               <v-spacer></v-spacer>
-              <v-btn v-if="canEdit && changed" color="primary" flat @click="submit" :loading="submiting">保存</v-btn>
+              <v-btn
+                v-if="canEdit && changed"
+                color="primary"
+                flat
+                @click="submit"
+                :loading="submiting"
+              >保存</v-btn>
             </v-card-actions>
           </v-card-text>
         </v-form>
@@ -157,14 +163,14 @@ export default {
 
     let rules = await getRules(moduleName)
     if (typeof this.moduleInfo.formatterRules == 'function')
-      rules = this.moduleInfo.formatterRules(rules)
+      rules =await this.moduleInfo.formatterRules(rules)
     this.rules = rules
 
     await this.load()
 
     let options = await getFormItems(moduleName)
     if (typeof this.moduleInfo.formatterRules == 'function')
-      options = this.moduleInfo.formatterOptions(options)
+      options =await this.moduleInfo.formatterOptions(options)
     this.options = options
   },
   methods: {
@@ -190,7 +196,7 @@ export default {
         form = await getDefaultModel(moduleName)
       }
       if (typeof this.moduleInfo.formatterForm == 'function')
-        form = this.moduleInfo.formatterForm(form)
+        form =await this.moduleInfo.formatterForm(form)
       this.form = form
     },
     getRules(item) {

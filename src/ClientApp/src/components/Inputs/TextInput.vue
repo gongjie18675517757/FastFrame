@@ -28,6 +28,7 @@
       :label="Description"
       :rules="rules"
       :Relate="Relate"
+      :filter="filter"
       @change="change"
     />
   </v-flex>
@@ -57,7 +58,7 @@ export default {
         return []
       }
     },
-    canEdit:Boolean,
+    canEdit: Boolean,
     ModuleName: String,
     Relate: String,
     Type: {
@@ -66,7 +67,8 @@ export default {
     },
     Description: String,
     Name: String,
-    Readonly: String
+    Readonly: String,
+    filter: [Array, Function]
   },
   data() {
     return {

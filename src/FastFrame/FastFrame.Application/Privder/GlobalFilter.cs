@@ -64,7 +64,7 @@ namespace FastFrame.Application.Privder
             {
                 context.Result = new ObjectResult(new { Message = context.Exception.Message });
 #if DEBUG
-                context.Result = new ObjectResult(new { Message = context.Exception});
+                context.Result = new ObjectResult(context.Exception);
 #endif
             }
         }

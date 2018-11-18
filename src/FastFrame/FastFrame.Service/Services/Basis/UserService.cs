@@ -73,4 +73,12 @@ namespace FastFrame.Service.Services.Basis
             return await GetAsync(id);
         }
     }
+
+    public partial class DeptService
+    {
+        protected override async Task OnAdding(DeptDto input, Dept entity)
+        {
+            await base.OnAdding(input, entity);           
+        }
+    }
 }

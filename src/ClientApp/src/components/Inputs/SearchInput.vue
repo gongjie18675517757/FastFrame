@@ -60,7 +60,7 @@ export default {
     },
     disabled: Boolean,
     label: String,
-
+    filter: [Array, Function],
     Name: String,
     ModuleName: String,
     Relate: {
@@ -95,6 +95,8 @@ export default {
   methods: {
     async querySelections(v) {
       this.loading = true
+      let filter = this.filter || []
+      if (typeof filter == 'function') filter = await filter.call(this, this.model)
       let { Data } = await this.$http.post(`/api/${this.Relate}/list`, {
         Condition: {
           Filters: [
@@ -102,7 +104,13 @@ export default {
               Name: this.fields.join(';'),
               Compare: '$',
               Value: v
-            }
+            },
+            {
+              Name: 'Id',
+              Compare: '!=',
+              Value: this.model.Id
+            },
+            ...filter
           ]
         }
       })

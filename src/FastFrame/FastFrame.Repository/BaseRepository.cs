@@ -98,6 +98,10 @@ namespace FastFrame.Repository
                 }
             }
             /*验证关联性*/
+
+
+            /*检测树状的循环引用*/
+
         }
 
         /// <summary>

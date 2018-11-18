@@ -18,7 +18,7 @@ export default {
         moduleInfo: {
           area: 'Basis',
           name: 'User',
-          direction: '用户'
+          direction: '用户', 
         },
         pageInfo: {
           success: this.success,

@@ -6,24 +6,36 @@
           <v-toolbar flat dense card color="transparent">
             <v-toolbar-title>{{moduleInfo.direction}}列表</v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-btn icon @click="refresh">
+            <v-btn icon @click="refresh" title="刷新">
               <v-icon>refresh</v-icon>
             </v-btn>
-            <a-btn @click="toEdit({})" icon>
+            <a-btn @click="toEdit({})" icon title="新增">
               <v-icon>add</v-icon>
             </a-btn>
             <a-btn
               icon
+              title="修改"
               :disabled="selection.length!=1 && !currentRow"
               @click="toEdit(currentRow || selection[0])"
             >
               <v-icon>edit</v-icon>
             </a-btn>
-            <a-btn @click="remove()" :disabled="!havSelection" icon>
+            <a-btn @click="remove()" :disabled="!havSelection" icon title="删除">
               <v-icon>delete</v-icon>
             </a-btn>
+            <a-btn
+              v-for="item in toolitems"
+              :key="item.name"
+              icon
+              v-if="evalShow(item)"
+              :title="item.title"
+              :disabled="evalDisabled(item)"
+              @click="evalAction(item)"
+            >
+              <v-icon>{{item.icon}}</v-icon>
+            </a-btn>
             <v-menu offset-y>
-              <v-btn icon slot="activator">
+              <v-btn icon slot="activator" title="设置">
                 <v-icon>more_vert</v-icon>
               </v-btn>
               <v-list>
@@ -118,6 +130,7 @@ import { getColumns } from '@/generate'
 import { showDialog } from '@/utils'
 import { getComponent } from '@/router'
 import Cell from './Cell.vue'
+
 export default {
   components: {
     Cell
@@ -191,12 +204,43 @@ export default {
     },
     havSelection() {
       return this.selection.length > 0 || !!this.currentRow
+    },
+    toolitems() {
+      return this.moduleInfo.toolItems || []
+    },
+    context() {
+      let selection = []
+      if (this.singleSelection && this.currentRow) selection = [this.currentRow]
+      else selection = this.selection
+      return {
+        selection,
+        rows: this.items
+      }
     }
   },
   async created() {
     this.cols = await getColumns(this.moduleInfo.name)
   },
   methods: {
+    evalShow({ show }) {
+      let val = true
+      if (typeof show == 'function') val = show.call(this, this.context)
+      if (typeof show == 'boolean') val = show
+      if (typeof show == 'string') val = !!show
+
+      return val
+    },
+    evalDisabled({ disabled }) {
+      let val = false
+      if (typeof disabled == 'function') val = disabled.call(this, this.context)
+      if (typeof disabled == 'boolean') val = disabled
+      if (typeof disabled == 'string') val = !!disabled
+
+      return val
+    },
+    evalAction({ action }) {
+      if (typeof action == 'function') action.call(this, this.context)
+    },
     refresh() {
       this.reload()
     },
@@ -243,6 +287,11 @@ export default {
       this.loading = true
       let { page, rowsPerPage, sortBy, descending } = this.pager,
         keyword = this.search
+      let { queryFilter = [] } = this.pageInfo
+      if (typeof queryFilter == 'function') {
+        queryFilter = await queryFilter.call(this, context)
+      }
+
       let pageInfo = {
         PageIndex: page,
         PageSize: rowsPerPage,
@@ -252,13 +301,11 @@ export default {
         SortInfo: {
           Name: sortBy || 'Id',
           Mode: descending ? 'asc' : 'desc'
-        }
+        },
+        Filters: [...queryFilter]
       }
       try {
-        let { Total, Data } = await this.$http.post(
-          '/api/' + this.moduleInfo.name + '/list',
-          pageInfo
-        )
+        let { Total, Data } = await this.$http.post('/api/' + this.moduleInfo.name + '/list', pageInfo)
         this.items = Data
         this.total = Total
       } finally {

@@ -41,6 +41,11 @@ namespace FastFrame.Infrastructure
             {
                 return query;
             }
+            foreach (var item in condition.Filters)
+            {
+                if (item.Value?.Trim().ToLower() == "null")
+                    item.Value = null;
+            }
 
             if (!condition.KeyWord.IsNullOrWhiteSpace())
             {

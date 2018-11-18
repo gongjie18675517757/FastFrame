@@ -28,7 +28,8 @@ import {
   VCheckbox,
   VSwitch,
   VAutocomplete,
-  VDialog
+  VDialog,
+  VTreeview
 } from 'vuetify'
 import 'vuetify/src/stylus/app.styl'
 import zhHans from 'vuetify/es5/locale/zh-Hans'
@@ -63,7 +64,8 @@ Vue.use(Vuetify, {
     VCheckbox,
     VSwitch,
     VAutocomplete,
-    VDialog
+    VDialog,
+    VTreeview
   },
   // theme: {
   //   primary: '#ee44aa',

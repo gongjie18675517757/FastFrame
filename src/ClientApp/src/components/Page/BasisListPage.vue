@@ -1,7 +1,41 @@
 <template>
-  <v-container grid-list-xl fluid>
-    <v-layout row wrap="">
-      <v-flex lg12>
+  <v-container grid-list-xl fluid fill-height>
+    <v-layout row wrap="" >
+      <v-flex v-if="TreeKey" xs12 sm4>
+        <v-card>
+          <v-toolbar flat dense card color="transparent">
+            <v-toolbar-title>{{moduleInfo.direction}}树状表</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-btn icon @click="refresh" title="刷新">
+              <v-icon>refresh</v-icon>
+            </v-btn>
+          </v-toolbar>
+          <v-divider></v-divider>
+          <v-card-text class="pa-0">
+            <v-treeview
+              :active.sync="tree.active"
+              :items="tree.items"
+              :load-children="loadTreeItems"
+              :open.sync="tree.open"
+              activatable
+              active-class="primary--text"
+              class="grey lighten-5"
+              item-text="Name"
+              item-key="Id"
+              transition
+              @update:active="setCurrentTreeNode"
+            >
+              <v-icon
+                v-if="!item.children.length"
+                slot="prepend"
+                slot-scope="{ item, active }"
+                :color="active ? 'primary' : ''"
+              >mdi-account</v-icon>
+            </v-treeview>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+      <v-flex xs12 :sm8="TreeKey">
         <v-card>
           <v-toolbar flat dense card color="transparent">
             <v-toolbar-title>{{moduleInfo.direction}}列表</v-toolbar-title>
@@ -126,7 +160,7 @@
 </template>
 
 <script>
-import { getColumns } from '@/generate'
+import { getColumns, getModuleStrut } from '@/generate'
 import { showDialog } from '@/utils'
 import { getComponent } from '@/router'
 import Cell from './Cell.vue'
@@ -166,7 +200,15 @@ export default {
       dialogMode: true,
       showMamageField: false,
       cols: [],
-      items: []
+      items: [],
+
+      RelateFields: [],
+      TreeKey: null,
+      tree: {
+        active: [],
+        items: [],
+        open: []
+      }
     }
   },
   computed: {
@@ -219,7 +261,21 @@ export default {
     }
   },
   async created() {
+    let { TreeKey, RelateFields } = await getModuleStrut(this.moduleInfo.name)
+    this.TreeKey = TreeKey
+    this.RelateFields = RelateFields
     this.cols = await getColumns(this.moduleInfo.name)
+
+    if (TreeKey) {
+      // this.tree.items = await this.loadTreeItems({})
+      this.tree.items = [
+        {
+          Id: null,
+          Name: '所有' + this.moduleInfo.direction,
+          children: []
+        }
+      ]
+    }
   },
   methods: {
     evalShow({ show }) {
@@ -287,17 +343,33 @@ export default {
       this.loading = true
       let { page, rowsPerPage, sortBy, descending } = this.pager,
         keyword = this.search
+
+      /*条件1 */
       let { queryFilter = [] } = this.pageInfo.pars || {}
       if (typeof queryFilter == 'function') {
         queryFilter = await queryFilter.call(this, context)
       }
 
+      /*条件2 */
+      let treeFilter = []
+      if (this.TreeKey && this.tree.active.length > 0) {
+        let parentId = this.tree.active[this.tree.active.length - 1]
+        if (parentId) {
+          treeFilter = [
+            {
+              Name: this.TreeKey,
+              Compare: '==',
+              Value: parentId
+            }
+          ]
+        }
+      }
       let pageInfo = {
         PageIndex: page,
         PageSize: rowsPerPage,
         Condition: {
           KeyWord: this.search,
-          Filters: [...queryFilter]
+          Filters: [...queryFilter, ...treeFilter]
         },
         SortInfo: {
           Name: sortBy || 'Id',
@@ -311,6 +383,27 @@ export default {
       } finally {
         this.loading = false
       }
+    },
+    async loadTreeItems(item) {
+      let { Data } = await this.$http.post(`/api/${this.moduleInfo.name}/List`, {
+        PageIndex: 1,
+        PageSize: 999,
+        Condition: {
+          Filters: [
+            {
+              Name: this.TreeKey,
+              Compare: '==',
+              Value: item.Id ? item.Id : 'null'
+            }
+          ]
+        }
+      })
+      Data.forEach(r => (r.children = []))
+      item.children.push(...Data)
+      return Data
+    },
+    setCurrentTreeNode() {
+      this.loadList()
     },
     success() {
       let selection = []

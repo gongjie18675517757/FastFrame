@@ -79,7 +79,7 @@ namespace FastFrame.Application.Controllers
                 TryGetAttribute<ReadOnlyAttribute>(x, out var readOnlyAttribute);
 
                 /*关联标记*/
-                TryGetAttribute<RelatedToAttribute>(x, out var relatedToAttribute);
+                TryGetAttribute<RelatedToAttribute>(x, out var relatedToAttribute); 
 
                 /*实际类型*/
                 var nullableType = T4Help.GetNullableType(x.PropertyType);
@@ -94,11 +94,14 @@ namespace FastFrame.Application.Controllers
                     Readonly = readOnlyAttribute?.ReadOnlyMark,
                     DefaultValue = instance.GetValue(x.Name),
                     Rules = GetRules(x),
-                    Relate = relatedToAttribute?.RelatedType.Name
+                    Relate = relatedToAttribute?.RelatedType.Name, 
                 });
             }
 
             TryGetAttribute<RelatedFieldAttribute>(type, out var relatedFieldAttribute);
+
+            /*树状标记*/
+            TryGetAttribute<TreeAttribute>(type, out var treeAttribute);
 
             /*模块信息*/
             return new ModuleStruct()
@@ -106,10 +109,10 @@ namespace FastFrame.Application.Controllers
                 Name = type.Name,
                 Description = await descriptionProvider.GetClassDescription(type),
                 FieldInfoStruts = fieldInfoStructs,
-                RelateFields = relatedFieldAttribute?.FieldNames
+                RelateFields = relatedFieldAttribute?.FieldNames,
+                TreeKey= treeAttribute?.Key
             };
-        }
-
+        } 
 
         private IEnumerable<Rule> GetRules(PropertyInfo prop)
         {
@@ -161,6 +164,7 @@ namespace FastFrame.Application.Controllers
         /// 被关联时显示的字段列表
         /// </summary>
         public IEnumerable<string> RelateFields { get; internal set; }
+        public string TreeKey { get; internal set; }
     }
 
     public class FieldInfoStrut
@@ -172,7 +176,7 @@ namespace FastFrame.Application.Controllers
         public ReadOnlyMark? Readonly { get; internal set; }
         public object DefaultValue { get; internal set; }
         public IEnumerable<Rule> Rules { get; internal set; }
-        public string Relate { get; internal set; }
+        public string Relate { get; internal set; } 
     }
 
     public class Rule

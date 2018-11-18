@@ -1,5 +1,6 @@
 ﻿using FastFrame.Dto.Basis;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace FastFrame.Application.Controllers.Basis
@@ -27,5 +28,5 @@ namespace FastFrame.Application.Controllers.Basis
         {
             return await service.ToogleDisabled(id);
         }
-    }
+    } 
 }

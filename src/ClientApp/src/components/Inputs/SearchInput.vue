@@ -117,12 +117,24 @@ export default {
       this.items = Data
       this.loading = false
     },
-    change($event) {
+    change($event={}) {
       this.$emit('change', $event)
       this.$emit('input', $event.Id)
     },
     async openDialog() {
-      let rows = await showDialog(`${this.Relate}_List`, { single: true })
+      let filter = this.filter || []
+      if (typeof filter == 'function') filter = await filter.call(this, this.model)
+      let rows = await showDialog(`${this.Relate}_List`, {
+        single: true,
+        queryFilter: [
+          {
+            Name: 'Id',
+            Compare: '!=',
+            Value: this.model.Id
+          },
+          ...filter
+        ]
+      })
       if (rows.length > 0) {
         this.items = rows
         this.select = rows[0]

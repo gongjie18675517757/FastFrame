@@ -287,7 +287,7 @@ export default {
       this.loading = true
       let { page, rowsPerPage, sortBy, descending } = this.pager,
         keyword = this.search
-      let { queryFilter = [] } = this.pageInfo
+      let { queryFilter = [] } = this.pageInfo.pars || {}
       if (typeof queryFilter == 'function') {
         queryFilter = await queryFilter.call(this, context)
       }
@@ -296,13 +296,13 @@ export default {
         PageIndex: page,
         PageSize: rowsPerPage,
         Condition: {
-          KeyWord: this.search
+          KeyWord: this.search,
+          Filters: [...queryFilter]
         },
         SortInfo: {
           Name: sortBy || 'Id',
           Mode: descending ? 'asc' : 'desc'
-        },
-        Filters: [...queryFilter]
+        }
       }
       try {
         let { Total, Data } = await this.$http.post('/api/' + this.moduleInfo.name + '/list', pageInfo)

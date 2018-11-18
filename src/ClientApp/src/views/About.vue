@@ -3,36 +3,15 @@
 </template>
 
 <script>
+import { showDialog } from '@/utils'
 export default {
   methods: {
-    handleClick() {
-      let key = new Date().getTime()
+    async handleClick() {
       let component = () => import('@/views/Basis/User/List.vue')
-      let render = {
-        render: h => {
-          return h(
-            'v-dialog',
-            {
-              props: {
-                persistent: true,
-                scrollable: true,
-                value: true
-              }
-            },
-            [
-              h(component, {
-                ref: 'list'
-              })
-            ]
-          )
-        }
-      }
-
-      this.$store.commit({
-        type: 'showDialog',
-        render,
-        key
+      let selection = await showDialog(component, {
+        single: true
       })
+      console.log(selection)
     }
   }
 }

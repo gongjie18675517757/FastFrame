@@ -10,17 +10,24 @@
               <v-icon>refresh</v-icon>
             </v-btn>
             <a-btn @click="toEdit({})" icon>
-              <v-icon>playlist_add</v-icon>
+              <v-icon>add</v-icon>
             </a-btn>
-            <a-btn @click="remove()" :disabled="selection.length==0" icon>
-              <v-icon>delete_forever</v-icon>
+            <a-btn
+              icon
+              :disabled="selection.length!=1 && !currentRow"
+              @click="toEdit(currentRow || selection[0])"
+            >
+              <v-icon>edit</v-icon>
+            </a-btn>
+            <a-btn @click="remove()" :disabled="!havSelection" icon>
+              <v-icon>delete</v-icon>
             </a-btn>
             <v-menu offset-y>
               <v-btn icon slot="activator">
                 <v-icon>more_vert</v-icon>
               </v-btn>
               <v-list>
-                <v-list-tile>
+                <v-list-tile v-if="!pageInfo.success">
                   <v-list-tile-action>
                     <v-checkbox v-model="dialogMode"></v-checkbox>
                   </v-list-tile-action>
@@ -65,47 +72,56 @@
               item-key="Id"
             >
               <template slot="items" slot-scope="props">
-                <td>
-                  <v-checkbox primary hide-details v-model="props.selected"></v-checkbox>
-                </td>
-                <!-- <td>
+                <tr :active="!singleSelection && props.selected" @click="handleRowClick(props)">
+                  <td>
+                    <v-icon
+                      small
+                      size="16"
+                      color="primary"
+                      v-if="singleSelection && currentRow==props.item"
+                    >check</v-icon>
+                    <v-checkbox
+                      v-if="!singleSelection"
+                      primary
+                      hide-details
+                      v-model="props.selected"
+                    ></v-checkbox>
+                  </td>
+                  <!-- <td>
                   <v-avatar size="32">
                     <img
                       :src="props.item.HandIconId?'/api/resource/get/'+props.item.HandIconId:timg"
                     >
                   </v-avatar>
-                </td>-->
-                <td v-for="col in columns" :key="col.Name">
-                  <span v-if="col.Type=='Boolean'">{{ props.item[col.Name]?'是':'否' }}</span>
-                  <span v-else-if="col.Relate">
-                    <span>{{getRelateText({column:col,row:props.item})}}</span>
-                  </span>
-                  <span v-else>{{ props.item[col.Name] }}</span>
-                </td>
-                <td>
-                  <v-btn outline icon color="primary" @click="toEdit(props.item)">
-                    <v-icon>edit</v-icon>
-                  </v-btn>
-                  <v-btn outline icon color="pink" @click="remove(props.item.Id)">
-                    <v-icon>delete</v-icon>
-                  </v-btn>
-                </td>
+                  </td>-->
+                  <td v-for="col in columns" :key="col.Name">
+                    <Cell :info="col" :model="props.item" @toEdit="toEdit(props.item)"/>
+                  </td>
+                </tr>
               </template>
               <template slot="no-data">没有加载数据</template>
             </v-data-table>
           </v-card-text>
+          <v-card-actions v-if="this.pageInfo.success">
+            <v-btn flat @click="this.pageInfo.close">取消</v-btn>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" flat @click="success">确认</v-btn>
+          </v-card-actions>
         </v-card>
       </v-flex>
     </v-layout>
-    <v-dialog v-if="dialog" v-model="dialog" persistent scrollable >
-      <component :is="template" @success="success" :pars="pars"/>
-    </v-dialog>
   </v-container>
 </template>
 
 <script>
 import { getColumns } from '@/generate'
+import { showDialog } from '@/utils'
+import { getComponent } from '@/router'
+import Cell from './Cell.vue'
 export default {
+  components: {
+    Cell
+  },
   props: {
     moduleInfo: {
       type: Object,
@@ -116,6 +132,12 @@ export default {
           direction: ''
         }
       }
+    },
+    pageInfo: {
+      type: Object,
+      default: function() {
+        return {}
+      }
     }
   },
   inject: ['reload'],
@@ -123,16 +145,13 @@ export default {
     return {
       search: '',
       selection: [],
+      currentRow: null,
       pager: {},
       loading: false,
       total: 0,
 
-      dialog: false,
       dialogMode: true,
       showMamageField: false,
-      pars: {},
-      template: () =>
-        import(`@/views/${this.moduleInfo.area}/${this.moduleInfo.name}/Add`),
       cols: [],
       items: []
     }
@@ -143,24 +162,22 @@ export default {
         add: `/${this.moduleInfo.name}/add`
       }
     },
+    singleSelection() {
+      return this.pageInfo.pars && this.pageInfo.pars.single
+    },
     headers() {
       return [
         {
           text: '#',
-          value: '',
-          sortable: false
+          sortable: false,
+          width: '50px'
         },
         ...this.columns.map(c => {
           return {
             text: c.Description,
             value: c.Name
           }
-        }),
-        {
-          text: '操作',
-          sortable: false,
-          value: ''
-        }
+        })
       ]
     },
     columns() {
@@ -171,6 +188,9 @@ export default {
         { Name: 'ModifyTime', Description: '修改时间' }
       ]
       return [...this.cols, ...(this.showMamageField ? adminColumns : [])]
+    },
+    havSelection() {
+      return this.selection.length > 0 || !!this.currentRow
     }
   },
   async created() {
@@ -180,21 +200,33 @@ export default {
     refresh() {
       this.reload()
     },
-    toEdit({ Id = '' } = {}) {
+    handleRowClick(props) {
+      if (this.singleSelection) {
+        this.currentRow = props.item
+      } else {
+        props.selected = !props.selected
+      }
+    },
+    async toEdit({ Id = '' } = {}) {
       let url = `${this.path.add}?q=${Id}`
+      let { name } = this.moduleInfo
       if (this.dialogMode) {
-        this.pars = {
-          id: Id
+        let component = getComponent(`${name}_add`)
+        let data = await showDialog(component, { id: Id })
+        let index = this.items.findIndex(x => x.Id == data.Id)
+        if (index != -1) {
+          this.items.splice(index, 1, data)
+        } else {
+          this.items.splice(0, 0, data)
         }
-        this.dialog = true
       } else {
         this.$router.push(url)
       }
     },
-    async remove(key) {
+    async remove() {
       let ids = []
-      if (key) {
-        ids = [key]
+      if (this.singleSelection) {
+        ids = [currentRow.Id]
       } else {
         ids = this.selection.map(r => r.Id)
       }
@@ -206,11 +238,6 @@ export default {
         } finally {
         }
       }
-    },
-    getRelateText({ column, row }) {
-      let tempName = column.Name.replace('_Id', '')
-      let name = column.Relate[0]
-      return row[`${tempName}_${name}`]
     },
     async loadList() {
       this.loading = true
@@ -238,24 +265,27 @@ export default {
         this.loading = false
       }
     },
-    success(data) {
-      this.dialog = false
-      if (data && data.Id) {
-        let index = this.items.findIndex(x => x.Id == data.Id)
-        if (index != -1) {
-          this.items.splice(index, 1, data)
-        } else {
-          this.items.splice(0, 0, data)
-        }
+    success() {
+      let selection = []
+      if (this.singleSelection) {
+        selection = [this.currentRow]
+      } else {
+        selection = this.selection
       }
+      this.$emit('success', selection)
+      this.pageInfo.success(selection)
     }
-  }
+  },
+  watch: {}
 }
 </script>
 <style>
 .btn-group .v-btn {
   padding: 0px;
   margin: 1px;
+}
+.selection {
+  background: #eee;
 }
 </style>
 

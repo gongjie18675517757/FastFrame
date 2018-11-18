@@ -5,6 +5,11 @@
 <script>
 import Page from '@/components/Page/BasisFormPage.vue'
 export default {
+  props:{
+      success:Function,
+      close:Function,
+      pars:Object
+  },
   components: {
     Page
   },
@@ -12,10 +17,14 @@ export default {
     return {
       page: {
         moduleInfo: {
-          area: 'Basis',
+          area:'Basis',
           name: 'Dept',
           direction: '部门',
-          ...this.$attrs
+        },
+        pageInfo:{
+          success:this.success,
+          close:this.close,
+          pars:this.pars
         }
       }
     }

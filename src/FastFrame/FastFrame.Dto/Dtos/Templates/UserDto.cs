@@ -17,13 +17,6 @@ namespace FastFrame.Dto.Basis
 		#endregion
 		#region 属性
 		/// <summary>
-		///姓名 
-		/// </summary>
-		[StringLength(50)]
-		[Required()]
-		public string Name {get;set;}
-		
-		/// <summary>
 		///帐号 
 		/// </summary>
 		[StringLength(50)]
@@ -40,6 +33,13 @@ namespace FastFrame.Dto.Basis
 		[Hide(HideMark.List)]
 		[ReadOnly(ReadOnlyMark.Edit)]
 		public string Password {get;set;}
+		
+		/// <summary>
+		///姓名 
+		/// </summary>
+		[StringLength(50)]
+		[Required()]
+		public string Name {get;set;}
 		
 		/// <summary>
 		///邮箱 

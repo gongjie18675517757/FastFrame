@@ -19,6 +19,8 @@ namespace FastFrame.Service.Services.Basis
             this.currentUserProvider = currentUserProvider;
         }
 
+
+
         protected override Task OnAdding(UserDto input, User entity)
         {
             entity.GeneratePassword();

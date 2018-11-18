@@ -83,47 +83,14 @@ namespace FastFrame.CodeGenerate.Build
                     TypeName = T4Help.GetTypeName(item.PropertyType),
                     Name = item.Name
                 };
-                if (TryGetAttribute<RelatedToAttribute>(item, out var relatedToAttribute)
-                    && TryGetAttribute<RelatedFieldAttribute>(relatedToAttribute.RelatedType, out var relatedFieldAttribute))
+                if (TryGetAttribute<RelatedToAttribute>(item, out var relatedToAttribute))
                 {
-                    var prop = relatedToAttribute.RelatedType.GetProperty(relatedFieldAttribute.DefaultName);
-                    if (prop != null)
+                    yield return new PropInfo()
                     {
-                        yield return new PropInfo()
-                        {
-                            Summary = $"{summary}{T4Help.GetPropertySummary(prop, XmlDocDir)}",
-                            AttrInfos = new AttrInfo[] {
-                                new AttrInfo()
-                                {
-                                    Name="RelatedFrom",
-                                    Parameters=new string[]{ $"nameof({item.Name})",$"nameof({relatedToAttribute.RelatedType.Name}.{prop.Name})","true"}
-                                }
-                            },
-                            Name = $"{item.Name.Replace("Id", "")}{prop.Name}",
-                            TypeName = T4Help.GetTypeName(prop.PropertyType)
-                        };
-                    }
-
-                    foreach (var fieldName in relatedFieldAttribute.OtherNames)
-                    {
-                        prop = relatedToAttribute.RelatedType.GetProperty(fieldName);
-                        if (prop != null)
-                        {
-                            yield return new PropInfo()
-                            {
-                                Summary = $"{summary}{T4Help.GetPropertySummary(prop, XmlDocDir)}",
-                                AttrInfos = new AttrInfo[] {
-                                new AttrInfo()
-                                {
-                                    Name="RelatedFrom",
-                                    Parameters=new string[]{ $"nameof({item.Name})",$"nameof({relatedToAttribute.RelatedType.Name}.{prop.Name})","false"}
-                                }
-                            },
-                                Name = $"{item.Name.Replace("Id", "")}{prop.Name}",
-                                TypeName = T4Help.GetTypeName(prop.PropertyType)
-                            };
-                        }
-                    }
+                        Summary = summary,
+                        TypeName = $"{T4Help.GetTypeName(relatedToAttribute.RelatedType)}Dto",
+                        Name = item.Name.Replace("_Id", "")
+                    };
                 }
             }
         }

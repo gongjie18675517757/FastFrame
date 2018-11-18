@@ -38,16 +38,9 @@ namespace FastFrame.Dto.Basis
 		public string Parent_Id {get;set;}
 		
 		/// <summary>
-		///上级名称 
+		///上级 
 		/// </summary>
-		[RelatedFrom(nameof(Parent_Id),nameof(Dept.Name),true)]
-		public string Parent_Name {get;set;}
-		
-		/// <summary>
-		///上级编码 
-		/// </summary>
-		[RelatedFrom(nameof(Parent_Id),nameof(Dept.EnCode),false)]
-		public string Parent_EnCode {get;set;}
+		public DeptDto Parent {get;set;}
 		
 		/// <summary>
 		///主管 
@@ -57,16 +50,9 @@ namespace FastFrame.Dto.Basis
 		public string Supervisor_Id {get;set;}
 		
 		/// <summary>
-		///主管名称 
+		///主管 
 		/// </summary>
-		[RelatedFrom(nameof(Supervisor_Id),nameof(Employee.Name),true)]
-		public string Supervisor_Name {get;set;}
-		
-		/// <summary>
-		///主管编码 
-		/// </summary>
-		[RelatedFrom(nameof(Supervisor_Id),nameof(Employee.EnCode),false)]
-		public string Supervisor_EnCode {get;set;}
+		public EmployeeDto Supervisor {get;set;}
 		
 		#endregion
 		#region 方法

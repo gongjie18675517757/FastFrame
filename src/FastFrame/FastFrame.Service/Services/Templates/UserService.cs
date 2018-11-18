@@ -4,6 +4,7 @@ namespace FastFrame.Service.Services.Basis
 	using FastFrame.Entity.Basis; 
 	using FastFrame.Dto.Basis; 
 	using FastFrame.Infrastructure.Interface; 
+	using FastFrame.Infrastructure; 
 	using System.Linq; 
 	/// <summary>
 	///登陆用户 服务类 
@@ -39,9 +40,9 @@ namespace FastFrame.Service.Services.Basis
 					from user3 in t_user3.DefaultIfEmpty()
 					 select new UserDto
 					{
-						Name=user.Name,
 						Account=user.Account,
 						Password=user.Password,
+						Name=user.Name,
 						Email=user.Email,
 						PhoneNumber=user.PhoneNumber,
 						HandIconId=user.HandIconId,

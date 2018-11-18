@@ -57,6 +57,7 @@ export default {
         return []
       }
     },
+    canEdit:Boolean,
     ModuleName: String,
     Relate: String,
     Type: {
@@ -96,13 +97,13 @@ export default {
       return '' //this.Type
     },
     evalDisabled() {
-      return (
-        this.Readonly == 'all' || (this.Readonly == 'edit' && this.model.Id)
-      )
+      if (this.Readonly == 'all') return true
+      if (this.Readonly == 'edit') return !!this.model.Id
+      return !this.canEdit
     }
   },
   methods: {
-    change(val) {     
+    change(val) {
       this.$emit('change', val)
       this.callback.call(this, {
         model: this.model,

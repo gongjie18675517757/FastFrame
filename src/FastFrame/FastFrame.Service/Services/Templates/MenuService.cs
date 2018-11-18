@@ -4,6 +4,7 @@ namespace FastFrame.Service.Services.Basis
 	using FastFrame.Entity.Basis; 
 	using FastFrame.Dto.Basis; 
 	using FastFrame.Infrastructure.Interface; 
+	using FastFrame.Infrastructure; 
 	using System.Linq; 
 	/// <summary>
 	///菜单 服务类 
@@ -33,7 +34,7 @@ namespace FastFrame.Service.Services.Basis
 			var userQuerable = userRepository.Queryable;
 			 var menuQueryable = menuRepository.Queryable;
 			 var query = from menu in menuQueryable 
-						join parent_Id in menuQueryable on menu.Parent_Id equals parent_Id.Id into t_parent_Id
+						join parent_Id in menuQueryable.MapTo<Menu,MenuDto>() on menu.Parent_Id equals parent_Id.Id into t_parent_Id
 						from parent_Id in t_parent_Id.DefaultIfEmpty()
 					join foreing in foreignQueryable on menu.Id equals foreing.EntityId into t_foreing
 					from foreing in t_foreing.DefaultIfEmpty()
@@ -50,8 +51,7 @@ namespace FastFrame.Service.Services.Basis
 						Icon=menu.Icon,
 						Path=menu.Path,
 						Id=menu.Id,
-						Parent_Name=parent_Id.Name,
-						Parent_EnCode=parent_Id.EnCode,
+						Parent=parent_Id,
 						CreateAccount = user2.Account,
 						CreateName = user2.Name,
 						CreateTime = foreing.CreateTime,

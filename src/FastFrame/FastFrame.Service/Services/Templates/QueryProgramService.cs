@@ -4,6 +4,7 @@ namespace FastFrame.Service.Services.Basis
 	using FastFrame.Entity.Basis; 
 	using FastFrame.Dto.Basis; 
 	using FastFrame.Infrastructure.Interface; 
+	using FastFrame.Infrastructure; 
 	using System.Linq; 
 	/// <summary>
 	///查询方案 服务类 

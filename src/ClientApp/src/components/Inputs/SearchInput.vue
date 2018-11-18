@@ -14,12 +14,14 @@
       <v-list-tile>
         <v-list-tile-title>
           请输入关键字,或者
-          <strong><a @click="openDialog">搜索</a></strong>
+          <strong>
+            <a @click="openDialog">搜索</a>
+          </strong>
         </v-list-tile-title>
       </v-list-tile>
     </template>
     <template slot="selection" slot-scope="{ item, selected }">
-      {{item[fields[0]]}}
+      <strong>{{item[fields[0]]}}</strong>
       <span v-for="(f,index) in fields" :key="index" v-if="index>0">[{{item[f]}}]</span>
     </template>
     <template slot="item" slot-scope="{ item, tile }">
@@ -41,6 +43,7 @@
 
 <script>
 import { getModuleStrut } from '@/generate'
+import { showDialog } from '@/utils'
 export default {
   props: {
     model: Object,
@@ -78,15 +81,10 @@ export default {
     let { RelateFields } = await getModuleStrut(this.Relate)
     this.fields = RelateFields
     if (this.value) {
-      let obj = { Id: this.value }
       let nameTemp = this.Name.replace('_Id', '')
-      for (const fieldName of RelateFields) {
-        let name = `${nameTemp}_${fieldName}`
-        obj[name] = this.model[name]
-        obj[fieldName] = this.model[name]
-      }
+      let obj = this.model[nameTemp]
+      this.items = [obj]
       this.select = obj
-      this.items=[obj]
     }
   },
   watch: {
@@ -113,10 +111,15 @@ export default {
     },
     change($event) {
       this.$emit('change', $event)
-      this.$emit('input', $event.Id) 
+      this.$emit('input', $event.Id)
     },
-    openDialog(e){
-      console.log(e); 
+    async openDialog() {
+      let rows = await showDialog(`${this.Relate}_List`, { single: true })
+      if (rows.length > 0) {
+        this.items = rows
+        this.select = rows[0]
+        this.change(rows[0])
+      }
     }
   }
 }

@@ -53,6 +53,7 @@ namespace FastFrame.CodeGenerate.Build
                  .Union(new string[] {
                     $"FastFrame.Dto.{areaName}",
                     $"FastFrame.Infrastructure.Interface",
+                    "FastFrame.Infrastructure",
                     "System.Linq"
                  })
                  .Distinct();
@@ -123,7 +124,8 @@ namespace FastFrame.CodeGenerate.Build
             {
                 var name = prop.Prop.Name.ToFirstLower();
                 var isRequired = prop.Prop.GetCustomAttribute<RequiredAttribute>() != null;
-                yield return $"\t\t\tjoin {name} in {prop.Attr.RelatedType.Name.ToFirstLower()}Queryable on {typeName}.{prop.Prop.Name} equals {name}.Id "
+                var relateType = prop.Attr.RelatedType;
+                yield return $"\t\t\tjoin {name} in {relateType.Name.ToFirstLower()}Queryable.MapTo<{relateType.Name},{relateType.Name}Dto>() on {typeName}.{prop.Prop.Name} equals {name}.Id "
                     + (isRequired ? "" : $"into t_{name}");
                 if (!isRequired)
                     yield return $"\t\t\tfrom {name} in t_{name}.DefaultIfEmpty()";
@@ -147,15 +149,7 @@ namespace FastFrame.CodeGenerate.Build
             }
             foreach (var prop in props)
             {
-                var relatedFieldAttribute = prop.Attr.RelatedType.GetCustomAttribute<RelatedFieldAttribute>();
-                if (relatedFieldAttribute == null)
-                    continue;
-                var defaultName = relatedFieldAttribute.DefaultName;
-                yield return $"\t\t\t{prop.Prop.Name.Replace("Id", defaultName)}={ prop.Prop.Name.ToFirstLower()}.{defaultName},";
-                foreach (var item in relatedFieldAttribute.OtherNames)
-                {
-                    yield return $"\t\t\t{prop.Prop.Name.Replace("Id", item)}={ prop.Prop.Name.ToFirstLower()}.{item},";
-                }
+                yield return $"\t\t\t{prop.Prop.Name.Replace("_Id", "")}={ prop.Prop.Name.ToFirstLower()},";
             }
 
             yield return "\t\t\tCreateAccount = user2.Account,";

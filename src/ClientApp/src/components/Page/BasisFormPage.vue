@@ -1,10 +1,16 @@
 <template>
   <v-container grid-list-xl fluid app>
-    <v-flex lg12>
-      <v-card>
+    <v-flex xs12>
+      <v-card v-bind="flex">
         <v-toolbar flat dense card color="transparent">
           <v-toolbar-title>{{title}}{{moduleInfo.direction}}</v-toolbar-title>
           <v-spacer></v-spacer>
+          <v-btn icon v-if="getId() && !changed" @click="canEdit=!canEdit">
+            <v-icon>edit</v-icon>
+          </v-btn>
+          <v-btn icon @click="refresh">
+            <v-icon>refresh</v-icon>
+          </v-btn>
           <v-menu offset-y>
             <v-btn icon slot="activator">
               <v-icon>more_vert</v-icon>
@@ -39,6 +45,8 @@
                 :model="form"
                 v-bind="item"
                 :rules="getRules(item)"
+                :canEdit="canEdit"
+                @change="changed=true"
               />
             </component>
             <component :is="singleLine?'v-flex':'v-layout'" wrap="">
@@ -52,9 +60,9 @@
             </component>
             <v-divider class="mt-5"></v-divider>
             <v-card-actions>
-              <v-btn flat @click="goList">取消</v-btn>
+              <v-btn flat @click="cancel">取消</v-btn>
               <v-spacer></v-spacer>
-              <v-btn color="primary" flat @click="submit" :loading="submiting">保存</v-btn>
+              <v-btn v-if="canEdit && changed" color="primary" flat @click="submit" :loading="submiting">保存</v-btn>
             </v-card-actions>
           </v-card-text>
         </v-form>
@@ -62,6 +70,7 @@
     </v-flex>
   </v-container>
 </template>
+
 <script>
 import TextInput from '@/components/Inputs/TextInput.vue'
 import timg from '@/assets/timg.jpg'
@@ -71,14 +80,21 @@ export default {
   components: {
     TextInput
   },
-
+  inject: ['reload'],
   props: {
     moduleInfo: {
       type: Object,
       default: function() {
         return {
           name: '',
-          direction: '',
+          direction: ''
+        }
+      }
+    },
+    pageInfo: {
+      type: Object,
+      default: function() {
+        return {
           pars: {}
         }
       }
@@ -104,7 +120,9 @@ export default {
       }),
       submiting: false,
       singleLine: false,
-      showMamageField: false
+      showMamageField: false,
+      canEdit: false,
+      changed: false
     }
   },
   watch: {
@@ -115,41 +133,70 @@ export default {
   computed: {
     title() {
       if (!this.getId()) return '新增'
+      else if (this.canEdit) return '修改'
       else return '查看'
+    },
+    flex() {
+      if (!this.singleLine) {
+        return {
+          xs12: ''
+        }
+      } else {
+        return {
+          xs6: ''
+        }
+      }
     }
+  },
+  created() {
+    let id = this.getId()
+    if (!id) this.canEdit = true
   },
   async mounted() {
     let moduleName = this.moduleInfo.name
-    this.rules = await getRules(moduleName)
+
+    let rules = await getRules(moduleName)
+    if (typeof this.moduleInfo.formatterRules == 'function')
+      rules = this.moduleInfo.formatterRules(rules)
+    this.rules = rules
+
     await this.load()
-    this.options = await getFormItems(moduleName)
+
+    let options = await getFormItems(moduleName)
+    if (typeof this.moduleInfo.formatterRules == 'function')
+      options = this.moduleInfo.formatterOptions(options)
+    this.options = options
   },
   methods: {
     getId() {
       let { q: id } = this.$route.query
-      if (this.moduleInfo.pars && this.moduleInfo.pars.id) {
-        return this.moduleInfo.pars.id
+      if (this.pageInfo.pars && this.pageInfo.pars.id) {
+        return this.pageInfo.pars.id
       } else {
         let { q: id } = this.$route.query
         return id
       }
     },
+    refresh() {
+      this.reload()
+    },
     async load() {
-      let id = this.getId()
+      let id = this.getId(),
+        form
       if (id) {
-        this.form = await this.$http.get(
-          `/api/${this.moduleInfo.name}/get/${id}`
-        )
+        form = await this.$http.get(`/api/${this.moduleInfo.name}/get/${id}`)
       } else {
         let moduleName = this.moduleInfo.name
-        this.form = await getDefaultModel(moduleName)
+        form = await getDefaultModel(moduleName)
       }
+      if (typeof this.moduleInfo.formatterForm == 'function')
+        form = this.moduleInfo.formatterForm(form)
+      this.form = form
     },
     getRules(item) {
       return this.rules[item.Name].filter(f => f.length == 1)
     },
     goList() {
-      this.$emit('success')
       this.$router.push(`/${this.moduleInfo.name}/list`)
     },
     async submit() {
@@ -172,12 +219,23 @@ export default {
           )
         }
         this.$emit('success', data)
-        alert.success('添加成功')
-        this.goList()
+        if (typeof this.pageInfo.success == 'function') {
+          this.pageInfo.success(data)
+        } else {
+          this.goList()
+        }
       } catch (error) {
         // alert.error(error.message)
       } finally {
         this.submiting = false
+      }
+    },
+    cancel() {
+      this.$emit('close')
+      if (typeof this.pageInfo.close == 'function') {
+        this.pageInfo.close()
+      } else {
+        this.goList()
       }
     }
   }

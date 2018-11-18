@@ -5,6 +5,11 @@
 <script>
 import Page from '@/components/Page/BasisFormPage.vue'
 export default {
+  props:{
+      success:Function,
+      close:Function,
+      pars:Object
+  },
   components: {
     Page
   },
@@ -15,7 +20,11 @@ export default {
           area:'Basis',
           name: 'QueryProgram',
           direction: '查询方案',
-          ...this.$attrs
+        },
+        pageInfo:{
+          success:this.success,
+          close:this.close,
+          pars:this.pars
         }
       }
     }

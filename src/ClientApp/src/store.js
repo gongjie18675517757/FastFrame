@@ -55,7 +55,7 @@ export default new Vuex.Store({
       })
     },
     hideDialog(state, payload) {
-      let index = state.dialogs.findIndex(r => x.key == payload.key || x.render == payload.render)
+      let index = state.dialogs.findIndex(x => x.key == payload.key || x.render == payload.render)
       if (index != -1)
         state.dialogs.splice(index, 1)
     }

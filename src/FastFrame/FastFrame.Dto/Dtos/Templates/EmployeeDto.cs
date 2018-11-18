@@ -16,18 +16,18 @@ namespace FastFrame.Dto.Basis
 		#endregion
 		#region 属性
 		/// <summary>
-		///名称 
-		/// </summary>
-		[StringLength(20)]
-		[Required()]
-		public string Name {get;set;}
-		
-		/// <summary>
 		///编码 
 		/// </summary>
 		[StringLength(20)]
 		[Required()]
 		public string EnCode {get;set;}
+		
+		/// <summary>
+		///名称 
+		/// </summary>
+		[StringLength(20)]
+		[Required()]
+		public string Name {get;set;}
 		
 		/// <summary>
 		///邮箱 
@@ -55,16 +55,9 @@ namespace FastFrame.Dto.Basis
 		public string User_Id {get;set;}
 		
 		/// <summary>
-		///用户姓名 
+		///用户 
 		/// </summary>
-		[RelatedFrom(nameof(User_Id),nameof(User.Name),true)]
-		public string User_Name {get;set;}
-		
-		/// <summary>
-		///用户帐号 
-		/// </summary>
-		[RelatedFrom(nameof(User_Id),nameof(User.Account),false)]
-		public string User_Account {get;set;}
+		public UserDto User {get;set;}
 		
 		/// <summary>
 		///部门 
@@ -73,16 +66,9 @@ namespace FastFrame.Dto.Basis
 		public string Dept_Id {get;set;}
 		
 		/// <summary>
-		///部门名称 
+		///部门 
 		/// </summary>
-		[RelatedFrom(nameof(Dept_Id),nameof(Dept.Name),true)]
-		public string Dept_Name {get;set;}
-		
-		/// <summary>
-		///部门编码 
-		/// </summary>
-		[RelatedFrom(nameof(Dept_Id),nameof(Dept.EnCode),false)]
-		public string Dept_EnCode {get;set;}
+		public DeptDto Dept {get;set;}
 		
 		#endregion
 		#region 方法

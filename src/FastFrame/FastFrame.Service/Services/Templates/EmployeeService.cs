@@ -4,6 +4,7 @@ namespace FastFrame.Service.Services.Basis
 	using FastFrame.Entity.Basis; 
 	using FastFrame.Dto.Basis; 
 	using FastFrame.Infrastructure.Interface; 
+	using FastFrame.Infrastructure; 
 	using System.Linq; 
 	/// <summary>
 	///员工表 服务类 
@@ -37,9 +38,9 @@ namespace FastFrame.Service.Services.Basis
 			 var userQueryable = userRepository.Queryable;
 			 var deptQueryable = deptRepository.Queryable;
 			 var query = from employee in employeeQueryable 
-						join user_Id in userQueryable on employee.User_Id equals user_Id.Id into t_user_Id
+						join user_Id in userQueryable.MapTo<User,UserDto>() on employee.User_Id equals user_Id.Id into t_user_Id
 						from user_Id in t_user_Id.DefaultIfEmpty()
-						join dept_Id in deptQueryable on employee.Dept_Id equals dept_Id.Id into t_dept_Id
+						join dept_Id in deptQueryable.MapTo<Dept,DeptDto>() on employee.Dept_Id equals dept_Id.Id into t_dept_Id
 						from dept_Id in t_dept_Id.DefaultIfEmpty()
 					join foreing in foreignQueryable on employee.Id equals foreing.EntityId into t_foreing
 					from foreing in t_foreing.DefaultIfEmpty()
@@ -49,18 +50,16 @@ namespace FastFrame.Service.Services.Basis
 					from user3 in t_user3.DefaultIfEmpty()
 					 select new EmployeeDto
 					{
-						Name=employee.Name,
 						EnCode=employee.EnCode,
+						Name=employee.Name,
 						Email=employee.Email,
 						PhoneNumber=employee.PhoneNumber,
 						Gender=employee.Gender,
 						User_Id=employee.User_Id,
 						Dept_Id=employee.Dept_Id,
 						Id=employee.Id,
-						User_Name=user_Id.Name,
-						User_Account=user_Id.Account,
-						Dept_Name=dept_Id.Name,
-						Dept_EnCode=dept_Id.EnCode,
+						User=user_Id,
+						Dept=dept_Id,
 						CreateAccount = user2.Account,
 						CreateName = user2.Name,
 						CreateTime = foreing.CreateTime,

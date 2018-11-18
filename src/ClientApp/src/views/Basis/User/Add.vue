@@ -1,9 +1,14 @@
 <template>
   <Page v-bind="page" @success="$emit('success',$event)"/>
 </template>
-<script> 
+<script>
 import Page from '@/components/Page/BasisFormPage.vue'
 export default {
+  props: {
+    success: Function,
+    close: Function,
+    pars: Object
+  },
   components: {
     Page
   },
@@ -13,8 +18,12 @@ export default {
         moduleInfo: {
           area: 'Basis',
           name: 'User',
-          direction: '用户',
-          ...this.$attrs
+          direction: '用户'
+        },
+        pageInfo: {
+          success: this.success,
+          close: this.close,
+          pars: this.pars
         }
       }
     }
@@ -22,5 +31,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+ 

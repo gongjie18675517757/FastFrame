@@ -4,6 +4,11 @@
 <script>
 import Page from '@/components/Page/BasisListPage.vue'
 export default {
+  props:{
+      success:Function,
+      close:Function,
+      pars:Object
+  },
   components: {
     Page
   },
@@ -14,6 +19,11 @@ export default {
           area:'Basis',
           name: 'Employee',
           direction: '员工表'
+        },
+        pageInfo:{
+          success:this.success,
+          close:this.close,
+          pars:this.pars
         }
       }
     }

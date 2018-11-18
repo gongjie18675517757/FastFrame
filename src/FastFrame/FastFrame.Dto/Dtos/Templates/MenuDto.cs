@@ -37,16 +37,9 @@ namespace FastFrame.Dto.Basis
 		public string Parent_Id {get;set;}
 		
 		/// <summary>
-		///上级菜单名称 
+		///上级菜单 
 		/// </summary>
-		[RelatedFrom(nameof(Parent_Id),nameof(Menu.Name),true)]
-		public string Parent_Name {get;set;}
-		
-		/// <summary>
-		///上级菜单编码 
-		/// </summary>
-		[RelatedFrom(nameof(Parent_Id),nameof(Menu.EnCode),false)]
-		public string Parent_EnCode {get;set;}
+		public MenuDto Parent {get;set;}
 		
 		/// <summary>
 		///标题 

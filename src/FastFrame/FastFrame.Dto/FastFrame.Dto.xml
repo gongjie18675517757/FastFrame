@@ -75,14 +75,9 @@
             上级 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.DeptDto.Parent_Name">
+        <member name="P:FastFrame.Dto.Basis.DeptDto.Parent">
              <summary>
-            上级名称 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.DeptDto.Parent_EnCode">
-             <summary>
-            上级编码 
+            上级 
              </summary>
         </member>
         <member name="P:FastFrame.Dto.Basis.DeptDto.Supervisor_Id">
@@ -90,14 +85,9 @@
             主管 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.DeptDto.Supervisor_Name">
+        <member name="P:FastFrame.Dto.Basis.DeptDto.Supervisor">
              <summary>
-            主管名称 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.DeptDto.Supervisor_EnCode">
-             <summary>
-            主管编码 
+            主管 
              </summary>
         </member>
         <member name="T:FastFrame.Dto.Basis.EmployeeDto">
@@ -105,14 +95,14 @@
             员工表 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.EmployeeDto.Name">
-             <summary>
-            名称 
-             </summary>
-        </member>
         <member name="P:FastFrame.Dto.Basis.EmployeeDto.EnCode">
              <summary>
             编码 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.EmployeeDto.Name">
+             <summary>
+            名称 
              </summary>
         </member>
         <member name="P:FastFrame.Dto.Basis.EmployeeDto.Email">
@@ -135,14 +125,9 @@
             用户 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.EmployeeDto.User_Name">
+        <member name="P:FastFrame.Dto.Basis.EmployeeDto.User">
              <summary>
-            用户姓名 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.EmployeeDto.User_Account">
-             <summary>
-            用户帐号 
+            用户 
              </summary>
         </member>
         <member name="P:FastFrame.Dto.Basis.EmployeeDto.Dept_Id">
@@ -150,14 +135,9 @@
             部门 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.EmployeeDto.Dept_Name">
+        <member name="P:FastFrame.Dto.Basis.EmployeeDto.Dept">
              <summary>
-            部门名称 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.EmployeeDto.Dept_EnCode">
-             <summary>
-            部门编码 
+            部门 
              </summary>
         </member>
         <member name="T:FastFrame.Dto.Basis.MenuDto">
@@ -180,14 +160,9 @@
             上级菜单 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.MenuDto.Parent_Name">
+        <member name="P:FastFrame.Dto.Basis.MenuDto.Parent">
              <summary>
-            上级菜单名称 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.MenuDto.Parent_EnCode">
-             <summary>
-            上级菜单编码 
+            上级菜单 
              </summary>
         </member>
         <member name="P:FastFrame.Dto.Basis.MenuDto.Title">
@@ -295,11 +270,6 @@
             登陆用户 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.UserDto.Name">
-             <summary>
-            姓名 
-             </summary>
-        </member>
         <member name="P:FastFrame.Dto.Basis.UserDto.Account">
              <summary>
             帐号 
@@ -308,6 +278,11 @@
         <member name="P:FastFrame.Dto.Basis.UserDto.Password">
              <summary>
             密码 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.UserDto.Name">
+             <summary>
+            姓名 
              </summary>
         </member>
         <member name="P:FastFrame.Dto.Basis.UserDto.Email">

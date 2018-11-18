@@ -8,13 +8,13 @@ import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import './hubs/chatHub'
 import $http from '@/http.js'
-import utils from './utils';
+import {eventBus} from './utils';
 
 import Btn from '@/components/Btn.vue'
 
 
 Vue.config.productionTip = false
-Vue.prototype.$eventBus = utils.eventBus
+Vue.prototype.$eventBus = eventBus
 Vue.prototype.$http = $http
 Vue.component('a-btn', Btn)
 

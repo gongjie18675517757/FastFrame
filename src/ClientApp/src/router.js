@@ -30,7 +30,7 @@ let load = (path, url) => {
 function loadAreas() {
   return mapMany(areas, area => {
     return mapMany(area.items, page => {
-      return page.items.map(item => { 
+      return page.items.map(item => {
         return {
           path: `/${page.name.toLowerCase()}/${item.name.toLowerCase()}`,
           name: `${page.name}_${item.name}`.toLowerCase(),
@@ -41,7 +41,19 @@ function loadAreas() {
     })
   })
 }
- 
+let childs = loadAreas()
+
+/**
+ * 获取组件
+ * @param {*} name 
+ */
+export function getComponent(name) {
+  name=name.toLowerCase()
+  return childs.find(x => x.name == name).component
+}
+
+
+
 export default new Router({
   routes: [{
       path: '/',
@@ -50,8 +62,8 @@ export default new Router({
       children: [
         load('/index/index', '/'),
         load('/about'),
-        load('/userCenter'),         
-        ...loadAreas()
+        load('/userCenter'),
+        ...childs
       ]
     },
     load('/login'),

@@ -37,6 +37,18 @@ namespace FastFrame.Application.Controllers
         }
 
         /// <summary>
+        /// 注册
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<UserDto> Regist([FromBody]UserDto user)
+        {
+            return await service.RegistAsync(user);
+        }
+
+        /// <summary>
         /// 登出
         /// </summary>
         /// <returns></returns>

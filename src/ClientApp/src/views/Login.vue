@@ -41,6 +41,10 @@
                             <v-card-actions>
                                 <v-btn block color="primary" @click="login" :loading="loading">登陆</v-btn>
                             </v-card-actions>
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn flat small to="/regist">注册</v-btn>
+                            </v-card-actions>
                         </v-card>
                     </v-flex>
                 </v-layout>

@@ -56,6 +56,24 @@ namespace FastFrame.Service.Services
         }
 
         /// <summary>
+        /// 注册
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task<UserDto> RegistAsync(UserDto input)
+        {
+            var user = input.MapTo<UserDto, User>();
+            user.GeneratePassword();
+            if (!await userRepository.Queryable.AnyAsync())
+            {
+                user.IsAdmin = true;
+            }
+            user = await userRepository.AddAsync(user);
+            await userRepository.CommmitAsync();
+            return user.MapTo<User, UserDto>();
+        }
+
+        /// <summary>
         /// 更新用户信息
         /// </summary> 
         /// <returns></returns>

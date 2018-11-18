@@ -3,7 +3,7 @@
  * 必填验证
  * @param {*} fieldDescription 
  */
-function required(fieldDescription) {
+function required(fieldDescription='') {
   return function (value) {
     return !!value || `${fieldDescription}是必填的`
   }
@@ -25,7 +25,7 @@ function email(fieldDescription = '邮箱地址无效') {
  * @param {*} min 
  * @param {*} max 
  */
-function stringLength(fieldDescription, min, max) {
+function stringLength(fieldDescription='', min, max) {
   return function (value) {
     return !value || (value && value.length >= min && value.length < max) || `${fieldDescription}长度要求在[${min},${max}]之间`
   }

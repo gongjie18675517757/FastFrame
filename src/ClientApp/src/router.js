@@ -48,7 +48,7 @@ let childs = loadAreas()
  * @param {*} name 
  */
 export function getComponent(name) {
-  name=name.toLowerCase()
+  name = name.toLowerCase()
   return childs.find(x => x.name == name).component
 }
 
@@ -67,5 +67,6 @@ export default new Router({
       ]
     },
     load('/login'),
+    load('/regist'),
   ]
 })

@@ -21,20 +21,5 @@ Vue.component('a-btn', Btn)
 new Vue({
   router,
   store,
-  render: h => h(App),
-  async created() {
-    try {
-      let request = await $http.get('/api/account/GetCurrent')
-      this.$store.commit('login', request)
-    } catch (error) {
-      if (this.$route.fullpath != '/login') {
-        this.$router.push({
-          path: '/login',
-          query: {
-            redirect: this.$route.fullpath
-          }
-        })
-      }
-    }
-  }
+  render: h => h(App), 
 }).$mount('#app')

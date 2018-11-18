@@ -23,20 +23,20 @@
             </v-flex>
             <v-text-field v-model="form.Account" label="帐号" readonly required></v-text-field>
             <v-text-field
-              :rules="[rules.required,rules.length(3,50)]"
+              :rules="[rules.required(),rules.stringLength('',3,50)]"
               v-model="form.Name"
               label="名称"
               required
             ></v-text-field>
             <v-text-field
-              :rules="[rules.required,rules.length(3,50)]"
+              :rules="[rules.required(),rules.stringLength('',3,50)]"
               v-model="form.Password"
               label="密码"
               type="password"
               required
             ></v-text-field>
-            <v-text-field v-model="form.Email" :rules="[rules.email]" label="邮箱" required></v-text-field>
-            <v-text-field v-model="form.PhoneNumber" :rules="[rules.phone]" label="手机号码" required></v-text-field>
+            <v-text-field v-model="form.Email" :rules="[rules.email()]" label="邮箱" required></v-text-field>
+            <v-text-field v-model="form.PhoneNumber" :rules="[rules.phone()]" label="手机号码" required></v-text-field>
             <v-divider class="mt-5"></v-divider>
             <v-card-actions>
               <!-- <v-btn flat>取消</v-btn> -->

@@ -25,15 +25,17 @@ namespace FastFrame.CodeGenerate.Build
 
                 var spaceName = T4Help.GenerateNameSpace(type, null);
                 var name = type.Name;
+                var summary = T4Help.GetClassSummary(type, XmlDocDir);
                 yield return new TargetInfo()
                 {
-                    Summary = T4Help.GetClassSummary(type, XmlDocDir),
+                    Summary = summary,
                     Path = TargetPath,
                     NamespaceName = $"FastFrame.Application.Controllers.{spaceName}",
                     ImportNames = new string[] {
                         $"FastFrame.Dto.{spaceName}",
                         $"FastFrame.Entity.{spaceName}",
                         $"FastFrame.Service.Services.{spaceName}",
+                        "FastFrame.Infrastructure.Attrs",
                         "FastFrame.Infrastructure.Interface"
                     },
                     CategoryName = "class",
@@ -53,6 +55,13 @@ namespace FastFrame.CodeGenerate.Build
                         CodeBlock = new string[] {
                             "this.service = service;",
                             "this.serviceLoader = serviceLoader;"
+                        }
+                    },
+                    AttrInfos = new[] {
+                        new AttrInfo()
+                        {
+                            Name="Permission",
+                            Parameters=new string[]{ $"nameof({name})" , $"\"{summary}\"" }
                         }
                     }
                 };

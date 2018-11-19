@@ -45,15 +45,40 @@
             </summary>
             <typeparam name="T"></typeparam>
         </member>
-        <member name="P:FastFrame.Dto.Dtos.LoginInput.Account">
+        <member name="T:FastFrame.Dto.Basis.PermissionDto">
+             <summary>
+            权限 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.PermissionDto.Permissions">
             <summary>
-            帐号
+            下级权限
             </summary>
         </member>
-        <member name="P:FastFrame.Dto.Dtos.LoginInput.Password">
-            <summary>
-            密码
-            </summary>
+        <member name="P:FastFrame.Dto.Basis.PermissionDto.Parent_Id">
+             <summary>
+            父级 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.PermissionDto.Parent">
+             <summary>
+            父级 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.PermissionDto.Name">
+             <summary>
+            名称 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.PermissionDto.AreaName">
+             <summary>
+            区域 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.PermissionDto.Description">
+             <summary>
+            说明 
+             </summary>
         </member>
         <member name="T:FastFrame.Dto.Basis.DeptDto">
              <summary>
@@ -265,6 +290,56 @@
             资源标识 
              </summary>
         </member>
+        <member name="T:FastFrame.Dto.Basis.RoleDto">
+             <summary>
+            角色 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.RoleDto.EnCode">
+             <summary>
+            编码 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.RoleDto.Name">
+             <summary>
+            名称 
+             </summary>
+        </member>
+        <member name="T:FastFrame.Dto.Basis.RoleMemberDto">
+             <summary>
+            角色成员 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.RoleMemberDto.Role_Id">
+             <summary>
+            角色 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.RoleMemberDto.User_Id">
+             <summary>
+            用户 
+             </summary>
+        </member>
+        <member name="T:FastFrame.Dto.Basis.RolePermissionDto">
+             <summary>
+            角色权限 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.RolePermissionDto.Role_Id">
+             <summary>
+            角色ID 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.RolePermissionDto.Parent_Id">
+             <summary>
+            父级 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.RolePermissionDto.Permission_Id">
+             <summary>
+            权限ID 
+             </summary>
+        </member>
         <member name="T:FastFrame.Dto.Basis.UserDto">
              <summary>
             登陆用户 
@@ -309,6 +384,16 @@
              <summary>
             是否禁用 
              </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Dtos.LoginInput.Account">
+            <summary>
+            帐号
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Dtos.LoginInput.Password">
+            <summary>
+            密码
+            </summary>
         </member>
         <member name="T:FastFrame.Dto.IDto">
             <summary>

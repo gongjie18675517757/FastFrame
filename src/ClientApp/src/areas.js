@@ -19,16 +19,11 @@ let generateItem = (name, title) => {
 export default [{
   name: 'Basis',
   title: '基础设置',
-  items: [{
-      name: 'User',
-      title: '用户',
-      items: [...pages]
-    },
-    {
-      name: 'Dept',
-      title: '部门',
-      items: [...pages]
-    },
+  items: [
+    generateItem('User', '员工'),
+    generateItem('Dept', '部门'),
+    generateItem('Permission', '权限'),
+    generateItem('Role', '角色'),
     generateItem('Employee', '员工'),
     generateItem('Menu', '菜单'),
     generateItem('Organize', '组织'),

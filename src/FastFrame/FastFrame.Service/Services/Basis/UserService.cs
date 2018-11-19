@@ -1,9 +1,13 @@
 ﻿using FastFrame.Dto.Basis;
 using FastFrame.Entity.Basis;
+using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Interface;
+using FastFrame.Repository;
 using FastFrame.Repository.Basis;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,11 +16,17 @@ namespace FastFrame.Service.Services.Basis
     public partial class UserService
     {
         private readonly ICurrentUserProvider currentUserProvider;
+        private readonly RoleMemberRepository roleMemberRepository;
+        private readonly RolePermissionRepository rolePermissionRepository;
 
-        public UserService(ICurrentUserProvider currentUserProvider, ForeignRepository foreignRepository,
+        public UserService(ICurrentUserProvider currentUserProvider,
+            RoleMemberRepository roleMemberRepository,           
+            ForeignRepository foreignRepository,
             UserRepository userRepository, IScopeServiceLoader loader) : this(foreignRepository, userRepository, loader)
         {
             this.currentUserProvider = currentUserProvider;
+            this.roleMemberRepository = roleMemberRepository;
+         
         }
 
 
@@ -72,13 +82,29 @@ namespace FastFrame.Service.Services.Basis
 
             return await GetAsync(id);
         }
-    }
 
-    public partial class DeptService
-    {
-        protected override async Task OnAdding(DeptDto input, Dept entity)
+        /// <summary>
+        /// 设置用户角色
+        /// </summary>         
+        public async Task SetUserRoles(string id, IEnumerable<RoleDto> roles)
         {
-            await base.OnAdding(input, entity);           
-        }
+            var before = await roleMemberRepository.Queryable.Where(x => x.User_Id == id).ToListAsync();
+            var comparisonCollection = new ComparisonCollection<RoleMember, RoleDto>(before, roles, (a, b) => a.Role_Id == b.Id);
+            foreach (var item in comparisonCollection.GetCollectionByAdded())
+            {
+                await roleMemberRepository.AddAsync(new RoleMember()
+                {
+                    Role_Id = item.Id,
+                    User_Id = id
+                });
+            }
+
+            foreach (var item in comparisonCollection.GetCollectionByDeleted())
+            {
+                await roleMemberRepository.DeleteAsync(item);
+            }
+
+            await roleMemberRepository.CommmitAsync();
+        } 
     }
 }

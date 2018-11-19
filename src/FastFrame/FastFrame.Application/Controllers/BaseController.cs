@@ -46,7 +46,8 @@ namespace FastFrame.Application.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete("{id}"), Permission("Delete", "删除")]
+        [HttpDelete("{id}")]
+        [Permission("Delete", "删除")]
         public virtual async Task Delete(string id)
         {
             await service.DeleteAsync(id);
@@ -57,7 +58,8 @@ namespace FastFrame.Application.Controllers
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        [HttpPut, Permission("Update", "修改")]
+        [HttpPut]
+        [Permission("Update", "修改")]
         public virtual async Task<TDto> Put([FromBody]TDto @input)
         {
             return await service.UpdateAsync(@input);

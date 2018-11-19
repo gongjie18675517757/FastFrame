@@ -1,6 +1,14 @@
 <template>
   <span>
-    <a v-if="info.IsLink" flat small color="primary" @click="$emit('toEdit')">{{value}}</a>
+    <a-btn
+      v-if="info.IsLink"
+      flat
+      small
+      color="primary"
+      :moduleName="moduleName"
+      name="Get"
+      @click="$emit('toEdit')"
+    >{{value}}</a-btn>
     <span v-else>{{value}}</span>
   </span>
 </template>
@@ -19,7 +27,8 @@ export default {
       default: function() {
         return {}
       }
-    }
+    },
+    moduleName: String
   },
   computed: {
     value() {
@@ -33,7 +42,7 @@ export default {
         let name = this.info.Relate[0]
         if (this.model[tempName]) {
           return this.model[tempName][name]
-        } 
+        }
       }
       return val
     }

@@ -154,6 +154,31 @@
             域名
             </summary>
         </member>
+        <member name="T:FastFrame.Entity.Basis.Permission">
+            <summary>
+            权限
+            </summary> 
+        </member>
+        <member name="P:FastFrame.Entity.Basis.Permission.Parent_Id">
+            <summary>
+            父级
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.Permission.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.Permission.AreaName">
+            <summary>
+            区域
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.Permission.Description">
+            <summary>
+            说明
+            </summary>
+        </member>
         <member name="T:FastFrame.Entity.Basis.QueryProgram">
             <summary>
             查询方案
@@ -222,6 +247,51 @@
         <member name="P:FastFrame.Entity.Basis.Resource.ContentType">
             <summary>
             资源标识
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Basis.Role">
+            <summary>
+            角色
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.Role.EnCode">
+            <summary>
+            编码
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.Role.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Basis.RoleMember">
+            <summary>
+            角色成员
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.RoleMember.Role_Id">
+            <summary>
+            角色
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.RoleMember.User_Id">
+            <summary>
+            用户
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Basis.RolePermission">
+            <summary>
+            角色权限
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.RolePermission.Role_Id">
+            <summary>
+            角色ID
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.RolePermission.Permission_Id">
+            <summary>
+            权限ID
             </summary>
         </member>
         <member name="T:FastFrame.Entity.Basis.User">

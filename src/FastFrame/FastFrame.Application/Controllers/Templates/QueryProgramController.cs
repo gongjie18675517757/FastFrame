@@ -3,10 +3,12 @@ namespace FastFrame.Application.Controllers.Basis
 	using FastFrame.Dto.Basis; 
 	using FastFrame.Entity.Basis; 
 	using FastFrame.Service.Services.Basis; 
+	using FastFrame.Infrastructure.Attrs; 
 	using FastFrame.Infrastructure.Interface; 
 	/// <summary>
 	///查询方案 
 	/// </summary>
+	[Permission(nameof(QueryProgram),"查询方案")]
 	public partial class QueryProgramController:BaseController<QueryProgram, QueryProgramDto>
 	{
 		#region 字段

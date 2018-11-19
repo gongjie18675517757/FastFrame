@@ -1,73 +1,11 @@
 <template>
   <v-container grid-list-xl fluid fill-height>
-    <v-layout row wrap="" >
-      <v-flex v-if="TreeKey" xs12 sm4>
-        <v-card>
-          <v-toolbar flat dense card color="transparent">
-            <v-toolbar-title>{{moduleInfo.direction}}树状表</v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-btn icon @click="refresh" title="刷新">
-              <v-icon>refresh</v-icon>
-            </v-btn>
-          </v-toolbar>
-          <v-divider></v-divider>
-          <v-card-text class="pa-0">
-            <v-treeview
-              :active.sync="tree.active"
-              :items="tree.items"
-              :load-children="loadTreeItems"
-              :open.sync="tree.open"
-              activatable
-              active-class="primary--text"
-              class="grey lighten-5"
-              item-text="Name"
-              item-key="Id"
-              transition
-              @update:active="setCurrentTreeNode"
-            >
-              <v-icon
-                v-if="!item.children.length"
-                slot="prepend"
-                slot-scope="{ item, active }"
-                :color="active ? 'primary' : ''"
-              >mdi-account</v-icon>
-            </v-treeview>
-          </v-card-text>
-        </v-card>
-      </v-flex>
-      <v-flex xs12 :sm8="TreeKey">
+    <v-layout row wrap="">
+      <v-flex xs12>
         <v-card>
           <v-toolbar flat dense card color="transparent">
             <v-toolbar-title>{{moduleInfo.direction}}列表</v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-btn icon @click="refresh" title="刷新">
-              <v-icon>refresh</v-icon>
-            </v-btn>
-            <a-btn @click="toEdit({})" icon title="新增">
-              <v-icon>add</v-icon>
-            </a-btn>
-            <a-btn
-              icon
-              title="修改"
-              :disabled="selection.length!=1 && !currentRow"
-              @click="toEdit(currentRow || selection[0])"
-            >
-              <v-icon>edit</v-icon>
-            </a-btn>
-            <a-btn @click="remove()" :disabled="!havSelection" icon title="删除">
-              <v-icon>delete</v-icon>
-            </a-btn>
-            <a-btn
-              v-for="item in toolitems"
-              :key="item.name"
-              icon
-              v-if="evalShow(item)"
-              :title="item.title"
-              :disabled="evalDisabled(item)"
-              @click="evalAction(item)"
-            >
-              <v-icon>{{item.icon}}</v-icon>
-            </a-btn>
             <v-menu offset-y>
               <v-btn icon slot="activator" title="设置">
                 <v-icon>more_vert</v-icon>
@@ -95,6 +33,45 @@
           <v-divider></v-divider>
           <v-card-title>
             <!-- <a-btn to="/user/add">添加</a-btn> -->
+            <!-- <v-spacer></v-spacer> -->
+            <a-btn @click="toEdit({})" icon title="新增" :moduleName="moduleInfo.name" name="Add">
+              <v-icon>add</v-icon>
+            </a-btn>
+            <a-btn
+              :moduleName="moduleInfo.name"
+              name="Update"
+              icon
+              title="修改"
+              :disabled="selection.length!=1 && !currentRow"
+              @click="toEdit(currentRow || selection[0])"
+            >
+              <v-icon>edit</v-icon>
+            </a-btn>
+            <a-btn
+              @click="remove()"
+              :disabled="!havSelection"
+              icon
+              title="删除"
+              :moduleName="moduleInfo.name"
+              name="Delete"
+            >
+              <v-icon>delete</v-icon>
+            </a-btn>
+            <a-btn
+              v-for="item in toolitems"
+              :key="item.name"
+              icon
+              v-if="evalShow(item)"
+              :title="item.title"
+              :moduleName="moduleInfo.name"
+              :disabled="evalDisabled(item)"
+              @click="evalAction(item)"
+            >
+              <v-icon>{{item.icon}}</v-icon>
+            </a-btn>
+            <v-btn icon @click="refresh" title="刷新">
+              <v-icon>refresh</v-icon>
+            </v-btn>
             <v-spacer></v-spacer>
             <v-text-field
               append-icon="search"
@@ -107,46 +84,77 @@
           </v-card-title>
           <v-divider></v-divider>
           <v-card-text class="pa-0">
-            <v-data-table
-              :headers="headers"
-              :loading="loading"
-              :items="items"
-              :total-items="total"
-              :pagination.sync="pager"
-              v-model="selection"
-              @update:pagination="loadList"
-              item-key="Id"
-            >
-              <template slot="items" slot-scope="props">
-                <tr :active="!singleSelection && props.selected" @click="handleRowClick(props)">
-                  <td>
-                    <v-icon
-                      small
-                      size="16"
-                      color="primary"
-                      v-if="singleSelection && currentRow==props.item"
-                    >check</v-icon>
-                    <v-checkbox
-                      v-if="!singleSelection"
-                      primary
-                      hide-details
-                      v-model="props.selected"
-                    ></v-checkbox>
-                  </td>
-                  <!-- <td>
+            <v-layout row wrap="">
+              <v-flex v-if="TreeKey">
+                <v-treeview
+                  :active.sync="tree.active"
+                  :items="tree.items"
+                  :load-children="loadTreeItems"
+                  :open.sync="tree.open"
+                  activatable
+                  active-class="primary--text"
+                  class="grey lighten-5"
+                  item-text="Name"
+                  item-key="Id"
+                  transition
+                  @update:active="setCurrentTreeNode"
+                >
+                  <v-icon
+                    v-if="!item.children.length"
+                    slot="prepend"
+                    slot-scope="{ item, active }"
+                    :color="active ? 'primary' : ''"
+                  >mdi-account</v-icon>
+                </v-treeview>
+              </v-flex>
+              <v-flex>
+                <v-data-table
+                  :headers="headers"
+                  :loading="loading"
+                  :items="items"
+                  :total-items="total"
+                  :pagination.sync="pager"
+                  v-model="selection"
+                  @update:pagination="loadList"
+                  item-key="Id"
+                >
+                  <template slot="items" slot-scope="props">
+                    <tr :active="!singleSelection && props.selected" @click="handleRowClick(props)">
+                      <td>
+                        <v-icon
+                          small
+                          size="16"
+                          color="primary"
+                          v-if="singleSelection && currentRow==props.item"
+                        >check</v-icon>
+                        <v-checkbox
+                          v-if="!singleSelection"
+                          primary
+                          hide-details
+                          v-model="props.selected"
+                        ></v-checkbox>
+                      </td>
+                      <!-- <td>
                   <v-avatar size="32">
                     <img
                       :src="props.item.HandIconId?'/api/resource/get/'+props.item.HandIconId:timg"
                     >
                   </v-avatar>
-                  </td>-->
-                  <td v-for="col in columns" :key="col.Name">
-                    <Cell :info="col" :model="props.item" @toEdit="toEdit(props.item)"/>
-                  </td>
-                </tr>
-              </template>
-              <template slot="no-data">没有加载数据</template>
-            </v-data-table>
+                      </td>-->
+                      <td v-for="col in columns" :key="col.Name">
+                        <Cell
+                          :info="col"
+                          :model="props.item"
+                          @toEdit="toEdit(props.item)"
+                          :moduleName="moduleInfo.name"
+                        />
+                      </td>
+                    </tr>
+                  </template>
+                  <template slot="no-data">没有加载数据</template>
+                </v-data-table>
+              </v-flex>
+            </v-layout>
           </v-card-text>
           <v-card-actions v-if="this.pageInfo.success">
             <v-btn flat @click="this.pageInfo.close">取消</v-btn>
@@ -335,6 +343,9 @@ export default {
           await this.$http.delete(`/api/${this.moduleInfo.name}/delete/${id}`)
           let index = this.items.findIndex(r => r.Id == id)
           this.items.splice(index, 1)
+          index = this.selection.findIndex(r => r.Id == id)
+          this.selection.splice(index, 1)
+          if (this.currentRow && this.currentRow.Id == id) this.currentRow = null
         } finally {
         }
       }

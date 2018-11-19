@@ -6,17 +6,17 @@ namespace FastFrame.Application.Controllers.Basis
 	using FastFrame.Infrastructure.Attrs; 
 	using FastFrame.Infrastructure.Interface; 
 	/// <summary>
-	///员工表 
+	///角色 
 	/// </summary>
-	[Permission(nameof(Employee),"员工表")]
-	public partial class EmployeeController:BaseController<Employee, EmployeeDto>
+	[Permission(nameof(Role),"角色")]
+	public partial class RoleController:BaseController<Role, RoleDto>
 	{
 		#region 字段
-		private readonly EmployeeService service;
+		private readonly RoleService service;
 		private readonly IScopeServiceLoader serviceLoader;
 		#endregion
 		#region 构造函数
-		public EmployeeController(EmployeeService service,IScopeServiceLoader serviceLoader)
+		public RoleController(RoleService service,IScopeServiceLoader serviceLoader)
 			:base(service,serviceLoader)
 		{
 			this.service = service;

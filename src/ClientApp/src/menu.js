@@ -9,6 +9,16 @@ export default [{
         icon: 'group',
         title: '部门管理',
         path: '/dept/list',
+      },
+      {
+        icon: 'mdi-coin',
+        title: '权限管理',
+        path: '/permission/list',
+      },
+      {
+        icon: 'mdi-coin',
+        title: '角色管理',
+        path: '/role/list',
       }
     ]
   }  

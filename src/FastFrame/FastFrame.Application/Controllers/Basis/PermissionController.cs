@@ -39,8 +39,8 @@ namespace FastFrame.Application.Controllers.Basis
                 var dto= new PermissionDto()
                 {
                     AreaName = areaName,
+                    EnCode = permissionAttribute.EnCode,
                     Name = permissionAttribute.Name,
-                    Description = permissionAttribute.Description,
                     Permissions = permissions
                 };
 
@@ -56,8 +56,8 @@ namespace FastFrame.Application.Controllers.Basis
                         permissions.Add(new PermissionDto()
                         {
                             AreaName = areaName,
+                            EnCode = attr.EnCode,
                             Name = attr.Name,
-                            Description = attr.Description,
                             Parent= dto
                         });
                     }

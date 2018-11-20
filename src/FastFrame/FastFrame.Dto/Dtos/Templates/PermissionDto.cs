@@ -31,7 +31,7 @@ namespace FastFrame.Dto.Basis
 		/// </summary>
 		[StringLength(50)]
 		[Required()]
-		public string Name {get;set;}
+		public string EnCode {get;set;}
 		
 		/// <summary>
 		///区域 
@@ -45,7 +45,7 @@ namespace FastFrame.Dto.Basis
 		/// </summary>
 		[StringLength(50)]
 		[Required()]
-		public string Description {get;set;}
+		public string Name {get;set;}
 		
 		#endregion
 		#region 方法

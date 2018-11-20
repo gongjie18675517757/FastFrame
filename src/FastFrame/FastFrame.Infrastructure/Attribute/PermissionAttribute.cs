@@ -8,15 +8,14 @@ namespace FastFrame.Infrastructure.Attrs
     [AttributeUsage(AttributeTargets.All, Inherited = false, AllowMultiple = true)]
     public sealed class PermissionAttribute : System.Attribute
     {
-        public PermissionAttribute(string name, string description)
+        public PermissionAttribute(string encode, string name)
         {
+            EnCode = encode;
             Name = name;
-            Description = description;
             IsPrimary = true;
         }
-        public PermissionAttribute(params string[] anOtherNames)
-        {
-            AnOtherNames = anOtherNames;
+        public PermissionAttribute()
+        { 
             IsPrimary = false;
         }
 
@@ -25,12 +24,16 @@ namespace FastFrame.Infrastructure.Attrs
         /// <summary>
         /// 权限名称
         /// </summary>
-        public string Name { get; }
+        public string EnCode { get; }
 
         /// <summary>
         /// 权限描述
         /// </summary>
-        public string Description { get; }
-        public string[] AnOtherNames { get; }
+        public string Name { get; }
+
+        /// <summary>
+        /// 别名
+        /// </summary>
+        public string[] AnOtherEnCodes { get; set; }
     }
 }

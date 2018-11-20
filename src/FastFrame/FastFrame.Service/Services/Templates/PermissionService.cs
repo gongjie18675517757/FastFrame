@@ -45,9 +45,9 @@ namespace FastFrame.Service.Services.Basis
 					 select new PermissionDto
 					{
 						Parent_Id=permission.Parent_Id,
-						Name=permission.Name,
+						EnCode=permission.EnCode,
 						AreaName=permission.AreaName,
-						Description=permission.Description,
+						Name=permission.Name,
 						Id=permission.Id,
 						Parent=parent_Id,
 						CreateAccount = user2.Account,

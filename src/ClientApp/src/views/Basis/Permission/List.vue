@@ -25,7 +25,7 @@ export default {
             {
               name: 'InitPermission',
               title: '初始化权限',
-              icon: 'settings_power',
+              icon: 'error_outline',
               async action() {
                 await this.$http.post(`/api/Permission/InitPermission`)
                 alert.success('初始化成功!')

@@ -212,13 +212,18 @@ export function showDialog(component, pars = {}) {
                 let child = []
                 if (!this.refresh) {
                     let props = {
+                        ...pars,
                         pars,
                         success,
                         close
                     }
                     child = [
                         h(component, {
-                            props
+                            props,
+                            on: {
+                                success,
+                                close
+                            }
                         })
                     ]
                 }

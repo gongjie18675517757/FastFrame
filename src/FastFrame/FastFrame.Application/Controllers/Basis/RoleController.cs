@@ -20,13 +20,35 @@ namespace FastFrame.Application.Controllers.Basis
         }
 
         /// <summary>
+        /// 获取角色成员
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("{id}")]
+        [Permission(AnOtherEnCodes = new string[] { nameof(SetRoleMember) })]
+        public async Task<IEnumerable<UserDto>> GetRoleMember([FromQuery]string id)
+        {
+            return await service.GetRoleMember(id);
+        }
+
+        /// <summary>
         /// 设置角色权限
         /// </summary> 
         [HttpPut("{id}")]
         [Permission(nameof(SetRolePermission), "设置角色权限")]
-        public async Task SetRolePermission([FromQuery]string id, [FromBody]IEnumerable<PermissionDto> permissions)
+        public async Task SetRolePermission([FromQuery]string id, [FromBody]IEnumerable<string> permissions)
         {
             await service.SetRolePermission(id, permissions);
-        } 
+        }
+
+        /// <summary>
+        /// 获取角色权限
+        /// </summary> 
+        [HttpGet("{id}")]
+        [Permission(AnOtherEnCodes = new string[] { nameof(SetRolePermission) })]
+        public async Task<IEnumerable<PermissionDto>> GetRolePermission([FromQuery]string id)
+        {
+            return await service.GetRolePermission(id);
+        }
     }
 }

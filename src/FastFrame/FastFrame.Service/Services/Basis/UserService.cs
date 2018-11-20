@@ -17,16 +17,17 @@ namespace FastFrame.Service.Services.Basis
     {
         private readonly ICurrentUserProvider currentUserProvider;
         private readonly RoleMemberRepository roleMemberRepository;
-        private readonly RolePermissionRepository rolePermissionRepository;
+        private readonly RoleRepository roleRepository;
 
         public UserService(ICurrentUserProvider currentUserProvider,
-            RoleMemberRepository roleMemberRepository,           
+            RoleMemberRepository roleMemberRepository,
+            RoleRepository roleRepository,
             ForeignRepository foreignRepository,
             UserRepository userRepository, IScopeServiceLoader loader) : this(foreignRepository, userRepository, loader)
         {
             this.currentUserProvider = currentUserProvider;
             this.roleMemberRepository = roleMemberRepository;
-         
+            this.roleRepository = roleRepository;
         }
 
 
@@ -105,6 +106,19 @@ namespace FastFrame.Service.Services.Basis
             }
 
             await roleMemberRepository.CommmitAsync();
-        } 
+        }
+
+        /// <summary>
+        /// 获取角色权限
+        /// </summary>
+        /// <param name="id"></param>        
+        public async Task<IEnumerable<RoleDto>> GetUserRoles(string id)
+        {
+            var iq = from a in roleMemberRepository.Queryable
+                     join b in roleRepository.Queryable on a.Role_Id equals b.Id
+                     where a.User_Id == id
+                     select b;
+            return await iq.MapTo<Role, RoleDto>().ToListAsync();
+        }
     }
 }

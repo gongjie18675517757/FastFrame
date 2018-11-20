@@ -66,19 +66,19 @@
               />
             </component>
             <v-divider class="mt-5"></v-divider>
-            <v-card-actions>
-              <v-btn flat @click="cancel">取消</v-btn>
-              <v-spacer></v-spacer>
-              <v-btn
-                v-if="canEdit && changed"
-                color="primary"
-                flat
-                @click="submit"
-                :loading="submiting"
-              >保存</v-btn>
-            </v-card-actions>
           </v-card-text>
         </v-form>
+        <v-card-actions>
+          <v-btn flat @click="cancel">取消</v-btn>
+          <v-spacer></v-spacer>
+          <v-btn
+            v-if="canEdit && changed"
+            color="primary"
+            flat
+            @click="submit"
+            :loading="submiting"
+          >保存</v-btn>
+        </v-card-actions>
       </v-card>
     </v-flex>
   </v-container>

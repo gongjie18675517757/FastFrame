@@ -1,6 +1,7 @@
 ﻿using FastFrame.Dto.Basis;
 using FastFrame.Entity.Basis;
 using FastFrame.Infrastructure;
+using FastFrame.Infrastructure.Attrs;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +14,12 @@ namespace FastFrame.Service.Services.Basis
         /// <summary>
         /// 初始化权限
         /// </summary>       
+        [Permission(nameof(InitPermission), "切换身份")]
         public async Task InitPermission(IEnumerable<PermissionDto> permissionDtos)
         {
             var beforeEntitys = await permissionRepository.Queryable.ToListAsync();
             var comparisonCollection = new ComparisonCollection<Permission, PermissionDto>(beforeEntitys, permissionDtos,
-                (a, b) => a.AreaName == b.AreaName && a.Name == b.Name && a.Parent_Id == b.Parent_Id);
+                (a, b) => a.AreaName == b.AreaName && a.EnCode == b.EnCode && a.Parent_Id == b.Parent_Id);
             foreach (var item in comparisonCollection.GetCollectionByAdded().ToList())
             {
                 var entity = item.MapTo<PermissionDto, Permission>();
@@ -38,7 +40,7 @@ namespace FastFrame.Service.Services.Basis
             comparisonCollection = new ComparisonCollection<Permission, PermissionDto>(
                     beforeEntitys,
                     permissionDtos.SelectMany(x => x.Permissions).Concat(permissionDtos),
-                    (a, b) => a.AreaName == b.AreaName && a.Name == b.Name && a.Parent_Id == b.Parent_Id);
+                    (a, b) => a.AreaName == b.AreaName && a.EnCode == b.EnCode && a.Parent_Id == b.Parent_Id);
 
             foreach (var item in comparisonCollection.GetCollectionByAdded())
             {
@@ -55,8 +57,10 @@ namespace FastFrame.Service.Services.Basis
             {
                 if (before.Id != after.Id || before.Parent_Id != after.Parent?.Id)
                 {
+                    var id = before.Id;
                     after.MapSet(before);
                     before.Parent_Id = after.Parent?.Id;
+                    before.Id = id;
                     await permissionRepository.UpdateAsync(before);
                 } 
             } 

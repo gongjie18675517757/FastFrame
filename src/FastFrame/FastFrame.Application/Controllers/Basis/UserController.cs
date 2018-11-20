@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace FastFrame.Application.Controllers.Basis
 {
     public partial class UserController
-    { 
+    {
         /// <summary>
         /// 切换身份
         /// </summary>
@@ -38,9 +38,19 @@ namespace FastFrame.Application.Controllers.Basis
         /// </summary>        
         [HttpPut("{id}")]
         [Permission(nameof(SetUserRoles), "切换状态")]
-        public async Task SetUserRoles([FromQuery]string id,[FromBody]IEnumerable<RoleDto> roles)
+        public async Task SetUserRoles([FromQuery]string id, [FromBody]IEnumerable<RoleDto> roles)
         {
             await service.SetUserRoles(id, roles);
+        }
+
+        /// <summary>
+        /// 获取用户角色
+        /// </summary> 
+        [HttpGet("{id}")]
+        [Permission(AnOtherEnCodes = new string[] { nameof(SetUserRoles) })]
+        public async Task<IEnumerable<RoleDto>> GetUserRoles([FromQuery]string id)
+        {
+            return await service.GetUserRoles(id);
         }
     }
 }

@@ -34,6 +34,10 @@ namespace FastFrame.Application.Privder
                     context.HttpContext.Response.StatusCode = 401;
                     context.Result = new ObjectResult(new { Message = "未登陆" }); 
                 }
+                else
+                {
+                    operaterProvider.Refresh();
+                }
             }
             return Task.CompletedTask;
         }

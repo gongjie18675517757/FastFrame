@@ -77,6 +77,11 @@ namespace FastFrame.Application.Privder
             await cachingProvider.RemoveAsync(currUser.ToKen);
         }
 
+        public void Refresh()
+        {
+            cachingProvider.Set(currUser.ToKen, currUser, TimeSpan.FromDays(1));
+        }
+
         private string GetToken()
         {
             if (!token.IsNullOrWhiteSpace())

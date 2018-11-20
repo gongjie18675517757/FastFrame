@@ -65,7 +65,7 @@
             父级 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.PermissionDto.Name">
+        <member name="P:FastFrame.Dto.Basis.PermissionDto.EnCode">
              <summary>
             名称 
              </summary>
@@ -75,7 +75,7 @@
             区域 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.PermissionDto.Description">
+        <member name="P:FastFrame.Dto.Basis.PermissionDto.Name">
              <summary>
             说明 
              </summary>

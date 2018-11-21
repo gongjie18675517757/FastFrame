@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Reflection;
 using FastFrame.Infrastructure;
 using System.Linq;
+using FastFrame.Infrastructure.Interface;
+using FastFrame.Service.Services.Basis;
 
 namespace FastFrame.Application.Controllers.Basis
 {
@@ -23,20 +25,32 @@ namespace FastFrame.Application.Controllers.Basis
             await service.InitPermission(permissions);
         }
 
+        /// <summary>
+        /// 权限列表
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IEnumerable<PermissionDto>> Permissions()
+        {
+            return await service.Permissions();
+        }
+
         private IEnumerable<PermissionDto> GetPermissions()
         {
             foreach (var type in this.GetType().Assembly.GetTypes())
             {
+                if (!typeof(BaseController).IsAssignableFrom(type))
+                    continue;
                 var permissionAttribute = type.GetCustomAttribute<PermissionAttribute>();
                 if (permissionAttribute == null)
                     continue;
                 if (type.IsAbstract || !type.IsClass)
                     continue;
 
-                var areaName = T4Help.GenerateNameSpace(type, "");
-                var permissions = new List<PermissionDto>(); 
+                var areaName = type.Namespace.Replace("FastFrame.Application.Controllers.", "");
+                var permissions = new List<PermissionDto>();
 
-                var dto= new PermissionDto()
+                var dto = new PermissionDto()
                 {
                     AreaName = areaName,
                     EnCode = permissionAttribute.EnCode,
@@ -58,7 +72,7 @@ namespace FastFrame.Application.Controllers.Basis
                             AreaName = areaName,
                             EnCode = attr.EnCode,
                             Name = attr.Name,
-                            Parent= dto
+                            Parent = dto
                         });
                     }
                 }

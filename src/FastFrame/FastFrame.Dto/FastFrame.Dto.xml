@@ -67,7 +67,7 @@
         </member>
         <member name="P:FastFrame.Dto.Basis.PermissionDto.EnCode">
              <summary>
-            名称 
+            编码 
              </summary>
         </member>
         <member name="P:FastFrame.Dto.Basis.PermissionDto.AreaName">
@@ -77,7 +77,7 @@
         </member>
         <member name="P:FastFrame.Dto.Basis.PermissionDto.Name">
              <summary>
-            说明 
+            名称 
              </summary>
         </member>
         <member name="T:FastFrame.Dto.Basis.DeptDto">
@@ -358,6 +358,16 @@
         <member name="P:FastFrame.Dto.Basis.UserDto.Name">
              <summary>
             姓名 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.UserDto.Dept_Id">
+             <summary>
+            部门 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.UserDto.Dept">
+             <summary>
+            部门 
              </summary>
         </member>
         <member name="P:FastFrame.Dto.Basis.UserDto.Email">

@@ -8,25 +8,40 @@
         </v-flex>
       </v-layout>
     </v-card-text>
+    <v-card-actions>
+      <v-btn flat @click="$emit('close')">取消</v-btn>
+      <v-spacer></v-spacer>
+      <v-btn color="primary" flat @click="success">保存</v-btn>
+    </v-card-actions>
   </v-card>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      title: '角色',
-      model: ['00F6VOP9PQMWAP1UJVC6Q0LIC', '00F6UKEAXFAHAP1UJV1USZ95R'],
-
-      selection: {},
-      items: [],
-      labelFormatter(item) {
-        return `${item.Name}[${item.EnCode}]`
+  props: {
+    title: String,
+    requestUrl: String,
+    model: {
+      type: Array,
+      default: function() {
+        return []
+      }
+    },
+    labelFormatter: {
+      type: Function,
+      default: function(item) {
+        return item.Name
       }
     }
   },
+  data() {
+    return {
+      selection: {},
+      items: []
+    }
+  },
   async created() {
-    let { Data: items } = await this.$http.post('/api/Role/list', { pagesize: 999 })
+    let { Data: items } = await this.$http.post(this.requestUrl, { pagesize: 999 })
     let obj = {}
     for (const item of items) {
       obj[item.Id] = false
@@ -36,6 +51,12 @@ export default {
     }
     this.selection = obj
     this.items = items
+  },
+  methods: {
+    success() {
+      var keys = Object.keys(this.selection).filter(k => this.selection[k])
+      this.$emit('success', keys)
+    }
   }
 }
 </script>

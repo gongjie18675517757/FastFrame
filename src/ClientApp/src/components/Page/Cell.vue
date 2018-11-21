@@ -1,6 +1,7 @@
 <template>
   <span>
     <a-btn
+      class="btn-link"
       v-if="info.IsLink"
       flat
       small
@@ -52,4 +53,7 @@ export default {
 </script>
 
 <style>
+.btn-link .v-btn__content{
+  font-size: 13px; 
+}
 </style>

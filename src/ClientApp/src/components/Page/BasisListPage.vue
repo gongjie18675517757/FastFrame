@@ -64,6 +64,7 @@
               v-if="evalShow(item)"
               :title="item.title"
               :moduleName="moduleInfo.name"
+              :name="item.name"
               :disabled="evalDisabled(item)"
               @click="evalAction(item)"
             >

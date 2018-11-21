@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 namespace FastFrame.Entity.Basis
 {
     /// <summary>
-    /// 登陆用户
+    /// 用户
     /// </summary>
     [Export]
     [RelatedField(nameof(Name), nameof(Account))]
@@ -40,6 +40,12 @@ namespace FastFrame.Entity.Basis
         /// </summary>
         [StringLength(50), Required]
         public string Name { get; set; }
+
+        /// <summary>
+        /// 部门
+        /// </summary>
+        [RelatedTo(typeof(Dept))]
+        public string Dept_Id { get; set; }
 
         /// <summary>
         /// 邮箱

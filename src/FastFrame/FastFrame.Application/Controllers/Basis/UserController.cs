@@ -38,7 +38,7 @@ namespace FastFrame.Application.Controllers.Basis
         /// </summary>        
         [HttpPut("{id}")]
         [Permission(nameof(SetUserRoles), "切换状态")]
-        public async Task SetUserRoles([FromQuery]string id, [FromBody]IEnumerable<RoleDto> roles)
+        public async Task SetUserRoles([FromQuery]string id, [FromBody]IEnumerable<string> roles)
         {
             await service.SetUserRoles(id, roles);
         }

@@ -7,15 +7,34 @@
 </template>
 
 <script>
+import { existBtn } from '@/permission'
 export default {
   props: {
-    authority: String
+    name: String,
+    moduleName: String,
+    disabled: {
+      type: Boolean,
+      default: false
+    }
   },
-  created() {    
+  data() {
+    return {
+      attrs: {},
+      permission: true
+    }
+  },
+  computed: {
+    evalDisabled() {
+      return this.disabled && this.permission
+    }
+  },
+  async created() {
+    this.attrs = this.$attrs
+    this.permission = await existBtn(this.moduleName, this.name)
   },
   methods: {
     handleClick($event) {
-      this.$emit('click',$event)
+      this.$emit('click', $event)
     }
   }
 }

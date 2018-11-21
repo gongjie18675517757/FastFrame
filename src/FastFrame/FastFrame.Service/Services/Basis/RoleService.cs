@@ -31,16 +31,16 @@ namespace FastFrame.Service.Services.Basis
         /// <summary>
         /// 设置角色成员
         /// </summary>         
-        public async Task SetRoleMember(string id, IEnumerable<UserDto> users)
+        public async Task SetRoleMember(string id, IEnumerable<string> users)
         {
             var before = await roleMemberRepository.Queryable.Where(x => x.Role_Id == id).ToListAsync();
-            var comparisonCollection = new ComparisonCollection<RoleMember, UserDto>(before, users, (a, b) => a.Role_Id == b.Id);
+            var comparisonCollection = new ComparisonCollection<RoleMember, string>(before, users, (a, b) => a.Role_Id == b);
             foreach (var item in comparisonCollection.GetCollectionByAdded())
             {
                 await roleMemberRepository.AddAsync(new RoleMember()
                 {
                     Role_Id = id,
-                    User_Id = item.Id
+                    User_Id = item
                 });
             }
             foreach (var item in comparisonCollection.GetCollectionByDeleted())

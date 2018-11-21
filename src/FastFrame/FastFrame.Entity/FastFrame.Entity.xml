@@ -31,7 +31,7 @@
         </member>
         <member name="T:FastFrame.Entity.Basis.Employee">
             <summary>
-            员工表
+            员工
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Basis.Employee.EnCode">
@@ -296,7 +296,7 @@
         </member>
         <member name="T:FastFrame.Entity.Basis.User">
             <summary>
-            登陆用户
+            用户
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Basis.User.Account">
@@ -317,6 +317,11 @@
         <member name="P:FastFrame.Entity.Basis.User.Name">
             <summary>
             姓名
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.User.Dept_Id">
+            <summary>
+            部门
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Basis.User.Email">

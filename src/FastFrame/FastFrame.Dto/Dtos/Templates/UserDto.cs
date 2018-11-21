@@ -42,6 +42,17 @@ namespace FastFrame.Dto.Basis
 		public string Name {get;set;}
 		
 		/// <summary>
+		///部门 
+		/// </summary>
+		[RelatedTo(typeof(Dept))]
+		public string Dept_Id {get;set;}
+		
+		/// <summary>
+		///部门 
+		/// </summary>
+		public DeptDto Dept {get;set;}
+		
+		/// <summary>
 		///邮箱 
 		/// </summary>
 		[StringLength(50)]

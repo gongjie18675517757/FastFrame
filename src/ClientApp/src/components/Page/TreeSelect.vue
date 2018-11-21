@@ -51,6 +51,12 @@ export default {
       default: function() {
         return []
       }
+    },
+    formatter: {
+      type: Function,
+      default: function(items) {
+        return items
+      }
     }
   },
   data() {
@@ -60,12 +66,8 @@ export default {
     }
   },
   async created() {
-    
-    
     let { Data: items } = await this.$http.post(this.requestUrl, this.requestPars)
-    items.forEach(r => {
-      r.selected = false
-    })
+    items = this.formatter(items)
     let loadTree = parentId => {
       return items.filter(r => r[this.parentKey] == parentId).map(r => {
         return {
@@ -74,9 +76,10 @@ export default {
         }
       })
     }
+
     this.items = loadTree(null)
     this.selection = [...this.model]
-    console.log(this.selection);
+    console.log(this.selection)
   },
   methods: {
     cancel() {

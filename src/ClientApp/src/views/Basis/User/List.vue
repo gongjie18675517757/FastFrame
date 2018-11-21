@@ -4,7 +4,9 @@
 
 <script>
 import Page from '@/components/Page/BasisListPage.vue'
-import { alert } from '@/utils'
+import { alert,showDialog } from '@/utils'
+import CheckGroup from '@/components/Page/CheckGroup.vue'
+
 export default {
   props: {
     success: Function,
@@ -55,6 +57,29 @@ export default {
                   rows.splice(index, 1, result)
                 }
               }
+            },
+            {
+              name: 'SetUserRoles',
+              title: '分配角色',
+              icon: 'error_outline',
+              disabled({ selection }) {
+                return selection.length == 0
+              },
+              async action({ selection }) {
+                let { Id } = selection[0]
+                let data = await this.$http.get(`/api/user/GetUserRoles/${Id}`)
+                let ids = await showDialog(CheckGroup, {
+                  title: '角色成员',
+                  requestUrl: '/api/Role/list',
+                  model: data.map(r => r.Id),
+                  labelFormatter(item) {
+                    return `${item.Name}[${item.EnCode}]`
+                  }
+                })
+                await this.$http.put(`/api/user/SetUserRoles/${Id}`, ids)
+
+                alert.success('设置成功!')
+              }
             }
           ]
         },
@@ -62,7 +87,7 @@ export default {
           success: this.success,
           close: this.close,
           pars: {
-            ...this.pars, 
+            ...this.pars
           }
         }
       }

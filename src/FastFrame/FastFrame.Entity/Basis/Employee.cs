@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 namespace FastFrame.Entity.Basis
 {
     /// <summary>
-    /// 员工表
+    /// 员工
     /// </summary>
     [Export]
     [RelatedField(nameof(Name), nameof(EnCode))]

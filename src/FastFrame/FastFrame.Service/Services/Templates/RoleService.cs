@@ -1,18 +1,15 @@
 namespace FastFrame.Service.Services.Basis
 {
-    using FastFrame.Repository.Basis;
-    using FastFrame.Entity.Basis;
-    using FastFrame.Dto.Basis;
-    using FastFrame.Infrastructure.Interface;
-    using FastFrame.Infrastructure;
-    using System.Linq;
-    using System;
-    using System.Threading.Tasks;
-
-    /// <summary>
-    ///角色 服务类 
-    /// </summary>
-    public partial class RoleService:BaseService<Role, RoleDto>
+	using FastFrame.Repository.Basis; 
+	using FastFrame.Entity.Basis; 
+	using FastFrame.Dto.Basis; 
+	using FastFrame.Infrastructure.Interface; 
+	using FastFrame.Infrastructure; 
+	using System.Linq; 
+	/// <summary>
+	///角色 服务类 
+	/// </summary>
+	public partial class RoleService:BaseService<Role, RoleDto>
 	{
 		#region 字段
 		private readonly ForeignRepository foreignRepository;
@@ -56,8 +53,7 @@ namespace FastFrame.Service.Services.Basis
 						ModifyTime = foreing.ModifyTime,
 					};
 			return query;
-		} 
-       
-        #endregion
-    }
+		}
+		#endregion
+	}
 }

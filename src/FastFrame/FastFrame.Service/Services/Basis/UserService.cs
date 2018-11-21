@@ -22,8 +22,9 @@ namespace FastFrame.Service.Services.Basis
         public UserService(ICurrentUserProvider currentUserProvider,
             RoleMemberRepository roleMemberRepository,
             RoleRepository roleRepository,
+            DeptRepository deptRepository,
             ForeignRepository foreignRepository,
-            UserRepository userRepository, IScopeServiceLoader loader) : this(foreignRepository, userRepository, loader)
+            UserRepository userRepository, IScopeServiceLoader loader) : this(deptRepository,foreignRepository, userRepository, loader)
         {
             this.currentUserProvider = currentUserProvider;
             this.roleMemberRepository = roleMemberRepository;
@@ -87,15 +88,15 @@ namespace FastFrame.Service.Services.Basis
         /// <summary>
         /// 设置用户角色
         /// </summary>         
-        public async Task SetUserRoles(string id, IEnumerable<RoleDto> roles)
+        public async Task SetUserRoles(string id, IEnumerable<string> roles)
         {
             var before = await roleMemberRepository.Queryable.Where(x => x.User_Id == id).ToListAsync();
-            var comparisonCollection = new ComparisonCollection<RoleMember, RoleDto>(before, roles, (a, b) => a.Role_Id == b.Id);
+            var comparisonCollection = new ComparisonCollection<RoleMember, string>(before, roles, (a, b) => a.Role_Id == b);
             foreach (var item in comparisonCollection.GetCollectionByAdded())
             {
                 await roleMemberRepository.AddAsync(new RoleMember()
                 {
-                    Role_Id = item.Id,
+                    Role_Id = item,
                     User_Id = id
                 });
             }

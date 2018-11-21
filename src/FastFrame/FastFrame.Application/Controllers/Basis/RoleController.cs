@@ -14,7 +14,7 @@ namespace FastFrame.Application.Controllers.Basis
         /// </summary> 
         [HttpPut("{id}")]
         [Permission(nameof(SetRoleMember), "设置角色成员")]
-        public async Task SetRoleMember([FromQuery]string id, [FromBody]IEnumerable<UserDto> users)
+        public async Task SetRoleMember([FromQuery]string id, [FromBody]IEnumerable<string> users)
         {
             await service.SetRoleMember(id, users);
         }

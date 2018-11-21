@@ -164,9 +164,9 @@
             父级
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Basis.Permission.Name">
+        <member name="P:FastFrame.Entity.Basis.Permission.EnCode">
             <summary>
-            名称
+            编码
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Basis.Permission.AreaName">
@@ -174,9 +174,9 @@
             区域
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Basis.Permission.Description">
+        <member name="P:FastFrame.Entity.Basis.Permission.Name">
             <summary>
-            说明
+            名称
             </summary>
         </member>
         <member name="T:FastFrame.Entity.Basis.QueryProgram">
@@ -317,6 +317,11 @@
         <member name="P:FastFrame.Entity.Basis.User.Name">
             <summary>
             姓名
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.User.Dept_Id">
+            <summary>
+            部门
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Basis.User.Email">

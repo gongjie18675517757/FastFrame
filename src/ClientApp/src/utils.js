@@ -90,8 +90,8 @@ export async function lock(lockObj = {}) {
     }
     lockSet.add(lockObj)
     return {
-        freed() {
-            lockSet.delete(lockObj)
+        freed() { 
+            lockSet.delete(lockObj) 
         }
     }
 }

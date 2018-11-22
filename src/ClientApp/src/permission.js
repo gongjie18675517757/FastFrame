@@ -6,11 +6,10 @@ import {
 let permission = []
 
 async function initPermission() {
-  if (permission.length == 0) {
-    let localLock = await lock('Permissions')
-    try {
-      let items = await $http.get('/api/Permission/Permissions')
-      console.log(items);
+  let localLock = await lock('Permissions') 
+  try {
+    if (permission.length == 0) {
+      let items = await $http.get('/api/Permission/Permissions') 
       let loadTree = parentId => {
         return items.filter(r => r.Parent_Id == parentId).map(r => {
           return {
@@ -19,13 +18,13 @@ async function initPermission() {
           }
         })
       }
-      permission = loadTree(null) 
-    } catch (error) {
+      permission = loadTree(null)
+    } 
+  } catch (error) {
 
-    } finally {
-      localLock.freed()
-    }
-  }
+  } finally {
+    localLock.freed()
+  } 
 }
 
 /**

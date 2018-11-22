@@ -1,6 +1,6 @@
 <template>
   <span>
-    <v-btn v-bind="$attrs" @click="handleClick">
+    <v-btn v-bind="$attrs" @click="handleClick" :disabled="evalDisabled">
       <slot></slot>
     </v-btn>
   </span>
@@ -25,7 +25,7 @@ export default {
   },
   computed: {
     evalDisabled() {
-      return this.disabled && this.permission
+      return this.disabled || !this.permission
     }
   },
   async created() {

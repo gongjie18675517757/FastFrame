@@ -31,7 +31,7 @@ namespace FastFrame.Application.Privder
         public string GetCurrOrganizeId()
         {
             string host;
-            if(httpContextAccessor.HttpContext.Request.Headers.TryGetValue("Referer", out var sv) && sv.Any())
+            if(httpContextAccessor.HttpContext.Request.Headers.TryGetValue("X-ORIGINAL-HOST", out var sv) && sv.Any())
             {
                 var arr = sv.ToArray();
                 host = arr.FirstOrDefault();
@@ -39,8 +39,9 @@ namespace FastFrame.Application.Privder
             else
             {
                 host = httpContextAccessor.HttpContext.Request.Host.Value;
+                host = new Uri(host).Authority;
             }
-            host = new Uri(host).Authority; 
+       
             return dataBase.Set<OrganizeHost>().Where(x => x.Host == host).FirstOrDefault()?.OrganizeId;
         }
 

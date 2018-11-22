@@ -95,7 +95,10 @@ namespace FastFrame.Service.Services.Basis
         public async Task<IEnumerable<PermissionDto>> Permissions()
         {
             var currUser = currentUserProvider.GetCurrUser();
-            var iq = from a in roleMemberRepository.Queryable.Where(x => x.User_Id == currUser.Id)
+
+            var user =await userRepository.GetAsync(currUser.Id);
+
+            var iq = from a in roleMemberRepository.Queryable.Where(x => x.User_Id == user.Id)
                      join b in rolePermissionRepository.Queryable on a.Role_Id equals b.Role_Id
                      join c in permissionRepository.Queryable on b.Permission_Id equals c.Id
                      select c;

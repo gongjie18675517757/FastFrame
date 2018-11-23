@@ -277,13 +277,7 @@ export default {
 
     if (TreeKey) {
       // this.tree.items = await this.loadTreeItems({})
-      this.tree.items = [
-        {
-          Id: null,
-          Name: '所有' + this.moduleInfo.direction,
-          children: []
-        }
-      ]
+      this.tree.items = await this.loadTreeItems({})
     }
   },
   methods: {
@@ -411,7 +405,7 @@ export default {
         }
       })
       Data.forEach(r => (r.children = []))
-      item.children.push(...Data)
+      if (item.children) item.children.push(...Data)
       return Data
     },
     setCurrentTreeNode() {

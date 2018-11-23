@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace FastFrame.Infrastructure.Attrs
 {
@@ -15,7 +16,7 @@ namespace FastFrame.Infrastructure.Attrs
             IsPrimary = true;
         }
         public PermissionAttribute()
-        { 
+        {
             IsPrimary = false;
         }
 
@@ -34,6 +35,9 @@ namespace FastFrame.Infrastructure.Attrs
         /// <summary>
         /// 别名
         /// </summary>
-        public string[] AnOtherEnCodes { get; set; }
+        public string[] AnOtherEnCodes { get; set; } = new string[0];
+
+
+        public string[] AllEnCodes => AnOtherEnCodes.Concat(new[] { EnCode }).ToArray();
     }
 }

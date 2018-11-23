@@ -29,7 +29,7 @@ export default {
               title: '分配权限',
               icon: 'error_outline',
               disabled({ selection }) {
-                return selection.length == 0
+                   return selection.length !=1
               },
               async action({ selection }) {
                 let { Id } = selection[0]
@@ -49,7 +49,7 @@ export default {
               title: '分配成员',
               icon: 'error_outline',
               disabled({ selection }) {
-                return selection.length == 0
+                return selection.length !=1
               },
               async action({ selection }) {
                 let { Id } = selection[0]

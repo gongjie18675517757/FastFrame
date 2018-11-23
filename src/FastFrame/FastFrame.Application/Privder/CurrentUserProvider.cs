@@ -39,7 +39,7 @@ namespace FastFrame.Application.Privder
             else
             {
                 host = httpContextAccessor.HttpContext.Request.Host.Value;
-                host = new Uri(host).Authority;
+                //host = new Uri(host).Authority;
             }
        
             return dataBase.Set<OrganizeHost>().Where(x => x.Host == host).FirstOrDefault()?.OrganizeId;

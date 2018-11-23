@@ -38,7 +38,7 @@ namespace FastFrame.Application.Controllers.Basis
         /// </summary>        
         [HttpPut("{id}")]
         [Permission(nameof(SetUserRoles), "切换状态")]
-        public async Task SetUserRoles([FromQuery]string id, [FromBody]IEnumerable<string> roles)
+        public async Task SetUserRoles(string id, [FromBody]IEnumerable<string> roles)
         {
             await service.SetUserRoles(id, roles);
         }
@@ -48,7 +48,7 @@ namespace FastFrame.Application.Controllers.Basis
         /// </summary> 
         [HttpGet("{id}")]
         [Permission(AnOtherEnCodes = new string[] { nameof(SetUserRoles) })]
-        public async Task<IEnumerable<RoleDto>> GetUserRoles([FromQuery]string id)
+        public async Task<IEnumerable<RoleDto>> GetUserRoles(string id)
         {
             return await service.GetUserRoles(id);
         }

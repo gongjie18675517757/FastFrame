@@ -1,23 +1,30 @@
 ﻿using FastFrame.Infrastructure.Attrs;
 using FastFrame.Infrastructure.Interface;
+using FastFrame.Service.Services.Basis;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Reflection;
 
 namespace FastFrame.Application.Privder
 {
     public class GlobalFilter : IAsyncExceptionFilter, IAsyncAuthorizationFilter
     {
         private readonly ICurrentUserProvider operaterProvider;
+        private readonly PermissionService permissionService;
         private readonly IDescriptionProvider descriptionProvider;
         private const string StopwatchName = "Stopwatch";
 
-        public GlobalFilter(ICurrentUserProvider operaterProvider, IDescriptionProvider descriptionProvider)
+        public GlobalFilter(ICurrentUserProvider operaterProvider,
+            PermissionService permissionService,
+            IDescriptionProvider descriptionProvider)
         {
             this.operaterProvider = operaterProvider;
+            this.permissionService = permissionService;
             this.descriptionProvider = descriptionProvider;
         }
         /// <summary>
@@ -25,21 +32,36 @@ namespace FastFrame.Application.Privder
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public Task OnAuthorizationAsync(AuthorizationFilterContext context)
+        public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
             if (!context.Filters.Any(x => x.GetType() == typeof(AllowAnonymousFilter)))
             {
                 if (operaterProvider.GetCurrUser() == null)
                 {
                     context.HttpContext.Response.StatusCode = 401;
-                    context.Result = new ObjectResult(new { Message = "未登陆" }); 
+                    context.Result = new ObjectResult(new { Message = "未登陆" });
                 }
                 else
                 {
+                    if (context.ActionDescriptor is ControllerActionDescriptor controllerActionDescriptor)
+                    {
+                        var permissionAttribute = controllerActionDescriptor.ControllerTypeInfo.GetCustomAttribute<PermissionAttribute>();
+                        var permissionAttribute2 = controllerActionDescriptor.MethodInfo.GetCustomAttribute<PermissionAttribute>();
+                        if (permissionAttribute != null && permissionAttribute2 != null)
+                        {
+                            var moduleName = permissionAttribute.EnCode;
+                            var methodNames = permissionAttribute2.AllEnCodes;
+                            var exists= await permissionService.ExistPermission(moduleName, methodNames);
+                            if (!exists)
+                            {
+                                context.HttpContext.Response.StatusCode = 403;
+                                context.Result = new ObjectResult(new { Message = "权限不足" });
+                            }
+                        }
+                    }
                     operaterProvider.Refresh();
                 }
-            }
-            return Task.CompletedTask;
+            } 
         }
 
         /// <summary>

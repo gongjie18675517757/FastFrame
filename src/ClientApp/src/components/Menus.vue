@@ -37,6 +37,7 @@
 
 <script>
 import menu from '@/menu.js'
+import { getPermission } from '@/permission.js'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import MenuGroup from './MenuGroup.vue'
 import MenuItem from './MenuItem.vue'
@@ -49,11 +50,20 @@ export default {
   data() {
     return {
       miniVariant: false,
-      menus: menu,
+      menus: [],
       scrollSettings: {
         maxScrollbarLength: 160
       }
     }
+  },
+  async created() {
+    let list = await getPermission()
+    this.menus = menu.map(r => {
+      r.items = r.items.filter(x => {
+        return !!list.find(p => p.EnCode == x.permission)
+      })
+      return r
+    })
   },
   computed: {
     notifyCount() {

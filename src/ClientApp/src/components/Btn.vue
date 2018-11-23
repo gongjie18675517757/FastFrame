@@ -1,6 +1,6 @@
 <template>
   <span>
-    <v-btn v-bind="$attrs" @click="handleClick" :disabled="evalDisabled">
+    <v-btn v-bind="$attrs" @click="handleClick" :disabled="evalDisabled" :title="evalTitle">
       <slot></slot>
     </v-btn>
   </span>
@@ -12,6 +12,7 @@ export default {
   props: {
     name: String,
     moduleName: String,
+    title: String,
     disabled: {
       type: Boolean,
       default: false
@@ -26,6 +27,10 @@ export default {
   computed: {
     evalDisabled() {
       return this.disabled || !this.permission
+    },
+    evalTitle() {
+      if (!this.permission) return `${this.title}(权限不足)`
+      else return this.title
     }
   },
   async created() {

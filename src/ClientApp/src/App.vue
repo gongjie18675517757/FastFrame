@@ -25,7 +25,10 @@ export default {
       return this.$store.state.dialogs
     }
   },
-  created() {},
+  async created() {
+    let request = await this.$http.get('/api/account/GetCurrent')
+    this.$store.commit('login', request)
+  },
   methods: {
     resufresh() {
       this.resufreshed = false

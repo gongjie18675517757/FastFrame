@@ -4,7 +4,7 @@
 
 <script>
 import Page from '@/components/Page/BasisListPage.vue'
-import { alert,showDialog } from '@/utils'
+import { alert, showDialog } from '@/utils'
 import CheckGroup from '@/components/Page/CheckGroup.vue'
 
 export default {
@@ -29,7 +29,7 @@ export default {
               title: '切换身份[管理员<>普通用户]',
               icon: 'perm_identity',
               disabled({ selection }) {
-                return selection.length == 0
+                return selection.length != 1
               },
               async action({ selection, rows }) {
                 let { Id } = selection[0]
@@ -46,7 +46,7 @@ export default {
               title: '切换状态[禁用<>启用]',
               icon: 'sync_disabled',
               disabled({ selection }) {
-                return selection.length == 0
+                return selection.length != 1
               },
               async action({ selection, rows }) {
                 let { Id } = selection[0]
@@ -63,7 +63,7 @@ export default {
               title: '分配角色',
               icon: 'error_outline',
               disabled({ selection }) {
-                return selection.length == 0
+                return selection.length != 1
               },
               async action({ selection }) {
                 let { Id } = selection[0]

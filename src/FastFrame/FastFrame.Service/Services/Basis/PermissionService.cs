@@ -41,12 +41,11 @@ namespace FastFrame.Service.Services.Basis
         {
             var beforeEntitys = await permissionRepository.Queryable.ToListAsync();
             var comparisonCollection = new ComparisonCollection<Permission, PermissionDto>(beforeEntitys, permissionDtos,
-                (a, b) => a.AreaName == b.AreaName && a.EnCode == b.EnCode && a.Parent_Id == b.Parent_Id);
+                (a, b) => a.EnCode == b.EnCode && a.Parent_Id == b.Parent_Id);
             foreach (var item in comparisonCollection.GetCollectionByAdded().ToList())
             {
                 var entity = item.MapTo<PermissionDto, Permission>();
                 entity = await permissionRepository.AddAsync(entity);
-                beforeEntitys.Add(entity);
                 item.Id = entity.Id;
                 foreach (var child in item.Permissions)
                     child.Parent_Id = entity.Id;
@@ -55,36 +54,29 @@ namespace FastFrame.Service.Services.Basis
             foreach (var (before, after) in comparisonCollection.GetCollectionByModify())
             {
                 after.Id = before.Id;
+                before.AreaName = after.AreaName;
                 foreach (var child in after.Permissions)
                     child.Parent_Id = before.Id;
             }
-
+            beforeEntitys = comparisonCollection.GetCollectionByDeleted().ToList();
             comparisonCollection = new ComparisonCollection<Permission, PermissionDto>(
                     beforeEntitys,
-                    permissionDtos.SelectMany(x => x.Permissions).Concat(permissionDtos),
-                    (a, b) => a.AreaName == b.AreaName && a.EnCode == b.EnCode && a.Parent_Id == b.Parent_Id);
+                    permissionDtos.SelectMany(x => x.Permissions),
+                    (a, b) => a.EnCode == b.EnCode && a.Parent_Id == b.Parent_Id);
 
             foreach (var item in comparisonCollection.GetCollectionByAdded())
             {
                 var entity = item.MapTo<PermissionDto, Permission>();
-                entity.Parent_Id = item.Parent.Id;
                 entity = await permissionRepository.AddAsync(entity);
             }
-
             foreach (var item in comparisonCollection.GetCollectionByDeleted())
             {
                 await permissionRepository.DeleteAsync(item);
             }
             foreach (var (before, after) in comparisonCollection.GetCollectionByModify())
             {
-                if (before.Id != after.Id || before.Parent_Id != after.Parent?.Id)
-                {
-                    var id = before.Id;
-                    after.MapSet(before);
-                    before.Parent_Id = after.Parent?.Id;
-                    before.Id = id;
-                    await permissionRepository.UpdateAsync(before);
-                }
+                before.AreaName = after.AreaName;
+                await permissionRepository.UpdateAsync(before);
             }
             await permissionRepository.CommmitAsync();
         }
@@ -96,25 +88,49 @@ namespace FastFrame.Service.Services.Basis
         {
             var currUser = currentUserProvider.GetCurrUser();
 
-            var user =await userRepository.GetAsync(currUser.Id);
+            var user = await userRepository.GetAsync(currUser.Id);
+            var iq = GetPermissions(user.Id);
 
-            var iq = from a in roleMemberRepository.Queryable.Where(x => x.User_Id == user.Id)
-                     join b in rolePermissionRepository.Queryable on a.Role_Id equals b.Role_Id
-                     join c in permissionRepository.Queryable on b.Permission_Id equals c.Id
-                     select c;
-            var iq2 = from a in iq.GroupBy(x => x.Parent_Id)
-                      join b in permissionRepository.Queryable on a.Key equals b.Id
-                      select b;
-
-            iq = iq.Concat(iq2);
-
-            if (currUser.IsAdmin)
+            if (user.IsAdmin)
             {
                 iq = permissionRepository.Queryable;
             }
-
             var list = await iq.MapTo<Permission, PermissionDto>().ToListAsync();
-            return list.GroupBy(x => x.Id).Select(x => x.FirstOrDefault());
+            return list;
+        }
+
+        private IQueryable<Permission> GetPermissions(string userId)
+        {
+            var iq = from a in roleMemberRepository.Queryable.Where(x => x.User_Id == userId)
+                     join b in rolePermissionRepository.Queryable on a.Role_Id equals b.Role_Id
+                     join c in permissionRepository.Queryable on b.Permission_Id equals c.Id
+                     where c.Parent_Id != null
+                     select c;
+
+            var iq2 = from a in iq.Select(x => x.Parent_Id).Distinct()
+                      join b in permissionRepository.Queryable on a equals b.Id
+                      select b;
+
+            iq = iq.Concat(iq2).Distinct();
+
+            return iq;
+        }
+
+        public async Task<bool> ExistPermission(string moduleName, params string[] methodNames)
+        {
+            var userId = currentUserProvider.GetCurrUser().Id;
+            var currUser = await userRepository.GetAsync(userId);
+            if (currUser.IsAdmin)
+                return true;
+
+            var permissionId = await permissionRepository.Queryable
+                .Join(permissionRepository.Queryable, x => x.Id, x => x.Parent_Id, (a, b) => new { a, b })
+                .Where(x => x.a.EnCode == moduleName && methodNames.Contains(x.b.EnCode))
+                .Select(x => x.b.Id)
+                .FirstOrDefaultAsync();
+
+            var iq = GetPermissions(userId).Where(x => x.Id == permissionId);
+            return await iq.AnyAsync();
         }
     }
 }

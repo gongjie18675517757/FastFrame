@@ -1,19 +1,18 @@
-﻿using FastFrame.Infrastructure.Interface;
-using FastFrame.Infrastructure;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
-using System;
-using System.Threading.Tasks;
-using System.Linq;
-using EasyCaching.Core;
+﻿using CSRedis;
 using FastFrame.Entity.Basis;
+using FastFrame.Infrastructure;
+using FastFrame.Infrastructure.Interface;
+using Microsoft.AspNetCore.Http;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace FastFrame.Application.Privder
 {
     public class CurrentUserProvider : ICurrentUserProvider
     {
         private readonly IHttpContextAccessor httpContextAccessor;
-        private readonly IEasyCachingProvider cachingProvider;
+        private readonly CSRedisClient cSRedisClient;
         private readonly IDescriptionProvider descriptionProvider;
         private readonly Database.DataBase dataBase;
         private string tokenName = "_code";
@@ -21,17 +20,17 @@ namespace FastFrame.Application.Privder
         private ICurrUser currUser;
 
         public CurrentUserProvider(IHttpContextAccessor httpContextAccessor,
-            IEasyCachingProvider cachingProvider, IDescriptionProvider descriptionProvider, Database.DataBase dataBase)
+            CSRedisClient cSRedisClient, IDescriptionProvider descriptionProvider, Database.DataBase dataBase)
         {
             this.httpContextAccessor = httpContextAccessor;
-            this.cachingProvider = cachingProvider;
+            this.cSRedisClient = cSRedisClient;
             this.descriptionProvider = descriptionProvider;
             this.dataBase = dataBase;
         }
         public string GetCurrOrganizeId()
         {
             string host;
-            if(httpContextAccessor.HttpContext.Request.Headers.TryGetValue("X-ORIGINAL-HOST", out var sv) && sv.Any())
+            if (httpContextAccessor.HttpContext.Request.Headers.TryGetValue("X-ORIGINAL-HOST", out var sv) && sv.Any())
             {
                 var arr = sv.ToArray();
                 host = arr.FirstOrDefault();
@@ -41,7 +40,7 @@ namespace FastFrame.Application.Privder
                 host = httpContextAccessor.HttpContext.Request.Host.Value;
                 //host = new Uri(host).Authority;
             }
-       
+
             return dataBase.Set<OrganizeHost>().Where(x => x.Host == host).FirstOrDefault()?.OrganizeId;
         }
 
@@ -52,9 +51,9 @@ namespace FastFrame.Application.Privder
                 var token = GetToken();
                 if (!token.IsNullOrWhiteSpace())
                 {
-                    var cacheValue = cachingProvider.Get<CurrUser>(token);
-                    if (cacheValue.HasValue)
-                        currUser = cacheValue.Value;
+                    var user = cSRedisClient.Get<CurrUser>(token);
+                    if (user != null)
+                        currUser = user;
                 }
             }
             return currUser;
@@ -62,7 +61,7 @@ namespace FastFrame.Application.Privder
 
         public async Task Login(ICurrUser currUser)
         {
-            await cachingProvider.SetAsync(currUser.ToKen, currUser, TimeSpan.FromDays(1));
+            await cSRedisClient.SetAsync(currUser.ToKen, currUser, 60*60*24);
             httpContextAccessor.HttpContext.Response.Headers.Add(tokenName, currUser.ToKen);
             httpContextAccessor.HttpContext.Response.Cookies.Delete(tokenName);
             httpContextAccessor.HttpContext.Response.Cookies.Append(tokenName, currUser.ToKen, new CookieOptions()
@@ -75,12 +74,12 @@ namespace FastFrame.Application.Privder
         public async Task LogOut()
         {
             var token = GetToken();
-            await cachingProvider.RemoveAsync(currUser.ToKen);
+            await cSRedisClient.DelAsync(currUser.ToKen);
         }
 
         public void Refresh()
         {
-            cachingProvider.Set(currUser.ToKen, currUser, TimeSpan.FromDays(1));
+            cSRedisClient.Set(currUser.ToKen, currUser, 60 * 60 * 24);
         }
 
         private string GetToken()

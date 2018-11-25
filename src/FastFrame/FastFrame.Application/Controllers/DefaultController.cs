@@ -2,8 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CSRedis;
+using FastFrame.Application.Hubs;
+using FastFrame.Infrastructure.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using FastFrame.Infrastructure;
 
 namespace FastFrame.Application.Controllers
 {
@@ -11,6 +16,14 @@ namespace FastFrame.Application.Controllers
     [ApiController]
     public class DefaultController : ControllerBase
     {
+        private readonly IMessageBus messageBus;
+        private readonly ICurrentUserProvider currentUserProvider;
+
+        public DefaultController(IMessageBus messageBus, ICurrentUserProvider currentUserProvider)
+        {
+            this.messageBus = messageBus;
+            this.currentUserProvider = currentUserProvider;
+        }
         // GET: api/Default
         [HttpGet]
         public IEnumerable<string> Get()
@@ -27,8 +40,16 @@ namespace FastFrame.Application.Controllers
 
         // POST: api/Default
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task Post([FromBody] Message value)
         {
+            var userid = currentUserProvider.GetCurrUser().Id;
+            await messageBus.PubLishAsync(new Message()
+            {
+                Category = MessageType.Notify,
+                Content = value.Content,
+                FromUserIds = new string[] { },
+                ToUserIds = new[] { userid }
+            });          
         }
 
         // PUT: api/Default/5
@@ -43,4 +64,7 @@ namespace FastFrame.Application.Controllers
         {
         }
     }
+
+
+
 }

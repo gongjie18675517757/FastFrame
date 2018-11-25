@@ -53,13 +53,14 @@ namespace FastFrame.Application.Controllers
             return await service.VerifyUnique(uniqueInput);
         }
 
+
         /// <summary>
         /// 生成模块结构
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
         [HttpGet("{name}")]
-        public async Task<ModuleStruct> ModuleStruts(string name)
+        public ModuleStruct ModuleStruts(string name)
         {
             var type = typeProvider.GetTypeByName(name);
             var fieldInfoStructs = new List<FieldInfoStrut>();
@@ -89,7 +90,7 @@ namespace FastFrame.Application.Controllers
                 {
                     Name = x.Name,
                     Type = nullableType.Name,
-                    Description = await descriptionProvider.GetPropertyDescription(x),
+                    Description = descriptionProvider.GetPropertyDescription(x),
                     Hide = hideAttribute?.HideMark,
                     Readonly = readOnlyAttribute?.ReadOnlyMark,
                     DefaultValue = instance.GetValue(x.Name),
@@ -107,12 +108,13 @@ namespace FastFrame.Application.Controllers
             return new ModuleStruct()
             {
                 Name = type.Name,
-                Description = await descriptionProvider.GetClassDescription(type),
+                Description = descriptionProvider.GetClassDescription(type),
                 FieldInfoStruts = fieldInfoStructs,
                 RelateFields = relatedFieldAttribute?.FieldNames,
                 TreeKey= treeAttribute?.Key
             };
         } 
+
 
         private IEnumerable<Rule> GetRules(PropertyInfo prop)
         {

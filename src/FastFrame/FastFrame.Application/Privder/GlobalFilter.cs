@@ -69,7 +69,7 @@ namespace FastFrame.Application.Privder
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public async Task OnExceptionAsync(ExceptionContext context)
+        public Task OnExceptionAsync(ExceptionContext context)
         {
             /*写入Log*/
             //context.HttpContext.Response.ContentType = "application/json;charset=utf-8";
@@ -77,11 +77,11 @@ namespace FastFrame.Application.Privder
             var ex = context.Exception;
             if (ex is UniqueException uniqueException)
             {
-                var typeDescription = await descriptionProvider.GetClassDescription(uniqueException.Type);
+                var typeDescription = descriptionProvider.GetClassDescription(uniqueException.Type);
                 var propDescriptions = new string[uniqueException.PropNames.Length];
                 for (int i = 0; i < uniqueException.PropNames.Length; i++)
                 {
-                    propDescriptions[i] = await descriptionProvider.GetPropertyDescription(uniqueException.Type, uniqueException.PropNames[i]);
+                    propDescriptions[i] = descriptionProvider.GetPropertyDescription(uniqueException.Type, uniqueException.PropNames[i]);
 
                 }
                 context.Result = new ObjectResult(new { Message = $"{typeDescription}:{string.Join("+", propDescriptions)} 重复!" });
@@ -93,6 +93,8 @@ namespace FastFrame.Application.Privder
                 context.Result = new ObjectResult(context.Exception);
 #endif
             }
+
+            return Task.CompletedTask;
         }
     }
 }

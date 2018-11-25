@@ -50,6 +50,7 @@ export default {
   data() {
     return {
       miniVariant: false,
+      items: menu,
       menus: [],
       scrollSettings: {
         maxScrollbarLength: 160
@@ -57,13 +58,11 @@ export default {
     }
   },
   async created() {
-    let list = await getPermission()
-    this.menus = menu.map(r => {
-      r.items = r.items.filter(x => {
-        return !!list.find(p => p.EnCode == x.permission)
-      })
-      return r
-    })
+    this.$eventBus.$on('init', this.initMenu)
+    await this.initMenu()
+  },
+  destroyed() {
+    this.$eventBus.$off('init', this.initMenu)
   },
   computed: {
     notifyCount() {
@@ -82,6 +81,17 @@ export default {
     }
   },
   methods: {
+    async initMenu() {
+      let list = await getPermission()
+      this.menus = this.items.map(r => {
+        return {
+          ...r,
+          items: r.items.filter(x => {
+            return !!list.find(p => p.EnCode == x.permission)
+          })
+        }
+      }) 
+    },
     genChildTarget(item, subItem) {
       if (subItem.href) return
       if (subItem.component) {

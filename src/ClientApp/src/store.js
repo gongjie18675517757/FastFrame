@@ -8,6 +8,7 @@ export default new Vuex.Store({
     currUser: {},
     leftDrawer: true,
     rightDrawer: false,
+    dialogMode:true,
     notifys: [{
         title: '您的帐户入帐100元',
         color: 'light-green',

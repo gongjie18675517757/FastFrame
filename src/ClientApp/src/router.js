@@ -23,8 +23,8 @@ function loadAreas() {
           path: `/${page.name.toLowerCase()}/${item.name.toLowerCase()}`,
           name: `${page.name}_${item.name}`.toLowerCase(),
           meta: {
-            title: `${page.title}列表`,
-            keepAlive: true,
+            title: `${item.name == 'List'?'':'新增'}${page.title}${item.name == 'List'?'列表':''}`,
+            keepAlive: item.name == 'List',
             moduleName: page.name,
             pageName: item.name
           },
@@ -70,7 +70,7 @@ let router = new Router({
           },
           component: () =>
             import(`./views/About.vue`)
-        }, 
+        },
         {
           path: '/userCenter',
           name: 'userCenter',
@@ -128,7 +128,7 @@ const existLogin = () => {
         return reject()
       else
         return resolve();
-    }, 100);
+    }, 500);
   })
 }
 
@@ -136,18 +136,6 @@ router.beforeEach(async (to, from, next) => {
   window.document.title = to.meta.title ? `${to.meta.title}-${siteName}` : siteName;
   if (to.meta.allowAnonymous) {
     next();
-    return
-  }
-
-  try {
-    await existLogin()
-  } catch (error) {
-    next({
-      path: '/login',
-      query: {
-        redirect: to.fullPath
-      }
-    })
     return
   }
 
@@ -167,8 +155,24 @@ router.beforeEach(async (to, from, next) => {
       }
     })
   }
+
+  try {
+    await existLogin()
+  } catch (error) {
+    next({
+      path: '/login',
+      query: {
+        redirect: to.fullPath
+      }
+    })
+    return
+  }
 })
 
-
+router.afterEach((to, from) => {
+  if (!to.meta.allowAnonymous) {
+    store.state.lastUrl = to.fullPath
+  }
+})
 
 export default router

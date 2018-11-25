@@ -17,21 +17,21 @@ namespace FastFrame.Application.Privder
             docPath = AppDomain.CurrentDomain.BaseDirectory;
             this.hostingEnvironment = hostingEnvironment;
         }
-        public ValueTask<string> GetClassDescription(Type type)
+        public string GetClassDescription(Type type)
         {
-            return new ValueTask<string>(T4Help.GetClassSummary(type, docPath));
+            return T4Help.GetClassSummary(type, docPath);
         }
 
-        public ValueTask<string> GetPropertyDescription(PropertyInfo property)
+        public string GetPropertyDescription(PropertyInfo property)
         {
-            return new ValueTask<string>(T4Help.GetPropertySummary(property, docPath));
+            return T4Help.GetPropertySummary(property, docPath);
         }
 
-        public ValueTask<string> GetPropertyDescription(Type type, string propName)
+        public string GetPropertyDescription(Type type, string propName)
         {          
             var property = type.GetProperty(propName);
             if (property == null)
-                return new ValueTask<string>(propName);
+                return propName;
             else
                 return GetPropertyDescription(property);
         }

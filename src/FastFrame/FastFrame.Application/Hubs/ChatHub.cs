@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using FastFrame.Infrastructure;
+using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
+using static CSRedis.CSRedisClient;
 
 namespace FastFrame.Application.Hubs
 {
@@ -17,7 +16,7 @@ namespace FastFrame.Application.Hubs
         {
             var connectionId = Context.ConnectionId;
             var token = Context.GetHttpContext().Request.Cookies["token"];
-            await Clients.Caller.SendAsync("ReceiveMessage", "system", "welcome to SignalR");
+            await Clients.Caller.SendAsync("ReceiveMessage", "system", "welcome to ChatHub");
             await Clients.Others.SendAsync("ReceiveMessage", connectionId, "connectioned");
             await base.OnConnectedAsync();
         }

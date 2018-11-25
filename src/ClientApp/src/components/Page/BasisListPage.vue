@@ -1,5 +1,5 @@
 <template>
-  <v-container grid-list-xl fluid fill-height>
+  <v-container grid-list-xl fluid app>
     <v-layout row wrap="">
       <v-flex xs12>
         <v-card>
@@ -204,9 +204,8 @@ export default {
       currentRow: null,
       pager: {},
       loading: false,
-      total: 0,
-
-      dialogMode: true,
+      total: 0, 
+      
       showMamageField: false,
       cols: [],
       items: [],
@@ -266,6 +265,14 @@ export default {
       return {
         selection,
         rows: this.items
+      }
+    },
+    dialogMode: {
+      get() {
+        return this.$store.state.dialogMode
+      },
+      set(val) {
+        this.$store.state.dialogMode = val
       }
     }
   },

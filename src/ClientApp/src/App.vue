@@ -8,6 +8,7 @@
 
 <script>
 import Alert from '@/components/Alert.vue'
+
 export default {
   components: { Alert },
   provide() {
@@ -25,9 +26,7 @@ export default {
       return this.$store.state.dialogs
     }
   },
-  async created() {
-    let request = await this.$http.get('/api/account/GetCurrent')
-    this.$store.commit('login', request)
+  async created() { 
   },
   methods: {
     resufresh() {

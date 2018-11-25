@@ -3,7 +3,11 @@
     <Menus/>
     <Toolbar :title="title"/>
     <v-content>
-      <router-view/>
+      <keep-alive>
+        <!--使用keep-alive会将页面缓存-->
+        <router-view v-if="$route.meta.keepAlive"></router-view>
+      </keep-alive>
+      <router-view v-if="!$route.meta.keepAlive"></router-view>
     </v-content>
     <Setting/>
     <v-footer :fixed="fixed" app inset>
@@ -16,6 +20,8 @@
 import Setting from '@/components/Setting.vue'
 import Menus from '@/components/Menus.vue'
 import Toolbar from '@/components/Toolbar.vue'
+import { init } from '@/permission.js'
+ 
 export default {
   components: {
     Setting,
@@ -31,7 +37,9 @@ export default {
   async created() {
     try {
       let request = await this.$http.get('/api/account/GetCurrent')
-      this.$store.commit('login', request)
+      this.$store.commit('login', request) 
+      await init() 
+      this.$eventBus.$emit('init')
     } catch (error) {
       if (this.$route.fullpath != '/login') {
         this.$router.push({
@@ -52,6 +60,9 @@ export default {
 }
 body {
   overflow: hidden;
+}
+.container {
+  padding: 5px;
 }
 </style>
 

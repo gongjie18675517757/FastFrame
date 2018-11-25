@@ -1,4 +1,5 @@
 import * as signalR from "@aspnet/signalr";
+import {alert} from "@/utils"
 import {
   sleep
 } from '@/utils.js'
@@ -6,9 +7,9 @@ import {
   eventBus
 } from '@/utils'
 const connection = new signalR.HubConnectionBuilder()
-  .withUrl("/hub/chat")
+  .withUrl("/hub/message")
   .build()
-
+ 
 // connection.start().catch(function (err) {
 //   return console.error(err.toString());
 // });
@@ -50,6 +51,10 @@ async function onConnectioned() {
 
 connection.on("ReceiveMessage", () => {
   eventBus.$emit('receive', )
+})
+
+connection.on("Notify", (msg) => {
+  alert.success(msg.content)  
 })
 
 

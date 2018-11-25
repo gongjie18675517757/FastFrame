@@ -1,7 +1,4 @@
-﻿using EasyCaching.Core.Internal;
-using EasyCaching.Redis;
-using EasyCaching.Serialization.Json;
-using FastFrame.Application.Hubs;
+﻿using FastFrame.Application.Hubs;
 using FastFrame.Application.Privder;
 using FastFrame.Infrastructure.Interface;
 using FastFrame.Repository;
@@ -21,6 +18,10 @@ using Swashbuckle.Swagger.Model;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using static CSRedis.CSRedisClient;
+using FastFrame.Infrastructure;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.SignalR;
 
 namespace FastFrame.Application
 {
@@ -80,6 +81,7 @@ namespace FastFrame.Application
                 .AddScoped<ICurrentUserProvider, CurrentUserProvider>()
                 .AddScoped<IResourceProvider, ResourceProvider>()
                 .AddScoped<IDescriptionProvider, DescriptionProvider>()
+                .AddScoped<IMessageBus, MessageBusProvider>()
                 .AddServices()
                 .AddRepository();
 
@@ -100,17 +102,47 @@ namespace FastFrame.Application
                 //options.IncludeXmlComments(xmlPath);
             });
 
-            services.AddDefaultRedisCache(option =>
+            var client = new CSRedis.CSRedisClient("127.0.0.1");
+            RedisHelper.Initialization(client);
+            string CacheUserMapKey = "CacheUserMapKey";
+            client.Del(CacheUserMapKey);
+            services.AddSingleton(client);
+
+            var serviceProvider = services.BuildServiceProvider();
+
+            client.Subscribe(("message.publish", async e =>
             {
-                option.DBConfig.Endpoints.Add(new ServerEndPoint("127.0.0.1", 6379));
-                option.DBConfig.Password = "";
-            });
-            services.AddDefaultJsonSerializer();
-            return services.BuildServiceProvider();
+                try
+                {
+                    Console.WriteLine(e.Body);
+                    var message = e.Body.ToObject<Message>();
+                    using (var serviceScope = serviceProvider.CreateScope())
+                    {
+                        var hubContext = serviceScope.ServiceProvider.GetService<IHubContext<MessageHub>>();
+                        foreach (var toId in message.ToUserIds)
+                        {
+                            var clientIds = await client.HGetAsync<List<string>>(CacheUserMapKey, toId);
+                            if (clientIds == null)
+                                continue;
+
+                            foreach (var clientId in clientIds)
+                            {
+                                await hubContext.Clients.Client(clientId).SendAsync(message.Category.ToString(), message);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    //throw;
+                }
+            }
+            ));
+            return serviceProvider;
         }
 
-
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime applicationLifetime)
         {
             if (env.IsDevelopment())
             {
@@ -119,7 +151,8 @@ namespace FastFrame.Application
             app.UseSignalR(routes =>
             {
                 routes.MapHub<ChatHub>("/hub/chat");
-            }); 
+                routes.MapHub<MessageHub>("/hub/message");
+            });
             app.Use(async (context, next) =>
             {
                 var stopwatch = new Stopwatch();
@@ -134,7 +167,7 @@ namespace FastFrame.Application
                     context.Response.Redirect("/index.html");
                 await next.Invoke();
             });
-            app.UseStaticFiles(); 
+            app.UseStaticFiles();
             app.UseMvc();
             //app.UseRouter(r =>
             //{
@@ -142,6 +175,23 @@ namespace FastFrame.Application
             //});
             app.UseSwagger();
             app.UseSwaggerUi();
+
+            applicationLifetime.ApplicationStarted.Register(() =>
+            {
+                Console.WriteLine("ApplicationStarted");
+            });
+            applicationLifetime.ApplicationStopped.Register(() =>
+            {
+                Console.WriteLine("ApplicationStopped");
+            });
+            applicationLifetime.ApplicationStopping.Register(() =>
+            {
+                Console.WriteLine("ApplicationStopping");
+            });
         }
     }
+
+
+
+
 }

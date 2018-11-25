@@ -14,14 +14,14 @@ namespace FastFrame.Infrastructure.Interface
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        ValueTask<string> GetClassDescription(Type type);
+        string GetClassDescription(Type type);
 
         /// <summary>
         /// 获取属性说明
         /// </summary>
         /// <param name="property"></param>
         /// <returns></returns>
-        ValueTask<string> GetPropertyDescription(PropertyInfo property);
+        string GetPropertyDescription(PropertyInfo property);
 
         /// <summary>
         /// 获取属性说明
@@ -29,6 +29,6 @@ namespace FastFrame.Infrastructure.Interface
         /// <param name="type"></param>
         /// <param name="propName"></param>
         /// <returns></returns>
-        ValueTask<string> GetPropertyDescription(Type type,string propName);
+        string GetPropertyDescription(Type type,string propName);
     }
 }

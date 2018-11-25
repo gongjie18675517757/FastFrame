@@ -37,4 +37,6 @@ namespace FastFrame.Infrastructure.Interface
 
         void Refresh();
     }
+
+    
 }

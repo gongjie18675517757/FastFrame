@@ -5,6 +5,11 @@ import {
 
 let permission = []
 
+export async function init() {
+  permission=[]
+  await initPermission() 
+}
+
 async function initPermission() {
   let localLock = await lock('Permissions')
   try {

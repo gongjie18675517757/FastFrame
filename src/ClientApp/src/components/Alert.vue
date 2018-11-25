@@ -13,7 +13,7 @@
       absolute
     >
       {{ item.msg }}
-      <v-btn color="pink" flat @click="alerts.splice(index,1)">
+      <v-btn  flat @click="alerts.splice(index,1)">
         关闭
       </v-btn>
     </v-snackbar>

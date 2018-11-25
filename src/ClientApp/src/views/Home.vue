@@ -4,10 +4,10 @@
     <Toolbar :title="title"/>
     <v-content>
       <keep-alive>
-        <!--使用keep-alive会将页面缓存-->
-        <router-view v-if="$route.meta.keepAlive"></router-view>
+        <router-view v-if="$route.meta.keepAlive && resufreshed"></router-view>
       </keep-alive>
-      <router-view v-if="!$route.meta.keepAlive"></router-view>
+      <router-view v-if="!$route.meta.keepAlive && resufreshed"></router-view>
+      <!-- <router-view></router-view> -->
     </v-content>
     <Setting/>
     <v-footer :fixed="fixed" app inset>
@@ -21,24 +21,26 @@ import Setting from '@/components/Setting.vue'
 import Menus from '@/components/Menus.vue'
 import Toolbar from '@/components/Toolbar.vue'
 import { init } from '@/permission.js'
- 
+
 export default {
   components: {
     Setting,
     Menus,
     Toolbar
   },
+  
   data() {
     return {
       fixed: false,
-      title: 'XXX管理后台'
+      title: 'XXX管理后台',
+      resufreshed: true
     }
   },
   async created() {
     try {
       let request = await this.$http.get('/api/account/GetCurrent')
-      this.$store.commit('login', request) 
-      await init() 
+      this.$store.commit('login', request)
+      await init()
       this.$eventBus.$emit('init')
     } catch (error) {
       if (this.$route.fullpath != '/login') {
@@ -50,6 +52,9 @@ export default {
         })
       }
     }
+  },
+  methods: {
+     
   }
 }
 </script>

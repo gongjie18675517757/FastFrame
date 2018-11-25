@@ -26,8 +26,7 @@ export default {
       return this.$store.state.dialogs
     }
   },
-  async created() { 
-  },
+  async created() {},
   methods: {
     resufresh() {
       this.resufreshed = false

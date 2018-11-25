@@ -90,8 +90,8 @@ export async function lock(lockObj = {}) {
     }
     lockSet.add(lockObj)
     return {
-        freed() { 
-            lockSet.delete(lockObj) 
+        freed() {
+            lockSet.delete(lockObj)
         }
     }
 }
@@ -232,7 +232,8 @@ export function showDialog(component, pars = {}) {
                         props: {
                             // persistent: true,
                             scrollable: true,
-                            value: this.visible
+                            value: this.visible,
+                            ...pars,
                         },
                         on: {
                             input: val => {

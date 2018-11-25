@@ -26,7 +26,7 @@ export async function start() {
     onConnectioned()
   } catch (error) {
     console.log('连接失败');
-    await onError(error)
+    onError(error)
   }
 }
 /**
@@ -43,10 +43,10 @@ const onError = async (err) => {
 }
 
 async function onConnectioned() {
-  while (true) {
-    await connection.invoke('SendMessage', 'xx', 'xxxxxx')
-    await sleep(10000)
-  }
+  // while (true) {
+  //   await connection.invoke('SendMessage', 'xx', 'xxxxxx')
+  //   await sleep(10000)
+  // }
 }
 
 connection.on("ReceiveMessage", () => {

@@ -500,6 +500,16 @@
             图片库 
              </summary>
         </member>
+        <member name="P:FastFrame.Dto.CMS.MeidiaDto.Parent_Id">
+             <summary>
+            上级 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.MeidiaDto.Parent">
+             <summary>
+            上级 
+             </summary>
+        </member>
         <member name="P:FastFrame.Dto.CMS.MeidiaDto.Href">
              <summary>
             链接 
@@ -508,6 +518,21 @@
         <member name="P:FastFrame.Dto.CMS.MeidiaDto.Name">
              <summary>
             名称 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.MeidiaDto.Resource_Id">
+             <summary>
+            资源 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.MeidiaDto.Resource">
+             <summary>
+            资源 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.MeidiaDto.IsFolder">
+             <summary>
+            是否文件夹 
              </summary>
         </member>
         <member name="T:FastFrame.Dto.IDto">

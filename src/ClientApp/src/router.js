@@ -46,78 +46,81 @@ export function getComponent(name) {
   return childs.find(x => x.name == name).component
 }
 
+let routes = [{
+    path: '/',
+    name: 'home',
+    component: Home,
+    children: [{
+        path: '/',
+        name: 'index',
+        meta: {
+          title: '首页',
+          keepAlive: true
+        },
+        component: () =>
+          import(`./views/Index/Index.vue`)
+      },
+      {
+        path: '/about',
+        name: 'about',
+        meta: {
+          title: '关于页',
+          keepAlive: false
+        },
+        component: () =>
+          import(`./views/About.vue`)
+      },
+      {
+        path: '/userCenter',
+        name: 'userCenter',
+        meta: {
+          title: '个人中心',
+          keepAlive: false
+        },
+        component: () =>
+          import(`./views/UserCenter.vue`)
+      },
+      ...childs
+    ]
+  },
+  {
+    path: '/login',
+    name: 'login',
+    meta: {
+      title: '登陆页',
+      keepAlive: false,
+      allowAnonymous: true,
+    },
+    component: () =>
+      import(`./views/Login.vue`)
+  },
+  {
+    path: '/regist',
+    name: 'regist',
+    meta: {
+      title: '注册页',
+      keepAlive: false,
+      allowAnonymous: true,
+    },
+    component: () =>
+      import(`./views/Regist.vue`)
+  },
+  {
+    path: '/405',
+    name: '405',
+    meta: {
+      title: '权限不足',
+      keepAlive: false,
+    },
+    component: () =>
+      import(`./views/405.vue`)
+  },
+]
+
 let router = new Router({
-  routes: [{
-      path: '/',
-      name: 'home',
-      component: Home,
-      children: [{
-          path: '/',
-          name: 'index',
-          meta: {
-            title: '首页',
-            keepAlive: true
-          },
-          component: () =>
-            import(`./views/Index/Index.vue`)
-        },
-        {
-          path: '/about',
-          name: 'about',
-          meta: {
-            title: '关于页',
-            keepAlive: false
-          },
-          component: () =>
-            import(`./views/About.vue`)
-        },
-        {
-          path: '/userCenter',
-          name: 'userCenter',
-          meta: {
-            title: '个人中心',
-            keepAlive: false
-          },
-          component: () =>
-            import(`./views/UserCenter.vue`)
-        },
-        ...childs
-      ]
-    },
-    {
-      path: '/login',
-      name: 'login',
-      meta: {
-        title: '登陆页',
-        keepAlive: false,
-        allowAnonymous: true,
-      },
-      component: () =>
-        import(`./views/Login.vue`)
-    },
-    {
-      path: '/regist',
-      name: 'regist',
-      meta: {
-        title: '注册页',
-        keepAlive: false,
-        allowAnonymous: true,
-      },
-      component: () =>
-        import(`./views/Regist.vue`)
-    },
-    {
-      path: '/405',
-      name: '405',
-      meta: {
-        title: '权限不足',
-        keepAlive: false,
-      },
-      component: () =>
-        import(`./views/405.vue`)
-    },
-  ]
+  routes
 })
+console.log(routes);
 
 
 const siteName = 'XX管理系统'

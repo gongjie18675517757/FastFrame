@@ -1,4 +1,5 @@
-﻿using FastFrame.Infrastructure.Attrs;
+﻿using FastFrame.Entity.Basis;
+using FastFrame.Infrastructure.Attrs;
 using System.ComponentModel.DataAnnotations;
 
 namespace FastFrame.Entity.CMS
@@ -8,8 +9,14 @@ namespace FastFrame.Entity.CMS
     /// </summary>
     [Export]
     [RelatedField(nameof(Name))]
-    public class Meidia:BaseEntity
+    public class Meidia : BaseEntity
     {
+        /// <summary>
+        /// 上级
+        /// </summary>
+        [RelatedTo(typeof(Meidia))]
+        public string Parent_Id { get; set; }
+
         /// <summary>
         /// 链接
         /// </summary>
@@ -20,6 +27,17 @@ namespace FastFrame.Entity.CMS
         /// 名称
         /// </summary>
         [StringLength(50)]
-        public string Name { get; set; } 
+        public string Name { get; set; }
+
+        /// <summary>
+        /// 资源
+        /// </summary>
+        [RelatedTo(typeof(Resource))]
+        public string Resource_Id { get; set; }
+
+        /// <summary>
+        /// 是否文件夹
+        /// </summary>
+        public bool IsFolder { get; set; }
     }
 }

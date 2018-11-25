@@ -25,7 +25,7 @@ namespace FastFrame.Application.Controllers.Basis
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        [Permission(AnOtherEnCodes = new string[] { nameof(SetRoleMember) })]
+        [Permission(new string[] { nameof(SetRoleMember) })]
         public async Task<IEnumerable<UserDto>> GetRoleMember(string id)
         {
             return await service.GetRoleMember(id);
@@ -45,7 +45,7 @@ namespace FastFrame.Application.Controllers.Basis
         /// 获取角色权限
         /// </summary> 
         [HttpGet("{id}")]
-        [Permission(AnOtherEnCodes = new string[] { nameof(SetRolePermission) })]
+        [Permission(new string[] { nameof(SetRolePermission) })]
         public async Task<IEnumerable<PermissionDto>> GetRolePermission(string id)
         {
             return await service.GetRolePermission(id);

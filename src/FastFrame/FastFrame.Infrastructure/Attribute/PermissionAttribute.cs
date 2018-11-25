@@ -15,9 +15,10 @@ namespace FastFrame.Infrastructure.Attrs
             Name = name;
             IsPrimary = true;
         }
-        public PermissionAttribute()
+        public PermissionAttribute(string[] anOtherEnCodes)
         {
             IsPrimary = false;
+            AnOtherEnCodes = anOtherEnCodes;
         }
 
         public bool IsPrimary { get; }

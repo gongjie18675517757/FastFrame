@@ -447,6 +447,11 @@
             图片库
             </summary>
         </member>
+        <member name="P:FastFrame.Entity.CMS.Meidia.Parent_Id">
+            <summary>
+            上级
+            </summary>
+        </member>
         <member name="P:FastFrame.Entity.CMS.Meidia.Href">
             <summary>
             链接
@@ -455,6 +460,16 @@
         <member name="P:FastFrame.Entity.CMS.Meidia.Name">
             <summary>
             名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.CMS.Meidia.Resource_Id">
+            <summary>
+            资源
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.CMS.Meidia.IsFolder">
+            <summary>
+            是否文件夹
             </summary>
         </member>
         <member name="T:FastFrame.Entity.Enums.GenderMark">

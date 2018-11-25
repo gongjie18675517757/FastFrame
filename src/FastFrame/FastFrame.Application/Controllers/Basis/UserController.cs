@@ -47,7 +47,7 @@ namespace FastFrame.Application.Controllers.Basis
         /// 获取用户角色
         /// </summary> 
         [HttpGet("{id}")]
-        [Permission(AnOtherEnCodes = new string[] { nameof(SetUserRoles) })]
+        [Permission(new string[] { nameof(SetUserRoles) })]
         public async Task<IEnumerable<RoleDto>> GetUserRoles(string id)
         {
             return await service.GetUserRoles(id);

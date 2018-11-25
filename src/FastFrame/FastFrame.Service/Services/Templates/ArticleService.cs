@@ -5,13 +5,12 @@ namespace FastFrame.Service.Services.CMS
 	using FastFrame.Dto.CMS; 
 	using FastFrame.Infrastructure.Interface; 
 	using FastFrame.Infrastructure; 
-	using System.Linq;
-    using FastFrame.Repository.Basis;
-
-    /// <summary>
-    ///文章 服务类 
-    /// </summary>
-    public partial class ArticleService:BaseService<Article, ArticleDto>
+	using FastFrame.Repository.Basis; 
+	using System.Linq; 
+	/// <summary>
+	///文章 服务类 
+	/// </summary>
+	public partial class ArticleService:BaseService<Article, ArticleDto>
 	{
 		#region 字段
 		private readonly ArticleCategoryRepository articleCategoryRepository;

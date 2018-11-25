@@ -68,7 +68,8 @@ export default {
     Description: String,
     Name: String,
     Readonly: String,
-    filter: [Array, Function]
+    filter: [Array, Function],
+    flex: [Object, String]
   },
   data() {
     return {
@@ -77,6 +78,14 @@ export default {
   },
   computed: {
     formItemFlex() {
+      if (typeof this.flex == 'string') {
+        let obj = {}
+        obj[this.flex] = ''
+        return obj
+      }
+      if (typeof this.flex == 'object') {
+        return this.flex
+      }
       return {
         xs12: '',
         sm4: ''

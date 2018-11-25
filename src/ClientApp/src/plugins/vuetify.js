@@ -29,7 +29,8 @@ import {
   VSwitch,
   VAutocomplete,
   VDialog,
-  VTreeview
+  VTreeview,
+  VResponsive
 } from 'vuetify'
 import 'vuetify/src/stylus/app.styl'
 import zhHans from 'vuetify/es5/locale/zh-Hans'
@@ -65,7 +66,8 @@ Vue.use(Vuetify, {
     VSwitch,
     VAutocomplete,
     VDialog,
-    VTreeview
+    VTreeview,
+    VResponsive
   },
   // theme: {
   //   primary: '#ee44aa',
@@ -76,8 +78,8 @@ Vue.use(Vuetify, {
   //   success: '#4CAF50',
   //   warning: '#FFC107'
   // }, 
-  
-  
+
+
   customProperties: true,
   iconfont: 'md',
   lang: {

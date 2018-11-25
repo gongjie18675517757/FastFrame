@@ -65,8 +65,12 @@ export async function getColumns(name = '') {
       } = await getModuleStrut(col.Relate)
       col.Relate = fields
     }
-    if (RelateFields.length > 0 && RelateFields[0] == col.Name) {
-      col.IsLink = true
+    try {
+      if (RelateFields.length > 0 && RelateFields[0] == col.Name) {
+        col.IsLink = true
+      }
+    } catch (error) {
+      console.log(error)
     }
   }
   return columns

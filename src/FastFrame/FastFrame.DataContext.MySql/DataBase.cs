@@ -17,8 +17,7 @@ namespace FastFrame.Database
         public DataBase(DbContextOptions options) : base(options)
         {
 
-        }
-
+        } 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             /*循环添加DbSet*/
@@ -37,6 +36,6 @@ namespace FastFrame.Database
             }
 
             base.OnModelCreating(modelBuilder);
-        } 
+        }
     }
 }

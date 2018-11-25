@@ -54,6 +54,7 @@ namespace FastFrame.CodeGenerate.Build
                     $"FastFrame.Dto.{areaName}",
                     $"FastFrame.Infrastructure.Interface",
                     "FastFrame.Infrastructure",
+                    "FastFrame.Repository.Basis",
                     "System.Linq"
                  })
                  .Distinct();

@@ -5,7 +5,7 @@ namespace FastFrame.Dto.Basis
 	using global::System.ComponentModel.DataAnnotations; 
 	using FastFrame.Entity.Enums; 
 	/// <summary>
-	///登陆用户 
+	///用户 
 	/// </summary>
 	[Unique("Account")]
 	[RelatedField("Name","Account")]

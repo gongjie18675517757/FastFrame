@@ -367,6 +367,96 @@
             <param name="password"></param>
             <returns></returns>
         </member>
+        <member name="T:FastFrame.Entity.CMS.Article">
+            <summary>
+            文章
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.CMS.Article.Title">
+            <summary>
+            标题
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.CMS.Article.ArticleCategory_Id">
+            <summary>
+            文章类别
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.CMS.Article.Url">
+            <summary>
+            URL标识
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.CMS.Article.Summarize">
+            <summary>
+            概述
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.CMS.Article.Thumbnail_Id">
+            <summary>
+            缩略图
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.CMS.Article.Content">
+            <summary>
+            文章内容
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.CMS.Article.IsRelease">
+            <summary>
+            发布?
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.CMS.Article.LookCount">
+            <summary>
+            阅读次数
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.CMS.Article.Description">
+            <summary>
+            说明
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.CMS.ArticleCategory">
+            <summary>
+            文章类别
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.CMS.ArticleCategory.Parent_Id">
+            <summary>
+            上级标题
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.CMS.ArticleCategory.Name">
+            <summary>
+            标题
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.CMS.ArticleCategory.Url">
+            <summary>
+            Url标识
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.CMS.ArticleCategory.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.CMS.Meidia">
+            <summary>
+            图片库
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.CMS.Meidia.Href">
+            <summary>
+            链接
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.CMS.Meidia.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
         <member name="T:FastFrame.Entity.Enums.GenderMark">
             <summary>
             性别

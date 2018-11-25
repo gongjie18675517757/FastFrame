@@ -7,7 +7,7 @@ namespace FastFrame.Service.Services.Basis
 	using FastFrame.Infrastructure; 
 	using System.Linq; 
 	/// <summary>
-	///登陆用户 服务类 
+	///用户 服务类 
 	/// </summary>
 	public partial class UserService:BaseService<User, UserDto>
 	{

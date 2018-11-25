@@ -1,22 +1,22 @@
-namespace FastFrame.Application.Controllers.Basis
+namespace FastFrame.Application.Controllers.CMS
 {
-	using FastFrame.Dto.Basis; 
-	using FastFrame.Entity.Basis; 
-	using FastFrame.Service.Services.Basis; 
+	using FastFrame.Dto.CMS; 
+	using FastFrame.Entity.CMS; 
+	using FastFrame.Service.Services.CMS; 
 	using FastFrame.Infrastructure.Attrs; 
 	using FastFrame.Infrastructure.Interface; 
 	/// <summary>
-	///用户 
+	///图片库 
 	/// </summary>
-	[Permission(nameof(User),"用户")]
-	public partial class UserController:BaseController<User, UserDto>
+	[Permission(nameof(Meidia),"图片库")]
+	public partial class MeidiaController:BaseController<Meidia, MeidiaDto>
 	{
 		#region 字段
-		private readonly UserService service;
+		private readonly MeidiaService service;
 		private readonly IScopeServiceLoader serviceLoader;
 		#endregion
 		#region 构造函数
-		public UserController(UserService service,IScopeServiceLoader serviceLoader)
+		public MeidiaController(MeidiaService service,IScopeServiceLoader serviceLoader)
 			:base(service,serviceLoader)
 		{
 			this.service = service;

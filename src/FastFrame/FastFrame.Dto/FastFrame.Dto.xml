@@ -117,7 +117,7 @@
         </member>
         <member name="T:FastFrame.Dto.Basis.EmployeeDto">
              <summary>
-            员工表 
+            员工 
              </summary>
         </member>
         <member name="P:FastFrame.Dto.Basis.EmployeeDto.EnCode">
@@ -342,7 +342,7 @@
         </member>
         <member name="T:FastFrame.Dto.Basis.UserDto">
              <summary>
-            登陆用户 
+            用户 
              </summary>
         </member>
         <member name="P:FastFrame.Dto.Basis.UserDto.Account">
@@ -404,6 +404,111 @@
             <summary>
             密码
             </summary>
+        </member>
+        <member name="T:FastFrame.Dto.CMS.ArticleCategoryDto">
+             <summary>
+            文章类别 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.ArticleCategoryDto.Parent_Id">
+             <summary>
+            上级标题 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.ArticleCategoryDto.Parent">
+             <summary>
+            上级标题 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.ArticleCategoryDto.Name">
+             <summary>
+            标题 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.ArticleCategoryDto.Url">
+             <summary>
+            Url标识 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.ArticleCategoryDto.Description">
+             <summary>
+            描述 
+             </summary>
+        </member>
+        <member name="T:FastFrame.Dto.CMS.ArticleDto">
+             <summary>
+            文章 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.ArticleDto.Title">
+             <summary>
+            标题 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.ArticleDto.ArticleCategory_Id">
+             <summary>
+            文章类别 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.ArticleDto.ArticleCategory">
+             <summary>
+            文章类别 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.ArticleDto.Url">
+             <summary>
+            URL标识 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.ArticleDto.Summarize">
+             <summary>
+            概述 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.ArticleDto.Thumbnail_Id">
+             <summary>
+            缩略图 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.ArticleDto.Thumbnail">
+             <summary>
+            缩略图 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.ArticleDto.Content">
+             <summary>
+            文章内容 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.ArticleDto.IsRelease">
+             <summary>
+            发布? 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.ArticleDto.LookCount">
+             <summary>
+            阅读次数 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.ArticleDto.Description">
+             <summary>
+            说明 
+             </summary>
+        </member>
+        <member name="T:FastFrame.Dto.CMS.MeidiaDto">
+             <summary>
+            图片库 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.MeidiaDto.Href">
+             <summary>
+            链接 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.MeidiaDto.Name">
+             <summary>
+            名称 
+             </summary>
         </member>
         <member name="T:FastFrame.Dto.IDto">
             <summary>

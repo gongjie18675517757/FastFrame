@@ -110,35 +110,35 @@ namespace FastFrame.Application
 
             var serviceProvider = services.BuildServiceProvider();
 
-            client.Subscribe(("message.publish", async e =>
-            {
-                try
-                {
-                    Console.WriteLine(e.Body);
-                    var message = e.Body.ToObject<Message>();
-                    using (var serviceScope = serviceProvider.CreateScope())
-                    {
-                        var hubContext = serviceScope.ServiceProvider.GetService<IHubContext<MessageHub>>();
-                        foreach (var toId in message.ToUserIds)
-                        {
-                            var clientIds = await client.HGetAsync<List<string>>(CacheUserMapKey, toId);
-                            if (clientIds == null)
-                                continue;
+            //client.Subscribe(("message.publish", async e =>
+            //{
+            //    try
+            //    {
+            //        Console.WriteLine(e.Body);
+            //        var message = e.Body.ToObject<Message>();
+            //        using (var serviceScope = serviceProvider.CreateScope())
+            //        {
+            //            var hubContext = serviceScope.ServiceProvider.GetService<IHubContext<MessageHub>>();
+            //            foreach (var toId in message.ToUserIds)
+            //            {
+            //                var clientIds = await client.HGetAsync<List<string>>(CacheUserMapKey, toId);
+            //                if (clientIds == null)
+            //                    continue;
 
-                            foreach (var clientId in clientIds)
-                            {
-                                await hubContext.Clients.Client(clientId).SendAsync(message.Category.ToString(), message);
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                    //throw;
-                }
-            }
-            ));
+            //                foreach (var clientId in clientIds)
+            //                {
+            //                    await hubContext.Clients.Client(clientId).SendAsync(message.Category.ToString(), message);
+            //                }
+            //            }
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Console.WriteLine(ex.Message);
+            //        //throw;
+            //    }
+            //}
+            //));
             return serviceProvider;
         }
 

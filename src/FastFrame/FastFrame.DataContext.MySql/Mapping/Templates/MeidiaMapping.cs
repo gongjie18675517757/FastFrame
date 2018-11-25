@@ -1,10 +1,10 @@
-namespace FastFrame.Database.Mapping.Basis
+namespace FastFrame.Database.Mapping.CMS
 {
-	using FastFrame.Entity.Basis; 
+	using FastFrame.Entity.CMS; 
 	/// <summary>
-	///用户 
+	///图片库 
 	/// </summary>
-	public partial class UserMapping:BaseMapping<User>
+	public partial class MeidiaMapping:BaseMapping<Meidia>
 	{
 		#region 字段
 		#endregion

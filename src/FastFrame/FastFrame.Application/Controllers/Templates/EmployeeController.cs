@@ -6,9 +6,9 @@ namespace FastFrame.Application.Controllers.Basis
 	using FastFrame.Infrastructure.Attrs; 
 	using FastFrame.Infrastructure.Interface; 
 	/// <summary>
-	///员工表 
+	///员工 
 	/// </summary>
-	[Permission(nameof(Employee),"员工表")]
+	[Permission(nameof(Employee),"员工")]
 	public partial class EmployeeController:BaseController<Employee, EmployeeDto>
 	{
 		#region 字段

@@ -1,17 +1,17 @@
-namespace FastFrame.Repository.Basis
+namespace FastFrame.Repository.CMS
 {
-	using FastFrame.Entity.Basis; 
+	using FastFrame.Entity.CMS; 
 	using FastFrame.Database; 
 	using FastFrame.Infrastructure.Interface; 
 	/// <summary>
-	///员工[数据访问] 
+	///图片库[数据访问] 
 	/// </summary>
-	public partial class EmployeeRepository:BaseRepository<Employee>,IRepository<Employee>
+	public partial class MeidiaRepository:BaseRepository<Meidia>,IRepository<Meidia>
 	{
 		#region 字段
 		#endregion
 		#region 构造函数
-		public EmployeeRepository(DataBase context,ICurrentUserProvider currentUserProvider)
+		public MeidiaRepository(DataBase context,ICurrentUserProvider currentUserProvider)
 			:base(context,currentUserProvider)
 		{
 		}

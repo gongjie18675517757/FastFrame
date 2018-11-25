@@ -5,7 +5,7 @@ namespace FastFrame.Dto.Basis
 	using global::System.ComponentModel.DataAnnotations; 
 	using FastFrame.Entity.Enums; 
 	/// <summary>
-	///员工表 
+	///员工 
 	/// </summary>
 	[RelatedField("Name","EnCode")]
 	public partial class EmployeeDto:BaseDto<Employee>

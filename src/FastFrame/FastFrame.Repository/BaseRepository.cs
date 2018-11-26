@@ -167,6 +167,8 @@ namespace FastFrame.Repository
         public virtual async Task<T> UpdateAsync(T entity)
         {
             /*需要验证唯一性和关联性*/
+            await Verification(entity);
+
             var foreign = await context.Set<Foreign>().FirstOrDefaultAsync(x => x.EntityId == entity.Id);
             if (foreign != null)
             {

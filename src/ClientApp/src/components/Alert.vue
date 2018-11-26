@@ -6,16 +6,13 @@
       :value="true"
       :color="item.type"
       :timeout="item.timeout"
-      bottom
+      top
       multi-line
-      right
       vertical
       absolute
     >
       {{ item.msg }}
-      <v-btn  flat @click="alerts.splice(index,1)">
-        关闭
-      </v-btn>
+      <v-btn flat @click="alerts.splice(index,1)">关闭</v-btn>
     </v-snackbar>
   </div>
 </template>
@@ -32,28 +29,11 @@ export default {
       return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
     }
     function guid() {
-      return (
-        S4() +
-        S4() +
-        '-' +
-        S4() +
-        '-' +
-        S4() +
-        '-' +
-        S4() +
-        '-' +
-        S4() +
-        S4() +
-        S4()
-      )
+      return S4() + S4() + '-' + S4() + '-' + S4() + '-' + S4() + '-' + S4() + S4() + S4()
     }
 
     let self = this
-    this.$eventBus.$on('alert', function({
-      type = 'success',
-      msg = '',
-      timeout = 3000
-    }) {
+    this.$eventBus.$on('alert', function({ type = 'success', msg = '', timeout = 3000 }) {
       let item = {
         type,
         msg,

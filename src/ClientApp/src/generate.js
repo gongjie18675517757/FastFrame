@@ -58,19 +58,19 @@ export async function getColumns(name = '') {
       ModuleName
     }
   })
+
   for (const col of columns) {
     if (col.Relate) {
-      let {
-        RelateFields: fields
-      } = await getModuleStrut(col.Relate)
-      col.Relate = fields
-    }
-    try {
-      if (RelateFields.length > 0 && RelateFields[0] == col.Name) {
-        col.IsLink = true
+      let relate = col.Relate
+      let strut = await getModuleStrut(col.Relate)
+      col.Relate = strut.RelateFields
+      try {
+        if (strut.RelateFields.length > 0) {
+          col.IsLink = true
+        }
+      } catch (error) {
+        console.log(error, relate, strut.RelateFields)
       }
-    } catch (error) {
-      console.log(error)
     }
   }
   return columns

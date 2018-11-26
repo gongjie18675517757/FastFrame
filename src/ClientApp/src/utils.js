@@ -120,7 +120,7 @@ export function mapMany(arr, fn) {
 export function upload({
     accept = "",
     onProgress = () => {}
-}) {
+} = {}) {
     let el = document.getElementById('uploadInput')
     if (el) {
         el.parentElement.removeChild(el)

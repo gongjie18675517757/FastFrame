@@ -45,27 +45,29 @@
         <v-divider></v-divider>
         <v-form ref="form">
           <v-card-text>
-            <component :is="singleLine?'v-flex':'v-layout'" wrap="">
-              <TextInput
-                v-for="item in options"
-                :key="item.Name"
-                :model="form"
-                v-bind="item"
-                :rules="getRules(item)"
-                :canEdit="canEdit"
-                @change="changed=true"
-              />
-            </component>
-            <component :is="singleLine?'v-flex':'v-layout'" wrap="">
-              <TextInput
-                v-if="showMamageField && form.Id"
-                v-for="item in manageOptions"
-                :key="item.Name"
-                :model="form"
-                v-bind="item"
-              />
-            </component>
-            <v-divider class="mt-5"></v-divider>
+            <vue-perfect-scrollbar class="drawer-menu--scroll--formcontent">
+              <component :is="singleLine?'v-flex':'v-layout'" wrap="">
+                <TextInput
+                  v-for="item in options"
+                  :key="item.Name"
+                  :model="form"
+                  v-bind="item"
+                  :rules="getRules(item)"
+                  :canEdit="canEdit"
+                  @change="changed=true"
+                />
+              </component>
+              <component :is="singleLine?'v-flex':'v-layout'" wrap="">
+                <TextInput
+                  v-if="showMamageField && form.Id"
+                  v-for="item in manageOptions"
+                  :key="item.Name"
+                  :model="form"
+                  v-bind="item"
+                />
+              </component>
+              <v-divider class="mt-5"></v-divider>
+            </vue-perfect-scrollbar>
           </v-card-text>
         </v-form>
         <v-card-actions>
@@ -85,13 +87,15 @@
 </template>
 
 <script>
+import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import TextInput from '@/components/Inputs/TextInput.vue'
 import timg from '@/assets/timg.jpg'
 import { alert, mapMany } from '@/utils'
 import { getDefaultModel, getFormItems, getRules } from '@/generate'
 export default {
   components: {
-    TextInput
+    TextInput,
+    VuePerfectScrollbar
   },
   inject: ['reload'],
   props: {
@@ -246,11 +250,17 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="stylus">
 .subheader {
   padding: 0px;
 }
+
 .handIcon {
   cursor: pointer;
 }
+
+.drawer-menu--scroll--formcontent {
+    height: calc(100vh - 225px);
+    overflow: auto;
+  }
 </style>

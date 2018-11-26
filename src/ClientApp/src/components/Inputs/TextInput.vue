@@ -31,6 +31,19 @@
       :filter="filter"
       @change="change"
     />
+    <v-textarea
+      v-if="evalType=='textArea'"
+      v-model="model[Name]"
+      :Name="Name"
+      :model="model"
+      :disabled="evalDisabled"
+      :label="Description"
+      :rules="rules"
+      :Relate="Relate"
+      :filter="filter"
+      @change="change"
+      auto-grow
+    ></v-textarea>
   </v-flex>
 </template>
 
@@ -59,6 +72,7 @@ export default {
       }
     },
     canEdit: Boolean,
+    IsTextArea: Boolean,
     ModuleName: String,
     Relate: String,
     Type: {
@@ -86,12 +100,20 @@ export default {
       if (typeof this.flex == 'object') {
         return this.flex
       }
+      if (this.IsTextArea) {
+        return {
+          xs12: ''
+        }
+      }
       return {
         xs12: '',
         sm4: ''
       }
     },
     evalType() {
+      if (this.IsTextArea) {
+        return 'textArea'
+      }
       if (this.Name == 'Password') {
         return 'password'
       }

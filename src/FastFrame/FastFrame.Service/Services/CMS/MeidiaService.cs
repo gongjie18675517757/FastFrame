@@ -12,7 +12,11 @@ namespace FastFrame.Service.Services.CMS
     {
         public async Task<IEnumerable<MeidiaDto>> Meidias(string id = null)
         {
-            return await QueryMain().Where(x => x.Parent_Id == id).ToListAsync();
+            return await QueryMain()
+                .Where(x => x.Parent_Id == id)
+                .OrderByDescending(x => x.IsFolder)
+                .ThenBy(x => x.CreateTime)
+                .ToListAsync();
         }
     }
 }

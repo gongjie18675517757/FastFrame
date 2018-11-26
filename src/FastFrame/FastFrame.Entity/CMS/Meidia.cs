@@ -9,6 +9,7 @@ namespace FastFrame.Entity.CMS
     /// </summary>
     [Export]
     [RelatedField(nameof(Name))]
+    [Unique(nameof(Parent_Id), nameof(Name))]
     public class Meidia : BaseEntity
     {
         /// <summary>
@@ -27,6 +28,7 @@ namespace FastFrame.Entity.CMS
         /// 名称
         /// </summary>
         [StringLength(50)]
+        [Required]     
         public string Name { get; set; }
 
         /// <summary>

@@ -87,73 +87,80 @@
           <v-card-text class="pa-0">
             <v-layout row wrap="">
               <v-flex v-if="TreeKey">
-                <v-treeview
-                  :active.sync="tree.active"
-                  :items="tree.items"
-                  :load-children="loadTreeItems"
-                  :open.sync="tree.open"
-                  activatable
-                  active-class="primary--text"
-                  class="grey lighten-5"
-                  item-text="Name"
-                  item-key="Id"
-                  transition
-                  @update:active="setCurrentTreeNode"
-                >
-                  <v-icon
-                    v-if="!item.children.length"
-                    slot="prepend"
-                    slot-scope="{ item, active }"
-                    :color="active ? 'primary' : ''"
-                  >mdi-account</v-icon>
-                </v-treeview>
+                <vue-perfect-scrollbar class="drawer-menu--scroll--formcontent">
+                  <v-treeview
+                    :active.sync="tree.active"
+                    :items="tree.items"
+                    :load-children="loadTreeItems"
+                    :open.sync="tree.open"
+                    activatable
+                    active-class="primary--text"
+                    class="grey lighten-5"
+                    item-text="Name"
+                    item-key="Id"
+                    transition
+                    @update:active="setCurrentTreeNode"
+                  >
+                    <v-icon
+                      v-if="!item.children.length"
+                      slot="prepend"
+                      slot-scope="{ item, active }"
+                      :color="active ? 'primary' : ''"
+                    >mdi-account</v-icon>
+                  </v-treeview>
+                </vue-perfect-scrollbar>
               </v-flex>
               <v-flex>
-                <v-data-table
-                  :headers="headers"
-                  :loading="loading"
-                  :items="items"
-                  :total-items="total"
-                  :pagination.sync="pager"
-                  v-model="selection"
-                  @update:pagination="loadList"
-                  item-key="Id"
-                >
-                  <template slot="items" slot-scope="props">
-                    <tr :active="!singleSelection && props.selected" @click="handleRowClick(props)">
-                      <td>
-                        <v-icon
-                          small
-                          size="16"
-                          color="primary"
-                          v-if="singleSelection && currentRow==props.item"
-                        >check</v-icon>
-                        <v-checkbox
-                          v-if="!singleSelection"
-                          primary
-                          hide-details
-                          v-model="props.selected"
-                        ></v-checkbox>
-                      </td>
-                      <!-- <td>
+                <vue-perfect-scrollbar class="drawer-menu--scroll--formcontent">
+                  <v-data-table
+                    :headers="headers"
+                    :loading="loading"
+                    :items="items"
+                    :total-items="total"
+                    :pagination.sync="pager"
+                    v-model="selection"
+                    @update:pagination="loadList"
+                    item-key="Id"
+                  >
+                    <template slot="items" slot-scope="props">
+                      <tr
+                        :active="!singleSelection && props.selected"
+                        @click="handleRowClick(props)"
+                      >
+                        <td>
+                          <v-icon
+                            small
+                            size="16"
+                            color="primary"
+                            v-if="singleSelection && currentRow==props.item"
+                          >check</v-icon>
+                          <v-checkbox
+                            v-if="!singleSelection"
+                            primary
+                            hide-details
+                            v-model="props.selected"
+                          ></v-checkbox>
+                        </td>
+                        <!-- <td>
                   <v-avatar size="32">
                     <img
                       :src="props.item.HandIconId?'/api/resource/get/'+props.item.HandIconId:timg"
                     >
                   </v-avatar>
-                      </td>-->
-                      <td v-for="col in columns" :key="col.Name">
-                        <Cell
-                          :info="col"
-                          :model="props.item"
-                          @toEdit="toEdit(props.item)"
-                          :moduleName="moduleInfo.name"
-                        />
-                      </td>
-                    </tr>
-                  </template>
-                  <template slot="no-data">没有加载数据</template>
-                </v-data-table>
+                        </td>-->
+                        <td v-for="col in columns" :key="col.Name">
+                          <Cell
+                            :info="col"
+                            :model="props.item"
+                            @toEdit="toEdit(props.item)"
+                            :moduleName="moduleInfo.name"
+                          />
+                        </td>
+                      </tr>
+                    </template>
+                    <template slot="no-data">没有加载数据</template>
+                  </v-data-table>
+                </vue-perfect-scrollbar>
               </v-flex>
             </v-layout>
           </v-card-text>
@@ -173,10 +180,11 @@ import { getColumns, getModuleStrut } from '@/generate'
 import { showDialog } from '@/utils'
 import { getComponent } from '@/router'
 import Cell from './Cell.vue'
-
+import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 export default {
   components: {
-    Cell
+    Cell,
+    VuePerfectScrollbar
   },
   props: {
     moduleInfo: {
@@ -204,8 +212,8 @@ export default {
       currentRow: null,
       pager: {},
       loading: false,
-      total: 0, 
-      
+      total: 0,
+
       showMamageField: false,
       cols: [],
       items: [],
@@ -432,13 +440,20 @@ export default {
   watch: {}
 }
 </script>
-<style>
+ 
+<style scoped lang="stylus">
 .btn-group .v-btn {
   padding: 0px;
   margin: 1px;
 }
+
 .selection {
   background: #eee;
+}
+
+.drawer-menu--scroll--formcontent {
+  height: calc(100vh - 205px);
+  overflow: auto;
 }
 </style>
 

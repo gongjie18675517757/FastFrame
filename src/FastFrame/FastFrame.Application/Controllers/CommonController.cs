@@ -31,7 +31,7 @@ namespace FastFrame.Application.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IEnumerable<string> Get(int count=1)
+        public IEnumerable<string> Get(int count = 1)
         {
             return Enumerable.Range(1, count).Select(x => IdGenerate.NetId());
         }
@@ -80,10 +80,19 @@ namespace FastFrame.Application.Controllers
                 TryGetAttribute<ReadOnlyAttribute>(x, out var readOnlyAttribute);
 
                 /*关联标记*/
-                TryGetAttribute<RelatedToAttribute>(x, out var relatedToAttribute); 
+                TryGetAttribute<RelatedToAttribute>(x, out var relatedToAttribute);
 
                 /*实际类型*/
                 var nullableType = T4Help.GetNullableType(x.PropertyType);
+
+                /*长度*/
+                var isTextArea = false;
+                if (TryGetAttribute<StringLengthAttribute>(x, out var stringLengthAttribute)
+                    && stringLengthAttribute.MaximumLength >= 200)
+                {
+                    isTextArea = true;
+                }
+
 
                 /*字段信息*/
                 fieldInfoStructs.Add(new FieldInfoStrut()
@@ -95,7 +104,8 @@ namespace FastFrame.Application.Controllers
                     Readonly = readOnlyAttribute?.ReadOnlyMark,
                     DefaultValue = instance.GetValue(x.Name),
                     Rules = GetRules(x),
-                    Relate = relatedToAttribute?.RelatedType.Name, 
+                    Relate = relatedToAttribute?.RelatedType.Name,
+                    IsTextArea = isTextArea
                 });
             }
 
@@ -111,9 +121,9 @@ namespace FastFrame.Application.Controllers
                 Description = descriptionProvider.GetClassDescription(type),
                 FieldInfoStruts = fieldInfoStructs,
                 RelateFields = relatedFieldAttribute?.FieldNames,
-                TreeKey= treeAttribute?.Key
+                TreeKey = treeAttribute?.Key
             };
-        } 
+        }
 
 
         private IEnumerable<Rule> GetRules(PropertyInfo prop)
@@ -125,7 +135,7 @@ namespace FastFrame.Application.Controllers
                     stringLengthAttribute.MinimumLength.ToString(),
                     stringLengthAttribute.MaximumLength.ToString());
             if (TryGetAttribute<UniqueAttribute>(prop, out var uniqueAttribute))
-                yield return new Rule("unique",prop.DeclaringType.Name,prop.Name);
+                yield return new Rule("unique", prop.DeclaringType.Name, prop.Name);
         }
 
         private bool TryGetAttribute<T>(PropertyInfo propertyInfo, out T attr) where T : Attribute
@@ -178,7 +188,8 @@ namespace FastFrame.Application.Controllers
         public ReadOnlyMark? Readonly { get; internal set; }
         public object DefaultValue { get; internal set; }
         public IEnumerable<Rule> Rules { get; internal set; }
-        public string Relate { get; internal set; } 
+        public string Relate { get; internal set; }
+        public bool IsTextArea { get; internal set; }
     }
 
     public class Rule

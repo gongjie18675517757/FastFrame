@@ -179,7 +179,10 @@ export default {
     await this.load()
 
     let options = await getFormItems(moduleName)
-    if (typeof this.moduleInfo.formatterRules == 'function') options = await this.moduleInfo.formatterOptions(options)
+
+    if (typeof this.moduleInfo.formatterOptions == 'function') {
+      options = await this.moduleInfo.formatterOptions(options)
+    }
     this.options = options
   },
   methods: {
@@ -208,7 +211,12 @@ export default {
       this.form = form
     },
     getRules(item) {
-      return this.rules[item.Name].filter(f => f.length == 1)
+      let rule = this.rules[item.Name]
+      if (rule) {
+        return rule.filter(f => f.length == 1)
+      } else {
+        return []
+      }
     },
     goList() {
       this.$router.push(`/${this.moduleInfo.name}/list`)
@@ -260,7 +268,7 @@ export default {
 }
 
 .drawer-menu--scroll--formcontent {
-    height: calc(100vh - 225px);
-    overflow: auto;
-  }
+  height: calc(100vh - 225px);
+  overflow: auto;
+}
 </style>

@@ -10,7 +10,8 @@ namespace FastFrame.Dto.CMS
     /// <summary>
     ///图片库 
     /// </summary>
-    [RelatedField("Name")]
+    [Unique("Parent_Id","Name")]
+	[RelatedField("Name")]
 	public partial class MeidiaDto:BaseDto<Meidia>
 	{
 		#region 字段
@@ -39,6 +40,7 @@ namespace FastFrame.Dto.CMS
 		///名称 
 		/// </summary>
 		[StringLength(50)]
+		[Required()]
 		public string Name {get;set;}
 		
 		/// <summary>

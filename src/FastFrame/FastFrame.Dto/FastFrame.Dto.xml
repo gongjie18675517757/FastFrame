@@ -395,50 +395,15 @@
             是否禁用 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Dtos.LoginInput.Account">
-            <summary>
-            帐号
-            </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Dtos.LoginInput.Password">
-            <summary>
-            密码
-            </summary>
-        </member>
-        <member name="T:FastFrame.Dto.CMS.ArticleCategoryDto">
-             <summary>
-            文章类别 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.ArticleCategoryDto.Parent_Id">
-             <summary>
-            上级标题 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.ArticleCategoryDto.Parent">
-             <summary>
-            上级标题 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.ArticleCategoryDto.Name">
-             <summary>
-            标题 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.ArticleCategoryDto.Url">
-             <summary>
-            Url标识 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.ArticleCategoryDto.Description">
-             <summary>
-            描述 
-             </summary>
-        </member>
         <member name="T:FastFrame.Dto.CMS.ArticleDto">
              <summary>
             文章 
              </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.ArticleDto.Content">
+            <summary>
+            内容
+            </summary>
         </member>
         <member name="P:FastFrame.Dto.CMS.ArticleDto.Title">
              <summary>
@@ -475,11 +440,6 @@
             缩略图 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.CMS.ArticleDto.Content">
-             <summary>
-            文章内容 
-             </summary>
-        </member>
         <member name="P:FastFrame.Dto.CMS.ArticleDto.IsRelease">
              <summary>
             发布? 
@@ -493,6 +453,41 @@
         <member name="P:FastFrame.Dto.CMS.ArticleDto.Description">
              <summary>
             说明 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.ArticleDto.ArticleContent_Id">
+             <summary>
+            文章内容 
+             </summary>
+        </member>
+        <member name="T:FastFrame.Dto.CMS.ArticleCategoryDto">
+             <summary>
+            文章类别 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.ArticleCategoryDto.Parent_Id">
+             <summary>
+            上级标题 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.ArticleCategoryDto.Parent">
+             <summary>
+            上级标题 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.ArticleCategoryDto.Name">
+             <summary>
+            标题 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.ArticleCategoryDto.Url">
+             <summary>
+            Url标识 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.ArticleCategoryDto.Description">
+             <summary>
+            描述 
              </summary>
         </member>
         <member name="T:FastFrame.Dto.CMS.MeidiaDto">
@@ -534,6 +529,16 @@
              <summary>
             是否文件夹 
              </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Dtos.LoginInput.Account">
+            <summary>
+            帐号
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Dtos.LoginInput.Password">
+            <summary>
+            密码
+            </summary>
         </member>
         <member name="T:FastFrame.Dto.IDto">
             <summary>

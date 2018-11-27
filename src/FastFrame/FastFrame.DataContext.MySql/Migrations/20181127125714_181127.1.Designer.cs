@@ -3,14 +3,16 @@ using System;
 using FastFrame.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FastFrame.Database.Migrations
 {
     [DbContext(typeof(DataBase))]
-    partial class DataBaseModelSnapshot : ModelSnapshot
+    [Migration("20181127125714_181127.1")]
+    partial class _1811271
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -548,7 +550,7 @@ namespace FastFrame.Database.Migrations
                     b.ToTable("Basis_User");
 
                     b.HasData(
-                        new { Id = "00F6P5G2VC2SAP1UJV7HTBYGA", Account = "admin", Email = "gongjie@qq.com", EncryptionKey = "b93aa30467287a9d67917b4fc26c7558", IsAdmin = true, IsDeleted = false, IsDisabled = false, IsRoot = true, Name = "超级管理员", OrganizeId = "00F6P5G2VC2SAP1UJV7HTBYGU", Password = "b2675064e48182c349d4fc88f54fb609", PhoneNumber = "18675517757" }
+                        new { Id = "00F6P5G2VC2SAP1UJV7HTBYGA", Account = "admin", Email = "gongjie@qq.com", EncryptionKey = "352a093e83c82849c534e4dfa7af6611", IsAdmin = true, IsDeleted = false, IsDisabled = false, IsRoot = true, Name = "超级管理员", OrganizeId = "00F6P5G2VC2SAP1UJV7HTBYGU", Password = "c306f2936fd13b1f1af8d67a450a9807", PhoneNumber = "18675517757" }
                     );
                 });
 
@@ -562,8 +564,8 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
-                    b.Property<string>("ArticleContent_Id")
-                        .HasMaxLength(25)
+                    b.Property<string>("Content")
+                        .IsRequired()
                         .IsUnicode(true);
 
                     b.Property<string>("Description")
@@ -641,30 +643,6 @@ namespace FastFrame.Database.Migrations
                         .HasName("Index_OrganizeId");
 
                     b.ToTable("CMS_ArticleCategory");
-                });
-
-            modelBuilder.Entity("FastFrame.Entity.CMS.ArticleContent", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(25)
-                        .IsUnicode(true);
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .IsUnicode(true);
-
-                    b.Property<bool>("IsDeleted");
-
-                    b.Property<string>("OrganizeId")
-                        .HasMaxLength(25)
-                        .IsUnicode(true);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrganizeId")
-                        .HasName("Index_OrganizeId");
-
-                    b.ToTable("CMS_ArticleContent");
                 });
 
             modelBuilder.Entity("FastFrame.Entity.CMS.Meidia", b =>

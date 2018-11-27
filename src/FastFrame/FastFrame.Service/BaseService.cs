@@ -49,8 +49,8 @@ namespace FastFrame.Service
             }
 
             var entity = input.MapTo<TDto, TEntity>();
-            await OnAdding(input, entity);
             await repository.AddAsync(entity);
+            await OnAdding(input, entity);
             await repository.CommmitAsync();
 
             return await GetAsync(entity.Id);
@@ -82,16 +82,17 @@ namespace FastFrame.Service
             await repository.CommmitAsync();
         }
 
+        protected virtual Task OnGeting(TDto dto) => Task.CompletedTask;
+
         /// <summary>
         /// 获取单条数据
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// </summary> 
         public async Task<TDto> GetAsync(string id)
         {
             var entity = await Query().FirstOrDefaultAsync(x => x.Id == id);
             if (entity == null)
                 throw new Exception("ID不正确");
+            await OnGeting(entity);
             return entity;
         }
 

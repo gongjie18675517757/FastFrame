@@ -40,8 +40,10 @@ namespace FastFrame.Database
                         prop.HasMaxLength(25);
 
                     /*非ID字段，且没有指定长度的，默认200*/
-                    else if (item.GetCustomAttribute<StringLengthAttribute>() == null)
+                    else if (item.GetCustomAttribute<StringLengthAttribute>() == null && item.Name != "Content")
+                    {
                         prop.HasMaxLength(200);
+                    }
                 }
 
                 if (item.PropertyType.IsEnum)

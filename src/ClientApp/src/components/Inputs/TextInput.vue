@@ -44,15 +44,29 @@
       @change="change"
       auto-grow
     ></v-textarea>
+    <RichInput
+      v-if="evalType=='richText'"
+      v-model="model[Name]"
+      :Name="Name"
+      :model="model"
+      :disabled="evalDisabled"
+      :label="Description"
+      :rules="rules"
+      :Relate="Relate"
+      :filter="filter"
+      @change="change"
+    />
   </v-flex>
 </template>
 
 <script>
 import SearchInput from './SearchInput.vue'
+import RichInput from './RichInput.vue'
 import rules from '@/rules'
 export default {
   components: {
-    SearchInput
+    SearchInput,
+    RichInput
   },
   props: {
     model: {
@@ -73,6 +87,7 @@ export default {
     },
     canEdit: Boolean,
     IsTextArea: Boolean,
+    IsRichText: Boolean,
     ModuleName: String,
     Relate: String,
     Type: {
@@ -92,6 +107,12 @@ export default {
   },
   computed: {
     formItemFlex() {
+      if (this.IsTextArea || this.IsRichText) {
+        return {
+          xs12: ''
+        }
+      }
+
       if (typeof this.flex == 'string') {
         let obj = {}
         obj[this.flex] = ''
@@ -100,11 +121,7 @@ export default {
       if (typeof this.flex == 'object') {
         return this.flex
       }
-      if (this.IsTextArea) {
-        return {
-          xs12: ''
-        }
-      }
+
       return {
         xs12: '',
         sm4: ''
@@ -113,6 +130,9 @@ export default {
     evalType() {
       if (this.IsTextArea) {
         return 'textArea'
+      }
+      if (this.IsRichText) {
+        return 'richText'
       }
       if (this.Name == 'Password') {
         return 'password'

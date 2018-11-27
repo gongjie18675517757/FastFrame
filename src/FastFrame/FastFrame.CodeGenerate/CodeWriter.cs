@@ -132,6 +132,8 @@ namespace FastFrame.CodeGenerate
                         write.WriteCodeLine($"}}", 0);
 
                         WriteFileComplete?.Invoke(target, path);
+
+                        write.Flush();
                     }
                 }
             }

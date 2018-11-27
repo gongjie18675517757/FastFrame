@@ -59,13 +59,6 @@ namespace FastFrame.Dto.CMS
 		public MeidiaDto Thumbnail {get;set;}
 		
 		/// <summary>
-		///文章内容 
-		/// </summary>
-		[Required()]
-		[Hide(HideMark.List)]
-		public string Content {get;set;}
-		
-		/// <summary>
 		///发布? 
 		/// </summary>
 		public bool IsRelease {get;set;}
@@ -82,6 +75,11 @@ namespace FastFrame.Dto.CMS
 		/// </summary>
 		[StringLength(500)]
 		public string Description {get;set;}
+		
+		/// <summary>
+		///文章内容 
+		/// </summary>
+		public string ArticleContent_Id {get;set;}
 		
 		#endregion
 		#region 方法

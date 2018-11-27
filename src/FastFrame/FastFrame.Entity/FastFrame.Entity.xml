@@ -397,11 +397,6 @@
             缩略图
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.CMS.Article.Content">
-            <summary>
-            文章内容
-            </summary>
-        </member>
         <member name="P:FastFrame.Entity.CMS.Article.IsRelease">
             <summary>
             发布?
@@ -415,6 +410,11 @@
         <member name="P:FastFrame.Entity.CMS.Article.Description">
             <summary>
             说明
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.CMS.Article.ArticleContent_Id">
+            <summary>
+            文章内容
             </summary>
         </member>
         <member name="T:FastFrame.Entity.CMS.ArticleCategory">
@@ -440,6 +440,16 @@
         <member name="P:FastFrame.Entity.CMS.ArticleCategory.Description">
             <summary>
             描述
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.CMS.ArticleContent">
+            <summary>
+            文章内容
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.CMS.ArticleContent.Content">
+            <summary>
+            内容
             </summary>
         </member>
         <member name="T:FastFrame.Entity.CMS.Meidia">

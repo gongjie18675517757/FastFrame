@@ -41,14 +41,7 @@ namespace FastFrame.Entity.CMS
         /// </summary>
         [RelatedTo(typeof(Meidia))]
         [Hide(HideMark.List)]
-        public string Thumbnail_Id { get; set; } 
-
-        /// <summary>
-        /// 文章内容
-        /// </summary>
-        [Required]
-        [Hide(HideMark.List)]
-        public string Content { get; set; }
+        public string Thumbnail_Id { get; set; }  
 
         /// <summary>
         /// 发布?
@@ -67,5 +60,10 @@ namespace FastFrame.Entity.CMS
         /// </summary>
         [StringLength(500)]
         public string Description { get; set; }
+
+        /// <summary>
+        /// 文章内容
+        /// </summary>
+        public string ArticleContent_Id { get; set; }
     } 
 }

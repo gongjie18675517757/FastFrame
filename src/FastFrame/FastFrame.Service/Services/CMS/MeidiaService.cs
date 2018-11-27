@@ -17,6 +17,6 @@ namespace FastFrame.Service.Services.CMS
                 .OrderByDescending(x => x.IsFolder)
                 .ThenBy(x => x.CreateTime)
                 .ToListAsync();
-        }
+        } 
     }
 }

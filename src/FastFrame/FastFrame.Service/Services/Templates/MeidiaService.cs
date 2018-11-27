@@ -1,15 +1,14 @@
 namespace FastFrame.Service.Services.CMS
 {
-    using FastFrame.Repository.CMS;
-    using FastFrame.Entity.CMS;
-    using FastFrame.Repository.Basis;
-    using FastFrame.Entity.Basis;
-    using FastFrame.Dto.CMS;
-    using FastFrame.Infrastructure.Interface;
-    using FastFrame.Infrastructure;
-    using System.Linq;
+	using FastFrame.Repository.CMS; 
+	using FastFrame.Entity.CMS; 
+	using FastFrame.Repository.Basis; 
+	using FastFrame.Entity.Basis; 
+	using FastFrame.Dto.CMS; 
+	using FastFrame.Infrastructure.Interface; 
+	using FastFrame.Infrastructure; 
+	using System.Linq;
     using FastFrame.Dto.Basis;
-    using System;
 
     /// <summary>
     ///图片库 服务类 
@@ -17,8 +16,8 @@ namespace FastFrame.Service.Services.CMS
     public partial class MeidiaService:BaseService<Meidia, MeidiaDto>
 	{
 		#region 字段
-		private readonly MeidiaRepository meidiaRepository;  
-        private readonly ResourceRepository resourceRepository;
+		private readonly MeidiaRepository meidiaRepository;
+		private readonly ResourceRepository resourceRepository;
 		private readonly ForeignRepository foreignRepository;
 		private readonly UserRepository userRepository;
 		#endregion

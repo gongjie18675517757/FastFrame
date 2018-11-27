@@ -87,10 +87,16 @@ namespace FastFrame.Application.Controllers
 
                 /*长度*/
                 var isTextArea = false;
+                var isRichText = false;
                 if (TryGetAttribute<StringLengthAttribute>(x, out var stringLengthAttribute)
                     && stringLengthAttribute.MaximumLength >= 200)
                 {
                     isTextArea = true;
+                }
+                else if (stringLengthAttribute != null && stringLengthAttribute.MaximumLength>=8000)
+                {
+                    isRichText = true;
+                    isTextArea = false;
                 }
 
 
@@ -105,7 +111,8 @@ namespace FastFrame.Application.Controllers
                     DefaultValue = instance.GetValue(x.Name),
                     Rules = GetRules(x),
                     Relate = relatedToAttribute?.RelatedType.Name,
-                    IsTextArea = isTextArea
+                    IsTextArea = isTextArea,
+                    IsRichText= isRichText,
                 });
             }
 
@@ -190,6 +197,7 @@ namespace FastFrame.Application.Controllers
         public IEnumerable<Rule> Rules { get; internal set; }
         public string Relate { get; internal set; }
         public bool IsTextArea { get; internal set; }
+        public bool IsRichText { get; internal set; }
     }
 
     public class Rule

@@ -4,6 +4,7 @@ namespace FastFrame.Dto.Basis
 	using FastFrame.Infrastructure.Attrs; 
 	using global::System.ComponentModel.DataAnnotations; 
 	using FastFrame.Entity.Enums; 
+	using FastFrame.Dto.Basis; 
 	/// <summary>
 	///菜单 
 	/// </summary>
@@ -58,6 +59,21 @@ namespace FastFrame.Dto.Basis
 		/// </summary>
 		[StringLength(50)]
 		public string Path {get;set;}
+		
+		/// <summary>
+		///管理属性 
+		/// </summary>
+		public Foreign Foreign {get;set;}
+		
+		/// <summary>
+		///创建人 
+		/// </summary>
+		public User Create_User {get;set;}
+		
+		/// <summary>
+		///修改人 
+		/// </summary>
+		public User Modify_User {get;set;}
 		
 		#endregion
 		#region 方法

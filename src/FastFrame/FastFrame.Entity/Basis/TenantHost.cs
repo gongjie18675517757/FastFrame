@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace FastFrame.Entity.Basis
 {
     [Exclude]
-    public class OrganizeHost : BaseEntity
+    public class TenantHost:IEntity,IHasTenant
     {
         /// <summary>
         /// 域名
@@ -12,5 +12,15 @@ namespace FastFrame.Entity.Basis
         [StringLength(200)]
         [Required]
         public string Host { get; set; }
+
+        /// <summary>
+        /// 主键
+        /// </summary>
+        public string Id { get; set; }
+
+        /// <summary>
+        /// 租户
+        /// </summary>
+        public string Tenant_Id { get; set;  }
     }
 }

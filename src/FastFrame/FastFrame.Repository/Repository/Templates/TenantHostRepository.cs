@@ -6,12 +6,12 @@ namespace FastFrame.Repository.Basis
 	/// <summary>
 	///[数据访问] 
 	/// </summary>
-	public partial class OrganizeHostRepository:BaseRepository<OrganizeHost>,IRepository<OrganizeHost>
+	public partial class TenantHostRepository:BaseRepository<TenantHost>,IRepository<TenantHost>
 	{
 		#region 字段
 		#endregion
 		#region 构造函数
-		public OrganizeHostRepository(DataBase context,ICurrentUserProvider currentUserProvider)
+		public TenantHostRepository(DataBase context,ICurrentUserProvider currentUserProvider)
 			:base(context,currentUserProvider)
 		{
 		}

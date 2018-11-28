@@ -7,13 +7,12 @@ namespace FastFrame.Service.Services.CMS
 	using FastFrame.Dto.CMS; 
 	using FastFrame.Infrastructure.Interface; 
 	using FastFrame.Infrastructure; 
-	using System.Linq;
-    using FastFrame.Dto.Basis;
-
-    /// <summary>
-    ///图片库 服务类 
-    /// </summary>
-    public partial class MeidiaService:BaseService<Meidia, MeidiaDto>
+	using System.Linq; 
+	using FastFrame.Dto.Basis; 
+	/// <summary>
+	///图片库 服务类 
+	/// </summary>
+	public partial class MeidiaService:BaseService<Meidia, MeidiaDto>
 	{
 		#region 字段
 		private readonly MeidiaRepository meidiaRepository;
@@ -61,12 +60,9 @@ namespace FastFrame.Service.Services.CMS
 						Id=meidia.Id,
 						Parent=parent_Id,
 						Resource=resource_Id,
-						CreateAccount = user2.Account,
-						CreateName = user2.Name,
-						CreateTime = foreing.CreateTime,
-						ModifyAccount = user3.Account,
-						ModifyName = user3.Name,
-						ModifyTime = foreing.ModifyTime,
+						Foreign = foreing,
+						Create_User = user2,
+						Modify_User = user3,
 					};
 			return query;
 		}

@@ -99,6 +99,11 @@
             修改时间
             </summary>
         </member>
+        <member name="P:FastFrame.Entity.Basis.Foreign.Id">
+            <summary>
+            主键
+            </summary>
+        </member>
         <member name="T:FastFrame.Entity.Basis.Menu">
             <summary>
             菜单
@@ -134,26 +139,6 @@
             路径
             </summary>
         </member>
-        <member name="T:FastFrame.Entity.Basis.Organize">
-            <summary>
-            组织信息
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.Organize.Name">
-            <summary>
-            名称
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.Organize.EnCode">
-            <summary>
-            编码
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.OrganizeHost.Host">
-            <summary>
-            域名
-            </summary>
-        </member>
         <member name="T:FastFrame.Entity.Basis.Permission">
             <summary>
             权限
@@ -179,6 +164,16 @@
             名称
             </summary>
         </member>
+        <member name="P:FastFrame.Entity.Basis.Permission.Id">
+            <summary>
+            主键
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.Permission.Tenant_Id">
+            <summary>
+            租户
+            </summary>
+        </member>
         <member name="T:FastFrame.Entity.Basis.QueryProgram">
             <summary>
             查询方案
@@ -199,12 +194,22 @@
             是否公共方案
             </summary>
         </member>
+        <member name="P:FastFrame.Entity.Basis.QueryProgram.User_Id">
+            <summary>
+            用户
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.QueryProgram.Id">
+            <summary>
+            主键
+            </summary>
+        </member>
         <member name="T:FastFrame.Entity.Basis.QueryProgramDetail">
             <summary>
             查询方案明细
             </summary> 
         </member>
-        <member name="P:FastFrame.Entity.Basis.QueryProgramDetail.SearchProgram_Id">
+        <member name="P:FastFrame.Entity.Basis.QueryProgramDetail.QueryProgram_Id">
             <summary>
             方案ID
             </summary>
@@ -222,6 +227,11 @@
         <member name="P:FastFrame.Entity.Basis.QueryProgramDetail.Value">
             <summary>
             比较的值
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.QueryProgramDetail.Id">
+            <summary>
+            主键
             </summary>
         </member>
         <member name="T:FastFrame.Entity.Basis.Resource">
@@ -292,6 +302,46 @@
         <member name="P:FastFrame.Entity.Basis.RolePermission.Permission_Id">
             <summary>
             权限ID
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Basis.Tenant">
+            <summary>
+            组织信息
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.Tenant.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.Tenant.EnCode">
+            <summary>
+            编码
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.Tenant.Id">
+            <summary>
+            主键
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.Tenant.IsDeleted">
+            <summary>
+            删除码
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.TenantHost.Host">
+            <summary>
+            域名
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.TenantHost.Id">
+            <summary>
+            主键
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.TenantHost.Tenant_Id">
+            <summary>
+            租户
             </summary>
         </member>
         <member name="T:FastFrame.Entity.Basis.User">
@@ -366,6 +416,86 @@
             </summary>
             <param name="password"></param>
             <returns></returns>
+        </member>
+        <member name="T:FastFrame.Entity.Chat.Notify">
+            <summary>
+            通知
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.Notify.Title">
+            <summary>
+            标题
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.Notify.Content">
+            <summary>
+            内容
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.Notify.Target_Id">
+            <summary>
+            目标
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Chat.Message">
+            <summary>
+            消息
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.Message.Content">
+            <summary>
+            内容
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.Message.Resource_Id">
+            <summary>
+            资源
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Chat.Email">
+            <summary>
+            邮件
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.Email.Title">
+            <summary>
+            标题
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.Email.Replay_Id">
+            <summary>
+            回复自
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Chat.EmailContent">
+            <summary>
+            邮件正文
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Chat.EmailAnnex">
+            <summary>
+            邮件附件
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Chat.ChatUser">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.ChatUser.Chat_Id">
+            <summary>
+            实例
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.ChatUser.UserId">
+            <summary>
+            用户ID
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.ChatUser.IsRead">
+            <summary>
+            已读
+            </summary>
         </member>
         <member name="T:FastFrame.Entity.CMS.Article">
             <summary>
@@ -452,6 +582,11 @@
             内容
             </summary>
         </member>
+        <member name="P:FastFrame.Entity.CMS.ArticleContent.Id">
+            <summary>
+            主键
+            </summary>
+        </member>
         <member name="T:FastFrame.Entity.CMS.Meidia">
             <summary>
             图片库
@@ -497,12 +632,202 @@
             女
             </summary>
         </member>
+        <member name="T:FastFrame.Entity.OA.Form">
+            <summary>
+            表单
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.OA.Form.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.OA.Form.Title">
+            <summary>
+            标题
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.OA.FormItem">
+            <summary>
+            表单项
+            </summary>   
+        </member>
+        <member name="P:FastFrame.Entity.OA.FormItem.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.OA.FormItem.Title">
+            <summary>
+            标题
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.OA.FormItem.Category">
+            <summary>
+            类型
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.OA.FormItem.Order">
+            <summary>
+            排序
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.OA.FormItem.IsRequired">
+            <summary>
+            是否必填
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.OA.FormItem.IsEmail">
+            <summary>
+            是否Email
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.OA.FormItem.IsPhone">
+            <summary>
+            是否手机号
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.OA.FormItem.MinValue">
+            <summary>
+            最小值[长度]
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.OA.FormItem.MaxValue">
+            <summary>
+            最大值[长度]
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.OA.FormItem.Form_Id">
+            <summary>
+            表单
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.OA.FormItemCategory">
+            <summary>
+            表单项类型
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.OA.FormItemCategory.Text">
+            <summary>
+            文本
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.OA.FormItemCategory.TextArea">
+            <summary>
+            多行文本
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.OA.FormItemCategory.Select">
+            <summary>
+            选择框
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.OA.FormItemCategory.MuchSelect">
+            <summary>
+            多选框
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.OA.FormItemCategory.Date">
+            <summary>
+            日期
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.OA.FormItemCategory.Time">
+            <summary>
+            时间
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.OA.FormItemCategory.DateTime">
+            <summary>
+            日期+时间
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.OA.FormItemCategory.Number">
+            <summary>
+            数字
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.OA.FormItemDataSource">
+            <summary>
+            选择项数据源
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.OA.FormItemDataSource.FormItem_Id">
+            <summary>
+            表单项
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.OA.FormItemDataSource.Value">
+            <summary>
+            值
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.OA.FormItemTextValue">
+            <summary>
+            表单值:文本
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.OA.FormItemTextValue.Instance_Id">
+            <summary>
+            表单实例
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.OA.FormItemTextValue.FormItem_Id">
+            <summary>
+            表单项
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.OA.FormItemTextValue.Value">
+            <summary>
+            值
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.OA.FormItemNumberValue">
+            <summary>
+            表单值:数值
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.OA.FormItemNumberValue.Instance_Id">
+            <summary>
+            表单实例
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.OA.FormItemNumberValue.FormItem_Id">
+            <summary>
+            表单项
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.OA.FormItemNumberValue.Value">
+            <summary>
+            值
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.OA.FormItemDateTimeValue">
+            <summary>
+            表单值:数值
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.OA.FormItemDateTimeValue.Instance_Id">
+            <summary>
+            表单实例
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.OA.FormItemDateTimeValue.FormItem_Id">
+            <summary>
+            表单项
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.OA.FormItemDateTimeValue.Value">
+            <summary>
+            值
+            </summary>
+        </member>
         <member name="P:FastFrame.Entity.BaseEntity.Id">
             <summary>
             主键
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.BaseEntity.OrganizeId">
+        <member name="P:FastFrame.Entity.BaseEntity.Tenant_Id">
             <summary>
             组织
             </summary>
@@ -517,14 +842,29 @@
             主键
              </summary>
         </member>
-        <member name="P:FastFrame.Entity.IEntity.OrganizeId">
+        <member name="T:FastFrame.Entity.IHasManage">
             <summary>
-            组织
+            标记使用管理字段,记录创建人,创建时间,修改人,修改时间
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.IEntity.IsDeleted">
+        <member name="T:FastFrame.Entity.IHasSoftDelete">
+            <summary>
+            使用软删除
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.IHasSoftDelete.IsDeleted">
             <summary>
             删除
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.IHasTenant">
+            <summary>
+            标记使用多租户
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.IHasTenant.Tenant_Id">
+            <summary>
+            租户
             </summary>
         </member>
     </members>

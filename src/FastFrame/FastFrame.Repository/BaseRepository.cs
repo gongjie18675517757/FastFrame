@@ -35,16 +35,21 @@ namespace FastFrame.Repository
         {
             /*验证唯一性+关联性*/
             entity.Id = IdGenerate.NetId();
-            entity.OrganizeId = currentUserProvider.GetCurrOrganizeId();
+            if(entity is IHasTenant tenant)
+                tenant.Tenant_Id = currentUserProvider.GetCurrOrganizeId();
+         
             await Verification(entity);
-            await context.Set<Foreign>().AddAsync(new Foreign()
+
+            if(entity is IHasManage hasManage)
             {
-                EntityId = entity.Id,
-                Id = IdGenerate.NetId(),
-                CreateTime = DateTime.Now,
-                CreateUserId = currUser?.Id,
-                OrganizeId = currentUserProvider.GetCurrOrganizeId(),
-            });
+                await context.Set<Foreign>().AddAsync(new Foreign()
+                {
+                    EntityId = entity.Id,
+                    Id = IdGenerate.NetId(),
+                    CreateTime = DateTime.Now,
+                    CreateUserId = currUser?.Id,                     
+                });
+            } 
 
             var entityEntry = context.Entry(entity);
             entityEntry.State = EntityState.Added;
@@ -149,13 +154,13 @@ namespace FastFrame.Repository
         {
             get
             {
-                if (currUser != null && currUser.IsRoot)
-                    return context.Set<T>();
-                else
+                IQueryable<T> queryable = context.Set<T>();
+                var tenant_Id = currentUserProvider.GetCurrOrganizeId();
+                if (typeof(IHasTenant).IsAssignableFrom(typeof(T)) && !tenant_Id.IsNullOrWhiteSpace())
                 {
-                    var organizeId = currentUserProvider.GetCurrOrganizeId();
-                    return context.Set<T>().Where(x => x.OrganizeId == organizeId);
+                    queryable = queryable.Where("Tenant_Id=@0", tenant_Id);
                 }
+                return queryable;
             }
         }
 
@@ -169,13 +174,17 @@ namespace FastFrame.Repository
             /*需要验证唯一性和关联性*/
             await Verification(entity);
 
-            var foreign = await context.Set<Foreign>().FirstOrDefaultAsync(x => x.EntityId == entity.Id);
-            if (foreign != null)
+            if (entity is IHasManage hasManage)
             {
-                foreign.ModifyUserId = currUser?.Id;
-                foreign.ModifyTime = DateTime.Now;
-                context.Entry(foreign).State = EntityState.Modified;
-            }
+                var foreign = await context.Set<Foreign>().FirstOrDefaultAsync(x => x.EntityId == entity.Id);
+                if (foreign != null)
+                {
+                    foreign.ModifyUserId = currUser?.Id;
+                    foreign.ModifyTime = DateTime.Now;
+                    context.Entry(foreign).State = EntityState.Modified;
+                }
+            } 
+                
             var entityEntry = context.Entry(entity);
             entityEntry.State = EntityState.Modified;
             return entityEntry.Entity;

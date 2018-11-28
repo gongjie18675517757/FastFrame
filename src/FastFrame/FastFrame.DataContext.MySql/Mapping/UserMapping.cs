@@ -15,7 +15,7 @@
                 Email = "gongjie@qq.com",
                 Id = "00F6P5G2VC2SAP1UJV7HTBYGA",
                 IsAdmin = true,
-                OrganizeId = "00F6P5G2VC2SAP1UJV7HTBYGU",
+                Tenant_Id = "00F6P5G2VC2SAP1UJV7HTBYGU",
                 IsRoot = true,
                 Name = "超级管理员",
                 PhoneNumber = "18675517757",

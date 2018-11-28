@@ -4,7 +4,7 @@ namespace FastFrame.Database.Mapping.Basis
 	/// <summary>
 	///组织信息 
 	/// </summary>
-	public partial class OrganizeMapping:BaseMapping<Tenant>
+	public partial class TenantMapping:BaseMapping<Tenant>
 	{
 		#region 字段
 		#endregion

@@ -19,7 +19,7 @@ namespace FastFrame.Dto.Basis
 		/// </summary>
 		[StringLength(50)]
 		[Required()]
-		public string SearchProgram_Id {get;set;}
+		public string QueryProgram_Id {get;set;}
 		
 		/// <summary>
 		///条件名称 

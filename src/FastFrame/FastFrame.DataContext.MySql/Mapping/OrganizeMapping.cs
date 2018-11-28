@@ -8,24 +8,23 @@
         public override void ModelCreating(ModelBuilder modelBuilder)
         {
             base.ModelCreating(modelBuilder);
-            modelBuilder.Entity<Organize>().HasData(new Organize()
+            modelBuilder.Entity<Tenant>().HasData(new Tenant()
             {
                 EnCode = "default",
                 Id = "00F6P5G2VC2SAP1UJV7HTBYGU",
-                Name = "默认组织",
-                OrganizeId = "00F6P5G2VC2SAP1UJV7HTBYGU"
+                Name = "默认组织",              
             });
 
-            modelBuilder.Entity<OrganizeHost>().HasData(new OrganizeHost()
+            modelBuilder.Entity<TenantHost>().HasData(new TenantHost()
             {
                 Host = "192.168.1.100:8081",
-                OrganizeId = "00F6P5G2VC2SAP1UJV7HTBYGU",
+                Tenant_Id = "00F6P5G2VC2SAP1UJV7HTBYGU",
                 Id = "00F6P5G2VC2SAP1UJV7HTBYGB"
             },
-            new OrganizeHost()
+            new TenantHost()
             {
                 Host = "192.168.1.100:82",
-                OrganizeId = "00F6P5G2VC2SAP1UJV7HTBYGU", 
+                Tenant_Id = "00F6P5G2VC2SAP1UJV7HTBYGU", 
                 Id = "00F6P5G2VC2SAP1UJV7HTBYGc"
             });
         }

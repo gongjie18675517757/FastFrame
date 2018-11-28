@@ -1,9 +1,11 @@
 ﻿using FastFrame.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 
 namespace FastFrame.Database
@@ -19,10 +21,20 @@ namespace FastFrame.Database
             /*指定主键*/
             entity.HasKey(x => x.Id);
             entity.Property(x => x.Id).ValueGeneratedNever();
-            entity.HasIndex(x => x.OrganizeId).HasName("Index_OrganizeId");
+
+            /*索引租户ID*/
+            if (typeof(IHasTenant).IsAssignableFrom(entityType))
+                entity.HasIndex("Tenant_Id").HasName("Index_OrganizeId");
 
             /*过滤掉软删除的*/
-            entity.HasQueryFilter(x => !x.IsDeleted);
+            if (typeof(IHasSoftDelete).IsAssignableFrom(entityType))
+            {
+                var parameterExpression= Expression.Parameter(typeof(T));
+                var memberExpression = Expression.Property(parameterExpression,nameof(IHasSoftDelete.IsDeleted));
+                var unaryExpression= Expression.Not(memberExpression);
+                var expression= Expression.Lambda<Func<T, bool>>(unaryExpression, parameterExpression);
+                entity.HasQueryFilter(expression);
+            }
 
             foreach (var item in typeof(T).GetProperties())
             {

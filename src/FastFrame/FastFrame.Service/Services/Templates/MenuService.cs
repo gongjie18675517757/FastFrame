@@ -52,12 +52,9 @@ namespace FastFrame.Service.Services.Basis
 						Path=menu.Path,
 						Id=menu.Id,
 						Parent=parent_Id,
-						CreateAccount = user2.Account,
-						CreateName = user2.Name,
-						CreateTime = foreing.CreateTime,
-						ModifyAccount = user3.Account,
-						ModifyName = user3.Name,
-						ModifyTime = foreing.ModifyTime,
+						Foreign = foreing,
+						Create_User = user2,
+						Modify_User = user3,
 					};
 			return query;
 		}

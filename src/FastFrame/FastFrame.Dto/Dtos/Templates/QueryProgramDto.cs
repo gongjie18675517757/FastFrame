@@ -33,6 +33,11 @@ namespace FastFrame.Dto.Basis
 		/// </summary>
 		public bool IsPublic {get;set;}
 		
+		/// <summary>
+		///用户 
+		/// </summary>
+		public string User_Id {get;set;}
+		
 		#endregion
 		#region 方法
 		#endregion

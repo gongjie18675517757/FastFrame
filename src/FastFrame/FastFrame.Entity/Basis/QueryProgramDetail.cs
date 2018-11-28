@@ -6,13 +6,13 @@ namespace FastFrame.Entity.Basis
     /// <summary>
     /// 查询方案明细
     /// </summary> 
-    public class QueryProgramDetail:BaseEntity
+    public class QueryProgramDetail:IEntity
     {
         /// <summary>
         /// 方案ID
         /// </summary>
         [StringLength(50), Required]
-        public string SearchProgram_Id { get; set; }
+        public string QueryProgram_Id { get; set; }
 
         /// <summary>
         /// 条件名称
@@ -31,5 +31,10 @@ namespace FastFrame.Entity.Basis
         /// </summary>
         [StringLength(50), Required]
         public string Value { get; set; }
+
+        /// <summary>
+        /// 主键
+        /// </summary>
+        public string Id { get; set; }
     }
 }

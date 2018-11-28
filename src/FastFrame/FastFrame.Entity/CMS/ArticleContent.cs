@@ -7,7 +7,7 @@ namespace FastFrame.Entity.CMS
     /// 文章内容
     /// </summary>
     [Exclude]
-    public class ArticleContent:BaseEntity
+    public class ArticleContent:IEntity
     {        
         /// <summary>
         /// 内容
@@ -15,5 +15,10 @@ namespace FastFrame.Entity.CMS
         [Required]
         [Hide(HideMark.List)]
         public string Content { get; set; }
+
+        /// <summary>
+        /// 主键
+        /// </summary>
+        public string Id { get; set; }
     }
 }

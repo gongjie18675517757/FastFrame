@@ -3,14 +3,14 @@ namespace FastFrame.Dto.CMS
 	using FastFrame.Entity.CMS; 
 	using FastFrame.Infrastructure.Attrs; 
 	using global::System.ComponentModel.DataAnnotations; 
-	using FastFrame.Entity.Enums;
-    using FastFrame.Entity.Basis;
-    using FastFrame.Dto.Basis;
-
-    /// <summary>
-    ///图片库 
-    /// </summary>
-    [Unique("Parent_Id","Name")]
+	using FastFrame.Entity.Enums; 
+	using FastFrame.Entity.Basis; 
+	using FastFrame.Dto.CMS; 
+	using FastFrame.Dto.Basis; 
+	/// <summary>
+	///图片库 
+	/// </summary>
+	[Unique("Parent_Id","Name")]
 	[RelatedField("Name")]
 	public partial class MeidiaDto:BaseDto<Meidia>
 	{
@@ -58,6 +58,21 @@ namespace FastFrame.Dto.CMS
 		///是否文件夹 
 		/// </summary>
 		public bool IsFolder {get;set;}
+		
+		/// <summary>
+		///管理属性 
+		/// </summary>
+		public Foreign Foreign {get;set;}
+		
+		/// <summary>
+		///创建人 
+		/// </summary>
+		public User Create_User {get;set;}
+		
+		/// <summary>
+		///修改人 
+		/// </summary>
+		public User Modify_User {get;set;}
 		
 		#endregion
 		#region 方法

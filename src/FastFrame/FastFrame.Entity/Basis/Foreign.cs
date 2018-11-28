@@ -10,7 +10,7 @@ namespace FastFrame.Entity.Basis
     /// 表外键信息
     /// </summary>
     [Exclude]
-    public class Foreign : BaseEntity
+    public class Foreign : IEntity
     {
         /// <summary>
         /// 数据行ID
@@ -41,5 +41,10 @@ namespace FastFrame.Entity.Basis
         /// 修改时间
         /// </summary>
         public DateTime ModifyTime { get; set; }
+
+        /// <summary>
+        /// 主键
+        /// </summary>
+        public string Id { get; set; }
     }
 }

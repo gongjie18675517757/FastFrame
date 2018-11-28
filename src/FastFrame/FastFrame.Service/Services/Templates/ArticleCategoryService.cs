@@ -6,6 +6,7 @@ namespace FastFrame.Service.Services.CMS
 	using FastFrame.Infrastructure.Interface; 
 	using FastFrame.Infrastructure; 
 	using FastFrame.Repository.Basis; 
+	using FastFrame.Entity.Basis; 
 	using System.Linq; 
 	/// <summary>
 	///文章类别 服务类 
@@ -51,12 +52,9 @@ namespace FastFrame.Service.Services.CMS
 						Description=articleCategory.Description,
 						Id=articleCategory.Id,
 						Parent=parent_Id,
-						CreateAccount = user2.Account,
-						CreateName = user2.Name,
-						CreateTime = foreing.CreateTime,
-						ModifyAccount = user3.Account,
-						ModifyName = user3.Name,
-						ModifyTime = foreing.ModifyTime,
+						Foreign = foreing,
+						Create_User = user2,
+						Modify_User = user3,
 					};
 			return query;
 		}

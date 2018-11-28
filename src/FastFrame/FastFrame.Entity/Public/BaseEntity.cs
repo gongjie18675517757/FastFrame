@@ -1,6 +1,6 @@
 ﻿namespace FastFrame.Entity
 {
-    public abstract class BaseEntity : IEntity
+    public abstract class BaseEntity : IEntity, IHasTenant, IHasSoftDelete,IHasManage
     {
         /// <summary>
         /// 主键
@@ -11,7 +11,7 @@
         /// 组织
         /// </summary>
         [Infrastructure.Attrs.Exclude]
-        public string OrganizeId { get; set; }
+        public string Tenant_Id { get; set; }
 
         /// <summary>
         /// 删除码

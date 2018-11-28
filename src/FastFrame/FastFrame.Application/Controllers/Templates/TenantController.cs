@@ -8,15 +8,15 @@ namespace FastFrame.Application.Controllers.Basis
 	/// <summary>
 	///组织信息 
 	/// </summary>
-	[Permission(nameof(Organize),"组织信息")]
-	public partial class OrganizeController:BaseController<Organize, OrganizeDto>
+	[Permission(nameof(Tenant),"组织信息")]
+	public partial class TenantController:BaseController<Tenant, TenantDto>
 	{
 		#region 字段
-		private readonly OrganizeService service;
+		private readonly TenantService service;
 		private readonly IScopeServiceLoader serviceLoader;
 		#endregion
 		#region 构造函数
-		public OrganizeController(OrganizeService service,IScopeServiceLoader serviceLoader)
+		public TenantController(TenantService service,IScopeServiceLoader serviceLoader)
 			:base(service,serviceLoader)
 		{
 			this.service = service;

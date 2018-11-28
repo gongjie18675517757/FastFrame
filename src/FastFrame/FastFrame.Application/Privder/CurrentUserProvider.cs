@@ -41,7 +41,7 @@ namespace FastFrame.Application.Privder
                 //host = new Uri(host).Authority;
             }
 
-            return dataBase.Set<OrganizeHost>().Where(x => x.Host == host).FirstOrDefault()?.OrganizeId;
+            return dataBase.Set<TenantHost>().Where(x => x.Host == host).FirstOrDefault()?.Tenant_Id;
         }
 
         public ICurrUser GetCurrUser()

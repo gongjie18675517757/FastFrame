@@ -15,8 +15,8 @@ namespace FastFrame.Service.Services.CMS
             return await QueryMain()
                 .Where(x => x.Parent_Id == id)
                 .OrderByDescending(x => x.IsFolder)
-                .ThenBy(x => x.CreateTime)
+                .ThenBy(x => x.Foreign.CreateTime)
                 .ToListAsync();
-        } 
+        }
     }
 }

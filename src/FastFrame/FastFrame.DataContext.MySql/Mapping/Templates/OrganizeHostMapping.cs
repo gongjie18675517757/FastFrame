@@ -4,7 +4,7 @@ namespace FastFrame.Database.Mapping.Basis
 	/// <summary>
 	/// 
 	/// </summary>
-	public partial class OrganizeHostMapping:BaseMapping<OrganizeHost>
+	public partial class OrganizeHostMapping:BaseMapping<TenantHost>
 	{
 		#region 字段
 		#endregion

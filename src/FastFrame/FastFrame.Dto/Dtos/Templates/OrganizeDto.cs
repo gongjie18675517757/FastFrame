@@ -7,7 +7,7 @@ namespace FastFrame.Dto.Basis
 	/// <summary>
 	///组织信息 
 	/// </summary>
-	public partial class OrganizeDto:BaseDto<Organize>
+	public partial class OrganizeDto:BaseDto<Tenant>
 	{
 		#region 字段
 		#endregion

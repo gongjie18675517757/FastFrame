@@ -9,7 +9,7 @@ namespace FastFrame.Entity.Basis
     [Export]
     [Tree(nameof(Parent_Id))]
     [RelatedField(nameof(Name), nameof(EnCode), nameof(AreaName))]
-    public class Permission : BaseEntity
+    public class Permission : IEntity,IHasTenant
     {
         /// <summary>
         /// 父级
@@ -34,5 +34,16 @@ namespace FastFrame.Entity.Basis
         /// </summary>
         [StringLength(50), Required]
         public string Name { get; set; }
+
+        /// <summary>
+        /// 主键
+        /// </summary>
+        public string Id { get; set; }
+
+        /// <summary>
+        /// 租户
+        /// </summary>
+        [Exclude]
+        public string Tenant_Id { get; set; }
     }
 }

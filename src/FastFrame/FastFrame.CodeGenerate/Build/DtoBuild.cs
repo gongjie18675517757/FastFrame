@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.ComponentModel.DataAnnotations;
 using FastFrame.Infrastructure.Attrs;
+using FastFrame.Entity;
 
 namespace FastFrame.CodeGenerate.Build
 {
@@ -52,8 +53,15 @@ namespace FastFrame.CodeGenerate.Build
                         $"FastFrame.Entity.{areaNameSpace}",
                         "FastFrame.Infrastructure.Attrs",
                         "global::System.ComponentModel.DataAnnotations",
-                        "FastFrame.Entity.Enums"
-                    },
+                        "FastFrame.Entity.Enums",
+                        "FastFrame.Entity.Basis"
+                    }
+                .Union(type.GetProperties()
+                    .Select(x => x.GetCustomAttribute<RelatedToAttribute>())
+                    .Where(x => x != null)
+                    .SelectMany(x => new[] { x.RelatedType.Namespace ,
+                        $"FastFrame.Dto.{T4Help.GenerateNameSpace(x.RelatedType,"")}" }))
+                    .Distinct(),
                 Summary = T4Help.GetClassSummary(type, XmlDocDir),
                 Name = $"{type.Name}Dto",
                 BaseNames = new string[] { $"BaseDto<{type.Name}>" },
@@ -71,6 +79,11 @@ namespace FastFrame.CodeGenerate.Build
             {
                 if (item.Name == "Id")
                     continue;
+                if (item.Name == "Tenant_Id")
+                    continue;
+                if (item.Name == "IsDeleted")
+                    continue;
+
                 if (item.GetCustomAttribute<ExcludeAttribute>() != null)
                     continue;
 
@@ -83,6 +96,7 @@ namespace FastFrame.CodeGenerate.Build
                     TypeName = T4Help.GetTypeName(item.PropertyType),
                     Name = item.Name
                 };
+
                 if (TryGetAttribute<RelatedToAttribute>(item, out var relatedToAttribute))
                 {
                     yield return new PropInfo()
@@ -92,6 +106,30 @@ namespace FastFrame.CodeGenerate.Build
                         Name = item.Name.Replace("_Id", "")
                     };
                 }
+            }
+
+            if (typeof(IHasManage).IsAssignableFrom(type))
+            {
+                yield return new PropInfo()
+                {
+                    Summary = "管理属性",
+                    TypeName = "Foreign",
+                    Name = "Foreign"
+                };
+
+                yield return new PropInfo()
+                {
+                    Summary = "创建人",
+                    TypeName = "User",
+                    Name = "Create_User"
+                };
+
+                yield return new PropInfo()
+                {
+                    Summary = "修改人",
+                    TypeName = "User",
+                    Name = "Modify_User"
+                };
             }
         }
 

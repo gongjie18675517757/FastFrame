@@ -60,12 +60,9 @@ namespace FastFrame.Service.Services.Basis
 						Id=employee.Id,
 						User=user_Id,
 						Dept=dept_Id,
-						CreateAccount = user2.Account,
-						CreateName = user2.Name,
-						CreateTime = foreing.CreateTime,
-						ModifyAccount = user3.Account,
-						ModifyName = user3.Name,
-						ModifyTime = foreing.ModifyTime,
+						Foreign = foreing,
+						Create_User = user2,
+						Modify_User = user3,
 					};
 			return query;
 		}

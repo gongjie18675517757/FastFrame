@@ -4,6 +4,8 @@ namespace FastFrame.Dto.CMS
 	using FastFrame.Infrastructure.Attrs; 
 	using global::System.ComponentModel.DataAnnotations; 
 	using FastFrame.Entity.Enums; 
+	using FastFrame.Entity.Basis; 
+	using FastFrame.Dto.CMS; 
 	/// <summary>
 	///文章类别 
 	/// </summary>
@@ -46,6 +48,21 @@ namespace FastFrame.Dto.CMS
 		/// </summary>
 		[StringLength(500)]
 		public string Description {get;set;}
+		
+		/// <summary>
+		///管理属性 
+		/// </summary>
+		public Foreign Foreign {get;set;}
+		
+		/// <summary>
+		///创建人 
+		/// </summary>
+		public User Create_User {get;set;}
+		
+		/// <summary>
+		///修改人 
+		/// </summary>
+		public User Modify_User {get;set;}
 		
 		#endregion
 		#region 方法

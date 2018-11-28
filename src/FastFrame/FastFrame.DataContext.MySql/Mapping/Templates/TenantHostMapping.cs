@@ -2,9 +2,9 @@ namespace FastFrame.Database.Mapping.Basis
 {
 	using FastFrame.Entity.Basis; 
 	/// <summary>
-	///组织信息 
+	/// 
 	/// </summary>
-	public partial class OrganizeMapping:BaseMapping<Tenant>
+	public partial class TenantHostMapping:BaseMapping<TenantHost>
 	{
 		#region 字段
 		#endregion

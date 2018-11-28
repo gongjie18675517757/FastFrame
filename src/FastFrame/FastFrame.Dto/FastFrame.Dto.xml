@@ -9,36 +9,6 @@
             基类DTO
             </summary>
         </member>
-        <member name="P:FastFrame.Dto.BaseDto.CreateAccount">
-            <summary>
-            创建人
-            </summary>
-        </member>
-        <member name="P:FastFrame.Dto.BaseDto.CreateName">
-            <summary>
-            创建人姓名
-            </summary>
-        </member>
-        <member name="P:FastFrame.Dto.BaseDto.CreateTime">
-            <summary>
-            创建时间
-            </summary> 
-        </member>
-        <member name="P:FastFrame.Dto.BaseDto.ModifyAccount">
-            <summary>
-            修改人
-            </summary>
-        </member>
-        <member name="P:FastFrame.Dto.BaseDto.ModifyName">
-            <summary>
-            修改人姓名
-            </summary>
-        </member>
-        <member name="P:FastFrame.Dto.BaseDto.ModifyTime">
-            <summary>
-            修改时间
-            </summary>
-        </member>
         <member name="T:FastFrame.Dto.BaseDto`1">
             <summary>
             基类DTO
@@ -115,6 +85,21 @@
             主管 
              </summary>
         </member>
+        <member name="P:FastFrame.Dto.Basis.DeptDto.Foreign">
+             <summary>
+            管理属性 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.DeptDto.Create_User">
+             <summary>
+            创建人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.DeptDto.Modify_User">
+             <summary>
+            修改人 
+             </summary>
+        </member>
         <member name="T:FastFrame.Dto.Basis.EmployeeDto">
              <summary>
             员工 
@@ -165,6 +150,21 @@
             部门 
              </summary>
         </member>
+        <member name="P:FastFrame.Dto.Basis.EmployeeDto.Foreign">
+             <summary>
+            管理属性 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.EmployeeDto.Create_User">
+             <summary>
+            创建人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.EmployeeDto.Modify_User">
+             <summary>
+            修改人 
+             </summary>
+        </member>
         <member name="T:FastFrame.Dto.Basis.MenuDto">
              <summary>
             菜单 
@@ -205,6 +205,21 @@
             路径 
              </summary>
         </member>
+        <member name="P:FastFrame.Dto.Basis.MenuDto.Foreign">
+             <summary>
+            管理属性 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.MenuDto.Create_User">
+             <summary>
+            创建人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.MenuDto.Modify_User">
+             <summary>
+            修改人 
+             </summary>
+        </member>
         <member name="T:FastFrame.Dto.Basis.OrganizeDto">
              <summary>
             组织信息 
@@ -225,7 +240,7 @@
             查询方案明细 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.QueryProgramDetailDto.SearchProgram_Id">
+        <member name="P:FastFrame.Dto.Basis.QueryProgramDetailDto.QueryProgram_Id">
              <summary>
             方案ID 
              </summary>
@@ -265,6 +280,11 @@
             是否公共方案 
              </summary>
         </member>
+        <member name="P:FastFrame.Dto.Basis.QueryProgramDto.User_Id">
+             <summary>
+            用户 
+             </summary>
+        </member>
         <member name="T:FastFrame.Dto.Basis.ResourceDto">
              <summary>
             资源 
@@ -290,6 +310,21 @@
             资源标识 
              </summary>
         </member>
+        <member name="P:FastFrame.Dto.Basis.ResourceDto.Foreign">
+             <summary>
+            管理属性 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.ResourceDto.Create_User">
+             <summary>
+            创建人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.ResourceDto.Modify_User">
+             <summary>
+            修改人 
+             </summary>
+        </member>
         <member name="T:FastFrame.Dto.Basis.RoleDto">
              <summary>
             角色 
@@ -303,6 +338,21 @@
         <member name="P:FastFrame.Dto.Basis.RoleDto.Name">
              <summary>
             名称 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.RoleDto.Foreign">
+             <summary>
+            管理属性 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.RoleDto.Create_User">
+             <summary>
+            创建人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.RoleDto.Modify_User">
+             <summary>
+            修改人 
              </summary>
         </member>
         <member name="T:FastFrame.Dto.Basis.RoleMemberDto">
@@ -338,6 +388,21 @@
         <member name="P:FastFrame.Dto.Basis.RolePermissionDto.Permission_Id">
              <summary>
             权限ID 
+             </summary>
+        </member>
+        <member name="T:FastFrame.Dto.Basis.TenantDto">
+             <summary>
+            组织信息 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.TenantDto.Name">
+             <summary>
+            名称 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.TenantDto.EnCode">
+             <summary>
+            编码 
              </summary>
         </member>
         <member name="T:FastFrame.Dto.Basis.UserDto">
@@ -393,6 +458,21 @@
         <member name="P:FastFrame.Dto.Basis.UserDto.IsDisabled">
              <summary>
             是否禁用 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.UserDto.Foreign">
+             <summary>
+            管理属性 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.UserDto.Create_User">
+             <summary>
+            创建人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.UserDto.Modify_User">
+             <summary>
+            修改人 
              </summary>
         </member>
         <member name="T:FastFrame.Dto.CMS.ArticleDto">
@@ -460,6 +540,21 @@
             文章内容 
              </summary>
         </member>
+        <member name="P:FastFrame.Dto.CMS.ArticleDto.Foreign">
+             <summary>
+            管理属性 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.ArticleDto.Create_User">
+             <summary>
+            创建人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.ArticleDto.Modify_User">
+             <summary>
+            修改人 
+             </summary>
+        </member>
         <member name="T:FastFrame.Dto.CMS.ArticleCategoryDto">
              <summary>
             文章类别 
@@ -488,6 +583,21 @@
         <member name="P:FastFrame.Dto.CMS.ArticleCategoryDto.Description">
              <summary>
             描述 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.ArticleCategoryDto.Foreign">
+             <summary>
+            管理属性 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.ArticleCategoryDto.Create_User">
+             <summary>
+            创建人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.ArticleCategoryDto.Modify_User">
+             <summary>
+            修改人 
              </summary>
         </member>
         <member name="T:FastFrame.Dto.CMS.MeidiaDto">
@@ -528,6 +638,21 @@
         <member name="P:FastFrame.Dto.CMS.MeidiaDto.IsFolder">
              <summary>
             是否文件夹 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.MeidiaDto.Foreign">
+             <summary>
+            管理属性 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.MeidiaDto.Create_User">
+             <summary>
+            创建人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.MeidiaDto.Modify_User">
+             <summary>
+            修改人 
              </summary>
         </member>
         <member name="P:FastFrame.Dto.Dtos.LoginInput.Account">

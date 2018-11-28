@@ -36,7 +36,5 @@ namespace FastFrame.Infrastructure.Interface
         Task LogOut();
 
         void Refresh();
-    }
-
-    
+    } 
 }

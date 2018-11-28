@@ -3,6 +3,7 @@ using FastFrame.Entity;
 using FastFrame.Entity.Basis;
 using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Attrs;
+using FastFrame.Infrastructure.EventBus;
 using FastFrame.Infrastructure.Interface;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -17,12 +18,14 @@ namespace FastFrame.Repository
     {
         private readonly DataBase context;
         private readonly ICurrentUserProvider currentUserProvider;
+        private readonly IEventBus eventBus;
         private readonly ICurrUser currUser;
 
-        public BaseRepository(DataBase context, ICurrentUserProvider currentUserProvider) : base(context)
+        public BaseRepository(DataBase context, ICurrentUserProvider currentUserProvider,IEventBus eventBus) : base(context)
         {
             this.context = context;
             this.currentUserProvider = currentUserProvider;
+            this.eventBus = eventBus;
             currUser = currentUserProvider.GetCurrUser();
         }
 
@@ -53,6 +56,8 @@ namespace FastFrame.Repository
 
             var entityEntry = context.Entry(entity);
             entityEntry.State = EntityState.Added;
+
+            await eventBus.TriggerAsync(new EntityAdding<T>(entityEntry.Entity));
             return entityEntry.Entity;
         }
 

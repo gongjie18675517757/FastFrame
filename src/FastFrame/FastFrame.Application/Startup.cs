@@ -1,6 +1,7 @@
 ﻿using FastFrame.Application.Hubs;
 using FastFrame.Application.Privder;
 using FastFrame.Infrastructure.Interface;
+using FastFrame.Infrastructure.EventBus;
 using FastFrame.Repository;
 using FastFrame.Service;
 using Microsoft.AspNetCore.Builder;
@@ -83,7 +84,8 @@ namespace FastFrame.Application
                 .AddScoped<IDescriptionProvider, DescriptionProvider>()
                 .AddScoped<IMessageBus, MessageBusProvider>()
                 .AddServices()
-                .AddRepository();
+                .AddRepository()
+                .AddEventBus(this.GetType().Assembly);
 
             services.AddSwaggerGen(options =>
             {

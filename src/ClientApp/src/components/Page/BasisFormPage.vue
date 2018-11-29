@@ -46,7 +46,7 @@
         <v-form ref="form">
           <v-card-text>
             <vue-perfect-scrollbar class="drawer-menu--scroll--formcontent">
-              <component :is="singleLine?'v-flex':'v-layout'" wrap="">
+              <component :is="singleLine?'v-flex':'v-layout'" wrap>
                 <TextInput
                   v-for="item in options"
                   :key="item.Name"
@@ -57,7 +57,7 @@
                   @change="changed=true"
                 />
               </component>
-              <component :is="singleLine?'v-flex':'v-layout'" wrap="">
+              <component :is="singleLine?'v-flex':'v-layout'" wrap>
                 <TextInput
                   v-if="showMamageField && form.Id"
                   v-for="item in manageOptions"
@@ -87,25 +87,25 @@
 </template>
 
 <script>
-import VuePerfectScrollbar from 'vue-perfect-scrollbar'
-import TextInput from '@/components/Inputs/TextInput.vue'
-import timg from '@/assets/timg.jpg'
-import { alert, mapMany } from '@/utils'
-import { getDefaultModel, getFormItems, getRules } from '@/generate'
+import VuePerfectScrollbar from "vue-perfect-scrollbar";
+import TextInput from "@/components/Inputs/TextInput.vue";
+import timg from "@/assets/timg.jpg";
+import { alert, mapMany } from "@/utils";
+import { getDefaultModel, getFormItems, getRules } from "@/generate";
 export default {
   components: {
     TextInput,
     VuePerfectScrollbar
   },
-  inject: ['reload'],
+  inject: ["reload"],
   props: {
     moduleInfo: {
       type: Object,
       default: function() {
         return {
-          name: '',
-          direction: ''
-        }
+          name: "",
+          direction: ""
+        };
       }
     },
     pageInfo: {
@@ -113,7 +113,7 @@ export default {
       default: function() {
         return {
           pars: {}
-        }
+        };
       }
     }
   },
@@ -123,139 +123,147 @@ export default {
       options: [],
       rules: {},
       manageOptions: [
-        { Name: 'CreateName', Description: '创建人' },
-        { Name: 'CreateTime', Description: '创建时间' },
-        { Name: 'ModifyName', Description: '最后修改人' },
-        { Name: 'ModifyTime', Description: '最后修改时间' }
+        { Name: "Create_User.Name", Description: "创建人" },
+        { Name: "Foreign.CreateTime", Description: "创建时间" },
+        { Name: "Modify_User.Name", Description: "最后修改人" },
+        { Name: "Foreign.ModifyTime", Description: "最后修改时间" }
       ].map(r => {
         return {
           Name: r.Name,
-          Type: 'String',
+          Type: "String",
           Description: r.Description,
-          Readonly: 'all'
-        }
+          Readonly: "all"
+        };
       }),
       submiting: false,
       singleLine: false,
       showMamageField: false,
       canEdit: false,
       changed: false
-    }
+    };
   },
   watch: {
     $route: function() {
-      this.load()
+      this.load();
     }
   },
   computed: {
     title() {
-      if (!this.getId()) return '新增'
-      else if (this.canEdit) return '修改'
-      else return '查看'
+      if (!this.getId()) return "新增";
+      else if (this.canEdit) return "修改";
+      else return "查看";
     },
     flex() {
       if (!this.singleLine) {
         return {
-          xs12: ''
-        }
+          xs12: ""
+        };
       } else {
         return {
-          xs6: ''
-        }
+          xs6: ""
+        };
       }
     }
   },
   created() {
-    let id = this.getId()
-    if (!id) this.canEdit = true
+    let id = this.getId();
+    if (!id) this.canEdit = true;
   },
   async mounted() {
-    let moduleName = this.moduleInfo.name
+    let moduleName = this.moduleInfo.name;
 
-    let rules = await getRules(moduleName)
-    if (typeof this.moduleInfo.formatterRules == 'function') rules = await this.moduleInfo.formatterRules(rules)
-    this.rules = rules
+    let rules = await getRules(moduleName);
+    if (typeof this.moduleInfo.formatterRules == "function")
+      rules = await this.moduleInfo.formatterRules(rules);
+    this.rules = rules;
 
-    await this.load()
+    await this.load();
 
-    let options = await getFormItems(moduleName)
+    let options = await getFormItems(moduleName);
 
-    if (typeof this.moduleInfo.formatterOptions == 'function') {
-      options = await this.moduleInfo.formatterOptions(options)
+    if (typeof this.moduleInfo.formatterOptions == "function") {
+      options = await this.moduleInfo.formatterOptions(options);
     }
-    this.options = options
+    this.options = options;
   },
   methods: {
     getId() {
-      let { q: id } = this.$route.query
+      let { q: id } = this.$route.query;
       if (this.pageInfo.pars && this.pageInfo.pars.id) {
-        return this.pageInfo.pars.id
+        return this.pageInfo.pars.id;
       } else {
-        let { q: id } = this.$route.query
-        return id
+        let { q: id } = this.$route.query;
+        return id;
       }
     },
     refresh() {
-      this.reload()
+      this.reload();
     },
     async load() {
       let id = this.getId(),
-        form
+        form;
       if (id) {
-        form = await this.$http.get(`/api/${this.moduleInfo.name}/get/${id}`)
+        form = await this.$http.get(`/api/${this.moduleInfo.name}/get/${id}`);
       } else {
-        let moduleName = this.moduleInfo.name
-        form = await getDefaultModel(moduleName)
+        let moduleName = this.moduleInfo.name;
+        form = await getDefaultModel(moduleName);
       }
-      if (typeof this.moduleInfo.formatterForm == 'function') form = await this.moduleInfo.formatterForm(form)
-      this.form = form
+      if (typeof this.moduleInfo.formatterForm == "function")
+        form = await this.moduleInfo.formatterForm(form);
+      this.form = form;
     },
     getRules(item) {
-      let rule = this.rules[item.Name]
+      let rule = this.rules[item.Name];
       if (rule) {
-        return rule.filter(f => f.length == 1)
+        return rule.filter(f => f.length == 1);
       } else {
-        return []
+        return [];
       }
     },
     goList() {
-      this.$router.push(`/${this.moduleInfo.name}/list`)
+      this.$router.push(`/${this.moduleInfo.name}/list`);
     },
     async submit() {
-      this.submiting = true
+      this.submiting = true;
       try {
         if (!this.$refs.form.validate()) {
-          throw new Error('请填写完整信息')
+          throw new Error("请填写完整信息");
         }
-        let id = this.getId()
-        let data
+        let id = this.getId();
+        let data;
         if (!id) {
-          data = await this.$http.post(`/api/${this.moduleInfo.name}/post`, this.form)
+          data = await this.$http.post(
+            `/api/${this.moduleInfo.name}/post`,
+            this.form
+          );
         } else {
-          data = await this.$http.put(`/api/${this.moduleInfo.name}/put`, this.form)
+          data = await this.$http.put(
+            `/api/${this.moduleInfo.name}/put`,
+            this.form
+          );
         }
-        this.$emit('success', data)
-        if (typeof this.pageInfo.success == 'function') {
-          this.pageInfo.success(data)
+        this.$emit("success", data);
+        if (typeof this.pageInfo.success == "function") {
+          this.pageInfo.success(data);
         } else {
-          this.goList()
+          this.goList();
         }
       } catch (error) {
         // alert.error(error.message)
       } finally {
-        this.submiting = false
+        this.submiting = false;
       }
     },
     cancel() {
-      this.$emit('close')
-      if (typeof this.pageInfo.close == 'function') {
-        this.pageInfo.close()
+      this.$emit("close");
+      if (typeof this.pageInfo.close == "function") {
+        this.pageInfo.close();
       } else {
-        this.goList()
+        this.goList();
       }
     }
   }
-}
+};
 </script>
 
 <style scoped lang="stylus">

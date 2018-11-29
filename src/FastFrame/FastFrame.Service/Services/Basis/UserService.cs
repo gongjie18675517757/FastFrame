@@ -129,5 +129,10 @@ namespace FastFrame.Service.Services.Basis
             Console.WriteLine($"{@event.Data.Account} is adding");
             return Task.CompletedTask;
         }
+
+        protected override Task OnUpdateing(UserDto input, User entity)
+        {
+            return base.OnUpdateing(input, entity);
+        }
     }
 }

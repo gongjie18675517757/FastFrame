@@ -2,7 +2,7 @@
   <v-flex v-bind="formItemFlex" v-if="evalType">
     <v-text-field
       v-if="evalType=='text' || evalType=='password'"
-      v-model="model[Name]"
+      v-model="value"
       :rules="rules"
       :label="Description"
       :error-messages="ErrorMessage"
@@ -12,7 +12,7 @@
     ></v-text-field>
     <v-checkbox
       v-if="evalType=='Boolean'"
-      v-model="model[Name]"
+      v-model="value"
       :rules="rules"
       :label="Description"
       :error-messages="ErrorMessage"
@@ -21,7 +21,7 @@
     ></v-checkbox>
     <SearchInput
       v-if="evalType=='remoteSelect'"
-      v-model="model[Name]"
+      v-model="value"
       :Name="Name"
       :model="model"
       :disabled="evalDisabled"
@@ -33,7 +33,7 @@
     />
     <v-textarea
       v-if="evalType=='textArea'"
-      v-model="model[Name]"
+      v-model="value"
       :Name="Name"
       :model="model"
       :disabled="evalDisabled"
@@ -46,7 +46,7 @@
     ></v-textarea>
     <RichInput
       v-if="evalType=='richText'"
-      v-model="model[Name]"
+      v-model="value"
       :Name="Name"
       :model="model"
       :disabled="evalDisabled"
@@ -60,9 +60,9 @@
 </template>
 
 <script>
-import SearchInput from './SearchInput.vue'
-import RichInput from './RichInput.vue'
-import rules from '@/rules'
+import SearchInput from "./SearchInput.vue";
+import RichInput from "./RichInput.vue";
+import rules from "@/rules";
 export default {
   components: {
     SearchInput,
@@ -72,7 +72,7 @@ export default {
     model: {
       type: Object,
       default: function() {
-        return {}
+        return {};
       }
     },
     callback: {
@@ -82,7 +82,7 @@ export default {
     rules: {
       type: Array,
       default: function() {
-        return []
+        return [];
       }
     },
     canEdit: Boolean,
@@ -92,7 +92,7 @@ export default {
     Relate: String,
     Type: {
       type: String,
-      default: 'text'
+      default: "text"
     },
     Description: String,
     Name: String,
@@ -103,68 +103,78 @@ export default {
   data() {
     return {
       ErrorMessage: []
-    }
+    };
   },
   computed: {
+    value: {
+      get() {
+        let temp = this.model;
+        return eval(`temp.${this.Name}`);
+      },
+      set(val) {
+        let temp = this.model;
+        eval(`temp.${this.Name}=val`);
+      }
+    },
     formItemFlex() {
       if (this.IsTextArea || this.IsRichText) {
         return {
-          xs12: ''
-        }
+          xs12: ""
+        };
       }
 
-      if (typeof this.flex == 'string') {
-        let obj = {}
-        obj[this.flex] = ''
-        return obj
+      if (typeof this.flex == "string") {
+        let obj = {};
+        obj[this.flex] = "";
+        return obj;
       }
-      if (typeof this.flex == 'object') {
-        return this.flex
+      if (typeof this.flex == "object") {
+        return this.flex;
       }
 
       return {
-        xs12: '',
-        sm4: ''
-      }
+        xs12: "",
+        sm4: ""
+      };
     },
     evalType() {
       if (this.IsTextArea) {
-        return 'textArea'
+        return "textArea";
       }
       if (this.IsRichText) {
-        return 'richText'
+        return "richText";
       }
-      if (this.Name == 'Password') {
-        return 'password'
+      if (this.Name == "Password") {
+        return "password";
       }
       if (this.Relate) {
-        return 'remoteSelect'
+        return "remoteSelect";
       }
-      if (this.Name.endsWith('Id')) {
-        return
+      if (this.Name.endsWith("Id")) {
+        return;
       }
-      if (this.Type == 'String') {
-        return 'text'
+      if (this.Type == "String") {
+        return "text";
       }
 
-      return '' //this.Type
+      return ""; //this.Type
     },
     evalDisabled() {
-      if (this.Readonly == 'all') return true
-      if (this.Readonly == 'edit') return !!this.model.Id
-      return !this.canEdit
+      if (this.Readonly == "all") return true;
+      if (this.Readonly == "edit") return !!this.model.Id;
+      return !this.canEdit;
     }
   },
   methods: {
     change(val) {
-      this.$emit('change', val)
+      this.$emit("change", val);
       this.callback.call(this, {
         model: this.model,
         value: val
-      })
+      });
     }
   }
-}
+};
 </script>
 
 <style>

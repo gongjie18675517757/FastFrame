@@ -7,6 +7,7 @@
   <ItemGroup>
     <ProjectReference Include="..\FastFrame.DataContext.MySql\FastFrame.Database.csproj" />
     <ProjectReference Include="..\FastFrame.Entity\FastFrame.Entity.csproj" />
+    <ProjectReference Include="..\FastFrame.Infrastructure\FastFrame.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

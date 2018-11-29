@@ -1,11 +1,10 @@
 namespace FastFrame.Service.Services.CMS
 {
-	using FastFrame.Repository.CMS; 
 	using FastFrame.Entity.CMS; 
 	using FastFrame.Dto.CMS; 
 	using FastFrame.Infrastructure.Interface; 
 	using FastFrame.Infrastructure; 
-	using FastFrame.Repository.Basis; 
+	using FastFrame.Repository; 
 	using FastFrame.Entity.Basis; 
 	using System.Linq; 
 	/// <summary>
@@ -14,14 +13,14 @@ namespace FastFrame.Service.Services.CMS
 	public partial class ArticleService:BaseService<Article, ArticleDto>
 	{
 		#region 字段
-		private readonly ArticleCategoryRepository articleCategoryRepository;
-		private readonly MeidiaRepository meidiaRepository;
-		private readonly ForeignRepository foreignRepository;
-		private readonly UserRepository userRepository;
-		private readonly ArticleRepository articleRepository;
+		private readonly IRepository<ArticleCategory> articleCategoryRepository;
+		private readonly IRepository<Meidia> meidiaRepository;
+		private readonly IRepository<Foreign> foreignRepository;
+		private readonly IRepository<User> userRepository;
+		private readonly IRepository<Article> articleRepository;
 		#endregion
 		#region 构造函数
-		public ArticleService(ArticleCategoryRepository articleCategoryRepository,MeidiaRepository meidiaRepository,ForeignRepository foreignRepository,UserRepository userRepository,ArticleRepository articleRepository,IScopeServiceLoader loader)
+		public ArticleService(IRepository<ArticleCategory> articleCategoryRepository,IRepository<Meidia> meidiaRepository,IRepository<Foreign> foreignRepository,IRepository<User> userRepository,IRepository<Article> articleRepository,IScopeServiceLoader loader)
 			:base(articleRepository,loader)
 		{
 			this.articleCategoryRepository=articleCategoryRepository;

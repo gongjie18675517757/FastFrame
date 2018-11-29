@@ -15,15 +15,15 @@ namespace FastFrame.Service
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TDto"></typeparam>
-    public abstract class BaseService<TEntity, TDto> : IService<TEntity, TDto>
+    public class BaseService<TEntity, TDto> : IService<TEntity, TDto>
         where TEntity : class, IEntity, new()
         where TDto : class, IDto<TEntity>, new()
     {
-        private readonly BaseRepository<TEntity> repository;
+        private readonly IRepository<TEntity> repository;
 
         public IScopeServiceLoader Loader { get; }
 
-        public BaseService(BaseRepository<TEntity> repository, IScopeServiceLoader loader)
+        public BaseService(IRepository<TEntity> repository, IScopeServiceLoader loader)
         {
             this.repository = repository;
             Loader = loader;

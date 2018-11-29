@@ -1,10 +1,10 @@
 namespace FastFrame.Service.Services.Basis
 {
-	using FastFrame.Repository.Basis; 
 	using FastFrame.Entity.Basis; 
 	using FastFrame.Dto.Basis; 
 	using FastFrame.Infrastructure.Interface; 
 	using FastFrame.Infrastructure; 
+	using FastFrame.Repository; 
 	using System.Linq; 
 	/// <summary>
 	///权限 服务类 
@@ -12,12 +12,12 @@ namespace FastFrame.Service.Services.Basis
 	public partial class PermissionService:BaseService<Permission, PermissionDto>
 	{
 		#region 字段
-		private readonly PermissionRepository permissionRepository;
-		private readonly ForeignRepository foreignRepository;
-		private readonly UserRepository userRepository;
+		private readonly IRepository<Permission> permissionRepository;
+		private readonly IRepository<Foreign> foreignRepository;
+		private readonly IRepository<User> userRepository;
 		#endregion
 		#region 构造函数
-		public PermissionService(PermissionRepository permissionRepository,ForeignRepository foreignRepository,UserRepository userRepository,IScopeServiceLoader loader)
+		public PermissionService(IRepository<Permission> permissionRepository,IRepository<Foreign> foreignRepository,IRepository<User> userRepository,IScopeServiceLoader loader)
 			:base(permissionRepository,loader)
 		{
 			this.permissionRepository=permissionRepository;

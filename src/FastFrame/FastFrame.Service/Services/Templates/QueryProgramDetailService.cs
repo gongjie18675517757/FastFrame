@@ -1,10 +1,10 @@
 namespace FastFrame.Service.Services.Basis
 {
-	using FastFrame.Repository.Basis; 
 	using FastFrame.Entity.Basis; 
 	using FastFrame.Dto.Basis; 
 	using FastFrame.Infrastructure.Interface; 
 	using FastFrame.Infrastructure; 
+	using FastFrame.Repository; 
 	using System.Linq; 
 	/// <summary>
 	///查询方案明细 服务类 
@@ -12,12 +12,12 @@ namespace FastFrame.Service.Services.Basis
 	public partial class QueryProgramDetailService:BaseService<QueryProgramDetail, QueryProgramDetailDto>
 	{
 		#region 字段
-		private readonly ForeignRepository foreignRepository;
-		private readonly UserRepository userRepository;
-		private readonly QueryProgramDetailRepository queryProgramDetailRepository;
+		private readonly IRepository<Foreign> foreignRepository;
+		private readonly IRepository<User> userRepository;
+		private readonly IRepository<QueryProgramDetail> queryProgramDetailRepository;
 		#endregion
 		#region 构造函数
-		public QueryProgramDetailService(ForeignRepository foreignRepository,UserRepository userRepository,QueryProgramDetailRepository queryProgramDetailRepository,IScopeServiceLoader loader)
+		public QueryProgramDetailService(IRepository<Foreign> foreignRepository,IRepository<User> userRepository,IRepository<QueryProgramDetail> queryProgramDetailRepository,IScopeServiceLoader loader)
 			:base(queryProgramDetailRepository,loader)
 		{
 			this.foreignRepository=foreignRepository;

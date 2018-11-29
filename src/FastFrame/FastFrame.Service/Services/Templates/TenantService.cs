@@ -1,10 +1,10 @@
 namespace FastFrame.Service.Services.Basis
 {
-	using FastFrame.Repository.Basis; 
 	using FastFrame.Entity.Basis; 
 	using FastFrame.Dto.Basis; 
 	using FastFrame.Infrastructure.Interface; 
 	using FastFrame.Infrastructure; 
+	using FastFrame.Repository; 
 	using System.Linq; 
 	/// <summary>
 	///组织信息 服务类 
@@ -12,12 +12,12 @@ namespace FastFrame.Service.Services.Basis
 	public partial class TenantService:BaseService<Tenant, TenantDto>
 	{
 		#region 字段
-		private readonly ForeignRepository foreignRepository;
-		private readonly UserRepository userRepository;
-		private readonly TenantRepository tenantRepository;
+		private readonly IRepository<Foreign> foreignRepository;
+		private readonly IRepository<User> userRepository;
+		private readonly IRepository<Tenant> tenantRepository;
 		#endregion
 		#region 构造函数
-		public TenantService(ForeignRepository foreignRepository,UserRepository userRepository,TenantRepository tenantRepository,IScopeServiceLoader loader)
+		public TenantService(IRepository<Foreign> foreignRepository,IRepository<User> userRepository,IRepository<Tenant> tenantRepository,IScopeServiceLoader loader)
 			:base(tenantRepository,loader)
 		{
 			this.foreignRepository=foreignRepository;

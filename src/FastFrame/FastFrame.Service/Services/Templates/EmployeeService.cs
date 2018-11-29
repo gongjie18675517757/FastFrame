@@ -1,10 +1,10 @@
 namespace FastFrame.Service.Services.Basis
 {
-	using FastFrame.Repository.Basis; 
 	using FastFrame.Entity.Basis; 
 	using FastFrame.Dto.Basis; 
 	using FastFrame.Infrastructure.Interface; 
 	using FastFrame.Infrastructure; 
+	using FastFrame.Repository; 
 	using System.Linq; 
 	/// <summary>
 	///员工 服务类 
@@ -12,13 +12,13 @@ namespace FastFrame.Service.Services.Basis
 	public partial class EmployeeService:BaseService<Employee, EmployeeDto>
 	{
 		#region 字段
-		private readonly UserRepository userRepository;
-		private readonly DeptRepository deptRepository;
-		private readonly ForeignRepository foreignRepository;
-		private readonly EmployeeRepository employeeRepository;
+		private readonly IRepository<User> userRepository;
+		private readonly IRepository<Dept> deptRepository;
+		private readonly IRepository<Foreign> foreignRepository;
+		private readonly IRepository<Employee> employeeRepository;
 		#endregion
 		#region 构造函数
-		public EmployeeService(UserRepository userRepository,DeptRepository deptRepository,ForeignRepository foreignRepository,EmployeeRepository employeeRepository,IScopeServiceLoader loader)
+		public EmployeeService(IRepository<User> userRepository,IRepository<Dept> deptRepository,IRepository<Foreign> foreignRepository,IRepository<Employee> employeeRepository,IScopeServiceLoader loader)
 			:base(employeeRepository,loader)
 		{
 			this.userRepository=userRepository;

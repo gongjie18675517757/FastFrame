@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FastFrame.Repository
 {
-    public  class BaseUnitOrWork : IUnitOfWork
+    public class BaseUnitOrWork : IUnitOfWork
     {
         private readonly DataBase context;
 
@@ -34,7 +34,7 @@ namespace FastFrame.Repository
 
             //using (var bt = context.Database.BeginTransaction())
             //{
-                
+
             //}
         }
 

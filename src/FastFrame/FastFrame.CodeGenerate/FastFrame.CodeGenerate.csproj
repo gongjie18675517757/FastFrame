@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Build\RepositoryBuild.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\FastFrame.Infrastructure\FastFrame.Infrastructure.csproj" />
   </ItemGroup>
 

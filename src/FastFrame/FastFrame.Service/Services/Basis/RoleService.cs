@@ -2,7 +2,7 @@
 using FastFrame.Entity.Basis;
 using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Interface;
-using FastFrame.Repository.Basis;
+using FastFrame.Repository;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,15 +12,18 @@ namespace FastFrame.Service.Services.Basis
 {
     public partial class RoleService
     {
-        private readonly RoleMemberRepository roleMemberRepository;
-        private readonly RolePermissionRepository rolePermissionRepository;
-        private readonly PermissionRepository permissionRepository;
+        private readonly IRepository<RoleMember> roleMemberRepository;
+        private readonly IRepository<RolePermission> rolePermissionRepository;
+        private readonly IRepository<Permission> permissionRepository;
 
-        public RoleService(ForeignRepository foreignRepository,
-            RoleMemberRepository roleMemberRepository,
-            RolePermissionRepository rolePermissionRepository,
-            PermissionRepository permissionRepository,
-            UserRepository userRepository, RoleRepository roleRepository, IScopeServiceLoader loader)
+        public RoleService(
+            IRepository<Foreign> foreignRepository,
+            IRepository<RoleMember> roleMemberRepository,
+            IRepository<RolePermission> rolePermissionRepository,
+            IRepository<Permission> permissionRepository,
+            IRepository<User> userRepository, 
+            IRepository<Role> roleRepository, 
+            IScopeServiceLoader loader)
             : this(foreignRepository, userRepository, roleRepository, loader)
         {
             this.roleMemberRepository = roleMemberRepository;

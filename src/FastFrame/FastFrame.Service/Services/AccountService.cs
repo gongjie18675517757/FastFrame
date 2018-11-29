@@ -3,22 +3,20 @@ using FastFrame.Dto.Dtos;
 using FastFrame.Entity.Basis;
 using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Interface;
-using FastFrame.Repository.Basis;
+using FastFrame.Repository;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace FastFrame.Service.Services
 {
     public class AccountService : IService
     {
-        private readonly UserRepository userRepository;
+        private readonly IRepository<User> userRepository;
         private readonly ICurrentUserProvider currentUserProvider;
 
-        public AccountService(UserRepository userRepository, ICurrentUserProvider currentUserProvider)
+        public AccountService(IRepository<User> userRepository, ICurrentUserProvider currentUserProvider)
         {
             this.userRepository = userRepository;
             this.currentUserProvider = currentUserProvider;

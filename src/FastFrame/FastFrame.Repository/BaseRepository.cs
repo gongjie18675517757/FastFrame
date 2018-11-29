@@ -5,6 +5,7 @@ using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Attrs;
 using FastFrame.Infrastructure.EventBus;
 using FastFrame.Infrastructure.Interface;
+using FastFrame.Repository.Events;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
@@ -14,14 +15,14 @@ using System.Threading.Tasks;
 
 namespace FastFrame.Repository
 {
-    public abstract class BaseRepository<T> : BaseUnitOrWork, IRepository<T> where T : class, IEntity
+    public class BaseRepository<T> : BaseUnitOrWork, IRepository<T> where T : class, IEntity
     {
         private readonly DataBase context;
         private readonly ICurrentUserProvider currentUserProvider;
         private readonly IEventBus eventBus;
         private readonly ICurrUser currUser;
 
-        public BaseRepository(DataBase context, ICurrentUserProvider currentUserProvider,IEventBus eventBus) : base(context)
+        public BaseRepository(DataBase context, ICurrentUserProvider currentUserProvider, IEventBus eventBus) : base(context)
         {
             this.context = context;
             this.currentUserProvider = currentUserProvider;
@@ -38,21 +39,21 @@ namespace FastFrame.Repository
         {
             /*验证唯一性+关联性*/
             entity.Id = IdGenerate.NetId();
-            if(entity is IHasTenant tenant)
+            if (entity is IHasTenant tenant)
                 tenant.Tenant_Id = currentUserProvider.GetCurrOrganizeId();
-         
+
             await Verification(entity);
 
-            if(entity is IHasManage hasManage)
+            if (entity is IHasManage hasManage)
             {
                 await context.Set<Foreign>().AddAsync(new Foreign()
                 {
                     EntityId = entity.Id,
                     Id = IdGenerate.NetId(),
                     CreateTime = DateTime.Now,
-                    CreateUserId = currUser?.Id,                     
+                    CreateUserId = currUser?.Id,
                 });
-            } 
+            }
 
             var entityEntry = context.Entry(entity);
             entityEntry.State = EntityState.Added;
@@ -128,6 +129,7 @@ namespace FastFrame.Repository
             //context.Entry(foreign).State = EntityState.Modified;
             //context.Entry(entity).State = EntityState.Modified;
             context.Set<Foreign>().Remove(foreign);
+            await eventBus.TriggerAsync(new EntityDeleteing<T>(entity));
         }
 
         /// <summary>
@@ -188,10 +190,12 @@ namespace FastFrame.Repository
                     foreign.ModifyTime = DateTime.Now;
                     context.Entry(foreign).State = EntityState.Modified;
                 }
-            } 
-                
+            }
+
             var entityEntry = context.Entry(entity);
             entityEntry.State = EntityState.Modified;
+
+            await eventBus.TriggerAsync(new EntityUpdateing<T>(entityEntry.Entity));
             return entityEntry.Entity;
         }
 

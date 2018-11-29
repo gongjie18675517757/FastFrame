@@ -1,9 +1,8 @@
 ﻿using FastFrame.Dto.Basis;
 using FastFrame.Entity.Basis;
 using FastFrame.Infrastructure;
-using FastFrame.Infrastructure.Attrs;
 using FastFrame.Infrastructure.Interface;
-using FastFrame.Repository.Basis;
+using FastFrame.Repository;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,18 +12,18 @@ namespace FastFrame.Service.Services.Basis
 {
     public partial class PermissionService
     {
-        private readonly RoleRepository roleRepository;
-        private readonly RoleMemberRepository roleMemberRepository;
-        private readonly RolePermissionRepository rolePermissionRepository;
+        private readonly IRepository<Role> roleRepository;
+        private readonly IRepository<RoleMember> roleMemberRepository;
+        private readonly IRepository<RolePermission> rolePermissionRepository;
         private readonly ICurrentUserProvider currentUserProvider;
 
         public PermissionService(
-            PermissionRepository permissionRepository,
-            ForeignRepository foreignRepository,
-            UserRepository userRepository,
-            RoleRepository roleRepository,
-            RoleMemberRepository roleMemberRepository,
-            RolePermissionRepository rolePermissionRepository,
+            IRepository<Permission> permissionRepository,
+            IRepository<Foreign> foreignRepository,
+            IRepository<User> userRepository,
+            IRepository<Role> roleRepository,
+            IRepository<RoleMember> roleMemberRepository,
+            IRepository<RolePermission> rolePermissionRepository,
             ICurrentUserProvider currentUserProvider,
             IScopeServiceLoader loader)
             : this(permissionRepository, foreignRepository, userRepository, loader)

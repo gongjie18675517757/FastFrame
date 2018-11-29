@@ -50,12 +50,12 @@ namespace FastFrame.CodeGenerate.Build
             var importNames = relatedTypes
                  .Select(x => T4Help.GenerateNameSpace(x.RelatedType, null))
                  .Union(new[] { areaName })
-                 .SelectMany(x => new string[] { $"FastFrame.Repository.{x}", $"FastFrame.Entity.{x}", })
+                 .SelectMany(x => new string[] {$"FastFrame.Entity.{x}", })
                  .Union(new string[] {
                     $"FastFrame.Dto.{areaName}",
                     $"FastFrame.Infrastructure.Interface",
                     "FastFrame.Infrastructure",
-                    "FastFrame.Repository.Basis",
+                    "FastFrame.Repository",
                      "FastFrame.Entity.Basis",
                     "System.Linq"
                  })
@@ -71,7 +71,7 @@ namespace FastFrame.CodeGenerate.Build
                     .Select(x => x.RelatedType.Name)
                     .Union(new[] { "Foreign", "User", type.Name })
                     .Distinct()
-                    .Select(x => new { type = $"{x}Repository", name = $"{x.ToFirstLower()}Repository" });
+                    .Select(x => new { type = $"IRepository<{x}>", name = $"{x.ToFirstLower()}Repository" });
 
 
             return new TargetInfo()

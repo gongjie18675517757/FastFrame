@@ -1,19 +1,19 @@
-﻿using System.Threading.Tasks;
-using FastFrame.Dto.CMS;
+﻿using FastFrame.Dto.CMS;
+using FastFrame.Entity.Basis;
 using FastFrame.Entity.CMS;
 using FastFrame.Infrastructure.Interface;
-using FastFrame.Repository.Basis;
-using FastFrame.Repository.CMS;
+using FastFrame.Repository;
+using System.Threading.Tasks;
 
 namespace FastFrame.Service.Services.CMS
 {
     public partial class ArticleService
     {
-        private readonly ArticleContentRepository articleContentRepository;
+        private readonly IRepository<ArticleContent> articleContentRepository;
 
-        public ArticleService(ArticleCategoryRepository articleCategoryRepository, MeidiaRepository meidiaRepository, 
-            ForeignRepository foreignRepository, UserRepository userRepository, ArticleRepository articleRepository, 
-            ArticleContentRepository articleContentRepository,
+        public ArticleService(IRepository<ArticleCategory> articleCategoryRepository, IRepository<Meidia> meidiaRepository, 
+            IRepository<Foreign> foreignRepository, IRepository<User> userRepository, IRepository<Article> articleRepository, 
+            IRepository<ArticleContent> articleContentRepository,
             IScopeServiceLoader loader)
         : this(articleCategoryRepository, meidiaRepository, foreignRepository, userRepository, articleRepository,loader)
         {

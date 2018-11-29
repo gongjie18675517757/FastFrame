@@ -1,30 +1,31 @@
 ﻿using FastFrame.Dto.Basis;
 using FastFrame.Entity.Basis;
 using FastFrame.Infrastructure;
+using FastFrame.Infrastructure.EventBus;
 using FastFrame.Infrastructure.Interface;
 using FastFrame.Repository;
-using FastFrame.Repository.Basis;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace FastFrame.Service.Services.Basis
 {
-    public partial class UserService
+    public partial class UserService : IEventHandle<User>
     {
         private readonly ICurrentUserProvider currentUserProvider;
-        private readonly RoleMemberRepository roleMemberRepository;
-        private readonly RoleRepository roleRepository;
+        private readonly IRepository<RoleMember> roleMemberRepository;
+        private readonly IRepository<Role> roleRepository;
 
-        public UserService(ICurrentUserProvider currentUserProvider,
-            RoleMemberRepository roleMemberRepository,
-            RoleRepository roleRepository,
-            DeptRepository deptRepository,
-            ForeignRepository foreignRepository,
-            UserRepository userRepository, IScopeServiceLoader loader) : this(deptRepository,foreignRepository, userRepository, loader)
+        public UserService(
+            ICurrentUserProvider currentUserProvider,
+            IRepository<RoleMember> roleMemberRepository,
+            IRepository<Role> roleRepository,
+            IRepository<Dept> deptRepository,
+            IRepository<Foreign> foreignRepository,
+            IRepository<User> userRepository,
+            IScopeServiceLoader loader) : this(deptRepository, foreignRepository, userRepository, loader)
         {
             this.currentUserProvider = currentUserProvider;
             this.roleMemberRepository = roleMemberRepository;
@@ -120,6 +121,13 @@ namespace FastFrame.Service.Services.Basis
                      where a.User_Id == id
                      select b;
             return await iq.MapTo<Role, RoleDto>().ToListAsync();
+        }
+
+
+        public Task HandleEventAsync(IEventData<User> @event)
+        {
+            Console.WriteLine($"{@event.Data.Account} is adding");
+            return Task.CompletedTask;
         }
     }
 }

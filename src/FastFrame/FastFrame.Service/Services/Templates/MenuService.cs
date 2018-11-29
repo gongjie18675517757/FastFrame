@@ -1,10 +1,10 @@
 namespace FastFrame.Service.Services.Basis
 {
-	using FastFrame.Repository.Basis; 
 	using FastFrame.Entity.Basis; 
 	using FastFrame.Dto.Basis; 
 	using FastFrame.Infrastructure.Interface; 
 	using FastFrame.Infrastructure; 
+	using FastFrame.Repository; 
 	using System.Linq; 
 	/// <summary>
 	///菜单 服务类 
@@ -12,12 +12,12 @@ namespace FastFrame.Service.Services.Basis
 	public partial class MenuService:BaseService<Menu, MenuDto>
 	{
 		#region 字段
-		private readonly MenuRepository menuRepository;
-		private readonly ForeignRepository foreignRepository;
-		private readonly UserRepository userRepository;
+		private readonly IRepository<Menu> menuRepository;
+		private readonly IRepository<Foreign> foreignRepository;
+		private readonly IRepository<User> userRepository;
 		#endregion
 		#region 构造函数
-		public MenuService(MenuRepository menuRepository,ForeignRepository foreignRepository,UserRepository userRepository,IScopeServiceLoader loader)
+		public MenuService(IRepository<Menu> menuRepository,IRepository<Foreign> foreignRepository,IRepository<User> userRepository,IScopeServiceLoader loader)
 			:base(menuRepository,loader)
 		{
 			this.menuRepository=menuRepository;

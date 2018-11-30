@@ -23,6 +23,10 @@ using static CSRedis.CSRedisClient;
 using FastFrame.Infrastructure;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.SignalR;
+using AspectCore.Configuration;
+using AspectCore.Extensions.DependencyInjection;
+using AspectCore.Injector;
+using AspectCore.DynamicProxy;
 
 namespace FastFrame.Application
 {
@@ -37,7 +41,7 @@ namespace FastFrame.Application
 
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
-        {
+        { 
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies 
@@ -108,9 +112,16 @@ namespace FastFrame.Application
             RedisHelper.Initialization(client);
             string CacheUserMapKey = "CacheUserMapKey";
             client.Del(CacheUserMapKey);
-            services.AddSingleton(client);
+            services.AddSingleton(client); 
 
-            var serviceProvider = services.BuildServiceProvider();
+            var container = services.ToServiceContainer();
+
+            //container.Configure(config =>
+            //{
+            //    config.Interceptors.AddTyped<AutoCache>();
+            //});
+            var serviceResolver = container.Build();
+             
 
             //client.Subscribe(("message.publish", async e =>
             //{
@@ -141,7 +152,9 @@ namespace FastFrame.Application
             //    }
             //}
             //));
-            return serviceProvider;
+
+
+            return serviceResolver;
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime applicationLifetime)
@@ -193,7 +206,5 @@ namespace FastFrame.Application
         }
     }
 
-
-
-
+   
 }

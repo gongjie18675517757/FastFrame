@@ -1,4 +1,5 @@
-﻿using FastFrame.Dto;
+﻿using AspectCore.DynamicProxy;
+using FastFrame.Dto;
 using FastFrame.Entity;
 using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Interface;
@@ -41,6 +42,7 @@ namespace FastFrame.Service
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        [AutoCacheInterceptor(AutoCacheOperate.Add)]
         public async Task<TDto> AddAsync(TDto input)
         {
             if (input == null)
@@ -69,6 +71,7 @@ namespace FastFrame.Service
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        [AutoCacheInterceptor(AutoCacheOperate.Remove)]
         public async Task DeleteAsync(params string[] ids)
         {
             foreach (var id in ids)
@@ -87,6 +90,7 @@ namespace FastFrame.Service
         /// <summary>
         /// 获取单条数据
         /// </summary> 
+        [AutoCacheInterceptor(AutoCacheOperate.Get)]
         public async Task<TDto> GetAsync(string id)
         {
             var entity = await Query().FirstOrDefaultAsync(x => x.Id == id);
@@ -141,6 +145,7 @@ namespace FastFrame.Service
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        [AutoCacheInterceptor(AutoCacheOperate.Update)]
         public async Task<TDto> UpdateAsync(TDto input)
         {
             if (input == null)
@@ -181,6 +186,78 @@ namespace FastFrame.Service
             {
                 Filters = filters
             }).AnyAsync();
+        }
+    }
+
+    public enum AutoCacheOperate
+    {
+        Get,
+        Add,
+        Update,
+        Remove,
+    }
+
+    public class AutoCacheInterceptor : AbstractInterceptorAttribute
+    {
+        private readonly AutoCacheOperate autoCacheOperate;
+
+        public AutoCacheInterceptor(AutoCacheOperate autoCacheOperate)
+        {
+            this.autoCacheOperate = autoCacheOperate;
+        }
+        public override async Task Invoke(AspectContext context, AspectDelegate next)
+        {
+            var resultType = context.ProxyMethod.ReturnType;
+            resultType = resultType.GetGenericArguments()[0];
+            switch (autoCacheOperate)
+            {
+                case AutoCacheOperate.Get:
+                    {
+                        var pars = context.Parameters;
+                        var key = pars[0].ToString();
+                        var value = await RedisHelper.GetAsync(key);
+                        if (value.IsNullOrWhiteSpace())
+                        {
+                            await next(context);
+                            var result = await context.UnwrapAsyncReturnValue();
+                            var jsonValue = Newtonsoft.Json.JsonConvert.SerializeObject(result);
+                            await RedisHelper.SetAsync(((IDto)result).Id, jsonValue, 60 * 60 * 10);
+                        }
+                        else
+                        {
+                            var resultValue = Newtonsoft.Json.JsonConvert.DeserializeObject(value, resultType);
+                            dynamic member = context.ServiceMethod.ReturnType.GetMember("Result")[0];
+                            dynamic temp = System.Convert.ChangeType(resultValue, member.PropertyType);
+                            context.ReturnValue = System.Convert.ChangeType(Task.FromResult(temp), context.ServiceMethod.ReturnType);
+                            //context.ReturnValue = Task.FromResult(resultValue);
+                        }
+                    }
+                    break;
+                case AutoCacheOperate.Add:
+                    {
+                        await next(context);
+                        var result = await context.UnwrapAsyncReturnValue();
+                        var jsonValue = Newtonsoft.Json.JsonConvert.SerializeObject(result);
+                        await RedisHelper.SetAsync(((IDto)result).Id, jsonValue, 60 * 60 * 10);
+                    }
+                    break;
+                case AutoCacheOperate.Update:
+                    {
+                        await next(context);
+                        var result = await context.UnwrapAsyncReturnValue();
+                        var jsonValue = Newtonsoft.Json.JsonConvert.SerializeObject(result);
+                        await RedisHelper.SetAsync(((IDto)result).Id, jsonValue, 60 * 60 * 10);
+                    }
+                    break;
+                case AutoCacheOperate.Remove:
+                    {
+                        var pars = context.Parameters.Cast<string>().ToArray();
+                        await RedisHelper.DelAsync(pars);
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

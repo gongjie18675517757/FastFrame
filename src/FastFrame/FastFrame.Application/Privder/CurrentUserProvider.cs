@@ -41,7 +41,15 @@ namespace FastFrame.Application.Privder
                 //host = new Uri(host).Authority;
             }
 
-            return dataBase.Set<TenantHost>().Where(x => x.Host == host).FirstOrDefault()?.Tenant_Id;
+            var tenantHost = dataBase.Set<TenantHost>().Where(x => x.Host == host).FirstOrDefault();
+            if (tenantHost == null)
+            {
+                return dataBase.Set<TenantHost>().FirstOrDefault().Tenant_Id;
+            }
+            else
+            {
+                return tenantHost.Tenant_Id;
+            }
         }
 
         public ICurrUser GetCurrUser()
@@ -61,7 +69,7 @@ namespace FastFrame.Application.Privder
 
         public async Task Login(ICurrUser currUser)
         {
-            await cSRedisClient.SetAsync(currUser.ToKen, currUser, 60*60*24);
+            await cSRedisClient.SetAsync(currUser.ToKen, currUser, 60 * 60 * 24);
             httpContextAccessor.HttpContext.Response.Headers.Add(tokenName, currUser.ToKen);
             httpContextAccessor.HttpContext.Response.Cookies.Delete(tokenName);
             httpContextAccessor.HttpContext.Response.Cookies.Append(tokenName, currUser.ToKen, new CookieOptions()

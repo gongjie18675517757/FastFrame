@@ -36,6 +36,7 @@ namespace FastFrame.Service.Services.Basis
 					{
 						Name=tenant.Name,
 						EnCode=tenant.EnCode,
+						HandIcon_Id=tenant.HandIcon_Id,
 						Id=tenant.Id,
 					};
 			return query;

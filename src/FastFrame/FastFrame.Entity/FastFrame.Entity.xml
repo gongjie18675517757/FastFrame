@@ -316,7 +316,12 @@
         </member>
         <member name="P:FastFrame.Entity.Basis.Tenant.EnCode">
             <summary>
-            编码
+            简称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.Tenant.HandIcon_Id">
+            <summary>
+            头像
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Basis.Tenant.Id">

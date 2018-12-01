@@ -71,6 +71,16 @@ let routes = [{
           import(`./views/About.vue`)
       },
       {
+        path: '/tenantCenter',
+        name: 'tenantCenter',
+        meta: {
+          title: '企业中心',
+          keepAlive: false
+        },
+        component: () =>
+          import(`./views/TenantCenter.vue`)
+      },
+      {
         path: '/userCenter',
         name: 'userCenter',
         meta: {

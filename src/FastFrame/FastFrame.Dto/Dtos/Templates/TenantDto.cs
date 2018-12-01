@@ -22,11 +22,16 @@ namespace FastFrame.Dto.Basis
 		public string Name {get;set;}
 		
 		/// <summary>
-		///编码 
+		///简称 
 		/// </summary>
 		[StringLength(50)]
 		[Required()]
 		public string EnCode {get;set;}
+		
+		/// <summary>
+		///头像 
+		/// </summary>
+		public string HandIcon_Id {get;set;}
 		
 		#endregion
 		#region 方法

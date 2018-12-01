@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using System.Reflection;
 using FastFrame.Infrastructure;
 using System.Linq;
-using FastFrame.Infrastructure.Interface;
-using FastFrame.Service.Services.Basis;
+using FastFrame.Entity.Basis;
+using FastFrame.Service;
 
 namespace FastFrame.Application.Controllers.Basis
 {

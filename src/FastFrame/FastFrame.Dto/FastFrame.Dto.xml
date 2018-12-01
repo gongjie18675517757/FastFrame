@@ -402,7 +402,12 @@
         </member>
         <member name="P:FastFrame.Dto.Basis.TenantDto.EnCode">
              <summary>
-            编码 
+            简称 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.TenantDto.HandIcon_Id">
+             <summary>
+            头像 
              </summary>
         </member>
         <member name="T:FastFrame.Dto.Basis.UserDto">

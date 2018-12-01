@@ -75,6 +75,8 @@ namespace FastFrame.CodeGenerate.Build
 
         public IEnumerable<PropInfo> GetPropInfos(Type type)
         {
+            var names= string.Join(",", type.GetProperties().Select(x => x.Name));
+            Console.WriteLine(names);
             foreach (var item in type.GetProperties())
             {
                 if (item.Name == "Id")

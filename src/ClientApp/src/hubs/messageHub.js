@@ -1,5 +1,7 @@
 import * as signalR from "@aspnet/signalr";
-import {alert} from "@/utils"
+import {
+  alert
+} from "@/utils"
 import {
   sleep
 } from '@/utils.js'
@@ -9,7 +11,7 @@ import {
 const connection = new signalR.HubConnectionBuilder()
   .withUrl("/hub/message")
   .build()
- 
+
 // connection.start().catch(function (err) {
 //   return console.error(err.toString());
 // });
@@ -21,11 +23,16 @@ const connection = new signalR.HubConnectionBuilder()
  */
 export async function start() {
   try {
+    connection.stop();
+  } catch {
+
+  }
+  try {
     console.log('开始连接');
     await connection.start()
     onConnectioned()
   } catch (error) {
-    console.log('连接失败');
+    console.log(error);
     onError(error)
   }
 }
@@ -54,7 +61,7 @@ connection.on("ReceiveMessage", () => {
 })
 
 connection.on("Notify", (msg) => {
-  alert.success(msg.content)  
+  alert.success(msg.content)
 })
 
 

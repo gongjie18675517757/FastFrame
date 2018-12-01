@@ -6,9 +6,10 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     currUser: {},
+    tenant: {},
     leftDrawer: true,
     rightDrawer: false,
-    dialogMode:true,
+    dialogMode: true,
     notifys: [{
         title: '您的帐户入帐100元',
         color: 'light-green',
@@ -59,10 +60,13 @@ export default new Vuex.Store({
       let index = state.dialogs.findIndex(x => x.key == payload.key || x.render == payload.render)
       if (index != -1)
         state.dialogs.splice(index, 1)
+    },
+    setTenant(state, payload) {
+      state.tenant = payload.info
     }
 
   },
   actions: {
-    
+
   }
 })

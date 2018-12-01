@@ -15,7 +15,7 @@
         <div class="layout row">
           <div class="flex">{{item.Name}}</div>
           <v-spacer></v-spacer>
-          <div>{{item.CreateTime}}</div>
+          <div>{{item.Foreign.CreateTime}}</div>
         </div>
       </div>
     </v-list-tile-content>

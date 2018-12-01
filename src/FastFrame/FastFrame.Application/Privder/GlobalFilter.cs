@@ -34,9 +34,11 @@ namespace FastFrame.Application.Privder
         /// <returns></returns>
         public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
+            var curr = operaterProvider.GetCurrUser();          
             if (!context.Filters.Any(x => x.GetType() == typeof(AllowAnonymousFilter)))
             {
-                if (operaterProvider.GetCurrUser() == null)
+                
+                if (curr == null)
                 {
                     context.HttpContext.Response.StatusCode = 401;
                     context.Result = new ObjectResult(new { Message = "未登陆" });
@@ -44,7 +46,7 @@ namespace FastFrame.Application.Privder
                 else
                 {
                     if (context.ActionDescriptor is ControllerActionDescriptor controllerActionDescriptor)
-                    {
+                    {                     
                         var permissionAttribute = controllerActionDescriptor.ControllerTypeInfo.GetCustomAttribute<PermissionAttribute>();
                         var permissionAttribute2 = controllerActionDescriptor.MethodInfo.GetCustomAttribute<PermissionAttribute>();
                         if (permissionAttribute != null && permissionAttribute2 != null)

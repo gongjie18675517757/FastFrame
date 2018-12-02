@@ -19,10 +19,6 @@ using Swashbuckle.Swagger.Model;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using static CSRedis.CSRedisClient;
-using FastFrame.Infrastructure;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.SignalR;
 using AspectCore.Configuration;
 using AspectCore.Extensions.DependencyInjection;
 using AspectCore.Injector;
@@ -32,6 +28,8 @@ namespace FastFrame.Application
 {
     public class Startup
     {
+        private SubscribeBus subscriber;
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -41,7 +39,7 @@ namespace FastFrame.Application
 
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
-        { 
+        {
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies 
@@ -86,7 +84,7 @@ namespace FastFrame.Application
                 .AddScoped<ICurrentUserProvider, CurrentUserProvider>()
                 .AddScoped<IResourceProvider, ResourceProvider>()
                 .AddScoped<IDescriptionProvider, DescriptionProvider>()
-                .AddScoped<IMessageBus, MessageBusProvider>()
+                .AddSingleton<IMessageBus, MessageBusProvider>()
                 .AddServices()
                 .AddRepository()
                 .AddEventBus(this.GetType().Assembly);
@@ -112,48 +110,11 @@ namespace FastFrame.Application
             RedisHelper.Initialization(client);
             string CacheUserMapKey = "CacheUserMapKey";
             client.Del(CacheUserMapKey);
-            services.AddSingleton(client); 
-
+            services.AddSingleton(client);
             var container = services.ToServiceContainer();
-
-            //container.Configure(config =>
-            //{
-            //    config.Interceptors.AddTyped<AutoCache>();
-            //});
             var serviceResolver = container.Build();
-             
-
-            //client.Subscribe(("message.publish", async e =>
-            //{
-            //    try
-            //    {
-            //        Console.WriteLine(e.Body);
-            //        var message = e.Body.ToObject<Message>();
-            //        using (var serviceScope = serviceProvider.CreateScope())
-            //        {
-            //            var hubContext = serviceScope.ServiceProvider.GetService<IHubContext<MessageHub>>();
-            //            foreach (var toId in message.ToUserIds)
-            //            {
-            //                var clientIds = await client.HGetAsync<List<string>>(CacheUserMapKey, toId);
-            //                if (clientIds == null)
-            //                    continue;
-
-            //                foreach (var clientId in clientIds)
-            //                {
-            //                    await hubContext.Clients.Client(clientId).SendAsync(message.Category.ToString(), message);
-            //                }
-            //            }
-            //        }
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        Console.WriteLine(ex.Message);
-            //        //throw;
-            //    }
-            //}
-            //));
-
-
+            subscriber = new SubscribeBus(client, serviceResolver);
+            subscriber.Start();
             return serviceResolver;
         }
 
@@ -205,6 +166,4 @@ namespace FastFrame.Application
             });
         }
     }
-
-   
 }

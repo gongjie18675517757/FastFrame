@@ -31,13 +31,13 @@ namespace FastFrame.Service.Services.Basis
 		protected override IQueryable<TenantDto> QueryMain() 
 		{
 			var tenantQueryable=tenantRepository.Queryable;
-			 var query = from tenant in tenantQueryable 
+			 var query = from _tenant in tenantQueryable 
 					 select new TenantDto
 					{
-						Name=tenant.Name,
-						EnCode=tenant.EnCode,
-						HandIcon_Id=tenant.HandIcon_Id,
-						Id=tenant.Id,
+						Name=_tenant.Name,
+						EnCode=_tenant.EnCode,
+						HandIcon_Id=_tenant.HandIcon_Id,
+						Id=_tenant.Id,
 					};
 			return query;
 		}

@@ -5,6 +5,7 @@ namespace FastFrame.Dto.Chat
 	using global::System.ComponentModel.DataAnnotations; 
 	using FastFrame.Entity.Enums; 
 	using FastFrame.Entity.Basis; 
+	using System; 
 	/// <summary>
 	///好友消息 
 	/// </summary>
@@ -19,7 +20,6 @@ namespace FastFrame.Dto.Chat
 		///内容 
 		/// </summary>
 		[StringLength(500)]
-		[Required()]
 		public string Content {get;set;}
 		
 		/// <summary>

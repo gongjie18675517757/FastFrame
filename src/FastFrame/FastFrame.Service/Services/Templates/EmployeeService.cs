@@ -37,12 +37,12 @@ namespace FastFrame.Service.Services.Basis
 			var userQuerable = userRepository.Queryable;
 			 var userQueryable = userRepository.Queryable;
 			 var deptQueryable = deptRepository.Queryable;
-			 var query = from employee in employeeQueryable 
-						join user_Id in userQueryable.MapTo<User,UserDto>() on employee.User_Id equals user_Id.Id into t_user_Id
-						from user_Id in t_user_Id.DefaultIfEmpty()
-						join dept_Id in deptQueryable.MapTo<Dept,DeptDto>() on employee.Dept_Id equals dept_Id.Id into t_dept_Id
-						from dept_Id in t_dept_Id.DefaultIfEmpty()
-					join foreing in foreignQueryable on employee.Id equals foreing.EntityId into t_foreing
+			 var query = from _employee in employeeQueryable 
+						join _user_Id in userQueryable.MapTo<User,UserDto>() on _employee.User_Id equals _user_Id.Id into t__user_Id
+						from _user_Id in t__user_Id.DefaultIfEmpty()
+						join _dept_Id in deptQueryable.MapTo<Dept,DeptDto>() on _employee.Dept_Id equals _dept_Id.Id into t__dept_Id
+						from _dept_Id in t__dept_Id.DefaultIfEmpty()
+					join foreing in foreignQueryable on _employee.Id equals foreing.EntityId into t_foreing
 					from foreing in t_foreing.DefaultIfEmpty()
 					join user2 in userQuerable on foreing.CreateUserId equals user2.Id into t_user2
 					from user2 in t_user2.DefaultIfEmpty()
@@ -50,16 +50,16 @@ namespace FastFrame.Service.Services.Basis
 					from user3 in t_user3.DefaultIfEmpty()
 					 select new EmployeeDto
 					{
-						EnCode=employee.EnCode,
-						Name=employee.Name,
-						Email=employee.Email,
-						PhoneNumber=employee.PhoneNumber,
-						Gender=employee.Gender,
-						User_Id=employee.User_Id,
-						Dept_Id=employee.Dept_Id,
-						Id=employee.Id,
-						User=user_Id,
-						Dept=dept_Id,
+						EnCode=_employee.EnCode,
+						Name=_employee.Name,
+						Email=_employee.Email,
+						PhoneNumber=_employee.PhoneNumber,
+						Gender=_employee.Gender,
+						User_Id=_employee.User_Id,
+						Dept_Id=_employee.Dept_Id,
+						Id=_employee.Id,
+						User=_user_Id,
+						Dept=_dept_Id,
 						Foreign = foreing,
 						Create_User = user2,
 						Modify_User = user3,

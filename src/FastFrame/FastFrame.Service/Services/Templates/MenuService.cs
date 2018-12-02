@@ -33,10 +33,10 @@ namespace FastFrame.Service.Services.Basis
 			var foreignQueryable = foreignRepository.Queryable;
 			var userQuerable = userRepository.Queryable;
 			 var menuQueryable = menuRepository.Queryable;
-			 var query = from menu in menuQueryable 
-						join parent_Id in menuQueryable.MapTo<Menu,MenuDto>() on menu.Parent_Id equals parent_Id.Id into t_parent_Id
-						from parent_Id in t_parent_Id.DefaultIfEmpty()
-					join foreing in foreignQueryable on menu.Id equals foreing.EntityId into t_foreing
+			 var query = from _menu in menuQueryable 
+						join _parent_Id in menuQueryable.MapTo<Menu,MenuDto>() on _menu.Parent_Id equals _parent_Id.Id into t__parent_Id
+						from _parent_Id in t__parent_Id.DefaultIfEmpty()
+					join foreing in foreignQueryable on _menu.Id equals foreing.EntityId into t_foreing
 					from foreing in t_foreing.DefaultIfEmpty()
 					join user2 in userQuerable on foreing.CreateUserId equals user2.Id into t_user2
 					from user2 in t_user2.DefaultIfEmpty()
@@ -44,14 +44,14 @@ namespace FastFrame.Service.Services.Basis
 					from user3 in t_user3.DefaultIfEmpty()
 					 select new MenuDto
 					{
-						EnCode=menu.EnCode,
-						Name=menu.Name,
-						Parent_Id=menu.Parent_Id,
-						Title=menu.Title,
-						Icon=menu.Icon,
-						Path=menu.Path,
-						Id=menu.Id,
-						Parent=parent_Id,
+						EnCode=_menu.EnCode,
+						Name=_menu.Name,
+						Parent_Id=_menu.Parent_Id,
+						Title=_menu.Title,
+						Icon=_menu.Icon,
+						Path=_menu.Path,
+						Id=_menu.Id,
+						Parent=_parent_Id,
 						Foreign = foreing,
 						Create_User = user2,
 						Modify_User = user3,

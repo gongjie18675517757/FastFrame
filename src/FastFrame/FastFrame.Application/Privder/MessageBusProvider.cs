@@ -15,9 +15,10 @@ namespace FastFrame.Application.Privder
             Console.WriteLine("MessageBusProvider Init");
             this.redisClient = redisClient;
         }
-        public async Task PubLishAsync(Message message)
+
+        public async Task PubLishAsync<T>(Message<T> message)
         {
-            await redisClient.PublishAsync("message.publish", message.ToJson());
+            await redisClient.PublishAsync($"receive.{message.Category.ToString().ToLower()}", message.ToJson());
         }
     }
 }

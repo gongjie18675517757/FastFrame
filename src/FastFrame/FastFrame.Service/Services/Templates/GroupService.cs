@@ -34,8 +34,8 @@ namespace FastFrame.Service.Services.Chat
 			var groupQueryable=groupRepository.Queryable;
 			var foreignQueryable = foreignRepository.Queryable;
 			var userQuerable = userRepository.Queryable;
-			 var query = from group in groupQueryable 
-					join foreing in foreignQueryable on group.Id equals foreing.EntityId into t_foreing
+			 var query = from _group in groupQueryable 
+					join foreing in foreignQueryable on _group.Id equals foreing.EntityId into t_foreing
 					from foreing in t_foreing.DefaultIfEmpty()
 					join user2 in userQuerable on foreing.CreateUserId equals user2.Id into t_user2
 					from user2 in t_user2.DefaultIfEmpty()
@@ -43,11 +43,11 @@ namespace FastFrame.Service.Services.Chat
 					from user3 in t_user3.DefaultIfEmpty()
 					 select new GroupDto
 					{
-						Name=group.Name,
-						LordUser_Id=group.LordUser_Id,
-						HandIcon_Id=group.HandIcon_Id,
-						Summary=group.Summary,
-						Id=group.Id,
+						Name=_group.Name,
+						LordUser_Id=_group.LordUser_Id,
+						HandIcon_Id=_group.HandIcon_Id,
+						Summary=_group.Summary,
+						Id=_group.Id,
 						Foreign = foreing,
 						Create_User = user2,
 						Modify_User = user3,

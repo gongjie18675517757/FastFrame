@@ -34,10 +34,10 @@ namespace FastFrame.Service.Services.CMS
 			var foreignQueryable = foreignRepository.Queryable;
 			var userQuerable = userRepository.Queryable;
 			 var articleCategoryQueryable = articleCategoryRepository.Queryable;
-			 var query = from articleCategory in articleCategoryQueryable 
-						join parent_Id in articleCategoryQueryable.MapTo<ArticleCategory,ArticleCategoryDto>() on articleCategory.Parent_Id equals parent_Id.Id into t_parent_Id
-						from parent_Id in t_parent_Id.DefaultIfEmpty()
-					join foreing in foreignQueryable on articleCategory.Id equals foreing.EntityId into t_foreing
+			 var query = from _articleCategory in articleCategoryQueryable 
+						join _parent_Id in articleCategoryQueryable.MapTo<ArticleCategory,ArticleCategoryDto>() on _articleCategory.Parent_Id equals _parent_Id.Id into t__parent_Id
+						from _parent_Id in t__parent_Id.DefaultIfEmpty()
+					join foreing in foreignQueryable on _articleCategory.Id equals foreing.EntityId into t_foreing
 					from foreing in t_foreing.DefaultIfEmpty()
 					join user2 in userQuerable on foreing.CreateUserId equals user2.Id into t_user2
 					from user2 in t_user2.DefaultIfEmpty()
@@ -45,12 +45,12 @@ namespace FastFrame.Service.Services.CMS
 					from user3 in t_user3.DefaultIfEmpty()
 					 select new ArticleCategoryDto
 					{
-						Parent_Id=articleCategory.Parent_Id,
-						Name=articleCategory.Name,
-						Url=articleCategory.Url,
-						Description=articleCategory.Description,
-						Id=articleCategory.Id,
-						Parent=parent_Id,
+						Parent_Id=_articleCategory.Parent_Id,
+						Name=_articleCategory.Name,
+						Url=_articleCategory.Url,
+						Description=_articleCategory.Description,
+						Id=_articleCategory.Id,
+						Parent=_parent_Id,
 						Foreign = foreing,
 						Create_User = user2,
 						Modify_User = user3,

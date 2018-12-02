@@ -10,45 +10,48 @@ namespace FastFrame.Infrastructure.Interface
         /// <summary>
         ///  发布消息
         /// </summary>      
-        Task PubLishAsync(Message message);
+        Task PubLishAsync<T>(Message<T> message);
     }
 
     /// <summary>
     /// 消息类型
     /// </summary>
-    public enum MessageType
+    public enum MsgType
     {
         /// <summary>
         /// 通知
         /// </summary>
-        Notify = 0,
+        Notify,
 
+        /// <summary>
+        /// 好友消息
+        /// </summary>       
+        FriendMsg,
+
+        /// <summary>
+        /// 群组消息
+        /// </summary>
+        GroupMsg,
     }
 
     /// <summary>
     /// 消息体
     /// </summary>
-    public class Message
-    {
-        /// <summary>
-        /// 发送者
-        /// </summary>
-        public string[] FromUserIds { get; set; }
-
-        /// <summary>
-        /// 接收者
-        /// </summary>
-        public string[] ToUserIds { get; set; }
-
+    public class Message<T>
+    { 
         /// <summary>
         /// 类型
         /// </summary>
-        public MessageType Category { get; set; }
+        public MsgType Category { get; set; }
+
+        /// <summary>
+        /// 目标用户
+        /// </summary>
+        public string[] Target_Ids { get; set; }
 
         /// <summary>
         /// 内容
         /// </summary>
-        public string Content { get; set; }
-
+        public T Content { get; set; }
     }
 }

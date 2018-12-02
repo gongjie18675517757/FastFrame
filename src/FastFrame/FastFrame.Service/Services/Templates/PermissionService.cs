@@ -31,17 +31,17 @@ namespace FastFrame.Service.Services.Basis
 		protected override IQueryable<PermissionDto> QueryMain() 
 		{
 			 var permissionQueryable = permissionRepository.Queryable;
-			 var query = from permission in permissionQueryable 
-						join parent_Id in permissionQueryable.MapTo<Permission,PermissionDto>() on permission.Parent_Id equals parent_Id.Id into t_parent_Id
-						from parent_Id in t_parent_Id.DefaultIfEmpty()
+			 var query = from _permission in permissionQueryable 
+						join _parent_Id in permissionQueryable.MapTo<Permission,PermissionDto>() on _permission.Parent_Id equals _parent_Id.Id into t__parent_Id
+						from _parent_Id in t__parent_Id.DefaultIfEmpty()
 					 select new PermissionDto
 					{
-						Parent_Id=permission.Parent_Id,
-						EnCode=permission.EnCode,
-						AreaName=permission.AreaName,
-						Name=permission.Name,
-						Id=permission.Id,
-						Parent=parent_Id,
+						Parent_Id=_permission.Parent_Id,
+						EnCode=_permission.EnCode,
+						AreaName=_permission.AreaName,
+						Name=_permission.Name,
+						Id=_permission.Id,
+						Parent=_parent_Id,
 					};
 			return query;
 		}

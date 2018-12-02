@@ -32,14 +32,14 @@ namespace FastFrame.Service.Services.Chat
 		protected override IQueryable<EmailTargetDto> QueryMain() 
 		{
 			var emailTargetQueryable=emailTargetRepository.Queryable;
-			 var query = from emailTarget in emailTargetQueryable 
+			 var query = from _emailTarget in emailTargetQueryable 
 					 select new EmailTargetDto
 					{
-						Email_Id=emailTarget.Email_Id,
-						Category=emailTarget.Category,
-						To_Id=emailTarget.To_Id,
-						HaveRead=emailTarget.HaveRead,
-						Id=emailTarget.Id,
+						Email_Id=_emailTarget.Email_Id,
+						Category=_emailTarget.Category,
+						To_Id=_emailTarget.To_Id,
+						HaveRead=_emailTarget.HaveRead,
+						Id=_emailTarget.Id,
 					};
 			return query;
 		}

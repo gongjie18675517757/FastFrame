@@ -480,6 +480,96 @@
             修改人 
              </summary>
         </member>
+        <member name="T:FastFrame.Dto.Dtos.Chat.FriendMsgInput">
+            <summary>
+            发送新消息
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Dtos.Chat.FriendMsgInput.Content">
+            <summary>
+            内容
+            </summary>      
+        </member>
+        <member name="P:FastFrame.Dto.Dtos.Chat.FriendMsgInput.Category">
+            <summary>
+            消息类型
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Dtos.Chat.FriendMsgInput.Resource_Id">
+            <summary>
+            图片?附件ID
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Dtos.Chat.FriendMsgInput.Target_User_Id">
+            <summary>
+            目标用户
+            </summary>
+        </member>
+        <member name="T:FastFrame.Dto.Dtos.Chat.FriendOutput">
+            <summary>
+            好友
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Dtos.Chat.FriendOutput.Id">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Dtos.Chat.FriendOutput.Name">
+            <summary>
+            姓名
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Dtos.Chat.FriendOutput.HeadIcon_Id">
+            <summary>
+            头像
+            </summary>
+        </member>
+        <member name="T:FastFrame.Dto.Dtos.Chat.RecMsgOutPut">
+            <summary>
+            接收消息
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Dtos.Chat.RecMsgOutPut.Id">
+            <summary>
+            消息ID
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Dtos.Chat.RecMsgOutPut.Content">
+            <summary>
+            内容
+            </summary>            
+        </member>
+        <member name="P:FastFrame.Dto.Dtos.Chat.RecMsgOutPut.Category">
+            <summary>
+            消息类型
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Dtos.Chat.RecMsgOutPut.Resource_Id">
+            <summary>
+            图片?附件ID
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Dtos.Chat.RecMsgOutPut.From_User_Id">
+            <summary>
+            发送用户
+            </summary> 
+        </member>
+        <member name="P:FastFrame.Dto.Dtos.Chat.RecMsgOutPut.Target_User_Id">
+            <summary>
+            目标用户
+            </summary>      
+        </member>
+        <member name="P:FastFrame.Dto.Dtos.LoginInput.Account">
+            <summary>
+            帐号
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Dtos.LoginInput.Password">
+            <summary>
+            密码
+            </summary>
+        </member>
         <member name="T:FastFrame.Dto.CMS.ArticleDto">
              <summary>
             文章 
@@ -660,15 +750,255 @@
             修改人 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Dtos.LoginInput.Account">
-            <summary>
-            帐号
-            </summary>
+        <member name="T:FastFrame.Dto.Chat.EmailAnnexDto">
+             <summary>
+            邮件附件 
+             </summary>
         </member>
-        <member name="P:FastFrame.Dto.Dtos.LoginInput.Password">
-            <summary>
-            密码
-            </summary>
+        <member name="P:FastFrame.Dto.Chat.EmailAnnexDto.Email_Id">
+             <summary>
+            邮件ID 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.EmailAnnexDto.Resource_Id">
+             <summary>
+            文件ID 
+             </summary>
+        </member>
+        <member name="T:FastFrame.Dto.Chat.EmailContentDto">
+             <summary>
+            邮件正文 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.EmailContentDto.Email_Id">
+             <summary>
+            邮件ID 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.EmailContentDto.Content">
+             <summary>
+            内容 
+             </summary>
+        </member>
+        <member name="T:FastFrame.Dto.Chat.EmailDto">
+             <summary>
+            邮件 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.EmailDto.Title">
+             <summary>
+            标题 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.EmailDto.Replay_Email_Id">
+             <summary>
+            回复自 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.EmailDto.FromUser_Id">
+             <summary>
+            发件人 
+             </summary>
+        </member>
+        <member name="T:FastFrame.Dto.Chat.EmailTargetDto">
+             <summary>
+            邮件收件人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.EmailTargetDto.Email_Id">
+             <summary>
+            邮件ID 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.EmailTargetDto.Category">
+             <summary>
+            类型 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.EmailTargetDto.To_Id">
+             <summary>
+            接收人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.EmailTargetDto.HaveRead">
+             <summary>
+            已读 
+             </summary>
+        </member>
+        <member name="T:FastFrame.Dto.Chat.FriendMessageDto">
+             <summary>
+            好友消息 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.FriendMessageDto.Content">
+             <summary>
+            内容 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.FriendMessageDto.Category">
+             <summary>
+            消息类型 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.FriendMessageDto.Resource_Id">
+             <summary>
+            图片?附件ID 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.FriendMessageDto.From_Id">
+             <summary>
+            发送人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.FriendMessageDto.MessageTime">
+             <summary>
+            消息时间 
+             </summary>
+        </member>
+        <member name="T:FastFrame.Dto.Chat.GroupDto">
+             <summary>
+            群组 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.GroupDto.Name">
+             <summary>
+            群组名称 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.GroupDto.LordUser_Id">
+             <summary>
+            群主 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.GroupDto.HandIcon_Id">
+             <summary>
+            图标 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.GroupDto.Summary">
+             <summary>
+            简介 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.GroupDto.Foreign">
+             <summary>
+            管理属性 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.GroupDto.Create_User">
+             <summary>
+            创建人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.GroupDto.Modify_User">
+             <summary>
+            修改人 
+             </summary>
+        </member>
+        <member name="T:FastFrame.Dto.Chat.GroupManagerDto">
+             <summary>
+            群组管理员 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.GroupManagerDto.Group_Id">
+             <summary>
+            群组 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.GroupManagerDto.User_Id">
+             <summary>
+            管理员 
+             </summary>
+        </member>
+        <member name="T:FastFrame.Dto.Chat.GroupMessageDto">
+             <summary>
+            群组消息 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.GroupMessageDto.Group_Id">
+             <summary>
+            群组ID 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.GroupMessageDto.Content">
+             <summary>
+            内容 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.GroupMessageDto.Category">
+             <summary>
+            消息类型 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.GroupMessageDto.Resource_Id">
+             <summary>
+            图片?附件ID 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.GroupMessageDto.From_Id">
+             <summary>
+            发送人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.GroupMessageDto.MessageTime">
+             <summary>
+            消息时间 
+             </summary>
+        </member>
+        <member name="T:FastFrame.Dto.Chat.MessageTargetDto">
+             <summary>
+            消息接收人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.MessageTargetDto.Message_Id">
+             <summary>
+            消息ID 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.MessageTargetDto.To_Id">
+             <summary>
+            接收人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.MessageTargetDto.HaveRead">
+             <summary>
+            已读 
+             </summary>
+        </member>
+        <member name="T:FastFrame.Dto.Chat.NotifyDto">
+             <summary>
+            通知 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.NotifyDto.Title">
+             <summary>
+            标题 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.NotifyDto.Content">
+             <summary>
+            内容 
+             </summary>
+        </member>
+        <member name="T:FastFrame.Dto.Chat.NotifyTargetDto">
+             <summary>
+            通知目标 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.NotifyTargetDto.Notify_Id">
+             <summary>
+            通知ID 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.NotifyTargetDto.To_Id">
+             <summary>
+            接收人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.NotifyTargetDto.HaveRead">
+             <summary>
+            已读 
+             </summary>
         </member>
         <member name="T:FastFrame.Dto.IDto">
             <summary>

@@ -33,8 +33,8 @@ namespace FastFrame.Service.Services.Basis
 			var resourceQueryable=resourceRepository.Queryable;
 			var foreignQueryable = foreignRepository.Queryable;
 			var userQuerable = userRepository.Queryable;
-			 var query = from resource in resourceQueryable 
-					join foreing in foreignQueryable on resource.Id equals foreing.EntityId into t_foreing
+			 var query = from _resource in resourceQueryable 
+					join foreing in foreignQueryable on _resource.Id equals foreing.EntityId into t_foreing
 					from foreing in t_foreing.DefaultIfEmpty()
 					join user2 in userQuerable on foreing.CreateUserId equals user2.Id into t_user2
 					from user2 in t_user2.DefaultIfEmpty()
@@ -42,11 +42,11 @@ namespace FastFrame.Service.Services.Basis
 					from user3 in t_user3.DefaultIfEmpty()
 					 select new ResourceDto
 					{
-						Name=resource.Name,
-						Size=resource.Size,
-						Path=resource.Path,
-						ContentType=resource.ContentType,
-						Id=resource.Id,
+						Name=_resource.Name,
+						Size=_resource.Size,
+						Path=_resource.Path,
+						ContentType=_resource.ContentType,
+						Id=_resource.Id,
 						Foreign = foreing,
 						Create_User = user2,
 						Modify_User = user3,

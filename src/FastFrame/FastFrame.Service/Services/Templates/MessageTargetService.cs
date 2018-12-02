@@ -32,13 +32,13 @@ namespace FastFrame.Service.Services.Chat
 		protected override IQueryable<MessageTargetDto> QueryMain() 
 		{
 			var messageTargetQueryable=messageTargetRepository.Queryable;
-			 var query = from messageTarget in messageTargetQueryable 
+			 var query = from _messageTarget in messageTargetQueryable 
 					 select new MessageTargetDto
 					{
-						Message_Id=messageTarget.Message_Id,
-						To_Id=messageTarget.To_Id,
-						HaveRead=messageTarget.HaveRead,
-						Id=messageTarget.Id,
+						Message_Id=_messageTarget.Message_Id,
+						To_Id=_messageTarget.To_Id,
+						HaveRead=_messageTarget.HaveRead,
+						Id=_messageTarget.Id,
 					};
 			return query;
 		}

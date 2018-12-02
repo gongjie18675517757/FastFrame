@@ -33,8 +33,8 @@ namespace FastFrame.Service.Services.Basis
 			var roleQueryable=roleRepository.Queryable;
 			var foreignQueryable = foreignRepository.Queryable;
 			var userQuerable = userRepository.Queryable;
-			 var query = from role in roleQueryable 
-					join foreing in foreignQueryable on role.Id equals foreing.EntityId into t_foreing
+			 var query = from _role in roleQueryable 
+					join foreing in foreignQueryable on _role.Id equals foreing.EntityId into t_foreing
 					from foreing in t_foreing.DefaultIfEmpty()
 					join user2 in userQuerable on foreing.CreateUserId equals user2.Id into t_user2
 					from user2 in t_user2.DefaultIfEmpty()
@@ -42,9 +42,9 @@ namespace FastFrame.Service.Services.Basis
 					from user3 in t_user3.DefaultIfEmpty()
 					 select new RoleDto
 					{
-						EnCode=role.EnCode,
-						Name=role.Name,
-						Id=role.Id,
+						EnCode=_role.EnCode,
+						Name=_role.Name,
+						Id=_role.Id,
 						Foreign = foreing,
 						Create_User = user2,
 						Modify_User = user3,

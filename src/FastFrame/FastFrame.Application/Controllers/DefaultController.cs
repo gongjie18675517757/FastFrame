@@ -40,16 +40,15 @@ namespace FastFrame.Application.Controllers
 
         // POST: api/Default
         [HttpPost]
-        public async Task Post([FromBody] Message value)
+        public async Task Post([FromBody] Message<string> value)
         {
             var userid = currentUserProvider.GetCurrUser().Id;
-            await messageBus.PubLishAsync(new Message()
+            await messageBus.PubLishAsync(new Message<string>()
             {
-                Category = MessageType.Notify,
-                Content = value.Content,
-                FromUserIds = new string[] { },
-                ToUserIds = new[] { userid }
-            });          
+                Category = MsgType.Notify,
+                Content = value.Content, 
+                Target_Ids = new[] { userid }
+            });
         }
 
         // PUT: api/Default/5

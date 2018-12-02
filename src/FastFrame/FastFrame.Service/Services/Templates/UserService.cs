@@ -34,10 +34,10 @@ namespace FastFrame.Service.Services.Basis
 			var foreignQueryable = foreignRepository.Queryable;
 			var userQuerable = userRepository.Queryable;
 			 var deptQueryable = deptRepository.Queryable;
-			 var query = from user in userQueryable 
-						join dept_Id in deptQueryable.MapTo<Dept,DeptDto>() on user.Dept_Id equals dept_Id.Id into t_dept_Id
-						from dept_Id in t_dept_Id.DefaultIfEmpty()
-					join foreing in foreignQueryable on user.Id equals foreing.EntityId into t_foreing
+			 var query = from _user in userQueryable 
+						join _dept_Id in deptQueryable.MapTo<Dept,DeptDto>() on _user.Dept_Id equals _dept_Id.Id into t__dept_Id
+						from _dept_Id in t__dept_Id.DefaultIfEmpty()
+					join foreing in foreignQueryable on _user.Id equals foreing.EntityId into t_foreing
 					from foreing in t_foreing.DefaultIfEmpty()
 					join user2 in userQuerable on foreing.CreateUserId equals user2.Id into t_user2
 					from user2 in t_user2.DefaultIfEmpty()
@@ -45,17 +45,17 @@ namespace FastFrame.Service.Services.Basis
 					from user3 in t_user3.DefaultIfEmpty()
 					 select new UserDto
 					{
-						Account=user.Account,
-						Password=user.Password,
-						Name=user.Name,
-						Dept_Id=user.Dept_Id,
-						Email=user.Email,
-						PhoneNumber=user.PhoneNumber,
-						HandIconId=user.HandIconId,
-						IsAdmin=user.IsAdmin,
-						IsDisabled=user.IsDisabled,
-						Id=user.Id,
-						Dept=dept_Id,
+						Account=_user.Account,
+						Password=_user.Password,
+						Name=_user.Name,
+						Dept_Id=_user.Dept_Id,
+						Email=_user.Email,
+						PhoneNumber=_user.PhoneNumber,
+						HandIconId=_user.HandIconId,
+						IsAdmin=_user.IsAdmin,
+						IsDisabled=_user.IsDisabled,
+						Id=_user.Id,
+						Dept=_dept_Id,
 						Foreign = foreing,
 						Create_User = user2,
 						Modify_User = user3,

@@ -32,12 +32,12 @@ namespace FastFrame.Service.Services.Chat
 		protected override IQueryable<GroupManagerDto> QueryMain() 
 		{
 			var groupManagerQueryable=groupManagerRepository.Queryable;
-			 var query = from groupManager in groupManagerQueryable 
+			 var query = from _groupManager in groupManagerQueryable 
 					 select new GroupManagerDto
 					{
-						Group_Id=groupManager.Group_Id,
-						User_Id=groupManager.User_Id,
-						Id=groupManager.Id,
+						Group_Id=_groupManager.Group_Id,
+						User_Id=_groupManager.User_Id,
+						Id=_groupManager.Id,
 					};
 			return query;
 		}

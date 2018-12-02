@@ -32,16 +32,15 @@ namespace FastFrame.Service.Services.Chat
 		protected override IQueryable<FriendMessageDto> QueryMain() 
 		{
 			var friendMessageQueryable=friendMessageRepository.Queryable;
-			 var query = from friendMessage in friendMessageQueryable 
+			 var query = from _friendMessage in friendMessageQueryable 
 					 select new FriendMessageDto
 					{
-						Content=friendMessage.Content,
-						Category=friendMessage.Category,
-						Resource_Id=friendMessage.Resource_Id,
-						From_Id=friendMessage.From_Id,
-						MessageTime=friendMessage.MessageTime,
-						Id=friendMessage.Id,
-						Tenant_Id=friendMessage.Tenant_Id,
+						Content=_friendMessage.Content,
+						Category=_friendMessage.Category,
+						Resource_Id=_friendMessage.Resource_Id,
+						From_Id=_friendMessage.From_Id,
+						MessageTime=_friendMessage.MessageTime,
+						Id=_friendMessage.Id,
 					};
 			return query;
 		}

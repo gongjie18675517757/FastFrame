@@ -5,6 +5,7 @@ namespace FastFrame.Dto.CMS
 	using global::System.ComponentModel.DataAnnotations; 
 	using FastFrame.Entity.Enums; 
 	using FastFrame.Entity.Basis; 
+	using System; 
 	using FastFrame.Dto.CMS; 
 	/// <summary>
 	///文章 

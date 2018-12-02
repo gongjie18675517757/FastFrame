@@ -50,7 +50,7 @@ namespace FastFrame.CodeGenerate.Build
             var importNames = relatedTypes
                  .Select(x => T4Help.GenerateNameSpace(x.RelatedType, null))
                  .Union(new[] { areaName })
-                 .SelectMany(x => new string[] {$"FastFrame.Entity.{x}", })
+                 .SelectMany(x => new string[] { $"FastFrame.Entity.{x}", })
                  .Union(new string[] {
                     $"FastFrame.Dto.{areaName}",
                     $"FastFrame.Infrastructure.Interface",
@@ -133,20 +133,20 @@ namespace FastFrame.CodeGenerate.Build
                 yield return $" var {relatedTypeName}Queryable = {relatedTypeName}Repository.Queryable;";
             }
 
-            yield return $" var query = from {typeName} in {typeName}Queryable ";
+            yield return $" var query = from _{typeName} in {typeName}Queryable ";
             foreach (var prop in props)
             {
-                var name = prop.Prop.Name.ToFirstLower();
+                var name = "_" + prop.Prop.Name.ToFirstLower();
                 var isRequired = prop.Prop.GetCustomAttribute<RequiredAttribute>() != null;
                 var relateType = prop.Attr.RelatedType;
-                yield return $"\t\t\tjoin {name} in {relateType.Name.ToFirstLower()}Queryable.MapTo<{relateType.Name},{relateType.Name}Dto>() on {typeName}.{prop.Prop.Name} equals {name}.Id "
+                yield return $"\t\t\tjoin {name} in {relateType.Name.ToFirstLower()}Queryable.MapTo<{relateType.Name},{relateType.Name}Dto>() on _{typeName}.{prop.Prop.Name} equals {name}.Id "
                     + (isRequired ? "" : $"into t_{name}");
                 if (!isRequired)
                     yield return $"\t\t\tfrom {name} in t_{name}.DefaultIfEmpty()";
             }
             if (hasManage)
             {
-                yield return $"\t\tjoin foreing in foreignQueryable on {typeName}.Id equals foreing.EntityId into t_foreing";
+                yield return $"\t\tjoin foreing in foreignQueryable on _{typeName}.Id equals foreing.EntityId into t_foreing";
                 yield return "\t\tfrom foreing in t_foreing.DefaultIfEmpty()";
                 yield return "\t\tjoin user2 in userQuerable on foreing.CreateUserId equals user2.Id into t_user2";
                 yield return "\t\tfrom user2 in t_user2.DefaultIfEmpty()";
@@ -161,11 +161,15 @@ namespace FastFrame.CodeGenerate.Build
             {
                 if (prop.GetCustomAttribute<ExcludeAttribute>() != null)
                     continue;
-                yield return $"\t\t\t{prop.Name}={typeName}.{prop.Name},";
+                if (prop.Name == "Tenant_Id" || prop.Name == "IsDeleted")
+                    continue;
+                yield return $"\t\t\t{prop.Name}=_{typeName}.{prop.Name},";
             }
             foreach (var prop in props)
             {
-                yield return $"\t\t\t{prop.Prop.Name.Replace("_Id", "")}={ prop.Prop.Name.ToFirstLower()},";
+                if (prop.Prop.Name == "Tenant_Id" || prop.Prop.Name == "IsDeleted")
+                    continue;
+                yield return $"\t\t\t{prop.Prop.Name.Replace("_Id", "")}={ "_" + prop.Prop.Name.ToFirstLower()},";
             }
 
 

@@ -54,7 +54,8 @@ namespace FastFrame.CodeGenerate.Build
                         "FastFrame.Infrastructure.Attrs",
                         "global::System.ComponentModel.DataAnnotations",
                         "FastFrame.Entity.Enums",
-                        "FastFrame.Entity.Basis"
+                        "FastFrame.Entity.Basis",
+                        "System"
                     }
                 .Union(type.GetProperties()
                     .Select(x => x.GetCustomAttribute<RelatedToAttribute>())

@@ -31,14 +31,14 @@ namespace FastFrame.Service.Services.Basis
 		protected override IQueryable<QueryProgramDetailDto> QueryMain() 
 		{
 			var queryProgramDetailQueryable=queryProgramDetailRepository.Queryable;
-			 var query = from queryProgramDetail in queryProgramDetailQueryable 
+			 var query = from _queryProgramDetail in queryProgramDetailQueryable 
 					 select new QueryProgramDetailDto
 					{
-						QueryProgram_Id=queryProgramDetail.QueryProgram_Id,
-						Name=queryProgramDetail.Name,
-						Compare=queryProgramDetail.Compare,
-						Value=queryProgramDetail.Value,
-						Id=queryProgramDetail.Id,
+						QueryProgram_Id=_queryProgramDetail.QueryProgram_Id,
+						Name=_queryProgramDetail.Name,
+						Compare=_queryProgramDetail.Compare,
+						Value=_queryProgramDetail.Value,
+						Id=_queryProgramDetail.Id,
 					};
 			return query;
 		}

@@ -590,7 +590,7 @@
         <member name="P:FastFrame.Entity.Chat.Message.Content">
             <summary>
             内容
-            </summary>
+            </summary>     
         </member>
         <member name="P:FastFrame.Entity.Chat.Message.Category">
             <summary>

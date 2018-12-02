@@ -32,12 +32,12 @@ namespace FastFrame.Service.Services.Chat
 		protected override IQueryable<EmailAnnexDto> QueryMain() 
 		{
 			var emailAnnexQueryable=emailAnnexRepository.Queryable;
-			 var query = from emailAnnex in emailAnnexQueryable 
+			 var query = from _emailAnnex in emailAnnexQueryable 
 					 select new EmailAnnexDto
 					{
-						Email_Id=emailAnnex.Email_Id,
-						Resource_Id=emailAnnex.Resource_Id,
-						Id=emailAnnex.Id,
+						Email_Id=_emailAnnex.Email_Id,
+						Resource_Id=_emailAnnex.Resource_Id,
+						Id=_emailAnnex.Id,
 					};
 			return query;
 		}

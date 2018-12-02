@@ -40,12 +40,12 @@ namespace FastFrame.Service.Services.CMS
 			var userQuerable = userRepository.Queryable;
 			 var articleCategoryQueryable = articleCategoryRepository.Queryable;
 			 var meidiaQueryable = meidiaRepository.Queryable;
-			 var query = from article in articleQueryable 
-						join articleCategory_Id in articleCategoryQueryable.MapTo<ArticleCategory,ArticleCategoryDto>() on article.ArticleCategory_Id equals articleCategory_Id.Id into t_articleCategory_Id
-						from articleCategory_Id in t_articleCategory_Id.DefaultIfEmpty()
-						join thumbnail_Id in meidiaQueryable.MapTo<Meidia,MeidiaDto>() on article.Thumbnail_Id equals thumbnail_Id.Id into t_thumbnail_Id
-						from thumbnail_Id in t_thumbnail_Id.DefaultIfEmpty()
-					join foreing in foreignQueryable on article.Id equals foreing.EntityId into t_foreing
+			 var query = from _article in articleQueryable 
+						join _articleCategory_Id in articleCategoryQueryable.MapTo<ArticleCategory,ArticleCategoryDto>() on _article.ArticleCategory_Id equals _articleCategory_Id.Id into t__articleCategory_Id
+						from _articleCategory_Id in t__articleCategory_Id.DefaultIfEmpty()
+						join _thumbnail_Id in meidiaQueryable.MapTo<Meidia,MeidiaDto>() on _article.Thumbnail_Id equals _thumbnail_Id.Id into t__thumbnail_Id
+						from _thumbnail_Id in t__thumbnail_Id.DefaultIfEmpty()
+					join foreing in foreignQueryable on _article.Id equals foreing.EntityId into t_foreing
 					from foreing in t_foreing.DefaultIfEmpty()
 					join user2 in userQuerable on foreing.CreateUserId equals user2.Id into t_user2
 					from user2 in t_user2.DefaultIfEmpty()
@@ -53,18 +53,18 @@ namespace FastFrame.Service.Services.CMS
 					from user3 in t_user3.DefaultIfEmpty()
 					 select new ArticleDto
 					{
-						Title=article.Title,
-						ArticleCategory_Id=article.ArticleCategory_Id,
-						Url=article.Url,
-						Summarize=article.Summarize,
-						Thumbnail_Id=article.Thumbnail_Id,
-						IsRelease=article.IsRelease,
-						LookCount=article.LookCount,
-						Description=article.Description,
-						ArticleContent_Id=article.ArticleContent_Id,
-						Id=article.Id,
-						ArticleCategory=articleCategory_Id,
-						Thumbnail=thumbnail_Id,
+						Title=_article.Title,
+						ArticleCategory_Id=_article.ArticleCategory_Id,
+						Url=_article.Url,
+						Summarize=_article.Summarize,
+						Thumbnail_Id=_article.Thumbnail_Id,
+						IsRelease=_article.IsRelease,
+						LookCount=_article.LookCount,
+						Description=_article.Description,
+						ArticleContent_Id=_article.ArticleContent_Id,
+						Id=_article.Id,
+						ArticleCategory=_articleCategory_Id,
+						Thumbnail=_thumbnail_Id,
 						Foreign = foreing,
 						Create_User = user2,
 						Modify_User = user3,

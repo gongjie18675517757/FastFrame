@@ -10,8 +10,7 @@ namespace FastFrame.Entity.Chat
     {
         /// <summary>
         /// 内容
-        /// </summary>
-        [Required]
+        /// </summary>     
         [StringLength(500)]
         public string Content { get; set; }
 

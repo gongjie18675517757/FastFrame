@@ -5,6 +5,7 @@ namespace FastFrame.Dto.Chat
 	using global::System.ComponentModel.DataAnnotations; 
 	using FastFrame.Entity.Enums; 
 	using FastFrame.Entity.Basis; 
+	using System; 
 	/// <summary>
 	///消息接收人 
 	/// </summary>

@@ -4,6 +4,7 @@ namespace FastFrame.Dto.Basis
 	using FastFrame.Infrastructure.Attrs; 
 	using global::System.ComponentModel.DataAnnotations; 
 	using FastFrame.Entity.Enums; 
+	using System; 
 	/// <summary>
 	///资源 
 	/// </summary>

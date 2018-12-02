@@ -32,13 +32,12 @@ namespace FastFrame.Service.Services.Chat
 		protected override IQueryable<NotifyDto> QueryMain() 
 		{
 			var notifyQueryable=notifyRepository.Queryable;
-			 var query = from notify in notifyQueryable 
+			 var query = from _notify in notifyQueryable 
 					 select new NotifyDto
 					{
-						Title=notify.Title,
-						Content=notify.Content,
-						Tenant_Id=notify.Tenant_Id,
-						Id=notify.Id,
+						Title=_notify.Title,
+						Content=_notify.Content,
+						Id=_notify.Id,
 					};
 			return query;
 		}

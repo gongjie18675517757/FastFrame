@@ -38,12 +38,12 @@ namespace FastFrame.Service.Services.CMS
 			var userQuerable = userRepository.Queryable;
 			 var meidiaQueryable = meidiaRepository.Queryable;
 			 var resourceQueryable = resourceRepository.Queryable;
-			 var query = from meidia in meidiaQueryable 
-						join parent_Id in meidiaQueryable.MapTo<Meidia,MeidiaDto>() on meidia.Parent_Id equals parent_Id.Id into t_parent_Id
-						from parent_Id in t_parent_Id.DefaultIfEmpty()
-						join resource_Id in resourceQueryable.MapTo<Resource,ResourceDto>() on meidia.Resource_Id equals resource_Id.Id into t_resource_Id
-						from resource_Id in t_resource_Id.DefaultIfEmpty()
-					join foreing in foreignQueryable on meidia.Id equals foreing.EntityId into t_foreing
+			 var query = from _meidia in meidiaQueryable 
+						join _parent_Id in meidiaQueryable.MapTo<Meidia,MeidiaDto>() on _meidia.Parent_Id equals _parent_Id.Id into t__parent_Id
+						from _parent_Id in t__parent_Id.DefaultIfEmpty()
+						join _resource_Id in resourceQueryable.MapTo<Resource,ResourceDto>() on _meidia.Resource_Id equals _resource_Id.Id into t__resource_Id
+						from _resource_Id in t__resource_Id.DefaultIfEmpty()
+					join foreing in foreignQueryable on _meidia.Id equals foreing.EntityId into t_foreing
 					from foreing in t_foreing.DefaultIfEmpty()
 					join user2 in userQuerable on foreing.CreateUserId equals user2.Id into t_user2
 					from user2 in t_user2.DefaultIfEmpty()
@@ -51,14 +51,14 @@ namespace FastFrame.Service.Services.CMS
 					from user3 in t_user3.DefaultIfEmpty()
 					 select new MeidiaDto
 					{
-						Parent_Id=meidia.Parent_Id,
-						Href=meidia.Href,
-						Name=meidia.Name,
-						Resource_Id=meidia.Resource_Id,
-						IsFolder=meidia.IsFolder,
-						Id=meidia.Id,
-						Parent=parent_Id,
-						Resource=resource_Id,
+						Parent_Id=_meidia.Parent_Id,
+						Href=_meidia.Href,
+						Name=_meidia.Name,
+						Resource_Id=_meidia.Resource_Id,
+						IsFolder=_meidia.IsFolder,
+						Id=_meidia.Id,
+						Parent=_parent_Id,
+						Resource=_resource_Id,
 						Foreign = foreing,
 						Create_User = user2,
 						Modify_User = user3,

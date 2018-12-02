@@ -32,7 +32,11 @@ export default {
     Menus,
     Toolbar
   },
-
+  provide() {
+    return {
+      reload: this.resufresh
+    };
+  },
   data() {
     return {
       fixed: false,
@@ -61,7 +65,14 @@ export default {
       }
     }
   },
-  methods: {}
+  methods: {
+    resufresh() {
+      this.resufreshed = false;
+      this.$nextTick(function() {
+        this.resufreshed = true;
+      });
+    }
+  }
 };
 </script>
 <style scoped>

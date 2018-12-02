@@ -10,6 +10,7 @@ export default new Vuex.Store({
     leftDrawer: true,
     rightDrawer: false,
     dialogMode: true,
+    mapMode: '',
     notifys: [{
         title: '您的帐户入帐100元',
         color: 'light-green',
@@ -63,10 +64,16 @@ export default new Vuex.Store({
     },
     setTenant(state, payload) {
       state.tenant = payload.info
+    },
+    setMapMode(state, payload) {
+      state.mapMode = payload.mode
+      window.localStorage.setItem('mapMode', payload.mode)
     }
-
   },
-  actions: {
-
+  actions: {},
+  getters: {
+    mapMode: state => {
+      return state.mapMode || window.localStorage.getItem('mapMode') || 'bd'
+    }
   }
 })

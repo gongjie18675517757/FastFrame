@@ -93,7 +93,7 @@ namespace FastFrame.Application.Controllers
                 {
                     isTextArea = true;
                 }
-                else if (stringLengthAttribute != null && stringLengthAttribute.MaximumLength>=8000)
+                else if (stringLengthAttribute != null && stringLengthAttribute.MaximumLength >= 8000)
                 {
                     isRichText = true;
                     isTextArea = false;
@@ -112,7 +112,7 @@ namespace FastFrame.Application.Controllers
                     Rules = GetRules(x),
                     Relate = relatedToAttribute?.RelatedType.Name,
                     IsTextArea = isTextArea,
-                    IsRichText= isRichText,
+                    IsRichText = isRichText,
                 });
             }
 
@@ -127,7 +127,7 @@ namespace FastFrame.Application.Controllers
                 Name = type.Name,
                 Description = descriptionProvider.GetClassDescription(type),
                 FieldInfoStruts = fieldInfoStructs,
-                RelateFields = relatedFieldAttribute?.FieldNames,
+                RelateFields = relatedFieldAttribute?.FieldNames ?? new[] { type.GetProperties().FirstOrDefault().Name },
                 TreeKey = treeAttribute?.Key
             };
         }

@@ -25,11 +25,45 @@ export function loadScript(src, cb) {
     var $script = document.createElement("script");
     $script.setAttribute("type", "text/javascript");
     $script.setAttribute("src", src);
+    $script.setAttribute("async", '');
+    $script.setAttribute("defer", '');
     document
       .getElementsByTagName("head")
       .item(0)
       .appendChild($script);
   } else {
     cb();
+  }
+}
+
+/**
+ * 地图组件基类
+ */
+export const Base = {
+  inject: ["getMap"],
+  data() {
+    return {
+      instance: null
+    }
+  },
+  computed: {
+    map() {
+      return this.getMap();
+    }
+  },
+  created() {
+    if (this.map) {
+      this.load();
+    }
+  },
+  watch: {
+    map(val) {
+      if (val) {
+        this.load();
+      }
+    }
+  },
+  methods: {
+    load() {}
   }
 }

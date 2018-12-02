@@ -315,8 +315,8 @@ export default {
     evalAction({ action }) {
       if (typeof action == 'function') action.call(this, this.context)
     },
-    refresh() {
-      this.reload()
+    refresh() {       
+      this.reload()  
     },
     handleRowClick(props) {
       if (this.singleSelection) {

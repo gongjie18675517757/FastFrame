@@ -11,6 +11,7 @@ namespace FastFrame.Application.Controllers.Basis
     public partial class TenantController
     {
         [AllowAnonymous]
+        [HttpGet]
         public async Task<TenantDto> GetCurrent()
         {
             return await service.GetCurrentAsync();

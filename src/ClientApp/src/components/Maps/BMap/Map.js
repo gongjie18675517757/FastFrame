@@ -1,23 +1,16 @@
-<template>
-  <div>
-    <div id="map"></div>
-    <Mark v-for="(mark,index) in marks" :map="map" :key="`mark.${index}`" v-bind="mark"/>
-    <div class="none">
-      <slot></slot>
-    </div>
-  </div>
-</template>
-
-<script>
-import Mark from "./BMapMark.vue";
-import { loadScript } from "../mapUtils.js";
-
+import {
+  loadScript
+} from "../mapUtils.js";
 export default {
-  components: { Mark },
+  provide() {
+    return {
+      getMap: () => this.map
+    };
+  },
   props: {
     center: {
       type: Object,
-      default: function() {
+      default: function () {
         return {
           lat: 0,
           lng: 0,
@@ -53,22 +46,20 @@ export default {
 
       map.addControl(top_right_navigation);
       map.enableScrollWheelZoom(true);
-      this.$watch("center", this.setCenter, { deep: true });
+      this.$watch("center", this.setCenter, {
+        deep: true
+      });
       this.setCenter(this.center);
     },
-    setCenter({ lng, lat, zoom }) {
+    setCenter({
+      lng,
+      lat,
+      zoom
+    }) {
       this.map.centerAndZoom(new BMap.Point(lng, lat), zoom);
     }
+  },
+  render(h) {
+    return h('div', {}, this.$slots.default)
   }
 };
-</script>
-
-
-<style scoped>
-#map {
-  height: 100%;
-}
-.none {
-  display: none;
-}
-</style>

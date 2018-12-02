@@ -13,11 +13,11 @@ import Alert from "@/components/Alert.vue";
 
 export default {
   components: { Alert },
-  provide() {
-    return {
-      reload: this.resufresh
-    };
-  },
+  // provide() {
+  //   return {
+  //     reload: this.resufresh
+  //   };
+  // },
   data() {
     return {
       resufreshed: true

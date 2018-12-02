@@ -8,7 +8,8 @@ import {
 } from '@/permission.js'
 import {
   changeChar,
-  mapMany
+  mapMany,
+  sleep
 } from './utils'
 
 Vue.use(Router)
@@ -65,10 +66,20 @@ let routes = [{
         name: 'about',
         meta: {
           title: '关于页',
-          keepAlive: false
+          keepAlive: true
         },
         component: () =>
           import(`./views/About.vue`)
+      },
+      {
+        path: '/map',
+        name: 'map',
+        meta: {
+          title: '地图演示',
+          keepAlive: true
+        },
+        component: () =>
+          import(`./views/Map.vue`)
       },
       {
         path: '/tenantCenter',
@@ -133,7 +144,17 @@ let router = new Router({
 console.log(routes);
 
 
-const siteName = 'XX管理系统'
+const getSiteName = async () => {
+  while (true) {
+    let name = store.state.tenant.Name
+    if (!name) {
+      await sleep(100)
+    } else {
+      return name
+    }
+  }
+
+}
 const existLogin = () => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
@@ -146,7 +167,8 @@ const existLogin = () => {
 }
 
 router.beforeEach(async (to, from, next) => {
-  window.document.title = to.meta.title ? `${to.meta.title}-${siteName}` : siteName;
+  let name = await getSiteName()
+  window.document.title = to.meta.title ? `${to.meta.title}-${name}` : name;
   if (to.meta.allowAnonymous) {
     next();
     return

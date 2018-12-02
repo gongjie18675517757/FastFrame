@@ -1,14 +1,11 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace FastFrame.Entity.Chat
 {
     /// <summary>
-    /// 通知
+    /// 邮件
     /// </summary>
-    public class Notify:IEntity,IHasTenant
+    public class Email : IEntity, IHasTenant
     {
         /// <summary>
         /// 标题
@@ -18,11 +15,14 @@ namespace FastFrame.Entity.Chat
         public string Title { get; set; }
 
         /// <summary>
-        /// 内容
+        /// 回复自
         /// </summary>
-        [Required]
-        [StringLength(500)]
-        public string Content { get; set; } 
+        public string Replay_Email_Id { get; set; }
+
+        /// <summary>
+        /// 发件人
+        /// </summary>
+        public string FromUser_Id { get; set; }
 
         /// <summary>
         /// 组织

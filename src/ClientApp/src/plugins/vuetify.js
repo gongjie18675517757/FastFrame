@@ -32,7 +32,8 @@ import {
   VTreeview,
   VResponsive,
   VImg,
-  VTextarea
+  VTextarea,  
+  VRadioGroup
 } from 'vuetify'
 import 'vuetify/src/stylus/app.styl'
 import zhHans from 'vuetify/es5/locale/zh-Hans'
@@ -71,7 +72,8 @@ Vue.use(Vuetify, {
     VTreeview,
     VResponsive,
     VImg,
-    VTextarea
+    VTextarea,     
+    VRadioGroup
   },
   // theme: {
   //   primary: '#ee44aa',
@@ -88,10 +90,8 @@ Vue.use(Vuetify, {
   iconfont: 'md',
   lang: {
     locales: {
-      zhHans      
+      zhHans
     },
     current: 'zhHans'
   },
 })
-
- 

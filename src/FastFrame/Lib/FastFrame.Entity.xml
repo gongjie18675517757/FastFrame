@@ -422,6 +422,246 @@
             <param name="password"></param>
             <returns></returns>
         </member>
+        <member name="T:FastFrame.Entity.Chat.Email">
+            <summary>
+            邮件
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.Email.Title">
+            <summary>
+            标题
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.Email.Replay_Email_Id">
+            <summary>
+            回复自
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.Email.FromUser_Id">
+            <summary>
+            发件人
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.Email.Tenant_Id">
+            <summary>
+            组织
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.Email.Id">
+            <summary>
+            主键
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Chat.EmailAnnex">
+            <summary>
+            邮件附件
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.EmailAnnex.Email_Id">
+            <summary>
+            邮件ID
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.EmailAnnex.Resource_Id">
+            <summary>
+            文件ID
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.EmailAnnex.Id">
+            <summary>
+            主键
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Chat.EmailContent">
+            <summary>
+            邮件正文
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.EmailContent.Email_Id">
+            <summary>
+            邮件ID
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.EmailContent.Content">
+            <summary>
+            内容
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.EmailContent.Id">
+            <summary>
+            主键
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Chat.EmailTarget">
+            <summary>
+            邮件收件人
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.EmailTarget.Email_Id">
+            <summary>
+            邮件ID
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.EmailTarget.Category">
+            <summary>
+            类型
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Chat.EmailTargetCategory">
+            <summary>
+            邮件类型
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Chat.EmailTargetCategory.To">
+            <summary>
+            发送
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Chat.EmailTargetCategory.CC">
+            <summary>
+            接收
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Chat.FriendMessage">
+            <summary>
+            好友消息
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Chat.Group">
+            <summary>
+            群组 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.Group.Name">
+            <summary>
+            群组名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.Group.LordUser_Id">
+            <summary>
+            群主
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.Group.HandIcon_Id">
+            <summary>
+            图标
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.Group.Summary">
+            <summary>
+            简介
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Chat.GroupManager">
+            <summary>
+            群组管理员
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.GroupManager.Group_Id">
+            <summary>
+            群组
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.GroupManager.User_Id">
+            <summary>
+            管理员
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.GroupManager.Id">
+            <summary>
+            主键
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Chat.GroupMessage">
+            <summary>
+            群组消息
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.GroupMessage.Group_Id">
+            <summary>
+            群组ID
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Chat.Message">
+            <summary>
+            消息
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.Message.Content">
+            <summary>
+            内容
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.Message.Category">
+            <summary>
+            消息类型
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.Message.Resource_Id">
+            <summary>
+            图片?附件ID
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.Message.From_Id">
+            <summary>
+            发送人
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.Message.MessageTime">
+            <summary>
+            消息时间
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.Message.Id">
+            <summary>
+            主键
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.Message.Tenant_Id">
+            <summary>
+            组织
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Chat.MessageTarget">
+            <summary>
+            消息接收人
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.MessageTarget.Message_Id">
+            <summary>
+            消息ID
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Chat.MsgType">
+            <summary>
+            消息类型
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Chat.MsgType.Text">
+            <summary>
+            文本
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Chat.MsgType.Image">
+            <summary>
+            图片
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Chat.MsgType.Voice">
+            <summary>
+            语音
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Chat.MsgType.Video">
+            <summary>
+            视频
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Chat.MsgType.File">
+            <summary>
+            文件
+            </summary>
+        </member>
         <member name="T:FastFrame.Entity.Chat.Notify">
             <summary>
             通知
@@ -437,69 +677,44 @@
             内容
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Chat.Notify.Target_Id">
+        <member name="P:FastFrame.Entity.Chat.Notify.Tenant_Id">
             <summary>
-            目标
+            组织
             </summary>
         </member>
-        <member name="T:FastFrame.Entity.Chat.Message">
+        <member name="P:FastFrame.Entity.Chat.Notify.Id">
             <summary>
-            消息
+            主键
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Chat.Message.Content">
+        <member name="T:FastFrame.Entity.Chat.NotifyTarget">
             <summary>
-            内容
+            通知目标
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Chat.Message.Resource_Id">
+        <member name="P:FastFrame.Entity.Chat.NotifyTarget.Notify_Id">
             <summary>
-            资源
+            通知ID
             </summary>
         </member>
-        <member name="T:FastFrame.Entity.Chat.Email">
+        <member name="T:FastFrame.Entity.Chat.TargetInfo">
             <summary>
-            邮件
+            目标信息
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Chat.Email.Title">
+        <member name="P:FastFrame.Entity.Chat.TargetInfo.To_Id">
             <summary>
-            标题
+            接收人
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Chat.Email.Replay_Id">
-            <summary>
-            回复自
-            </summary>
-        </member>
-        <member name="T:FastFrame.Entity.Chat.EmailContent">
-            <summary>
-            邮件正文
-            </summary>
-        </member>
-        <member name="T:FastFrame.Entity.Chat.EmailAnnex">
-            <summary>
-            邮件附件
-            </summary>
-        </member>
-        <member name="T:FastFrame.Entity.Chat.ChatUser">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Chat.ChatUser.Chat_Id">
-            <summary>
-            实例
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Chat.ChatUser.UserId">
-            <summary>
-            用户ID
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Chat.ChatUser.IsRead">
+        <member name="P:FastFrame.Entity.Chat.TargetInfo.HaveRead">
             <summary>
             已读
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.TargetInfo.Id">
+            <summary>
+            主键
             </summary>
         </member>
         <member name="T:FastFrame.Entity.CMS.Article">

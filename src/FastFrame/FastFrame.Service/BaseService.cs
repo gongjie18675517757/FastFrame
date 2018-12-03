@@ -26,7 +26,7 @@ namespace FastFrame.Service
         public IScopeServiceLoader Loader { get; }
 
         [FromContainer]
-        public IEventBus EventBus { get; set; }
+        public IEventBus EventBus { get; set; } 
 
         public BaseService(IRepository<TEntity> repository, IScopeServiceLoader loader)
         {
@@ -58,11 +58,11 @@ namespace FastFrame.Service
             await repository.AddAsync(entity);
             await OnAdding(input, entity);
             input.Id = entity.Id;
-            await EventBus.TriggerAsync(new Events.DoMainAdding<TDto>(input));
+            await EventBus?.TriggerAsync(new Events.DoMainAdding<TDto>(input));
             await repository.CommmitAsync();
 
             var dto = await GetAsync(entity.Id);
-            await EventBus.TriggerAsync(new Events.DoMainAdded<TDto>(dto));
+            await EventBus?.TriggerAsync(new Events.DoMainAdded<TDto>(dto));
             return dto;
         }
 
@@ -86,7 +86,7 @@ namespace FastFrame.Service
             {
                 var entity = await repository.GetAsync(id);
                 await OnDeleteing(entity);
-                await EventBus.TriggerAsync(new Events.DoMainDeleteing<TDto>(new TDto() { Id = id }));
+                await EventBus?.TriggerAsync(new Events.DoMainDeleteing<TDto>(new TDto() { Id = id }));
                 if (entity == null)
                     throw new Exception("ID不正确");
                 await repository.DeleteAsync(entity);
@@ -94,7 +94,7 @@ namespace FastFrame.Service
             await repository.CommmitAsync();
             foreach (var id in ids)
             {
-                await EventBus.TriggerAsync(new Events.DoMainDeleted<TDto>(new TDto() { Id = id }));
+                await EventBus?.TriggerAsync(new Events.DoMainDeleted<TDto>(new TDto() { Id = id }));
             }
         }
 
@@ -168,11 +168,11 @@ namespace FastFrame.Service
             var entity = await repository.GetAsync(input.Id);
             input.MapSet(entity);
             await OnUpdateing(input, entity);
-            await EventBus.TriggerAsync(new Events.DoMainUpdateing<TDto>(input));
+            await EventBus?.TriggerAsync(new Events.DoMainUpdateing<TDto>(input));
             await repository.UpdateAsync(entity);
             await repository.CommmitAsync();
             var dto = await GetAsync(input.Id);
-            await EventBus.TriggerAsync(new Events.DoMainUpdated<TDto>(dto));
+            await EventBus?.TriggerAsync(new Events.DoMainUpdated<TDto>(dto));
             return dto;
         }
 

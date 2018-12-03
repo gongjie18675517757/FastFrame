@@ -1,4 +1,6 @@
-﻿using FastFrame.Database;
+﻿using AspectCore.Extensions.DependencyInjection;
+using AspectCore.Injector;
+using FastFrame.Database;
 using FastFrame.Infrastructure.EventBus;
 using FastFrame.Infrastructure.Interface;
 using FastFrame.Repository;
@@ -11,7 +13,7 @@ using System.IO;
 
 namespace Service.Test
 {
-    public abstract class BaseServiceTest:System.IDisposable
+    public abstract class BaseServiceTest : System.IDisposable
     {
         public BaseServiceTest()
         {
@@ -29,19 +31,20 @@ namespace Service.Test
                 })
                 .AddScoped<IScopeServiceLoader, ScopeServiceLoader>()
                 .AddScoped<ICurrentUserProvider, CurrentUserProvider>()
-                .AddScoped<IEventBus,EventBus>()
+                .AddScoped<IEventBus, EventBus>()
                 .AddServices()
                 .AddRepository();
 
-             
 
-            serviceScope = services.BuildServiceProvider().CreateScope();
-            ServiceProvider= serviceScope.ServiceProvider;
+            var container = services.ToServiceContainer();
+            var serviceResolver = container.Build();
+            serviceScope = serviceResolver.CreateScope();
+            ServiceProvider = serviceScope;
         }
 
-        public IConfigurationRoot Configuration { get; } 
+        public IConfigurationRoot Configuration { get; }
 
-        private IServiceScope serviceScope;
+        private IServiceResolver serviceScope;
 
         public IServiceProvider ServiceProvider { get; }
 

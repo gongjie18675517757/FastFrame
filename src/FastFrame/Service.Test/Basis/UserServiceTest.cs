@@ -42,9 +42,9 @@ namespace Service.Test.Basis
                 var exists = await repository.Queryable.AnyAsync(x => x.Name == name);
                 Assert.AreEqual(exists, false);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
             finally
             { 

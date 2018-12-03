@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28010.2046
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastFrame.Infrastructure", "FastFrame.Infrastructure\FastFrame.Infrastructure.csproj", "{3A75262C-B979-4A64-A70E-16ECBAF5CC84}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastFrame.Application", "FastFrame.Application\FastFrame.Application.csproj", "{E34F668B-0398-4538-9F01-C7F8A5EE9FB6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastFrame.WebHost", "FastFrame.Application\FastFrame.WebHost.csproj", "{E34F668B-0398-4538-9F01-C7F8A5EE9FB6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastFrame.UnitTest", "FastFrame.UnitTest\FastFrame.UnitTest.csproj", "{B2BC2CCE-C00F-489F-84ED-E490F57AE72D}"
 EndProject
@@ -27,7 +27,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastFrame.CodeGenerate", "F
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastFrame.Service", "FastFrame.Service\FastFrame.Service.csproj", "{793E1492-50E8-47E3-9391-BFCE246F9B8F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Test", "Service.Test\Service.Test.csproj", "{4CFA85EB-510C-4FE9-B0D6-E50D5F187374}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service.Test", "Service.Test\Service.Test.csproj", "{4CFA85EB-510C-4FE9-B0D6-E50D5F187374}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{13A71BB6-3A6C-4AC8-90A7-6698CBD8F4F8}"
 EndProject

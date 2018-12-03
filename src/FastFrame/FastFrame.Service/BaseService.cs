@@ -1,7 +1,8 @@
-﻿using AspectCore.DynamicProxy;
+﻿using AspectCore.Injector;
 using FastFrame.Dto;
 using FastFrame.Entity;
 using FastFrame.Infrastructure;
+using FastFrame.Infrastructure.EventBus;
 using FastFrame.Infrastructure.Interface;
 using FastFrame.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +24,9 @@ namespace FastFrame.Service
         private readonly IRepository<TEntity> repository;
 
         public IScopeServiceLoader Loader { get; }
+
+        [FromContainer]
+        public IEventBus EventBus { get; set; }
 
         public BaseService(IRepository<TEntity> repository, IScopeServiceLoader loader)
         {
@@ -53,9 +57,13 @@ namespace FastFrame.Service
             var entity = input.MapTo<TDto, TEntity>();
             await repository.AddAsync(entity);
             await OnAdding(input, entity);
+            input.Id = entity.Id;
+            await EventBus.TriggerAsync(new Events.DoMainAdding<TDto>(input));
             await repository.CommmitAsync();
 
-            return await GetAsync(entity.Id);
+            var dto = await GetAsync(entity.Id);
+            await EventBus.TriggerAsync(new Events.DoMainAdded<TDto>(dto));
+            return dto;
         }
 
         /// <summary>
@@ -78,11 +86,16 @@ namespace FastFrame.Service
             {
                 var entity = await repository.GetAsync(id);
                 await OnDeleteing(entity);
+                await EventBus.TriggerAsync(new Events.DoMainDeleteing<TDto>(new TDto() { Id = id }));
                 if (entity == null)
                     throw new Exception("ID不正确");
                 await repository.DeleteAsync(entity);
             }
             await repository.CommmitAsync();
+            foreach (var id in ids)
+            {
+                await EventBus.TriggerAsync(new Events.DoMainDeleted<TDto>(new TDto() { Id = id }));
+            }
         }
 
         protected virtual Task OnGeting(TDto dto) => Task.CompletedTask;
@@ -155,11 +168,12 @@ namespace FastFrame.Service
             var entity = await repository.GetAsync(input.Id);
             input.MapSet(entity);
             await OnUpdateing(input, entity);
-
+            await EventBus.TriggerAsync(new Events.DoMainUpdateing<TDto>(input));
             await repository.UpdateAsync(entity);
             await repository.CommmitAsync();
-
-            return await GetAsync(input.Id);
+            var dto = await GetAsync(input.Id);
+            await EventBus.TriggerAsync(new Events.DoMainUpdated<TDto>(dto));
+            return dto;
         }
 
         /// <summary>
@@ -186,78 +200,6 @@ namespace FastFrame.Service
             {
                 Filters = filters
             }).AnyAsync();
-        }
-    }
-
-    public enum AutoCacheOperate
-    {
-        Get,
-        Add,
-        Update,
-        Remove,
-    }
-
-    public class AutoCacheInterceptor : AbstractInterceptorAttribute
-    {
-        private readonly AutoCacheOperate autoCacheOperate;
-
-        public AutoCacheInterceptor(AutoCacheOperate autoCacheOperate)
-        {
-            this.autoCacheOperate = autoCacheOperate;
-        }
-        public override async Task Invoke(AspectContext context, AspectDelegate next)
-        {
-            var resultType = context.ProxyMethod.ReturnType;
-            resultType = resultType.GetGenericArguments()[0];
-            switch (autoCacheOperate)
-            {
-                case AutoCacheOperate.Get:
-                    {
-                        var pars = context.Parameters;
-                        var key = pars[0].ToString();
-                        var value = await RedisHelper.GetAsync(key);
-                        if (value.IsNullOrWhiteSpace())
-                        {
-                            await next(context);
-                            var result = await context.UnwrapAsyncReturnValue();
-                            var jsonValue = Newtonsoft.Json.JsonConvert.SerializeObject(result);
-                            await RedisHelper.SetAsync(((IDto)result).Id, jsonValue, 60 * 60 * 10);
-                        }
-                        else
-                        {
-                            var resultValue = Newtonsoft.Json.JsonConvert.DeserializeObject(value, resultType);
-                            dynamic member = context.ServiceMethod.ReturnType.GetMember("Result")[0];
-                            dynamic temp = System.Convert.ChangeType(resultValue, member.PropertyType);
-                            context.ReturnValue = System.Convert.ChangeType(Task.FromResult(temp), context.ServiceMethod.ReturnType);
-                            //context.ReturnValue = Task.FromResult(resultValue);
-                        }
-                    }
-                    break;
-                case AutoCacheOperate.Add:
-                    {
-                        await next(context);
-                        var result = await context.UnwrapAsyncReturnValue();
-                        var jsonValue = Newtonsoft.Json.JsonConvert.SerializeObject(result);
-                        await RedisHelper.SetAsync(((IDto)result).Id, jsonValue, 60 * 60 * 10);
-                    }
-                    break;
-                case AutoCacheOperate.Update:
-                    {
-                        await next(context);
-                        var result = await context.UnwrapAsyncReturnValue();
-                        var jsonValue = Newtonsoft.Json.JsonConvert.SerializeObject(result);
-                        await RedisHelper.SetAsync(((IDto)result).Id, jsonValue, 60 * 60 * 10);
-                    }
-                    break;
-                case AutoCacheOperate.Remove:
-                    {
-                        var pars = context.Parameters.Cast<string>().ToArray();
-                        await RedisHelper.DelAsync(pars);
-                    }
-                    break;
-                default:
-                    break;
-            }
         }
     }
 }

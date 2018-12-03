@@ -7,7 +7,7 @@ namespace FastFrame.Dto
     /// </summary>
     public interface IDto
     {
-        string Id { get; }
+        string Id { get; set; }
     }
 
     /// <summary>

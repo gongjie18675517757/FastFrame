@@ -7,7 +7,7 @@ using System.Reflection;
 
 
 namespace FastFrame.Infrastructure
-{ 
+{
     public class T4Help
     {
         /// <summary>
@@ -31,7 +31,7 @@ namespace FastFrame.Infrastructure
         }
 
         public static Type GetNullableType(Type type)
-        { 
+        {
             if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
             {
                 return type.GetGenericArguments()[0];
@@ -70,10 +70,10 @@ namespace FastFrame.Infrastructure
                 default:
                     break;
             }
-            return isNullable ? $"Nullable<{name}>" : name;
+            return isNullable ? $"{name}?" : name;
         }
 
-       
+
         /// <summary>
         /// 判断文件是否存在过
         /// </summary>

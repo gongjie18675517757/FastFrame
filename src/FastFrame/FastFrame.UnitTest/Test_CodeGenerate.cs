@@ -27,11 +27,9 @@ namespace FastFrame.UnitTest
         {
             var dtoBuild = new CodeGenerate.Build.DtoBuild(@"D:\CoreProject\FastFrame\src\FastFrame", typeof(IEntity));
             var targetInfo = dtoBuild.GetTargetInfo(typeof(TestEntity2));
-            Assert.AreEqual(3, targetInfo.PropInfos.Count());
-            var prop = targetInfo.PropInfos.FirstOrDefault(x => x.Name == "TestEntity1_EnCode");
-            Assert.AreNotEqual(null, prop);
-            prop = targetInfo.PropInfos.FirstOrDefault(x => x.Name == "TestEntity1_Name");
-            Assert.AreNotEqual(null, prop);
+            Assert.AreEqual(5, targetInfo.PropInfos.Count());
+            var prop = targetInfo.PropInfos.FirstOrDefault(x => x.Name == "TestEntity1");
+            Assert.AreNotEqual(null, prop);           
         }
     }
 }

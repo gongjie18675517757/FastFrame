@@ -82,7 +82,7 @@
         <member name="P:FastFrame.Entity.Basis.Foreign.CreateUserId">
             <summary>
             创建人
-            </summary>
+            </summary>        
         </member>
         <member name="P:FastFrame.Entity.Basis.Foreign.CreateTime">
             <summary>

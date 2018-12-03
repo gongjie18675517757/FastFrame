@@ -20,8 +20,7 @@ namespace FastFrame.Entity.Basis
 
         /// <summary>
         /// 创建人
-        /// </summary>
-        [Required]
+        /// </summary>        
         [RelatedTo(typeof(User))]
         public string CreateUserId { get; set; }
 

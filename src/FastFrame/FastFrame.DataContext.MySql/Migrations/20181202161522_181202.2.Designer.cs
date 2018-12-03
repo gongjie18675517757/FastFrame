@@ -3,14 +3,16 @@ using System;
 using FastFrame.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FastFrame.Database.Migrations
 {
     [DbContext(typeof(DataBase))]
-    partial class DataBaseModelSnapshot : ModelSnapshot
+    [Migration("20181202161522_181202.2")]
+    partial class _1812022
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -113,6 +115,7 @@ namespace FastFrame.Database.Migrations
                     b.Property<DateTime>("CreateTime");
 
                     b.Property<string>("CreateUserId")
+                        .IsRequired()
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
@@ -517,7 +520,7 @@ namespace FastFrame.Database.Migrations
                     b.ToTable("Basis_User");
 
                     b.HasData(
-                        new { Id = "00F6P5G2VC2SAP1UJV7HTBYGA", Account = "admin", Email = "gongjie@qq.com", EncryptionKey = "af2dd6afec52cfa781a03057f182e316", IsAdmin = true, IsDeleted = false, IsDisabled = false, IsRoot = true, Name = "超级管理员", Password = "e383510c3d87d18360c7a950ab325f50", PhoneNumber = "18675517757", Tenant_Id = "00F6P5G2VC2SAP1UJV7HTBYGU" }
+                        new { Id = "00F6P5G2VC2SAP1UJV7HTBYGA", Account = "admin", Email = "gongjie@qq.com", EncryptionKey = "15b9e245754a720667d3fb1f939345a9", IsAdmin = true, IsDeleted = false, IsDisabled = false, IsRoot = true, Name = "超级管理员", Password = "90e028f3a5854186fbe858daf9e02072", PhoneNumber = "18675517757", Tenant_Id = "00F6P5G2VC2SAP1UJV7HTBYGU" }
                     );
                 });
 

@@ -39,8 +39,8 @@ export default {
     }
   },
   methods: {
-    handleClick: e => {
-      console.log(e)
+    handleClick: () => {
+      // console.log(e)
     }
   }
 }

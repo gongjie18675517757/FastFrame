@@ -89,8 +89,8 @@
 <script>
 import VuePerfectScrollbar from "vue-perfect-scrollbar";
 import TextInput from "@/components/Inputs/TextInput.vue";
-import timg from "@/assets/timg.jpg";
-import { alert, mapMany } from "@/utils";
+// import timg from "@/assets/timg.jpg";
+// import { alert } from "@/utils";
 import { getDefaultModel, getFormItems, getRules } from "@/generate";
 export default {
   components: {
@@ -187,8 +187,7 @@ export default {
     this.options = options;
   },
   methods: {
-    getId() {
-      let { q: id } = this.$route.query;
+    getId() {       
       if (this.pageInfo.pars && this.pageInfo.pars.id) {
         return this.pageInfo.pars.id;
       } else {

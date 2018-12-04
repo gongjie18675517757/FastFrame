@@ -11,7 +11,7 @@ namespace FastFrame.Service.Services.Chat
     /// <summary>
     /// 好友消息
     /// </summary>
-    public partial class ChatService
+    public partial class ChatService:IService
     {
         private readonly ICurrentUserProvider currentUserProvider;
         private readonly IRepository<FriendMessage> friendMsgRepository;

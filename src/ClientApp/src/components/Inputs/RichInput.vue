@@ -12,7 +12,7 @@
  
 
 <script>
-import { quillEditor } from 'vue-quill-editor'
+
 export default {
   props: {
     value: String,
@@ -36,12 +36,7 @@ export default {
   methods: {
     onEditorBlur() {
       //失去焦点事件
-    },
-    onEditorFocus(val, editor) {
-      // if (this.disabled) {
-      //   editor.enable(false)
-      // }
-    },
+    }, 
     onEditorChange({ html }) {
       //内容改变事件
       this.content = html

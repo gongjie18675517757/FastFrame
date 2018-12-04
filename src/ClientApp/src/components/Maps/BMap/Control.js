@@ -21,9 +21,9 @@ export default {
     load() {
       function control() {
         this.defaultAnchor = BMAP_ANCHOR_TOP_LEFT;
-        this.defaultOffset = new BMap.Size(0, 0);
+        this.defaultOffset = new window.BMap.Size(0, 0);
       }
-      control.prototype = new BMap.Control();
+      control.prototype = new window.BMap.Control();
       control.prototype.initialize = map =>
         map.getContainer().appendChild(this.$el);
       this.instance = new control();

@@ -344,7 +344,7 @@ export default {
     async remove() {
       let ids = []
       if (this.singleSelection) {
-        ids = [currentRow.Id]
+        ids = [this.currentRow.Id]
       } else {
         ids = this.selection.map(r => r.Id)
       }
@@ -356,19 +356,19 @@ export default {
           index = this.selection.findIndex(r => r.Id == id)
           this.selection.splice(index, 1)
           if (this.currentRow && this.currentRow.Id == id) this.currentRow = null
-        } finally {
+        } catch(err) {
+          window.console.error(err)
         }
       }
     },
     async loadList() {
       this.loading = true
-      let { page, rowsPerPage, sortBy, descending } = this.pager,
-        keyword = this.search
+      let { page, rowsPerPage, sortBy, descending } = this.pager 
 
       /*条件1 */
       let { queryFilter = [] } = this.pageInfo.pars || {}
       if (typeof queryFilter == 'function') {
-        queryFilter = await queryFilter.call(this, context)
+        queryFilter = await queryFilter.call(this, this.context)
       }
 
       /*条件2 */

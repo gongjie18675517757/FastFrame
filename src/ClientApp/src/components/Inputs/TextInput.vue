@@ -62,7 +62,7 @@
 <script>
 import SearchInput from "./SearchInput.vue";
 import RichInput from "./RichInput.vue";
-import rules from "@/rules";
+
 export default {
   components: {
     SearchInput,

@@ -79,7 +79,7 @@ export default {
 
     this.items = loadTree(null)
     this.selection = [...this.model]
-    console.log(this.selection)
+     
   },
   methods: {
     cancel() {

@@ -71,7 +71,7 @@ export function generateArray(length) {
  * @param {*} millisecond 
  */
 export function sleep(millisecond = 0) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         setTimeout(() => {
             resolve()
         }, millisecond);
@@ -140,7 +140,7 @@ export function upload({
             let formData = new FormData()
             for (let index = 0; index < files.length; index++) {
                 const file = files[index];
-                formData.append('files[]', files[index]);
+                formData.append('files[]', file);
             }
             $http.post('/api/resource/post', formData, {
                 method: 'post',

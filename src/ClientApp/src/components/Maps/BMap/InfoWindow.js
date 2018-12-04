@@ -27,7 +27,7 @@ export default {
   },
   methods: {
     load() {
-      this.instance = new BMap.InfoWindow(this.$el, {
+      this.instance = new window.BMap.InfoWindow(this.$el, {
         width: 250,
         height: 80,
         title: "信息窗口",
@@ -41,7 +41,7 @@ export default {
         lng,
         lat
       } = target.getPosition();
-      var point = new BMap.Point(lng, lat);
+      var point = new window.BMap.Point(lng, lat);
       this.map.openInfoWindow(this.instance, point);
     }
   }

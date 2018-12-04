@@ -14,12 +14,12 @@ export default {
   },
   beforeDestroy() {
     if (this.map && this.instance) {
-      this.map.controls[google.maps.ControlPosition.TOP_LEFT].remove(this.$el);
+      this.map.controls[window.google.maps.ControlPosition.TOP_LEFT].remove(this.$el);
     }
   },
   methods: {
     load() {
-      this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(this.$el);
+      this.map.controls[window.google.maps.ControlPosition.TOP_LEFT].push(this.$el);
     }
   }
 };

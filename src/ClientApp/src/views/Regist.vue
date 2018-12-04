@@ -62,8 +62,8 @@
 import UserAdd from '@/views/Basis/User/Add.vue'
 
 import rules from '@/rules'
-import timg from '@/assets/timg.jpg'
-import { alert, upload } from '@/utils'
+ 
+import { alert } from '@/utils'
 export default {
   components: {
     UserAdd

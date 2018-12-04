@@ -70,21 +70,21 @@ export default {
         {
           icon: 'account_circle',
           title: '个人中心',
-          click: e => {
+          click: () => {
             this.$router.push('/userCenter')
           }
         }, 
         {
           icon: 'settings',
           title: '更换头像',
-          click: e => {
+          click: () => {
             this.rightDrawer = true
           }
         },
         {
           icon: 'fullscreen_exit',
           title: '注销',
-          click: async e => {
+          click: async () => {
             this.$store.commit('logout')
             this.$router.push('/login')
             this.$http.post()

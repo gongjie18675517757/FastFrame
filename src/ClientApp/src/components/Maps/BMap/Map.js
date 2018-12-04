@@ -36,12 +36,12 @@ export default {
   },
   methods: {
     loaded() {
-      var map = new BMap.Map(this.$el);
+      var map = new window.BMap.Map(this.$el);
       this.map = map;
 
-      var top_right_navigation = new BMap.NavigationControl({
-        anchor: BMAP_ANCHOR_BOTTOM_RIGHT,
-        type: BMAP_NAVIGATION_CONTROL_SMALL
+      var top_right_navigation = new window.BMap.NavigationControl({
+        anchor: window.BMAP_ANCHOR_BOTTOM_RIGHT,
+        type: window.BMAP_NAVIGATION_CONTROL_SMALL
       });
 
       map.addControl(top_right_navigation);
@@ -56,7 +56,7 @@ export default {
       lat,
       zoom
     }) {
-      this.map.centerAndZoom(new BMap.Point(lng, lat), zoom);
+      this.map.centerAndZoom(new window.BMap.Point(lng, lat), zoom);
     }
   },
   render(h) {

@@ -56,7 +56,7 @@
 <script>
 // import { validationMixin } from 'vuelidate'
 // import { required, maxLength, email } from 'vuelidate/lib/validators'
-import { sleep, alert } from '@/utils.js'
+import {  alert } from '@/utils.js'
 export default {
   data: () => ({
     loading: false,

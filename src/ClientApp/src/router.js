@@ -7,7 +7,7 @@ import {
   existBtn
 } from '@/permission.js'
 import {
-  changeChar,
+ 
   mapMany,
   sleep
 } from './utils'
@@ -141,19 +141,20 @@ let routes = [{
 let router = new Router({
   routes
 })
-console.log(routes);
+ 
 
 
 const getSiteName = async () => {
+  let name = ''
   while (true) {
-    let name = store.state.tenant.Name
+    name = store.state.tenant.Name
     if (!name) {
       await sleep(100)
     } else {
-      return name
+      break;
     }
   }
-
+  return name
 }
 const existLogin = () => {
   return new Promise((resolve, reject) => {
@@ -204,7 +205,7 @@ router.beforeEach(async (to, from, next) => {
   }
 })
 
-router.afterEach((to, from) => {
+router.afterEach((to) => {
   if (!to.meta.allowAnonymous) {
     store.state.lastUrl = to.fullPath
   }

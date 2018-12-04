@@ -6,8 +6,8 @@ import {
 let permission = []
 
 export async function init() {
-  permission=[]
-  await initPermission() 
+  permission = []
+  await initPermission()
 }
 
 async function initPermission() {
@@ -26,7 +26,7 @@ async function initPermission() {
       permission = loadTree(null)
     }
   } catch (error) {
-
+    window.console.error(error)
   } finally {
     localLock.freed()
   }

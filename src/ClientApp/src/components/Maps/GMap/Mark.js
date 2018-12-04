@@ -19,10 +19,10 @@ export default {
   },
   watch: {
     lat(val) {
-      this.instance.setPosition(google.maps.LatLng(this.lng, val));
+      this.instance.setPosition(window.google.maps.LatLng(this.lng, val));
     },
     lng(val) {
-      this.instance.setPosition(google.maps.LatLng(val, this.lat));     
+      this.instance.setPosition(window.google.maps.LatLng(val, this.lat));     
     },
     title(val) {
       this.instance.setTitle(val);
@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     load() {
-      this.instance = new google.maps.Marker({
+      this.instance = new window.google.maps.Marker({
         position: {
           lng: this.lng,
           lat: this.lat

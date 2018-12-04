@@ -19,10 +19,10 @@ export default {
   },
   watch: {
     lat(val) {
-      this.instance.setPosition(new BMap.Point(this.lng, val));
+      this.instance.setPosition(new window.BMap.Point(this.lng, val));
     },
     lng(val) {
-      this.instance.setPosition(new BMap.Point(val, this.lat));
+      this.instance.setPosition(new window.BMap.Point(val, this.lat));
     },
     title(val) {
       this.instance.setTitle(val);
@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     load() {
-      this.instance = new BMap.Marker(new BMap.Point(this.lng, this.lat), {
+      this.instance = new window.BMap.Marker(new window.BMap.Point(this.lng, this.lat), {
         title: this.title
       });
       this.map.addOverlay(this.instance);

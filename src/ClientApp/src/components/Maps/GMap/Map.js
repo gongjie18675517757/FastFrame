@@ -37,7 +37,7 @@ export default {
   },
   methods: {
     loaded() {
-      var map = new google.maps.Map(this.$el); 
+      var map = new window.google.maps.Map(this.$el); 
       this.map = map;  
       this.$watch("center", this.setCenter, {
         deep: true
@@ -52,7 +52,7 @@ export default {
       lat,
       zoom
     }) {
-      var position = new google.maps.LatLng(lat, lng);
+      var position = new window.google.maps.LatLng(lat, lng);
       this.map.setCenter(position);
       this.map.setZoom(zoom);
     }

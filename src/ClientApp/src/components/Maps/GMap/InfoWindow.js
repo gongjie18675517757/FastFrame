@@ -28,14 +28,12 @@ export default {
   },
   methods: {
     load() {
-      this.instance = new google.maps.InfoWindow({
+      this.instance = new window.google.maps.InfoWindow({
         content: this.$el,
       });
 
     },
-    handleClick({
-      target
-    }) {
+    handleClick() {
       this.instance.open(this.map,this.$refs.mark.instance)
     }
   }

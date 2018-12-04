@@ -24,15 +24,15 @@ const connection = new signalR.HubConnectionBuilder()
 export async function start() {
   try {
     connection.stop();
-  } catch {
-
+  } catch (err) {
+    window.console.err(err)
   }
   try {
-    console.log('开始连接');
+    window.console.log('开始连接');
     await connection.start()
     onConnectioned()
   } catch (error) {
-    console.log(error);
+    window.console.error(error);
     onError(error)
   }
 }
@@ -45,6 +45,7 @@ export async function stop() {
 
 
 const onError = async (err) => {
+  window.console.err(err)
   await sleep(5000)
   await start()
 }

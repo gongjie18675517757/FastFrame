@@ -28,9 +28,9 @@ export default {
               disabled({ selection }) {
                 return selection.length != 1
               },
-              async action({ selection, rows }) {
+              async action({ selection }) {
                 let { Id, IsRelease } = selection[0]
-                let result = await this.$http.put(`/api/Article/ToggleRelease/${Id}`)
+                await this.$http.put(`/api/Article/ToggleRelease/${Id}`)
                 let msg = `${IsRelease ? '取消' : ''}发布成功`
                 selection[0].IsRelease = !IsRelease
                 alert.success(msg)

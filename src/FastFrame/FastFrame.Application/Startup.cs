@@ -118,6 +118,8 @@ namespace FastFrame.Application
             return serviceResolver;
         }
 
+        /*master*/
+
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime applicationLifetime)
         {
             if (env.IsDevelopment())

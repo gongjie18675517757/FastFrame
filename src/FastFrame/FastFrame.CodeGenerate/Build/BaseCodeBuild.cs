@@ -8,6 +8,7 @@ namespace FastFrame.CodeGenerate.Build
 {
     public abstract class BaseCodeBuild
     {
+        public abstract string ProductName { get; }
         /// <summary>
         /// 解决方案目录
         /// </summary>
@@ -47,6 +48,6 @@ namespace FastFrame.CodeGenerate.Build
         /// 构造代码信息
         /// </summary>
         /// <returns></returns>
-        public abstract IEnumerable<TargetInfo> BuildCodeInfo();
+        public abstract IEnumerable<TargetInfo> BuildCodeInfo(string typeName);
     }
 }

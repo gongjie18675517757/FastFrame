@@ -16,10 +16,14 @@ namespace FastFrame.CodeGenerate.Build
 
         public override string TargetPath => $"{SolutionDir}\\FastFrame.Application\\Controllers\\Templates";
 
-        public override IEnumerable<TargetInfo> BuildCodeInfo()
+        public override string ProductName => "API控制器";
+
+        public override IEnumerable<TargetInfo> BuildCodeInfo(string typeName)
         {
             foreach (var type in GetTypes())
             {
+                if (type.Name != typeName)
+                    continue;
                 if (type.GetCustomAttribute<Infrastructure.Attrs.ExportAttribute>() == null)
                     continue;
 

@@ -12,6 +12,7 @@ namespace FastFrame.CodeGenerate.Build
 {
     public class DtoBuild : BaseCodeBuild
     {
+        public override string ProductName => "DTO";
         public DtoBuild(string solutionDir, Type baseEntityType) : base(solutionDir, baseEntityType)
         {
         }
@@ -19,10 +20,12 @@ namespace FastFrame.CodeGenerate.Build
         public override string TargetPath => $"{SolutionDir}\\FastFrame.Dto\\Dtos\\Templates";
 
 
-        public override IEnumerable<TargetInfo> BuildCodeInfo()
+        public override IEnumerable<TargetInfo> BuildCodeInfo(string typeName)
         {
             foreach (var type in GetTypes())
             {
+                if (type.Name != typeName)
+                    continue;
                 if (type.GetCustomAttribute<ExcludeAttribute>() != null)
                     continue;
 

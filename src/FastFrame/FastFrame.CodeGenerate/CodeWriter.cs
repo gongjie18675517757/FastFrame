@@ -10,10 +10,16 @@ namespace FastFrame.CodeGenerate
 {
     public class CodeWriter
     {
+        private readonly string typeName;
+
+        public CodeWriter(string typeName="")
+        {
+            this.typeName = typeName;
+        }
         public event EventHandler<string> WriteFileComplete;
         public void Run(BaseCodeBuild codeBuild)
         {
-            foreach (var target in codeBuild.BuildCodeInfo())
+            foreach (var target in codeBuild.BuildCodeInfo(typeName))
             {
                 if (!Directory.Exists(target.Path))
                     Directory.CreateDirectory(target.Path);

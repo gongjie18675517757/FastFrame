@@ -15,6 +15,7 @@ namespace FastFrame.CodeGenerate.Build
 {
     public class ServiceCodeBuild : BaseCodeBuild
     {
+        public override string ProductName => "服务";
         public ServiceCodeBuild(string solutionDir, Type baseEntityType) : base(solutionDir, baseEntityType)
         {
         }
@@ -26,13 +27,15 @@ namespace FastFrame.CodeGenerate.Build
         //    yield break;
         //}
 
-        public override IEnumerable<TargetInfo> BuildCodeInfo()
+        public override IEnumerable<TargetInfo> BuildCodeInfo(string typeName)
         {
-            foreach (var item in GetTypes())
+            foreach (var type in GetTypes())
             {
-                if (item.GetCustomAttribute<Infrastructure.Attrs.ExcludeAttribute>() != null)
+                if (type.Name != typeName)
                     continue;
-                yield return Build(item);
+                if (type.GetCustomAttribute<Infrastructure.Attrs.ExcludeAttribute>() != null)
+                    continue;
+                yield return Build(type);
             }
         }
 

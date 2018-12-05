@@ -14,12 +14,36 @@ namespace FastFrame.CodeGenerate
     {
         static void Main()
         {
+            string typeName = "";
             var baseType = typeof(IEntity);
+            var types = baseType.Assembly.GetTypes().Where(x => baseType.IsAssignableFrom(x) && x.IsClass && !x.IsAbstract);
+            var typeNames = types.Select((x, index) => (index + 1, x.Name)).ToDictionary(x => x.Item1, x => x.Name);
+
+            START:
+            Console.WriteLine("请输入要生成的类型:");
+            foreach (var (index, Name) in typeNames)
+            {
+                Console.WriteLine($"{index}:{Name}");
+            }
+            Console.WriteLine("0:全部");
+
+            INPUT:
+            Console.Write(">:");
+            var inputIndex = Console.ReadLine();
+            if (int.TryParse(inputIndex, out var intIndex) && (typeNames.ContainsKey(intIndex) || intIndex == 0))
+            {
+                typeName = intIndex == 0 ? "" : typeNames[intIndex];
+            }
+            else
+            {
+                goto INPUT;
+            }
+
             var codeBuildType = typeof(BaseCodeBuild);
             var builds = codeBuildType.Assembly
                     .GetTypes()
                     .Where(x => codeBuildType.IsAssignableFrom(x) && !x.IsAbstract);
-            var writer = new CodeWriter();
+            var writer = new CodeWriter(typeName);
             writer.WriteFileComplete += (s, e) => Console.WriteLine($"{DateTime.Now}\t{e}\t");
             foreach (var item in builds)
             {
@@ -29,15 +53,14 @@ namespace FastFrame.CodeGenerate
                 writer.Run(codeBuild);
             }
 
-            var types = baseType.Assembly.GetTypes()
-                .Where(x => baseType.IsAssignableFrom(x)
-                    && x.IsClass
-                    && !x.IsAbstract
+            var types2 = types
+                .Where(x =>
+                      x.Name == typeName
                     && x.GetCustomAttribute<Infrastructure.Attrs.ExportAttribute>() != null);
 
             var basePath = @"D:\CoreProject\FastFrame\src\ClientApp\src\views";
             var docPath = @"D:\CoreProject\FastFrame\src\FastFrame\Lib";
-            foreach (var area in types.GroupBy(x => T4Help.GenerateNameSpace(x, null)))
+            foreach (var area in types2.GroupBy(x => T4Help.GenerateNameSpace(x, null)))
             {
                 var path = Path.Combine(basePath, area.Key);
                 if (!Directory.Exists(path)) Directory.CreateDirectory(path);
@@ -131,6 +154,8 @@ namespace FastFrame.CodeGenerate
                     }
                 }
             }
+
+            goto START;
         }
 
         static void WriteLines(string path, IEnumerable<string> lines)

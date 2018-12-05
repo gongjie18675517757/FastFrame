@@ -342,6 +342,7 @@ export default {
       }
     },
     async remove() {
+      await this.$message.confirm("提示", "确认要删除吗?");
       let ids = []
       if (this.singleSelection) {
         ids = [this.currentRow.Id]

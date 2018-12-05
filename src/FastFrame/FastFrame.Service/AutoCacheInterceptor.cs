@@ -20,7 +20,8 @@ namespace FastFrame.Service
         public override async Task Invoke(AspectContext context, AspectDelegate next)
         {
             var resultType = context.ProxyMethod.ReturnType;
-            resultType = resultType.GetGenericArguments()[0];
+            if (resultType.IsGenericType)
+                resultType = resultType.GetGenericArguments()[0];
             switch (autoCacheOperate)
             {
                 case AutoCacheOperate.Get:
@@ -63,13 +64,14 @@ namespace FastFrame.Service
                     break;
                 case AutoCacheOperate.Remove:
                     {
-                        var pars = context.Parameters.Cast<string>().ToArray();
+                        await next(context);
+                        var pars = (string[])context.Parameters[0];
                         await RedisHelper.DelAsync(pars);
                     }
                     break;
                 default:
                     break;
-            } 
+            }
         }
     }
 }

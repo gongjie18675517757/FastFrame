@@ -189,6 +189,7 @@ export default {
       alert.success('添加成功!')
     },
     async handleDelete() {
+      await this.$message.confirm("提示", "确认要删除吗?");
       let { Id } = this.currItem
       let index = this.items.findIndex(r => r == this.currItem)
       await this.$http.delete(`/api/meidia/delete/${Id}`)

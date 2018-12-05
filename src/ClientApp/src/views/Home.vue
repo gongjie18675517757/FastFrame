@@ -48,7 +48,7 @@ export default {
       return this.$store.state.tenant.Name;
     }
   },
-  async created() {
+  async created() { 
     try {
       let request = await this.$http.get("/api/account/GetCurrent");
       this.$store.commit("login", request);

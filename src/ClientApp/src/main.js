@@ -8,8 +8,12 @@ import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import '@/hubs/messageHub'
 import $http from '@/http.js'
+import Alert from '@/components/Message/Alert.vue'
+import Confirm from '@/components/Message/Confirm.vue'
+import Prompt from '@/components/Message/Prompt.vue'
 import {
-  eventBus
+  eventBus,
+  showDialog
 } from './utils';
 
 import VueQuillEditor from 'vue-quill-editor'
@@ -21,7 +25,23 @@ Vue.use(VueQuillEditor)
 
 import Btn from '@/components/Btn.vue'
 
-
+Vue.prototype.$message = {
+  alert(title = "", content = "") {
+    return showDialog(Alert, {
+      title,
+      content
+    })
+  },
+  confirm(title = "", content = "") {
+    return showDialog(Confirm, {
+      title,
+      content
+    })
+  },
+  prompt() {
+    return showDialog(Prompt, ...arguments)
+  }
+}
 Vue.config.productionTip = false
 Vue.prototype.$eventBus = eventBus
 Vue.prototype.$http = $http

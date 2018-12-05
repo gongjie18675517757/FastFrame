@@ -69,7 +69,7 @@ namespace FastFrame.Service
                     break;
                 default:
                     break;
-            }
+            } 
         }
     }
 }

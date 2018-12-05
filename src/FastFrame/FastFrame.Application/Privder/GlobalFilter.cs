@@ -9,6 +9,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Reflection;
+using AspectCore.DynamicProxy;
 
 namespace FastFrame.Application.Privder
 {
@@ -34,10 +35,10 @@ namespace FastFrame.Application.Privder
         /// <returns></returns>
         public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
-            var curr = operaterProvider.GetCurrUser();          
+            var curr = operaterProvider.GetCurrUser();
             if (!context.Filters.Any(x => x.GetType() == typeof(AllowAnonymousFilter)))
             {
-                
+
                 if (curr == null)
                 {
                     context.HttpContext.Response.StatusCode = 401;
@@ -46,14 +47,14 @@ namespace FastFrame.Application.Privder
                 else
                 {
                     if (context.ActionDescriptor is ControllerActionDescriptor controllerActionDescriptor)
-                    {                     
+                    {
                         var permissionAttribute = controllerActionDescriptor.ControllerTypeInfo.GetCustomAttribute<PermissionAttribute>();
                         var permissionAttribute2 = controllerActionDescriptor.MethodInfo.GetCustomAttribute<PermissionAttribute>();
                         if (permissionAttribute != null && permissionAttribute2 != null)
                         {
                             var moduleName = permissionAttribute.EnCode;
                             var methodNames = permissionAttribute2.AllEnCodes;
-                            var exists= await permissionService.ExistPermission(moduleName, methodNames);
+                            var exists = await permissionService.ExistPermission(moduleName, methodNames);
                             if (!exists)
                             {
                                 context.HttpContext.Response.StatusCode = 403;
@@ -63,7 +64,7 @@ namespace FastFrame.Application.Privder
                     }
                     operaterProvider.Refresh();
                 }
-            } 
+            }
         }
 
         /// <summary>
@@ -77,6 +78,9 @@ namespace FastFrame.Application.Privder
             //context.HttpContext.Response.ContentType = "application/json;charset=utf-8";
             context.HttpContext.Response.StatusCode = 400;
             var ex = context.Exception;
+            if(ex is AspectInvocationException aspectInvocationException)
+                ex = ex.InnerException;
+
             if (ex is UniqueException uniqueException)
             {
                 var typeDescription = descriptionProvider.GetClassDescription(uniqueException.Type);
@@ -84,15 +88,18 @@ namespace FastFrame.Application.Privder
                 for (int i = 0; i < uniqueException.PropNames.Length; i++)
                 {
                     propDescriptions[i] = descriptionProvider.GetPropertyDescription(uniqueException.Type, uniqueException.PropNames[i]);
-
                 }
                 context.Result = new ObjectResult(new { Message = $"{typeDescription}:{string.Join("+", propDescriptions)} 重复!" });
             }
             else
             {
-                context.Result = new ObjectResult(new { Message = context.Exception.Message });
+                context.Result = new ObjectResult(new { ex.Message });
 #if DEBUG
-                context.Result = new ObjectResult(context.Exception);
+                context.Result = new ObjectResult(new
+                {
+                    ex.Message,
+                    ex.StackTrace
+                });
 #endif
             }
 

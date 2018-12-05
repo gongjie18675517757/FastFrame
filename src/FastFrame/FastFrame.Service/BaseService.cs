@@ -52,7 +52,10 @@ namespace FastFrame.Service
             if (input == null)
             {
                 throw new ArgumentNullException(nameof(input));
-            }
+            } 
+
+
+
 
             var entity = input.MapTo<TDto, TEntity>();
             await repository.AddAsync(entity);

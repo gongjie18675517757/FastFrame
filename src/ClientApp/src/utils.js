@@ -256,3 +256,11 @@ export function showDialog(component, pars = {}) {
     })
 
 }
+
+/**
+ * 取数组中随机值
+ * @param {*} arr 
+ */
+export const randomElement = (arr = []) => {
+    return arr[Math.floor(Math.random() * arr.length)];
+};

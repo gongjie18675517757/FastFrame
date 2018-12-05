@@ -72,6 +72,16 @@ let routes = [{
           import(`./views/About.vue`)
       },
       {
+        path: '/chat',
+        name: 'chat',
+        meta: {
+          title: '在线聊天',
+          keepAlive: true
+        },
+        component: () =>
+          import(`./views/Chat/ChatLayout.vue`)
+      },
+      {
         path: '/map',
         name: 'map',
         meta: {

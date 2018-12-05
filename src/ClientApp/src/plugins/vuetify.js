@@ -32,8 +32,9 @@ import {
   VTreeview,
   VResponsive,
   VImg,
-  VTextarea,  
-  VRadioGroup
+  VTextarea,
+  VRadioGroup,
+  VBottomNav
 } from 'vuetify'
 import 'vuetify/src/stylus/app.styl'
 import zhHans from 'vuetify/es5/locale/zh-Hans'
@@ -72,8 +73,9 @@ Vue.use(Vuetify, {
     VTreeview,
     VResponsive,
     VImg,
-    VTextarea,     
-    VRadioGroup
+    VTextarea,
+    VRadioGroup,
+    VBottomNav
   },
   // theme: {
   //   primary: '#ee44aa',

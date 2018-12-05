@@ -36,7 +36,8 @@ export default new Vuex.Store({
         timeLabel: '1小时前'
       }
     ],
-    dialogs: []
+    dialogs: [],
+    friendMsgs: []
   },
   mutations: {
     login(state, payload) {
@@ -68,6 +69,9 @@ export default new Vuex.Store({
     setMapMode(state, payload) {
       state.mapMode = payload.mode
       window.localStorage.setItem('mapMode', payload.mode)
+    },
+    addFriendMsg(state, payload) {
+      state.friendMsgs.push(payload.FriendMsg)
     }
   },
   actions: {},

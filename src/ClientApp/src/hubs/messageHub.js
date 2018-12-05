@@ -8,6 +8,8 @@ import {
 import {
   eventBus
 } from '@/utils'
+import store from '@/store'
+
 const connection = new signalR.HubConnectionBuilder()
   .withUrl("/hub/message")
   .build()
@@ -57,8 +59,12 @@ async function onConnectioned() {
   // }
 }
 
-connection.on("ReceiveMessage", () => {
-  eventBus.$emit('receive', )
+connection.on("FriendMsg", (msg) => {
+  eventBus.$emit('FriendMsg', msg)
+  store.commit({
+    type: 'addFriendMsg',
+    FriendMsg:msg
+  })
 })
 
 connection.on("Notify", (msg) => {

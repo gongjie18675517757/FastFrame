@@ -21,7 +21,7 @@
           <menu-item title="地图" icon="map" path="/map"/>
           <menu-item title="邮件" icon="email"/>
           <menu-item title="通知" icon="notifications" :count="notifyCount"/>
-          <menu-item title="消息" icon="chat"/>
+          <menu-item title="消息" icon="chat" path="/chat"/>
           <v-divider></v-divider>
           <div v-for="(group,index) in menus" :key="index">
             <v-subheader>{{ group.title }}</v-subheader>

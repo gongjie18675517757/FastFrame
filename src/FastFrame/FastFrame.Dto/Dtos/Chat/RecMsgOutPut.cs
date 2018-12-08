@@ -4,7 +4,7 @@ namespace FastFrame.Dto.Dtos.Chat
 {
     /// <summary>
     /// 接收消息
-    /// </summary>
+    /// </summary>    
     public class RecMsgOutPut
     {
         /// <summary>

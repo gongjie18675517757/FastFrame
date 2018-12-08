@@ -64,7 +64,7 @@
     </v-card-actions>
   </v-card>
 </template>
-<script> 
+<script>
 import VuePerfectScrollbar from "vue-perfect-scrollbar";
 export default {
   components: {
@@ -110,4 +110,12 @@ export default {
   }
 };
 </script>
+
+<style scoped lang="stylus">
+
+.chat-room--scrollbar {
+  height: calc(100vh - 230px);
+  overflow: auto;
+}
+</style>
 

@@ -23,13 +23,13 @@ using AspectCore.Configuration;
 using AspectCore.Extensions.DependencyInjection;
 using AspectCore.Injector;
 using AspectCore.DynamicProxy;
+using CSRedis;
+using FastFrame.Infrastructure.MessageBus;
 
 namespace FastFrame.Application
 {
     public class Startup
-    {
-        private SubscribeBus subscriber;
-
+    { 
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -41,9 +41,7 @@ namespace FastFrame.Application
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.Configure<CookiePolicyOptions>(options =>
-            {
-                // This lambda determines whether user consent for non-essential cookies 
-                // is needed for a given request.
+            { 
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
@@ -59,24 +57,18 @@ namespace FastFrame.Application
                     options.SerializerSettings.ContractResolver = new DefaultContractResolver();
                     options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm";
                     options.SerializerSettings.NullValueHandling = NullValueHandling.Include;
-                    options.SerializerSettings.Converters.Add(new StringEnumConverter() { CamelCaseText = true });
+                    options.SerializerSettings.Converters.Add(new StringEnumConverter());
                 });
-            services.AddSignalR();
-
-            ILoggerFactory Mlogger = new LoggerFactory()
-               .AddDebug((categoryName, logLevel) => (logLevel == LogLevel.Information) && (categoryName == DbLoggerCategory.Database.Command.Name))
-              .AddConsole((categoryName, logLevel) => (logLevel == LogLevel.Information) && (categoryName == DbLoggerCategory.Database.Command.Name));
-
-            services.AddOptions();
-
-            services.Configure<ResourceOption>(Configuration.GetSection("ResourceOption"));
-            //services.Configure<RedisConfig>(Configuration.GetSection("RedisConfig"));
+            services.AddSignalR(); 
+            services.AddLogging(r=>r.AddLog4Net());
+            services.AddOptions(); 
+            services.Configure<ResourceOption>(Configuration.GetSection("ResourceOption")); 
 
             services
                 .AddHttpContextAccessor()
                 .AddDbContextPool<Database.DataBase>(o =>
                 {
-                    o.UseMySql(Configuration.GetConnectionString("Local_Mysql")).UseLoggerFactory(Mlogger);
+                    o.UseMySql(Configuration.GetConnectionString("Local_Mysql"));
                     //o.UseInMemoryDatabase("Local_Mysql");
                 })
                 .AddSingleton<ITypeProvider, TypeProvider>()
@@ -84,7 +76,7 @@ namespace FastFrame.Application
                 .AddScoped<ICurrentUserProvider, CurrentUserProvider>()
                 .AddScoped<IResourceProvider, ResourceProvider>()
                 .AddScoped<IDescriptionProvider, DescriptionProvider>()
-                .AddSingleton<IMessageBus, MessageBusProvider>()
+                .AddSingleton<IMessageBus, MessageBus>()
                 .AddServices()
                 .AddRepository()
                 .AddEventBus(this.GetType().Assembly);
@@ -106,15 +98,20 @@ namespace FastFrame.Application
                 //options.IncludeXmlComments(xmlPath);
             });
 
-            var client = new CSRedis.CSRedisClient("127.0.0.1");
-            RedisHelper.Initialization(client);
-            string CacheUserMapKey = "CacheUserMapKey";
-            client.Del(CacheUserMapKey);
-            services.AddSingleton(client);
+            //var client = new CSRedis.CSRedisClient("127.0.0.1");
+            //RedisHelper.Initialization(client);
+            //string CacheUserMapKey = "CacheUserMapKey";
+            //client.Del(CacheUserMapKey);
+            //services.AddSingleton(client);
+
+            services.AddSingleton(x => {
+                var redisClient= new CSRedisClient("127.0.0.1");
+                RedisHelper.Initialization(redisClient);
+                redisClient.Del("CacheUserMapKey");
+                return redisClient;
+            }); 
             var container = services.ToServiceContainer();
-            var serviceResolver = container.Build();
-            subscriber = new SubscribeBus(client, serviceResolver);
-            subscriber.Start();
+            var serviceResolver = container.Build(); 
             return serviceResolver;
         }
 
@@ -168,4 +165,6 @@ namespace FastFrame.Application
             });
         }
     }
+
+
 }

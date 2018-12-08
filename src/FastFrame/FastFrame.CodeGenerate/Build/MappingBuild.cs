@@ -18,7 +18,7 @@ namespace FastFrame.CodeGenerate.Build
         {
             foreach (var type in GetTypes())
             {
-                if (type.Name != typeName)
+                if (!string.IsNullOrWhiteSpace(type.Name) && type.Name != typeName)
                     continue;
                 var areaNameSpace = T4Help.GenerateNameSpace(type, null);
                 yield return new TargetInfo()

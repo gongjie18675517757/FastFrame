@@ -5,13 +5,14 @@ using System;
 using System.Threading.Tasks;
 using FastFrame.Infrastructure.Interface;
 using FastFrame.Entity.Chat;
+using FastFrame.Infrastructure.MessageBus;
 
 namespace FastFrame.Service.Services.Chat
 {
     /// <summary>
     /// 好友消息
     /// </summary>
-    public partial class ChatService:IService
+    public partial class ChatService : IService
     {
         private readonly ICurrentUserProvider currentUserProvider;
         private readonly IRepository<FriendMessage> friendMsgRepository;
@@ -56,7 +57,7 @@ namespace FastFrame.Service.Services.Chat
 
             await messageBus.PubLishAsync(new Message<RecMsgOutPut>()
             {
-                Category = Infrastructure.Interface.MsgType.FriendMsg,
+                Category = Infrastructure.MessageBus.MsgType.FriendMsg,
                 Content = outPut,
                 Target_Ids = new string[] { input.Target_User_Id }
             });

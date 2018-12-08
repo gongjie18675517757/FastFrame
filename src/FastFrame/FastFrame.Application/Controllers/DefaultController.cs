@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using FastFrame.Infrastructure;
+using FastFrame.Infrastructure.MessageBus;
+using Microsoft.Extensions.Logging;
 
 namespace FastFrame.Application.Controllers
 {
@@ -18,16 +20,19 @@ namespace FastFrame.Application.Controllers
     {
         private readonly IMessageBus messageBus;
         private readonly ICurrentUserProvider currentUserProvider;
+        private readonly ILogger<DefaultController> logger;
 
-        public DefaultController(IMessageBus messageBus, ICurrentUserProvider currentUserProvider)
+        public DefaultController(IMessageBus messageBus, ICurrentUserProvider currentUserProvider,ILogger<DefaultController> logger)
         {
             this.messageBus = messageBus;
             this.currentUserProvider = currentUserProvider;
+            this.logger = logger;
         }
         // GET: api/Default
         [HttpGet]
         public IEnumerable<string> Get()
         {
+            logger.LogError("xxxxxxx");
             return new string[] { "value1", "value2" };
         }
 

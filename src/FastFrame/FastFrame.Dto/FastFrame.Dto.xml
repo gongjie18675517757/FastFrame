@@ -528,7 +528,7 @@
         <member name="T:FastFrame.Dto.Dtos.Chat.RecMsgOutPut">
             <summary>
             接收消息
-            </summary>
+            </summary>    
         </member>
         <member name="P:FastFrame.Dto.Dtos.Chat.RecMsgOutPut.Id">
             <summary>

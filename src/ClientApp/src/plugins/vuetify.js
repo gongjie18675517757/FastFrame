@@ -34,7 +34,9 @@ import {
   VImg,
   VTextarea,
   VRadioGroup,
-  VBottomNav
+  VBottomNav,
+  VTabs,
+  VTooltip
 } from 'vuetify'
 import 'vuetify/src/stylus/app.styl'
 import zhHans from 'vuetify/es5/locale/zh-Hans'
@@ -75,7 +77,9 @@ Vue.use(Vuetify, {
     VImg,
     VTextarea,
     VRadioGroup,
-    VBottomNav
+    VBottomNav,
+    VTabs,
+    VTooltip
   },
   // theme: {
   //   primary: '#ee44aa',

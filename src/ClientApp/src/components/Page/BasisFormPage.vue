@@ -187,7 +187,7 @@ export default {
     this.options = options;
   },
   methods: {
-    getId() {       
+    getId() {
       if (this.pageInfo.pars && this.pageInfo.pars.id) {
         return this.pageInfo.pars.id;
       } else {
@@ -230,15 +230,19 @@ export default {
         }
         let id = this.getId();
         let data;
+        let postData = { ...this.form };
+        delete postData.Foreign;
+        delete postData.Create_User;
+        delete postData.Modify_User;
         if (!id) {
           data = await this.$http.post(
             `/api/${this.moduleInfo.name}/post`,
-            this.form
+            postData
           );
         } else {
           data = await this.$http.put(
             `/api/${this.moduleInfo.name}/put`,
-            this.form
+            postData
           );
         }
         this.$emit("success", data);

@@ -1,6 +1,7 @@
 ﻿using FastFrame.CodeGenerate.Build;
 using FastFrame.Entity;
 using FastFrame.Infrastructure;
+using FastFrame.Infrastructure.Attrs;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,6 +16,7 @@ namespace FastFrame.CodeGenerate
         static void Main()
         {
             string typeName = "";
+            string rootPath = new DirectoryInfo("../../../../").FullName;
             var baseType = typeof(IEntity);
             var types = baseType.Assembly.GetTypes().Where(x => baseType.IsAssignableFrom(x) && x.IsClass && !x.IsAbstract);
             var typeNames = types.Select((x, index) => (index + 1, x.Name)).ToDictionary(x => x.Item1, x => x.Name);
@@ -48,18 +50,16 @@ namespace FastFrame.CodeGenerate
             foreach (var item in builds)
             {
                 var constructorInfo = item.GetConstructors().FirstOrDefault();
-                var obj = constructorInfo.Invoke(new object[] { "D:\\CoreProject\\FastFrame\\src\\FastFrame", baseType });
+                var obj = constructorInfo.Invoke(new object[] { rootPath, baseType });
                 var codeBuild = (BaseCodeBuild)obj;
                 writer.Run(codeBuild);
             }
 
             var types2 = types
-                .Where(x =>
-                      x.Name == typeName
-                    && x.GetCustomAttribute<Infrastructure.Attrs.ExportAttribute>() != null);
+                .Where(x => (typeName.IsNullOrWhiteSpace() || x.Name == typeName) && x.GetCustomAttribute<ExportAttribute>() != null);
 
-            var basePath = @"D:\CoreProject\FastFrame\src\ClientApp\src\views";
-            var docPath = @"D:\CoreProject\FastFrame\src\FastFrame\Lib";
+            var basePath = $@"{Directory.GetParent(rootPath)}ClientApp\src\views";
+            var docPath = $@"{rootPath}Lib";
             foreach (var area in types2.GroupBy(x => T4Help.GenerateNameSpace(x, null)))
             {
                 var path = Path.Combine(basePath, area.Key);

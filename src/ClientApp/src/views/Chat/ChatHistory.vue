@@ -1,13 +1,19 @@
 <template>
-  <v-layout>
-    <div class="chat-history">
-      <v-toolbar dense class="chat-history-toolbar">
-        <v-text-field flat solo full-width clearable prepend-icon="search" label="Search"></v-text-field>
-      </v-toolbar>
-      <vue-perfect-scrollbar class="chat-history--scrollbar">
-        <v-divider></v-divider>
+  <v-card>
+    <v-card-title>
+      <v-text-field
+        append-icon="search"
+        label="搜索联系人和群组"
+        single-line
+        hide-details
+        v-model="search"
+        @change="searchList"
+        class="search-input"
+      ></v-text-field>
+    </v-card-title>
+    <v-card-title>
+      <vue-perfect-scrollbar class="drawer---scroll--formcontent">
         <v-list two-line class="chat-history--list">
-          <v-subheader>History</v-subheader>
           <template v-for="(item, index) in chats">
             <v-divider :key="index"></v-divider>
             <v-list-tile
@@ -26,27 +32,24 @@
               </v-list-tile-content>
               <v-list-tile-action>
                 <v-list-tile-action-text>{{ formatChatTime(item.created_at) }}</v-list-tile-action-text>
-                <v-circle dot small :color="chatStatusColor(item)"></v-circle>
               </v-list-tile-action>
             </v-list-tile>
           </template>
         </v-list>
       </vue-perfect-scrollbar>
-    </div>
-  </v-layout>
+    </v-card-title>
+  </v-card>
 </template>
 
 <script>
-import VCircle from "@/components/circle/VCircle.js";
 import { randomElement } from "@/utils";
 import VuePerfectScrollbar from "vue-perfect-scrollbar";
 export default {
   components: {
-    VuePerfectScrollbar,
-    VCircle
+    VuePerfectScrollbar
   },
-
   data: () => ({
+    search: "",
     chats: [
       {
         uuid: "a44f8ade-513c-46b5-bae4-0acf809860e6",
@@ -142,6 +145,7 @@ export default {
   }),
 
   methods: {
+    searchList() {},
     chatRoute(id) {
       return "/chat/messaging/" + id;
     },
@@ -168,3 +172,13 @@ export default {
 };
 </script>
 
+<style scoped lang="stylus">
+.search-input {
+  padding-top: 2px;
+}
+
+.drawer---scroll--formcontent {
+  height: calc(100vh - 136px);
+  overflow: auto;
+}
+</style>

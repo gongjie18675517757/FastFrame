@@ -1,6 +1,5 @@
 <template>
-  <v-container class="fill-height pa-0 ma-0 messaging fluid" id="messaging">
-    <chat-menu :items="menus" class="chat-drawer--menu"></chat-menu>
+  <v-container>
     <ChatMessaging/>
   </v-container>
 </template>
@@ -54,9 +53,9 @@ export default {
     }
   }
 };
-</script>
+</script> 
 
-<style scoped>
+<style scoped lang="stylus">
 .chat-drawer--menu {
   width: 68px;
   float: left;

@@ -24,7 +24,7 @@ namespace FastFrame.CodeGenerate.Build
         {
             foreach (var type in GetTypes())
             {
-                if (type.Name != typeName)
+                if (!string.IsNullOrWhiteSpace(type.Name) && type.Name != typeName)
                     continue;
                 if (type.GetCustomAttribute<ExcludeAttribute>() != null)
                     continue;

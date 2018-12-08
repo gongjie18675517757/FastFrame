@@ -6,7 +6,7 @@
         <v-img
           :lazy-src="imgSrc"
           :src="imgSrc"
-          alt=""
+          alt
           v-else-if="isImage"
           aspect-ratio="1"
           class="grey lighten-2"
@@ -24,87 +24,94 @@
 </template>
 
 <script>
-import { showDialog, alert } from '@/utils'
-import Prompt from '@/components/Message/Prompt.vue'
-import rules from '@/rules'
-import Vue from 'vue'
+import { showDialog, alert } from "@/utils";
+import Prompt from "@/components/Message/Prompt.vue";
+import rules from "@/rules";
+import Vue from "vue";
 export default {
-  props: { 
+  props: {
     item: {
       type: Object,
       default: function() {
-        return {}
+        return {};
       }
     },
     selected: Boolean
   },
   computed: {
     isImage() {
-      if (this.item.Resource) return this.item.Resource.ContentType == 'image/jpeg'
+      if (this.item.Resource)
+        return this.item.Resource.ContentType == "image/jpeg";
     },
     imgSrc() {
       if (this.isImage) {
-        return `/api/resource/get/${this.item.Resource_Id}`
+        return `/api/resource/get/${this.item.Resource_Id}`;
       }
     }
   },
   methods: {
     async reName() {
       let { name } = await showDialog(Prompt, {
-        title: '名称',
-        maxWidth: '500px',
+        title: "名称",
+        maxWidth: "500px",
         model: {
           name: this.item.Name
         },
         options: [
           {
-            Name: 'name',
-            Type: 'String',
-            Description: '名称',
-            rules: [rules.required('文件夹名称')]
+            Name: "name",
+            Type: "String",
+            Description: "名称",
+            rules: [rules.required("文件夹名称")]
           }
         ]
-      })
-      if (name == this.item.Name) return
-      let beforeName = this.item.Name
-      this.item.Name = name
+      });
+      if (name == this.item.Name) return;
+      let beforeName = this.item.Name;
+      this.item.Name = name;
+
+      let postData = { ...this.item };
+      delete postData.Foreign;
+      delete postData.Create_User;
+      delete postData.Modify_User;
+
       try {
-        await this.$http.put('/api/Meidia/put', this.item)
-        alert.success('更新成功!')
+        await this.$http.put("/api/Meidia/put", postData);
+        alert.success("更新成功!");
       } catch (error) {
-        this.item.Name = beforeName
+        this.item.Name = beforeName;
       }
     },
     handleDbClick() {
-      this.$emit('dblclick')
+      this.$emit("dblclick");
       if (this.isImage) {
-        let src = this.imgSrc
+        let src = this.imgSrc;
         showDialog(
           Vue.extend({
             props: {
               success: Function
             },
             render(h) {
-              return h('v-img', {
+              return h("v-img", {
                 props: {
-                  'lazy-src': src,
+                  "lazy-src": src,
                   src: src,
-                  'max-height': '80%',
-                  'max-width': '80%'
+                  "max-height": "80%",
+                  "max-width": "80%"
                 },
                 on: {
                   click: () => {
-                    this.success()
+                    this.success();
                   }
                 }
-              })
+              });
             }
           })
-        )
+        );
       }
     }
   }
-}
+};
 </script>
 
 <style scoped>

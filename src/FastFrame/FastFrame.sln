@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28010.2046
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastFrame.Infrastructure", "FastFrame.Infrastructure\FastFrame.Infrastructure.csproj", "{3A75262C-B979-4A64-A70E-16ECBAF5CC84}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastFrame.WebHost", "FastFrame.Application\FastFrame.WebHost.csproj", "{E34F668B-0398-4538-9F01-C7F8A5EE9FB6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastFrame.Application", "FastFrame.Application\FastFrame.Application.csproj", "{E34F668B-0398-4538-9F01-C7F8A5EE9FB6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastFrame.UnitTest", "FastFrame.UnitTest\FastFrame.UnitTest.csproj", "{B2BC2CCE-C00F-489F-84ED-E490F57AE72D}"
 EndProject

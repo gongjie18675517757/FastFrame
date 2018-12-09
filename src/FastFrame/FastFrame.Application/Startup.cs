@@ -1,7 +1,11 @@
-﻿using FastFrame.Application.Hubs;
+﻿using AspectCore.Extensions.DependencyInjection;
+using AspectCore.Injector;
+using CSRedis;
+using FastFrame.Application.Hubs;
 using FastFrame.Application.Privder;
-using FastFrame.Infrastructure.Interface;
 using FastFrame.Infrastructure.EventBus;
+using FastFrame.Infrastructure.Interface;
+using FastFrame.Infrastructure.MessageBus;
 using FastFrame.Repository;
 using FastFrame.Service;
 using Microsoft.AspNetCore.Builder;
@@ -15,21 +19,14 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
-using Swashbuckle.Swagger.Model;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using AspectCore.Configuration;
-using AspectCore.Extensions.DependencyInjection;
-using AspectCore.Injector;
-using AspectCore.DynamicProxy;
-using CSRedis;
-using FastFrame.Infrastructure.MessageBus;
 
 namespace FastFrame.Application
 {
     public class Startup
-    { 
+    {
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -41,16 +38,19 @@ namespace FastFrame.Application
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.Configure<CookiePolicyOptions>(options =>
-            { 
+            {
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-
+            services.Configure<IISServerOptions>(config =>
+            {
+                config.AutomaticAuthentication = false;
+            });
             services.AddMvc(opts =>
             {
                 opts.Filters.Add<GlobalFilter>();
             })
-            .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddJsonOptions(options =>
                 {
                     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
@@ -59,10 +59,10 @@ namespace FastFrame.Application
                     options.SerializerSettings.NullValueHandling = NullValueHandling.Include;
                     options.SerializerSettings.Converters.Add(new StringEnumConverter());
                 });
-            services.AddSignalR(); 
-            services.AddLogging(r=>r.AddLog4Net());
-            services.AddOptions(); 
-            services.Configure<ResourceOption>(Configuration.GetSection("ResourceOption")); 
+            services.AddSignalR();
+            services.AddLogging(r => r.AddLog4Net());
+            services.AddOptions();
+            services.Configure<ResourceOption>(Configuration.GetSection("ResourceOption"));
 
             services
                 .AddHttpContextAccessor()
@@ -83,14 +83,14 @@ namespace FastFrame.Application
 
             services.AddSwaggerGen(options =>
             {
-                options.SingleApiVersion(new Info
+                options.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info()
                 {
                     Version = "v1",
                     Title = "API文档",
-                    Description = "快速开发平台API文档",
-                    TermsOfService = "None",
+                    Description = "快速开发平台", 
                 });
-                options.DescribeAllEnumsAsStrings();
+                options.DescribeAllEnumsAsStrings(); 
+
                 ////Determine base path for the application.  
                 //var basePath = PlatformServices.Default.Application.ApplicationBasePath;
                 ////Set the comments path for the swagger json and ui.  
@@ -104,14 +104,15 @@ namespace FastFrame.Application
             //client.Del(CacheUserMapKey);
             //services.AddSingleton(client);
 
-            services.AddSingleton(x => {
-                var redisClient= new CSRedisClient("127.0.0.1");
+            services.AddSingleton(x =>
+            {
+                var redisClient = new CSRedisClient("127.0.0.1");
                 RedisHelper.Initialization(redisClient);
                 redisClient.Del("CacheUserMapKey");
                 return redisClient;
-            }); 
+            });
             var container = services.ToServiceContainer();
-            var serviceResolver = container.Build(); 
+            var serviceResolver = container.Build();
             return serviceResolver;
         }
 
@@ -149,7 +150,10 @@ namespace FastFrame.Application
             //    r.MapRoute("defaultApi", "api/{organize?}/{controller=values}/{action}/{id?}/");
             //});
             app.UseSwagger();
-            app.UseSwaggerUi();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "MsSystem API V1");
+            });
 
             applicationLifetime.ApplicationStarted.Register(() =>
             {

@@ -4,7 +4,11 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <UserSecretsId>baa687c8-fef2-457d-b3b8-191741af27e2</UserSecretsId>
   </PropertyGroup>
-
+  
+  <PropertyGroup>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+  </PropertyGroup>
+  
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>DEBUG;TRACE</DefineConstants>
   </PropertyGroup>
@@ -33,10 +37,10 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="2.2.6" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-    <!--<PackageReference Include="Swashbuckle.AspNetCore" Version="3.0.0" />-->
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="3.0.0" />
     <!--<PackageReference Include="EasyCaching.Redis" Version="0.3.0" />-->
-    <PackageReference Include="Swashbuckle.SwaggerGen" Version="6.0.0-beta902" />
-    <PackageReference Include="Swashbuckle.SwaggerUi" Version="6.0.0-beta902" />
+    <!--<PackageReference Include="Swashbuckle.SwaggerGen" Version="6.0.0-beta902" />
+    <PackageReference Include="Swashbuckle.SwaggerUi" Version="6.0.0-beta902" />-->
   </ItemGroup>
 
   <ItemGroup>
@@ -46,6 +50,15 @@
     <ProjectReference Include="..\FastFrame.Infrastructure\FastFrame.Infrastructure.csproj" />
     <ProjectReference Include="..\FastFrame.Repository\FastFrame.Repository.csproj" />
     <ProjectReference Include="..\FastFrame.Service\FastFrame.Service.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Init.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="publish.ps1">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

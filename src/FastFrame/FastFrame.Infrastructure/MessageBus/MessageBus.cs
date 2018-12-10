@@ -21,17 +21,27 @@ namespace FastFrame.Infrastructure.MessageBus
             this.serviceProvider = serviceProvider;
         }
 
-        public async Task PubLishAsync<T>(Message<T> message) where T : class
+        public async Task PubLishAsync<T>(Message<T> message) where T : class, new()
         {
             await redisClient.PublishAsync($"Message:{typeof(T).Name}", message.ToJson());
         }
 
-        public void SubscribeAsync<T>() where T : class
+        public void SubscribeAsync<T>() where T : class, new()
         {
             redisClient.Subscribe(($"Message:{typeof(T).Name}", ExecHandle<T>));
         }
 
-        private async void ExecHandle<T>(SubscribeMessageEventArgs msg) where T : class
+        public void SubscribeAsync(Type msgType)
+        { 
+            //var method = this.GetType().GetMethod(nameof(ExecHandle), System.Reflection.BindingFlags.NonPublic);
+            //var action = (Action<SubscribeMessageEventArgs>)method.MakeGenericMethod(msgType)
+            //    .CreateDelegate(typeof(Action<SubscribeMessageEventArgs>));
+            //redisClient.Subscribe(($"Message:{msgType.Name}", action));
+        }
+
+        
+
+        private async void ExecHandle<T>(SubscribeMessageEventArgs msg) where T : class, new()
         {
             var message = msg.Body.ToObject<Message<T>>();
             using (var serviceScope = serviceProvider.CreateScope())

@@ -3,7 +3,7 @@
     /// <summary>
     /// 消息体
     /// </summary>
-    public class Message<T> where T : class
+    public class Message<T> where T : class,new()
     {
         /// <summary>
         /// 类型

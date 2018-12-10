@@ -7,7 +7,7 @@ namespace FastFrame.Service.Services.Chat
     /// <summary>
     /// 处理接收消息
     /// </summary>
-    public class ChatMessageHandle : IAsyncMessageHandle<RecMsgOutPut>
+    public class ChatMessageHandle : IAsyncMessageHandle<RecMsgOutPut>,IService
     {
         private readonly IClientManage clientManage;
 

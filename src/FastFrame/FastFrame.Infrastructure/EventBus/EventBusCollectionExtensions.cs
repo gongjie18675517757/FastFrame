@@ -24,4 +24,6 @@ namespace FastFrame.Infrastructure.EventBus
             return services;
         }
     }
+
+   
 }

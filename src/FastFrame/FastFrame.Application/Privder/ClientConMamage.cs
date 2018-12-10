@@ -28,7 +28,7 @@ namespace FastFrame.Application.Privder
             this.client = client;
             this.hubContext = hubContext;
         }
-        public async Task SendAsync<T>(Message<T> message) where T : class
+        public async Task SendAsync<T>(Message<T> message) where T : class, new()
         {
             foreach (var toId in message.Target_Ids)
             {

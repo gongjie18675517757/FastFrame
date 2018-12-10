@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.SignalR;
 using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.MessageBus;
 using Microsoft.Extensions.Logging;
+using FastFrame.Dto.Dtos.Chat;
 
 namespace FastFrame.Application.Controllers
 {
@@ -45,15 +46,10 @@ namespace FastFrame.Application.Controllers
 
         // POST: api/Default
         [HttpPost]
-        public async Task Post([FromBody] Message<string> value)
+        public async Task Post([FromBody] Message<RecMsgOutPut> value)
         {
-            var userid = currentUserProvider.GetCurrUser().Id;
-            await messageBus.PubLishAsync(new Message<string>()
-            {
-                Category = MsgType.Notify,
-                Content = value.Content, 
-                Target_Ids = new[] { userid }
-            });
+            var userid = currentUserProvider.GetCurrUser().Id; 
+            await messageBus.PubLishAsync(value);
         }
 
         // PUT: api/Default/5

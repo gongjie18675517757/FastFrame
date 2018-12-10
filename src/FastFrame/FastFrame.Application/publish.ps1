@@ -3,7 +3,7 @@
 # 
 
 #源码目录
-$sourcePath="D:\CoreProject\FastFrame\src\FastFrame\FastFrame.Application"
+$sourcePath="./"
 
 #发布目录
 $targetPath=".\bin\publish"

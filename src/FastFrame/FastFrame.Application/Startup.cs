@@ -3,6 +3,7 @@ using AspectCore.Injector;
 using CSRedis;
 using FastFrame.Application.Hubs;
 using FastFrame.Application.Privder;
+using FastFrame.Dto.Dtos.Chat;
 using FastFrame.Infrastructure.EventBus;
 using FastFrame.Infrastructure.Interface;
 using FastFrame.Infrastructure.MessageBus;
@@ -76,9 +77,10 @@ namespace FastFrame.Application
                 .AddScoped<ICurrentUserProvider, CurrentUserProvider>()
                 .AddScoped<IResourceProvider, ResourceProvider>()
                 .AddScoped<IDescriptionProvider, DescriptionProvider>()
-                .AddSingleton<IMessageBus, MessageBus>()
+                .AddSingleton<IClientManage, ClientConMamage>()
                 .AddServices()
                 .AddRepository()
+                .AddMessageBus(this.GetType().Assembly)
                 .AddEventBus(this.GetType().Assembly);
 
             services.AddSwaggerGen(options =>
@@ -87,9 +89,9 @@ namespace FastFrame.Application
                 {
                     Version = "v1",
                     Title = "API文档",
-                    Description = "快速开发平台", 
+                    Description = "快速开发平台",
                 });
-                options.DescribeAllEnumsAsStrings(); 
+                options.DescribeAllEnumsAsStrings();
 
                 ////Determine base path for the application.  
                 //var basePath = PlatformServices.Default.Application.ApplicationBasePath;
@@ -120,6 +122,8 @@ namespace FastFrame.Application
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime applicationLifetime)
         {
+            app.ApplicationServices.GetService<IMessageBus>().SubscribeAsync<RecMsgOutPut>();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

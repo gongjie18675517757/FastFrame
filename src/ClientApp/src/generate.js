@@ -51,7 +51,7 @@ export async function getColumns(name = '') {
     Name: ModuleName
   } = await getModuleStrut(name)
   let columns = FieldInfoStruts.filter(f => {
-    return f.Hide != 'list' && f.Hide != 'all' && (!f.Name.endsWith('Id') || f.Relate)
+    return f.Hide != 'List' && f.Hide != 'All' && (!f.Name.endsWith('Id') || f.Relate)
   }).map(f => {
     return {
       ...f,

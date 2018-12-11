@@ -7,7 +7,7 @@ import {
   existBtn
 } from '@/permission.js'
 import {
- 
+
   mapMany,
   sleep
 } from './utils'
@@ -151,7 +151,7 @@ let routes = [{
 let router = new Router({
   routes
 })
- 
+
 
 
 const getSiteName = async () => {
@@ -168,6 +168,9 @@ const getSiteName = async () => {
 }
 const existLogin = () => {
   return new Promise((resolve, reject) => {
+    if (store.state.currUser.Id)
+      return resolve(); 
+
     setTimeout(() => {
       if (!store.state.currUser.Id)
         return reject()

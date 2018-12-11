@@ -7,19 +7,19 @@ export default [{
       permission: 'User'
     },
     {
-      icon: 'group',
+      icon: 'fa fa-male',
       title: '部门管理',
       path: '/dept/list',
       permission: 'Dept'
     },
     {
-      icon: 'mdi-coin',
+      icon: 'people',
       title: '权限管理',
       path: '/permission/list',
       permission: 'Permission'
     },
     {
-      icon: 'mdi-coin',
+      icon: 'people_outline',
       title: '角色管理',
       path: '/role/list',
       permission: 'Role'

@@ -12,7 +12,7 @@
     >{{value}}</a-btn>
     <a-btn
       class="btn-link"
-      v-else-if="isRelate && RelatePermission"
+      v-else-if="Foreignkey"
       flat
       small
       color="primary"
@@ -58,6 +58,14 @@ export default {
     isRelate() {
       return !!this.info.Relate;
     },
+    Foreignkey() {
+      if (this.isRelate) {
+        let Id = this.model[this.info.Name];
+        return Id;
+      } else {
+        return "";
+      }
+    },
     value() {
       let val = this.model[this.info.Name];
       if (this.info.Type == "Boolean") {
@@ -77,9 +85,10 @@ export default {
   methods: {
     toRelate() {
       let { ModuleName } = this.info.Relate;
-      showDialog(`${ModuleName}_Add`, {
-        id: this.model[this.info.Name]
-      });
+      if (this.Foreignkey)
+        showDialog(`${ModuleName}_Add`, {
+          id: this.Foreignkey
+        });
     }
   }
 };

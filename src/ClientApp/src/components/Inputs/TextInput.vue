@@ -160,8 +160,8 @@ export default {
       return ""; //this.Type
     },
     evalDisabled() {
-      if (this.Readonly == "all") return true;
-      if (this.Readonly == "edit") return !!this.model.Id;
+      if (this.Readonly == "All") return true;
+      if (this.Readonly == "Edit") return !!this.model.Id;
       return !this.canEdit;
     }
   },

@@ -23,5 +23,7 @@ namespace FastFrame.Dto.Dtos.Chat
         /// 头像
         /// </summary>
         public string HeadIcon_Id { get; set; } 
+
+
     }
 }

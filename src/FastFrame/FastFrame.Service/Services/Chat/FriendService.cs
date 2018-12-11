@@ -15,10 +15,12 @@ namespace FastFrame.Service.Services.Chat
     public partial class FriendService : IService
     {
         private readonly IRepository<User> repository;
+        private readonly Infrastructure.Interface.ICurrentUserProvider currentUserProvider;
 
-        public FriendService(IRepository<User> repository)
+        public FriendService(IRepository<User> repository, Infrastructure.Interface.ICurrentUserProvider currentUserProvider)
         {
             this.repository = repository;
+            this.currentUserProvider = currentUserProvider;
         }
 
         /// <summary>
@@ -27,7 +29,16 @@ namespace FastFrame.Service.Services.Chat
         /// <returns></returns>
         public async Task<IEnumerable<FriendOutput>> Friends()
         {
-            return await repository.Queryable.Select(x => new FriendOutput() { Id = x.Id, HeadIcon_Id = x.HandIconId, Name = x.Name }).ToListAsync();
+            var userId = currentUserProvider.GetCurrUser().Id;
+            return await repository.Queryable
+                .Where(x => x.Id != userId && !x.IsDisabled)
+                .Select(x => new FriendOutput()
+                {
+                    Id = x.Id,
+                    HeadIcon_Id = x.HandIconId,
+                    Name = x.Name
+                })
+                .ToListAsync();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using FastFrame.Infrastructure.Attrs;
+using FastFrame.Infrastructure.Interface;
 using System.ComponentModel.DataAnnotations;
 
 namespace FastFrame.Entity.Basis
@@ -7,14 +8,14 @@ namespace FastFrame.Entity.Basis
     /// 组织信息
     /// </summary>
     [Export]
-    public class Tenant : IEntity, IHasSoftDelete
+    public class Tenant : IEntity, IHasSoftDelete, ITenant
     {
         /// <summary>
-        /// 名称
+        /// 全称
         /// </summary>
         [StringLength(50)]
         [Required]
-        public string Name { get; set; }
+        public string FullName { get; set; }
 
         /// <summary>
         /// 简称
@@ -22,6 +23,23 @@ namespace FastFrame.Entity.Basis
         [StringLength(50)]
         [Required]
         public string EnCode { get; set; }
+
+        /// <summary>
+        /// URL标识
+        /// </summary>
+        [Unique]
+        [StringLength(50)]
+        public string UrlMark { get; set; } = "";
+
+        /// <summary>
+        /// 上级
+        /// </summary>
+        public string Parent_Id { get; set; }
+
+        /// <summary>
+        /// 是否可发展下级
+        /// </summary>
+        public bool CanHaveChildren { get; set; }
 
         /// <summary>
         /// 头像

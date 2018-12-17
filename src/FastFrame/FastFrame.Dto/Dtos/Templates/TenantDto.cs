@@ -16,11 +16,11 @@ namespace FastFrame.Dto.Basis
 		#endregion
 		#region 属性
 		/// <summary>
-		///名称 
+		///全称 
 		/// </summary>
 		[StringLength(50)]
 		[Required()]
-		public string Name {get;set;}
+		public string FullName {get;set;}
 		
 		/// <summary>
 		///简称 
@@ -28,6 +28,23 @@ namespace FastFrame.Dto.Basis
 		[StringLength(50)]
 		[Required()]
 		public string EnCode {get;set;}
+		
+		/// <summary>
+		///URL标识 
+		/// </summary>
+		[StringLength(50)]
+		[Unique()]
+		public string UrlMark {get;set;}
+		
+		/// <summary>
+		///上级 
+		/// </summary>
+		public string Parent_Id {get;set;}
+		
+		/// <summary>
+		///是否可发展下级 
+		/// </summary>
+		public bool CanHaveChildren {get;set;}
 		
 		/// <summary>
 		///头像 

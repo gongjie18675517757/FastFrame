@@ -27,29 +27,42 @@ namespace FastFrame.Application.Privder
             this.descriptionProvider = descriptionProvider;
             this.dataBase = dataBase;
         }
-        public string GetCurrOrganizeId()
+        private bool tryGetHost(string[] headerNames, out string host)
+        {
+            host = string.Empty;
+            foreach (var headerName in headerNames)
+            {
+                if (httpContextAccessor.HttpContext.Request.Headers.TryGetValue(headerName, out var sv) && sv.Any())
+                {
+                    var arr = sv.ToArray();
+                    host = arr.FirstOrDefault();
+                    return true;
+                }
+            }
+            return false;
+        }
+        public ITenant GetCurrOrganizeId()
+        {
+            /*
+             * X-ORIGINAL-HOST
+             * Origin
+             * Referer
+             */
+            var host = getHost();
+
+            var tenantId = dataBase.Set<TenantHost>().Where(x => x.Host == host).Select(x=>x.Tenant_Id).FirstOrDefault();
+            return dataBase.Set<Tenant>()
+                .Where(x => x.Id == tenantId || x.Parent_Id == "")
+                .OrderByDescending(x => x.Parent_Id)
+                .FirstOrDefault();
+        }
+
+        private string getHost()
         {
             string host;
-            if (httpContextAccessor.HttpContext.Request.Headers.TryGetValue("X-ORIGINAL-HOST", out var sv) && sv.Any())
-            {
-                var arr = sv.ToArray();
-                host = arr.FirstOrDefault();
-            }
-            else
-            {
+            if (!tryGetHost(new string[] { "X-ORIGINAL-HOST", "Origin", "Referer" }, out host))
                 host = httpContextAccessor.HttpContext.Request.Host.Value;
-                //host = new Uri(host).Authority;
-            }
-
-            var tenantHost = dataBase.Set<TenantHost>().Where(x => x.Host == host).FirstOrDefault();
-            if (tenantHost == null)
-            {
-                return dataBase.Set<TenantHost>().FirstOrDefault().Tenant_Id;
-            }
-            else
-            {
-                return tenantHost.Tenant_Id;
-            }
+            return host;
         }
 
         public ICurrUser GetCurrUser()
@@ -69,6 +82,8 @@ namespace FastFrame.Application.Privder
 
         public async Task Login(ICurrUser currUser)
         {
+            var host = getHost();
+            host = string.Join(".", host.Split(new char[] { '.' }).Skip(1));
             await cSRedisClient.SetAsync(currUser.ToKen, currUser, 60 * 60 * 24);
             httpContextAccessor.HttpContext.Response.Headers.Add(tokenName, currUser.ToKen);
             httpContextAccessor.HttpContext.Response.Cookies.Delete(tokenName);
@@ -76,6 +91,9 @@ namespace FastFrame.Application.Privder
             {
                 Expires = new DateTimeOffset(DateTime.Now.AddYears(1)),
                 HttpOnly = true,
+                //Domain = ".localhost",
+                Path="/",
+                
             });
         }
 
@@ -94,20 +112,14 @@ namespace FastFrame.Application.Privder
         {
             if (!token.IsNullOrWhiteSpace())
                 return token;
+            var request = httpContextAccessor.HttpContext.Request;
             token = string.Empty;
-            if (httpContextAccessor.HttpContext.Request.Headers.TryGetValue(tokenName, out var headerValue))
-            {
+            if (request.Headers.TryGetValue(tokenName, out var headerValue))
                 token = headerValue.First();
-            }
-            if (token.IsNullOrWhiteSpace() && httpContextAccessor.HttpContext.Request.Cookies.TryGetValue(tokenName, out var cookieValue))
-            {
+            if (token.IsNullOrWhiteSpace() && request.Cookies.TryGetValue(tokenName, out var cookieValue))
                 token = cookieValue;
-            }
-            if (token.IsNullOrWhiteSpace() && httpContextAccessor.HttpContext.Request.Query.TryGetValue(tokenName, out var queryValue))
-            {
+            if (token.IsNullOrWhiteSpace() && request.Query.TryGetValue(tokenName, out var queryValue))
                 token = queryValue.First();
-            }
-
             return token;
         }
     }

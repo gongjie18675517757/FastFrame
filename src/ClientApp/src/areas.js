@@ -26,7 +26,7 @@ export default [{
       generateItem('Role', '角色'),
       generateItem('Employee', '员工'),
       generateItem('Menu', '菜单'),
-      generateItem('Organize', '组织'),
+      generateItem('Tenant', '组织'),
       generateItem('QueryProgram', '查询方案'),
     ]
   },

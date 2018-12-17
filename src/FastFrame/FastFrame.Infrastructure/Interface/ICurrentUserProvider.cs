@@ -19,7 +19,7 @@ namespace FastFrame.Infrastructure.Interface
         /// 获取当前组织ID
         /// </summary>
         /// <returns></returns>
-        string GetCurrOrganizeId();
+        ITenant GetCurrOrganizeId();
 
         /// <summary>
         /// 登陆

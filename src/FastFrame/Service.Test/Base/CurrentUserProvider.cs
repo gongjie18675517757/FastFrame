@@ -1,4 +1,5 @@
-﻿using FastFrame.Infrastructure.Interface;
+﻿using FastFrame.Entity.Basis;
+using FastFrame.Infrastructure.Interface;
 using System;
 using System.Threading.Tasks;
 
@@ -7,9 +8,9 @@ namespace Service.Test
     public class CurrentUserProvider : ICurrentUserProvider
     {
         ICurrUser curr = null;
-        public string GetCurrOrganizeId()
+        public ITenant GetCurrOrganizeId()
         {
-            return "test";
+            return new Tenant() { Id = "test", Parent_Id = "" };
         }
 
         public ICurrUser GetCurrUser()
@@ -30,7 +31,7 @@ namespace Service.Test
         }
 
         public void Refresh()
-        { 
+        {
         }
     }
 }

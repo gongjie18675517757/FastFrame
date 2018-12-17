@@ -40,7 +40,7 @@ namespace FastFrame.Repository
             /*验证唯一性+关联性*/
             entity.Id = IdGenerate.NetId();
             if (entity is IHasTenant tenant)
-                tenant.Tenant_Id = currentUserProvider.GetCurrOrganizeId();
+                tenant.Tenant_Id = currentUserProvider.GetCurrOrganizeId().Id;
 
             await Verification(entity);
 
@@ -162,10 +162,10 @@ namespace FastFrame.Repository
             get
             {
                 IQueryable<T> queryable = context.Set<T>();
-                var tenant_Id = currentUserProvider.GetCurrOrganizeId();
-                if (typeof(IHasTenant).IsAssignableFrom(typeof(T)) && !tenant_Id.IsNullOrWhiteSpace())
+                var tenant = currentUserProvider.GetCurrOrganizeId();
+                if (typeof(IHasTenant).IsAssignableFrom(typeof(T)) /*&& !tenant.Parent_Id.IsNullOrWhiteSpace()*/)
                 {
-                    queryable = queryable.Where("Tenant_Id=@0", tenant_Id);
+                    queryable = queryable.Where("Tenant_Id=@0", tenant.Id);
                 }
                 return queryable;
             }

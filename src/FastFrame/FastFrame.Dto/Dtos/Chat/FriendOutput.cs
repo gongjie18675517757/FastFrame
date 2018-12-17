@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FastFrame.Dto.Chat;
+using FastFrame.Entity.Chat;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -22,8 +24,16 @@ namespace FastFrame.Dto.Dtos.Chat
         /// <summary>
         /// 头像
         /// </summary>
-        public string HeadIcon_Id { get; set; } 
+        public string HeadIcon_Id { get; set; }
 
+        /// <summary>
+        /// 消息
+        /// </summary>
+        public IEnumerable<FriendMessageDto> Messages { get; set; }
+    }
 
+    public partial class FriendMessageDto
+    {
+        public MessageTargetDto MessageTarget { get; set; }
     }
 }

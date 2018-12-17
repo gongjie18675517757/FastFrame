@@ -1,5 +1,7 @@
 ﻿using FastFrame.Dto.Dtos.Chat;
 using FastFrame.Entity.Basis;
+using FastFrame.Entity.Chat;
+using FastFrame.Infrastructure.Interface;
 using FastFrame.Repository;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -15,11 +17,19 @@ namespace FastFrame.Service.Services.Chat
     public partial class FriendService : IService
     {
         private readonly IRepository<User> repository;
-        private readonly Infrastructure.Interface.ICurrentUserProvider currentUserProvider;
+        private readonly IRepository<FriendMessage> messageRepository;
+        private readonly IRepository<MessageTarget> targetRepository;
+        private readonly ICurrentUserProvider currentUserProvider;
 
-        public FriendService(IRepository<User> repository, Infrastructure.Interface.ICurrentUserProvider currentUserProvider)
+        public FriendService(
+            IRepository<User> repository,
+            IRepository<FriendMessage> messageRepository,
+            IRepository<MessageTarget> targetRepository,
+            ICurrentUserProvider currentUserProvider)
         {
             this.repository = repository;
+            this.messageRepository = messageRepository;
+            this.targetRepository = targetRepository;
             this.currentUserProvider = currentUserProvider;
         }
 
@@ -30,7 +40,7 @@ namespace FastFrame.Service.Services.Chat
         public async Task<IEnumerable<FriendOutput>> Friends()
         {
             var userId = currentUserProvider.GetCurrUser().Id;
-            return await repository.Queryable
+            var list = await repository.Queryable
                 .Where(x => x.Id != userId && !x.IsDisabled)
                 .Select(x => new FriendOutput()
                 {
@@ -38,7 +48,8 @@ namespace FastFrame.Service.Services.Chat
                     HeadIcon_Id = x.HandIconId,
                     Name = x.Name
                 })
-                .ToListAsync();
-        }
+                .ToListAsync(); 
+            return list;
+        } 
     }
 }

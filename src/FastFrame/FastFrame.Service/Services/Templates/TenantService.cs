@@ -34,8 +34,11 @@ namespace FastFrame.Service.Services.Basis
 			 var query = from _tenant in tenantQueryable 
 					 select new TenantDto
 					{
-						Name=_tenant.Name,
+						FullName=_tenant.FullName,
 						EnCode=_tenant.EnCode,
+						UrlMark=_tenant.UrlMark,
+						Parent_Id=_tenant.Parent_Id,
+						CanHaveChildren=_tenant.CanHaveChildren,
 						HandIcon_Id=_tenant.HandIcon_Id,
 						Id=_tenant.Id,
 					};

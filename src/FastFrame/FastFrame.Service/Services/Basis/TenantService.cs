@@ -1,7 +1,9 @@
 ﻿using FastFrame.Dto.Basis;
 using FastFrame.Entity.Basis;
+using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Interface;
 using FastFrame.Repository;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FastFrame.Service.Services.Basis
@@ -22,12 +24,20 @@ namespace FastFrame.Service.Services.Basis
         }
         public Task<TenantDto> GetCurrentAsync()
         {
-            return GetAsync(currentUserProvider.GetCurrOrganizeId());
+            return GetAsync(currentUserProvider.GetCurrOrganizeId().Id);
         } 
         public Task<TenantDto> UpdateCurrentAsync(TenantDto tenantDto)
         {
-            tenantDto.Id = currentUserProvider.GetCurrOrganizeId();
+            tenantDto.Id = currentUserProvider.GetCurrOrganizeId().Id;
             return UpdateAsync(tenantDto);
+        }
+
+        protected override IQueryable<TenantDto> GetListQueryableing(IQueryable<TenantDto> query)
+        {
+            var terantId = currentUserProvider.GetCurrOrganizeId().Id;
+            query = base.GetListQueryableing(query);
+            query.Where(x => x.Id != terantId && x.Parent_Id == terantId);
+            return query;
         }
     }
 }

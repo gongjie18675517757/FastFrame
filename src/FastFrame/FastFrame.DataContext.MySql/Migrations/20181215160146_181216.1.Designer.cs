@@ -3,14 +3,16 @@ using System;
 using FastFrame.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FastFrame.Database.Migrations
 {
     [DbContext(typeof(DataBase))]
-    partial class DataBaseModelSnapshot : ModelSnapshot
+    [Migration("20181215160146_181216.1")]
+    partial class _1812161
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -420,10 +422,6 @@ namespace FastFrame.Database.Migrations
 
                     b.Property<bool>("IsDeleted");
 
-                    b.Property<string>("Parent_Id")
-                        .HasMaxLength(25)
-                        .IsUnicode(true);
-
                     b.Property<string>("UrlMark")
                         .HasMaxLength(50)
                         .IsUnicode(true);
@@ -436,11 +434,10 @@ namespace FastFrame.Database.Migrations
                         new
                         {
                             Id = "00F6P5G2VC2SAP1UJV7HTBYGU",
-                            CanHaveChildren = true,
+                            CanHaveChildren = false,
                             EnCode = "default",
                             FullName = "默认组织",
                             IsDeleted = false,
-                            Parent_Id = "",
                             UrlMark = ""
                         });
                 });
@@ -549,13 +546,13 @@ namespace FastFrame.Database.Migrations
                             Id = "00F6P5G2VC2SAP1UJV7HTBYGA",
                             Account = "admin",
                             Email = "gongjie@qq.com",
-                            EncryptionKey = "7e363ac77b87dce8d86a36c411816904",
+                            EncryptionKey = "f77bd12eaa5c3a79a391a6c1d718802b",
                             IsAdmin = true,
                             IsDeleted = false,
                             IsDisabled = false,
                             IsRoot = true,
                             Name = "超级管理员",
-                            Password = "9e20855150f82e62e42bb3cffc66b705",
+                            Password = "d2fb917f9ae0cc1e0ca1c80b9d12e6d7",
                             PhoneNumber = "18675517757",
                             Tenant_Id = "00F6P5G2VC2SAP1UJV7HTBYGU"
                         });

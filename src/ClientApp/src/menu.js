@@ -23,7 +23,13 @@ export default [{
       title: '角色管理',
       path: '/role/list',
       permission: 'Role'
-    }
+    },
+    {
+      icon: 'view_agenda',
+      title: '下级企业',
+      path: '/tenant/list',
+      permission: 'Tenant'
+    },
   ]
 }, {
   title: '内容管理',

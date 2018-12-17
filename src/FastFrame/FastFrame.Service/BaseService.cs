@@ -26,7 +26,7 @@ namespace FastFrame.Service
         public IScopeServiceLoader Loader { get; }
 
         [FromContainer]
-        public IEventBus EventBus { get; set; } 
+        public IEventBus EventBus { get; set; }
 
         public BaseService(IRepository<TEntity> repository, IScopeServiceLoader loader)
         {
@@ -36,23 +36,19 @@ namespace FastFrame.Service
 
         /// <summary>
         /// 新增前
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
+        /// </summary> 
         protected virtual Task OnAdding(TDto input, TEntity entity) => Task.CompletedTask;
 
         /// <summary>
         /// 新增
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
+        /// </summary> 
         [AutoCacheInterceptor(AutoCacheOperate.Add)]
-        public async Task<TDto> AddAsync(TDto input)
+        public virtual async Task<TDto> AddAsync(TDto input)
         {
             if (input == null)
             {
                 throw new ArgumentNullException(nameof(input));
-            } 
+            }
 
 
 
@@ -71,19 +67,15 @@ namespace FastFrame.Service
 
         /// <summary>
         /// 删除前
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
+        /// </summary> 
         protected virtual Task OnDeleteing(TEntity input) => Task.CompletedTask;
 
 
         /// <summary>
         /// 删除
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// </summary> 
         [AutoCacheInterceptor(AutoCacheOperate.Remove)]
-        public async Task DeleteAsync(params string[] ids)
+        public virtual async Task DeleteAsync(params string[] ids)
         {
             foreach (var id in ids)
             {
@@ -101,13 +93,16 @@ namespace FastFrame.Service
             }
         }
 
+        /// <summary>
+        /// 返回前
+        /// </summary> 
         protected virtual Task OnGeting(TDto dto) => Task.CompletedTask;
 
         /// <summary>
         /// 获取单条数据
         /// </summary> 
         [AutoCacheInterceptor(AutoCacheOperate.Get)]
-        public async Task<TDto> GetAsync(string id)
+        public virtual async Task<TDto> GetAsync(string id)
         {
             var entity = await Query().FirstOrDefaultAsync(x => x.Id == id);
             if (entity == null)
@@ -116,14 +111,15 @@ namespace FastFrame.Service
             return entity;
         }
 
+        protected virtual IQueryable<TDto> GetListQueryableing(IQueryable<TDto> query) => query;
+
         /// <summary>
         /// 获取分页列表
-        /// </summary>
-        /// <param name="pageInfo"></param>
-        /// <returns></returns>
-        public async Task<PageList<TDto>> GetListAsync(PagePara pageInfo)
+        /// </summary> 
+        public virtual async Task<PageList<TDto>> GetListAsync(PagePara pageInfo)
         {
             var query = Query().DynamicQuery(pageInfo.Condition);
+            query = GetListQueryableing(query);
             return new PageList<TDto>()
             {
                 Total = await query.CountAsync(),
@@ -142,8 +138,7 @@ namespace FastFrame.Service
 
         /// <summary>
         /// 主查询表达式
-        /// </summary>
-        /// <returns></returns>
+        /// </summary> 
         protected virtual IQueryable<TDto> QueryMain()
         {
             return repository.Queryable.MapTo<TEntity, TDto>();
@@ -151,18 +146,14 @@ namespace FastFrame.Service
 
         /// <summary>
         /// 更新前
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
+        /// </summary> 
         protected virtual Task OnUpdateing(TDto input, TEntity entity) => Task.CompletedTask;
 
         /// <summary>
         /// 更新
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
+        /// </summary> 
         [AutoCacheInterceptor(AutoCacheOperate.Update)]
-        public async Task<TDto> UpdateAsync(TDto input)
+        public virtual async Task<TDto> UpdateAsync(TDto input)
         {
             if (input == null)
             {
@@ -181,11 +172,8 @@ namespace FastFrame.Service
 
         /// <summary>
         /// 验证属性
-        /// </summary>
-        /// <param name="propName"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public async Task<bool> VerifyUnique(UniqueInput input)
+        /// </summary> 
+        public virtual async Task<bool> VerifyUnique(UniqueInput input)
         {
             var filters = input.KeyValues.Select(x => new Filter()
             {

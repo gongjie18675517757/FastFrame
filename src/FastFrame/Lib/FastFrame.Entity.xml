@@ -309,14 +309,29 @@
             组织信息
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Basis.Tenant.Name">
+        <member name="P:FastFrame.Entity.Basis.Tenant.FullName">
             <summary>
-            名称
+            全称
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Basis.Tenant.EnCode">
             <summary>
             简称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.Tenant.UrlMark">
+            <summary>
+            URL标识
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.Tenant.Parent_Id">
+            <summary>
+            上级
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.Tenant.CanHaveChildren">
+            <summary>
+            是否可发展下级
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Basis.Tenant.HandIcon_Id">

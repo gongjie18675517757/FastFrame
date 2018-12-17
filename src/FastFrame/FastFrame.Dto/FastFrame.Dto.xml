@@ -395,14 +395,29 @@
             组织信息 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.TenantDto.Name">
+        <member name="P:FastFrame.Dto.Basis.TenantDto.FullName">
              <summary>
-            名称 
+            全称 
              </summary>
         </member>
         <member name="P:FastFrame.Dto.Basis.TenantDto.EnCode">
              <summary>
             简称 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.TenantDto.UrlMark">
+             <summary>
+            URL标识 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.TenantDto.Parent_Id">
+             <summary>
+            上级 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.TenantDto.CanHaveChildren">
+             <summary>
+            是否可发展下级 
              </summary>
         </member>
         <member name="P:FastFrame.Dto.Basis.TenantDto.HandIcon_Id">
@@ -523,6 +538,11 @@
         <member name="P:FastFrame.Dto.Dtos.Chat.FriendOutput.HeadIcon_Id">
             <summary>
             头像
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Dtos.Chat.FriendOutput.Messages">
+            <summary>
+            消息
             </summary>
         </member>
         <member name="T:FastFrame.Dto.Dtos.Chat.RecMsgOutPut">

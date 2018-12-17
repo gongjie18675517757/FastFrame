@@ -12,7 +12,9 @@
             {
                 EnCode = "default",
                 Id = "00F6P5G2VC2SAP1UJV7HTBYGU",
-                Name = "默认组织",              
+                FullName = "默认组织",
+                CanHaveChildren = true,
+                Parent_Id = "",
             });
 
             modelBuilder.Entity<TenantHost>().HasData(new TenantHost()
@@ -24,7 +26,7 @@
             new TenantHost()
             {
                 Host = "192.168.1.100:82",
-                Tenant_Id = "00F6P5G2VC2SAP1UJV7HTBYGU", 
+                Tenant_Id = "00F6P5G2VC2SAP1UJV7HTBYGU",
                 Id = "00F6P5G2VC2SAP1UJV7HTBYGc"
             });
         }

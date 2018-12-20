@@ -147,12 +147,11 @@ namespace FastFrame.Application
                     context.Response.Redirect("/index.html");
                 await next.Invoke();
             });
+
+
             app.UseStaticFiles();
             app.UseMvc();
-            //app.UseRouter(r =>
-            //{
-            //    r.MapRoute("defaultApi", "api/{organize?}/{controller=values}/{action}/{id?}/");
-            //});
+          
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
@@ -172,7 +171,5 @@ namespace FastFrame.Application
                 Console.WriteLine("ApplicationStopping");
             });
         }
-    }
-
-
+    } 
 }

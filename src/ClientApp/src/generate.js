@@ -89,7 +89,7 @@ export async function getFormItems(name = '') {
     Name: ModuleName
   } = await getModuleStrut(name)
   return FieldInfoStruts.filter(f => {
-    return f.Hide != 'form' && f.Hide != 'all'
+    return f.Hide != 'Form' && f.Hide != 'All'
   }).map(f => {
     return {
       ...f,

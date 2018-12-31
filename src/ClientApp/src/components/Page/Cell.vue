@@ -67,6 +67,7 @@ export default {
       }
     },
     value() {
+      
       let val = this.model[this.info.Name];
       if (this.info.Type == "Boolean") {
         if (val) return "是";

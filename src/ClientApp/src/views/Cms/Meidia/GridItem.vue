@@ -41,7 +41,7 @@ export default {
   computed: {
     isImage() {
       if (this.item.Resource)
-        return this.item.Resource.ContentType == "image/jpeg";
+        return this.item.Resource.ContentType.startsWith("image/");
     },
     imgSrc() {
       if (this.isImage) {

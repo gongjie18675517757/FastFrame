@@ -157,7 +157,7 @@ let router = new Router({
 const getSiteName = async () => {
   let name = ''
   while (true) {
-    name = store.state.tenant.Name
+    name = store.state.tenant.FullName
     if (!name) {
       await sleep(100)
     } else {
@@ -181,7 +181,7 @@ const existLogin = () => {
 }
 
 router.beforeEach(async (to, from, next) => {
-  let name = await getSiteName()
+  let name = await getSiteName()  
   window.document.title = to.meta.title ? `${to.meta.title}-${name}` : name;
   if (to.meta.allowAnonymous) {
     next();

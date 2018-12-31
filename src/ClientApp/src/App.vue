@@ -1,50 +1,55 @@
 <template>
   <div>
     <v-fade-transition mode="out-in">
-      <router-view v-if="resufreshed"/>
-    </v-fade-transition> 
-    <Alert/>
-    <component v-for="dialog in dialogs" :key="dialog.key" :is="dialog.render"/>
+      <router-view v-if="resufreshed" />
+    </v-fade-transition>
+    <Alert />
+    <component v-for="dialog in dialogs" :key="dialog.key" :is="dialog.render" />
   </div>
 </template>
 
 <script>
-import Alert from "@/components/Alert.vue";
+  import Alert from "@/components/Alert.vue";
 
-export default {
-  components: { Alert },
-  // provide() {
-  //   return {
-  //     reload: this.resufresh
-  //   };
-  // },
-  data() {
-    return {
-      resufreshed: true
-    };
-  },
-  computed: {
-    dialogs() {
-      return this.$store.state.dialogs;
+  export default {
+    components: {
+      Alert
+    },
+    // provide() {
+    //   return {
+    //     reload: this.resufresh
+    //   };
+    // },
+    data() {
+      return {
+        resufreshed: true
+      };
+    },
+    computed: {
+      dialogs() {
+        return this.$store.state.dialogs;
+      }
+    },
+    async created() {
+      
+    },
+    methods: {
+      resufresh() {
+        this.resufreshed = false;
+        this.$nextTick(function () {
+          this.resufreshed = true;
+        });
+      }
     }
-  },
-  async created() {},
-  methods: {
-    resufresh() {
-      this.resufreshed = false;
-      this.$nextTick(function() {
-        this.resufreshed = true;
-      });
-    }
-  }
-};
+  };
 </script>
 
 <style>
-.form {
-  padding: 5px;
-}
-.v-card__title {
-  padding: 2px;
-}
+  .form {
+    padding: 5px;
+  }
+
+  .v-card__title {
+    padding: 2px;
+  }
 </style>

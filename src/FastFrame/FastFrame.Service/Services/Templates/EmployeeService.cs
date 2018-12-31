@@ -11,30 +11,26 @@ namespace FastFrame.Service.Services.Basis
 	/// </summary>
 	public partial class EmployeeService:BaseService<Employee, EmployeeDto>
 	{
-		#region 字段
+		/*字段*/
 		private readonly IRepository<User> userRepository;
 		private readonly IRepository<Dept> deptRepository;
-		private readonly IRepository<Foreign> foreignRepository;
 		private readonly IRepository<Employee> employeeRepository;
-		#endregion
-		#region 构造函数
-		public EmployeeService(IRepository<User> userRepository,IRepository<Dept> deptRepository,IRepository<Foreign> foreignRepository,IRepository<Employee> employeeRepository,IScopeServiceLoader loader)
+		
+		/*构造函数*/
+		public EmployeeService(IRepository<User> userRepository,IRepository<Dept> deptRepository,IRepository<Employee> employeeRepository,IScopeServiceLoader loader)
 			:base(employeeRepository,loader)
 		{
 			this.userRepository=userRepository;
 			this.deptRepository=deptRepository;
-			this.foreignRepository=foreignRepository;
 			this.employeeRepository=employeeRepository;
 		}
-		#endregion
-		#region 属性
-		#endregion
-		#region 方法
+		
+		/*属性*/
+		
+		/*方法*/
 		protected override IQueryable<EmployeeDto> QueryMain() 
 		{
 			var employeeQueryable=employeeRepository.Queryable;
-			var foreignQueryable = foreignRepository.Queryable;
-			var userQuerable = userRepository.Queryable;
 			 var userQueryable = userRepository.Queryable;
 			 var deptQueryable = deptRepository.Queryable;
 			 var query = from _employee in employeeQueryable 
@@ -42,12 +38,10 @@ namespace FastFrame.Service.Services.Basis
 						from _user_Id in t__user_Id.DefaultIfEmpty()
 						join _dept_Id in deptQueryable.MapTo<Dept,DeptDto>() on _employee.Dept_Id equals _dept_Id.Id into t__dept_Id
 						from _dept_Id in t__dept_Id.DefaultIfEmpty()
-					join foreing in foreignQueryable on _employee.Id equals foreing.EntityId into t_foreing
-					from foreing in t_foreing.DefaultIfEmpty()
-					join user2 in userQuerable on foreing.CreateUserId equals user2.Id into t_user2
-					from user2 in t_user2.DefaultIfEmpty()
-					join user3 in userQuerable on foreing.ModifyUserId equals user3.Id into t_user3
-					from user3 in t_user3.DefaultIfEmpty()
+						join _create_User_Id in userQueryable.MapTo<User,UserDto>() on _employee.Create_User_Id equals _create_User_Id.Id into t__create_User_Id
+						from _create_User_Id in t__create_User_Id.DefaultIfEmpty()
+						join _modify_User_Id in userQueryable.MapTo<User,UserDto>() on _employee.Modify_User_Id equals _modify_User_Id.Id into t__modify_User_Id
+						from _modify_User_Id in t__modify_User_Id.DefaultIfEmpty()
 					 select new EmployeeDto
 					{
 						EnCode=_employee.EnCode,
@@ -58,14 +52,17 @@ namespace FastFrame.Service.Services.Basis
 						User_Id=_employee.User_Id,
 						Dept_Id=_employee.Dept_Id,
 						Id=_employee.Id,
+						Create_User_Id=_employee.Create_User_Id,
+						CreateTime=_employee.CreateTime,
+						Modify_User_Id=_employee.Modify_User_Id,
+						ModifyTime=_employee.ModifyTime,
 						User=_user_Id,
 						Dept=_dept_Id,
-						Foreign = foreing,
-						Create_User = user2,
-						Modify_User = user3,
+						Create_User=_create_User_Id,
+						Modify_User=_modify_User_Id,
 					};
 			return query;
 		}
-		#endregion
+		
 	}
 }

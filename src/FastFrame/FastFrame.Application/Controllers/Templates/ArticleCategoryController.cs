@@ -11,21 +11,21 @@ namespace FastFrame.Application.Controllers.CMS
 	[Permission(nameof(ArticleCategory),"文章类别")]
 	public partial class ArticleCategoryController:BaseController<ArticleCategory, ArticleCategoryDto>
 	{
-		#region 字段
+		/*字段*/
 		private readonly ArticleCategoryService service;
 		private readonly IScopeServiceLoader serviceLoader;
-		#endregion
-		#region 构造函数
+		
+		/*构造函数*/
 		public ArticleCategoryController(ArticleCategoryService service,IScopeServiceLoader serviceLoader)
 			:base(service,serviceLoader)
 		{
 			this.service = service;
 			this.serviceLoader = serviceLoader;
 		}
-		#endregion
-		#region 属性
-		#endregion
-		#region 方法
-		#endregion
+		
+		/*属性*/
+		
+		/*方法*/
+		
 	}
 }

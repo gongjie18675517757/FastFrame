@@ -12,23 +12,21 @@ namespace FastFrame.Service.Services.Chat
 	/// </summary>
 	public partial class NotifyService:BaseService<Notify, NotifyDto>
 	{
-		#region 字段
-		private readonly IRepository<Foreign> foreignRepository;
+		/*字段*/
 		private readonly IRepository<User> userRepository;
 		private readonly IRepository<Notify> notifyRepository;
-		#endregion
-		#region 构造函数
-		public NotifyService(IRepository<Foreign> foreignRepository,IRepository<User> userRepository,IRepository<Notify> notifyRepository,IScopeServiceLoader loader)
+		
+		/*构造函数*/
+		public NotifyService(IRepository<User> userRepository,IRepository<Notify> notifyRepository,IScopeServiceLoader loader)
 			:base(notifyRepository,loader)
 		{
-			this.foreignRepository=foreignRepository;
 			this.userRepository=userRepository;
 			this.notifyRepository=notifyRepository;
 		}
-		#endregion
-		#region 属性
-		#endregion
-		#region 方法
+		
+		/*属性*/
+		
+		/*方法*/
 		protected override IQueryable<NotifyDto> QueryMain() 
 		{
 			var notifyQueryable=notifyRepository.Queryable;
@@ -41,6 +39,6 @@ namespace FastFrame.Service.Services.Chat
 					};
 			return query;
 		}
-		#endregion
+		
 	}
 }

@@ -46,13 +46,14 @@ namespace FastFrame.Repository
 
             if (entity is IHasManage hasManage)
             {
-                await context.Set<Foreign>().AddAsync(new Foreign()
+                hasManage.CreateTime = DateTime.Now;
+                hasManage.ModifyTime = DateTime.Now;
+                var curr = currentUserProvider.GetCurrUser();
+                if (curr != null)
                 {
-                    EntityId = entity.Id,
-                    Id = IdGenerate.NetId(),
-                    CreateTime = DateTime.Now,
-                    CreateUserId = currUser?.Id,
-                });
+                    hasManage.Create_User_Id = curr.Id;
+                    hasManage.Modify_User_Id = curr.Id;
+                } 
             }
 
             var entityEntry = context.Entry(entity);
@@ -120,15 +121,22 @@ namespace FastFrame.Repository
         /// </summary>
         /// <param name="entity"></param>
         public virtual async Task DeleteAsync(T entity)
-        {
-            context.Set<T>().Remove(entity);
-            //entity.IsDeleted = true;
-            var foreign = await context.Set<Foreign>().FirstOrDefaultAsync(x => x.EntityId == entity.Id);
-            //foreign.ModifyUserId = currUser?.Id;
-            //foreign.ModifyTime = DateTime.Now;
-            //context.Entry(foreign).State = EntityState.Modified;
-            //context.Entry(entity).State = EntityState.Modified;
-            context.Set<Foreign>().Remove(foreign);
+        {  
+            if(entity is IHasManage hasManage)
+            {
+                hasManage.Modify_User_Id = currUser?.Id;
+                hasManage.ModifyTime = DateTime.Now;
+            }
+            if (entity is IHasSoftDelete softDelete)
+            {
+                softDelete.IsDeleted = true;
+                context.Entry(entity).State = EntityState.Modified;
+            }
+            else
+            {
+                context.Entry(entity).State = EntityState.Deleted;
+            } 
+
             await eventBus.TriggerAsync(new EntityDeleteing<T>(entity));
         }
 
@@ -183,13 +191,8 @@ namespace FastFrame.Repository
 
             if (entity is IHasManage hasManage)
             {
-                var foreign = await context.Set<Foreign>().FirstOrDefaultAsync(x => x.EntityId == entity.Id);
-                if (foreign != null)
-                {
-                    foreign.ModifyUserId = currUser?.Id;
-                    foreign.ModifyTime = DateTime.Now;
-                    context.Entry(foreign).State = EntityState.Modified;
-                }
+                hasManage.ModifyTime = DateTime.Now;
+                hasManage.Modify_User_Id = currUser?.Id; 
             }
 
             var entityEntry = context.Entry(entity);
@@ -198,6 +201,5 @@ namespace FastFrame.Repository
             await eventBus.TriggerAsync(new EntityUpdateing<T>(entityEntry.Entity));
             return entityEntry.Entity;
         }
-
     }
 }

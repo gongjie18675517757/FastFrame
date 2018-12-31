@@ -12,23 +12,21 @@ namespace FastFrame.Service.Services.Chat
 	/// </summary>
 	public partial class EmailAnnexService:BaseService<EmailAnnex, EmailAnnexDto>
 	{
-		#region 字段
-		private readonly IRepository<Foreign> foreignRepository;
+		/*字段*/
 		private readonly IRepository<User> userRepository;
 		private readonly IRepository<EmailAnnex> emailAnnexRepository;
-		#endregion
-		#region 构造函数
-		public EmailAnnexService(IRepository<Foreign> foreignRepository,IRepository<User> userRepository,IRepository<EmailAnnex> emailAnnexRepository,IScopeServiceLoader loader)
+		
+		/*构造函数*/
+		public EmailAnnexService(IRepository<User> userRepository,IRepository<EmailAnnex> emailAnnexRepository,IScopeServiceLoader loader)
 			:base(emailAnnexRepository,loader)
 		{
-			this.foreignRepository=foreignRepository;
 			this.userRepository=userRepository;
 			this.emailAnnexRepository=emailAnnexRepository;
 		}
-		#endregion
-		#region 属性
-		#endregion
-		#region 方法
+		
+		/*属性*/
+		
+		/*方法*/
 		protected override IQueryable<EmailAnnexDto> QueryMain() 
 		{
 			var emailAnnexQueryable=emailAnnexRepository.Queryable;
@@ -41,6 +39,6 @@ namespace FastFrame.Service.Services.Chat
 					};
 			return query;
 		}
-		#endregion
+		
 	}
 }

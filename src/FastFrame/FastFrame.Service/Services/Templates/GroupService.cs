@@ -1,46 +1,42 @@
 namespace FastFrame.Service.Services.Chat
 {
+	using FastFrame.Entity.Basis; 
 	using FastFrame.Entity.Chat; 
 	using FastFrame.Dto.Chat; 
 	using FastFrame.Infrastructure.Interface; 
 	using FastFrame.Infrastructure; 
 	using FastFrame.Repository; 
-	using FastFrame.Entity.Basis; 
 	using System.Linq; 
+	using FastFrame.Dto.Basis; 
 	/// <summary>
 	///群组 服务类 
 	/// </summary>
 	public partial class GroupService:BaseService<Group, GroupDto>
 	{
-		#region 字段
-		private readonly IRepository<Foreign> foreignRepository;
+		/*字段*/
 		private readonly IRepository<User> userRepository;
 		private readonly IRepository<Group> groupRepository;
-		#endregion
-		#region 构造函数
-		public GroupService(IRepository<Foreign> foreignRepository,IRepository<User> userRepository,IRepository<Group> groupRepository,IScopeServiceLoader loader)
+		
+		/*构造函数*/
+		public GroupService(IRepository<User> userRepository,IRepository<Group> groupRepository,IScopeServiceLoader loader)
 			:base(groupRepository,loader)
 		{
-			this.foreignRepository=foreignRepository;
 			this.userRepository=userRepository;
 			this.groupRepository=groupRepository;
 		}
-		#endregion
-		#region 属性
-		#endregion
-		#region 方法
+		
+		/*属性*/
+		
+		/*方法*/
 		protected override IQueryable<GroupDto> QueryMain() 
 		{
 			var groupQueryable=groupRepository.Queryable;
-			var foreignQueryable = foreignRepository.Queryable;
-			var userQuerable = userRepository.Queryable;
+			 var userQueryable = userRepository.Queryable;
 			 var query = from _group in groupQueryable 
-					join foreing in foreignQueryable on _group.Id equals foreing.EntityId into t_foreing
-					from foreing in t_foreing.DefaultIfEmpty()
-					join user2 in userQuerable on foreing.CreateUserId equals user2.Id into t_user2
-					from user2 in t_user2.DefaultIfEmpty()
-					join user3 in userQuerable on foreing.ModifyUserId equals user3.Id into t_user3
-					from user3 in t_user3.DefaultIfEmpty()
+						join _create_User_Id in userQueryable.MapTo<User,UserDto>() on _group.Create_User_Id equals _create_User_Id.Id into t__create_User_Id
+						from _create_User_Id in t__create_User_Id.DefaultIfEmpty()
+						join _modify_User_Id in userQueryable.MapTo<User,UserDto>() on _group.Modify_User_Id equals _modify_User_Id.Id into t__modify_User_Id
+						from _modify_User_Id in t__modify_User_Id.DefaultIfEmpty()
 					 select new GroupDto
 					{
 						Name=_group.Name,
@@ -48,12 +44,15 @@ namespace FastFrame.Service.Services.Chat
 						HandIcon_Id=_group.HandIcon_Id,
 						Summary=_group.Summary,
 						Id=_group.Id,
-						Foreign = foreing,
-						Create_User = user2,
-						Modify_User = user3,
+						Create_User_Id=_group.Create_User_Id,
+						CreateTime=_group.CreateTime,
+						Modify_User_Id=_group.Modify_User_Id,
+						ModifyTime=_group.ModifyTime,
+						Create_User=_create_User_Id,
+						Modify_User=_modify_User_Id,
 					};
 			return query;
 		}
-		#endregion
+		
 	}
 }

@@ -22,7 +22,7 @@ namespace FastFrame.CodeGenerate.Build
         {
             foreach (var type in GetTypes())
             {
-                if (!string.IsNullOrWhiteSpace(type.Name) && type.Name != typeName)
+                if (!string.IsNullOrWhiteSpace(typeName) && type.Name != typeName)
                     continue;
                 if (type.GetCustomAttribute<Infrastructure.Attrs.ExportAttribute>() == null)
                     continue;

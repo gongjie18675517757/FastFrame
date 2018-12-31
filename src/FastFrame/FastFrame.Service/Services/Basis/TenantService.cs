@@ -13,19 +13,18 @@ namespace FastFrame.Service.Services.Basis
         private readonly ICurrentUserProvider currentUserProvider;
 
         public TenantService(
-            ICurrentUserProvider currentUserProvider,
-            IRepository<Foreign> foreignRepository,
+            ICurrentUserProvider currentUserProvider, 
             IRepository<User> userRepository,
-            IRepository<Tenant> tenantRepository, 
+            IRepository<Tenant> tenantRepository,
             IScopeServiceLoader loader)
-            :this(foreignRepository, userRepository, tenantRepository, loader)
+            : this(userRepository, tenantRepository, loader)
         {
             this.currentUserProvider = currentUserProvider;
         }
         public Task<TenantDto> GetCurrentAsync()
         {
             return GetAsync(currentUserProvider.GetCurrOrganizeId().Id);
-        } 
+        }
         public Task<TenantDto> UpdateCurrentAsync(TenantDto tenantDto)
         {
             tenantDto.Id = currentUserProvider.GetCurrOrganizeId().Id;

@@ -11,35 +11,30 @@ namespace FastFrame.Service.Services.Basis
 	/// </summary>
 	public partial class ResourceService:BaseService<Resource, ResourceDto>
 	{
-		#region 字段
-		private readonly IRepository<Foreign> foreignRepository;
+		/*字段*/
 		private readonly IRepository<User> userRepository;
 		private readonly IRepository<Resource> resourceRepository;
-		#endregion
-		#region 构造函数
-		public ResourceService(IRepository<Foreign> foreignRepository,IRepository<User> userRepository,IRepository<Resource> resourceRepository,IScopeServiceLoader loader)
+		
+		/*构造函数*/
+		public ResourceService(IRepository<User> userRepository,IRepository<Resource> resourceRepository,IScopeServiceLoader loader)
 			:base(resourceRepository,loader)
 		{
-			this.foreignRepository=foreignRepository;
 			this.userRepository=userRepository;
 			this.resourceRepository=resourceRepository;
 		}
-		#endregion
-		#region 属性
-		#endregion
-		#region 方法
+		
+		/*属性*/
+		
+		/*方法*/
 		protected override IQueryable<ResourceDto> QueryMain() 
 		{
 			var resourceQueryable=resourceRepository.Queryable;
-			var foreignQueryable = foreignRepository.Queryable;
-			var userQuerable = userRepository.Queryable;
+			 var userQueryable = userRepository.Queryable;
 			 var query = from _resource in resourceQueryable 
-					join foreing in foreignQueryable on _resource.Id equals foreing.EntityId into t_foreing
-					from foreing in t_foreing.DefaultIfEmpty()
-					join user2 in userQuerable on foreing.CreateUserId equals user2.Id into t_user2
-					from user2 in t_user2.DefaultIfEmpty()
-					join user3 in userQuerable on foreing.ModifyUserId equals user3.Id into t_user3
-					from user3 in t_user3.DefaultIfEmpty()
+						join _create_User_Id in userQueryable.MapTo<User,UserDto>() on _resource.Create_User_Id equals _create_User_Id.Id into t__create_User_Id
+						from _create_User_Id in t__create_User_Id.DefaultIfEmpty()
+						join _modify_User_Id in userQueryable.MapTo<User,UserDto>() on _resource.Modify_User_Id equals _modify_User_Id.Id into t__modify_User_Id
+						from _modify_User_Id in t__modify_User_Id.DefaultIfEmpty()
 					 select new ResourceDto
 					{
 						Name=_resource.Name,
@@ -47,12 +42,15 @@ namespace FastFrame.Service.Services.Basis
 						Path=_resource.Path,
 						ContentType=_resource.ContentType,
 						Id=_resource.Id,
-						Foreign = foreing,
-						Create_User = user2,
-						Modify_User = user3,
+						Create_User_Id=_resource.Create_User_Id,
+						CreateTime=_resource.CreateTime,
+						Modify_User_Id=_resource.Modify_User_Id,
+						ModifyTime=_resource.ModifyTime,
+						Create_User=_create_User_Id,
+						Modify_User=_modify_User_Id,
 					};
 			return query;
 		}
-		#endregion
+		
 	}
 }

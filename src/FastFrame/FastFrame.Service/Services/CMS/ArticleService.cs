@@ -11,17 +11,20 @@ namespace FastFrame.Service.Services.CMS
     {
         private readonly IRepository<ArticleContent> articleContentRepository;
 
-        public ArticleService(IRepository<ArticleCategory> articleCategoryRepository, IRepository<Meidia> meidiaRepository, 
-            IRepository<Foreign> foreignRepository, IRepository<User> userRepository, IRepository<Article> articleRepository, 
+        public ArticleService(
+            IRepository<ArticleCategory> articleCategoryRepository,
+            IRepository<Meidia> meidiaRepository,
+            IRepository<User> userRepository,
+            IRepository<Article> articleRepository,
             IRepository<ArticleContent> articleContentRepository,
             IScopeServiceLoader loader)
-        : this(articleCategoryRepository, meidiaRepository, foreignRepository, userRepository, articleRepository,loader)
+        : this(articleCategoryRepository, meidiaRepository, userRepository, articleRepository, loader)
         {
             this.articleContentRepository = articleContentRepository;
         }
         public async Task ToggleRelease(string id)
         {
-            var entity= await articleRepository.GetAsync(id);
+            var entity = await articleRepository.GetAsync(id);
             entity.IsRelease = !entity.IsRelease;
             await articleRepository.UpdateAsync(entity);
         }
@@ -47,7 +50,7 @@ namespace FastFrame.Service.Services.CMS
             await base.OnUpdateing(input, entity);
             var contentEntity = await articleContentRepository.GetAsync(entity.ArticleContent_Id);
             contentEntity.Content = input.Content;
-            await articleContentRepository.UpdateAsync(contentEntity); 
+            await articleContentRepository.UpdateAsync(contentEntity);
         }
 
         protected override async Task OnGeting(ArticleDto dto)

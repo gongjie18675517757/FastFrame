@@ -22,18 +22,14 @@ namespace FastFrame.CodeGenerate.Build
 
         public override string TargetPath => $"{SolutionDir}\\FastFrame.Service\\Services\\Templates";
 
-        //public override IEnumerable<Type> GetTypes()
-        //{
-        //    yield break;
-        //}
 
         public override IEnumerable<TargetInfo> BuildCodeInfo(string typeName)
         {
             foreach (var type in GetTypes())
             {
-                if (!string.IsNullOrWhiteSpace(type.Name) && type.Name != typeName)
+                if (!string.IsNullOrWhiteSpace(typeName) && type.Name != typeName)
                     continue;
-                if (type.GetCustomAttribute<Infrastructure.Attrs.ExcludeAttribute>() != null)
+                if (type.GetCustomAttribute<ExcludeAttribute>() != null)
                     continue;
                 yield return Build(type);
             }
@@ -72,7 +68,7 @@ namespace FastFrame.CodeGenerate.Build
             /*要导入的依赖*/
             var depends = relatedTypes
                     .Select(x => x.RelatedType.Name)
-                    .Union(new[] { "Foreign", "User", type.Name })
+                    .Union(new[] { "User", type.Name })
                     .Distinct()
                     .Select(x => new { type = $"IRepository<{x}>", name = $"{x.ToFirstLower()}Repository" });
 
@@ -125,18 +121,19 @@ namespace FastFrame.CodeGenerate.Build
 
             if (hasManage)
             {
-                yield return "var foreignQueryable = foreignRepository.Queryable;";
-                yield return "var userQuerable = userRepository.Queryable;";
+                // yield return "var userQuerable = userRepository.Queryable;";
             }
 
 
-            foreach (var prop in props)
+            foreach (var prop in props.GroupBy(x=>x.Attr.RelatedType.Name))
             {
-                var relatedTypeName = prop.Attr.RelatedType.Name.ToFirstLower();
+                var relatedTypeName = prop.Key.ToFirstLower();
                 yield return $" var {relatedTypeName}Queryable = {relatedTypeName}Repository.Queryable;";
             }
 
+
             yield return $" var query = from _{typeName} in {typeName}Queryable ";
+
             foreach (var prop in props)
             {
                 var name = "_" + prop.Prop.Name.ToFirstLower();
@@ -149,12 +146,12 @@ namespace FastFrame.CodeGenerate.Build
             }
             if (hasManage)
             {
-                yield return $"\t\tjoin foreing in foreignQueryable on _{typeName}.Id equals foreing.EntityId into t_foreing";
-                yield return "\t\tfrom foreing in t_foreing.DefaultIfEmpty()";
-                yield return "\t\tjoin user2 in userQuerable on foreing.CreateUserId equals user2.Id into t_user2";
-                yield return "\t\tfrom user2 in t_user2.DefaultIfEmpty()";
-                yield return "\t\tjoin user3 in userQuerable on foreing.ModifyUserId equals user3.Id into t_user3";
-                yield return "\t\tfrom user3 in t_user3.DefaultIfEmpty()";
+                //yield return $"\t\tjoin foreing in foreignQueryable on _{typeName}.Id equals foreing.EntityId into t_foreing";
+                //yield return "\t\tfrom foreing in t_foreing.DefaultIfEmpty()";
+                //yield return "\t\tjoin user2 in userQuerable on foreing.CreateUserId equals user2.Id into t_user2";
+                //yield return "\t\tfrom user2 in t_user2.DefaultIfEmpty()";
+                //yield return "\t\tjoin user3 in userQuerable on foreing.ModifyUserId equals user3.Id into t_user3";
+                //yield return "\t\tfrom user3 in t_user3.DefaultIfEmpty()";
             }
 
             yield return $"\t\t select new {type.Name}Dto";
@@ -178,9 +175,9 @@ namespace FastFrame.CodeGenerate.Build
 
             if (hasManage)
             {
-                yield return "\t\t\tForeign = foreing,";
-                yield return "\t\t\tCreate_User = user2,";
-                yield return "\t\t\tModify_User = user3,";
+                //yield return "\t\t\tForeign = foreing,";
+                //yield return "\t\t\tCreate_User = user2,";
+                //yield return "\t\t\tModify_User = user3,";
             }
 
 

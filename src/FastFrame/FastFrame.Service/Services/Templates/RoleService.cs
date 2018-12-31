@@ -11,46 +11,44 @@ namespace FastFrame.Service.Services.Basis
 	/// </summary>
 	public partial class RoleService:BaseService<Role, RoleDto>
 	{
-		#region 字段
-		private readonly IRepository<Foreign> foreignRepository;
+		/*字段*/
 		private readonly IRepository<User> userRepository;
 		private readonly IRepository<Role> roleRepository;
-		#endregion
-		#region 构造函数
-		public RoleService(IRepository<Foreign> foreignRepository,IRepository<User> userRepository,IRepository<Role> roleRepository,IScopeServiceLoader loader)
+		
+		/*构造函数*/
+		public RoleService(IRepository<User> userRepository,IRepository<Role> roleRepository,IScopeServiceLoader loader)
 			:base(roleRepository,loader)
 		{
-			this.foreignRepository=foreignRepository;
 			this.userRepository=userRepository;
 			this.roleRepository=roleRepository;
 		}
-		#endregion
-		#region 属性
-		#endregion
-		#region 方法
+		
+		/*属性*/
+		
+		/*方法*/
 		protected override IQueryable<RoleDto> QueryMain() 
 		{
 			var roleQueryable=roleRepository.Queryable;
-			var foreignQueryable = foreignRepository.Queryable;
-			var userQuerable = userRepository.Queryable;
+			 var userQueryable = userRepository.Queryable;
 			 var query = from _role in roleQueryable 
-					join foreing in foreignQueryable on _role.Id equals foreing.EntityId into t_foreing
-					from foreing in t_foreing.DefaultIfEmpty()
-					join user2 in userQuerable on foreing.CreateUserId equals user2.Id into t_user2
-					from user2 in t_user2.DefaultIfEmpty()
-					join user3 in userQuerable on foreing.ModifyUserId equals user3.Id into t_user3
-					from user3 in t_user3.DefaultIfEmpty()
+						join _create_User_Id in userQueryable.MapTo<User,UserDto>() on _role.Create_User_Id equals _create_User_Id.Id into t__create_User_Id
+						from _create_User_Id in t__create_User_Id.DefaultIfEmpty()
+						join _modify_User_Id in userQueryable.MapTo<User,UserDto>() on _role.Modify_User_Id equals _modify_User_Id.Id into t__modify_User_Id
+						from _modify_User_Id in t__modify_User_Id.DefaultIfEmpty()
 					 select new RoleDto
 					{
 						EnCode=_role.EnCode,
 						Name=_role.Name,
 						Id=_role.Id,
-						Foreign = foreing,
-						Create_User = user2,
-						Modify_User = user3,
+						Create_User_Id=_role.Create_User_Id,
+						CreateTime=_role.CreateTime,
+						Modify_User_Id=_role.Modify_User_Id,
+						ModifyTime=_role.ModifyTime,
+						Create_User=_create_User_Id,
+						Modify_User=_modify_User_Id,
 					};
 			return query;
 		}
-		#endregion
+		
 	}
 }

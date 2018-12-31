@@ -12,11 +12,11 @@ namespace FastFrame.Dto.Basis
 	[RelatedField("Name","EnCode","AreaName")]
 	public partial class PermissionDto:BaseDto<Permission>
 	{
-		#region 字段
-		#endregion
-		#region 构造函数
-		#endregion
-		#region 属性
+		/*字段*/
+		
+		/*构造函数*/
+		
+		/*属性*/
 		/// <summary>
 		///父级 
 		/// </summary>
@@ -49,8 +49,8 @@ namespace FastFrame.Dto.Basis
 		[Required()]
 		public string Name {get;set;}
 		
-		#endregion
-		#region 方法
-		#endregion
+		
+		/*方法*/
+		
 	}
 }

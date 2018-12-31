@@ -85,9 +85,9 @@
             主管 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.DeptDto.Foreign">
+        <member name="P:FastFrame.Dto.Basis.DeptDto.Create_User_Id">
              <summary>
-            管理属性 
+            创建人 
              </summary>
         </member>
         <member name="P:FastFrame.Dto.Basis.DeptDto.Create_User">
@@ -95,9 +95,24 @@
             创建人 
              </summary>
         </member>
+        <member name="P:FastFrame.Dto.Basis.DeptDto.CreateTime">
+             <summary>
+            创建时间 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.DeptDto.Modify_User_Id">
+             <summary>
+            修改人 
+             </summary>
+        </member>
         <member name="P:FastFrame.Dto.Basis.DeptDto.Modify_User">
              <summary>
             修改人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.DeptDto.ModifyTime">
+             <summary>
+            修改时间 
              </summary>
         </member>
         <member name="T:FastFrame.Dto.Basis.EmployeeDto">
@@ -150,9 +165,9 @@
             部门 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.EmployeeDto.Foreign">
+        <member name="P:FastFrame.Dto.Basis.EmployeeDto.Create_User_Id">
              <summary>
-            管理属性 
+            创建人 
              </summary>
         </member>
         <member name="P:FastFrame.Dto.Basis.EmployeeDto.Create_User">
@@ -160,9 +175,24 @@
             创建人 
              </summary>
         </member>
+        <member name="P:FastFrame.Dto.Basis.EmployeeDto.CreateTime">
+             <summary>
+            创建时间 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.EmployeeDto.Modify_User_Id">
+             <summary>
+            修改人 
+             </summary>
+        </member>
         <member name="P:FastFrame.Dto.Basis.EmployeeDto.Modify_User">
              <summary>
             修改人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.EmployeeDto.ModifyTime">
+             <summary>
+            修改时间 
              </summary>
         </member>
         <member name="T:FastFrame.Dto.Basis.MenuDto">
@@ -205,9 +235,9 @@
             路径 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.MenuDto.Foreign">
+        <member name="P:FastFrame.Dto.Basis.MenuDto.Create_User_Id">
              <summary>
-            管理属性 
+            创建人 
              </summary>
         </member>
         <member name="P:FastFrame.Dto.Basis.MenuDto.Create_User">
@@ -215,9 +245,24 @@
             创建人 
              </summary>
         </member>
+        <member name="P:FastFrame.Dto.Basis.MenuDto.CreateTime">
+             <summary>
+            创建时间 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.MenuDto.Modify_User_Id">
+             <summary>
+            修改人 
+             </summary>
+        </member>
         <member name="P:FastFrame.Dto.Basis.MenuDto.Modify_User">
              <summary>
             修改人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.MenuDto.ModifyTime">
+             <summary>
+            修改时间 
              </summary>
         </member>
         <member name="T:FastFrame.Dto.Basis.OrganizeDto">
@@ -310,9 +355,9 @@
             资源标识 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.ResourceDto.Foreign">
+        <member name="P:FastFrame.Dto.Basis.ResourceDto.Create_User_Id">
              <summary>
-            管理属性 
+            创建人 
              </summary>
         </member>
         <member name="P:FastFrame.Dto.Basis.ResourceDto.Create_User">
@@ -320,9 +365,24 @@
             创建人 
              </summary>
         </member>
+        <member name="P:FastFrame.Dto.Basis.ResourceDto.CreateTime">
+             <summary>
+            创建时间 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.ResourceDto.Modify_User_Id">
+             <summary>
+            修改人 
+             </summary>
+        </member>
         <member name="P:FastFrame.Dto.Basis.ResourceDto.Modify_User">
              <summary>
             修改人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.ResourceDto.ModifyTime">
+             <summary>
+            修改时间 
              </summary>
         </member>
         <member name="T:FastFrame.Dto.Basis.RoleDto">
@@ -340,9 +400,9 @@
             名称 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.RoleDto.Foreign">
+        <member name="P:FastFrame.Dto.Basis.RoleDto.Create_User_Id">
              <summary>
-            管理属性 
+            创建人 
              </summary>
         </member>
         <member name="P:FastFrame.Dto.Basis.RoleDto.Create_User">
@@ -350,9 +410,24 @@
             创建人 
              </summary>
         </member>
+        <member name="P:FastFrame.Dto.Basis.RoleDto.CreateTime">
+             <summary>
+            创建时间 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.RoleDto.Modify_User_Id">
+             <summary>
+            修改人 
+             </summary>
+        </member>
         <member name="P:FastFrame.Dto.Basis.RoleDto.Modify_User">
              <summary>
             修改人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.RoleDto.ModifyTime">
+             <summary>
+            修改时间 
              </summary>
         </member>
         <member name="T:FastFrame.Dto.Basis.RoleMemberDto">
@@ -480,9 +555,9 @@
             是否禁用 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.UserDto.Foreign">
+        <member name="P:FastFrame.Dto.Basis.UserDto.Create_User_Id">
              <summary>
-            管理属性 
+            创建人 
              </summary>
         </member>
         <member name="P:FastFrame.Dto.Basis.UserDto.Create_User">
@@ -490,9 +565,24 @@
             创建人 
              </summary>
         </member>
+        <member name="P:FastFrame.Dto.Basis.UserDto.CreateTime">
+             <summary>
+            创建时间 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.UserDto.Modify_User_Id">
+             <summary>
+            修改人 
+             </summary>
+        </member>
         <member name="P:FastFrame.Dto.Basis.UserDto.Modify_User">
              <summary>
             修改人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.UserDto.ModifyTime">
+             <summary>
+            修改时间 
              </summary>
         </member>
         <member name="T:FastFrame.Dto.Dtos.Chat.FriendMsgInput">
@@ -655,9 +745,9 @@
             文章内容 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.CMS.ArticleDto.Foreign">
+        <member name="P:FastFrame.Dto.CMS.ArticleDto.Create_User_Id">
              <summary>
-            管理属性 
+            创建人 
              </summary>
         </member>
         <member name="P:FastFrame.Dto.CMS.ArticleDto.Create_User">
@@ -665,9 +755,24 @@
             创建人 
              </summary>
         </member>
+        <member name="P:FastFrame.Dto.CMS.ArticleDto.CreateTime">
+             <summary>
+            创建时间 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.ArticleDto.Modify_User_Id">
+             <summary>
+            修改人 
+             </summary>
+        </member>
         <member name="P:FastFrame.Dto.CMS.ArticleDto.Modify_User">
              <summary>
             修改人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.ArticleDto.ModifyTime">
+             <summary>
+            修改时间 
              </summary>
         </member>
         <member name="T:FastFrame.Dto.CMS.ArticleCategoryDto">
@@ -700,9 +805,9 @@
             描述 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.CMS.ArticleCategoryDto.Foreign">
+        <member name="P:FastFrame.Dto.CMS.ArticleCategoryDto.Create_User_Id">
              <summary>
-            管理属性 
+            创建人 
              </summary>
         </member>
         <member name="P:FastFrame.Dto.CMS.ArticleCategoryDto.Create_User">
@@ -710,9 +815,24 @@
             创建人 
              </summary>
         </member>
+        <member name="P:FastFrame.Dto.CMS.ArticleCategoryDto.CreateTime">
+             <summary>
+            创建时间 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.ArticleCategoryDto.Modify_User_Id">
+             <summary>
+            修改人 
+             </summary>
+        </member>
         <member name="P:FastFrame.Dto.CMS.ArticleCategoryDto.Modify_User">
              <summary>
             修改人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.ArticleCategoryDto.ModifyTime">
+             <summary>
+            修改时间 
              </summary>
         </member>
         <member name="T:FastFrame.Dto.CMS.MeidiaDto">
@@ -755,9 +875,9 @@
             是否文件夹 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.CMS.MeidiaDto.Foreign">
+        <member name="P:FastFrame.Dto.CMS.MeidiaDto.Create_User_Id">
              <summary>
-            管理属性 
+            创建人 
              </summary>
         </member>
         <member name="P:FastFrame.Dto.CMS.MeidiaDto.Create_User">
@@ -765,9 +885,24 @@
             创建人 
              </summary>
         </member>
+        <member name="P:FastFrame.Dto.CMS.MeidiaDto.CreateTime">
+             <summary>
+            创建时间 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.MeidiaDto.Modify_User_Id">
+             <summary>
+            修改人 
+             </summary>
+        </member>
         <member name="P:FastFrame.Dto.CMS.MeidiaDto.Modify_User">
              <summary>
             修改人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.CMS.MeidiaDto.ModifyTime">
+             <summary>
+            修改时间 
              </summary>
         </member>
         <member name="T:FastFrame.Dto.Chat.EmailAnnexDto">
@@ -900,9 +1035,9 @@
             简介 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Chat.GroupDto.Foreign">
+        <member name="P:FastFrame.Dto.Chat.GroupDto.Create_User_Id">
              <summary>
-            管理属性 
+            创建人 
              </summary>
         </member>
         <member name="P:FastFrame.Dto.Chat.GroupDto.Create_User">
@@ -910,9 +1045,24 @@
             创建人 
              </summary>
         </member>
+        <member name="P:FastFrame.Dto.Chat.GroupDto.CreateTime">
+             <summary>
+            创建时间 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.GroupDto.Modify_User_Id">
+             <summary>
+            修改人 
+             </summary>
+        </member>
         <member name="P:FastFrame.Dto.Chat.GroupDto.Modify_User">
              <summary>
             修改人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.GroupDto.ModifyTime">
+             <summary>
+            修改时间 
              </summary>
         </member>
         <member name="T:FastFrame.Dto.Chat.GroupManagerDto">

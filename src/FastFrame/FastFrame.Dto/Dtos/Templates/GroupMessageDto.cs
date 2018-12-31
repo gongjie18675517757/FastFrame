@@ -11,11 +11,11 @@ namespace FastFrame.Dto.Chat
 	/// </summary>
 	public partial class GroupMessageDto:BaseDto<GroupMessage>
 	{
-		#region 字段
-		#endregion
-		#region 构造函数
-		#endregion
-		#region 属性
+		/*字段*/
+		
+		/*构造函数*/
+		
+		/*属性*/
 		/// <summary>
 		///群组ID 
 		/// </summary>
@@ -47,8 +47,8 @@ namespace FastFrame.Dto.Chat
 		/// </summary>
 		public DateTime MessageTime {get;set;}
 		
-		#endregion
-		#region 方法
-		#endregion
+		
+		/*方法*/
+		
 	}
 }

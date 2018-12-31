@@ -11,23 +11,21 @@ namespace FastFrame.Service.Services.Basis
 	/// </summary>
 	public partial class QueryProgramService:BaseService<QueryProgram, QueryProgramDto>
 	{
-		#region 字段
-		private readonly IRepository<Foreign> foreignRepository;
+		/*字段*/
 		private readonly IRepository<User> userRepository;
 		private readonly IRepository<QueryProgram> queryProgramRepository;
-		#endregion
-		#region 构造函数
-		public QueryProgramService(IRepository<Foreign> foreignRepository,IRepository<User> userRepository,IRepository<QueryProgram> queryProgramRepository,IScopeServiceLoader loader)
+		
+		/*构造函数*/
+		public QueryProgramService(IRepository<User> userRepository,IRepository<QueryProgram> queryProgramRepository,IScopeServiceLoader loader)
 			:base(queryProgramRepository,loader)
 		{
-			this.foreignRepository=foreignRepository;
 			this.userRepository=userRepository;
 			this.queryProgramRepository=queryProgramRepository;
 		}
-		#endregion
-		#region 属性
-		#endregion
-		#region 方法
+		
+		/*属性*/
+		
+		/*方法*/
 		protected override IQueryable<QueryProgramDto> QueryMain() 
 		{
 			var queryProgramQueryable=queryProgramRepository.Queryable;
@@ -42,6 +40,6 @@ namespace FastFrame.Service.Services.Basis
 					};
 			return query;
 		}
-		#endregion
+		
 	}
 }

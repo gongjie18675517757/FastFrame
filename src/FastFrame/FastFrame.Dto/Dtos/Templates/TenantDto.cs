@@ -10,11 +10,11 @@ namespace FastFrame.Dto.Basis
 	/// </summary>
 	public partial class TenantDto:BaseDto<Tenant>
 	{
-		#region 字段
-		#endregion
-		#region 构造函数
-		#endregion
-		#region 属性
+		/*字段*/
+		
+		/*构造函数*/
+		
+		/*属性*/
 		/// <summary>
 		///全称 
 		/// </summary>
@@ -51,8 +51,8 @@ namespace FastFrame.Dto.Basis
 		/// </summary>
 		public string HandIcon_Id {get;set;}
 		
-		#endregion
-		#region 方法
-		#endregion
+		
+		/*方法*/
+		
 	}
 }

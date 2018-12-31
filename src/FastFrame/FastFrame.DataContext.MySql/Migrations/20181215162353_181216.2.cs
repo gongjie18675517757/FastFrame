@@ -24,7 +24,7 @@ namespace FastFrame.Database.Migrations
                 keyColumn: "Id",
                 keyValue: "00F6P5G2VC2SAP1UJV7HTBYGA",
                 columns: new[] { "EncryptionKey", "Password" },
-                values: new object[] { "7e363ac77b87dce8d86a36c411816904", "9e20855150f82e62e42bb3cffc66b705" });
+                values: new object[] { "7e363ac77b87dce8d86a36c411816904", "9e20855150f82e62e42bb3cffc66b705" });  
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

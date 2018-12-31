@@ -23,12 +23,24 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
+                    b.Property<DateTime>("CreateTime");
+
+                    b.Property<string>("Create_User_Id")
+                        .HasMaxLength(25)
+                        .IsUnicode(true);
+
                     b.Property<string>("EnCode")
                         .IsRequired()
                         .HasMaxLength(50)
                         .IsUnicode(true);
 
                     b.Property<bool>("IsDeleted");
+
+                    b.Property<DateTime>("ModifyTime");
+
+                    b.Property<string>("Modify_User_Id")
+                        .HasMaxLength(25)
+                        .IsUnicode(true);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -61,6 +73,12 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
+                    b.Property<DateTime>("CreateTime");
+
+                    b.Property<string>("Create_User_Id")
+                        .HasMaxLength(25)
+                        .IsUnicode(true);
+
                     b.Property<string>("Dept_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true);
@@ -78,6 +96,12 @@ namespace FastFrame.Database.Migrations
                         .IsRequired();
 
                     b.Property<bool>("IsDeleted");
+
+                    b.Property<DateTime>("ModifyTime");
+
+                    b.Property<string>("Modify_User_Id")
+                        .HasMaxLength(25)
+                        .IsUnicode(true);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -104,7 +128,7 @@ namespace FastFrame.Database.Migrations
                     b.ToTable("Basis_Employee");
                 });
 
-            modelBuilder.Entity("FastFrame.Entity.Basis.Foreign", b =>
+            modelBuilder.Entity("FastFrame.Entity.Basis.Menu", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(25)
@@ -112,32 +136,7 @@ namespace FastFrame.Database.Migrations
 
                     b.Property<DateTime>("CreateTime");
 
-                    b.Property<string>("CreateUserId")
-                        .HasMaxLength(25)
-                        .IsUnicode(true);
-
-                    b.Property<string>("EntityId")
-                        .IsRequired()
-                        .HasMaxLength(25)
-                        .IsUnicode(true);
-
-                    b.Property<DateTime>("ModifyTime");
-
-                    b.Property<string>("ModifyUserId")
-                        .HasMaxLength(25)
-                        .IsUnicode(true);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EntityId")
-                        .HasName("Index_EntityId");
-
-                    b.ToTable("Basis_Foreign");
-                });
-
-            modelBuilder.Entity("FastFrame.Entity.Basis.Menu", b =>
-                {
-                    b.Property<string>("Id")
+                    b.Property<string>("Create_User_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
@@ -151,6 +150,12 @@ namespace FastFrame.Database.Migrations
                         .IsUnicode(true);
 
                     b.Property<bool>("IsDeleted");
+
+                    b.Property<DateTime>("ModifyTime");
+
+                    b.Property<string>("Modify_User_Id")
+                        .HasMaxLength(25)
+                        .IsUnicode(true);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -286,7 +291,19 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(200)
                         .IsUnicode(true);
 
+                    b.Property<DateTime>("CreateTime");
+
+                    b.Property<string>("Create_User_Id")
+                        .HasMaxLength(25)
+                        .IsUnicode(true);
+
                     b.Property<bool>("IsDeleted");
+
+                    b.Property<DateTime>("ModifyTime");
+
+                    b.Property<string>("Modify_User_Id")
+                        .HasMaxLength(25)
+                        .IsUnicode(true);
 
                     b.Property<string>("Name")
                         .HasMaxLength(150)
@@ -316,12 +333,24 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
+                    b.Property<DateTime>("CreateTime");
+
+                    b.Property<string>("Create_User_Id")
+                        .HasMaxLength(25)
+                        .IsUnicode(true);
+
                     b.Property<string>("EnCode")
                         .IsRequired()
                         .HasMaxLength(50)
                         .IsUnicode(true);
 
                     b.Property<bool>("IsDeleted");
+
+                    b.Property<DateTime>("ModifyTime");
+
+                    b.Property<string>("Modify_User_Id")
+                        .HasMaxLength(25)
+                        .IsUnicode(true);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -346,7 +375,19 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
+                    b.Property<DateTime>("CreateTime");
+
+                    b.Property<string>("Create_User_Id")
+                        .HasMaxLength(25)
+                        .IsUnicode(true);
+
                     b.Property<bool>("IsDeleted");
+
+                    b.Property<DateTime>("ModifyTime");
+
+                    b.Property<string>("Modify_User_Id")
+                        .HasMaxLength(25)
+                        .IsUnicode(true);
 
                     b.Property<string>("Role_Id")
                         .HasMaxLength(25)
@@ -374,7 +415,19 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
+                    b.Property<DateTime>("CreateTime");
+
+                    b.Property<string>("Create_User_Id")
+                        .HasMaxLength(25)
+                        .IsUnicode(true);
+
                     b.Property<bool>("IsDeleted");
+
+                    b.Property<DateTime>("ModifyTime");
+
+                    b.Property<string>("Modify_User_Id")
+                        .HasMaxLength(25)
+                        .IsUnicode(true);
 
                     b.Property<string>("Permission_Id")
                         .HasMaxLength(25)
@@ -493,6 +546,12 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(50)
                         .IsUnicode(true);
 
+                    b.Property<DateTime>("CreateTime");
+
+                    b.Property<string>("Create_User_Id")
+                        .HasMaxLength(25)
+                        .IsUnicode(true);
+
                     b.Property<string>("Dept_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true);
@@ -517,6 +576,12 @@ namespace FastFrame.Database.Migrations
                     b.Property<bool>("IsDisabled");
 
                     b.Property<bool>("IsRoot");
+
+                    b.Property<DateTime>("ModifyTime");
+
+                    b.Property<string>("Modify_User_Id")
+                        .HasMaxLength(25)
+                        .IsUnicode(true);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -548,14 +613,16 @@ namespace FastFrame.Database.Migrations
                         {
                             Id = "00F6P5G2VC2SAP1UJV7HTBYGA",
                             Account = "admin",
+                            CreateTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "gongjie@qq.com",
-                            EncryptionKey = "7e363ac77b87dce8d86a36c411816904",
+                            EncryptionKey = "f0cf2a0cba6b28493e1bee52a79dca22",
                             IsAdmin = true,
                             IsDeleted = false,
                             IsDisabled = false,
                             IsRoot = true,
+                            ModifyTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "超级管理员",
-                            Password = "9e20855150f82e62e42bb3cffc66b705",
+                            Password = "c133c477f7729b68df0acdbd7f51aff1",
                             PhoneNumber = "18675517757",
                             Tenant_Id = "00F6P5G2VC2SAP1UJV7HTBYGU"
                         });
@@ -575,6 +642,12 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
+                    b.Property<DateTime>("CreateTime");
+
+                    b.Property<string>("Create_User_Id")
+                        .HasMaxLength(25)
+                        .IsUnicode(true);
+
                     b.Property<string>("Description")
                         .HasMaxLength(500)
                         .IsUnicode(true);
@@ -584,6 +657,12 @@ namespace FastFrame.Database.Migrations
                     b.Property<bool>("IsRelease");
 
                     b.Property<int>("LookCount");
+
+                    b.Property<DateTime>("ModifyTime");
+
+                    b.Property<string>("Modify_User_Id")
+                        .HasMaxLength(25)
+                        .IsUnicode(true);
 
                     b.Property<string>("Summarize")
                         .HasMaxLength(50)
@@ -621,11 +700,23 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
+                    b.Property<DateTime>("CreateTime");
+
+                    b.Property<string>("Create_User_Id")
+                        .HasMaxLength(25)
+                        .IsUnicode(true);
+
                     b.Property<string>("Description")
                         .HasMaxLength(500)
                         .IsUnicode(true);
 
                     b.Property<bool>("IsDeleted");
+
+                    b.Property<DateTime>("ModifyTime");
+
+                    b.Property<string>("Modify_User_Id")
+                        .HasMaxLength(25)
+                        .IsUnicode(true);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -673,6 +764,12 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
+                    b.Property<DateTime>("CreateTime");
+
+                    b.Property<string>("Create_User_Id")
+                        .HasMaxLength(25)
+                        .IsUnicode(true);
+
                     b.Property<string>("Href")
                         .HasMaxLength(200)
                         .IsUnicode(true);
@@ -680,6 +777,12 @@ namespace FastFrame.Database.Migrations
                     b.Property<bool>("IsDeleted");
 
                     b.Property<bool>("IsFolder");
+
+                    b.Property<DateTime>("ModifyTime");
+
+                    b.Property<string>("Modify_User_Id")
+                        .HasMaxLength(25)
+                        .IsUnicode(true);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -839,6 +942,12 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
+                    b.Property<DateTime>("CreateTime");
+
+                    b.Property<string>("Create_User_Id")
+                        .HasMaxLength(25)
+                        .IsUnicode(true);
+
                     b.Property<string>("HandIcon_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true);
@@ -846,6 +955,12 @@ namespace FastFrame.Database.Migrations
                     b.Property<bool>("IsDeleted");
 
                     b.Property<string>("LordUser_Id")
+                        .HasMaxLength(25)
+                        .IsUnicode(true);
+
+                    b.Property<DateTime>("ModifyTime");
+
+                    b.Property<string>("Modify_User_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 

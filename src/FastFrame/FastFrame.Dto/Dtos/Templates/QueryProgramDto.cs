@@ -10,11 +10,11 @@ namespace FastFrame.Dto.Basis
 	/// </summary>
 	public partial class QueryProgramDto:BaseDto<QueryProgram>
 	{
-		#region 字段
-		#endregion
-		#region 构造函数
-		#endregion
-		#region 属性
+		/*字段*/
+		
+		/*构造函数*/
+		
+		/*属性*/
 		/// <summary>
 		///方案名称 
 		/// </summary>
@@ -39,8 +39,8 @@ namespace FastFrame.Dto.Basis
 		/// </summary>
 		public string User_Id {get;set;}
 		
-		#endregion
-		#region 方法
-		#endregion
+		
+		/*方法*/
+		
 	}
 }

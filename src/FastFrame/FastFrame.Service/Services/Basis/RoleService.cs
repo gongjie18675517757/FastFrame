@@ -16,15 +16,14 @@ namespace FastFrame.Service.Services.Basis
         private readonly IRepository<RolePermission> rolePermissionRepository;
         private readonly IRepository<Permission> permissionRepository;
 
-        public RoleService(
-            IRepository<Foreign> foreignRepository,
+        public RoleService( 
             IRepository<RoleMember> roleMemberRepository,
             IRepository<RolePermission> rolePermissionRepository,
             IRepository<Permission> permissionRepository,
-            IRepository<User> userRepository, 
-            IRepository<Role> roleRepository, 
+            IRepository<User> userRepository,
+            IRepository<Role> roleRepository,
             IScopeServiceLoader loader)
-            : this(foreignRepository, userRepository, roleRepository, loader)
+            : this(userRepository, roleRepository, loader)
         {
             this.roleMemberRepository = roleMemberRepository;
             this.rolePermissionRepository = rolePermissionRepository;

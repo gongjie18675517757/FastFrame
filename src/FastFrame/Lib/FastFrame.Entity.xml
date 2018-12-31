@@ -69,41 +69,6 @@
             部门
             </summary>
         </member>
-        <member name="T:FastFrame.Entity.Basis.Foreign">
-            <summary>
-            表外键信息
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.Foreign.EntityId">
-            <summary>
-            数据行ID
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.Foreign.CreateUserId">
-            <summary>
-            创建人
-            </summary>        
-        </member>
-        <member name="P:FastFrame.Entity.Basis.Foreign.CreateTime">
-            <summary>
-            创建时间
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.Foreign.ModifyUserId">
-            <summary>
-            修改人
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.Foreign.ModifyTime">
-            <summary>
-            修改时间
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.Foreign.Id">
-            <summary>
-            主键
-            </summary>
-        </member>
         <member name="T:FastFrame.Entity.Basis.Menu">
             <summary>
             菜单
@@ -1072,6 +1037,26 @@
             删除码
             </summary>
         </member>
+        <member name="P:FastFrame.Entity.BaseEntity.Create_User_Id">
+            <summary>
+            创建人
+            </summary>        
+        </member>
+        <member name="P:FastFrame.Entity.BaseEntity.CreateTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.BaseEntity.Modify_User_Id">
+            <summary>
+            修改人
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.BaseEntity.ModifyTime">
+            <summary>
+            修改时间
+            </summary>
+        </member>
         <member name="P:FastFrame.Entity.IEntity.Id">
              <summary>
             主键
@@ -1080,6 +1065,26 @@
         <member name="T:FastFrame.Entity.IHasManage">
             <summary>
             标记使用管理字段,记录创建人,创建时间,修改人,修改时间
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.IHasManage.Create_User_Id">
+            <summary>
+            创建人
+            </summary>        
+        </member>
+        <member name="P:FastFrame.Entity.IHasManage.CreateTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.IHasManage.Modify_User_Id">
+            <summary>
+            修改人
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.IHasManage.ModifyTime">
+            <summary>
+            修改时间
             </summary>
         </member>
         <member name="T:FastFrame.Entity.IHasSoftDelete">

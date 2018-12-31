@@ -12,6 +12,7 @@ using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.MessageBus;
 using Microsoft.Extensions.Logging;
 using FastFrame.Dto.Dtos.Chat;
+using System.Net.Http;
 
 namespace FastFrame.Application.Controllers
 {
@@ -23,7 +24,7 @@ namespace FastFrame.Application.Controllers
         private readonly ICurrentUserProvider currentUserProvider;
         private readonly ILogger<DefaultController> logger;
 
-        public DefaultController(IMessageBus messageBus, ICurrentUserProvider currentUserProvider,ILogger<DefaultController> logger)
+        public DefaultController(IMessageBus messageBus,  ICurrentUserProvider currentUserProvider,ILogger<DefaultController> logger)
         {
             this.messageBus = messageBus;
             this.currentUserProvider = currentUserProvider;

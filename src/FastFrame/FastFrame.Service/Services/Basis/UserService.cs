@@ -23,9 +23,8 @@ namespace FastFrame.Service.Services.Basis
             IRepository<RoleMember> roleMemberRepository,
             IRepository<Role> roleRepository,
             IRepository<Dept> deptRepository,
-            IRepository<Foreign> foreignRepository,
             IRepository<User> userRepository,
-            IScopeServiceLoader loader) : this(deptRepository, foreignRepository, userRepository, loader)
+            IScopeServiceLoader loader) : this(deptRepository, userRepository, loader)
         {
             this.currentUserProvider = currentUserProvider;
             this.roleMemberRepository = roleMemberRepository;

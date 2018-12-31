@@ -12,23 +12,21 @@ namespace FastFrame.Service.Services.Chat
 	/// </summary>
 	public partial class GroupManagerService:BaseService<GroupManager, GroupManagerDto>
 	{
-		#region 字段
-		private readonly IRepository<Foreign> foreignRepository;
+		/*字段*/
 		private readonly IRepository<User> userRepository;
 		private readonly IRepository<GroupManager> groupManagerRepository;
-		#endregion
-		#region 构造函数
-		public GroupManagerService(IRepository<Foreign> foreignRepository,IRepository<User> userRepository,IRepository<GroupManager> groupManagerRepository,IScopeServiceLoader loader)
+		
+		/*构造函数*/
+		public GroupManagerService(IRepository<User> userRepository,IRepository<GroupManager> groupManagerRepository,IScopeServiceLoader loader)
 			:base(groupManagerRepository,loader)
 		{
-			this.foreignRepository=foreignRepository;
 			this.userRepository=userRepository;
 			this.groupManagerRepository=groupManagerRepository;
 		}
-		#endregion
-		#region 属性
-		#endregion
-		#region 方法
+		
+		/*属性*/
+		
+		/*方法*/
 		protected override IQueryable<GroupManagerDto> QueryMain() 
 		{
 			var groupManagerQueryable=groupManagerRepository.Queryable;
@@ -41,6 +39,6 @@ namespace FastFrame.Service.Services.Chat
 					};
 			return query;
 		}
-		#endregion
+		
 	}
 }

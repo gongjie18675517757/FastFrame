@@ -12,11 +12,11 @@ namespace FastFrame.Dto.Basis
 	[RelatedField("Name","EnCode")]
 	public partial class MenuDto:BaseDto<Menu>
 	{
-		#region 字段
-		#endregion
-		#region 构造函数
-		#endregion
-		#region 属性
+		/*字段*/
+		
+		/*构造函数*/
+		
+		/*属性*/
 		/// <summary>
 		///编码 
 		/// </summary>
@@ -62,22 +62,40 @@ namespace FastFrame.Dto.Basis
 		public string Path {get;set;}
 		
 		/// <summary>
-		///管理属性 
+		///创建人 
 		/// </summary>
-		public Foreign Foreign {get;set;}
+		[RelatedTo(typeof(User))]
+		public string Create_User_Id {get;set;}
 		
 		/// <summary>
 		///创建人 
 		/// </summary>
-		public User Create_User {get;set;}
+		public UserDto Create_User {get;set;}
+		
+		/// <summary>
+		///创建时间 
+		/// </summary>
+		[Required()]
+		public DateTime CreateTime {get;set;}
 		
 		/// <summary>
 		///修改人 
 		/// </summary>
-		public User Modify_User {get;set;}
+		[RelatedTo(typeof(User))]
+		public string Modify_User_Id {get;set;}
 		
-		#endregion
-		#region 方法
-		#endregion
+		/// <summary>
+		///修改人 
+		/// </summary>
+		public UserDto Modify_User {get;set;}
+		
+		/// <summary>
+		///修改时间 
+		/// </summary>
+		public DateTime ModifyTime {get;set;}
+		
+		
+		/*方法*/
+		
 	}
 }

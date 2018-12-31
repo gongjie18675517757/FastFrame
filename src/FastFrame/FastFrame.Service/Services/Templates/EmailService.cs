@@ -12,23 +12,21 @@ namespace FastFrame.Service.Services.Chat
 	/// </summary>
 	public partial class EmailService:BaseService<Email, EmailDto>
 	{
-		#region 字段
-		private readonly IRepository<Foreign> foreignRepository;
+		/*字段*/
 		private readonly IRepository<User> userRepository;
 		private readonly IRepository<Email> emailRepository;
-		#endregion
-		#region 构造函数
-		public EmailService(IRepository<Foreign> foreignRepository,IRepository<User> userRepository,IRepository<Email> emailRepository,IScopeServiceLoader loader)
+		
+		/*构造函数*/
+		public EmailService(IRepository<User> userRepository,IRepository<Email> emailRepository,IScopeServiceLoader loader)
 			:base(emailRepository,loader)
 		{
-			this.foreignRepository=foreignRepository;
 			this.userRepository=userRepository;
 			this.emailRepository=emailRepository;
 		}
-		#endregion
-		#region 属性
-		#endregion
-		#region 方法
+		
+		/*属性*/
+		
+		/*方法*/
 		protected override IQueryable<EmailDto> QueryMain() 
 		{
 			var emailQueryable=emailRepository.Queryable;
@@ -42,6 +40,6 @@ namespace FastFrame.Service.Services.Chat
 					};
 			return query;
 		}
-		#endregion
+		
 	}
 }

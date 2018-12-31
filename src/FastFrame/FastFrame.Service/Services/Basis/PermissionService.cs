@@ -19,14 +19,13 @@ namespace FastFrame.Service.Services.Basis
 
         public PermissionService(
             IRepository<Permission> permissionRepository,
-            IRepository<Foreign> foreignRepository,
             IRepository<User> userRepository,
             IRepository<Role> roleRepository,
             IRepository<RoleMember> roleMemberRepository,
             IRepository<RolePermission> rolePermissionRepository,
             ICurrentUserProvider currentUserProvider,
             IScopeServiceLoader loader)
-            : this(permissionRepository, foreignRepository, userRepository, loader)
+            : this(permissionRepository, userRepository, loader)
         {
             this.roleRepository = roleRepository;
             this.roleMemberRepository = roleMemberRepository;

@@ -13,42 +13,37 @@ namespace FastFrame.Service.Services.CMS
 	/// </summary>
 	public partial class MeidiaService:BaseService<Meidia, MeidiaDto>
 	{
-		#region 字段
+		/*字段*/
 		private readonly IRepository<Meidia> meidiaRepository;
 		private readonly IRepository<Resource> resourceRepository;
-		private readonly IRepository<Foreign> foreignRepository;
 		private readonly IRepository<User> userRepository;
-		#endregion
-		#region 构造函数
-		public MeidiaService(IRepository<Meidia> meidiaRepository,IRepository<Resource> resourceRepository,IRepository<Foreign> foreignRepository,IRepository<User> userRepository,IScopeServiceLoader loader)
+		
+		/*构造函数*/
+		public MeidiaService(IRepository<Meidia> meidiaRepository,IRepository<Resource> resourceRepository,IRepository<User> userRepository,IScopeServiceLoader loader)
 			:base(meidiaRepository,loader)
 		{
 			this.meidiaRepository=meidiaRepository;
 			this.resourceRepository=resourceRepository;
-			this.foreignRepository=foreignRepository;
 			this.userRepository=userRepository;
 		}
-		#endregion
-		#region 属性
-		#endregion
-		#region 方法
+		
+		/*属性*/
+		
+		/*方法*/
 		protected override IQueryable<MeidiaDto> QueryMain() 
 		{
-			var foreignQueryable = foreignRepository.Queryable;
-			var userQuerable = userRepository.Queryable;
 			 var meidiaQueryable = meidiaRepository.Queryable;
 			 var resourceQueryable = resourceRepository.Queryable;
+			 var userQueryable = userRepository.Queryable;
 			 var query = from _meidia in meidiaQueryable 
 						join _parent_Id in meidiaQueryable.MapTo<Meidia,MeidiaDto>() on _meidia.Parent_Id equals _parent_Id.Id into t__parent_Id
 						from _parent_Id in t__parent_Id.DefaultIfEmpty()
 						join _resource_Id in resourceQueryable.MapTo<Resource,ResourceDto>() on _meidia.Resource_Id equals _resource_Id.Id into t__resource_Id
 						from _resource_Id in t__resource_Id.DefaultIfEmpty()
-					join foreing in foreignQueryable on _meidia.Id equals foreing.EntityId into t_foreing
-					from foreing in t_foreing.DefaultIfEmpty()
-					join user2 in userQuerable on foreing.CreateUserId equals user2.Id into t_user2
-					from user2 in t_user2.DefaultIfEmpty()
-					join user3 in userQuerable on foreing.ModifyUserId equals user3.Id into t_user3
-					from user3 in t_user3.DefaultIfEmpty()
+						join _create_User_Id in userQueryable.MapTo<User,UserDto>() on _meidia.Create_User_Id equals _create_User_Id.Id into t__create_User_Id
+						from _create_User_Id in t__create_User_Id.DefaultIfEmpty()
+						join _modify_User_Id in userQueryable.MapTo<User,UserDto>() on _meidia.Modify_User_Id equals _modify_User_Id.Id into t__modify_User_Id
+						from _modify_User_Id in t__modify_User_Id.DefaultIfEmpty()
 					 select new MeidiaDto
 					{
 						Parent_Id=_meidia.Parent_Id,
@@ -57,14 +52,17 @@ namespace FastFrame.Service.Services.CMS
 						Resource_Id=_meidia.Resource_Id,
 						IsFolder=_meidia.IsFolder,
 						Id=_meidia.Id,
+						Create_User_Id=_meidia.Create_User_Id,
+						CreateTime=_meidia.CreateTime,
+						Modify_User_Id=_meidia.Modify_User_Id,
+						ModifyTime=_meidia.ModifyTime,
 						Parent=_parent_Id,
 						Resource=_resource_Id,
-						Foreign = foreing,
-						Create_User = user2,
-						Modify_User = user3,
+						Create_User=_create_User_Id,
+						Modify_User=_modify_User_Id,
 					};
 			return query;
 		}
-		#endregion
+		
 	}
 }

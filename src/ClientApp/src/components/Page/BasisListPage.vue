@@ -57,7 +57,7 @@
           <v-divider></v-divider>
           <v-card-text class="pa-0">
             <v-layout row wrap="">
-              <v-flex v-if="TreeKey">
+              <v-flex v-if="TreeKey" :xs3="TreeKey">
                 <vue-perfect-scrollbar :class="[this.pageInfo.success?'dialog-page':'full-page']">
                   <v-treeview :active.sync="tree.active" :items="tree.items" :load-children="loadTreeItems" :open.sync="tree.open"
                     activatable active-class="primary--text" class="grey lighten-5" item-text="Name" item-key="Id"
@@ -66,7 +66,7 @@
                   </v-treeview>
                 </vue-perfect-scrollbar>
               </v-flex>
-              <v-flex>
+              <v-flex :xs9="TreeKey">
                 <vue-perfect-scrollbar :class="[this.pageInfo.success?'dialog-page':'full-page']">
                   <v-data-table :headers="headers" :loading="loading" :items="items" :total-items="total"
                     :pagination.sync="pager" v-model="selection" @update:pagination="loadList" item-key="Id">

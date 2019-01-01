@@ -32,7 +32,7 @@
               </v-avatar>
             </v-flex>
             <v-text-field
-              v-model="form.Name"
+              v-model="form.FullName"
               label="后台名称"
               :readonly="!canEdit"
               :rules="[rules.required(),rules.stringLength('',3,50)]"

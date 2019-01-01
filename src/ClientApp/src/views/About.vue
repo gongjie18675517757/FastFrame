@@ -1,110 +1,65 @@
 <template>
-  <VMap id="map_1" :center="center" :mode="mode">
-    <InfoWindow v-bind="point">
-      <v-card>
-        <v-list>
-          <v-list-tile avatar>
-            <v-list-tile-avatar>
-              <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John">
-            </v-list-tile-avatar>
+  <v-layout align-center>
+    <v-item-group v-model="window" class="shrink mr-4" mandatory tag="v-flex">
+      <v-item v-for="n in length" :key="n">
+        <div slot-scope="{ active, toggle }">
+          <v-btn :input-value="active"  @click="toggle">
+            <v-icon>mdi-record</v-icon>
+            xx
+          </v-btn>
+        </div>
+      </v-item>
+    </v-item-group>
 
-            <v-list-tile-content>
-              <v-list-tile-title>John Leider</v-list-tile-title>
-              <v-list-tile-sub-title>Founder of Vuetify.js</v-list-tile-sub-title>
-            </v-list-tile-content>
+    <v-flex>
+      <v-window v-model="window" class="elevation-1" vertical>
+        <v-window-item v-for="n in length" :key="n">
+          <v-card flat>
+            <v-card-text>
+              <v-layout align-center mb-3>
+                <v-avatar color="grey" class="mr-3"></v-avatar>
+                <strong class="title">Title {{ n }}</strong>
+                <v-spacer></v-spacer>
+                <v-btn icon>
+                  <v-icon>mdi-account</v-icon>
+                </v-btn>
+              </v-layout>
 
-            <v-list-tile-action>
-              <v-btn icon>
-                <v-icon>favorite</v-icon>
-              </v-btn>
-            </v-list-tile-action>
-          </v-list-tile>
-        </v-list>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+                ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+                eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+                deserunt mollit anim id est laborum.
+              </p>
 
-        <v-divider></v-divider>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+                ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+                eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+                deserunt mollit anim id est laborum.
+              </p>
 
-        <v-list>
-          <v-list-tile>
-            <v-list-tile-action>
-              <v-switch color="purple"></v-switch>
-            </v-list-tile-action>
-            <v-list-tile-title>Enable messages</v-list-tile-title>
-          </v-list-tile>
-
-          <v-list-tile>
-            <v-list-tile-action>
-              <v-switch color="purple"></v-switch>
-            </v-list-tile-action>
-            <v-list-tile-title>Enable hints</v-list-tile-title>
-          </v-list-tile>
-        </v-list>
-
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn flat>Cancel</v-btn>
-          <v-btn color="primary" flat>Save</v-btn>
-        </v-card-actions>
-      </v-card>
-    </InfoWindow>
-    <Control>
-      <v-radio-group v-model="mode" :mandatory="false">
-        <v-radio label="百度地图" value="bd"></v-radio>
-        <v-radio label="谷歌地图" value="gg"></v-radio>
-      </v-radio-group>
-    </Control>
-    <Mark v-bind="center"/>
-  </VMap>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+                ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+                eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+                deserunt mollit anim id est laborum.
+              </p>
+            </v-card-text>
+          </v-card>
+        </v-window-item>
+      </v-window>
+    </v-flex>
+  </v-layout>
 </template>
-
 <script>
-import { Map, Control, InfoWindow, Mark } from "@/components/Maps";
-
-export default {
-  components: {
-    VMap: Map,
-    InfoWindow,
-    Control,
-    Mark
-  },
-  data() {
-    return {
-      center: {
-        lng: 116.404,
-        lat: 39.915,
-        zoom: 15
-      },
-      point: {
-        lng: 116.405,
-        lat: 39.915
-      },
-      marks: [{ lat: 39.915, lng: 116.404, title: "xx" }]
-    };
-  },
-  computed: {
-    mode: {
-      get() {
-        return this.$store.getters.mapMode;
-      },
-      set(val) {
-        this.$store.commit({
-          type: "setMapMode",
-          mode: val
-        });
-        window.location.reload();
-      }
+    export default {
+      data: () => ({
+        length: 3,
+        window: 0
+      })
     }
-  },
-  methods: {
-    toggle() {
-      this.model = this.mode == "gg" ? "bd" : "gg";
-    }
-  }
-};
-</script>
-
-<style scoped lang="stylus">
-#map_1 {
-  height: calc(100vh - 80px);
-  overflow: auto;
-}
-</style>
+  </script>

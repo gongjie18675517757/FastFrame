@@ -111,7 +111,4 @@ namespace FastFrame.Entity.Basis
             return $"{EncryptionKey}{password}".ToMD5() == Password;
         }
     }
-
-
-
 }

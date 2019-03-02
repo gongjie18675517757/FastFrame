@@ -22,6 +22,7 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace FastFrame.Application
@@ -92,23 +93,16 @@ namespace FastFrame.Application
                     Description = "快速开发平台",
                 });
                 options.DescribeAllEnumsAsStrings();
-
-                ////Determine base path for the application.  
-                //var basePath = PlatformServices.Default.Application.ApplicationBasePath;
-                ////Set the comments path for the swagger json and ui.  
-                //var xmlPath = Path.Combine(basePath, "MsSystem.API.xml");
-                //options.IncludeXmlComments(xmlPath);
+                var basePath = AppDomain.CurrentDomain.BaseDirectory;
+                var xmlPath = Path.Combine(basePath, "FastFrame.Application.xml");
+                options.IncludeXmlComments(xmlPath);
+                xmlPath = Path.Combine(basePath, "FastFrame.Dto.xml");
+                options.IncludeXmlComments(xmlPath);
             });
-
-            //var client = new CSRedis.CSRedisClient("127.0.0.1");
-            //RedisHelper.Initialization(client);
-            //string CacheUserMapKey = "CacheUserMapKey";
-            //client.Del(CacheUserMapKey);
-            //services.AddSingleton(client);
 
             services.AddSingleton(x =>
             {
-                var redisClient = new CSRedisClient("127.0.0.1");
+                var redisClient = new CSRedisClient("127.0.0.1:6379,writeBuffer=10240,prefix=Test");
                 RedisHelper.Initialization(redisClient);
                 redisClient.Del("CacheUserMapKey");
                 return redisClient;
@@ -123,7 +117,8 @@ namespace FastFrame.Application
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime applicationLifetime)
         {
             app.ApplicationServices.GetService<IMessageBus>().SubscribeAsync<RecMsgOutPut>();
-
+            app.ApplicationServices.GetService<RedisClient>();
+            app.ApplicationServices.GetService<Database.DataBase>().Database.Migrate();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -151,7 +146,7 @@ namespace FastFrame.Application
 
             app.UseStaticFiles();
             app.UseMvc();
-          
+
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
@@ -171,5 +166,5 @@ namespace FastFrame.Application
                 Console.WriteLine("ApplicationStopping");
             });
         }
-    } 
+    }
 }

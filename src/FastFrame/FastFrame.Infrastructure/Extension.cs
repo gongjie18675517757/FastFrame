@@ -119,6 +119,19 @@ namespace FastFrame.Infrastructure
             }
         }
 
+        public static string ToMD5(this Stream @in)
+        {
+            if (@in == null)
+                return null;
+            using (var md5 = MD5.Create())
+            {
+                var result = md5.ComputeHash(@in);
+                @in.Position = 0;
+                var strResult = BitConverter.ToString(result);
+                return strResult.Replace("-", "").ToLower();
+            }
+        }
+
         /// <summary>
         /// 获取对象值
         /// </summary>

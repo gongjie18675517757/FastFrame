@@ -39,35 +39,26 @@ namespace FastFrame.Entity.Basis
         /// 姓名
         /// </summary>
         [StringLength(50), Required]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// 部门
-        /// </summary>
-        [RelatedTo(typeof(Dept))]
-        public string Dept_Id { get; set; }
+        public string Name { get; set; } 
 
         /// <summary>
         /// 邮箱
         /// </summary>
         [StringLength(50), Unique]
-        //[RegularExpression("^\\s*([A-Za-z0-9_-]+(\\.\\w+)*@(\\w+\\.)+\\w{2,5})\\s*$", ErrorMessage = "不是有效邮箱")]
         public string Email { get; set; }
 
         /// <summary>
         /// 手机号码
         /// </summary>
         [StringLength(20), Unique]
-        //[RegularExpression("^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$",
-        //    ErrorMessage = "不是有效手机号码")]
         public string PhoneNumber { get; set; }
 
         /// <summary>
         /// 头像
         /// </summary>
         [StringLength(200)]
-        [Hide]
-        public string HandIconId { get; set; }
+        [RelatedTo(typeof(Resource))]
+        public string HandIcon_Id { get; set; }
 
         /// <summary>
         /// 是否管理员

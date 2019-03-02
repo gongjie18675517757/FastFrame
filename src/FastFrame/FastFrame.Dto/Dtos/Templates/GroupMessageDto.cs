@@ -11,11 +11,8 @@ namespace FastFrame.Dto.Chat
 	/// </summary>
 	public partial class GroupMessageDto:BaseDto<GroupMessage>
 	{
-		/*字段*/
 		
-		/*构造函数*/
 		
-		/*属性*/
 		/// <summary>
 		///群组ID 
 		/// </summary>
@@ -48,7 +45,6 @@ namespace FastFrame.Dto.Chat
 		public DateTime MessageTime {get;set;}
 		
 		
-		/*方法*/
 		
 	}
 }

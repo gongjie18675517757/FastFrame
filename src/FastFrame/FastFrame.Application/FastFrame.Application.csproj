@@ -6,12 +6,27 @@
   </PropertyGroup>
   
   <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>D:\CoreProject\FastFrame\src\FastFrame\FastFrame.Application\FastFrame.Application.xml</DocumentationFile>
+    <NoWarn>1701;1702;1591;</NoWarn>
   </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>1701;1702;1591;</NoWarn>
+    <DocumentationFile>D:\CoreProject\FastFrame\src\FastFrame\FastFrame.Application\FastFrame.Application.xml</DocumentationFile>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <Compile Remove="Controllers\CMS\**" />
+    <Content Remove="Controllers\CMS\**" />
+    <EmbeddedResource Remove="Controllers\CMS\**" />
+    <None Remove="Controllers\CMS\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <Content Remove="log4net.config" />
@@ -31,16 +46,13 @@
     <!--<PackageReference Include="AspectCore.Core" Version="1.0.1" />-->
     <!--<PackageReference Include="EasyCaching.Serialization.Json" Version="0.3.1" />-->
    
-    <PackageReference Include="AspectCore.Extensions.DependencyInjection" Version="1.1.0" />
+    <PackageReference Include="AspectCore.Extensions.DependencyInjection" Version="1.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="2.2.6" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
-    <!--<PackageReference Include="EasyCaching.Redis" Version="0.3.0" />-->
-    <!--<PackageReference Include="Swashbuckle.SwaggerGen" Version="6.0.0-beta902" />
-    <PackageReference Include="Swashbuckle.SwaggerUi" Version="6.0.0-beta902" />-->
+    <!--<PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />-->
+    <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="2.2.10" />
+    <!--<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.2" />-->
+    <!--<PackageReference Include="Newtonsoft.Json" Version="12.0.1" />-->
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" /> 
   </ItemGroup>
 
   <ItemGroup>

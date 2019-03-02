@@ -84,7 +84,7 @@ namespace FastFrame.Service.Services
                 input.Name,
                 input.PhoneNumber,
                 input.Email,
-                input.HandIconId,
+                input.HandIcon,
             }.MapSet(user);
             if (input.Password != user.Password)
             {

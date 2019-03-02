@@ -21,7 +21,7 @@ namespace FastFrame.CodeGenerate
             var types = baseType.Assembly.GetTypes().Where(x => baseType.IsAssignableFrom(x) && x.IsClass && !x.IsAbstract);
             var typeNames = types.Select((x, index) => (index + 1, x.Name)).ToDictionary(x => x.Item1, x => x.Name);
 
-            START:
+        START:
             Console.WriteLine("请输入要生成的类型:");
             foreach (var (index, Name) in typeNames)
             {
@@ -29,7 +29,7 @@ namespace FastFrame.CodeGenerate
             }
             Console.WriteLine("0:全部");
 
-            INPUT:
+        INPUT:
             Console.Write(">:");
             var inputIndex = Console.ReadLine();
             if (int.TryParse(inputIndex, out var intIndex) && (typeNames.ContainsKey(intIndex) || intIndex == 0))
@@ -58,7 +58,7 @@ namespace FastFrame.CodeGenerate
             var types2 = types
                 .Where(x => (typeName.IsNullOrWhiteSpace() || x.Name == typeName) && x.GetCustomAttribute<ExportAttribute>() != null);
 
-            var basePath = $@"{Directory.GetParent(rootPath)}ClientApp\src\views";
+            var basePath = $@"{Directory.GetParent(rootPath).Parent}\ClientApp\src\views";
             var docPath = $@"{rootPath}Lib";
             foreach (var area in types2.GroupBy(x => T4Help.GenerateNameSpace(x, null)))
             {
@@ -160,6 +160,7 @@ namespace FastFrame.CodeGenerate
 
         static void WriteLines(string path, IEnumerable<string> lines)
         {
+            Console.WriteLine(path);
             using (var file = File.Create(path))
             {
                 using (var write = new StreamWriter(file, Encoding.Default))

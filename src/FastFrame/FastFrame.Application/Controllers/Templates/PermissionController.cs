@@ -11,11 +11,9 @@ namespace FastFrame.Application.Controllers.Basis
 	[Permission(nameof(Permission),"权限")]
 	public partial class PermissionController:BaseController<Permission, PermissionDto>
 	{
-		/*字段*/
 		private readonly PermissionService service;
 		private readonly IScopeServiceLoader serviceLoader;
 		
-		/*构造函数*/
 		public PermissionController(PermissionService service,IScopeServiceLoader serviceLoader)
 			:base(service,serviceLoader)
 		{
@@ -23,9 +21,7 @@ namespace FastFrame.Application.Controllers.Basis
 			this.serviceLoader = serviceLoader;
 		}
 		
-		/*属性*/
 		
-		/*方法*/
 		
 	}
 }

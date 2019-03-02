@@ -11,11 +11,8 @@ namespace FastFrame.Dto.Chat
 	/// </summary>
 	public partial class EmailTargetDto:BaseDto<EmailTarget>
 	{
-		/*字段*/
 		
-		/*构造函数*/
 		
-		/*属性*/
 		/// <summary>
 		///邮件ID 
 		/// </summary>
@@ -37,7 +34,6 @@ namespace FastFrame.Dto.Chat
 		public bool HaveRead {get;set;}
 		
 		
-		/*方法*/
 		
 	}
 }

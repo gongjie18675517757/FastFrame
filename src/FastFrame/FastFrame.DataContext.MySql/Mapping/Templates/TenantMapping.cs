@@ -4,15 +4,11 @@ namespace FastFrame.Database.Mapping.Basis
 	/// <summary>
 	///组织信息 
 	/// </summary>
-	public partial class TenantMapping:BaseMapping<Tenant>
+	public partial class TenantMapping:BaseEntityMapping<Tenant>
 	{
-		/*字段*/
 		
-		/*构造函数*/
 		
-		/*属性*/
 		
-		/*方法*/
 		
 	}
 }

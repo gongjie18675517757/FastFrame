@@ -4,15 +4,11 @@ namespace FastFrame.Database.Mapping.Chat
 	/// <summary>
 	///邮件正文 
 	/// </summary>
-	public partial class EmailContentMapping:BaseMapping<EmailContent>
+	public partial class EmailContentMapping:BaseEntityMapping<EmailContent>
 	{
-		/*字段*/
 		
-		/*构造函数*/
 		
-		/*属性*/
 		
-		/*方法*/
 		
 	}
 }

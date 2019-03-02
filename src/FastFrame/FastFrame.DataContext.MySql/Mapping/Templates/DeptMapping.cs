@@ -4,15 +4,11 @@ namespace FastFrame.Database.Mapping.Basis
 	/// <summary>
 	///部门 
 	/// </summary>
-	public partial class DeptMapping:BaseMapping<Dept>
+	public partial class DeptMapping:BaseEntityMapping<Dept>
 	{
-		/*字段*/
 		
-		/*构造函数*/
 		
-		/*属性*/
 		
-		/*方法*/
 		
 	}
 }

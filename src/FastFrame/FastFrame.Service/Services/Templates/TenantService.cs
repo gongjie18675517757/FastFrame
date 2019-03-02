@@ -11,11 +11,9 @@ namespace FastFrame.Service.Services.Basis
 	/// </summary>
 	public partial class TenantService:BaseService<Tenant, TenantDto>
 	{
-		/*字段*/
 		private readonly IRepository<User> userRepository;
 		private readonly IRepository<Tenant> tenantRepository;
 		
-		/*构造函数*/
 		public TenantService(IRepository<User> userRepository,IRepository<Tenant> tenantRepository,IScopeServiceLoader loader)
 			:base(tenantRepository,loader)
 		{
@@ -23,9 +21,7 @@ namespace FastFrame.Service.Services.Basis
 			this.tenantRepository=tenantRepository;
 		}
 		
-		/*属性*/
 		
-		/*方法*/
 		protected override IQueryable<TenantDto> QueryMain() 
 		{
 			var tenantQueryable=tenantRepository.Queryable;
@@ -33,7 +29,7 @@ namespace FastFrame.Service.Services.Basis
 					 select new TenantDto
 					{
 						FullName=_tenant.FullName,
-						EnCode=_tenant.EnCode,
+						ShortName=_tenant.ShortName,
 						UrlMark=_tenant.UrlMark,
 						Parent_Id=_tenant.Parent_Id,
 						CanHaveChildren=_tenant.CanHaveChildren,

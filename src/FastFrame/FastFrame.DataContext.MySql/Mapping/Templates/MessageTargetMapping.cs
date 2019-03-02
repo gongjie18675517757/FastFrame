@@ -4,15 +4,11 @@ namespace FastFrame.Database.Mapping.Chat
 	/// <summary>
 	///消息接收人 
 	/// </summary>
-	public partial class MessageTargetMapping:BaseMapping<MessageTarget>
+	public partial class MessageTargetMapping:BaseEntityMapping<MessageTarget>
 	{
-		/*字段*/
 		
-		/*构造函数*/
 		
-		/*属性*/
 		
-		/*方法*/
 		
 	}
 }

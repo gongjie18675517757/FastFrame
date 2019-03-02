@@ -10,11 +10,8 @@ namespace FastFrame.Dto.Basis
 	/// </summary>
 	public partial class TenantDto:BaseDto<Tenant>
 	{
-		/*字段*/
 		
-		/*构造函数*/
 		
-		/*属性*/
 		/// <summary>
 		///全称 
 		/// </summary>
@@ -27,7 +24,7 @@ namespace FastFrame.Dto.Basis
 		/// </summary>
 		[StringLength(50)]
 		[Required()]
-		public string EnCode {get;set;}
+		public string ShortName {get;set;}
 		
 		/// <summary>
 		///URL标识 
@@ -52,7 +49,6 @@ namespace FastFrame.Dto.Basis
 		public string HandIcon_Id {get;set;}
 		
 		
-		/*方法*/
 		
 	}
 }

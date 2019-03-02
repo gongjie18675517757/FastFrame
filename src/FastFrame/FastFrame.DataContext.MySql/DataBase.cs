@@ -26,14 +26,28 @@ namespace FastFrame.Database
             foreach (var item in types)
                 modelBuilder.Model.AddEntityType(item);
 
+            entityType = typeof(IQuery);
+            types = entityType.Assembly.GetTypes().Where(x => entityType.IsAssignableFrom(x) && x.IsClass && !x.IsAbstract);
+            foreach (var item in types)
+                modelBuilder.Model.AddQueryType(item);
+
             /*循环添加Mapping*/
-            var type = typeof(IMapping);
+            var type = typeof(IEntityMapping);
             types = type.Assembly.GetTypes().Where(x => type.IsAssignableFrom(x) && x.IsClass && !x.IsAbstract);
             foreach (var item in types)
             {
-                var mapping = (IMapping)item.Assembly.CreateInstance(item.FullName);
+                var mapping = (IEntityMapping)item.Assembly.CreateInstance(item.FullName);
+                mapping.ModelCreating(modelBuilder); 
+            }
+
+            type = typeof(IQueryMapping);
+            types = type.Assembly.GetTypes().Where(x => type.IsAssignableFrom(x) && x.IsClass && !x.IsAbstract);
+            foreach (var item in types)
+            {
+                var mapping = (IQueryMapping)item.Assembly.CreateInstance(item.FullName);
                 mapping.ModelCreating(modelBuilder);
             }
+
 
             base.OnModelCreating(modelBuilder);
         }

@@ -11,11 +11,8 @@ namespace FastFrame.Dto.Chat
 	/// </summary>
 	public partial class EmailDto:BaseDto<Email>
 	{
-		/*字段*/
 		
-		/*构造函数*/
 		
-		/*属性*/
 		/// <summary>
 		///标题 
 		/// </summary>
@@ -34,7 +31,6 @@ namespace FastFrame.Dto.Chat
 		public string FromUser_Id {get;set;}
 		
 		
-		/*方法*/
 		
 	}
 }

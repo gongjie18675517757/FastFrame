@@ -12,11 +12,9 @@ namespace FastFrame.Service.Services.Chat
 	/// </summary>
 	public partial class MessageTargetService:BaseService<MessageTarget, MessageTargetDto>
 	{
-		/*字段*/
 		private readonly IRepository<User> userRepository;
 		private readonly IRepository<MessageTarget> messageTargetRepository;
 		
-		/*构造函数*/
 		public MessageTargetService(IRepository<User> userRepository,IRepository<MessageTarget> messageTargetRepository,IScopeServiceLoader loader)
 			:base(messageTargetRepository,loader)
 		{
@@ -24,9 +22,7 @@ namespace FastFrame.Service.Services.Chat
 			this.messageTargetRepository=messageTargetRepository;
 		}
 		
-		/*属性*/
 		
-		/*方法*/
 		protected override IQueryable<MessageTargetDto> QueryMain() 
 		{
 			var messageTargetQueryable=messageTargetRepository.Queryable;

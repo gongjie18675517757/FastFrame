@@ -36,5 +36,26 @@ namespace FastFrame.UnitTest
             var id = IdGenerate.NetId();
             Assert.AreEqual(id.Length, 25);
         }
+
+        //[TestMethod]
+        //public async Task Test_NewId3()
+        //{
+        //    var list = new List<long>();
+        //    var syncLock = new object();
+        //    await Task.WhenAll(Enumerable.Range(1, 1).Select(x => Task.Run(() =>
+        //    {
+        //        var ids = new List<long>();
+        //        for (int i = 0; i < 1*10000; i++)
+        //        {
+        //            ids.Add(Snowflake.Instance().GetId());
+        //        }
+        //        lock (syncLock)
+        //        {
+        //            list.AddRange(ids);
+        //        }
+        //    })).ToArray());
+        //    var dic = list.Distinct();
+        //    Assert.AreEqual(dic.Count(), list.Count);
+        //}
     }
 }

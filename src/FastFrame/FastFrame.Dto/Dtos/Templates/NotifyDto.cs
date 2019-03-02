@@ -6,16 +6,14 @@ namespace FastFrame.Dto.Chat
 	using FastFrame.Entity.Enums; 
 	using FastFrame.Entity.Basis; 
 	using System; 
+	using FastFrame.Dto.Basis; 
 	/// <summary>
 	///通知 
 	/// </summary>
 	public partial class NotifyDto:BaseDto<Notify>
 	{
-		/*字段*/
 		
-		/*构造函数*/
 		
-		/*属性*/
 		/// <summary>
 		///标题 
 		/// </summary>
@@ -26,12 +24,62 @@ namespace FastFrame.Dto.Chat
 		/// <summary>
 		///内容 
 		/// </summary>
-		[StringLength(500)]
 		[Required()]
 		public string Content {get;set;}
 		
+		/// <summary>
+		///发布人 
+		/// </summary>
+		[RelatedTo(typeof(Employee))]
+		public string Publush_Id {get;set;}
 		
-		/*方法*/
+		/// <summary>
+		///发布人 
+		/// </summary>
+		public EmployeeDto Publush {get;set;}
+		
+		/// <summary>
+		///创建人 
+		/// </summary>
+		[Hide(HideMark.Form)]
+		[ReadOnly(ReadOnlyMark.All)]
+		[RelatedTo(typeof(User))]
+		public string Create_User_Id {get;set;}
+		
+		/// <summary>
+		///创建人 
+		/// </summary>
+		public UserDto Create_User {get;set;}
+		
+		/// <summary>
+		///创建时间 
+		/// </summary>
+		[Required()]
+		[Hide(HideMark.Form)]
+		[ReadOnly(ReadOnlyMark.All)]
+		public DateTime CreateTime {get;set;}
+		
+		/// <summary>
+		///修改人 
+		/// </summary>
+		[Hide(HideMark.Form)]
+		[ReadOnly(ReadOnlyMark.All)]
+		[RelatedTo(typeof(User))]
+		public string Modify_User_Id {get;set;}
+		
+		/// <summary>
+		///修改人 
+		/// </summary>
+		public UserDto Modify_User {get;set;}
+		
+		/// <summary>
+		///修改时间 
+		/// </summary>
+		[Hide(HideMark.Form)]
+		[ReadOnly(ReadOnlyMark.All)]
+		public DateTime ModifyTime {get;set;}
+		
+		
 		
 	}
 }

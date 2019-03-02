@@ -27,7 +27,7 @@ namespace FastFrame.CodeGenerate.Build
                     ImportNames = new string[] { $"FastFrame.Entity.{areaNameSpace}" },
                     Summary = T4Help.GetClassSummary(type, XmlDocDir),
                     Name = $"{type.Name}Mapping",
-                    BaseNames = new string[] { $"BaseMapping<{type.Name}>" },
+                    BaseNames = new string[] { $"BaseEntityMapping<{type.Name}>" },
                     Path = $"{TargetPath}",
                     CategoryName = "class"
                 };

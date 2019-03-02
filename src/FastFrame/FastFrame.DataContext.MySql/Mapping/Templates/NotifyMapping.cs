@@ -4,15 +4,11 @@ namespace FastFrame.Database.Mapping.Chat
 	/// <summary>
 	///通知 
 	/// </summary>
-	public partial class NotifyMapping:BaseMapping<Notify>
+	public partial class NotifyMapping:BaseEntityMapping<Notify>
 	{
-		/*字段*/
 		
-		/*构造函数*/
 		
-		/*属性*/
 		
-		/*方法*/
 		
 	}
 }

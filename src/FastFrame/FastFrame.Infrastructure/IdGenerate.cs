@@ -1,5 +1,4 @@
 ﻿using Funcular.DotNetCore.IdGenerators;
-using System;
 
 namespace FastFrame.Infrastructure
 {
@@ -14,5 +13,7 @@ namespace FastFrame.Infrastructure
                delimiterPositions: new[] { 20, 15, 10, 5 });
 
         public static string NetId() => generator.NewId();
+        //public static string NetId() => Snowflake.Instance().GetId().ToString();
     }
+
 }

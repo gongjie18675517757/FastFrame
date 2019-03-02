@@ -12,14 +12,22 @@ namespace FastFrame.CodeGenerate
     {
         private readonly string typeName;
 
-        public CodeWriter(string typeName="")
+        public CodeWriter(string typeName = "")
         {
             this.typeName = typeName;
         }
         public event EventHandler<string> WriteFileComplete;
         public void Run(BaseCodeBuild codeBuild)
         {
-            foreach (var target in codeBuild.BuildCodeInfo(typeName))
+            var targets = codeBuild.BuildCodeInfo(typeName);
+            foreach (var file in Directory.GetFiles(codeBuild.TargetPath))
+            {
+                var fileName = Path.GetFileName(file);
+                var exists = targets.Any(r => $"{r.Name}.cs" == fileName);
+                if (string.IsNullOrWhiteSpace(typeName) && !exists)
+                    File.Delete(file);
+            }
+            foreach (var target in targets)
             {
                 if (!Directory.Exists(target.Path))
                     Directory.CreateDirectory(target.Path);
@@ -59,15 +67,15 @@ namespace FastFrame.CodeGenerate
                         write.WriteCodeLine($"{{", 1);
 
                         /*字段*/
-                        write.WriteCodeLine("/*字段*/",2);
+                        //write.WriteCodeLine("/*字段*/", 2);
                         foreach (var field in target.FieldInfos)
                         {
                             write.WriteCodeLine($"private readonly {field.TypeName} {field.FieldName};", 2);
                         }
-                        write.WriteCodeLine("",2);
+                        write.WriteCodeLine("", 2);
 
                         /*构造函数*/
-                        write.WriteCodeLine("/*构造函数*/",2);
+                        //write.WriteCodeLine("/*构造函数*/", 2);
                         if (target.Constructor != null)
                         {
                             write.WriteCodeLine($"public {target.Name}({string.Join(",", target.Constructor.Parms.Select(x => $"{x.TypeName} {x.DefineName}"))})", 2);
@@ -86,10 +94,10 @@ namespace FastFrame.CodeGenerate
                             /*构造函数结束*/
                             write.WriteCodeLine($"}}", 2);
                         }
-                        write.WriteCodeLine("",2);
+                        write.WriteCodeLine("", 2);
 
                         /*属性列表*/
-                        write.WriteCodeLine("/*属性*/",2);                    
+                        //write.WriteCodeLine("/*属性*/", 2);
                         foreach (var prop in target.PropInfos)
                         {
                             /*属性说明*/
@@ -109,11 +117,11 @@ namespace FastFrame.CodeGenerate
                             /*空行*/
                             write.WriteCodeLine($"", 2);
                         }
-                        write.WriteCodeLine("",2);
+                        write.WriteCodeLine("", 2);
 
 
                         /*方法列表*/
-                        write.WriteCodeLine("/*方法*/",2);
+                        //write.WriteCodeLine("/*方法*/", 2);
                         foreach (var method in target.MethodInfos)
                         {
                             write.WriteCodeLine($"{method.Modifier} { (method.IsOverride ? "override" : "") } {method.ResultTypeName} {method.MethodName}({string.Join(",", method.Parms.Select(x => $"{x.TypeName} {x.DefineName}"))}) ", 2);
@@ -129,7 +137,7 @@ namespace FastFrame.CodeGenerate
                             /*方法结束*/
                             write.WriteCodeLine($"}}", 2);
                         }
-                        write.WriteCodeLine("",2);
+                        write.WriteCodeLine("", 2);
 
                         /*类结束*/
                         write.WriteCodeLine($"}}", 1);
@@ -143,6 +151,6 @@ namespace FastFrame.CodeGenerate
                     }
                 }
             }
-        } 
+        }
     }
 }

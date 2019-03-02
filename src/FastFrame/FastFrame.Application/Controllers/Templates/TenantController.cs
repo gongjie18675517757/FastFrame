@@ -11,11 +11,9 @@ namespace FastFrame.Application.Controllers.Basis
 	[Permission(nameof(Tenant),"组织信息")]
 	public partial class TenantController:BaseController<Tenant, TenantDto>
 	{
-		/*字段*/
 		private readonly TenantService service;
 		private readonly IScopeServiceLoader serviceLoader;
 		
-		/*构造函数*/
 		public TenantController(TenantService service,IScopeServiceLoader serviceLoader)
 			:base(service,serviceLoader)
 		{
@@ -23,9 +21,7 @@ namespace FastFrame.Application.Controllers.Basis
 			this.serviceLoader = serviceLoader;
 		}
 		
-		/*属性*/
 		
-		/*方法*/
 		
 	}
 }

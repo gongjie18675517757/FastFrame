@@ -12,11 +12,8 @@ namespace FastFrame.Dto.Basis
 	[RelatedField("Name","EnCode","AreaName")]
 	public partial class PermissionDto:BaseDto<Permission>
 	{
-		/*字段*/
 		
-		/*构造函数*/
 		
-		/*属性*/
 		/// <summary>
 		///父级 
 		/// </summary>
@@ -50,7 +47,6 @@ namespace FastFrame.Dto.Basis
 		public string Name {get;set;}
 		
 		
-		/*方法*/
 		
 	}
 }

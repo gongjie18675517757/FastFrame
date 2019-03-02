@@ -11,12 +11,10 @@ namespace FastFrame.Service.Services.Basis
 	/// </summary>
 	public partial class EmployeeService:BaseService<Employee, EmployeeDto>
 	{
-		/*字段*/
 		private readonly IRepository<User> userRepository;
 		private readonly IRepository<Dept> deptRepository;
 		private readonly IRepository<Employee> employeeRepository;
 		
-		/*构造函数*/
 		public EmployeeService(IRepository<User> userRepository,IRepository<Dept> deptRepository,IRepository<Employee> employeeRepository,IScopeServiceLoader loader)
 			:base(employeeRepository,loader)
 		{
@@ -25,9 +23,7 @@ namespace FastFrame.Service.Services.Basis
 			this.employeeRepository=employeeRepository;
 		}
 		
-		/*属性*/
 		
-		/*方法*/
 		protected override IQueryable<EmployeeDto> QueryMain() 
 		{
 			var employeeQueryable=employeeRepository.Queryable;

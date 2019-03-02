@@ -4,15 +4,11 @@ namespace FastFrame.Database.Mapping.Basis
 	/// <summary>
 	///资源 
 	/// </summary>
-	public partial class ResourceMapping:BaseMapping<Resource>
+	public partial class ResourceMapping:BaseEntityMapping<Resource>
 	{
-		/*字段*/
 		
-		/*构造函数*/
 		
-		/*属性*/
 		
-		/*方法*/
 		
 	}
 }

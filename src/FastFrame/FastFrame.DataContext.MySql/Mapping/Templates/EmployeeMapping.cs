@@ -4,15 +4,11 @@ namespace FastFrame.Database.Mapping.Basis
 	/// <summary>
 	///员工 
 	/// </summary>
-	public partial class EmployeeMapping:BaseMapping<Employee>
+	public partial class EmployeeMapping:BaseEntityMapping<Employee>
 	{
-		/*字段*/
 		
-		/*构造函数*/
 		
-		/*属性*/
 		
-		/*方法*/
 		
 	}
 }

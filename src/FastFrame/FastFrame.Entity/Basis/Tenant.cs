@@ -22,7 +22,7 @@ namespace FastFrame.Entity.Basis
         /// </summary>
         [StringLength(50)]
         [Required]
-        public string EnCode { get; set; }
+        public string ShortName { get; set; }
 
         /// <summary>
         /// URL标识

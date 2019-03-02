@@ -69,39 +69,49 @@
             部门
             </summary>
         </member>
-        <member name="T:FastFrame.Entity.Basis.Menu">
+        <member name="T:FastFrame.Entity.Basis.Meidia">
             <summary>
-            菜单
+            图片库
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Basis.Menu.EnCode">
+        <member name="P:FastFrame.Entity.Basis.Meidia.Parent_Id">
             <summary>
-            编码
+            上级
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Basis.Menu.Name">
+        <member name="P:FastFrame.Entity.Basis.Meidia.Href">
+            <summary>
+            链接
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.Meidia.Name">
             <summary>
             名称
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Basis.Menu.Parent_Id">
+        <member name="P:FastFrame.Entity.Basis.Meidia.Resource_Id">
             <summary>
-            上级菜单
+            资源
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Basis.Menu.Title">
+        <member name="P:FastFrame.Entity.Basis.Meidia.ContentType">
             <summary>
-            标题
+            资源标识
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Basis.Menu.Icon">
+        <member name="P:FastFrame.Entity.Basis.Meidia.IsFolder">
             <summary>
-            图标
+            是否文件夹
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Basis.Menu.Path">
+        <member name="T:FastFrame.Entity.Basis.NotifyTarget">
             <summary>
-            路径
+            通知目标
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.NotifyTarget.Notify_Id">
+            <summary>
+            通知ID
             </summary>
         </member>
         <member name="T:FastFrame.Entity.Basis.Permission">
@@ -137,72 +147,12 @@
         <member name="P:FastFrame.Entity.Basis.Permission.Tenant_Id">
             <summary>
             租户
-            </summary>
-        </member>
-        <member name="T:FastFrame.Entity.Basis.QueryProgram">
-            <summary>
-            查询方案
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.QueryProgram.Name">
-            <summary>
-            方案名称
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.QueryProgram.ModuleName">
-            <summary>
-            模块名称
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.QueryProgram.IsPublic">
-            <summary>
-            是否公共方案
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.QueryProgram.User_Id">
-            <summary>
-            用户
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.QueryProgram.Id">
-            <summary>
-            主键
-            </summary>
-        </member>
-        <member name="T:FastFrame.Entity.Basis.QueryProgramDetail">
-            <summary>
-            查询方案明细
             </summary> 
-        </member>
-        <member name="P:FastFrame.Entity.Basis.QueryProgramDetail.QueryProgram_Id">
-            <summary>
-            方案ID
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.QueryProgramDetail.Name">
-            <summary>
-            条件名称
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.QueryProgramDetail.Compare">
-            <summary>
-            比较操作符
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.QueryProgramDetail.Value">
-            <summary>
-            比较的值
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.QueryProgramDetail.Id">
-            <summary>
-            主键
-            </summary>
         </member>
         <member name="T:FastFrame.Entity.Basis.Resource">
             <summary>
             资源
-            </summary>
+            </summary>     
         </member>
         <member name="P:FastFrame.Entity.Basis.Resource.Name">
             <summary>
@@ -222,6 +172,11 @@
         <member name="P:FastFrame.Entity.Basis.Resource.ContentType">
             <summary>
             资源标识
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.Resource.MD5">
+            <summary>
+            MD5摘要
             </summary>
         </member>
         <member name="T:FastFrame.Entity.Basis.Role">
@@ -279,7 +234,7 @@
             全称
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Basis.Tenant.EnCode">
+        <member name="P:FastFrame.Entity.Basis.Tenant.ShortName">
             <summary>
             简称
             </summary>
@@ -354,11 +309,6 @@
             姓名
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Basis.User.Dept_Id">
-            <summary>
-            部门
-            </summary>
-        </member>
         <member name="P:FastFrame.Entity.Basis.User.Email">
             <summary>
             邮箱
@@ -369,7 +319,7 @@
             手机号码
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Basis.User.HandIconId">
+        <member name="P:FastFrame.Entity.Basis.User.HandIcon_Id">
             <summary>
             头像
             </summary>
@@ -401,6 +351,26 @@
             </summary>
             <param name="password"></param>
             <returns></returns>
+        </member>
+        <member name="T:FastFrame.Entity.Chat.Notify">
+            <summary>
+            通知
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.Notify.Title">
+            <summary>
+            标题
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.Notify.Content">
+            <summary>
+            内容
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Chat.Notify.Publush_Id">
+            <summary>
+            发布人
+            </summary>
         </member>
         <member name="T:FastFrame.Entity.Chat.Email">
             <summary>
@@ -640,181 +610,6 @@
         <member name="F:FastFrame.Entity.Chat.MsgType.File">
             <summary>
             文件
-            </summary>
-        </member>
-        <member name="T:FastFrame.Entity.Chat.Notify">
-            <summary>
-            通知
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Chat.Notify.Title">
-            <summary>
-            标题
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Chat.Notify.Content">
-            <summary>
-            内容
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Chat.Notify.Tenant_Id">
-            <summary>
-            组织
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Chat.Notify.Id">
-            <summary>
-            主键
-            </summary>
-        </member>
-        <member name="T:FastFrame.Entity.Chat.NotifyTarget">
-            <summary>
-            通知目标
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Chat.NotifyTarget.Notify_Id">
-            <summary>
-            通知ID
-            </summary>
-        </member>
-        <member name="T:FastFrame.Entity.Chat.TargetInfo">
-            <summary>
-            目标信息
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Chat.TargetInfo.To_Id">
-            <summary>
-            接收人
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Chat.TargetInfo.HaveRead">
-            <summary>
-            已读
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Chat.TargetInfo.Id">
-            <summary>
-            主键
-            </summary>
-        </member>
-        <member name="T:FastFrame.Entity.CMS.Article">
-            <summary>
-            文章
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.CMS.Article.Title">
-            <summary>
-            标题
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.CMS.Article.ArticleCategory_Id">
-            <summary>
-            文章类别
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.CMS.Article.Url">
-            <summary>
-            URL标识
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.CMS.Article.Summarize">
-            <summary>
-            概述
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.CMS.Article.Thumbnail_Id">
-            <summary>
-            缩略图
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.CMS.Article.IsRelease">
-            <summary>
-            发布?
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.CMS.Article.LookCount">
-            <summary>
-            阅读次数
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.CMS.Article.Description">
-            <summary>
-            说明
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.CMS.Article.ArticleContent_Id">
-            <summary>
-            文章内容
-            </summary>
-        </member>
-        <member name="T:FastFrame.Entity.CMS.ArticleCategory">
-            <summary>
-            文章类别
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.CMS.ArticleCategory.Parent_Id">
-            <summary>
-            上级标题
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.CMS.ArticleCategory.Name">
-            <summary>
-            标题
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.CMS.ArticleCategory.Url">
-            <summary>
-            Url标识
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.CMS.ArticleCategory.Description">
-            <summary>
-            描述
-            </summary>
-        </member>
-        <member name="T:FastFrame.Entity.CMS.ArticleContent">
-            <summary>
-            文章内容
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.CMS.ArticleContent.Content">
-            <summary>
-            内容
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.CMS.ArticleContent.Id">
-            <summary>
-            主键
-            </summary>
-        </member>
-        <member name="T:FastFrame.Entity.CMS.Meidia">
-            <summary>
-            图片库
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.CMS.Meidia.Parent_Id">
-            <summary>
-            上级
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.CMS.Meidia.Href">
-            <summary>
-            链接
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.CMS.Meidia.Name">
-            <summary>
-            名称
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.CMS.Meidia.Resource_Id">
-            <summary>
-            资源
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.CMS.Meidia.IsFolder">
-            <summary>
-            是否文件夹
             </summary>
         </member>
         <member name="T:FastFrame.Entity.Enums.GenderMark">
@@ -1105,6 +900,26 @@
         <member name="P:FastFrame.Entity.IHasTenant.Tenant_Id">
             <summary>
             租户
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.TargetInfo">
+            <summary>
+            目标信息
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.TargetInfo.To_Id">
+            <summary>
+            接收人
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.TargetInfo.HaveRead">
+            <summary>
+            已读
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.TargetInfo.Id">
+            <summary>
+            主键
             </summary>
         </member>
     </members>

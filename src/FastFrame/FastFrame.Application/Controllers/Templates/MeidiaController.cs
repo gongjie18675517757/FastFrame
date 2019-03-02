@@ -1,8 +1,8 @@
-namespace FastFrame.Application.Controllers.CMS
+namespace FastFrame.Application.Controllers.Basis
 {
-	using FastFrame.Dto.CMS; 
-	using FastFrame.Entity.CMS; 
-	using FastFrame.Service.Services.CMS; 
+	using FastFrame.Dto.Basis; 
+	using FastFrame.Entity.Basis; 
+	using FastFrame.Service.Services.Basis; 
 	using FastFrame.Infrastructure.Attrs; 
 	using FastFrame.Infrastructure.Interface; 
 	/// <summary>
@@ -11,11 +11,9 @@ namespace FastFrame.Application.Controllers.CMS
 	[Permission(nameof(Meidia),"图片库")]
 	public partial class MeidiaController:BaseController<Meidia, MeidiaDto>
 	{
-		/*字段*/
 		private readonly MeidiaService service;
 		private readonly IScopeServiceLoader serviceLoader;
 		
-		/*构造函数*/
 		public MeidiaController(MeidiaService service,IScopeServiceLoader serviceLoader)
 			:base(service,serviceLoader)
 		{
@@ -23,9 +21,7 @@ namespace FastFrame.Application.Controllers.CMS
 			this.serviceLoader = serviceLoader;
 		}
 		
-		/*属性*/
 		
-		/*方法*/
 		
 	}
 }

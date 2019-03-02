@@ -11,11 +11,9 @@ namespace FastFrame.Application.Controllers.Basis
 	[Permission(nameof(Employee),"员工")]
 	public partial class EmployeeController:BaseController<Employee, EmployeeDto>
 	{
-		/*字段*/
 		private readonly EmployeeService service;
 		private readonly IScopeServiceLoader serviceLoader;
 		
-		/*构造函数*/
 		public EmployeeController(EmployeeService service,IScopeServiceLoader serviceLoader)
 			:base(service,serviceLoader)
 		{
@@ -23,9 +21,7 @@ namespace FastFrame.Application.Controllers.Basis
 			this.serviceLoader = serviceLoader;
 		}
 		
-		/*属性*/
 		
-		/*方法*/
 		
 	}
 }

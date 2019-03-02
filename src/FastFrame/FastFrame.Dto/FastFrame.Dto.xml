@@ -195,139 +195,99 @@
             修改时间 
              </summary>
         </member>
-        <member name="T:FastFrame.Dto.Basis.MenuDto">
+        <member name="T:FastFrame.Dto.Basis.MeidiaDto">
              <summary>
-            菜单 
+            图片库 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.MenuDto.EnCode">
+        <member name="P:FastFrame.Dto.Basis.MeidiaDto.Parent_Id">
              <summary>
-            编码 
+            上级 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.MenuDto.Name">
+        <member name="P:FastFrame.Dto.Basis.MeidiaDto.Parent">
+             <summary>
+            上级 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.MeidiaDto.Href">
+             <summary>
+            链接 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.MeidiaDto.Name">
              <summary>
             名称 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.MenuDto.Parent_Id">
+        <member name="P:FastFrame.Dto.Basis.MeidiaDto.Resource_Id">
              <summary>
-            上级菜单 
+            资源 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.MenuDto.Parent">
+        <member name="P:FastFrame.Dto.Basis.MeidiaDto.Resource">
              <summary>
-            上级菜单 
+            资源 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.MenuDto.Title">
+        <member name="P:FastFrame.Dto.Basis.MeidiaDto.ContentType">
              <summary>
-            标题 
+            资源标识 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.MenuDto.Icon">
+        <member name="P:FastFrame.Dto.Basis.MeidiaDto.IsFolder">
              <summary>
-            图标 
+            是否文件夹 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.MenuDto.Path">
-             <summary>
-            路径 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.MenuDto.Create_User_Id">
+        <member name="P:FastFrame.Dto.Basis.MeidiaDto.Create_User_Id">
              <summary>
             创建人 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.MenuDto.Create_User">
+        <member name="P:FastFrame.Dto.Basis.MeidiaDto.Create_User">
              <summary>
             创建人 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.MenuDto.CreateTime">
+        <member name="P:FastFrame.Dto.Basis.MeidiaDto.CreateTime">
              <summary>
             创建时间 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.MenuDto.Modify_User_Id">
+        <member name="P:FastFrame.Dto.Basis.MeidiaDto.Modify_User_Id">
              <summary>
             修改人 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.MenuDto.Modify_User">
+        <member name="P:FastFrame.Dto.Basis.MeidiaDto.Modify_User">
              <summary>
             修改人 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.MenuDto.ModifyTime">
+        <member name="P:FastFrame.Dto.Basis.MeidiaDto.ModifyTime">
              <summary>
             修改时间 
              </summary>
         </member>
-        <member name="T:FastFrame.Dto.Basis.OrganizeDto">
+        <member name="T:FastFrame.Dto.Basis.NotifyTargetDto">
              <summary>
-            组织信息 
+            通知目标 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.OrganizeDto.Name">
+        <member name="P:FastFrame.Dto.Basis.NotifyTargetDto.Notify_Id">
              <summary>
-            名称 
+            通知ID 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.OrganizeDto.EnCode">
+        <member name="P:FastFrame.Dto.Basis.NotifyTargetDto.To_Id">
              <summary>
-            编码 
+            接收人 
              </summary>
         </member>
-        <member name="T:FastFrame.Dto.Basis.QueryProgramDetailDto">
+        <member name="P:FastFrame.Dto.Basis.NotifyTargetDto.HaveRead">
              <summary>
-            查询方案明细 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.QueryProgramDetailDto.QueryProgram_Id">
-             <summary>
-            方案ID 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.QueryProgramDetailDto.Name">
-             <summary>
-            条件名称 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.QueryProgramDetailDto.Compare">
-             <summary>
-            比较操作符 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.QueryProgramDetailDto.Value">
-             <summary>
-            比较的值 
-             </summary>
-        </member>
-        <member name="T:FastFrame.Dto.Basis.QueryProgramDto">
-             <summary>
-            查询方案 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.QueryProgramDto.Name">
-             <summary>
-            方案名称 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.QueryProgramDto.ModuleName">
-             <summary>
-            模块名称 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.QueryProgramDto.IsPublic">
-             <summary>
-            是否公共方案 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.QueryProgramDto.User_Id">
-             <summary>
-            用户 
+            已读 
              </summary>
         </member>
         <member name="T:FastFrame.Dto.Basis.ResourceDto">
@@ -355,34 +315,9 @@
             资源标识 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.ResourceDto.Create_User_Id">
+        <member name="P:FastFrame.Dto.Basis.ResourceDto.MD5">
              <summary>
-            创建人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.ResourceDto.Create_User">
-             <summary>
-            创建人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.ResourceDto.CreateTime">
-             <summary>
-            创建时间 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.ResourceDto.Modify_User_Id">
-             <summary>
-            修改人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.ResourceDto.Modify_User">
-             <summary>
-            修改人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.ResourceDto.ModifyTime">
-             <summary>
-            修改时间 
+            MD5摘要 
              </summary>
         </member>
         <member name="T:FastFrame.Dto.Basis.RoleDto">
@@ -430,41 +365,6 @@
             修改时间 
              </summary>
         </member>
-        <member name="T:FastFrame.Dto.Basis.RoleMemberDto">
-             <summary>
-            角色成员 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.RoleMemberDto.Role_Id">
-             <summary>
-            角色 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.RoleMemberDto.User_Id">
-             <summary>
-            用户 
-             </summary>
-        </member>
-        <member name="T:FastFrame.Dto.Basis.RolePermissionDto">
-             <summary>
-            角色权限 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.RolePermissionDto.Role_Id">
-             <summary>
-            角色ID 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.RolePermissionDto.Parent_Id">
-             <summary>
-            父级 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.RolePermissionDto.Permission_Id">
-             <summary>
-            权限ID 
-             </summary>
-        </member>
         <member name="T:FastFrame.Dto.Basis.TenantDto">
              <summary>
             组织信息 
@@ -475,7 +375,7 @@
             全称 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.TenantDto.EnCode">
+        <member name="P:FastFrame.Dto.Basis.TenantDto.ShortName">
              <summary>
             简称 
              </summary>
@@ -520,16 +420,6 @@
             姓名 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.UserDto.Dept_Id">
-             <summary>
-            部门 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.UserDto.Dept">
-             <summary>
-            部门 
-             </summary>
-        </member>
         <member name="P:FastFrame.Dto.Basis.UserDto.Email">
              <summary>
             邮箱 
@@ -540,7 +430,12 @@
             手机号码 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.UserDto.HandIconId">
+        <member name="P:FastFrame.Dto.Basis.UserDto.HandIcon_Id">
+             <summary>
+            头像 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.UserDto.HandIcon">
              <summary>
             头像 
              </summary>
@@ -679,231 +574,6 @@
             <summary>
             密码
             </summary>
-        </member>
-        <member name="T:FastFrame.Dto.CMS.ArticleDto">
-             <summary>
-            文章 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.ArticleDto.Content">
-            <summary>
-            内容
-            </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.ArticleDto.Title">
-             <summary>
-            标题 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.ArticleDto.ArticleCategory_Id">
-             <summary>
-            文章类别 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.ArticleDto.ArticleCategory">
-             <summary>
-            文章类别 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.ArticleDto.Url">
-             <summary>
-            URL标识 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.ArticleDto.Summarize">
-             <summary>
-            概述 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.ArticleDto.Thumbnail_Id">
-             <summary>
-            缩略图 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.ArticleDto.Thumbnail">
-             <summary>
-            缩略图 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.ArticleDto.IsRelease">
-             <summary>
-            发布? 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.ArticleDto.LookCount">
-             <summary>
-            阅读次数 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.ArticleDto.Description">
-             <summary>
-            说明 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.ArticleDto.ArticleContent_Id">
-             <summary>
-            文章内容 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.ArticleDto.Create_User_Id">
-             <summary>
-            创建人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.ArticleDto.Create_User">
-             <summary>
-            创建人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.ArticleDto.CreateTime">
-             <summary>
-            创建时间 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.ArticleDto.Modify_User_Id">
-             <summary>
-            修改人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.ArticleDto.Modify_User">
-             <summary>
-            修改人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.ArticleDto.ModifyTime">
-             <summary>
-            修改时间 
-             </summary>
-        </member>
-        <member name="T:FastFrame.Dto.CMS.ArticleCategoryDto">
-             <summary>
-            文章类别 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.ArticleCategoryDto.Parent_Id">
-             <summary>
-            上级标题 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.ArticleCategoryDto.Parent">
-             <summary>
-            上级标题 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.ArticleCategoryDto.Name">
-             <summary>
-            标题 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.ArticleCategoryDto.Url">
-             <summary>
-            Url标识 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.ArticleCategoryDto.Description">
-             <summary>
-            描述 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.ArticleCategoryDto.Create_User_Id">
-             <summary>
-            创建人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.ArticleCategoryDto.Create_User">
-             <summary>
-            创建人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.ArticleCategoryDto.CreateTime">
-             <summary>
-            创建时间 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.ArticleCategoryDto.Modify_User_Id">
-             <summary>
-            修改人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.ArticleCategoryDto.Modify_User">
-             <summary>
-            修改人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.ArticleCategoryDto.ModifyTime">
-             <summary>
-            修改时间 
-             </summary>
-        </member>
-        <member name="T:FastFrame.Dto.CMS.MeidiaDto">
-             <summary>
-            图片库 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.MeidiaDto.Parent_Id">
-             <summary>
-            上级 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.MeidiaDto.Parent">
-             <summary>
-            上级 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.MeidiaDto.Href">
-             <summary>
-            链接 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.MeidiaDto.Name">
-             <summary>
-            名称 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.MeidiaDto.Resource_Id">
-             <summary>
-            资源 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.MeidiaDto.Resource">
-             <summary>
-            资源 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.MeidiaDto.IsFolder">
-             <summary>
-            是否文件夹 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.MeidiaDto.Create_User_Id">
-             <summary>
-            创建人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.MeidiaDto.Create_User">
-             <summary>
-            创建人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.MeidiaDto.CreateTime">
-             <summary>
-            创建时间 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.MeidiaDto.Modify_User_Id">
-             <summary>
-            修改人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.MeidiaDto.Modify_User">
-             <summary>
-            修改人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.CMS.MeidiaDto.ModifyTime">
-             <summary>
-            修改时间 
-             </summary>
         </member>
         <member name="T:FastFrame.Dto.Chat.EmailAnnexDto">
              <summary>
@@ -1150,24 +820,44 @@
             内容 
              </summary>
         </member>
-        <member name="T:FastFrame.Dto.Chat.NotifyTargetDto">
+        <member name="P:FastFrame.Dto.Chat.NotifyDto.Publush_Id">
              <summary>
-            通知目标 
+            发布人 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Chat.NotifyTargetDto.Notify_Id">
+        <member name="P:FastFrame.Dto.Chat.NotifyDto.Publush">
              <summary>
-            通知ID 
+            发布人 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Chat.NotifyTargetDto.To_Id">
+        <member name="P:FastFrame.Dto.Chat.NotifyDto.Create_User_Id">
              <summary>
-            接收人 
+            创建人 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Chat.NotifyTargetDto.HaveRead">
+        <member name="P:FastFrame.Dto.Chat.NotifyDto.Create_User">
              <summary>
-            已读 
+            创建人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.NotifyDto.CreateTime">
+             <summary>
+            创建时间 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.NotifyDto.Modify_User_Id">
+             <summary>
+            修改人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.NotifyDto.Modify_User">
+             <summary>
+            修改人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Chat.NotifyDto.ModifyTime">
+             <summary>
+            修改时间 
              </summary>
         </member>
         <member name="T:FastFrame.Dto.IDto">

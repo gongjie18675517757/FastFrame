@@ -12,11 +12,9 @@ namespace FastFrame.Service.Services.Chat
 	/// </summary>
 	public partial class GroupManagerService:BaseService<GroupManager, GroupManagerDto>
 	{
-		/*字段*/
 		private readonly IRepository<User> userRepository;
 		private readonly IRepository<GroupManager> groupManagerRepository;
 		
-		/*构造函数*/
 		public GroupManagerService(IRepository<User> userRepository,IRepository<GroupManager> groupManagerRepository,IScopeServiceLoader loader)
 			:base(groupManagerRepository,loader)
 		{
@@ -24,9 +22,7 @@ namespace FastFrame.Service.Services.Chat
 			this.groupManagerRepository=groupManagerRepository;
 		}
 		
-		/*属性*/
 		
-		/*方法*/
 		protected override IQueryable<GroupManagerDto> QueryMain() 
 		{
 			var groupManagerQueryable=groupManagerRepository.Queryable;

@@ -42,8 +42,7 @@ namespace FastFrame.Entity.Basis
 
         /// <summary>
         /// 租户
-        /// </summary>
-        [Exclude]
+        /// </summary> 
         public string Tenant_Id { get; set; }
     }
 }

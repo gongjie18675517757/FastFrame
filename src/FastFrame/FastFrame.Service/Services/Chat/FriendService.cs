@@ -45,7 +45,7 @@ namespace FastFrame.Service.Services.Chat
                 .Select(x => new FriendOutput()
                 {
                     Id = x.Id,
-                    HeadIcon_Id = x.HandIconId,
+                    HeadIcon_Id = x.HandIcon_Id,
                     Name = x.Name
                 })
                 .ToListAsync(); 

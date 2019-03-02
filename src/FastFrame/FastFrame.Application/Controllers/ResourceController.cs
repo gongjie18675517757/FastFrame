@@ -1,6 +1,8 @@
 ﻿using FastFrame.Dto.Basis;
+using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Interface;
 using FastFrame.Service.Services.Basis;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -26,20 +28,25 @@ namespace FastFrame.Application.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IEnumerable<ResourceDto>> Post()
+        public async Task<IEnumerable<ResourceDto>> Post(List<IFormFile> files)
         {
             if (Request.Form.Files.Count == 0)
                 throw new System.Exception("无有效文件!");
             var result = new List<ResourceDto>();
-            foreach (var formFile in Request.Form.Files)
+
+            //var  files = Request.Form.Files;
+
+            foreach (var formFile in files)
             {
-                var path = await resourceProvider.SetResource(formFile.OpenReadStream());
+                var stream = formFile.OpenReadStream();
+                var path = await resourceProvider.SetResource(stream);
                 result.Add(await resourceService.AddAsync(new ResourceDto()
                 {
                     ContentType = formFile.ContentType,
                     Name = formFile.FileName,
                     Path = path,
                     Size = formFile.Length,
+                    MD5 = stream.ToMD5()
                 }));
             }
 

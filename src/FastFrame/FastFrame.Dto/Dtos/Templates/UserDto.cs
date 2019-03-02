@@ -13,11 +13,8 @@ namespace FastFrame.Dto.Basis
 	[RelatedField("Name","Account")]
 	public partial class UserDto:BaseDto<User>
 	{
-		/*字段*/
 		
-		/*构造函数*/
 		
-		/*属性*/
 		/// <summary>
 		///帐号 
 		/// </summary>
@@ -44,17 +41,6 @@ namespace FastFrame.Dto.Basis
 		public string Name {get;set;}
 		
 		/// <summary>
-		///部门 
-		/// </summary>
-		[RelatedTo(typeof(Dept))]
-		public string Dept_Id {get;set;}
-		
-		/// <summary>
-		///部门 
-		/// </summary>
-		public DeptDto Dept {get;set;}
-		
-		/// <summary>
 		///邮箱 
 		/// </summary>
 		[StringLength(50)]
@@ -72,8 +58,13 @@ namespace FastFrame.Dto.Basis
 		///头像 
 		/// </summary>
 		[StringLength(200)]
-		[Hide(HideMark.All)]
-		public string HandIconId {get;set;}
+		[RelatedTo(typeof(Resource))]
+		public string HandIcon_Id {get;set;}
+		
+		/// <summary>
+		///头像 
+		/// </summary>
+		public ResourceDto HandIcon {get;set;}
 		
 		/// <summary>
 		///是否管理员 
@@ -90,6 +81,8 @@ namespace FastFrame.Dto.Basis
 		/// <summary>
 		///创建人 
 		/// </summary>
+		[Hide(HideMark.Form)]
+		[ReadOnly(ReadOnlyMark.All)]
 		[RelatedTo(typeof(User))]
 		public string Create_User_Id {get;set;}
 		
@@ -102,11 +95,15 @@ namespace FastFrame.Dto.Basis
 		///创建时间 
 		/// </summary>
 		[Required()]
+		[Hide(HideMark.Form)]
+		[ReadOnly(ReadOnlyMark.All)]
 		public DateTime CreateTime {get;set;}
 		
 		/// <summary>
 		///修改人 
 		/// </summary>
+		[Hide(HideMark.Form)]
+		[ReadOnly(ReadOnlyMark.All)]
 		[RelatedTo(typeof(User))]
 		public string Modify_User_Id {get;set;}
 		
@@ -118,10 +115,11 @@ namespace FastFrame.Dto.Basis
 		/// <summary>
 		///修改时间 
 		/// </summary>
+		[Hide(HideMark.Form)]
+		[ReadOnly(ReadOnlyMark.All)]
 		public DateTime ModifyTime {get;set;}
 		
 		
-		/*方法*/
 		
 	}
 }

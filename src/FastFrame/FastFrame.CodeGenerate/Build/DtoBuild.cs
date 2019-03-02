@@ -20,7 +20,7 @@ namespace FastFrame.CodeGenerate.Build
         public override string TargetPath => $"{SolutionDir}\\FastFrame.Dto\\Dtos\\Templates";
 
 
-        public override IEnumerable<TargetInfo> BuildCodeInfo(string typeName)
+        public override IEnumerable<Info.TargetInfo> BuildCodeInfo(string typeName)
         {
             foreach (var type in GetTypes())
             {
@@ -33,7 +33,7 @@ namespace FastFrame.CodeGenerate.Build
             }
         }
 
-        public TargetInfo GetTargetInfo(Type type)
+        public Info.TargetInfo GetTargetInfo(Type type)
         {
             var areaNameSpace = T4Help.GenerateNameSpace(type, null);
 
@@ -49,7 +49,7 @@ namespace FastFrame.CodeGenerate.Build
                 }.Union(x.OtherNames.Select(y => $"\"{y}\""))
             }));
 
-            return new TargetInfo()
+            return new Info.TargetInfo()
             {
                 NamespaceName = $"FastFrame.Dto.{areaNameSpace}",
                 ImportNames = new string[] {
@@ -79,8 +79,8 @@ namespace FastFrame.CodeGenerate.Build
 
         public IEnumerable<PropInfo> GetPropInfos(Type type)
         {
-            var names= string.Join(",", type.GetProperties().Select(x => x.Name));
-            Console.WriteLine(names);
+            var instance = type.Assembly.CreateInstance(type.FullName);
+
             foreach (var item in type.GetProperties())
             {
                 if (item.Name == "Id")
@@ -95,12 +95,20 @@ namespace FastFrame.CodeGenerate.Build
 
                 var summary = T4Help.GetPropertySummary(item, XmlDocDir);
 
+                var defaultValue = instance.GetValue(item.Name)?.ToString();
+                if (defaultValue == null)
+                    defaultValue = "null";
+                if (T4Help.GetNullableType(item.PropertyType) == typeof(string))
+                    defaultValue = $"\"{defaultValue}\"";
+                if (T4Help.GetNullableType(item.PropertyType) == typeof(string))
+                    defaultValue = $"\"{defaultValue}\"";
                 yield return new PropInfo()
                 {
                     Summary = summary,
                     AttrInfos = GetAttrInfos(item),
                     TypeName = T4Help.GetTypeName(item.PropertyType),
-                    Name = item.Name
+                    Name = item.Name,
+                    DefaultValue = defaultValue
                 };
 
                 if (TryGetAttribute<RelatedToAttribute>(item, out var relatedToAttribute))

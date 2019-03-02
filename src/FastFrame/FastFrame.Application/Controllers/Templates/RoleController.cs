@@ -11,11 +11,9 @@ namespace FastFrame.Application.Controllers.Basis
 	[Permission(nameof(Role),"角色")]
 	public partial class RoleController:BaseController<Role, RoleDto>
 	{
-		/*字段*/
 		private readonly RoleService service;
 		private readonly IScopeServiceLoader serviceLoader;
 		
-		/*构造函数*/
 		public RoleController(RoleService service,IScopeServiceLoader serviceLoader)
 			:base(service,serviceLoader)
 		{
@@ -23,9 +21,7 @@ namespace FastFrame.Application.Controllers.Basis
 			this.serviceLoader = serviceLoader;
 		}
 		
-		/*属性*/
 		
-		/*方法*/
 		
 	}
 }

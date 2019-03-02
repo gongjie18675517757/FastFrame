@@ -1,22 +1,19 @@
-namespace FastFrame.Service.Services.Chat
+namespace FastFrame.Service.Services.Basis
 {
-	using FastFrame.Entity.Chat; 
-	using FastFrame.Dto.Chat; 
+	using FastFrame.Entity.Basis; 
+	using FastFrame.Dto.Basis; 
 	using FastFrame.Infrastructure.Interface; 
 	using FastFrame.Infrastructure; 
 	using FastFrame.Repository; 
-	using FastFrame.Entity.Basis; 
 	using System.Linq; 
 	/// <summary>
 	///通知目标 服务类 
 	/// </summary>
 	public partial class NotifyTargetService:BaseService<NotifyTarget, NotifyTargetDto>
 	{
-		/*字段*/
 		private readonly IRepository<User> userRepository;
 		private readonly IRepository<NotifyTarget> notifyTargetRepository;
 		
-		/*构造函数*/
 		public NotifyTargetService(IRepository<User> userRepository,IRepository<NotifyTarget> notifyTargetRepository,IScopeServiceLoader loader)
 			:base(notifyTargetRepository,loader)
 		{
@@ -24,9 +21,7 @@ namespace FastFrame.Service.Services.Chat
 			this.notifyTargetRepository=notifyTargetRepository;
 		}
 		
-		/*属性*/
 		
-		/*方法*/
 		protected override IQueryable<NotifyTargetDto> QueryMain() 
 		{
 			var notifyTargetQueryable=notifyTargetRepository.Queryable;

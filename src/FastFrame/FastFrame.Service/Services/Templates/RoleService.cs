@@ -11,11 +11,9 @@ namespace FastFrame.Service.Services.Basis
 	/// </summary>
 	public partial class RoleService:BaseService<Role, RoleDto>
 	{
-		/*字段*/
 		private readonly IRepository<User> userRepository;
 		private readonly IRepository<Role> roleRepository;
 		
-		/*构造函数*/
 		public RoleService(IRepository<User> userRepository,IRepository<Role> roleRepository,IScopeServiceLoader loader)
 			:base(roleRepository,loader)
 		{
@@ -23,9 +21,7 @@ namespace FastFrame.Service.Services.Basis
 			this.roleRepository=roleRepository;
 		}
 		
-		/*属性*/
 		
-		/*方法*/
 		protected override IQueryable<RoleDto> QueryMain() 
 		{
 			var roleQueryable=roleRepository.Queryable;

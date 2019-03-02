@@ -11,11 +11,9 @@ namespace FastFrame.Application.Controllers.Basis
 	[Permission(nameof(User),"用户")]
 	public partial class UserController:BaseController<User, UserDto>
 	{
-		/*字段*/
 		private readonly UserService service;
 		private readonly IScopeServiceLoader serviceLoader;
 		
-		/*构造函数*/
 		public UserController(UserService service,IScopeServiceLoader serviceLoader)
 			:base(service,serviceLoader)
 		{
@@ -23,9 +21,7 @@ namespace FastFrame.Application.Controllers.Basis
 			this.serviceLoader = serviceLoader;
 		}
 		
-		/*属性*/
 		
-		/*方法*/
 		
 	}
 }

@@ -4,8 +4,8 @@ namespace FastFrame.Entity.Basis
 {
     /// <summary>
     /// 资源
-    /// </summary>
-    public class Resource:BaseEntity
+    /// </summary>     
+    public class Resource:IEntity,IHasTenant
     {
         /// <summary>
         /// 资源名称
@@ -27,6 +27,16 @@ namespace FastFrame.Entity.Basis
         /// <summary>
         /// 资源标识
         /// </summary>
+        [StringLength(50)]
         public string ContentType { get; set; }
+
+        /// <summary>
+        /// MD5摘要
+        /// </summary>
+        public string MD5 { get; set; }
+
+        public string Tenant_Id { get; set; }
+
+        public string Id { get; set; }
     }
 }

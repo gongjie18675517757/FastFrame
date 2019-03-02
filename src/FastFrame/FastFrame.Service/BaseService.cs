@@ -134,7 +134,7 @@ namespace FastFrame.Service
         /// 拼查询表达式
         /// </summary>
         /// <returns></returns>
-        protected virtual IQueryable<TDto> Query() => QueryMain();
+        internal virtual IQueryable<TDto> Query() => QueryMain();
 
         /// <summary>
         /// 主查询表达式

@@ -23,7 +23,7 @@ namespace FastFrame.CodeGenerate.Build
         public override string TargetPath => $"{SolutionDir}\\FastFrame.Service\\Services\\Templates";
 
 
-        public override IEnumerable<TargetInfo> BuildCodeInfo(string typeName)
+        public override IEnumerable<Info.TargetInfo> BuildCodeInfo(string typeName)
         {
             foreach (var type in GetTypes())
             {
@@ -35,7 +35,7 @@ namespace FastFrame.CodeGenerate.Build
             }
         }
 
-        public TargetInfo Build(Type type)
+        public Info.TargetInfo Build(Type type)
         {
             /*当前类型区域名称*/
             var areaName = T4Help.GenerateNameSpace(type, null);
@@ -73,7 +73,7 @@ namespace FastFrame.CodeGenerate.Build
                     .Select(x => new { type = $"IRepository<{x}>", name = $"{x.ToFirstLower()}Repository" });
 
 
-            return new TargetInfo()
+            return new Info.TargetInfo()
             {
                 NamespaceName = $"FastFrame.Service.Services.{areaName}",
                 ImportNames = importNames,

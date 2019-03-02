@@ -22,9 +22,9 @@ namespace FastFrame.Service.Services.Basis
             ICurrentUserProvider currentUserProvider,
             IRepository<RoleMember> roleMemberRepository,
             IRepository<Role> roleRepository,
-            IRepository<Dept> deptRepository,
+            IRepository<Resource> resourceRepository,
             IRepository<User> userRepository,
-            IScopeServiceLoader loader) : this(deptRepository, userRepository, loader)
+            IScopeServiceLoader loader) : this(resourceRepository, userRepository, loader)
         {
             this.currentUserProvider = currentUserProvider;
             this.roleMemberRepository = roleMemberRepository;
@@ -132,6 +132,19 @@ namespace FastFrame.Service.Services.Basis
         protected override Task OnUpdateing(UserDto input, User entity)
         {
             return base.OnUpdateing(input, entity);
+        }
+    }
+
+    public partial class ResourceService
+    {
+        public override async Task<ResourceDto> AddAsync(ResourceDto input)
+        {
+            var md5 = input.MD5;
+            var id = await resourceRepository.Where(r => r.MD5 == md5).Select(r => r.Id).FirstOrDefaultAsync();
+            if (id == null)
+                return await base.AddAsync(input);
+            else
+                return await GetAsync(id);
         }
     }
 }

@@ -1,21 +1,17 @@
-namespace FastFrame.Dto.Chat
+namespace FastFrame.Dto.Basis
 {
-	using FastFrame.Entity.Chat; 
+	using FastFrame.Entity.Basis; 
 	using FastFrame.Infrastructure.Attrs; 
 	using global::System.ComponentModel.DataAnnotations; 
 	using FastFrame.Entity.Enums; 
-	using FastFrame.Entity.Basis; 
 	using System; 
 	/// <summary>
 	///通知目标 
 	/// </summary>
 	public partial class NotifyTargetDto:BaseDto<NotifyTarget>
 	{
-		/*字段*/
 		
-		/*构造函数*/
 		
-		/*属性*/
 		/// <summary>
 		///通知ID 
 		/// </summary>
@@ -32,7 +28,6 @@ namespace FastFrame.Dto.Chat
 		public bool HaveRead {get;set;}
 		
 		
-		/*方法*/
 		
 	}
 }

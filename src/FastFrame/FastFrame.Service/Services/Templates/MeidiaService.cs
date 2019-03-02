@@ -1,24 +1,20 @@
-namespace FastFrame.Service.Services.CMS
+namespace FastFrame.Service.Services.Basis
 {
-	using FastFrame.Entity.CMS; 
 	using FastFrame.Entity.Basis; 
-	using FastFrame.Dto.CMS; 
+	using FastFrame.Dto.Basis; 
 	using FastFrame.Infrastructure.Interface; 
 	using FastFrame.Infrastructure; 
 	using FastFrame.Repository; 
 	using System.Linq; 
-	using FastFrame.Dto.Basis; 
 	/// <summary>
 	///图片库 服务类 
 	/// </summary>
 	public partial class MeidiaService:BaseService<Meidia, MeidiaDto>
 	{
-		/*字段*/
 		private readonly IRepository<Meidia> meidiaRepository;
 		private readonly IRepository<Resource> resourceRepository;
 		private readonly IRepository<User> userRepository;
 		
-		/*构造函数*/
 		public MeidiaService(IRepository<Meidia> meidiaRepository,IRepository<Resource> resourceRepository,IRepository<User> userRepository,IScopeServiceLoader loader)
 			:base(meidiaRepository,loader)
 		{
@@ -27,9 +23,7 @@ namespace FastFrame.Service.Services.CMS
 			this.userRepository=userRepository;
 		}
 		
-		/*属性*/
 		
-		/*方法*/
 		protected override IQueryable<MeidiaDto> QueryMain() 
 		{
 			 var meidiaQueryable = meidiaRepository.Queryable;
@@ -50,6 +44,7 @@ namespace FastFrame.Service.Services.CMS
 						Href=_meidia.Href,
 						Name=_meidia.Name,
 						Resource_Id=_meidia.Resource_Id,
+						ContentType=_meidia.ContentType,
 						IsFolder=_meidia.IsFolder,
 						Id=_meidia.Id,
 						Create_User_Id=_meidia.Create_User_Id,

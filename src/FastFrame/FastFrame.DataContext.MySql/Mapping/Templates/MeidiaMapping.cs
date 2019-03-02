@@ -1,18 +1,14 @@
-namespace FastFrame.Database.Mapping.CMS
+namespace FastFrame.Database.Mapping.Basis
 {
-	using FastFrame.Entity.CMS; 
+	using FastFrame.Entity.Basis; 
 	/// <summary>
 	///图片库 
 	/// </summary>
-	public partial class MeidiaMapping:BaseMapping<Meidia>
+	public partial class MeidiaMapping:BaseEntityMapping<Meidia>
 	{
-		/*字段*/
 		
-		/*构造函数*/
 		
-		/*属性*/
 		
-		/*方法*/
 		
 	}
 }

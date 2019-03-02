@@ -12,11 +12,9 @@ namespace FastFrame.Service.Services.Chat
 	/// </summary>
 	public partial class EmailAnnexService:BaseService<EmailAnnex, EmailAnnexDto>
 	{
-		/*字段*/
 		private readonly IRepository<User> userRepository;
 		private readonly IRepository<EmailAnnex> emailAnnexRepository;
 		
-		/*构造函数*/
 		public EmailAnnexService(IRepository<User> userRepository,IRepository<EmailAnnex> emailAnnexRepository,IScopeServiceLoader loader)
 			:base(emailAnnexRepository,loader)
 		{
@@ -24,9 +22,7 @@ namespace FastFrame.Service.Services.Chat
 			this.emailAnnexRepository=emailAnnexRepository;
 		}
 		
-		/*属性*/
 		
-		/*方法*/
 		protected override IQueryable<EmailAnnexDto> QueryMain() 
 		{
 			var emailAnnexQueryable=emailAnnexRepository.Queryable;

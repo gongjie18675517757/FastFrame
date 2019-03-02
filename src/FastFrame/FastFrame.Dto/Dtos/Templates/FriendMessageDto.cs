@@ -11,11 +11,8 @@ namespace FastFrame.Dto.Chat
 	/// </summary>
 	public partial class FriendMessageDto:BaseDto<FriendMessage>
 	{
-		/*字段*/
 		
-		/*构造函数*/
 		
-		/*属性*/
 		/// <summary>
 		///内容 
 		/// </summary>
@@ -43,7 +40,6 @@ namespace FastFrame.Dto.Chat
 		public DateTime MessageTime {get;set;}
 		
 		
-		/*方法*/
 		
 	}
 }

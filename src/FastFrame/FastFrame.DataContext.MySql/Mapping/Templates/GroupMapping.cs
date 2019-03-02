@@ -4,15 +4,11 @@ namespace FastFrame.Database.Mapping.Chat
 	/// <summary>
 	///群组 
 	/// </summary>
-	public partial class GroupMapping:BaseMapping<Group>
+	public partial class GroupMapping:BaseEntityMapping<Group>
 	{
-		/*字段*/
 		
-		/*构造函数*/
 		
-		/*属性*/
 		
-		/*方法*/
 		
 	}
 }

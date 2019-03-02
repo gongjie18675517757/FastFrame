@@ -4,15 +4,11 @@ namespace FastFrame.Database.Mapping.Basis
 	/// <summary>
 	///角色成员 
 	/// </summary>
-	public partial class RoleMemberMapping:BaseMapping<RoleMember>
+	public partial class RoleMemberMapping:BaseEntityMapping<RoleMember>
 	{
-		/*字段*/
 		
-		/*构造函数*/
 		
-		/*属性*/
 		
-		/*方法*/
 		
 	}
 }

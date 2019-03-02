@@ -8,14 +8,17 @@ using FastFrame.Infrastructure.Interface;
 using FastFrame.Repository.Events;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 
 namespace FastFrame.Repository
 {
-    public class BaseRepository<T> : BaseUnitOrWork, IRepository<T> where T : class, IEntity
+    internal class BaseRepository<T> : BaseUnitOrWork, IRepository<T> where T : class, IEntity
     {
         private readonly DataBase context;
         private readonly ICurrentUserProvider currentUserProvider;
@@ -53,7 +56,7 @@ namespace FastFrame.Repository
                 {
                     hasManage.Create_User_Id = curr.Id;
                     hasManage.Modify_User_Id = curr.Id;
-                } 
+                }
             }
 
             var entityEntry = context.Entry(entity);
@@ -121,8 +124,8 @@ namespace FastFrame.Repository
         /// </summary>
         /// <param name="entity"></param>
         public virtual async Task DeleteAsync(T entity)
-        {  
-            if(entity is IHasManage hasManage)
+        {
+            if (entity is IHasManage hasManage)
             {
                 hasManage.Modify_User_Id = currUser?.Id;
                 hasManage.ModifyTime = DateTime.Now;
@@ -135,7 +138,7 @@ namespace FastFrame.Repository
             else
             {
                 context.Entry(entity).State = EntityState.Deleted;
-            } 
+            }
 
             await eventBus.TriggerAsync(new EntityDeleteing<T>(entity));
         }
@@ -149,6 +152,29 @@ namespace FastFrame.Repository
         {
             var entity = await Queryable.FirstOrDefaultAsync(x => x.Id == id);
             await DeleteAsync(entity);
+        }
+
+        /// <summary>
+        /// 更新数据
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public virtual async Task<T> UpdateAsync(T entity)
+        {
+            /*需要验证唯一性和关联性*/
+            await Verification(entity);
+
+            if (entity is IHasManage hasManage)
+            {
+                hasManage.ModifyTime = DateTime.Now;
+                hasManage.Modify_User_Id = currUser?.Id;
+            }
+
+            var entityEntry = context.Entry(entity);
+            entityEntry.State = EntityState.Modified;
+
+            await eventBus.TriggerAsync(new EntityUpdateing<T>(entityEntry.Entity));
+            return entityEntry.Entity;
         }
 
         /// <summary>
@@ -179,27 +205,20 @@ namespace FastFrame.Repository
             }
         }
 
-        /// <summary>
-        /// 更新数据
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
-        public virtual async Task<T> UpdateAsync(T entity)
+        public Type ElementType => Queryable.ElementType;
+
+        public Expression Expression => Queryable.Expression;
+
+        public IQueryProvider Provider => Queryable.Provider;
+
+        public IEnumerator<T> GetEnumerator()
         {
-            /*需要验证唯一性和关联性*/
-            await Verification(entity);
+            return Queryable.GetEnumerator();
+        }
 
-            if (entity is IHasManage hasManage)
-            {
-                hasManage.ModifyTime = DateTime.Now;
-                hasManage.Modify_User_Id = currUser?.Id; 
-            }
-
-            var entityEntry = context.Entry(entity);
-            entityEntry.State = EntityState.Modified;
-
-            await eventBus.TriggerAsync(new EntityUpdateing<T>(entityEntry.Entity));
-            return entityEntry.Entity;
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return Queryable.GetEnumerator();
         }
     }
 }

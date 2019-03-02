@@ -12,11 +12,8 @@ namespace FastFrame.Dto.Basis
 	[RelatedField("Name","EnCode")]
 	public partial class EmployeeDto:BaseDto<Employee>
 	{
-		/*字段*/
 		
-		/*构造函数*/
 		
-		/*属性*/
 		/// <summary>
 		///编码 
 		/// </summary>
@@ -75,6 +72,8 @@ namespace FastFrame.Dto.Basis
 		/// <summary>
 		///创建人 
 		/// </summary>
+		[Hide(HideMark.Form)]
+		[ReadOnly(ReadOnlyMark.All)]
 		[RelatedTo(typeof(User))]
 		public string Create_User_Id {get;set;}
 		
@@ -87,11 +86,15 @@ namespace FastFrame.Dto.Basis
 		///创建时间 
 		/// </summary>
 		[Required()]
+		[Hide(HideMark.Form)]
+		[ReadOnly(ReadOnlyMark.All)]
 		public DateTime CreateTime {get;set;}
 		
 		/// <summary>
 		///修改人 
 		/// </summary>
+		[Hide(HideMark.Form)]
+		[ReadOnly(ReadOnlyMark.All)]
 		[RelatedTo(typeof(User))]
 		public string Modify_User_Id {get;set;}
 		
@@ -103,10 +106,11 @@ namespace FastFrame.Dto.Basis
 		/// <summary>
 		///修改时间 
 		/// </summary>
+		[Hide(HideMark.Form)]
+		[ReadOnly(ReadOnlyMark.All)]
 		public DateTime ModifyTime {get;set;}
 		
 		
-		/*方法*/
 		
 	}
 }

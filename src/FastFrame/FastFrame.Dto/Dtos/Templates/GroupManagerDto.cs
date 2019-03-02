@@ -11,11 +11,8 @@ namespace FastFrame.Dto.Chat
 	/// </summary>
 	public partial class GroupManagerDto:BaseDto<GroupManager>
 	{
-		/*字段*/
 		
-		/*构造函数*/
 		
-		/*属性*/
 		/// <summary>
 		///群组 
 		/// </summary>
@@ -27,7 +24,6 @@ namespace FastFrame.Dto.Chat
 		public string User_Id {get;set;}
 		
 		
-		/*方法*/
 		
 	}
 }

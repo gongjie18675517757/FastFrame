@@ -26,5 +26,10 @@ namespace FastFrame.CodeGenerate.Info
         /// 属性名称
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// 默认值
+        /// </summary>
+        public string DefaultValue { get; set; }
     }
 }

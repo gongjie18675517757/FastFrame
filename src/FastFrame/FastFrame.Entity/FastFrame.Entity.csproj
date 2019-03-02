@@ -1,17 +1,33 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RunPostBuildEvent>Always</RunPostBuildEvent>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>D:\CoreProject\FastFrame\src\FastFrame\FastFrame.Entity\FastFrame.Entity.xml</DocumentationFile>
-    <NoWarn>1701;1702;1591</NoWarn>
+    <NoWarn>1701;1702;1591;</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>1701;1702;1591;</NoWarn>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <DocumentationFile>D:\CoreProject\FastFrame\src\FastFrame\FastFrame.Entity\FastFrame.Entity.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="CMS\**" />
+    <EmbeddedResource Remove="CMS\**" />
+    <None Remove="CMS\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Basis\Foreign.cs" />
+    <Compile Remove="Basis\Menu.cs" />
+    <Compile Remove="Basis\QueryProgram.cs" />
+    <Compile Remove="Basis\QueryProgramDetail.cs" /> 
   </ItemGroup>
 
   <ItemGroup>

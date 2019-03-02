@@ -12,11 +12,9 @@ namespace FastFrame.Service.Services.Chat
 	/// </summary>
 	public partial class GroupMessageService:BaseService<GroupMessage, GroupMessageDto>
 	{
-		/*字段*/
 		private readonly IRepository<User> userRepository;
 		private readonly IRepository<GroupMessage> groupMessageRepository;
 		
-		/*构造函数*/
 		public GroupMessageService(IRepository<User> userRepository,IRepository<GroupMessage> groupMessageRepository,IScopeServiceLoader loader)
 			:base(groupMessageRepository,loader)
 		{
@@ -24,9 +22,7 @@ namespace FastFrame.Service.Services.Chat
 			this.groupMessageRepository=groupMessageRepository;
 		}
 		
-		/*属性*/
 		
-		/*方法*/
 		protected override IQueryable<GroupMessageDto> QueryMain() 
 		{
 			var groupMessageQueryable=groupMessageRepository.Queryable;

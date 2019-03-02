@@ -12,11 +12,9 @@ namespace FastFrame.Service.Services.Chat
 	/// </summary>
 	public partial class EmailContentService:BaseService<EmailContent, EmailContentDto>
 	{
-		/*字段*/
 		private readonly IRepository<User> userRepository;
 		private readonly IRepository<EmailContent> emailContentRepository;
 		
-		/*构造函数*/
 		public EmailContentService(IRepository<User> userRepository,IRepository<EmailContent> emailContentRepository,IScopeServiceLoader loader)
 			:base(emailContentRepository,loader)
 		{
@@ -24,9 +22,7 @@ namespace FastFrame.Service.Services.Chat
 			this.emailContentRepository=emailContentRepository;
 		}
 		
-		/*属性*/
 		
-		/*方法*/
 		protected override IQueryable<EmailContentDto> QueryMain() 
 		{
 			var emailContentQueryable=emailContentRepository.Queryable;

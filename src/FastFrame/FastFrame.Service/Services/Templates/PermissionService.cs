@@ -11,11 +11,9 @@ namespace FastFrame.Service.Services.Basis
 	/// </summary>
 	public partial class PermissionService:BaseService<Permission, PermissionDto>
 	{
-		/*字段*/
 		private readonly IRepository<Permission> permissionRepository;
 		private readonly IRepository<User> userRepository;
 		
-		/*构造函数*/
 		public PermissionService(IRepository<Permission> permissionRepository,IRepository<User> userRepository,IScopeServiceLoader loader)
 			:base(permissionRepository,loader)
 		{
@@ -23,9 +21,7 @@ namespace FastFrame.Service.Services.Basis
 			this.userRepository=userRepository;
 		}
 		
-		/*属性*/
 		
-		/*方法*/
 		protected override IQueryable<PermissionDto> QueryMain() 
 		{
 			 var permissionQueryable = permissionRepository.Queryable;

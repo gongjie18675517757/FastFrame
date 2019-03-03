@@ -49,7 +49,6 @@
               <span>Refresh form</span>
             </v-tooltip>
               </v-slide-x-reverse-transition>-->
-
               <v-btn color="primary" flat @click="submit" :loading="submiting">保存</v-btn>
             </v-card-actions>
           </v-card-text>
@@ -60,9 +59,9 @@
 </template>
 
 <script>
-import rules from '@/rules'
-import timg from '@/assets/timg.jpg'
-import { alert, upload } from '@/utils'
+import rules from "@/rules";
+import timg from "@/assets/timg.jpg";
+import { alert, upload } from "@/utils";
 export default {
   data() {
     return {
@@ -73,47 +72,49 @@ export default {
       initform: null,
       form: {},
       submiting: false
-    }
+    };
   },
   computed: {
     handIcon() {
-      let id = this.form.HandIcon_Id
-      return id ? `/api/resource/get/${id}` : timg
+      let id = this.form.HandIcon_Id;
+      return id ? `/api/resource/get/${id}` : timg;
     }
   },
   async created() {
-    let request = await this.$http.get('/api/account/GetCurrent')
-    this.form = request
+    let request = await this.$http.get("/api/account/GetCurrent");
+    this.form = request;
   },
   methods: {
     async uploadImg() {
-      let accept = 'image/gif, image/jpeg'
-      let resources = await upload({ accept })
-      this.form.HandIcon_Id = resources[0].Id
+      let accept = "image/*";
+      let resources = await upload({ accept });
+      this.form.HandIcon_Id = resources[0].Id;
     },
     async submit() {
-      this.submiting = true
+      this.submiting = true;
       try {
         if (!this.$refs.form.validate()) {
-          throw new Error('请填写完整信息')
+          throw new Error("请填写完整信息");
         }
         let request = await this.$http.put(
-          '/api/Account/UpdateCurrUserInfo',
+          "/api/Account/UpdateCurrUserInfo",
           this.form
-        )
-        this.form = request
-        alert.success('更新成功')
+        );
+        this.form = request;
+        this.$store.commit("login", JSON.parse(JSON.stringify(request)));
+
+        alert.success("更新成功");
       } catch (error) {
-        alert.error(error.message)
+        alert.error(error.message);
       } finally {
-        this.submiting = false
+        this.submiting = false;
       }
     }
   }
-}
+};
 </script>
 
-<style scoped> 
+<style scoped>
 .subheader {
   padding: 0px;
 }

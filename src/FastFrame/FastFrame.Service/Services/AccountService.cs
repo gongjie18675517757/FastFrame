@@ -84,7 +84,7 @@ namespace FastFrame.Service.Services
                 input.Name,
                 input.PhoneNumber,
                 input.Email,
-                input.HandIcon,
+                input.HandIcon_Id,
             }.MapSet(user);
             if (input.Password != user.Password)
             {
@@ -93,6 +93,7 @@ namespace FastFrame.Service.Services
             }
             await userRepository.UpdateAsync(user);
             await userRepository.CommmitAsync();
+            await RedisHelper.DelAsync(userId);
             return await GetCurrentAsync();
         }
 

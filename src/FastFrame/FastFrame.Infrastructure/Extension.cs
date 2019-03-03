@@ -125,6 +125,7 @@ namespace FastFrame.Infrastructure
                 return null;
             using (var md5 = MD5.Create())
             {
+                @in.Position = 0;
                 var result = md5.ComputeHash(@in);
                 @in.Position = 0;
                 var strResult = BitConverter.ToString(result);

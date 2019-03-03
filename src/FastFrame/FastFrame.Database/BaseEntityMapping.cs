@@ -49,11 +49,13 @@ namespace FastFrame.Database
                 {
                     /*所有字符串,指定为unicode*/
                     prop.IsUnicode();
-                    prop.HasDefaultValue("");
 
                     /*所有ID,指定长度为25*/
                     if (item.Name.EndsWith("Id"))
+                    {
                         prop.HasMaxLength(25);
+                        prop.HasDefaultValue("");
+                    }
 
                     /*非ID字段，且没有指定长度的，默认200*/
                     else if (item.GetCustomAttribute<StringLengthAttribute>() == null && item.Name != "Content")
@@ -65,8 +67,13 @@ namespace FastFrame.Database
                 if (propType.IsEnum)
                 {
                     prop.HasConversion<string>().HasMaxLength(100);
-                    var values = Enum.GetNames(propType);
-                    prop.HasDefaultValue(values.FirstOrDefault());
+                    var names = Enum.GetNames(propType);
+                    if (names.Any())
+                    {
+                        var val = Enum.Parse(propType, names.First());
+                        prop.HasDefaultValue(val);
+                    }
+
                 }
 
                 if (propType == typeof(int))

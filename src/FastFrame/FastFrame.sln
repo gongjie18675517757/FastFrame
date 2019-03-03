@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{8386A041-B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastFrame.Entity", "FastFrame.Entity\FastFrame.Entity.csproj", "{B19E9C9A-E35F-45D9-8A2B-941387ECC892}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastFrame.Database", "FastFrame.DataContext.MySql\FastFrame.Database.csproj", "{A6A0AB4F-AA5B-40ED-8D09-D981DF4C645D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastFrame.Database", "FastFrame.Database\FastFrame.Database.csproj", "{A6A0AB4F-AA5B-40ED-8D09-D981DF4C645D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Public", "Public", "{5DDE019E-F818-470A-AA6F-95A42B093B9A}"
 EndProject

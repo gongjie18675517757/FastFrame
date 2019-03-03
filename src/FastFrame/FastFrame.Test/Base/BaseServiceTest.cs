@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.IO;
 
-namespace Service.Test
+namespace FastFrame.Test
 {
     public abstract class BaseServiceTest : System.IDisposable
     {

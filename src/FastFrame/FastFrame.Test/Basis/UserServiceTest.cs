@@ -8,7 +8,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Service.Test.Basis
+namespace FastFrame.Test.Basis
 {
     [TestClass]
     public class UserServiceTest : BaseBusinService

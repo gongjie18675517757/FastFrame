@@ -3,7 +3,7 @@ using FastFrame.Infrastructure.Interface;
 using System;
 using System.Threading.Tasks;
 
-namespace Service.Test
+namespace FastFrame.Test
 {
     public class CurrentUserProvider : ICurrentUserProvider
     {

@@ -12,7 +12,7 @@ namespace FastFrame.CodeGenerate.Build
         {
         }
 
-        public override string TargetPath => $"{SolutionDir}\\FastFrame.DataContext.MySql\\Mapping\\Templates";
+        public override string TargetPath => $"{SolutionDir}\\FastFrame.Database\\Mapping\\Templates";
 
         public override IEnumerable<TargetInfo> BuildCodeInfo(string typeName)
         {

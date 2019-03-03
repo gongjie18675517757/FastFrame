@@ -2,7 +2,7 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Service.Test
+namespace FastFrame.Test
 {
     public class ScopeServiceLoader : IScopeServiceLoader
     {

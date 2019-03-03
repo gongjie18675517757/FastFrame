@@ -11,7 +11,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Service.Test
+namespace FastFrame.Test
 {
     [TestClass]
     public class AccountTest : BaseServiceTest

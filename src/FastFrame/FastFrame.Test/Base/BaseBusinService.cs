@@ -7,7 +7,7 @@ using FastFrame.Service.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 
-namespace Service.Test
+namespace FastFrame.Test
 {
     public abstract class BaseBusinService : BaseServiceTest
     {

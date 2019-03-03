@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Test_CodeGenerate.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="appsettings.json" />
   </ItemGroup>
 
@@ -27,7 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FastFrame.DataContext.MySql\FastFrame.Database.csproj" />
+    <ProjectReference Include="..\FastFrame.Database\FastFrame.Database.csproj" />
     <ProjectReference Include="..\FastFrame.Infrastructure\FastFrame.Infrastructure.csproj" />
     <ProjectReference Include="..\FastFrame.Service\FastFrame.Service.csproj" />
   </ItemGroup>

@@ -59,13 +59,23 @@ namespace FastFrame.Application.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
+        //[Route("/resource/{id}")]
         public async Task<IActionResult> Get(string id)
         {
             var resource = await resourceService.GetAsync(id);
             if (resource == null)
                 throw new System.Exception("资源不存在");
             var stream = await resourceProvider.GetResource(resource.Path);
-            return File(stream, resource.ContentType, resource.Name, true);
+            if (resource.ContentType.StartsWith("image"))
+            {
+                var buffer = new byte[stream.Length];
+                await stream.ReadAsync(buffer, 0, buffer.Length);
+                return new FileContentResult(buffer, resource.ContentType);
+            }
+            else
+            {
+                return File(stream, resource.ContentType, resource.Name, true);
+            }
         }
     }
 }

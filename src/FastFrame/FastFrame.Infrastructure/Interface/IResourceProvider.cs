@@ -21,5 +21,12 @@ namespace FastFrame.Infrastructure.Interface
         /// <param name="path"></param>
         /// <returns></returns>
         Task<Stream> GetResource(string path);
+
+        /// <summary>
+        /// 获取实际文件路径
+        /// </summary>
+        /// <param name="relativelyPath"></param>
+        /// <returns></returns>
+        string GetFilePath(string relativelyPath);
     } 
 }

@@ -63,7 +63,7 @@ export function changeChar(str = '', map = (x) => x, filter = (item, index) => i
  * @param {*} length 
  */
 export function generateArray(length) {
-   return [...Array.from(new Array(length).keys())];
+    return [...Array.from(new Array(length).keys())];
 }
 
 /**
@@ -155,6 +155,7 @@ export function upload({
                     if (percentage < 100) {
                         onProgress(percentage)
                     }
+                    window.console.log(percentage)
                 }
             }).then(function (resp) {
                 resolve(resp)
@@ -264,3 +265,39 @@ export function showDialog(component, pars = {}) {
 export const randomElement = (arr = []) => {
     return arr[Math.floor(Math.random() * arr.length)];
 };
+
+/**
+ * 根据路径访问对象值
+ * @param {*} obj 
+ * @param {*} prop 
+ */
+export function getValue(obj = {}, prop = "") {
+    if (!prop)
+        throw new Error('属性名称配置不正确')
+    let paths = prop.split('.')
+
+    let temp = obj
+    for (let index = 0; index < paths.length - 1; index++) {
+        const path = paths[index];
+        temp = temp[path] || {}
+    }
+    return temp[paths[paths.length - 1]]
+}
+
+/**
+ * 根据路径设置值
+ * @param {*} obj 
+ * @param {*} prop 
+ */
+export function setValue(obj = {}, prop = "", val = null) {
+    if (!prop)
+        throw new Error('属性名称配置不正确')
+    let paths = prop.split('.')
+    let temp = obj
+    for (let index = 0; index < paths.length - 1; index++) {
+        const path = paths[index];
+        temp = temp[path] || {}
+    }
+    temp[paths[paths.length - 1]] = val
+
+}

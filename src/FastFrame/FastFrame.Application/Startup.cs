@@ -16,7 +16,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
@@ -98,7 +100,7 @@ namespace FastFrame.Application
                 options.IncludeXmlComments(xmlPath);
                 xmlPath = Path.Combine(basePath, "FastFrame.Dto.xml");
                 options.IncludeXmlComments(xmlPath);
-            }); 
+            });
 
             services.AddSingleton(x =>
             {
@@ -145,6 +147,12 @@ namespace FastFrame.Application
 
 
             app.UseStaticFiles();
+            //app.UseStaticFiles(new StaticFileOptions
+            //{
+            //    FileProvider = new PhysicalFileProvider(
+            //        app.ApplicationServices.GetRequiredService<IOptions<ResourceOption>>().Value.BasePath),
+            //    RequestPath = "/Resource"
+            //});
             app.UseMvc();
 
             app.UseSwagger();

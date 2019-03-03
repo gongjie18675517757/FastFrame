@@ -8,7 +8,7 @@
 
 <script>
 import { existBtn } from "@/permission.js";
-import { showDialog } from "@/utils";
+import { showDialog, getValue } from "@/utils";
 export default {
   props: {
     info: {
@@ -40,16 +40,14 @@ export default {
     isRelate() {
       return !!this.info.Relate;
     },
+    val() {
+      return getValue(this.model, this.info.Name);
+    },
     Foreignkey() {
-      if (this.isRelate) {
-        let Id = this.model[this.info.Name];
-        return Id;
-      } else {
-        return "";
-      }
+      return this.isRelate ? this.val : "";
     },
     value() {
-      let val = this.model[this.info.Name];
+      let val = this.val;
       if (this.info.Type == "Boolean") {
         if (val) return "是";
         else return "否";

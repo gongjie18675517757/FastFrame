@@ -47,5 +47,8 @@ namespace FastFrame.Application.Privder
             }
             return relativelyPath;
         }
+
+        public string GetFilePath(string relativelyPath)
+            => Path.Combine(option.Value.BasePath, relativelyPath);
     }
 }

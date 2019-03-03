@@ -113,6 +113,7 @@ namespace FastFrame.Application.Controllers
                     Relate = relatedToAttribute?.RelatedType.Name,
                     IsTextArea = isTextArea,
                     IsRichText = isRichText,
+
                 });
             }
 
@@ -128,7 +129,8 @@ namespace FastFrame.Application.Controllers
                 Description = descriptionProvider.GetClassDescription(type),
                 FieldInfoStruts = fieldInfoStructs,
                 RelateFields = relatedFieldAttribute?.FieldNames ?? new[] { type.GetProperties().FirstOrDefault().Name },
-                TreeKey = treeAttribute?.Key
+                TreeKey = treeAttribute?.Key,
+                HasManage = typeof(IHasManage).IsAssignableFrom(type)
             };
         }
 
@@ -183,7 +185,16 @@ namespace FastFrame.Application.Controllers
         /// 被关联时显示的字段列表
         /// </summary>
         public IEnumerable<string> RelateFields { get; internal set; }
+
+        /// <summary>
+        /// 树状键
+        /// </summary>
         public string TreeKey { get; internal set; }
+
+        /// <summary>
+        /// 有管理属性
+        /// </summary>
+        public bool HasManage { get; internal set; }
     }
 
     public class FieldInfoStrut

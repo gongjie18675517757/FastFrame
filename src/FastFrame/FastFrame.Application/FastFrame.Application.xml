@@ -234,12 +234,22 @@
             被关联时显示的字段列表
             </summary>
         </member>
+        <member name="P:FastFrame.Application.Controllers.ModuleStruct.TreeKey">
+            <summary>
+            树状键
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Controllers.ModuleStruct.HasManage">
+            <summary>
+            有管理属性
+            </summary>
+        </member>
         <member name="T:FastFrame.Application.Controllers.ResourceController">
             <summary>
             资源
             </summary>
         </member>
-        <member name="M:FastFrame.Application.Controllers.ResourceController.Post(System.Collections.Generic.List{Microsoft.AspNetCore.Http.IFormFile})">
+        <member name="M:FastFrame.Application.Controllers.ResourceController.Post">
             <summary>
             上传
             </summary>

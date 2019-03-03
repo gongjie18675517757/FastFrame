@@ -15,9 +15,12 @@ namespace FastFrame.CodeGenerate.Build
 {
     public class ServiceCodeBuild : BaseCodeBuild
     {
+        private readonly DtoBuild dtoBuild;
+
         public override string ProductName => "服务";
         public ServiceCodeBuild(string solutionDir, Type baseEntityType) : base(solutionDir, baseEntityType)
         {
+            dtoBuild = new DtoBuild(solutionDir, baseEntityType);
         }
 
         public override string TargetPath => $"{SolutionDir}\\FastFrame.Service\\Services\\Templates";
@@ -55,8 +58,9 @@ namespace FastFrame.CodeGenerate.Build
                     $"FastFrame.Infrastructure.Interface",
                     "FastFrame.Infrastructure",
                     "FastFrame.Repository",
-                     "FastFrame.Entity.Basis",
-                    "System.Linq"
+                    "FastFrame.Entity.Basis",
+                    "System.Linq",
+                    "Microsoft.EntityFrameworkCore"
                  })
                     .Union(type.GetProperties()
                     .Select(x => x.GetCustomAttribute<RelatedToAttribute>())
@@ -106,6 +110,11 @@ namespace FastFrame.CodeGenerate.Build
             };
         }
 
+        public IEnumerable<PropInfo> GetDtoProps(Type type)
+        {
+            return dtoBuild.GetPropInfos(type);//.Where(r => !r.TypeName.EndsWith("Dto"));
+        }
+
         public IEnumerable<string> GetQueryMainCodeBlock(Type type)
         {
             var hasManage = typeof(IHasManage).IsAssignableFrom(type);
@@ -125,7 +134,7 @@ namespace FastFrame.CodeGenerate.Build
             }
 
 
-            foreach (var prop in props.GroupBy(x=>x.Attr.RelatedType.Name))
+            foreach (var prop in props.GroupBy(x => x.Attr.RelatedType.Name))
             {
                 var relatedTypeName = prop.Key.ToFirstLower();
                 yield return $" var {relatedTypeName}Queryable = {relatedTypeName}Repository.Queryable;";
@@ -139,7 +148,7 @@ namespace FastFrame.CodeGenerate.Build
                 var name = "_" + prop.Prop.Name.ToFirstLower();
                 var isRequired = prop.Prop.GetCustomAttribute<RequiredAttribute>() != null;
                 var relateType = prop.Attr.RelatedType;
-                yield return $"\t\t\tjoin {name} in {relateType.Name.ToFirstLower()}Queryable.MapTo<{relateType.Name},{relateType.Name}Dto>() on _{typeName}.{prop.Prop.Name} equals {name}.Id "
+                yield return $"\t\t\tjoin {name} in {relateType.Name.ToFirstLower()}Queryable.TagWith(\"{name}\") on _{typeName}.{prop.Prop.Name} equals {name}.Id "
                     + (isRequired ? "" : $"into t_{name}");
                 if (!isRequired)
                     yield return $"\t\t\tfrom {name} in t_{name}.DefaultIfEmpty()";
@@ -154,8 +163,8 @@ namespace FastFrame.CodeGenerate.Build
                 //yield return "\t\tfrom user3 in t_user3.DefaultIfEmpty()";
             }
 
-            yield return $"\t\t select new {type.Name}Dto";
-            yield return "\t\t{";
+            yield return $"\t\t\t select new {type.Name}Dto";
+            yield return "\t\t\t{";
 
             foreach (var prop in type.GetProperties())
             {
@@ -163,13 +172,34 @@ namespace FastFrame.CodeGenerate.Build
                     continue;
                 if (prop.Name == "Tenant_Id" || prop.Name == "IsDeleted")
                     continue;
-                yield return $"\t\t\t{prop.Name}=_{typeName}.{prop.Name},";
+                yield return $"\t\t\t\t{prop.Name}=_{typeName}.{prop.Name},";
             }
             foreach (var prop in props)
             {
                 if (prop.Prop.Name == "Tenant_Id" || prop.Prop.Name == "IsDeleted")
                     continue;
-                yield return $"\t\t\t{prop.Prop.Name.Replace("_Id", "")}={ "_" + prop.Prop.Name.ToFirstLower()},";
+
+                var linqTempName = "_" + prop.Prop.Name.ToFirstLower();
+                var isDto = prop.Attr.RelatedType.GetCustomAttribute<ExcludeAttribute>() == null;
+                if (isDto)
+                {
+                    yield return $"\t\t\t\t{prop.Prop.Name.Replace("_Id", "")}={linqTempName}==null?null:new {prop.Attr.RelatedType.Name}Dto";
+                    yield return "\t\t\t\t{";
+                    yield return $"\t\t\t\t\tId = {linqTempName}.Id,";
+                    foreach (var targetDtoProp in GetDtoProps(prop.Attr.RelatedType))
+                    {
+                        if (targetDtoProp.TypeName.EndsWith("Dto"))
+                            yield return $"\t\t\t\t\t{targetDtoProp.Name} = null,";
+                        else
+                            yield return $"\t\t\t\t\t{targetDtoProp.Name} = {linqTempName}.{targetDtoProp.Name},";
+                    }
+                    yield return "\t\t\t\t},";
+                }
+                else
+                {
+                    yield return $"\t\t\t\t{prop.Prop.Name.Replace("_Id", "")}={linqTempName},";
+                }
+
             }
 
 

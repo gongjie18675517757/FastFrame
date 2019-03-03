@@ -61,7 +61,7 @@ export default {
     computeTitle(item) {
       return item.Name;
     },
-    getLastTime(item) {
+    getLastTime(/*item*/) {
       let dt = new Date();
       return `${dt.getFullYear()}-${dt.getMonth()}`;
     },

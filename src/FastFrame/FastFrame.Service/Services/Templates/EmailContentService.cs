@@ -7,6 +7,7 @@ namespace FastFrame.Service.Services.Chat
 	using FastFrame.Repository; 
 	using FastFrame.Entity.Basis; 
 	using System.Linq; 
+	using Microsoft.EntityFrameworkCore; 
 	/// <summary>
 	///邮件正文 服务类 
 	/// </summary>
@@ -27,11 +28,11 @@ namespace FastFrame.Service.Services.Chat
 		{
 			var emailContentQueryable=emailContentRepository.Queryable;
 			 var query = from _emailContent in emailContentQueryable 
-					 select new EmailContentDto
-					{
-						Email_Id=_emailContent.Email_Id,
-						Content=_emailContent.Content,
-						Id=_emailContent.Id,
+						 select new EmailContentDto
+						{
+							Email_Id=_emailContent.Email_Id,
+							Content=_emailContent.Content,
+							Id=_emailContent.Id,
 					};
 			return query;
 		}

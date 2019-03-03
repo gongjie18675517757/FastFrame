@@ -116,7 +116,7 @@
   import {
     getComponent
   } from '@/router'
-  import Cell from './Cell.vue'
+  import Cell from '@/components/Table/Cell.vue'
   import VuePerfectScrollbar from 'vue-perfect-scrollbar'
   export default {
     components: {

@@ -98,7 +98,7 @@ namespace FastFrame.Application
                 options.IncludeXmlComments(xmlPath);
                 xmlPath = Path.Combine(basePath, "FastFrame.Dto.xml");
                 options.IncludeXmlComments(xmlPath);
-            });
+            }); 
 
             services.AddSingleton(x =>
             {

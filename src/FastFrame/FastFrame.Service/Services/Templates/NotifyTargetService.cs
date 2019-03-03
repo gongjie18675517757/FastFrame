@@ -6,6 +6,7 @@ namespace FastFrame.Service.Services.Basis
 	using FastFrame.Infrastructure; 
 	using FastFrame.Repository; 
 	using System.Linq; 
+	using Microsoft.EntityFrameworkCore; 
 	/// <summary>
 	///通知目标 服务类 
 	/// </summary>
@@ -26,12 +27,12 @@ namespace FastFrame.Service.Services.Basis
 		{
 			var notifyTargetQueryable=notifyTargetRepository.Queryable;
 			 var query = from _notifyTarget in notifyTargetQueryable 
-					 select new NotifyTargetDto
-					{
-						Notify_Id=_notifyTarget.Notify_Id,
-						To_Id=_notifyTarget.To_Id,
-						HaveRead=_notifyTarget.HaveRead,
-						Id=_notifyTarget.Id,
+						 select new NotifyTargetDto
+						{
+							Notify_Id=_notifyTarget.Notify_Id,
+							To_Id=_notifyTarget.To_Id,
+							HaveRead=_notifyTarget.HaveRead,
+							Id=_notifyTarget.Id,
 					};
 			return query;
 		}

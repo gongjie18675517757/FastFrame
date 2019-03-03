@@ -7,6 +7,7 @@ namespace FastFrame.Service.Services.Chat
 	using FastFrame.Repository; 
 	using FastFrame.Entity.Basis; 
 	using System.Linq; 
+	using Microsoft.EntityFrameworkCore; 
 	/// <summary>
 	///群组管理员 服务类 
 	/// </summary>
@@ -27,11 +28,11 @@ namespace FastFrame.Service.Services.Chat
 		{
 			var groupManagerQueryable=groupManagerRepository.Queryable;
 			 var query = from _groupManager in groupManagerQueryable 
-					 select new GroupManagerDto
-					{
-						Group_Id=_groupManager.Group_Id,
-						User_Id=_groupManager.User_Id,
-						Id=_groupManager.Id,
+						 select new GroupManagerDto
+						{
+							Group_Id=_groupManager.Group_Id,
+							User_Id=_groupManager.User_Id,
+							Id=_groupManager.Id,
 					};
 			return query;
 		}

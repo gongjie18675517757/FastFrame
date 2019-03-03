@@ -10,6 +10,6 @@ namespace FastFrame.Dto
 
         public string ModuleName { get; set; }
 
-        public IEnumerable<KeyValuePair<string, string>> KeyValues { get; set; } = new List<KeyValuePair<string, string>>();
+        public List<KeyValuePair<string, string>> KeyValues { get; set; } = new List<KeyValuePair<string, string>>();
     }
 }

@@ -77,7 +77,7 @@ export default {
   },
   computed: {
     handIcon() {
-      let id = this.form.HandIconId
+      let id = this.form.HandIcon_Id
       return id ? `/api/resource/get/${id}` : timg
     }
   },
@@ -89,7 +89,7 @@ export default {
     async uploadImg() {
       let accept = 'image/gif, image/jpeg'
       let resources = await upload({ accept })
-      this.form.HandIconId = resources[0].Id
+      this.form.HandIcon_Id = resources[0].Id
     },
     async submit() {
       this.submiting = true

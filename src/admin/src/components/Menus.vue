@@ -11,7 +11,7 @@
       <v-toolbar color="primary darken-1" dark dense @click="toTenantCenter">
         <img :src="handicon" height="36" alt="Vue Material Admin Template">
         <v-toolbar-title class="ml-0 pl-3">
-          <span class="hidden-sm-and-down">{{tenant.EnCode}}</span>
+          <span class="hidden-sm-and-down">{{tenant.ShortName}}</span>
         </v-toolbar-title>
       </v-toolbar>
       <vue-perfect-scrollbar class="drawer-menu--scroll" :settings="scrollSettings">
@@ -69,7 +69,7 @@ export default {
   computed: {
     handicon() {
       return this.tenant.HandIcon_Id
-        ? `/api/resource/${this.tenant.HandIcon_Id}`
+        ? `/api/resource/get/${this.tenant.HandIcon_Id}`
         : logo;
     },
     tenant() {

@@ -17,7 +17,7 @@ export default {
     return {
       page: {
         moduleInfo: {
-          area:'Basis',
+          area:'CMS',
           name: 'Meidia',
           direction: '图片库',
         },

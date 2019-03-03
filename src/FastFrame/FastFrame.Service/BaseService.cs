@@ -165,6 +165,7 @@ namespace FastFrame.Service
             await EventBus?.TriggerAsync(new Events.DoMainUpdateing<TDto>(input));
             await repository.UpdateAsync(entity);
             await repository.CommmitAsync();
+            await RedisHelper.DelAsync(input.Id);
             var dto = await GetAsync(input.Id);
             await EventBus?.TriggerAsync(new Events.DoMainUpdated<TDto>(dto));
             return dto;

@@ -58,6 +58,7 @@ namespace FastFrame.Entity.Basis
         /// </summary>
         [StringLength(200)]
         [RelatedTo(typeof(Resource))]
+        [Hide(HideMark.Form)]
         public string HandIcon_Id { get; set; }
 
         /// <summary>

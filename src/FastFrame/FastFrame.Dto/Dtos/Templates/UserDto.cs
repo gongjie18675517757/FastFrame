@@ -58,6 +58,7 @@ namespace FastFrame.Dto.Basis
 		///头像 
 		/// </summary>
 		[StringLength(200)]
+		[Hide(HideMark.Form)]
 		[RelatedTo(typeof(Resource))]
 		public string HandIcon_Id {get;set;}
 		

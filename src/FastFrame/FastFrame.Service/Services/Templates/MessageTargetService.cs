@@ -7,6 +7,7 @@ namespace FastFrame.Service.Services.Chat
 	using FastFrame.Repository; 
 	using FastFrame.Entity.Basis; 
 	using System.Linq; 
+	using Microsoft.EntityFrameworkCore; 
 	/// <summary>
 	///消息接收人 服务类 
 	/// </summary>
@@ -27,12 +28,12 @@ namespace FastFrame.Service.Services.Chat
 		{
 			var messageTargetQueryable=messageTargetRepository.Queryable;
 			 var query = from _messageTarget in messageTargetQueryable 
-					 select new MessageTargetDto
-					{
-						Message_Id=_messageTarget.Message_Id,
-						To_Id=_messageTarget.To_Id,
-						HaveRead=_messageTarget.HaveRead,
-						Id=_messageTarget.Id,
+						 select new MessageTargetDto
+						{
+							Message_Id=_messageTarget.Message_Id,
+							To_Id=_messageTarget.To_Id,
+							HaveRead=_messageTarget.HaveRead,
+							Id=_messageTarget.Id,
 					};
 			return query;
 		}

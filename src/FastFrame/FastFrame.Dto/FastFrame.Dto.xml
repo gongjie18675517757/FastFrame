@@ -195,6 +195,26 @@
             修改时间 
              </summary>
         </member>
+        <member name="T:FastFrame.Dto.Basis.EnumItemDto">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.EnumItemDto.EnumName">
+             <summary>
+            键 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.EnumItemDto.EnumValue">
+             <summary>
+            值 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.EnumItemDto.Parent_Id">
+             <summary>
+            上级 
+             </summary>
+        </member>
         <member name="T:FastFrame.Dto.Basis.MeidiaDto">
              <summary>
             图片库 

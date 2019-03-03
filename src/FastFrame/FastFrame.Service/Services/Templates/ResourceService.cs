@@ -6,6 +6,7 @@ namespace FastFrame.Service.Services.Basis
 	using FastFrame.Infrastructure; 
 	using FastFrame.Repository; 
 	using System.Linq; 
+	using Microsoft.EntityFrameworkCore; 
 	/// <summary>
 	///资源 服务类 
 	/// </summary>
@@ -26,14 +27,14 @@ namespace FastFrame.Service.Services.Basis
 		{
 			var resourceQueryable=resourceRepository.Queryable;
 			 var query = from _resource in resourceQueryable 
-					 select new ResourceDto
-					{
-						Name=_resource.Name,
-						Size=_resource.Size,
-						Path=_resource.Path,
-						ContentType=_resource.ContentType,
-						MD5=_resource.MD5,
-						Id=_resource.Id,
+						 select new ResourceDto
+						{
+							Name=_resource.Name,
+							Size=_resource.Size,
+							Path=_resource.Path,
+							ContentType=_resource.ContentType,
+							MD5=_resource.MD5,
+							Id=_resource.Id,
 					};
 			return query;
 		}

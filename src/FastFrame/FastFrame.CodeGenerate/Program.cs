@@ -58,7 +58,7 @@ namespace FastFrame.CodeGenerate
             var types2 = types
                 .Where(x => (typeName.IsNullOrWhiteSpace() || x.Name == typeName) && x.GetCustomAttribute<ExportAttribute>() != null);
 
-            var basePath = $@"{Directory.GetParent(rootPath).Parent}\ClientApp\src\views";
+            var basePath = $@"{Directory.GetParent(rootPath).Parent}\Admin\src\views";
             var docPath = $@"{rootPath}Lib";
             foreach (var area in types2.GroupBy(x => T4Help.GenerateNameSpace(x, null)))
             {

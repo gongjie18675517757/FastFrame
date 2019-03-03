@@ -28,13 +28,13 @@ namespace FastFrame.Application.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IEnumerable<ResourceDto>> Post(List<IFormFile> files)
+        public async Task<IEnumerable<ResourceDto>> Post()
         {
             if (Request.Form.Files.Count == 0)
                 throw new System.Exception("无有效文件!");
             var result = new List<ResourceDto>();
 
-            //var  files = Request.Form.Files;
+            var files = Request.Form.Files;
 
             foreach (var formFile in files)
             {

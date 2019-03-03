@@ -39,7 +39,7 @@
             ></v-text-field>
             <v-text-field
               :rules="[rules.required(),rules.stringLength('',3,50)]"
-              v-model="form.EnCode"
+              v-model="form.ShortName"
               label="公司简称"
               :readonly="!canEdit"
               required
@@ -84,7 +84,7 @@ export default {
   },
   computed: {
     handIcon() {
-      let id = this.form.HandIconId;
+      let id = this.form.HandIcon_Id;
       return id ? `/api/resource/get/${id}` : timg;
     }
   },
@@ -99,8 +99,8 @@ export default {
         return;
       }
       let accept = "image/gif, image/jpeg";
-      let resources = await upload({ accept });
-      this.form.HandIconId = resources[0].Id;
+      let [{ Id }] = await upload({ accept });
+      this.form.HandIcon_Id = Id;
     },
     async submit() {
       this.submiting = true;
@@ -114,6 +114,10 @@ export default {
         );
         this.form = request;
         this.canEdit = false;
+        this.$store.commit({
+          type: "setTenant",
+          info: JSON.parse(JSON.stringify(request))
+        });
         alert.success("更新成功");
       } catch (error) {
         alert.error(error.message);

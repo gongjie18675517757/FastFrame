@@ -6,6 +6,7 @@ namespace FastFrame.Service.Services.Basis
 	using FastFrame.Infrastructure; 
 	using FastFrame.Repository; 
 	using System.Linq; 
+	using Microsoft.EntityFrameworkCore; 
 	/// <summary>
 	///权限 服务类 
 	/// </summary>
@@ -26,16 +27,24 @@ namespace FastFrame.Service.Services.Basis
 		{
 			 var permissionQueryable = permissionRepository.Queryable;
 			 var query = from _permission in permissionQueryable 
-						join _parent_Id in permissionQueryable.MapTo<Permission,PermissionDto>() on _permission.Parent_Id equals _parent_Id.Id into t__parent_Id
+						join _parent_Id in permissionQueryable.TagWith("_parent_Id") on _permission.Parent_Id equals _parent_Id.Id into t__parent_Id
 						from _parent_Id in t__parent_Id.DefaultIfEmpty()
-					 select new PermissionDto
-					{
-						Parent_Id=_permission.Parent_Id,
-						EnCode=_permission.EnCode,
-						AreaName=_permission.AreaName,
-						Name=_permission.Name,
-						Id=_permission.Id,
-						Parent=_parent_Id,
+						 select new PermissionDto
+						{
+							Parent_Id=_permission.Parent_Id,
+							EnCode=_permission.EnCode,
+							AreaName=_permission.AreaName,
+							Name=_permission.Name,
+							Id=_permission.Id,
+							Parent=_parent_Id==null?null:new PermissionDto
+							{
+								Id = _parent_Id.Id,
+								Parent_Id = _parent_Id.Parent_Id,
+								Parent = null,
+								EnCode = _parent_Id.EnCode,
+								AreaName = _parent_Id.AreaName,
+								Name = _parent_Id.Name,
+							},
 					};
 			return query;
 		}

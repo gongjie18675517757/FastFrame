@@ -69,6 +69,21 @@
             部门
             </summary>
         </member>
+        <member name="P:FastFrame.Entity.Basis.EnumItem.EnumName">
+            <summary>
+            键
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.EnumItem.EnumValue">
+            <summary>
+            值
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.EnumItem.Parent_Id">
+            <summary>
+            上级
+            </summary>
+        </member>
         <member name="T:FastFrame.Entity.Basis.Meidia">
             <summary>
             图片库

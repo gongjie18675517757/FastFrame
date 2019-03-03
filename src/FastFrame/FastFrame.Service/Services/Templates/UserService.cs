@@ -6,6 +6,7 @@ namespace FastFrame.Service.Services.Basis
     using FastFrame.Infrastructure;
     using FastFrame.Repository;
     using System.Linq;
+    using Microsoft.EntityFrameworkCore;
     /// <summary>
     ///用户 服务类 
     /// </summary>
@@ -27,11 +28,11 @@ namespace FastFrame.Service.Services.Basis
             var resourceQueryable = resourceRepository.Queryable;
             var userQueryable = userRepository.Queryable;
             var query = from _user in userQueryable
-                        join _handIconId in resourceQueryable.MapTo<Resource, ResourceDto>() on _user.HandIcon_Id equals _handIconId.Id into t__handIconId
-                        from _handIconId in t__handIconId.DefaultIfEmpty()
-                        join _create_User_Id in userQueryable.MapTo<User, UserDto>() on _user.Create_User_Id equals _create_User_Id.Id into t__create_User_Id
+                        join _handIcon_Id in resourceQueryable.TagWith("_handIcon_Id") on _user.HandIcon_Id equals _handIcon_Id.Id into t__handIcon_Id
+                        from _handIcon_Id in t__handIcon_Id.DefaultIfEmpty()
+                        join _create_User_Id in userQueryable.TagWith("_create_User_Id") on _user.Create_User_Id equals _create_User_Id.Id into t__create_User_Id
                         from _create_User_Id in t__create_User_Id.DefaultIfEmpty()
-                        join _modify_User_Id in userQueryable.MapTo<User, UserDto>() on _user.Modify_User_Id equals _modify_User_Id.Id into t__modify_User_Id
+                        join _modify_User_Id in userQueryable.TagWith("_modify_User_Id") on _user.Modify_User_Id equals _modify_User_Id.Id into t__modify_User_Id
                         from _modify_User_Id in t__modify_User_Id.DefaultIfEmpty()
                         select new UserDto
                         {
@@ -48,9 +49,53 @@ namespace FastFrame.Service.Services.Basis
                             CreateTime = _user.CreateTime,
                             Modify_User_Id = _user.Modify_User_Id,
                             ModifyTime = _user.ModifyTime,
-                            HandIcon = _handIconId,
-                            Create_User = _create_User_Id,
-                            Modify_User = _modify_User_Id,
+                            HandIcon = _handIcon_Id == null ? null : new ResourceDto
+                            {
+                                Id = _handIcon_Id.Id,
+                                Name = _handIcon_Id.Name,
+                                Size = _handIcon_Id.Size,
+                                Path = _handIcon_Id.Path,
+                                ContentType = _handIcon_Id.ContentType,
+                                MD5 = _handIcon_Id.MD5,
+                            },
+                            Create_User = _create_User_Id == null ? null : new UserDto
+                            {
+                                Id = _create_User_Id.Id,
+                                Account = _create_User_Id.Account,
+                                Password = _create_User_Id.Password,
+                                Name = _create_User_Id.Name,
+                                Email = _create_User_Id.Email,
+                                PhoneNumber = _create_User_Id.PhoneNumber,
+                                HandIcon_Id = _create_User_Id.HandIcon_Id,
+                                HandIcon = null,
+                                IsAdmin = _create_User_Id.IsAdmin,
+                                IsDisabled = _create_User_Id.IsDisabled,
+                                Create_User_Id = _create_User_Id.Create_User_Id,
+                                Create_User = null,
+                                CreateTime = _create_User_Id.CreateTime,
+                                Modify_User_Id = _create_User_Id.Modify_User_Id,
+                                Modify_User = null,
+                                ModifyTime = _create_User_Id.ModifyTime,
+                            },
+                            Modify_User = _modify_User_Id == null ? null : new UserDto
+                            {
+                                Id = _modify_User_Id.Id,
+                                Account = _modify_User_Id.Account,
+                                Password = _modify_User_Id.Password,
+                                Name = _modify_User_Id.Name,
+                                Email = _modify_User_Id.Email,
+                                PhoneNumber = _modify_User_Id.PhoneNumber,
+                                HandIcon_Id = _modify_User_Id.HandIcon_Id,
+                                HandIcon = null,
+                                IsAdmin = _modify_User_Id.IsAdmin,
+                                IsDisabled = _modify_User_Id.IsDisabled,
+                                Create_User_Id = _modify_User_Id.Create_User_Id,
+                                Create_User = null,
+                                CreateTime = _modify_User_Id.CreateTime,
+                                Modify_User_Id = _modify_User_Id.Modify_User_Id,
+                                Modify_User = null,
+                                ModifyTime = _modify_User_Id.ModifyTime,
+                            },
                         };
             return query;
         }

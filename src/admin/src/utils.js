@@ -63,7 +63,7 @@ export function changeChar(str = '', map = (x) => x, filter = (item, index) => i
  * @param {*} length 
  */
 export function generateArray(length) {
-    Array.from(new Array(length).keys());
+   return [...Array.from(new Array(length).keys())];
 }
 
 /**

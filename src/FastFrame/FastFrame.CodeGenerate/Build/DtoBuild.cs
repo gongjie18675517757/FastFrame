@@ -120,31 +120,7 @@ namespace FastFrame.CodeGenerate.Build
                         Name = item.Name.Replace("_Id", "")
                     };
                 }
-            }
-
-            //if (typeof(IHasManage).IsAssignableFrom(type))
-            //{
-            //    yield return new PropInfo()
-            //    {
-            //        Summary = "管理属性",
-            //        TypeName = "Foreign",
-            //        Name = "Foreign"
-            //    };
-
-            //    yield return new PropInfo()
-            //    {
-            //        Summary = "创建人",
-            //        TypeName = "User",
-            //        Name = "Create_User"
-            //    };
-
-            //    yield return new PropInfo()
-            //    {
-            //        Summary = "修改人",
-            //        TypeName = "User",
-            //        Name = "Modify_User"
-            //    };
-            //}
+            } 
         }
 
         public IEnumerable<AttrInfo> GetAttrInfos(PropertyInfo propertyInfo)

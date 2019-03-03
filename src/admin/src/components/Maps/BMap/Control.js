@@ -20,7 +20,7 @@ export default {
   methods: {
     load() {
       function control() {
-        this.defaultAnchor = BMAP_ANCHOR_TOP_LEFT;
+        this.defaultAnchor = window.BMAP_ANCHOR_TOP_LEFT;
         this.defaultOffset = new window.BMap.Size(0, 0);
       }
       control.prototype = new window.BMap.Control();

@@ -54,13 +54,16 @@ namespace FastFrame.Database
                     if (item.Name.EndsWith("Id"))
                     {
                         prop.HasMaxLength(25);
-                        prop.HasDefaultValue("");
-                    }
+                    } 
 
                     /*非ID字段，且没有指定长度的，默认200*/
                     else if (item.GetCustomAttribute<StringLengthAttribute>() == null && item.Name != "Content")
                     {
                         prop.HasMaxLength(200);
+                    }
+                    else
+                    {
+                        prop.HasDefaultValue("");
                     }
                 }
 

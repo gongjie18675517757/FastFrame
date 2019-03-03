@@ -30,24 +30,9 @@ export default [{
       path: '/tenant/list',
       permission: 'Tenant'
     },
-  ]
-}, {
-  title: '内容管理',
-  items: [{
-      icon: 'list',
-      title: '文章管理',
-      path: '/article/list',
-      permission: 'Article'
-    },
-    {
-      icon: 'merge_type',
-      title: '类别管理',
-      path: '/articlecategory/list',
-      permission: 'ArticleCategory'
-    },
     {
       icon: 'perm_media',
-      title: '媒体库',
+      title: '资源库',
       path: '/meidia/list',
       permission: 'Meidia'
     }

@@ -64,9 +64,7 @@ export default {
     ]
   }),
   methods: {
-    handleClick: e => {
-       
-    }
+    handleClick(){}
   }
 }
 </script>

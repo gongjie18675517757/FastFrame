@@ -1,25 +1,7 @@
 <template>
   <span>
-    <a-btn
-      class="btn-link"
-      v-if="info.IsLink"
-      flat
-      small
-      color="primary"
-      :moduleName="moduleName"
-      name="Get"
-      @click="$emit('toEdit')"
-    >{{value}}</a-btn>
-    <a-btn
-      class="btn-link"
-      v-else-if="Foreignkey"
-      flat
-      small
-      color="primary"
-      :moduleName="moduleName"
-      name="Get"
-      @click="toRelate"
-    >{{value}}</a-btn>
+    <a v-if="info.IsLink" :moduleName="moduleName" name="Get" @click="$emit('toEdit')">{{value}}</a>
+    <a v-else-if="Foreignkey" :moduleName="moduleName" name="Get" @click="toRelate">{{value}}</a>
     <span v-else>{{value}}</span>
   </span>
 </template>
@@ -67,7 +49,6 @@ export default {
       }
     },
     value() {
-      
       let val = this.model[this.info.Name];
       if (this.info.Type == "Boolean") {
         if (val) return "是";

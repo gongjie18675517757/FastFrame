@@ -95,7 +95,7 @@ export default {
   },
   computed: { 
     handIcon(){
-      let iconId=(this.$store.state.currUser || {}).HandIconId;
+      let iconId=(this.$store.state.currUser || {}).HandIcon_Id;
       return iconId?`/api/resource/get/${iconId}`:timg
     },
     notifyCount() {

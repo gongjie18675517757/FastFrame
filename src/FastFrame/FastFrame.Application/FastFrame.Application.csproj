@@ -23,9 +23,13 @@
   
   <ItemGroup>
     <Compile Remove="Controllers\CMS\**" />
+    <Compile Remove="Logs\**" />
     <Content Remove="Controllers\CMS\**" />
+    <Content Remove="Logs\**" />
     <EmbeddedResource Remove="Controllers\CMS\**" />
+    <EmbeddedResource Remove="Logs\**" />
     <None Remove="Controllers\CMS\**" />
+    <None Remove="Logs\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,7 +50,7 @@
     <!--<PackageReference Include="AspectCore.Core" Version="1.0.1" />-->
     <!--<PackageReference Include="EasyCaching.Serialization.Json" Version="0.3.1" />-->
    
-    <PackageReference Include="AspectCore.Extensions.DependencyInjection" Version="1.2.0" />
+    <PackageReference Include="AspectCore.Extensions.DependencyInjection" Version="1.2.0" />   
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <!--<PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />-->
     <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="2.2.10" />

@@ -7,6 +7,7 @@ namespace FastFrame.Service.Services.Chat
 	using FastFrame.Repository; 
 	using FastFrame.Entity.Basis; 
 	using System.Linq; 
+	using Microsoft.EntityFrameworkCore; 
 	/// <summary>
 	///邮件附件 服务类 
 	/// </summary>
@@ -27,11 +28,11 @@ namespace FastFrame.Service.Services.Chat
 		{
 			var emailAnnexQueryable=emailAnnexRepository.Queryable;
 			 var query = from _emailAnnex in emailAnnexQueryable 
-					 select new EmailAnnexDto
-					{
-						Email_Id=_emailAnnex.Email_Id,
-						Resource_Id=_emailAnnex.Resource_Id,
-						Id=_emailAnnex.Id,
+						 select new EmailAnnexDto
+						{
+							Email_Id=_emailAnnex.Email_Id,
+							Resource_Id=_emailAnnex.Resource_Id,
+							Id=_emailAnnex.Id,
 					};
 			return query;
 		}

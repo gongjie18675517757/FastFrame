@@ -63,6 +63,14 @@ namespace FastFrame.Service.Services.Basis
             user.IsAdmin = !user.IsAdmin;
             await userRepository.UpdateAsync(user);
             await userRepository.CommmitAsync();
+
+            var cache =await RedisHelper.GetAsync<CurrUser>(id);
+            if (cache != null)
+            {
+                cache.IsAdmin = user.IsAdmin;
+                await RedisHelper.SetAsync(id, cache, 60 * 60 * 24);
+            }
+
             return await GetAsync(id);
         }
 

@@ -116,8 +116,8 @@ namespace FastFrame.Service.Services.Basis
 
         public async Task<bool> ExistPermission(string moduleName, params string[] methodNames)
         {
-            var userId = currentUserProvider.GetCurrUser().Id;
-            var currUser = await userRepository.GetAsync(userId);
+            var currUser = currentUserProvider.GetCurrUser();
+            //var currUser = await userRepository.GetAsync(userId);
             if (currUser.IsAdmin)
                 return true;
 
@@ -127,7 +127,7 @@ namespace FastFrame.Service.Services.Basis
                 .Select(x => x.b.Id)
                 .FirstOrDefaultAsync();
 
-            var iq = GetPermissions(userId).Where(x => x.Id == permissionId);
+            var iq = GetPermissions(currUser.Id).Where(x => x.Id == permissionId);
             return await iq.AnyAsync();
         }
     }

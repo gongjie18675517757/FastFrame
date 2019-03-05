@@ -4,6 +4,8 @@ using FastFrame.Infrastructure.Interface;
 using FastFrame.Service.Services.Basis;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -66,6 +68,12 @@ namespace FastFrame.Application.Controllers
             if (resource == null)
                 throw new System.Exception("资源不存在");
             var stream = await resourceProvider.GetResource(resource.Path);
+
+            Response.Headers.Add("cache-control", new[] { "public,max-age=31536000" });
+            Response.Headers.Add("Expires", new[] { DateTime.UtcNow.AddYears(1).ToString("R") });
+            Response.Headers.Add("Last-Modified", DateTime.Now.ToString());
+            Response.Headers.Add("ETag", id);
+
             if (resource.ContentType.StartsWith("image"))
             {
                 var buffer = new byte[stream.Length];

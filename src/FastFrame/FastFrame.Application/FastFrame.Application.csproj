@@ -38,6 +38,7 @@
 
   <ItemGroup>
     <Folder Include="Controllers\Templates\" />
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -54,6 +55,9 @@
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <!--<PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />-->
     <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="2.2.10" />
+    <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.0.165" />
+    <PackageReference Include="MiniProfiler.EntityFrameworkCore" Version="4.0.165" />
+    <PackageReference Include="MiniProfiler.Providers.MySql" Version="4.0.165" />
     <!--<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.2" />-->
     <!--<PackageReference Include="Newtonsoft.Json" Version="12.0.1" />-->
     <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" /> 

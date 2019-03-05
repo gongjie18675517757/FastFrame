@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,10 +23,14 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using StackExchange.Profiling;
+using Swashbuckle.AspNetCore.Swagger;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
+
 
 namespace FastFrame.Application
 {
@@ -100,7 +105,14 @@ namespace FastFrame.Application
                 options.IncludeXmlComments(xmlPath);
                 xmlPath = Path.Combine(basePath, "FastFrame.Dto.xml");
                 options.IncludeXmlComments(xmlPath);
+
+                options.DocumentFilter<InjectMiniProfiler>();
             });
+
+            services.AddMiniProfiler(options =>
+            {
+                options.RouteBasePath = "/profiler";
+            }).AddEntityFramework();
 
             services.AddSingleton(x =>
             {
@@ -125,11 +137,17 @@ namespace FastFrame.Application
             {
                 app.UseDeveloperExceptionPage();
             }
+
+
+            app.UseMiniProfiler();
+
             app.UseSignalR(routes =>
             {
                 routes.MapHub<ChatHub>("/hub/chat");
                 routes.MapHub<MessageHub>("/hub/message");
             });
+            app.UseMiddleware<ResourceMiddleware>();
+
             app.Use(async (context, next) =>
             {
                 var stopwatch = new Stopwatch();
@@ -140,25 +158,29 @@ namespace FastFrame.Application
                     context.Response.Headers.Add("ElapsedMilliseconds", stopwatch.ElapsedMilliseconds.ToString());
                     return Task.CompletedTask;
                 });
-                if (context.Request.Path.Value == "/")
+                if (context.Request.Path.HasValue && context.Request.Path.Value == "/")
                     context.Response.Redirect("/index.html");
+
                 await next.Invoke();
             });
+            //app.UseRewriter(new RewriteOptions().AddRewrite())
 
 
             app.UseStaticFiles();
-            //app.UseStaticFiles(new StaticFileOptions
-            //{
-            //    FileProvider = new PhysicalFileProvider(
-            //        app.ApplicationServices.GetRequiredService<IOptions<ResourceOption>>().Value.BasePath),
-            //    RequestPath = "/Resource"
-            //});
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                    app.ApplicationServices.GetRequiredService<IOptions<ResourceOption>>().Value.BasePath),
+                RequestPath = "/resource"
+            });
             app.UseMvc();
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
+                c.InjectJavascript("/swagger/ui/Customization.js");
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "MsSystem API V1");
+                c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
             });
 
             applicationLifetime.ApplicationStarted.Register(() =>
@@ -173,6 +195,22 @@ namespace FastFrame.Application
             {
                 Console.WriteLine("ApplicationStopping");
             });
+        }
+    }
+
+    public class InjectMiniProfiler : IDocumentFilter
+    {
+        private readonly IHttpContextAccessor _httpContext;
+        public InjectMiniProfiler(IHttpContextAccessor httpContext)
+        {
+            _httpContext = httpContext;
+        }
+        public void Apply(SwaggerDocument swaggerDoc, DocumentFilterContext context)
+        {
+            swaggerDoc.Info.Contact = new Contact()
+            {
+                Name = MiniProfiler.Current.RenderIncludes(_httpContext.HttpContext).ToString()
+            };
         }
     }
 }

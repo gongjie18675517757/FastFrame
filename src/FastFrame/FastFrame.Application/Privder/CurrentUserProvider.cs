@@ -18,6 +18,7 @@ namespace FastFrame.Application.Privder
         private string tokenName = "_code";
         private string token;
         private ICurrUser currUser;
+        private ITenant  tenant =null;
 
         public CurrentUserProvider(IHttpContextAccessor httpContextAccessor,
             CSRedisClient cSRedisClient, IDescriptionProvider descriptionProvider, Database.DataBase dataBase)
@@ -43,6 +44,8 @@ namespace FastFrame.Application.Privder
         }
         public ITenant GetCurrOrganizeId()
         {
+            if (tenant!=null)
+                return tenant;
             /*
              * X-ORIGINAL-HOST
              * Origin
@@ -51,10 +54,12 @@ namespace FastFrame.Application.Privder
             var host = getHost();
 
             var tenantId = dataBase.Set<TenantHost>().Where(x => x.Host == host).Select(x=>x.Tenant_Id).FirstOrDefault();
-            return dataBase.Set<Tenant>()
+            tenant= dataBase.Set<Tenant>()
                 .Where(x => x.Id == tenantId || x.Parent_Id == "")
                 .OrderByDescending(x => x.Parent_Id)
                 .FirstOrDefault();
+
+            return tenant;
         }
 
         private string getHost()

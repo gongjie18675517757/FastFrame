@@ -8,6 +8,7 @@ using FastFrame.Repository;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 
 namespace FastFrame.Service
@@ -101,10 +102,10 @@ namespace FastFrame.Service
         /// <summary>
         /// 获取单条数据
         /// </summary> 
-        [AutoCacheInterceptor(AutoCacheOperate.Get)]
+        //[AutoCacheInterceptor(AutoCacheOperate.Get)]
         public virtual async Task<TDto> GetAsync(string id)
         {
-            var entity = await Query().FirstOrDefaultAsync(x => x.Id == id);
+            var entity = (await Query().Where("Id=@0",id).ToListAsync()).FirstOrDefault();
             if (entity == null)
                 throw new Exception("ID不正确");
             await OnGeting(entity);

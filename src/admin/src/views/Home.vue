@@ -50,10 +50,11 @@ export default {
   },
   async created() { 
     try {
-      let request = await this.$http.get("/api/account/GetCurrent");
+      let request = await this.$http.get("/api/account/GetCurrent");       
       this.$store.commit("login", request);
       await init();
       this.$eventBus.$emit("init");
+     
     } catch (error) {
       if (this.$route.fullpath != "/login") {
         this.$router.push({

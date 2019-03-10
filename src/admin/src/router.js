@@ -44,7 +44,8 @@ let childs = loadAreas()
  */
 export function getComponent(name) {
   name = name.toLowerCase()
-  return childs.find(x => x.name == name).component
+  let item = childs.find(x => x.name == name)
+  return item == null ? null : item.component
 }
 
 let routes = [{
@@ -169,7 +170,7 @@ const getSiteName = async () => {
 const existLogin = () => {
   return new Promise((resolve, reject) => {
     if (store.state.currUser.Id)
-      return resolve(); 
+      return resolve();
 
     setTimeout(() => {
       if (!store.state.currUser.Id)
@@ -181,7 +182,7 @@ const existLogin = () => {
 }
 
 router.beforeEach(async (to, from, next) => {
-  let name = await getSiteName()  
+  let name = await getSiteName()
   window.document.title = to.meta.title ? `${to.meta.title}-${name}` : name;
   if (to.meta.allowAnonymous) {
     next();

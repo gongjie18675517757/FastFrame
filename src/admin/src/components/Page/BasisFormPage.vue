@@ -1,100 +1,110 @@
 <template>
   <v-container grid-list-xl fluid app>
-    <v-flex xs12>
-      <v-card v-bind="flex">
-        <v-toolbar flat dense card color="transparent">
-          <v-toolbar-title>{{title}}{{moduleInfo.direction}}</v-toolbar-title>
-          <v-spacer></v-spacer>
-          <a-btn
-            icon
-            v-if="getId() && !changed"
-            :moduleName="moduleInfo.name"
-            name="Update"
-            @click="canEdit=!canEdit"
-            title="修改"
-          >
-            <v-icon>edit</v-icon>
-          </a-btn>
-          <v-btn icon @click="refresh" title="刷新">
-            <v-icon>refresh</v-icon>
-          </v-btn>
-          <v-menu offset-y>
-            <v-btn icon slot="activator" title="设置">
-              <v-icon>more_vert</v-icon>
+    <v-layout align-center justify-center :class="{singleLine:singleLine}">
+      <v-flex v-bind="flex">
+        <v-card>
+          <v-toolbar flat dense card color="transparent">
+            <v-toolbar-title>{{title}}{{moduleInfo.direction}}</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <a-btn
+              icon
+              v-if="getId() && !changed"
+              :moduleName="moduleInfo.name"
+              name="Update"
+              @click="handleEdit"
+              title="修改"
+            >
+              <v-icon>edit</v-icon>
+            </a-btn>
+            <v-btn icon @click="refresh" title="刷新">
+              <v-icon>refresh</v-icon>
             </v-btn>
-            <v-list>
-              <v-list-tile>
-                <v-list-tile-action>
-                  <v-checkbox v-model="singleLine"></v-checkbox>
-                </v-list-tile-action>
-                <v-list-tile-content>
-                  <v-list-tile-title>{{singleLine?'单行':'多行'}}</v-list-tile-title>
-                </v-list-tile-content>
-              </v-list-tile>
-              <v-list-tile>
-                <v-list-tile-action>
-                  <v-checkbox v-model="showMamageField"></v-checkbox>
-                </v-list-tile-action>
-                <v-list-tile-content>
-                  <v-list-tile-title>{{(showMamageField?'显示':'隐藏')+'管理字段'}}</v-list-tile-title>
-                </v-list-tile-content>
-              </v-list-tile>
-            </v-list>
-          </v-menu>
-        </v-toolbar>
-        <v-divider></v-divider>
-        <v-form ref="form">
-          <v-card-text>
-            <vue-perfect-scrollbar class="drawer-menu--scroll--formcontent">
-              <component :is="singleLine?'v-flex':'v-layout'" wrap>
-                <TextInput
-                  v-for="item in options"
-                  :key="item.Name"
-                  :model="form"
-                  v-bind="item"
-                  :rules="getRules(item)"
-                  :canEdit="canEdit"
-                  @change="changed=true"
-                />
-              </component>
-              <component :is="singleLine?'v-flex':'v-layout'" wrap>
-                <TextInput
-                  v-if="showMamageField && form.Id"
-                  v-for="item in manageOptions"
-                  :key="item.Name"
-                  :model="form"
-                  v-bind="item"
-                />
-              </component>
-              <v-divider class="mt-5"></v-divider>
-            </vue-perfect-scrollbar>
-          </v-card-text>
-        </v-form>
-        <v-card-actions>
-          <v-btn flat @click="cancel">取消</v-btn>
-          <v-spacer></v-spacer>
-          <v-btn
-            v-if="canEdit && changed"
-            color="primary"
-            flat
-            @click="submit"
-            :loading="submiting"
-          >保存</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-flex>
+            <v-menu offset-y>
+              <v-btn icon slot="activator" title="设置">
+                <v-icon>more_vert</v-icon>
+              </v-btn>
+              <v-list>
+                <v-list-tile>
+                  <v-list-tile-action>
+                    <v-checkbox v-model="singleLine"></v-checkbox>
+                  </v-list-tile-action>
+                  <v-list-tile-content>
+                    <v-list-tile-title>{{singleLine?'单行':'多行'}}</v-list-tile-title>
+                  </v-list-tile-content>
+                </v-list-tile>
+                <v-list-tile v-if="hasManage &&  form.Id">
+                  <v-list-tile-action>
+                    <v-checkbox v-model="showMamageField"></v-checkbox>
+                  </v-list-tile-action>
+                  <v-list-tile-content>
+                    <v-list-tile-title>{{(showMamageField?'显示':'隐藏')+'管理字段'}}</v-list-tile-title>
+                  </v-list-tile-content>
+                </v-list-tile>
+              </v-list>
+            </v-menu>
+          </v-toolbar>
+          <v-divider></v-divider>
+          <v-form ref="form">
+            <v-card-text>
+              <vue-perfect-scrollbar class="drawer-menu--scroll--formcontent">
+                <component :is="singleLine?'span':'v-layout'" wrap>
+                  <Input
+                    v-for="item in options"
+                    v-bind="item"
+                    :key="item.Name"
+                    :model="form"
+                    :rules="getRules(item)"
+                    :canEdit="canEdit"
+                    :singleLine="singleLine"
+                    :errorMessages="formErrorMessages[item.Name]"
+                    @change="changed=true"
+                    @update_errorMessages="formErrorMessages[item.Name]=$event"
+                    :ref="item.Name"
+                  />
+                </component>
+                <component
+                  :is="singleLine?'span':'v-layout'"
+                  wrap
+                  v-if="hasManage && showMamageField && form.Id"
+                >
+                  <Input
+                    v-for="item in manageOptions"
+                    :key="item.Name"
+                    :model="form"
+                    v-bind="item"
+                    :singleLine="singleLine"
+                  />
+                </component>
+                <v-divider class="mt-5"></v-divider>
+              </vue-perfect-scrollbar>
+            </v-card-text>
+          </v-form>
+          <v-card-actions>
+            <v-btn flat @click="cancel">取消</v-btn>
+            <v-spacer></v-spacer>
+            <v-btn
+              v-if="canEdit && changed"
+              color="primary"
+              flat
+              @click="submit"
+              :loading="submiting"
+            >保存</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-flex>
+    </v-layout>
   </v-container>
 </template>
 
 <script>
 import VuePerfectScrollbar from "vue-perfect-scrollbar";
-import TextInput from "@/components/Inputs/TextInput.vue";
+import Input from "@/components/Inputs";
 // import timg from "@/assets/timg.jpg";
-// import { alert } from "@/utils";
-import { getDefaultModel, getFormItems, getRules } from "@/generate";
+import { alert } from "@/utils";
+import { getDefaultModel, getFormItems, getRules, hasManage } from "@/generate";
 export default {
   components: {
-    TextInput,
+    Input,
     VuePerfectScrollbar
   },
   inject: ["reload"],
@@ -120,6 +130,7 @@ export default {
   data() {
     return {
       form: {},
+      formErrorMessages: {},
       options: [],
       rules: {},
       manageOptions: [
@@ -139,7 +150,8 @@ export default {
       singleLine: false,
       showMamageField: false,
       canEdit: false,
-      changed: false
+      changed: false,
+      hasManage: false
     };
   },
   watch: {
@@ -160,7 +172,11 @@ export default {
         };
       } else {
         return {
-          xs6: ""
+          xs12: 1,
+          sm10: 1,
+          md8: 1,
+          lg6: 1,
+          xl6: 1
         };
       }
     }
@@ -171,6 +187,7 @@ export default {
   },
   async mounted() {
     let moduleName = this.moduleInfo.name;
+    this.hasManage = await hasManage(moduleName);
 
     let rules = await getRules(moduleName);
     if (typeof this.moduleInfo.formatterRules == "function")
@@ -185,8 +202,31 @@ export default {
       options = await this.moduleInfo.formatterOptions(options);
     }
     this.options = options;
+
+    this.$eventBus.$on(`${this.moduleInfo.name}_DataUpdated`, this.DataUpdated);
+    this.$eventBus.$on(`${this.moduleInfo.name}_DataDeleted`, this.DataDeleted);
+  },
+  destroyed() {
+    this.$eventBus.$off(
+      `${this.moduleInfo.name}_DataUpdated`,
+      this.DataUpdated
+    );
+    this.$eventBus.$off(
+      `${this.moduleInfo.name}_DataDeleted`,
+      this.DataDeleted
+    );
   },
   methods: {
+    DataUpdated() {
+      this.load();
+    },
+    async DataDeleted() {
+      await this.$message.alert("提示", "当前内容已被其它人删除!");
+      this.cancel();
+    },
+    handleEdit() {
+      this.canEdit = !this.canEdit;
+    },
     getId() {
       if (this.pageInfo.pars && this.pageInfo.pars.id) {
         return this.pageInfo.pars.id;
@@ -209,15 +249,17 @@ export default {
       }
       if (typeof this.moduleInfo.formatterForm == "function")
         form = await this.moduleInfo.formatterForm(form);
+
+      let formErrs = {};
+      for (const name of Object.keys(form)) {
+        formErrs[name] = [];
+      }
+
+      this.formErrorMessages = formErrs;
       this.form = form;
     },
     getRules(item) {
-      let rule = this.rules[item.Name];
-      if (rule) {
-        return rule.filter(f => f.length == 1);
-      } else {
-        return [];
-      }
+      return this.rules[item.Name];
     },
     goList() {
       this.$router.push(`/${this.moduleInfo.name}/list`);
@@ -225,13 +267,27 @@ export default {
     async submit() {
       this.submiting = true;
       try {
-        if (!this.$refs.form.validate()) {
-          throw new Error("请填写完整信息");
+        let errs = [];
+        let names = Object.keys(this.form);
+        for (const name of names) {
+          if (
+            this.$refs[name] &&
+            this.$refs[name].length > 0 &&
+            typeof this.$refs[name][0].evalRules == "function"
+          ) {
+            let err = await this.$refs[name][0].evalRules();
+            errs.push(...err);
+          }
         }
-        let id = this.getId();
-        let data;
-        let postData = { ...this.form };
-        delete postData.Foreign;
+
+        if (errs.length > 0) {
+          alert.error("表单填写不完整");
+          return;
+        }
+
+        let id = this.getId(),
+          data,
+          postData = { ...this.form };
         delete postData.Create_User;
         delete postData.Modify_User;
         if (!id) {
@@ -252,7 +308,7 @@ export default {
           this.goList();
         }
       } catch (error) {
-        // alert.error(error.message)
+        alert.error(error.message);
       } finally {
         this.submiting = false;
       }
@@ -281,5 +337,13 @@ export default {
 .drawer-menu--scroll--formcontent {
   height: calc(100vh - 225px);
   overflow: auto;
+}
+
+.singleLine .v-card__text {
+  padding: 5px;
+}
+
+.container.grid-list-xl .layout.singleLine .flex {
+  padding: 5px;
 }
 </style>

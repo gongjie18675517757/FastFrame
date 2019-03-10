@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FastFrame.Service.Services.Basis
 {
-    public partial class PermissionService
+    public partial class PermissionService: IEqualityComparer<Permission>
     {
         private readonly IRepository<Role> roleRepository;
         private readonly IRepository<RoleMember> roleMemberRepository;
@@ -87,17 +87,16 @@ namespace FastFrame.Service.Services.Basis
             var currUser = currentUserProvider.GetCurrUser();
 
             var user = await userRepository.GetAsync(currUser.Id);
-            var iq = GetPermissions(user.Id);
 
             if (user.IsAdmin)
-            {
-                iq = permissionRepository.Queryable;
-            }
-            var list = await iq.MapTo<Permission, PermissionDto>().ToListAsync();
-            return list;
+                return await permissionRepository.MapTo<Permission, PermissionDto>().ToListAsync();
+            else
+                return await GetPermissions(user.Id);
+
+
         }
 
-        private IQueryable<Permission> GetPermissions(string userId)
+        private async Task<IEnumerable<PermissionDto>> GetPermissions(string userId)
         {
             var iq = from a in roleMemberRepository.Queryable.Where(x => x.User_Id == userId)
                      join b in rolePermissionRepository.Queryable on a.Role_Id equals b.Role_Id
@@ -105,13 +104,15 @@ namespace FastFrame.Service.Services.Basis
                      where c.Parent_Id != null
                      select c;
 
-            var iq2 = from a in iq.Select(x => x.Parent_Id).Distinct()
-                      join b in permissionRepository.Queryable on a equals b.Id
+
+            var iq2 = from a in iq
+                      join b in permissionRepository on a.Parent_Id equals b.Id
                       select b;
 
-            iq = iq.Concat(iq2).Distinct();
-
-            return iq;
+            return (await iq.ToListAsync())
+                        .Concat(await iq2.ToListAsync())
+                        .Distinct(this)
+                        .Select(r => r.MapTo<Permission, PermissionDto>());
         }
 
         public async Task<bool> ExistPermission(string moduleName, params string[] methodNames)
@@ -120,15 +121,35 @@ namespace FastFrame.Service.Services.Basis
             //var currUser = await userRepository.GetAsync(userId);
             if (currUser.IsAdmin)
                 return true;
-
-            var permissionId = await permissionRepository.Queryable
-                .Join(permissionRepository.Queryable, x => x.Id, x => x.Parent_Id, (a, b) => new { a, b })
-                .Where(x => x.a.EnCode == moduleName && methodNames.Contains(x.b.EnCode))
-                .Select(x => x.b.Id)
+            /*一级权限*/
+            var permissionId = await permissionRepository
+                .Where(r => r.EnCode == moduleName && r.Parent_Id == null)
+                .Select(r => r.Id)
                 .FirstOrDefaultAsync();
 
-            var iq = GetPermissions(currUser.Id).Where(x => x.Id == permissionId);
-            return await iq.AnyAsync();
+            /*二级权限*/
+            var permissionIds = await permissionRepository
+                .Where(r => r.Parent_Id == permissionId && methodNames.Contains(r.EnCode))
+                .Select(r => r.Id)
+                .ToListAsync();
+
+            /*是否在所属角色权限中*/
+            var query = from a in roleMemberRepository
+                        join b in rolePermissionRepository on a.Role_Id equals b.Role_Id
+                        where permissionIds.Contains(b.Permission_Id) && a.User_Id == currUser.Id
+                        select 1;
+
+            return await query.AnyAsync();
+        }
+
+        public bool Equals(Permission x, Permission y)
+        {
+            return x.Id == y.Id;
+        }
+
+        public int GetHashCode(Permission obj)
+        {
+            return obj.GetHashCode();
         }
     }
 }

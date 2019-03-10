@@ -23,6 +23,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using StackExchange.Profiling;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -46,6 +47,7 @@ namespace FastFrame.Application
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+             
             services.Configure<CookiePolicyOptions>(options =>
             {
                 options.CheckConsentNeeded = context => true;
@@ -77,7 +79,9 @@ namespace FastFrame.Application
                 .AddHttpContextAccessor()
                 .AddDbContextPool<Database.DataBase>(o =>
                 {
-                    o.UseMySql(Configuration.GetConnectionString("Local_Mysql"));
+                    o.UseMySql(Configuration.GetConnectionString("Local_Mysql"), mySqlOptions=> {
+                        mySqlOptions.ServerVersion(new Version(5, 6, 40), ServerType.MySql);
+                    });
                     //o.UseInMemoryDatabase("Local_Mysql");
                 })
                 .AddSingleton<ITypeProvider, TypeProvider>()

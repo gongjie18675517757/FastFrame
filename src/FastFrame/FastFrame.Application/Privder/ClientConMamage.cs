@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using FastFrame.Infrastructure.MessageBus;
 
 namespace FastFrame.Application.Privder
-{ 
+{
     /// <summary>
     /// 客户端连接管理
     /// </summary>
@@ -28,19 +28,27 @@ namespace FastFrame.Application.Privder
             this.client = client;
             this.hubContext = hubContext;
         }
-        public async Task SendAsync<T>(Message<T> message) where T : class, new()
+        public async Task SendAsync<T>(Message<T> message)
         {
-            foreach (var toId in message.Target_Ids)
+            if (message.Target_Ids.Length > 0)
             {
-                var clientIds = await client.HGetAsync<List<string>>(CacheUserMapKey, toId);
-                if (clientIds == null)
-                    continue;
-
-                foreach (var clientId in clientIds)
+                foreach (var toId in message.Target_Ids)
                 {
-                    await hubContext.Clients.Client(clientId).SendAsync("receiveMessage", message);
+                    var clientIds = await client.HGetAsync<List<string>>(CacheUserMapKey, toId);
+                    if (clientIds == null)
+                        continue;
+
+                    foreach (var clientId in clientIds)
+                    {
+                        await hubContext.Clients.Client(clientId).SendAsync("receiveMessage", message);
+                    }
                 }
             }
+
+            else
+            {
+                await hubContext.Clients.All.SendAsync("receiveMessage", message.ToJson());
+            }
         }
-    } 
+    }
 }

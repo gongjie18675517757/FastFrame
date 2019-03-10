@@ -1,29 +1,25 @@
 import * as signalR from "@aspnet/signalr";
 import {
-  alert
-} from "@/utils"
-import {
-  sleep
-} from '@/utils.js'
-import {
+  alert,
+  sleep,
   eventBus
-} from '@/utils'
+} from "@/utils"
+
 import store from '@/store'
 
 const connection = new signalR.HubConnectionBuilder()
   .withUrl("/hub/message")
   .build()
 
-// connection.start().catch(function (err) {
-//   return console.error(err.toString());
-// });
+connection.onclose(onError)
 
-// connection.onclose(onError)
 
 /**
  * 连接
  */
 export async function start() {
+  console.log(11);
+
   try {
     connection.stop();
   } catch (err) {
@@ -47,13 +43,15 @@ export async function stop() {
 
 
 const onError = async (err) => {
-  window.console.err(err)
-  await sleep(5000)
-  await start()
+  if (store.state.currUser && store.state.currUser.Id) {
+    window.console.err(err)
+    await sleep(5000)
+    await start()
+  }
 }
 
 async function onConnectioned() {
-  // while (true) {
+  // while (store.state.currUser && store.state.currUser.Id && connection.state == 1) {
   //   await connection.invoke('SendMessage', 'xx', 'xxxxxx')
   //   await sleep(10000)
   // }
@@ -63,7 +61,7 @@ connection.on("FriendMsg", (msg) => {
   eventBus.$emit('FriendMsg', msg)
   store.commit({
     type: 'addFriendMsg',
-    FriendMsg:msg
+    FriendMsg: msg
   })
 })
 
@@ -71,5 +69,25 @@ connection.on("Notify", (msg) => {
   alert.success(msg.content)
 })
 
+ 
 
-eventBus.$on('init', start)
+connection.on('ReceiveMessage', (msg) => {
+  if (typeof msg == 'string')
+    msg = JSON.parse(msg)
+  let {
+    Category,
+    Content,
+    TypeName
+  } = msg;
+
+  if (Category) {
+    eventBus.$emit(`${TypeName}_${Category}`, Content)
+  }
+
+  // eventBus.$emit('data_add', msg)
+})
+
+eventBus.$on('init', () => {
+  start()
+  console.log(111);
+})

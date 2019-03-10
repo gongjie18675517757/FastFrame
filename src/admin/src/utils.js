@@ -185,8 +185,8 @@ export function showDialog(component, pars = {}) {
             hide()
         }
         let close = () => {
-            reject(false)
             hide()
+            reject() 
         }
 
         let render = {

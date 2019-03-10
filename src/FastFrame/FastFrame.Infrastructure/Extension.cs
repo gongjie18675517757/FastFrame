@@ -1,5 +1,6 @@
 ﻿using AspectCore.Extensions.Reflection;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -188,7 +189,14 @@ namespace FastFrame.Infrastructure
         /// </summary>
         /// <param name="in"></param>
         /// <returns></returns>
-        public static string ToJson(this object @in) => @in == null ? "{}" : JsonConvert.SerializeObject(@in);
+        public static string ToJson(this object @in) =>
+            @in == null ? "{}" : JsonConvert.SerializeObject(@in, new JsonSerializerSettings()
+            {
+                DateFormatString = "yyyy-MM-dd HH:mm",
+                Converters = new[] {
+                    new StringEnumConverter()
+                }
+            });
 
         /// <summary>
         /// 反序列化

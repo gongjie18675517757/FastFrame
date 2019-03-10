@@ -61,9 +61,9 @@ namespace FastFrame.Database
                     {
                         prop.HasMaxLength(200);
                     }
-                    else
+                    else if(item.Name != "Content")
                     {
-                        prop.HasDefaultValue("");
+                        //prop.HasDefaultValue("");
                     }
                 }
 

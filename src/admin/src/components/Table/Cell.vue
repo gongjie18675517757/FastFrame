@@ -64,11 +64,11 @@ export default {
   },
   methods: {
     toRelate() {
-      let { ModuleName } = this.info.Relate;
-      if (this.Foreignkey)
-        showDialog(`${ModuleName}_Add`, {
-          id: this.Foreignkey
-        });
+      // let { ModuleName } = this.info.Relate;
+      // if (this.Foreignkey)
+      //   showDialog(`${ModuleName}_Add`, {
+      //     id: this.Foreignkey
+      //   });
     }
   }
 };

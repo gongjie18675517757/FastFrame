@@ -4,7 +4,9 @@ using FastFrame.Entity;
 using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.EventBus;
 using FastFrame.Infrastructure.Interface;
+using FastFrame.Infrastructure.MessageBus;
 using FastFrame.Repository;
+using FastFrame.Service.Events;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
@@ -28,6 +30,9 @@ namespace FastFrame.Service
 
         [FromContainer]
         public IEventBus EventBus { get; set; }
+
+        [FromContainer]
+        public IClientManage ClientManage { get; set; }
 
         public BaseService(IRepository<TEntity> repository, IScopeServiceLoader loader)
         {
@@ -63,6 +68,11 @@ namespace FastFrame.Service
 
             var dto = await GetAsync(entity.Id);
             await EventBus?.TriggerAsync(new Events.DoMainAdded<TDto>(dto));
+
+            await ClientManage.SendAsync(
+                new DoMainMessage<TDto>(typeof(TEntity).Name, MsgType.DataAdded, dto)
+            );
+
             return dto;
         }
 
@@ -91,7 +101,41 @@ namespace FastFrame.Service
             foreach (var id in ids)
             {
                 await EventBus?.TriggerAsync(new Events.DoMainDeleted<TDto>(new TDto() { Id = id }));
+                await ClientManage.SendAsync(
+                    new DoMainMessage<string>(typeof(TEntity).Name, MsgType.DataDeleted, id)
+              );
             }
+        }
+
+        /// <summary>
+        /// 更新前
+        /// </summary> 
+        protected virtual Task OnUpdateing(TDto input, TEntity entity) => Task.CompletedTask;
+
+        /// <summary>
+        /// 更新
+        /// </summary> 
+        [AutoCacheInterceptor(AutoCacheOperate.Update)]
+        public virtual async Task<TDto> UpdateAsync(TDto input)
+        {
+            if (input == null)
+            {
+                throw new ArgumentNullException(nameof(input));
+            }
+            var entity = await repository.GetAsync(input.Id);
+            input.MapSet(entity);
+            await OnUpdateing(input, entity);
+            await EventBus?.TriggerAsync(new Events.DoMainUpdateing<TDto>(input));
+            await repository.UpdateAsync(entity);
+            await repository.CommmitAsync();
+            await RedisHelper.DelAsync(input.Id);
+            var dto = await GetAsync(input.Id);
+            await EventBus?.TriggerAsync(new DoMainUpdated<TDto>(dto));
+
+            await ClientManage.SendAsync(
+                new DoMainMessage<TDto>(typeof(TEntity).Name, MsgType.DataUpdated, dto)
+            );
+            return dto;
         }
 
         /// <summary>
@@ -105,7 +149,7 @@ namespace FastFrame.Service
         //[AutoCacheInterceptor(AutoCacheOperate.Get)]
         public virtual async Task<TDto> GetAsync(string id)
         {
-            var entity = (await Query().Where("Id=@0",id).ToListAsync()).FirstOrDefault();
+            var entity = (await Query().Where("Id=@0", id).ToListAsync()).FirstOrDefault();
             if (entity == null)
                 throw new Exception("ID不正确");
             await OnGeting(entity);
@@ -145,32 +189,7 @@ namespace FastFrame.Service
             return repository.Queryable.MapTo<TEntity, TDto>();
         }
 
-        /// <summary>
-        /// 更新前
-        /// </summary> 
-        protected virtual Task OnUpdateing(TDto input, TEntity entity) => Task.CompletedTask;
 
-        /// <summary>
-        /// 更新
-        /// </summary> 
-        [AutoCacheInterceptor(AutoCacheOperate.Update)]
-        public virtual async Task<TDto> UpdateAsync(TDto input)
-        {
-            if (input == null)
-            {
-                throw new ArgumentNullException(nameof(input));
-            }
-            var entity = await repository.GetAsync(input.Id);
-            input.MapSet(entity);
-            await OnUpdateing(input, entity);
-            await EventBus?.TriggerAsync(new Events.DoMainUpdateing<TDto>(input));
-            await repository.UpdateAsync(entity);
-            await repository.CommmitAsync();
-            await RedisHelper.DelAsync(input.Id);
-            var dto = await GetAsync(input.Id);
-            await EventBus?.TriggerAsync(new Events.DoMainUpdated<TDto>(dto));
-            return dto;
-        }
 
         /// <summary>
         /// 验证属性

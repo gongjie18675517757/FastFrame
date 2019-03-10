@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using FastFrame.Infrastructure.Interface;
 using FastFrame.Entity.Chat;
 using FastFrame.Infrastructure.MessageBus;
+using MsgType = FastFrame.Infrastructure.MessageBus.MsgType;
 
 namespace FastFrame.Service.Services.Chat
 {
@@ -55,10 +56,8 @@ namespace FastFrame.Service.Services.Chat
             outPut.Id = entity.Id;
             outPut.From_User_Id = entity.From_Id;
 
-            await messageBus.PubLishAsync(new Message<RecMsgOutPut>()
+            await messageBus.PubLishAsync(new Message<RecMsgOutPut>(MsgType.FriendMsg, outPut)
             {
-                Category = Infrastructure.MessageBus.MsgType.FriendMsg,
-                Content = outPut,
                 Target_Ids = new string[] { input.Target_User_Id }
             });
 

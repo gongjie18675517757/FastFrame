@@ -19,5 +19,20 @@
         /// 群组消息
         /// </summary>
         GroupMsg,
+
+        /// <summary>
+        /// 数据新增
+        /// </summary>
+        DataAdded,
+
+        /// <summary>
+        /// 数据更新
+        /// </summary>
+        DataUpdated,
+
+        /// <summary>
+        /// 数据删除
+        /// </summary>
+        DataDeleted
     }
 }

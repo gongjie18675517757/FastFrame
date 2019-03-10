@@ -7,6 +7,6 @@ namespace FastFrame.Infrastructure.MessageBus
     /// </summary>
     public interface IClientManage
     {
-        Task SendAsync<T>(Message<T> message) where T : class, new();
+        Task SendAsync<T>(Message<T> message);
     }
 }

@@ -125,3 +125,14 @@ export async function getRules(name = '') {
 
   return obj
 }
+
+/**
+ * 是否包含管理字段
+ * @param {*} name 
+ */
+export async function hasManage(name) {
+  let {
+    HasManage
+  } = await getModuleStrut(name)
+  return HasManage
+}

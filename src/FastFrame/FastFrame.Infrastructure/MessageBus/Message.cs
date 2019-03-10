@@ -3,8 +3,14 @@
     /// <summary>
     /// 消息体
     /// </summary>
-    public class Message<T> where T : class,new()
+    public class Message<T>
     {
+        public Message(MsgType category, T content)
+        {
+            Category = category;
+            Content = content;
+        }
+
         /// <summary>
         /// 类型
         /// </summary>
@@ -13,7 +19,7 @@
         /// <summary>
         /// 目标用户
         /// </summary>
-        public string[] Target_Ids { get; set; }
+        public string[] Target_Ids { get; set; } = new string[0];
 
         /// <summary>
         /// 内容

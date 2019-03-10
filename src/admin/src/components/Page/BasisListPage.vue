@@ -5,38 +5,13 @@
         <v-card>
           <v-toolbar flat dense card color="transparent">
             <v-toolbar-title>{{moduleInfo.direction}}列表</v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-menu offset-y>
-              <v-btn icon slot="activator" title="设置">
-                <v-icon>more_vert</v-icon>
-              </v-btn>
-              <v-list>
-                <v-list-tile v-if="!pageInfo.success">
-                  <v-list-tile-action>
-                    <v-checkbox v-model="dialogMode"></v-checkbox>
-                  </v-list-tile-action>
-                  <v-list-tile-content>
-                    <v-list-tile-title>弹出模式</v-list-tile-title>
-                  </v-list-tile-content>
-                </v-list-tile>
-                <v-list-tile>
-                  <v-list-tile-action>
-                    <v-checkbox v-model="showMamageField"></v-checkbox>
-                  </v-list-tile-action>
-                  <v-list-tile-content>
-                    <v-list-tile-title>显示管理字段</v-list-tile-title>
-                  </v-list-tile-content>
-                </v-list-tile>
-              </v-list>
-            </v-menu>
-          </v-toolbar>
-          <v-divider></v-divider>
-          <v-card-title>
-            <!-- <a-btn to="/user/add">添加</a-btn> -->
             <!-- <v-spacer></v-spacer> -->
             <a-btn @click="toEdit({})" icon title="新增" :moduleName="moduleInfo.name" name="Add">
               <v-icon>add</v-icon>
             </a-btn>
+            <v-btn icon title="搜索" @click="search">
+              <v-icon>search</v-icon>
+            </v-btn>
             <a-btn
               :moduleName="moduleInfo.name"
               name="Update"
@@ -69,19 +44,34 @@
             >
               <v-icon>{{item.icon}}</v-icon>
             </a-btn>
-            <v-btn icon @click="refresh" title="刷新">
+            <v-btn icon @click="loadList" title="刷新">
               <v-icon>refresh</v-icon>
             </v-btn>
             <v-spacer></v-spacer>
-            <v-text-field
-              append-icon="search"
-              label="搜索"
-              single-line
-              hide-details
-              v-model="search"
-              @change="loadList"
-            ></v-text-field>
-          </v-card-title>
+            <v-menu offset-y>
+              <v-btn icon slot="activator" title="设置">
+                <v-icon>more_vert</v-icon>
+              </v-btn>
+              <v-list>
+                <v-list-tile v-if="!pageInfo.success">
+                  <v-list-tile-action>
+                    <v-checkbox v-model="dialogMode"></v-checkbox>
+                  </v-list-tile-action>
+                  <v-list-tile-content>
+                    <v-list-tile-title>弹出模式</v-list-tile-title>
+                  </v-list-tile-content>
+                </v-list-tile>
+                <v-list-tile>
+                  <v-list-tile-action>
+                    <v-checkbox v-model="showMamageField"></v-checkbox>
+                  </v-list-tile-action>
+                  <v-list-tile-content>
+                    <v-list-tile-title>显示管理字段</v-list-tile-title>
+                  </v-list-tile-content>
+                </v-list-tile>
+              </v-list>
+            </v-menu>
+          </v-toolbar>
           <v-divider></v-divider>
           <v-card-text class="pa-0">
             <v-layout row wrap>
@@ -137,7 +127,7 @@
                             v-if="!singleSelection"
                             primary
                             hide-details
-                            v-model="props.selected"
+                            :value="props.selected"
                           ></v-checkbox>
                         </td>
                         <!-- <td>
@@ -203,10 +193,8 @@ export default {
       }
     }
   },
-  inject: ["reload"],
   data() {
     return {
-      search: "",
       selection: [],
       currentRow: null,
       pager: {},
@@ -295,7 +283,37 @@ export default {
       this.tree.items = await this.loadTreeItems({});
     }
   },
+  mounted() {
+    this.$eventBus.$on(`${this.moduleInfo.name}_DataAdded`, this.DataAdded);
+    this.$eventBus.$on(`${this.moduleInfo.name}_DataUpdated`, this.DataUpdated);
+    this.$eventBus.$on(`${this.moduleInfo.name}_DataDeleted`, this.DataDeleted);
+  },
+  destroyed() {
+    this.$eventBus.$off(`${this.moduleInfo.name}_DataAdded`, this.DataAdded);
+    this.$eventBus.$off(
+      `${this.moduleInfo.name}_DataUpdated`,
+      this.DataUpdated
+    );
+    this.$eventBus.$off(
+      `${this.moduleInfo.name}_DataDeleted`,
+      this.DataDeleted
+    );
+  },
   methods: {
+    DataDeleted(id) {
+      this.$nextTick(() => {
+        let index = this.items.findIndex(r => r.Id == id);
+        if (index >= 0) this.items.splice(index, 1);
+      });
+    },
+    DataUpdated(item) {
+      let index = this.items.findIndex(r => r.Id == item.Id);
+      if (index >= 0) this.items.splice(index, 1, item);
+    },
+    DataAdded(item) {
+      this.items.splice(0, 0, item);
+    },
+    search() {},
     evalShow({ show }) {
       let val = true;
       if (typeof show == "function") val = show.call(this, this.context);
@@ -316,9 +334,6 @@ export default {
     evalAction({ action }) {
       if (typeof action == "function") action.call(this, this.context);
     },
-    refresh() {
-      this.reload();
-    },
     handleRowClick(props) {
       if (this.singleSelection) {
         this.currentRow = props.item;
@@ -326,20 +341,20 @@ export default {
         props.selected = !props.selected;
       }
     },
-    async toEdit({ Id = "" } = {}) {
+    toEdit({ Id = "" } = {}) {
       let url = `${this.path.add}?q=${Id}`;
       let { name } = this.moduleInfo;
       if (this.dialogMode) {
         let component = getComponent(`${name}_add`);
-        let data = await showDialog(component, {
+        showDialog(component, {
           id: Id
         });
-        let index = this.items.findIndex(x => x.Id == data.Id);
-        if (index != -1) {
-          this.items.splice(index, 1, data);
-        } else {
-          this.items.splice(0, 0, data);
-        }
+        // let index = this.items.findIndex(x => x.Id == data.Id);
+        // if (index != -1) {
+        //   this.items.splice(index, 1, data);
+        // } else {
+        //   this.items.splice(0, 0, data);
+        // }
       } else {
         this.$router.push(url);
       }
@@ -356,7 +371,7 @@ export default {
         try {
           await this.$http.delete(`/api/${this.moduleInfo.name}/delete/${id}`);
           let index = this.items.findIndex(r => r.Id == id);
-          this.items.splice(index, 1);
+          // this.items.splice(index, 1);
           index = this.selection.findIndex(r => r.Id == id);
           this.selection.splice(index, 1);
           if (this.currentRow && this.currentRow.Id == id)

@@ -9,7 +9,7 @@
       <v-form ref="form">
         <v-card-text>
           <v-layout wrap="">
-            <TextInput
+            <Input
               v-for="item in options"
               :key="item.Name"
               :model="form"
@@ -31,10 +31,10 @@
 </template>
 
 <script>
-import TextInput from '@/components/Inputs/TextInput.vue'
+import Input from '@/components/Inputs'
 export default {
   components: {
-    TextInput
+    Input
   },
   props: {
     options: Array,

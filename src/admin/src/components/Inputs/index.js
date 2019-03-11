@@ -33,6 +33,7 @@ export default {
     canEdit: Boolean,
     IsTextArea: Boolean,
     IsRichText: Boolean,
+    IsRequired: Boolean,
     ModuleName: String,
     Relate: String,
     Type: {
@@ -197,25 +198,33 @@ export default {
           [
             h('v-flex', {
               attrs: {
-                xs3: 1, 
+                xs3: 1,
               },
-              style:{
-                'margin-top': '2px'
+              style: {
+                display: 'table-cell',
+                'vertical-align': 'bottom',
               }
-            }, [h('span', null, this.Description)]),
+            }, [
+              h('span', null, this.Description),
+              h('span', {
+                style: {
+                  color: 'red'
+                }
+              }, this.IsRequired ? '*' : '')
+            ]),
             h('v-flex', {
               attrs: {
                 xs6: 1,
               },
               style: {
-                padding: '2px'
+                padding: '5px'
               }
             }, [component]),
             h('v-flex', {
               style: {
                 display: 'table-cell',
                 'vertical-align': 'bottom',
-                color:'red'
+                color: 'red'
               }
             }, (this.errorMessages || []).join('\r\n'))
           ])

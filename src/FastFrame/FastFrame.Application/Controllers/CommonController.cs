@@ -82,6 +82,9 @@ namespace FastFrame.Application.Controllers
                 /*关联标记*/
                 TryGetAttribute<RelatedToAttribute>(x, out var relatedToAttribute);
 
+                /*必填*/
+                TryGetAttribute<RequiredAttribute>(x, out var requiredAttribute);
+
                 /*实际类型*/
                 var nullableType = T4Help.GetNullableType(x.PropertyType);
 
@@ -114,6 +117,7 @@ namespace FastFrame.Application.Controllers
                     IsTextArea = isTextArea,
                     IsRichText = isRichText,
                     EnumValues = getEnumValues(nullableType),
+                    IsRequired= requiredAttribute!=null
                 });
             }
 
@@ -221,6 +225,7 @@ namespace FastFrame.Application.Controllers
         public bool IsTextArea { get; internal set; }
         public bool IsRichText { get; internal set; }
         public IEnumerable<KeyValuePair<string, string>> EnumValues { get; internal set; }
+        public bool IsRequired { get; internal set; }
     }
 
     public class Rule

@@ -16,7 +16,8 @@ export default {
         description: this.description,
         errorMessages: this.errorMessages,
         'auto-grow': true,
-        'hide-details': true
+        'hide-details': true,
+        title:'只读'
       },
       on: {
         ...this.$listeners,

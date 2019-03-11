@@ -5,7 +5,7 @@
     :search-input.sync="search"
     :filter="()=>true"
     v-model="select"
-    clearable
+    :clearable="!disabled"
     :label="label"
     :readonly="disabled"
     @change="change"
@@ -21,7 +21,7 @@
       </v-list-tile>
     </template>
     <template slot="selection" slot-scope="{ item }">
-      <strong>{{item[fields[0]]}}</strong>
+      <span>{{item[fields[0]]}}</span>
       <span v-for="(f,index) in fields.filter((a,b)=>b>0)" :key="index">[{{item[f]}}]</span>
     </template>
     <template slot="item" slot-scope="{ item }">
@@ -42,7 +42,7 @@
 
 <script>
 import { getModuleStrut } from "@/generate";
-import { showDialog } from "@/utils";
+import { showDialog, getValue, setValue } from "@/utils";
 export default {
   props: {
     model: Object,
@@ -68,7 +68,7 @@ export default {
   computed: {
     relateModel() {
       let name = this.Name.replace("_Id", "");
-      return this.model[name] || {};
+      return getValue(this.model || {}, name);
     }
   },
   async mounted() {
@@ -78,6 +78,8 @@ export default {
       this.items = [this.relateModel];
       this.select = this.relateModel;
     }
+
+    this.querySelections("");
   },
   watch: {
     search(v) {
@@ -85,7 +87,7 @@ export default {
     }
   },
   methods: {
-    async querySelections(v) {
+    async querySelections(v = "") {
       this.loading = true;
       let filter = this.filter || [];
       if (typeof filter == "function")
@@ -101,13 +103,13 @@ export default {
             {
               Name: "Id",
               Compare: "!=",
-              Value: this.relateModel.Id
+              Value: this.value || ""
             },
             ...filter
           ]
         }
       });
-      this.items = Data;
+      this.items = [...(this.select ? [this.select] : []), ...Data];
       this.loading = false;
     },
     change($event = {}) {
@@ -115,6 +117,9 @@ export default {
       this.$emit("input", $event.Id || null);
       if (!$event.Id) {
         this.items = [];
+        let name = this.Name.replace("_Id", "");
+        setValue(this.model, name, null);
+        this.$nextTick(this.querySelections)
       }
     },
     async openDialog() {
@@ -127,7 +132,7 @@ export default {
           {
             Name: "Id",
             Compare: "!=",
-            Value: this.relateModel.Id
+            Value: this.value || ""
           },
           ...filter
         ]

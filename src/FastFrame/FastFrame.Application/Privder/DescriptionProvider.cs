@@ -22,6 +22,11 @@ namespace FastFrame.Application.Privder
             return T4Help.GetClassSummary(type, docPath);
         }
 
+        public string GetEnumSummary(Type enumType, string enumValue)
+        {
+            return DescriptionHelp.GetEnumSummary(enumType, enumValue, docPath);
+        }
+
         public string GetPropertyDescription(PropertyInfo property)
         {
             return T4Help.GetPropertySummary(property, docPath);

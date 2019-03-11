@@ -30,5 +30,13 @@ namespace FastFrame.Infrastructure.Interface
         /// <param name="propName"></param>
         /// <returns></returns>
         string GetPropertyDescription(Type type,string propName);
+
+        /// <summary>
+        /// 获取枚举说明
+        /// </summary>
+        /// <param name="enumType"></param>
+        /// <param name="enumValue"></param>
+        /// <returns></returns>
+        string GetEnumSummary(Type enumType, string enumValue);
     }
 }

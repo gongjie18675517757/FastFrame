@@ -74,84 +74,46 @@
           </v-toolbar>
           <v-divider></v-divider>
           <v-card-text class="pa-0">
-            <v-layout row wrap>
-              <v-flex v-if="TreeKey" :xs3="TreeKey">
-                <vue-perfect-scrollbar :class="[this.pageInfo.success?'dialog-page':'full-page']">
-                  <v-treeview
-                    :active.sync="tree.active"
-                    :items="tree.items"
-                    :load-children="loadTreeItems"
-                    :open.sync="tree.open"
-                    activatable
-                    active-class="primary--text"
-                    class="grey lighten-5"
-                    item-text="Name"
-                    item-key="Id"
-                    transition
-                    @update:active="setCurrentTreeNode"
-                  >
-                    <v-icon
-                      v-if="!item.children.length"
-                      slot="prepend"
-                      slot-scope="{ item, active }"
-                      :color="active ? 'primary' : ''"
-                    >mdi-account</v-icon>
-                  </v-treeview>
-                </vue-perfect-scrollbar>
-              </v-flex>
-              <v-flex :xs9="TreeKey">
-                <vue-perfect-scrollbar :class="[this.pageInfo.success?'dialog-page':'full-page']">
-                  <v-data-table
-                    :headers="headers"
-                    :loading="loading"
-                    :items="items"
-                    :total-items="total"
-                    :pagination.sync="pager"
-                    v-model="selection"
-                    @update:pagination="loadList"
-                    item-key="Id"
-                  >
-                    <template slot="items" slot-scope="props">
-                      <tr
-                        :active="!singleSelection && props.selected"
-                        @click="handleRowClick(props)"
-                      >
-                        <td>
-                          <v-icon
-                            small
-                            size="16"
-                            color="primary"
-                            v-if="singleSelection && currentRow==props.item"
-                          >check</v-icon>
-                          <v-checkbox
-                            v-if="!singleSelection"
-                            primary
-                            hide-details
-                            :value="props.selected"
-                          ></v-checkbox>
-                        </td>
-                        <!-- <td>
-                  <v-avatar size="32">
-                    <img
-                      :src="props.item.HandIconId?'/api/resource/get/'+props.item.HandIconId:timg"
-                    >
-                  </v-avatar>
-                        </td>-->
-                        <td v-for="col in columns" :key="col.Name">
-                          <Cell
-                            :info="col"
-                            :model="props.item"
-                            @toEdit="toEdit(props.item)"
-                            :moduleName="moduleInfo.name"
-                          />
-                        </td>
-                      </tr>
-                    </template>
-                    <template slot="no-data">没有加载数据</template>
-                  </v-data-table>
-                </vue-perfect-scrollbar>
-              </v-flex>
-            </v-layout>
+            <vue-perfect-scrollbar :class="[this.pageInfo.success?'dialog-page':'full-page']">
+              <v-data-table
+                :headers="headers"
+                :loading="loading"
+                :items="items"
+                :total-items="total"
+                :pagination.sync="pager"
+                v-model="selection"
+                @update:pagination="loadList"
+                item-key="Id"
+              >
+                <template slot="items" slot-scope="props">
+                  <tr :active="!singleSelection && props.selected" @click="handleRowClick(props)">
+                    <td>
+                      <v-icon
+                        small
+                        size="16"
+                        color="primary"
+                        v-if="singleSelection && currentRow==props.item"
+                      >check</v-icon>
+                      <v-checkbox
+                        v-if="!singleSelection"
+                        primary
+                        hide-details
+                        :value="props.selected"
+                      ></v-checkbox>
+                    </td>
+                    <td v-for="col in columns" :key="col.Name">
+                      <Cell
+                        :info="col"
+                        :model="props.item"
+                        @toEdit="toEdit(props.item)"
+                        :moduleName="moduleInfo.name"
+                      />
+                    </td>
+                  </tr>
+                </template>
+                <template slot="no-data">没有加载数据</template>
+              </v-data-table>
+            </vue-perfect-scrollbar>
           </v-card-text>
           <v-card-actions v-if="this.pageInfo.success">
             <v-btn flat @click="this.pageInfo.close">取消</v-btn>
@@ -205,13 +167,7 @@ export default {
       cols: [],
       items: [],
 
-      RelateFields: [],
-      TreeKey: null,
-      tree: {
-        active: [],
-        items: [],
-        open: []
-      }
+      RelateFields: []
     };
   },
   computed: {
@@ -273,15 +229,9 @@ export default {
     }
   },
   async created() {
-    let { TreeKey, RelateFields } = await getModuleStrut(this.moduleInfo.name);
-    this.TreeKey = TreeKey;
+    let { RelateFields } = await getModuleStrut(this.moduleInfo.name);
     this.RelateFields = RelateFields;
     this.cols = await getColumns(this.moduleInfo.name);
-
-    if (TreeKey) {
-      // this.tree.items = await this.loadTreeItems({})
-      this.tree.items = await this.loadTreeItems({});
-    }
   },
   mounted() {
     this.$eventBus.$on(`${this.moduleInfo.name}_DataAdded`, this.DataAdded);

@@ -3,11 +3,13 @@ import RichInput from "./RichInput.vue";
 import TextInput from "./TextInput.js";
 import TextArea from './TextArea'
 import Checkbox from './Checkbox'
+import SelectInput from "./SelectInput";
 
 import {
   getValue,
   setValue
 } from "@/utils";
+
 export default {
   props: {
     value: [String, Number, Boolean, Array],
@@ -40,6 +42,7 @@ export default {
     Description: String,
     Name: String,
     Readonly: String,
+    EnumValues: Array,
     filter: [Array, Function],
     singleLine: Boolean
   },
@@ -95,7 +98,7 @@ export default {
     let props = {
       value: this.val,
       disabled: this.evalDisabled,
-      label: this.Description,
+      //label: this.Description,
       description: this.Description,
       errorMessages: this.errorMessages
     }
@@ -157,27 +160,68 @@ export default {
       })
     }
 
+    if (Array.isArray(this.EnumValues) && this.EnumValues.length > 0) {
+      component = h(SelectInput, {
+        props: {
+          ...props,
+          values: this.EnumValues
+        },
+        on
+      })
+    }
+
     if (component) {
       let flex = {
-        xs5: 1,
+        xs12: 1,
+        sm8: 1,
+        md6: 1,
+        lg6: 1,
+        xl4: 1
       }
       if (this.singleLine) {
         flex = {
           xs12: 1,
-          sm10: 1,
-          md8: 1,
-          lg6: 1,
-          xl6: 1
         }
       }
+      // return h('v-flex', {
+      //   attrs: {
+      //     ...flex
+      //   }
+      // }, [component])
+
       return h('v-flex', {
-        attrs: {
-          ...flex
-        }
-      }, [component])
+        attrs: flex,
+        class: ['input-container']
+      }, [
+        h('v-layout', null,
+          [
+            h('v-flex', {
+              attrs: {
+                xs3: 1, 
+              },
+              style:{
+                'margin-top': '2px'
+              }
+            }, [h('span', null, this.Description)]),
+            h('v-flex', {
+              attrs: {
+                xs6: 1,
+              },
+              style: {
+                padding: '2px'
+              }
+            }, [component]),
+            h('v-flex', {
+              style: {
+                display: 'table-cell',
+                'vertical-align': 'bottom',
+                color:'red'
+              }
+            }, this.errorMessages.join('\r\n'))
+          ])
+      ])
     } else if (this.Name && !this.Name.endsWith('Id')) {
       window.console.error(this.$props)
     }
-
   }
 }

@@ -113,7 +113,7 @@ namespace FastFrame.Application.Controllers
                     Relate = relatedToAttribute?.RelatedType.Name,
                     IsTextArea = isTextArea,
                     IsRichText = isRichText,
-
+                    EnumValues = getEnumValues(nullableType),
                 });
             }
 
@@ -134,7 +134,18 @@ namespace FastFrame.Application.Controllers
             };
         }
 
+        private IEnumerable<KeyValuePair<string, string>> getEnumValues(Type type)
+        {
+            if (!type.IsEnum)
+                yield break;
 
+            foreach (var item in Enum.GetNames(type))
+            {
+                yield return new KeyValuePair<string, string>(
+                    item, descriptionProvider.GetEnumSummary(type, item));
+            }
+
+        }
         private IEnumerable<Rule> GetRules(PropertyInfo prop)
         {
             if (TryGetAttribute<RequiredAttribute>(prop, out var requiredAttribute))
@@ -209,6 +220,7 @@ namespace FastFrame.Application.Controllers
         public string Relate { get; internal set; }
         public bool IsTextArea { get; internal set; }
         public bool IsRichText { get; internal set; }
+        public IEnumerable<KeyValuePair<string, string>> EnumValues { get; internal set; }
     }
 
     public class Rule

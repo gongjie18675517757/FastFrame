@@ -7,6 +7,12 @@ export default [{
       permission: 'User'
     },
     {
+      icon: 'person',
+      title: '员工管理',
+      path: '/employee/list',
+      permission: 'Employee'
+    },
+    {
       icon: 'fa fa-male',
       title: '部门管理',
       path: '/dept/list',

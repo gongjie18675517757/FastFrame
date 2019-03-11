@@ -4,10 +4,18 @@ export default {
     disabled: Boolean,
     label: String,
     description: String,
-    errorMessages: Array
+    errorMessages: Array,
+    values: {
+      type: Array,
+      default: function () {
+        return []
+      }
+    },
+    itemText: String,
+    itemValue: String,
   },
   render(h) {
-    return h('v-text-field', {
+    return h('v-select', {
       props: {
         ...this.$attrs,
         value: this.value,
@@ -15,8 +23,9 @@ export default {
         label: this.label,
         description: this.description,
         errorMessages: this.errorMessages,
-        'auto-grow': true,
-        'hide-details': true
+        items: this.values,
+        itemText: this.itemText || 'Value',
+        itemValue: this.itemValue || 'Key'
       },
       on: {
         ...this.$listeners,

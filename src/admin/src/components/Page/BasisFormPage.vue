@@ -28,16 +28,16 @@
                   <v-list-tile-action>
                     <v-checkbox v-model="singleLine"></v-checkbox>
                   </v-list-tile-action>
-                  <v-list-tile-content>
-                    <v-list-tile-title>{{singleLine?'单行':'多行'}}</v-list-tile-title>
+                  <v-list-tile-content @click="singleLine=!singleLine">
+                    <v-list-tile-title>{{'单行布局'}}</v-list-tile-title>
                   </v-list-tile-content>
                 </v-list-tile>
                 <v-list-tile v-if="hasManage &&  form.Id">
                   <v-list-tile-action>
                     <v-checkbox v-model="showMamageField"></v-checkbox>
                   </v-list-tile-action>
-                  <v-list-tile-content>
-                    <v-list-tile-title>{{(showMamageField?'显示':'隐藏')+'管理字段'}}</v-list-tile-title>
+                  <v-list-tile-content @click="showMamageField=!showMamageField">
+                    <v-list-tile-title>{{ '显示管理字段'}}</v-list-tile-title>
                   </v-list-tile-content>
                 </v-list-tile>
               </v-list>
@@ -135,9 +135,9 @@ export default {
       rules: {},
       manageOptions: [
         { Name: "Create_User.Name", Description: "创建人" },
-        { Name: "Foreign.CreateTime", Description: "创建时间" },
+        { Name: "CreateTime", Description: "创建时间" },
         { Name: "Modify_User.Name", Description: "最后修改人" },
-        { Name: "Foreign.ModifyTime", Description: "最后修改时间" }
+        { Name: "ModifyTime", Description: "最后修改时间" }
       ].map(r => {
         return {
           Name: r.Name,

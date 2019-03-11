@@ -217,7 +217,7 @@ export default {
                 'vertical-align': 'bottom',
                 color:'red'
               }
-            }, this.errorMessages.join('\r\n'))
+            }, (this.errorMessages || []).join('\r\n'))
           ])
       ])
     } else if (this.Name && !this.Name.endsWith('Id')) {

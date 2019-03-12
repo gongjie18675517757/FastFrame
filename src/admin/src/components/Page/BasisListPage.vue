@@ -71,6 +71,9 @@
                 </v-list-tile>
               </v-list>
             </v-menu>
+            <v-btn icon @click="cancel" title="关闭" v-if="pageInfo.success">
+              <v-icon>close</v-icon>
+            </v-btn>
           </v-toolbar>
           <v-divider></v-divider>
           <v-card-text class="pa-0">
@@ -115,8 +118,8 @@
               </v-data-table>
             </vue-perfect-scrollbar>
           </v-card-text>
-          <v-card-actions v-if="this.pageInfo.success">
-            <v-btn flat @click="this.pageInfo.close">取消</v-btn>
+          <v-card-actions v-if="pageInfo.success">
+            <v-btn flat @click="pageInfo.close">取消</v-btn>
             <v-spacer></v-spacer>
             <v-btn color="primary" flat @click="success">确认</v-btn>
           </v-card-actions>
@@ -132,6 +135,7 @@ import { showDialog } from "@/utils";
 import { getComponent } from "@/router";
 import Cell from "@/components/Table/Cell.vue";
 import VuePerfectScrollbar from "vue-perfect-scrollbar";
+import SearchDialogVue from "@/components/Dialog/SearchDialog.vue";
 export default {
   components: {
     Cell,
@@ -263,7 +267,28 @@ export default {
     DataAdded(item) {
       this.items.splice(0, 0, item);
     },
-    search() {},
+    search() {
+      this.$message
+        .dialog(SearchDialogVue, {
+          title: "查询",
+          options: [
+            {
+              Name: "Name",
+              Type: "String",
+              Description: "名称",
+              value: ""
+            },
+            ...this.cols.map(r => {
+              return {
+                ...r,
+                ReadOnly: false,
+                value: null
+              };
+            })
+          ]
+        })
+        .then(val => window.console.log(val));
+    },
     evalShow({ show }) {
       let val = true;
       if (typeof show == "function") val = show.call(this, this.context);
@@ -377,30 +402,6 @@ export default {
       } finally {
         this.loading = false;
       }
-    },
-    async loadTreeItems(item) {
-      let { Data } = await this.$http.post(
-        `/api/${this.moduleInfo.name}/List`,
-        {
-          PageIndex: 1,
-          PageSize: 999,
-          Condition: {
-            Filters: [
-              {
-                Name: this.TreeKey,
-                Compare: "==",
-                Value: item.Id ? item.Id : "null"
-              }
-            ]
-          }
-        }
-      );
-      Data.forEach(r => (r.children = []));
-      if (item.children) item.children.push(...Data);
-      return Data;
-    },
-    setCurrentTreeNode() {
-      this.loadList();
     },
     success() {
       let selection = [];

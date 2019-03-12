@@ -13,12 +13,7 @@ import {
 export default {
   props: {
     value: [String, Number, Boolean, Array],
-    model: {
-      type: Object,
-      default: function () {
-        return {};
-      }
-    },
+    model: Object,
     callback: {
       type: Function,
       default: function () {}
@@ -29,7 +24,12 @@ export default {
         return [];
       }
     },
-    errorMessages: Array,
+    errorMessages: {
+      type: Array,
+      default: function () {
+        return [];
+      }
+    },
     canEdit: Boolean,
     IsTextArea: Boolean,
     IsRichText: Boolean,
@@ -63,13 +63,16 @@ export default {
       set(val) {
         if (this.Name && this.model)
           setValue(this.model, this.Name, val)
-        else
-          this.$emit('input', val)
+          console.log(val);
+          
+        this.$emit('input', val)
+
       }
     },
     evalDisabled() {
+      if (typeof this.Readonly == 'function') return this.this.Readonly
       if (this.Readonly == "All") return true;
-      if (this.Readonly == "Edit") return !!this.model.Id;
+      if (this.Readonly == "Edit") return !!(this.model || {}).Id;
       return !this.canEdit;
     },
   },
@@ -78,12 +81,12 @@ export default {
       this.$emit('change', val)
       this.evalRules()
       if (typeof this.callback == 'function')
-        this.callback.call(this.model, val)
+        this.callback.call(this.model || {}, val)
     },
     async evalRules() {
       let errs = []
       for (const rule of this.rules) {
-        let result = await rule.call(this.model, this.val)
+        let result = await rule.call(this.model || {}, this.val)
         if (typeof (result) == 'string') {
           errs.push(result);
           continue
@@ -155,7 +158,7 @@ export default {
           Relate: this.Relate,
           filter: this.filter,
           ModuleName: this.ModuleName,
-          model: this.model
+          model: this.model || {}
         },
         on
       })

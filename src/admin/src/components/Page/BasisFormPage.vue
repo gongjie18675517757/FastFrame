@@ -42,11 +42,14 @@
                 </v-list-tile>
               </v-list>
             </v-menu>
+            <v-btn icon @click="cancel" title="关闭" v-if="pageInfo.success">
+              <v-icon>close</v-icon>
+            </v-btn>
           </v-toolbar>
           <v-divider></v-divider>
           <v-form ref="form">
             <v-card-text>
-              <vue-perfect-scrollbar class="drawer-menu--scroll--formcontent">
+              <vue-perfect-scrollbar :class="[!this.pageInfo.close?'fullPage':'dialogPage']">
                 <component :is="singleLine?'span':'v-layout'" wrap>
                   <Input
                     v-for="item in options"
@@ -75,10 +78,10 @@
                     :singleLine="singleLine"
                   />
                 </component>
-                <v-divider class="mt-5"></v-divider>
               </vue-perfect-scrollbar>
             </v-card-text>
           </v-form>
+
           <v-card-actions>
             <v-btn flat @click="cancel">取消</v-btn>
             <v-spacer></v-spacer>
@@ -334,8 +337,13 @@ export default {
   cursor: pointer;
 }
 
-.drawer-menu--scroll--formcontent {
-  height: calc(100vh - 225px);
+.fullPage {
+  height: calc(100vh - 145px);
+  overflow: auto;
+}
+
+.dialogPage {
+  height: calc(100vh - 245px);
   overflow: auto;
 }
 

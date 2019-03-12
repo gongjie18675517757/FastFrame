@@ -40,6 +40,9 @@ Vue.prototype.$message = {
   },
   prompt() {
     return showDialog(Prompt, ...arguments)
+  },
+  dialog(component, pars) {
+    return showDialog(component, pars)
   }
 }
 Vue.config.productionTip = false

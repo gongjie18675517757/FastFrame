@@ -39,7 +39,8 @@ import {
   VTooltip,
   VItemGroup,
   VWindow,
-  VSelect
+  VSelect,
+  VDatePicker
 } from 'vuetify'
 import 'vuetify/src/stylus/app.styl'
 import zhHans from 'vuetify/es5/locale/zh-Hans'
@@ -85,7 +86,8 @@ Vue.use(Vuetify, {
     VTooltip, 
     VItemGroup,
     VWindow, 
-    VSelect   
+    VSelect   ,
+    VDatePicker
   },
   // theme: {
   //   primary: '#ee44aa',

@@ -130,7 +130,7 @@
 </template>
 
 <script>
-import { getColumns, getModuleStrut } from "@/generate";
+import { getColumns, getModuleStrut, getQueryOptions } from "@/generate";
 import { showDialog } from "@/utils";
 import { getComponent } from "@/router";
 import Cell from "@/components/Table/Cell.vue";
@@ -170,6 +170,7 @@ export default {
       showMamageField: false,
       cols: [],
       items: [],
+      query: [],
 
       RelateFields: []
     };
@@ -267,27 +268,22 @@ export default {
     DataAdded(item) {
       this.items.splice(0, 0, item);
     },
-    search() {
-      this.$message
-        .dialog(SearchDialogVue, {
-          title: "查询",
-          options: [
-            {
-              Name: "Name",
-              Type: "String",
-              Description: "名称",
-              value: ""
-            },
-            ...this.cols.map(r => {
-              return {
-                ...r,
-                ReadOnly: false,
-                value: null
-              };
-            })
-          ]
-        })
-        .then(val => window.console.log(val));
+    async search() {
+      let options = await getQueryOptions(this.moduleInfo.name);
+      for (const item of this.query) {
+        let opt = options.find(
+          r => r.Name == item.Name && r.compare == item.compare
+        );
+        if (opt) {
+          opt.value = item.value;
+        }
+      }
+      let query = await this.$message.dialog(SearchDialogVue, {
+        title: "查询",
+        options
+      });
+      this.query = query;
+      this.loadList();
     },
     evalShow({ show }) {
       let val = true;
@@ -324,12 +320,6 @@ export default {
         showDialog(component, {
           id: Id
         });
-        // let index = this.items.findIndex(x => x.Id == data.Id);
-        // if (index != -1) {
-        //   this.items.splice(index, 1, data);
-        // } else {
-        //   this.items.splice(0, 0, data);
-        // }
       } else {
         this.$router.push(url);
       }
@@ -346,7 +336,7 @@ export default {
         try {
           await this.$http.delete(`/api/${this.moduleInfo.name}/delete/${id}`);
           let index = this.items.findIndex(r => r.Id == id);
-          // this.items.splice(index, 1);
+
           index = this.selection.findIndex(r => r.Id == id);
           this.selection.splice(index, 1);
           if (this.currentRow && this.currentRow.Id == id)
@@ -366,26 +356,12 @@ export default {
         queryFilter = await queryFilter.call(this, this.context);
       }
 
-      /*条件2 */
-      let treeFilter = [];
-      if (this.TreeKey && this.tree.active.length > 0) {
-        let parentId = this.tree.active[this.tree.active.length - 1];
-        if (parentId) {
-          treeFilter = [
-            {
-              Name: this.TreeKey,
-              Compare: "==",
-              Value: parentId
-            }
-          ];
-        }
-      }
       let pageInfo = {
         PageIndex: page,
         PageSize: rowsPerPage,
         Condition: {
           KeyWord: this.search,
-          Filters: [...queryFilter, ...treeFilter]
+          Filters: [...queryFilter, ...this.query]
         },
         SortInfo: {
           Name: sortBy || "Id",

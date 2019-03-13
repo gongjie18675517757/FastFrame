@@ -34,12 +34,11 @@
               <vue-perfect-scrollbar class="dialog-page">
                 <component :is="singleLine?'span':'v-layout'" wrap>
                   <Input
-                    v-for="item in options"
+                    v-for="(item,index) in options"
                     v-bind="item"
-                    :value="item.value"
-                    :key="item.Name"
+                    v-model="form[`${item.Name}_${index}`]"
+                    :key="item.Description"
                     :singleLine="singleLine"
-                    @input="item.value=$event"
                     canEdit
                   />
                 </component>
@@ -70,18 +69,45 @@ export default {
   },
   data() {
     return {
-      singleLine: false
+      singleLine: false,
+      form: null
     };
   },
+  created() {
+    this.load();
+  },
   methods: {
+    load() {
+      let form = {};
+      for (let index = 0; index < this.options.length; index++) {
+        const opt = this.options[index];
+        form[`${opt.Name}_${index}`] = opt.value;
+      }
+      this.form = form;
+    },
     refresh() {
       for (const option of this.options) {
         option.value = null;
       }
+      this.load();
       this.reload();
     },
     query() {
-      this.$emit("success" /*this.form*/);
+      for (let index = 0; index < this.options.length; index++) {
+        const opt = this.options[index];
+        opt.value = this.form[`${opt.Name}_${index}`];
+      }
+
+      let val = this.options
+        .filter(r => r.value)
+        .map(r => {
+          return {
+            Name: r.Name,
+            compare: r.compare,
+            value: r.value
+          };
+        });
+      this.$emit("success", val);
     },
     cancel() {
       this.$emit("close");

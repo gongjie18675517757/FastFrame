@@ -1,5 +1,6 @@
 import {
-  lock
+  lock,
+  mapMany
 } from '@/utils'
 import $http from '@/http'
 import rules from '@/rules'
@@ -135,4 +136,78 @@ export async function hasManage(name) {
     HasManage
   } = await getModuleStrut(name)
   return HasManage
+}
+
+/**
+ * 获取查询字段
+ * @param {*} name 
+ */
+export async function getQueryOptions(name) {
+  let {
+    FieldInfoStruts
+  } = await getModuleStrut(name)
+
+  let arr = []
+  for (const {
+      Type,
+      Name,
+      Description,
+      Relate,
+      EnumValues
+    } of FieldInfoStruts) {
+
+    if (Name.includes("Password") || Relate == "Resource")
+      continue;
+    if (!Name.endsWith('_Id') && Type == 'String') {
+      arr.push({
+        Type,
+        Description,
+        Name,
+        compare: '$'
+      })
+    } else if (Name.endsWith('_Id') && !!Relate) {
+      let temp = Name.replace('_Id', '')
+      let {
+        RelateFields
+      } = await getModuleStrut(Relate)
+      if (RelateFields.length > 0) {
+        arr.push({
+          Type,
+          Description,
+          Name: RelateFields.map(r => `${temp}.${r}`).join(';'),
+          compare: '$'
+        })
+      }
+    } else if (EnumValues.length > 0 || Type == 'Boolean') {
+      arr.push({
+        Description,
+        Name,
+        EnumValues,
+        compare: '==',
+        Type
+      })
+    } else if (['Int32', 'Decimal', 'DateTime'].includes(Type)) {
+      arr.push({
+        Description: `${Description}起`,
+        Name,
+        Type,
+        compare: '>='
+      })
+      arr.push({
+        Description: `${Description}止`,
+        Name,
+        Type,
+        compare: '<='
+      })
+    }
+  }
+
+  arr = arr.map(r => {
+    return {
+      ...r,
+      value: null
+    }
+  });
+
+  return arr;
 }

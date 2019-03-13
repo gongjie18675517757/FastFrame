@@ -4,6 +4,7 @@ import TextInput from "./TextInput.js";
 import TextArea from './TextArea'
 import Checkbox from './Checkbox'
 import SelectInput from "./SelectInput";
+import DateInput from './DateInput.vue'
 
 import {
   getValue,
@@ -63,10 +64,7 @@ export default {
       set(val) {
         if (this.Name && this.model)
           setValue(this.model, this.Name, val)
-          console.log(val);
-          
         this.$emit('input', val)
-
       }
     },
     evalDisabled() {
@@ -145,6 +143,12 @@ export default {
     }
     if (this.Type == 'Boolean') {
       component = h(Checkbox, {
+        props,
+        on
+      })
+    }
+    if (this.Type == 'DateTime') {
+      component = h(DateInput, {
         props,
         on
       })

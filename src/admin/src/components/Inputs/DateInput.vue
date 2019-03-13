@@ -8,16 +8,22 @@
     offset-y
     full-width
     max-width="290px"
-    min-width="290px"     
-    
+    min-width="290px"
+    :disabled="disabled"
   >
     <template v-slot:activator="{ on }">
-      <v-text-field v-model="date" readonly v-on="on"></v-text-field>
+      <v-text-field
+        :value="value"
+        readonly
+        v-on="on"
+        :description="description"
+        :errorMessages="errorMessages"
+      ></v-text-field>
     </template>
     <v-date-picker
-      v-model="date"
+      :value="value"
       no-title
-      @input="menu2 = false" 
+      @input="change"
       :header-date-format="format"
       :month-format="format"
       :weekday-format="weekdayFrm"
@@ -27,13 +33,24 @@
 
 <script>
 export default {
-  data: vm => ({
-    date: null,
-    menu2: false,
-    items: []
-  }),
-
+  props: {
+    value: String,
+    disabled: Boolean,
+    label: String,
+    description: String,
+    errorMessages: Array
+  },
+  data() {
+    return {      
+      menu2: false
+    };
+  },
   methods: {
+    change(val) {
+      this.$emit("input", val);
+      this.$emit("change", val); 
+      this.menu2 = false
+    },
     weekdayFrm(v) {
       v = new Date(v).getDay();
       return {

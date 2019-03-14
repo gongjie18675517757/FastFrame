@@ -10,10 +10,15 @@ namespace FastFrame.Service.Events
     /// 添加前
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class DoMainAdding<T> : BaseEventData<T> where T : IDto
+    public class DoMainAdding<T> : BaseEventData<T>  
     {
-        public DoMainAdding(T data, params object[] args) : base(data, args)
+        public DoMainAdding(T data, params object[] args)
         {
+            Data = data;
+            Args = args;
         }
+
+        public T Data { get; }
+        public object[] Args { get; }
     }
 }

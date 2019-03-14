@@ -268,22 +268,27 @@ export default {
     DataAdded(item) {
       this.items.splice(0, 0, item);
     },
-    async search() {
-      let options = await getQueryOptions(this.moduleInfo.name);
-      for (const item of this.query) {
-        let opt = options.find(
-          r => r.Name == item.Name && r.compare == item.compare
-        );
-        if (opt) {
-          opt.value = item.value;
+    search() {
+      getQueryOptions(this.moduleInfo.name).then(options => {
+        for (const item of this.query) {
+          let opt = options.find(
+            r => r.Name == item.Name && r.compare == item.compare
+          );
+          if (opt) {
+            opt.value = item.value;
+          }
         }
-      }
-      let query = await this.$message.dialog(SearchDialogVue, {
-        title: "查询",
-        options
+
+        this.$message
+          .dialog(SearchDialogVue, {
+            title: `查询${this.moduleInfo.direction}列表`,
+            options
+          })
+          .then(query => {
+            this.query = query;
+            this.loadList();
+          });
       });
-      this.query = query;
-      this.loadList();
     },
     evalShow({ show }) {
       let val = true;

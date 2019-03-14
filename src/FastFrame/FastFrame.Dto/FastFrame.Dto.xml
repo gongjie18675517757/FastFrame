@@ -595,6 +595,226 @@
             密码
             </summary>
         </member>
+        <member name="P:FastFrame.Dto.Module.RuleOutPut.RuleName">
+            <summary>
+            规则名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Module.RuleOutPut.RulePars">
+            <summary>
+            规则参数
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Module.StrucFieldOutput.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Module.StrucFieldOutput.TypeName">
+            <summary>
+            属性名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Module.StrucFieldOutput.Description">
+            <summary>
+            字段名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Module.StrucFieldOutput.Hide">
+            <summary>
+            隐藏属性
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Module.StrucFieldOutput.Readonly">
+            <summary>
+            只读属性
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Module.StrucFieldOutput.DefaultValue">
+            <summary>
+            默认值
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Module.StrucFieldOutput.IsTextArea">
+            <summary>
+            是否长文本
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Module.StrucFieldOutput.IsRichText">
+            <summary>
+            是否富文本
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Module.StrucFieldOutput.IsRequired">
+            <summary>
+            是否需要必填
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Module.StrucFieldOutput.RelateName">
+            <summary>
+            关联自
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Module.StrucFieldOutput.Rules">
+            <summary>
+            验证规则
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Module.StrucFieldOutput.EnumValues">
+            <summary>
+            枚举属性
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Module.StructureOutput.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Module.StructureOutput.Description">
+            <summary>
+            说明
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Module.StructureOutput.HasManage">
+            <summary>
+            拥有管理属性
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Module.StructureOutput.TreeKeyName">
+            <summary>
+            树状键
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Module.StructureOutput.RelateFields">
+            <summary>
+            被关联时显示的字段列表
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Module.StructureOutput.FieldInfoStruts">
+            <summary>
+            字段列表
+            </summary>
+        </member>
+        <member name="T:FastFrame.Dto.Module.EntityKeyValueDto">
+             <summary>
+            键值对 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Module.EntityKeyValueDto.Source_Id">
+             <summary>
+            来源ID 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Module.EntityKeyValueDto.Key">
+             <summary>
+            键 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Module.EntityKeyValueDto.Value">
+             <summary>
+            值 
+             </summary>
+        </member>
+        <member name="T:FastFrame.Dto.Module.StrucFieldDto">
+             <summary>
+            字段 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Module.StrucFieldDto.Name">
+             <summary>
+            名称 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Module.StrucFieldDto.TypeName">
+             <summary>
+            属性名称 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Module.StrucFieldDto.Description">
+             <summary>
+            字段名称 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Module.StrucFieldDto.Hide">
+             <summary>
+            隐藏属性 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Module.StrucFieldDto.Readonly">
+             <summary>
+            只读属性 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Module.StrucFieldDto.DefaultValue">
+             <summary>
+            默认值 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Module.StrucFieldDto.Relate_Id">
+             <summary>
+            关联自 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Module.StrucFieldDto.IsTextArea">
+             <summary>
+            是否长文本 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Module.StrucFieldDto.IsRichText">
+             <summary>
+            是否富文本 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Module.StrucFieldDto.IsRequired">
+             <summary>
+            是否需要必填 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Module.StrucFieldDto.Struct_Id">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:FastFrame.Dto.Module.StrucRuleDto">
+             <summary>
+            规则 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Module.StrucRuleDto.RuleName">
+             <summary>
+            规则名称 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Module.StrucRuleDto.Field_Id">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:FastFrame.Dto.Module.StructureDto">
+             <summary>
+            结构 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Module.StructureDto.Name">
+             <summary>
+            名称 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Module.StructureDto.Description">
+             <summary>
+            说明 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Module.StructureDto.TreeKey_Id">
+             <summary>
+            树状键 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Module.StructureDto.HasManage">
+             <summary>
+            拥有管理属性 
+             </summary>
+        </member>
         <member name="T:FastFrame.Dto.Chat.EmailAnnexDto">
              <summary>
             邮件附件 

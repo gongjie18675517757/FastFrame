@@ -1,19 +1,14 @@
 ﻿namespace FastFrame.Infrastructure.EventBus
 {
+    public interface IEventData
+    {
+
+    }
     /// <summary>
     /// 事件数据
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IEventData<T>
-    {
-        /// <summary>
-        /// 数据
-        /// </summary>
-        T Data { get; }
-
-        /// <summary>
-        /// 其它参数
-        /// </summary>
-        object[] Args { get; }
+    public interface IEventData<T>: IEventData
+    {  
     }
 }

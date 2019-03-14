@@ -642,6 +642,116 @@
             女
             </summary>
         </member>
+        <member name="T:FastFrame.Entity.Module.EntityKeyValue">
+            <summary>
+            键值对
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Module.EntityKeyValue.Source_Id">
+            <summary>
+            来源ID
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Module.EntityKeyValue.Key">
+            <summary>
+            键
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Module.EntityKeyValue.Value">
+            <summary>
+            值
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Module.StrucField">
+            <summary>
+            字段
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Module.StrucField.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Module.StrucField.TypeName">
+            <summary>
+            属性名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Module.StrucField.Description">
+            <summary>
+            字段名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Module.StrucField.Hide">
+            <summary>
+            隐藏属性
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Module.StrucField.Readonly">
+            <summary>
+            只读属性
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Module.StrucField.DefaultValue">
+            <summary>
+            默认值
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Module.StrucField.Relate_Id">
+            <summary>
+            关联自
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Module.StrucField.IsTextArea">
+            <summary>
+            是否长文本
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Module.StrucField.IsRichText">
+            <summary>
+            是否富文本
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Module.StrucField.IsRequired">
+            <summary>
+            是否需要必填
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Module.StrucRule">
+            <summary>
+            规则
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Module.StrucRule.RuleName">
+            <summary>
+            规则名称
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Module.Structure">
+            <summary>
+            结构
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Module.Structure.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Module.Structure.Description">
+            <summary>
+            说明
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Module.Structure.TreeKey_Id">
+            <summary>
+            树状键
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Module.Structure.HasManage">
+            <summary>
+            拥有管理属性
+            </summary>
+        </member>
         <member name="T:FastFrame.Entity.OA.Form">
             <summary>
             表单

@@ -21,11 +21,7 @@ namespace FastFrame.Database
 
             /*指定主键*/
             entity.HasKey(x => x.Id);
-            entity.Property(x => x.Id).ValueGeneratedNever();
-
-            /*索引租户ID*/
-            if (typeof(IHasTenant).IsAssignableFrom(entityType))
-                entity.HasIndex("Tenant_Id").HasName("Index_OrganizeId");
+            entity.Property(x => x.Id).ValueGeneratedNever(); 
 
             /*过滤掉软删除的*/
             if (typeof(IHasSoftDelete).IsAssignableFrom(entityType))
@@ -42,6 +38,10 @@ namespace FastFrame.Database
                 if (item.GetCustomAttribute<NotMappedAttribute>() != null)
                     continue;
 
+                /*索引ID*/
+                if (item.Name.EndsWith("Id") && item.Name != "Id")
+                    entity.HasIndex(item.Name).HasName($"Index_{entityType.Name}_{item.Name}");
+
                 var propType = T4Help.GetNullableType(item.PropertyType);
 
                 var prop = modelBuilder.Entity<T>().Property(item.Name).HasColumnName(item.Name.ToLower());
@@ -54,14 +54,14 @@ namespace FastFrame.Database
                     if (item.Name.EndsWith("Id"))
                     {
                         prop.HasMaxLength(25);
-                    } 
+                    }
 
                     /*非ID字段，且没有指定长度的，默认200*/
                     else if (item.GetCustomAttribute<StringLengthAttribute>() == null && item.Name != "Content")
                     {
                         prop.HasMaxLength(200);
                     }
-                    else if(item.Name != "Content")
+                    else if (item.Name != "Content")
                     {
                         //prop.HasDefaultValue("");
                     }

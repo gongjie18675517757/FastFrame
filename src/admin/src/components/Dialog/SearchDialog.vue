@@ -1,7 +1,7 @@
 <template>
   <v-container grid-list-xl fluid app>
     <v-layout align-center justify-center :class="{singleLine:singleLine}">
-      <v-flex xs12>
+      <v-flex xs12 md8 xl6>
         <v-card>
           <v-toolbar flat dense card color="transparent">
             <v-toolbar-title>{{title}}</v-toolbar-title>

@@ -96,6 +96,9 @@ namespace FastFrame.Service.Services.Basis
 
         }
 
+        /// <summary>
+        /// 获取用户权限
+        /// </summary> 
         private async Task<IEnumerable<PermissionDto>> GetPermissions(string userId)
         {
             var iq = from a in roleMemberRepository.Queryable.Where(x => x.User_Id == userId)
@@ -115,6 +118,9 @@ namespace FastFrame.Service.Services.Basis
                         .Select(r => r.MapTo<Permission, PermissionDto>());
         }
 
+        /// <summary>
+        /// 验证权限
+        /// </summary> 
         public async Task<bool> ExistPermission(string moduleName, params string[] methodNames)
         {
             var currUser = currentUserProvider.GetCurrUser();
@@ -141,6 +147,7 @@ namespace FastFrame.Service.Services.Basis
 
             return await query.AnyAsync();
         }
+
 
         public bool Equals(Permission x, Permission y)
         {

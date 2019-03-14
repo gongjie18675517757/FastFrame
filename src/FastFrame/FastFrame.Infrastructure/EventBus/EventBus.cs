@@ -12,7 +12,7 @@ namespace FastFrame.Infrastructure.EventBus
         {
             this.serviceProvider = serviceProvider;
         }
-        public async Task TriggerAsync<T>(IEventData<T> @event)
+        public async Task TriggerAsync<T>(T @event) where T:IEventData
         {
             var servers = serviceProvider.GetServices<IEventHandle<T>>();
             foreach (var server in servers)

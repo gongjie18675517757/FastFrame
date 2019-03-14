@@ -6,7 +6,7 @@ namespace FastFrame.Infrastructure.EventBus
     /// 事件处理
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IEventHandle<T>
+    public interface IEventHandle<T> where T:IEventData
     {
 
         /// <summary>
@@ -14,6 +14,6 @@ namespace FastFrame.Infrastructure.EventBus
         /// </summary>
         /// <param name="event"></param>
         /// <returns></returns>
-        Task HandleEventAsync(IEventData<T> @event);
+        Task HandleEventAsync(T @event);
     }
 }

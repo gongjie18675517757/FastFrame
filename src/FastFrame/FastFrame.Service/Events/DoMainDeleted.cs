@@ -7,10 +7,13 @@ namespace FastFrame.Service.Events
     /// 删除后
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class DoMainDeleted<T> : BaseEventData<T> where T : IDto
+    public class DoMainDeleted<T> : BaseEventData<T>  
     {
-        public DoMainDeleted(T data, params object[] args) : base(data, args)
+        public DoMainDeleted(string id)
         {
+            Id = id;
         }
+
+        public string Id { get; }
     }
 }

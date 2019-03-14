@@ -92,7 +92,7 @@ namespace FastFrame.Service
             {
                 var entity = await repository.GetAsync(id);
                 await OnDeleteing(entity);
-                await EventBus?.TriggerAsync(new Events.DoMainDeleteing<TDto>(new TDto() { Id = id }));
+                await EventBus?.TriggerAsync(new Events.DoMainDeleteing<TDto>(id));
                 if (entity == null)
                     throw new Exception("ID不正确");
                 await repository.DeleteAsync(entity);
@@ -100,7 +100,7 @@ namespace FastFrame.Service
             await repository.CommmitAsync();
             foreach (var id in ids)
             {
-                await EventBus?.TriggerAsync(new Events.DoMainDeleted<TDto>(new TDto() { Id = id }));
+                await EventBus?.TriggerAsync(new Events.DoMainDeleted<TDto>(id));
                 await ClientManage.SendAsync(
                     new DoMainMessage<string>(typeof(TEntity).Name, MsgType.DataDeleted, id)
               );

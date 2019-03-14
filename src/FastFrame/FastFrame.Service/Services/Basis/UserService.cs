@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace FastFrame.Service.Services.Basis
 {
-    public partial class UserService : IEventHandle<User>
+    public partial class UserService  
     {
         private readonly ICurrentUserProvider currentUserProvider;
         private readonly IRepository<RoleMember> roleMemberRepository;
@@ -128,18 +128,11 @@ namespace FastFrame.Service.Services.Basis
                      where a.User_Id == id
                      select b;
             return await iq.MapTo<Role, RoleDto>().ToListAsync();
-        }
-
-
-        public Task HandleEventAsync(IEventData<User> @event)
-        {
-            Console.WriteLine($"{@event.Data.Account} is adding");
-            return Task.CompletedTask;
-        }
+        } 
 
         protected override Task OnUpdateing(UserDto input, User entity)
         {
             return base.OnUpdateing(input, entity);
-        }
+        } 
     }
 }

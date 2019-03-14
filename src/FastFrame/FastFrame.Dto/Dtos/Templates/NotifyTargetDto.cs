@@ -15,6 +15,7 @@ namespace FastFrame.Dto.Basis
 		/// <summary>
 		///通知ID 
 		/// </summary>
+		[Required()]
 		public string Notify_Id {get;set;}
 		
 		/// <summary>

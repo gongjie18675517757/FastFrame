@@ -53,7 +53,6 @@ namespace FastFrame.Application.Controllers
             return await service.VerifyUnique(uniqueInput);
         }
 
-
         /// <summary>
         /// 生成模块结构
         /// </summary>
@@ -111,7 +110,7 @@ namespace FastFrame.Application.Controllers
                     Description = descriptionProvider.GetPropertyDescription(x),
                     Hide = hideAttribute?.HideMark,
                     Readonly = readOnlyAttribute?.ReadOnlyMark,
-                    DefaultValue = instance.GetValue(x.Name),
+                    DefaultValue = instance.GetValue(x.Name)?.ToString(),
                     Rules = GetRules(x),
                     Relate = relatedToAttribute?.RelatedType.Name,
                     IsTextArea = isTextArea,
@@ -184,11 +183,13 @@ namespace FastFrame.Application.Controllers
         /// <summary>
         /// 名称
         /// </summary>
+        [StringLength(150)]
         public string Name { get; set; }
 
         /// <summary>
         /// 说明
         /// </summary>
+        [StringLength(150)]
         public string Description { get; set; }
 
         /// <summary>
@@ -219,7 +220,7 @@ namespace FastFrame.Application.Controllers
         public string Description { get; set; }
         public HideMark? Hide { get; internal set; }
         public ReadOnlyMark? Readonly { get; internal set; }
-        public object DefaultValue { get; internal set; }
+        public string DefaultValue { get; internal set; }
         public IEnumerable<Rule> Rules { get; internal set; }
         public string Relate { get; internal set; }
         public bool IsTextArea { get; internal set; }

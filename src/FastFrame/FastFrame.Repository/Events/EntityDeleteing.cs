@@ -9,8 +9,13 @@ namespace FastFrame.Repository.Events
     /// <typeparam name="T"></typeparam>
     public class EntityDeleteing<T> : BaseEventData<T> where T : IEntity
     {
-        public EntityDeleteing(T data, params object[] args) : base(data, args)
+        public EntityDeleteing(T data, params object[] args) 
         {
+            Data = data;
+            Args = args;
         }
+
+        public T Data { get; }
+        public object[] Args { get; }
     }
 }

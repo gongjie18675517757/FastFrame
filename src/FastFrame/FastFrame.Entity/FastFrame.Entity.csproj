@@ -19,8 +19,11 @@
 
   <ItemGroup>
     <Compile Remove="CMS\**" />
+    <Compile Remove="Module\**" />
     <EmbeddedResource Remove="CMS\**" />
+    <EmbeddedResource Remove="Module\**" />
     <None Remove="CMS\**" />
+    <None Remove="Module\**" />
   </ItemGroup>
 
   <ItemGroup>

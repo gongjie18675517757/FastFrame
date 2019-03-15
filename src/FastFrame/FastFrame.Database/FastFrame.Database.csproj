@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <Compile Remove="Mapping\ForeignMapping.cs" />
+    <Compile Remove="Mapping\StructureMapping.cs" />
     <Compile Remove="Mapping\Templates\ForeignMapping.cs" />
     <Compile Remove="Migrations\20190306141601_190306.1.cs" />
   </ItemGroup>

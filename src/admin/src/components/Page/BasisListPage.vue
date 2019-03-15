@@ -233,10 +233,14 @@ export default {
       }
     }
   },
-  async created() {
-    let { RelateFields } = await getModuleStrut(this.moduleInfo.name);
-    this.RelateFields = RelateFields;
-    this.cols = await getColumns(this.moduleInfo.name);
+  created() {
+    getModuleStrut(this.moduleInfo.name).then(RelateFields => {
+      this.RelateFields = RelateFields;
+    });
+
+    getColumns(this.moduleInfo.name).then(cols => {
+      this.cols = cols;
+    });
   },
   mounted() {
     this.$eventBus.$on(`${this.moduleInfo.name}_DataAdded`, this.DataAdded);
@@ -329,27 +333,25 @@ export default {
         this.$router.push(url);
       }
     },
-    async remove() {
-      await this.$message.confirm("提示", "确认要删除吗?");
-      let ids = [];
-      if (this.singleSelection) {
-        ids = [this.currentRow.Id];
-      } else {
-        ids = this.selection.map(r => r.Id);
-      }
-      for (const id of ids) {
-        try {
-          await this.$http.delete(`/api/${this.moduleInfo.name}/delete/${id}`);
-          let index = this.items.findIndex(r => r.Id == id);
-
-          index = this.selection.findIndex(r => r.Id == id);
-          this.selection.splice(index, 1);
-          if (this.currentRow && this.currentRow.Id == id)
-            this.currentRow = null;
-        } catch (err) {
-          window.console.error(err);
+    remove() {
+      this.$message.confirm("提示", "确认要删除吗?").then(() => {
+        let ids = [];
+        if (this.singleSelection) {
+          ids = [this.currentRow.Id];
+        } else {
+          ids = this.selection.map(r => r.Id);
         }
-      }
+        for (const id of ids) {
+          let index = this.selection.findIndex(r => r.Id == id);
+          this.$http
+            .delete(`/api/${this.moduleInfo.name}/delete/${id}`)
+            .then(() => {
+              this.selection.splice(index, 1);
+              if (this.currentRow && this.currentRow.Id == id)
+                this.currentRow = null;
+            });
+        }
+      });
     },
     async loadList() {
       this.loading = true;

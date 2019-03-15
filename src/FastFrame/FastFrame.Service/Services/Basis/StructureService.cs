@@ -112,7 +112,12 @@ namespace FastFrame.Service.Services.Module
 
             foreach (var item in structs)
             {
-
+                var entity = await structures.AddAsync(new Structure {
+                    Description=item.Description,
+                    HasManage=item.HasManage,
+                    IsDeleted=false,
+                    Name=item.Name, 
+                });
             }
         }
 

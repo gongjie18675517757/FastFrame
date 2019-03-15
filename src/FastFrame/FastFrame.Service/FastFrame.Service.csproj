@@ -11,6 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Services\Basis\StructureService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\FastFrame.Dto\FastFrame.Dto.csproj" />
     <ProjectReference Include="..\FastFrame.Entity\FastFrame.Entity.csproj" />
     <ProjectReference Include="..\FastFrame.Infrastructure\FastFrame.Infrastructure.csproj" />

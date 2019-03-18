@@ -104,6 +104,11 @@ export default {
       description: this.Description,
       errorMessages: this.errorMessages
     }
+
+    if (this.$vuetify.breakpoint.smAndDown) {
+      props.label = this.Description
+    }
+
     let on = {
       ...this.$listeners,
       input: (val) => {
@@ -179,6 +184,13 @@ export default {
     }
 
     if (component) {
+      if (this.$vuetify.breakpoint.smAndDown) {
+        return h('v-flex', {
+          attrs: {
+            xs12: true
+          }
+        }, [component]);
+      }
       let flex = {
         xs12: 1,
         sm8: 1,

@@ -140,8 +140,7 @@ namespace FastFrame.Application
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-            }
-
+            } 
 
             app.UseMiniProfiler();
 

@@ -15,7 +15,9 @@
         <div class="layout row">
           <div class="flex">{{item.Name}}</div>
           <v-spacer></v-spacer>
-          <div>{{item.Foreign.CreateTime}}</div>
+          <div>{{item.Create_User.Name}}</div>
+          <v-spacer></v-spacer>
+          <div>{{item.CreateTime}}</div>
         </div>
       </div>
     </v-list-tile-content>
@@ -23,9 +25,9 @@
 </template>
 
 <script>
-import GridItem from './GridItem.vue'
+import GridItem from "./GridItem.vue";
 export default {
   extends: GridItem
-}
+};
 </script>
  

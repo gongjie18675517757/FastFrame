@@ -1,24 +1,12 @@
 <template>
-  <v-flex lg2 sm3 xs4 class="pa-2" :class="{selected:selected}">
-    <v-card flat tile class="grid-item">
-      <v-responsive class="link" @click="$emit('click')" @dblclick="handleDbClick">
+  <v-flex xs12 sm3 md3 lg2 xl1 :class="{selected:selected}">
+    <v-card height="200" @click="$emit('click')">
+      <v-card-text>
         <v-icon size="135" class="mx-auto" color="indigo" v-if="item.IsFolder">folder</v-icon>
-        <v-img
-          :lazy-src="imgSrc"
-          :src="imgSrc"
-          alt
-          v-else-if="isImage"
-          aspect-ratio="1"
-          class="grey lighten-2"
-        >
-          <v-layout slot="placeholder" fill-height align-center justify-center ma-0>
-            <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-          </v-layout>
-        </v-img>
-        <v-icon class="mx-auto" size="135" v-else>insert_drive_file</v-icon>
-      </v-responsive>
+        <img :src="imgSrc" v-else-if="isImage" style="max-height:130px;">
+      </v-card-text>
       <v-divider></v-divider>
-      <v-card-title class="grid-item" @dblclick="reName">{{item.Name}}</v-card-title>
+      <v-card-actions class="grid-item" @dblclick="reName">{{item.Name}}</v-card-actions>
     </v-card>
   </v-flex>
 </template>
@@ -51,7 +39,7 @@ export default {
   },
   methods: {
     async reName() {
-      let { name } = await showDialog(Prompt, {
+      let dialog = showDialog(Prompt, {
         title: "名称",
         maxWidth: "500px",
         model: {
@@ -66,21 +54,25 @@ export default {
           }
         ]
       });
-      if (name == this.item.Name) return;
-      let beforeName = this.item.Name;
-      this.item.Name = name;
+      dialog.then(({ name }) => {
+        if (name == this.item.Name) return;
+        let beforeName = this.item.Name;
+        this.item.Name = name;
 
-      let postData = { ...this.item };
-      delete postData.Foreign;
-      delete postData.Create_User;
-      delete postData.Modify_User;
+        let postData = { ...this.item };
+        delete postData.Foreign;
+        delete postData.Create_User;
+        delete postData.Modify_User;
 
-      try {
-        await this.$http.put("/api/Meidia/put", postData);
-        alert.success("更新成功!");
-      } catch (error) {
-        this.item.Name = beforeName;
-      }
+        this.$http
+          .put("/api/Meidia/put", postData)
+          .then(() => {
+            alert.success("更新成功!");
+          })
+          .catch(() => {
+            this.item.Name = beforeName;
+          });
+      });
     },
     handleDbClick() {
       this.$emit("dblclick");

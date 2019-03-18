@@ -5,73 +5,70 @@
         <v-card>
           <v-toolbar flat dense card color="transparent">
             <v-toolbar-title>{{moduleInfo.direction}}列表</v-toolbar-title>
-            <!-- <v-spacer></v-spacer> -->
-            <a-btn @click="toEdit({})" icon title="新增" :moduleName="moduleInfo.name" name="Add">
-              <v-icon>add</v-icon>
-            </a-btn>
-            <v-btn icon title="搜索" @click="search">
-              <v-icon>search</v-icon>
-            </v-btn>
-            <a-btn
-              :moduleName="moduleInfo.name"
-              name="Update"
-              icon
-              title="修改"
-              :disabled="selection.length!=1 && !currentRow"
-              @click="toEdit(currentRow || selection[0])"
-            >
-              <v-icon>edit</v-icon>
-            </a-btn>
-            <a-btn
-              @click="remove()"
-              :disabled="!havSelection"
-              icon
-              title="删除"
-              :moduleName="moduleInfo.name"
-              name="Delete"
-            >
-              <v-icon>delete</v-icon>
-            </a-btn>
-            <a-btn
-              v-for="item in toolitems.filter(r=>evalShow(r))"
-              :key="item.name"
-              icon
-              :title="item.title"
-              :moduleName="moduleInfo.name"
-              :name="item.name"
-              :disabled="evalDisabled(item)"
-              @click="evalAction(item)"
-            >
-              <v-icon>{{item.icon}}</v-icon>
-            </a-btn>
-            <v-btn icon @click="loadList" title="刷新">
-              <v-icon>refresh</v-icon>
-            </v-btn>
             <v-spacer></v-spacer>
-            <v-menu offset-y>
-              <v-btn icon slot="activator" title="设置">
+            <span class="hidden-sm-and-down">
+              <a-btn
+                v-for="btn in basisBtns"
+                :key="`${btn.title}_${btn.name}`"
+                :title="btn.title"
+                :color="btn.color"
+                :moduleName="moduleInfo.name"
+                :disabled="evalDisabled(btn)"
+                @click="evalAction(btn)"
+                small
+              >
+                <v-icon>{{btn.icon}}</v-icon>
+                <span>{{btn.title}}</span>
+              </a-btn>
+            </span>
+            <!-- <span> -->
+            <v-menu offset-y :close-on-content-click="false">
+              <v-btn
+                slot="activator"
+                title="设置"
+                small
+                :color="$vuetify.breakpoint.smAndDown?'':'success'"
+                :icon="$vuetify.breakpoint.smAndDown"
+              >
                 <v-icon>more_vert</v-icon>
+                <span v-if="!$vuetify.breakpoint.smAndDown">更多</span>
               </v-btn>
-              <v-list>
-                <v-list-tile v-if="!pageInfo.success">
+              <v-list two-line dense expand>
+                <v-list-tile
+                  v-for="item in [...($vuetify.breakpoint.smAndDown?basisBtns:[]),...toolitems].filter(r=>evalShow(r))"
+                  :key="`${item.title}_${item.name}`"
+                  :title="item.title"
+                  :moduleName="moduleInfo.name"
+                  :name="item.name"
+                  :disabled="evalDisabled(item)"
+                  @click="evalAction(item)"
+                >
                   <v-list-tile-action>
-                    <v-checkbox v-model="dialogMode"></v-checkbox>
+                    <v-icon>{{item.icon}}</v-icon>
+                  </v-list-tile-action>
+                  <v-list-tile-content>{{item.title}}</v-list-tile-content>
+                </v-list-tile>
+                <v-list-tile v-if="!pageInfo.success" @click="dialogMode=!dialogMode">
+                  <v-list-tile-action>
+                    <v-checkbox :value="dialogMode"></v-checkbox>
                   </v-list-tile-action>
                   <v-list-tile-content>
                     <v-list-tile-title>弹出模式</v-list-tile-title>
+                    <v-list-tile-sub-title>是否使用表单窗口</v-list-tile-sub-title>
                   </v-list-tile-content>
                 </v-list-tile>
-                <v-list-tile>
+                <v-list-tile @click="showMamageField=!showMamageField">
                   <v-list-tile-action>
-                    <v-checkbox v-model="showMamageField"></v-checkbox>
+                    <v-checkbox :value="showMamageField"></v-checkbox>
                   </v-list-tile-action>
                   <v-list-tile-content>
                     <v-list-tile-title>显示管理字段</v-list-tile-title>
+                    <v-list-tile-sub-title>录入人,修改人,录入时间,修改时间</v-list-tile-sub-title>
                   </v-list-tile-content>
                 </v-list-tile>
               </v-list>
             </v-menu>
-            <v-btn icon @click="cancel" title="关闭" v-if="pageInfo.success">
+            <v-btn icon @click="pageInfo.close" title="关闭" v-if="pageInfo.success">
               <v-icon>close</v-icon>
             </v-btn>
           </v-toolbar>
@@ -87,6 +84,8 @@
                 v-model="selection"
                 @update:pagination="loadList"
                 item-key="Id"
+                class="elevation-1 fixed-header v-table__overflow"
+                style="max-height: calc(100vh - 150px);backface-visibility: hidden;"
               >
                 <template slot="items" slot-scope="props">
                   <tr :active="!singleSelection && props.selected" @click="handleRowClick(props)">
@@ -172,7 +171,60 @@ export default {
       items: [],
       query: [],
 
-      RelateFields: []
+      RelateFields: [],
+      basisBtns: [
+        {
+          title: "新增",
+          color: "success",
+          name: "Add",
+          icon: "add",
+          action() {
+            this.toEdit({});
+          }
+        },
+        {
+          title: "搜索",
+          color: "info",
+          name: "List",
+          icon: "search",
+          action() {
+            this.search();
+          }
+        },
+        {
+          title: "修改",
+          color: "warning",
+          name: "Update",
+          icon: "search",
+          action({ selection }) {
+            this.toEdit(selection[0]);
+          },
+          disabled({ selection }) {
+            return selection.length != 1;
+          }
+        },
+        {
+          title: "删除",
+          color: "warning",
+          name: "Delete",
+          icon: "delete",
+          action({ selection }) {
+            this.remove(selection);
+          },
+          disabled({ selection }) {
+            return selection.length == 0;
+          }
+        },
+        {
+          title: "刷新",
+          color: "success",
+          name: "List",
+          icon: "refresh",
+          action({ selection }) {
+            this.loadList();
+          }
+        }
+      ]
     };
   },
   computed: {
@@ -412,12 +464,20 @@ export default {
 }
 
 .full-page {
-  height: calc(100vh - 205px);
+  height: calc(100vh - 150px);
   overflow: auto;
 }
 
 .dialog-page {
   height: calc(100vh - 265px);
   overflow: auto;
+}
+
+.theme--dark.v-table thead th {
+  background-color: #424242;
+}
+
+.theme--light.v-table thead th {
+  background-color: #ffffff;
 }
 </style>

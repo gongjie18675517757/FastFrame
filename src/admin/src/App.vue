@@ -41,8 +41,71 @@ export default {
   }
 };
 </script>
+<style lang="stylus">
+/* Theme */
+.fixed-header {
+  & {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
 
-<style>
+  table {
+    table-layout: fixed;
+  }
+
+  th {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+
+    &:after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+    }
+  }
+
+  tr.v-datatable__progress {
+    th {
+      // top: 56px
+      height: 1px;
+    }
+  }
+
+  .v-table__overflow {
+    flex-grow: 1;
+    flex-shrink: 1;
+    overflow-x: auto;
+    overflow-y: auto;
+    // overflow: auto
+    // height: 100%
+  }
+
+  .v-datatable.v-table {
+    width: auto;
+    min-width: 100%;
+    flex-grow: 0;
+    flex-shrink: 1;
+
+    .v-datatable__actions {
+      flex-wrap: nowrap;
+
+      .v-datatable__actions__pagination {
+        white-space: nowrap;
+      }
+    }
+  }
+}
+</style>
+
+<style >
+.v-dialog {
+  box-shadow: none;
+  -webkit-box-shadow: none;
+}
 .form {
   padding: 5px;
 }
@@ -61,9 +124,9 @@ export default {
 .v-input {
   font-size: 14px;
 }
-.v-text-field__details {
+/* .v-text-field__details {
   display: none;
-}
+} */
 .v-input__control {
   height: 30px;
 }

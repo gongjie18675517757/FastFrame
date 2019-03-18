@@ -36,6 +36,8 @@ export async function getDefaultModel(name = '') {
   } = await getModuleStrut(name)
   let model = {}
   for (const field of FieldInfoStruts) {
+    if (field.DefaultValue == "False") field.DefaultValue = false;
+    if (field.DefaultValue == "True") field.DefaultValue = true;
     model[field.Name] = field.DefaultValue
   }
   return model

@@ -58,20 +58,30 @@ namespace FastFrame.Infrastructure
             foreach (var item in condition.Filters)
             {
                 var conds = item.Name.Split(";".ToArray(), StringSplitOptions.RemoveEmptyEntries);
-                var values = item.Value.Split("".ToArray(), StringSplitOptions.RemoveEmptyEntries);
-                if (!conds.Any() && !values.Any())
+
+                if (!conds.Any())
                     continue;
 
                 if (item.Compare.ToLower() == "$")
                 {
-                    var queryStr = string.Join(" or ", conds.SelectMany((r, i) => $"{r}.Contains(@{i})"));
-                    query = query.Where(queryStr, values);
+                    var values = item.Value.Split("".ToArray(), StringSplitOptions.RemoveEmptyEntries);
+                    if (values.Any())
+                    {
+                        var queryStr = string.Join(" or ", conds.SelectMany((r) => values.Select((x, i) => $"{r}.Contains(@{i})")));
+                        query = query.Where(queryStr, values);
+                    }
+                    else
+                    {
+                        var queryStr = string.Join(" or ", conds.Select((r) => $"{r}.Contains(@0)"));
+                        query = query.Where(queryStr, item.Value);
+                    }
                 }
                 else
                 {
-                    var queryStr = string.Join(" or ", conds.SelectMany((r, i) => $"{r} {item.Compare} @{i}"));
-                    query = query.Where($"{item.Name} {item.Compare} @0", item.Value);
+                    var queryStr = string.Join(" or ", conds.Select((r) => $"{r} {item.Compare} @0"));
+                    query = query.Where(queryStr, item.Value);
                 }
+
             }
 
             return query;

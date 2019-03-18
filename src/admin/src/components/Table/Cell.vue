@@ -1,6 +1,7 @@
 <template>
   <span>
     <a v-if="info.IsLink" :moduleName="moduleName" name="Get" @click="$emit('toEdit')">{{value}}</a>
+    <a v-else-if="isFile" @click="toRelate">下载</a>
     <a v-else-if="Foreignkey" :moduleName="moduleName" name="Get" @click="toRelate">{{value}}</a>
     <span v-else>{{value}}</span>
   </span>
@@ -40,6 +41,9 @@ export default {
     isRelate() {
       return !!this.info.Relate;
     },
+    isFile() {
+      return this.isRelate && this.info.Relate.ModuleName == "Resource";
+    },
     val() {
       return getValue(this.model, this.info.Name);
     },
@@ -64,11 +68,16 @@ export default {
   },
   methods: {
     toRelate() {
-      // let { ModuleName } = this.info.Relate;
-      // if (this.Foreignkey)
-      //   showDialog(`${ModuleName}_Add`, {
-      //     id: this.Foreignkey
-      //   });
+      if (this.isFile) {
+        let url = `/api/resource/get/${this.val}`;
+        window.open(url);
+        return;
+      }
+      let { ModuleName } = this.info.Relate;
+      if (this.Foreignkey)
+        showDialog(`${ModuleName}_Add`, {
+          id: this.Foreignkey
+        });
     }
   }
 };

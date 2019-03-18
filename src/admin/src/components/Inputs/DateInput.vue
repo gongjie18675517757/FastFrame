@@ -16,7 +16,7 @@
         :value="value"
         readonly
         v-on="on"
-        :description="description"
+        :label="label"
         :errorMessages="errorMessages"
       ></v-text-field>
     </template>

@@ -338,7 +338,7 @@ export default {
 }
 
 .fullPage {
-  height: calc(100vh - 145px);
+  height: calc(100vh - 225px);
   overflow: auto;
 }
 

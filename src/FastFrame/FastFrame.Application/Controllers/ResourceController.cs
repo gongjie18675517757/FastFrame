@@ -31,7 +31,7 @@ namespace FastFrame.Application.Controllers
         /// <returns></returns>
         [HttpPost]
         public async Task<IEnumerable<ResourceDto>> Post()
-        {
+        { 
             if (Request.Form.Files.Count == 0)
                 throw new System.Exception("无有效文件!");
             var result = new List<ResourceDto>();

@@ -1,12 +1,20 @@
 <template>
   <v-flex xs12 sm3 md3 lg2 xl1 :class="{selected:selected}">
     <v-card height="200" @click="$emit('click')">
-      <v-card-text>
+      <v-card-text @dblclick="$emit('dblclick')">
         <v-icon size="135" class="mx-auto" color="indigo" v-if="item.IsFolder">folder</v-icon>
-        <img :src="imgSrc" v-else-if="isImage" style="max-height:130px;">
+        <img
+          :src="imgSrc"
+          v-else-if="isImage"
+          style="max-height:130px;"
+          @dblclick.stop="handleDbClick"
+        >
+        <v-icon size="135" class="mx-auto" color="indigo" v-else>insert_drive_file</v-icon>
       </v-card-text>
       <v-divider></v-divider>
-      <v-card-actions class="grid-item" @dblclick="reName">{{item.Name}}</v-card-actions>
+      <v-card-actions class="grid-item" @dblclick="reName">
+        <div style="margin:0 auto;">{{item.Name}}</div>
+      </v-card-actions>
     </v-card>
   </v-flex>
 </template>
@@ -75,7 +83,7 @@ export default {
       });
     },
     handleDbClick() {
-      this.$emit("dblclick");
+      // this.$emit("dblclick");
       if (this.isImage) {
         let src = this.imgSrc;
         showDialog(
@@ -84,12 +92,10 @@ export default {
               success: Function
             },
             render(h) {
-              return h("v-img", {
+              let img = h("v-img", {
                 props: {
                   "lazy-src": src,
-                  src: src,
-                  "max-height": "80%",
-                  "max-width": "80%"
+                  src: src
                 },
                 on: {
                   click: () => {
@@ -97,6 +103,28 @@ export default {
                   }
                 }
               });
+
+              return h(
+                "v-layout",
+                {
+                  props: {
+                    "grid-list-xl": true,
+                    fluid: true,
+                    app: true,
+                    "align-center": true,
+                    "justify-center": true
+                  }
+                },
+                [
+                  h(
+                    "v-flex",
+                    {
+                      xs12: true
+                    },
+                    [img]
+                  )
+                ]
+              );
             }
           })
         );

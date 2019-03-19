@@ -119,7 +119,8 @@ export function mapMany(arr, fn) {
  */
 export function upload({
     accept = "",
-    onProgress = () => {}
+    onProgress = () => {},
+    onStart = () => {}
 } = {}) {
     let el = document.getElementById('uploadInput')
     if (el) {
@@ -186,7 +187,7 @@ export function showDialog(component, pars = {}) {
         }
         let close = () => {
             hide()
-            reject(1) 
+            reject(1)
         }
 
         let render = {

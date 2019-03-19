@@ -66,6 +66,7 @@
               <v-icon>close</v-icon>
             </v-btn>
           </v-toolbar>
+          <v-progress-linear color="secondary" v-if="uploading" height="2" :value="uploadValue"></v-progress-linear>
           <v-divider></v-divider>
           <v-card-text class="pa-0">
             <vue-perfect-scrollbar
@@ -139,11 +140,12 @@ export default {
       moduleInfo: {
         name: "Meidia"
       },
-      stack: [null],
       items: [],
       view: "grid",
-      search: "",
       currItem: null,
+      curr: null,
+      uploading: false,
+      uploadValue: 0,
       basisBtns: [
         {
           title: "上传文件",
@@ -152,6 +154,18 @@ export default {
           icon: "cloud_upload",
           action() {
             this.upload();
+          },
+          disabled() {
+            return this.uploading;
+          }
+        },
+        {
+          title: "搜索",
+          color: "info",
+          name: "List",
+          icon: "search",
+          action() {
+            this.search();
           }
         },
         {
@@ -190,19 +204,17 @@ export default {
           name: "List",
           icon: "arrow_upward",
           action() {
-            this.stack.splice(this.stack.length - 1, 1);
+            // this.stack.splice(this.stack.length - 1, 1);
+            this.$router.push(`/meidia/list?id=${this.curr.Parent_Id}`);
           },
           disabled() {
-            return !this.currId;
+            return !this.curr;
           }
         }
       ]
     };
   },
   computed: {
-    currId() {
-      return this.stack[this.stack.length - 1];
-    },
     orderItems() {
       return this.items;
     },
@@ -214,12 +226,12 @@ export default {
     }
   },
   watch: {
-    currId(val) {
-      this.loadList(val);
+    $route({ query }) {
+      this.loadList(query.id || null, query.v);
     }
   },
   created() {
-    this.loadList(null);
+    this.loadList(this.$route.query.id || null);
   },
   methods: {
     evalShow({ show }) {
@@ -243,7 +255,7 @@ export default {
       if (typeof action == "function") action.call(this, this.context);
     },
     refrsh() {
-      this.reload();
+      this.$router.push("/meidia/list");
     },
     handleClick(item) {
       this.currItem = item;
@@ -251,28 +263,43 @@ export default {
     handleDbClick({ Id, IsFolder }) {
       if (IsFolder) {
         this.currItem = null;
-        this.stack.push(Id);
+        // this.stack.push(Id);
+        this.$router.push(`/meidia/list?id=${Id}`);
       }
     },
-    async loadList(val) {
-      let url = `/api/Meidia/Meidias/${val}`;
-      this.items = await this.$http.get(url);
+    async loadList(val = "null", keyword = "") {
+      let url = `/api/Meidia/Meidias/${val}?v=${keyword}`;
+      let { Curr, Children } = await this.$http.get(url);
+      this.curr = Curr;
+      this.items = Children;
     },
     async upload() {
       let accept = "image/gif, image/jpeg";
-      let [resource] = await upload({
-        accept
-      });
+      try {
+        let [resource] = await upload({
+          accept: "",
+          onStart: () => {
+            this.uploading = true;
+            this.uploadValue = 0;
+          },
+          onProgress: e => {
+            this.uploading = true;
+            this.uploadValue = e;
+          }
+        });
 
-      let postData = {
-        Name: resource.Name,
-        parent_Id: this.currId,
-        Resource_Id: resource.Id,
-        IsFolder: false
-      };
-      let entity = await this.$http.post("/api/Meidia/post", postData);
-      this.items.push(entity);
-      alert.success("添加成功!");
+        let postData = {
+          Name: resource.Name,
+          parent_Id: (this.curr || {}).Id,
+          Resource_Id: resource.Id,
+          IsFolder: false
+        };
+        let entity = await this.$http.post("/api/Meidia/post", postData);
+        this.items.push(entity);
+        alert.success("添加成功!");
+      } finally {
+        this.uploading = false;
+      }
     },
     async addFolder() {
       let { name } = await showDialog(Prompt, {
@@ -290,11 +317,28 @@ export default {
       let postData = {
         Name: name,
         IsFolder: true,
-        parent_Id: this.currId
+        parent_Id: (this.curr || {}).Id
       };
       let entity = await this.$http.post("/api/Meidia/post", postData);
       this.items.push(entity);
       alert.success("添加成功!");
+    },
+    search() {
+      showDialog(Prompt, {
+        title: "文件夹名称",
+        maxWidth: "500px",
+        options: [
+          {
+            Name: "name",
+            Type: "String",
+            IsRequired: true,
+            Description: "搜索关键字",
+            rules: [rules.required("搜索关键字")]
+          }
+        ]
+      }).then(({ name }) => {
+        this.$router.push(`/meidia/list?v=${name}`);
+      });
     },
     async handleDelete() {
       await this.$message.confirm("提示", "确认要删除吗?");
@@ -327,12 +371,12 @@ export default {
 }
 
 .full-page {
-  height: calc(100vh - 200px);
+  height: calc(100vh - 140px);
   overflow: auto;
 }
 
 .dialog-page {
-  height: calc(100vh - 274px);
+  height: calc(100vh - 214px);
   overflow: auto;
 }
 </style>

@@ -12,11 +12,11 @@ namespace FastFrame.Application.Controllers.Basis
     {
         [Permission(new string[] { nameof(List) })]
         [HttpGet("{id}")]
-        public async Task<IEnumerable<MeidiaDto>> Meidias(string id)
+        public async Task<MeidiaOutput> Meidias(string id,string v="")
         {
             if (id == "null")
                 id = null;
-            return await service.Meidias(id);
+            return await service.Meidias(id,v);
         }
     }
 }

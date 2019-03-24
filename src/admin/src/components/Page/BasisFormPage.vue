@@ -24,19 +24,19 @@
                 <v-icon>more_vert</v-icon>
               </v-btn>
               <v-list>
-                <v-list-tile>
+                <v-list-tile @click="singleLine=!singleLine">
                   <v-list-tile-action>
-                    <v-checkbox v-model="singleLine"></v-checkbox>
+                    <v-checkbox :value="singleLine"></v-checkbox>
                   </v-list-tile-action>
-                  <v-list-tile-content @click="singleLine=!singleLine">
+                  <v-list-tile-content>
                     <v-list-tile-title>{{'单行布局'}}</v-list-tile-title>
                   </v-list-tile-content>
                 </v-list-tile>
-                <v-list-tile v-if="hasManage &&  form.Id">
+                <v-list-tile v-if="hasManage &&  form.Id" @click="showMamageField=!showMamageField">
                   <v-list-tile-action>
-                    <v-checkbox v-model="showMamageField"></v-checkbox>
+                    <v-checkbox :value="showMamageField"></v-checkbox>
                   </v-list-tile-action>
-                  <v-list-tile-content @click="showMamageField=!showMamageField">
+                  <v-list-tile-content>
                     <v-list-tile-title>{{ '显示管理字段'}}</v-list-tile-title>
                   </v-list-tile-content>
                 </v-list-tile>
@@ -49,35 +49,33 @@
           <v-divider></v-divider>
           <v-form ref="form">
             <v-card-text>
-              <vue-perfect-scrollbar :class="[!this.pageInfo.close?'fullPage':'dialogPage']">
-                <component :is="singleLine?'span':'v-layout'" wrap>
-                  <Input
-                    v-for="item in options"
-                    v-bind="item"
-                    :key="item.Name"
-                    :model="form"
-                    :rules="getRules(item)"
-                    :canEdit="canEdit"
-                    :singleLine="singleLine"
-                    :errorMessages="formErrorMessages[item.Name]"
-                    @change="changed=true"
-                    @update_errorMessages="formErrorMessages[item.Name]=$event"
-                    :ref="item.Name"
-                  />
-                </component>
-                <component
-                  :is="singleLine?'span':'v-layout'"
-                  wrap
-                  v-if="hasManage && showMamageField && form.Id"
-                >
-                  <Input
-                    v-for="item in manageOptions"
-                    :key="item.Name"
-                    :model="form"
-                    v-bind="item"
-                    :singleLine="singleLine"
-                  />
-                </component>
+              <vue-perfect-scrollbar :class="[!this.pageInfo.close?'fullPage':'dialogPage','form-page']">
+                <v-expansion-panel expand v-model="formGroupExpandValue" style="margin-top:-15px;">
+                  <v-expansion-panel-content v-for="group in formGroup" :key="group.key.title">
+                    <template v-slot:header>
+                      <div class="form-page-group-header">{{group.key.title}}</div>
+                    </template>
+                    <v-card>
+                      <v-card-text>
+                        <component :is="singleLine?'span':'v-layout'" wrap>
+                          <Input
+                            v-for="item in group.values"
+                            v-bind="item"
+                            :key="item.Name"
+                            :model="form"
+                            :rules="getRules(item)"
+                            :canEdit="canEdit"
+                            :singleLine="singleLine"
+                            :errorMessages="formErrorMessages[item.Name]"
+                            @change="changed=true"
+                            @update_errorMessages="formErrorMessages[item.Name]=$event"
+                            :ref="item.Name"
+                          />
+                        </component>
+                      </v-card-text>
+                    </v-card>
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
               </vue-perfect-scrollbar>
             </v-card-text>
           </v-form>
@@ -103,7 +101,7 @@
 import VuePerfectScrollbar from "vue-perfect-scrollbar";
 import Input from "@/components/Inputs";
 // import timg from "@/assets/timg.jpg";
-import { alert } from "@/utils";
+import { alert, groupBy, selectMany } from "@/utils";
 import { getDefaultModel, getFormItems, getRules, hasManage } from "@/generate";
 export default {
   components: {
@@ -146,7 +144,8 @@ export default {
           Name: r.Name,
           Type: "String",
           Description: r.Description,
-          Readonly: "all"
+          Readonly: "All",
+          FormGroup: ["管理字段"]
         };
       }),
       submiting: false,
@@ -171,16 +170,52 @@ export default {
     flex() {
       if (!this.singleLine) {
         return {
-          xs12: ""
+          xs12: true
         };
       } else {
         return {
-          xs12: 1,
-          sm10: 1,
-          md8: 1,
-          lg6: 1,
-          xl6: 1
+          xs12: true,
+          sm10: true,
+          md8: true,
+          lg6: true,
+          xl6: true
         };
+      }
+    },
+    formGroup() {
+      let opts = this.options || [];
+      if (this.hasManage && this.showMamageField && this.form && this.form.Id) {
+        opts = [...opts, ...this.manageOptions];
+      }
+
+      let brr = selectMany(opts, r => {
+        return (r.FormGroup || ["基础信息"]).map(p => {
+          return {
+            ...r,
+            title: p
+          };
+        });
+      });
+
+      let arr = groupBy(
+        brr,
+        r => ({
+          title: r.title,
+          value: true
+        }),
+        (a, b) => a.title == b.title
+      );
+      return arr;
+    },
+    formGroupExpandValue: {
+      get() {
+        return this.formGroup.map(r => r.key.value);
+      },
+      set(val) {
+        for (let index = 0; index < val.length; index++) {
+          const value = val[index];
+          this.formGroup[index].value = value;
+        }
       }
     }
   },
@@ -204,6 +239,7 @@ export default {
     if (typeof this.moduleInfo.formatterOptions == "function") {
       options = await this.moduleInfo.formatterOptions(options);
     }
+
     this.options = options;
 
     this.$eventBus.$on(`${this.moduleInfo.name}_DataUpdated`, this.DataUpdated);

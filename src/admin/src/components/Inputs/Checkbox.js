@@ -7,6 +7,9 @@ export default {
     errorMessages: Array
   },
   render(h) {
+    if (this.disabled) {
+      return h('span', null, this.value ? '是' : '否')
+    }
     return h('v-checkbox', {
       props: {
         ...this.$attrs,
@@ -14,7 +17,7 @@ export default {
         readonly: this.disabled,
         label: this.label,
         description: this.description,
-        errorMessages: this.errorMessages,        
+        errorMessages: this.errorMessages,
       },
       on: {
         ...this.$listeners,

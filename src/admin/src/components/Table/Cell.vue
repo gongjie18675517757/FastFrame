@@ -56,6 +56,10 @@ export default {
         if (val) return "是";
         else return "否";
       }
+      if (this.info.EnumValues && this.info.EnumValues.length > 0) {
+        let kv = this.info.EnumValues.find(r => r.Key == val) || {};
+        return kv.Value || "";
+      }
       if (this.info.Relate) {
         let tempName = this.info.Name.replace("_Id", "");
         let name = this.info.Relate.RelateFields[0];
@@ -83,8 +87,4 @@ export default {
 };
 </script>
 
-<style>
-.btn-link .v-btn__content {
-  font-size: 13px;
-}
-</style>
+ 

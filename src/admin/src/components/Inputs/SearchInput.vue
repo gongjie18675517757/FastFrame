@@ -1,43 +1,40 @@
 <template>
-  <v-autocomplete
-    :loading="loading"
-    :items="items"
-    :search-input.sync="search"
-    :filter="()=>true"
-    v-model="select"
-    :clearable="!disabled"
-    :label="label"
-    :readonly="disabled"
-    @change="change"
-  >
-    <template slot="no-data">
-      <v-list-tile>
-        <v-list-tile-title>
-          请输入关键字,或者
-          <strong>
-            <a @click="openDialog">搜索</a>
-          </strong>
-        </v-list-tile-title>
-      </v-list-tile>
-    </template>
-    <template slot="selection" slot-scope="{ item }">
-      <span>{{item[fields[0]]}}</span>
-      <span v-for="(f,index) in fields.filter((a,b)=>b>0)" :key="index">[{{item[f]}}]</span>
-    </template>
-    <template slot="item" slot-scope="{ item }">
-      <v-list-tile-content>
-        <v-list-tile-title v-text="item[fields[0]]"></v-list-tile-title>
-        <v-list-tile-sub-title
-          v-for="(f,index) in fields.filter((a,b)=>b>0)"
-          :key="index"
-          v-text="item[f]"
-        ></v-list-tile-sub-title>
-      </v-list-tile-content>
-      <!-- <v-list-tile-action>
+  <span>
+    <span v-if="this.disabled">{{getField(select) || '无'}}</span>
+    <v-autocomplete
+      v-else
+      :loading="loading"
+      :items="items"
+      :search-input.sync="search"
+      :filter="()=>true"
+      v-model="select"
+      :clearable="!disabled"
+      :label="label"
+      :disabled="disabled"
+      :errorMessages="errorMessages"
+      @change="change"
+    >
+      <template slot="no-data">
+        <v-list-tile>
+          <v-list-tile-title>
+            请输入关键字,或者
+            <strong>
+              <a @click="openDialog">搜索</a>
+            </strong>
+          </v-list-tile-title>
+        </v-list-tile>
+      </template>
+      <template slot="selection" slot-scope="{ item }">{{getField(item)}}</template>
+      <template slot="item" slot-scope="{ item }">
+        <v-list-tile-content>
+          <v-list-tile-title v-text="getField(item)"></v-list-tile-title>
+        </v-list-tile-content>
+        <!-- <v-list-tile-action>
                 <v-icon>mdi-coin</v-icon>
-      </v-list-tile-action>-->
-    </template>
-  </v-autocomplete>
+        </v-list-tile-action>-->
+      </template>
+    </v-autocomplete>
+  </span>
 </template>
 
 <script>
@@ -51,6 +48,7 @@ export default {
     label: String,
     filter: [Array, Function],
     Name: String,
+    errorMessages: Array,
     Relate: {
       type: String,
       required: true
@@ -87,30 +85,51 @@ export default {
     }
   },
   methods: {
+    getField(item) {
+      if (!item) {
+        return null;
+      } else {
+        let values = this.fields.map((r, i) => {
+          let val = getValue(item, r);
+          if (i == 0) {
+            return val;
+          } else {
+            return `[${val}]`;
+          }
+        });
+
+        return values.join("");
+      }
+    },
     async querySelections(v = "") {
       this.loading = true;
       let filter = this.filter || [];
       if (typeof filter == "function")
         filter = await filter.call(this, this.model);
-      let { Data } = await this.$http.post(`/api/${this.Relate}/list`, {
-        Condition: {
-          Filters: [
-            {
-              Name: this.fields.join(";"),
-              Compare: "$",
-              Value: v
-            },
-            {
-              Name: "Id",
-              Compare: "!=",
-              Value: this.value || ""
-            },
-            ...filter
-          ]
-        }
-      });
-      this.items = [...(this.select ? [this.select] : []), ...Data];
-      this.loading = false;
+
+      try {
+        let { Data } = await this.$http.post(`/api/${this.Relate}/list`, {
+          Condition: {
+            Filters: [
+              {
+                Name: this.fields.join(";"),
+                Compare: "$",
+                Value: v
+              },
+              {
+                Name: "Id",
+                Compare: "!=",
+                Value: this.value || ""
+              },
+              ...filter
+            ]
+          }
+        });
+        this.items = [...(this.select ? [this.select] : []), ...Data];
+        this.loading = false;
+      } catch (error) {
+        window.console.error(error);
+      }
     },
     change($event = {}) {
       this.$emit("change", $event);
@@ -119,7 +138,10 @@ export default {
         this.items = [];
         let name = this.Name.replace("_Id", "");
         setValue(this.model, name, null);
-        this.$nextTick(this.querySelections)
+        this.$nextTick(this.querySelections);
+      } else {
+        let name = this.Name.replace("_Id", "");
+        setValue(this.model, name, $event);
       }
     },
     async openDialog() {
@@ -147,5 +169,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+ 

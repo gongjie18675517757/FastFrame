@@ -7,6 +7,9 @@ export default {
     errorMessages: Array
   },
   render(h) {
+    if (this.disabled) {
+      return h(span, null, this.value)
+    }
     return h('v-textarea', {
       props: {
         ...this.$attrs,

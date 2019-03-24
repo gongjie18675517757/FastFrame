@@ -1,34 +1,38 @@
 <template>
-  <v-menu
-    v-model="menu2"
-    :close-on-content-click="false"
-    :nudge-right="0"
-    lazy
-    transition="scale-transition"
-    offset-y
-    full-width
-    max-width="290px"
-    min-width="290px"
-    :disabled="disabled"
-  >
-    <template v-slot:activator="{ on }">
-      <v-text-field
+  <span>
+    <span v-if="this.disabled">{{this.value}}</span>
+    <v-menu
+      v-else
+      v-model="menu2"
+      :close-on-content-click="false"
+      :nudge-right="0"
+      lazy
+      transition="scale-transition"
+      offset-y
+      full-width
+      max-width="290px"
+      min-width="290px"
+      :disabled="disabled"
+    >
+      <template v-slot:activator="{ on }">
+        <v-text-field
+          :value="value"
+          readonly
+          v-on="on"
+          :label="label"
+          :errorMessages="errorMessages"
+        ></v-text-field>
+      </template>
+      <v-date-picker
         :value="value"
-        readonly
-        v-on="on"
-        :label="label"
-        :errorMessages="errorMessages"
-      ></v-text-field>
-    </template>
-    <v-date-picker
-      :value="value"
-      no-title
-      @input="change"
-      :header-date-format="format"
-      :month-format="format"
-      :weekday-format="weekdayFrm"
-    ></v-date-picker>
-  </v-menu>
+        no-title
+        @input="change"
+        :header-date-format="format"
+        :month-format="format"
+        :weekday-format="weekdayFrm"
+      ></v-date-picker>
+    </v-menu>
+  </span>
 </template>
 
 <script>
@@ -41,15 +45,15 @@ export default {
     errorMessages: Array
   },
   data() {
-    return {      
+    return {
       menu2: false
     };
   },
   methods: {
     change(val) {
       this.$emit("input", val);
-      this.$emit("change", val); 
-      this.menu2 = false
+      this.$emit("change", val);
+      this.menu2 = false;
     },
     weekdayFrm(v) {
       v = new Date(v).getDay();
@@ -70,5 +74,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+ 

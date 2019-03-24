@@ -1,10 +1,9 @@
 <template>
   <span>
     <a-btn
-      v-for="item in toolitems"
+      v-for="item in toolitems.filter(r=>evalShow(r))"
       :key="item.name"
       icon
-      v-if="evalShow(item)"
       :title="item.title"
       :disabled="evalDisabled(item)"
       @click="evalAction(item)"
@@ -20,12 +19,11 @@ export default {
     toolitems: {
       Type: Array,
       default: function() {
-        return []
+        return [];
       }
     }
   }
-}
+};
 </script>
 
-<style>
-</style>
+ 

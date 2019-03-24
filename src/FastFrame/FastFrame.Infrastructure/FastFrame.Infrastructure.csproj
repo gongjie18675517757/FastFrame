@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <!--<PackageReference Include="EasyCaching.Core" Version="0.3.0" />-->
-    <PackageReference Include="CSRedisCore" Version="3.0.40" />
+    <PackageReference Include="CSRedisCore" Version="3.0.46" />
     <PackageReference Include="AspectCore.Core" Version="1.2.0" />
     <PackageReference Include="Funcular.DotNetCore.IdGenerators.Net" Version="1.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.DynamicLinq" Version="1.0.11" />

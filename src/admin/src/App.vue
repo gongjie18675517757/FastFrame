@@ -102,6 +102,13 @@ export default {
 </style>
 
 <style >
+.form-page .v-expansion-panel__container--active .v-expansion-panel__header {
+  padding: 0px;
+}
+.form-page-group-header{
+  font-weight: bold;
+  font-size: 20px;
+}
 .v-dialog {
   box-shadow: none;
   -webkit-box-shadow: none;
@@ -127,7 +134,8 @@ export default {
 /* .v-text-field__details {
   display: none;
 } */
-.v-input__control {
+
+.much-input .v-input__control {
   height: 30px;
 }
 /* .v-text-field__slot >input {

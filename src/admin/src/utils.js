@@ -119,8 +119,7 @@ export function mapMany(arr, fn) {
  */
 export function upload({
     accept = "",
-    onProgress = () => {},
-    onStart = () => {}
+    onProgress = () => {}
 } = {}) {
     let el = document.getElementById('uploadInput')
     if (el) {
@@ -301,4 +300,41 @@ export function setValue(obj = {}, prop = "", val = null) {
     }
     temp[paths[paths.length - 1]] = val
 
+}
+
+/**
+ * 聚合
+ * @param {*} arr 
+ * @param {*} keySelector 
+ */
+export function groupBy(arr = [], keySelector = r => r, keyCompare = (a, b) => a == b) {
+    let brr = []
+    for (const item of arr) {
+        let key = keySelector(item)
+        let brrItem = brr.find(r => keyCompare(r.key, key))
+        if (!brrItem) {
+            brrItem = {
+                key,
+                values: []
+            }
+            brr.push(brrItem);
+        }
+
+        brrItem.values.push(item)
+    }
+
+    return brr;
+}
+
+/**
+ * 选择展开
+ */
+export function selectMany(arr = [], selector = r => [r]) {
+    let brr = []
+    for (const item of arr) {
+        let values = selector(item)
+        brr.push(...values)
+    }
+
+    return brr;
 }

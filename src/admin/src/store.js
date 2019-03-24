@@ -9,7 +9,7 @@ export default new Vuex.Store({
     tenant: {},
     leftDrawer: true,
     rightDrawer: false,
-    dialogMode: true,
+    dialogMode: false,
     mapMode: '',
     notifys: [{
         title: '您的帐户入帐100元',

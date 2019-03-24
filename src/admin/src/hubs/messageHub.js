@@ -17,13 +17,11 @@ connection.onclose(onError)
 /**
  * 连接
  */
-export async function start() {
-  console.log(11);
-
+export async function start() { 
   try {
     connection.stop();
   } catch (err) {
-    window.console.err(err)
+    window.console.error(err)
   }
   try {
     window.console.log('开始连接');
@@ -88,6 +86,5 @@ connection.on('ReceiveMessage', (msg) => {
 })
 
 eventBus.$on('init', () => {
-  start()
-  console.log(111);
+  start() 
 })

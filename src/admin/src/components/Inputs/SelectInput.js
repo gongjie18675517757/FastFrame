@@ -11,10 +11,19 @@ export default {
         return []
       }
     },
-    itemText: String,
-    itemValue: String,
+    itemText: {
+      type: String,
+      default: 'Value'
+    },
+    itemValue: {
+      type: String,
+      default: 'Key'
+    },
   },
   render(h) {
+    if (this.disabled) {
+      return h('span', {}, (this.values.find(r => r[this.itemValue] == this.value) || {})[this.itemText] || '')
+    }
     return h('v-select', {
       props: {
         ...this.$attrs,
@@ -24,8 +33,8 @@ export default {
         description: this.description,
         errorMessages: this.errorMessages,
         items: this.values,
-        itemText: this.itemText || 'Value',
-        itemValue: this.itemValue || 'Key'
+        itemText: this.itemText,
+        itemValue: this.itemValue
       },
       on: {
         ...this.$listeners,

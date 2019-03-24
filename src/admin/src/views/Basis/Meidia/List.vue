@@ -274,7 +274,7 @@ export default {
       this.items = Children;
     },
     async upload() {
-      let accept = "image/gif, image/jpeg";
+      // let accept = "image/gif, image/jpeg";
       try {
         let [resource] = await upload({
           accept: "",

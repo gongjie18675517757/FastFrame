@@ -48,7 +48,10 @@
                   </v-list-tile-action>
                   <v-list-tile-content>{{item.title}}</v-list-tile-content>
                 </v-list-tile>
-                <v-list-tile v-if="!pageInfo.success" @click="dialogMode=!dialogMode">
+                <v-list-tile
+                  v-if="!$vuetify.breakpoint.smAndDown && !pageInfo.success"
+                  @click="dialogMode=!dialogMode"
+                >
                   <v-list-tile-action>
                     <v-checkbox :value="dialogMode"></v-checkbox>
                   </v-list-tile-action>
@@ -85,7 +88,7 @@
                 @update:pagination="loadList"
                 item-key="Id"
                 class="elevation-1 fixed-header v-table__overflow"
-                style="max-height: calc(100vh - 150px);backface-visibility: hidden;"
+                style="max-height: calc(100vh - 140px);backface-visibility: hidden;"
               >
                 <template slot="items" slot-scope="props">
                   <tr :active="!singleSelection && props.selected" @click="handleRowClick(props)">
@@ -220,7 +223,7 @@ export default {
           color: "success",
           name: "List",
           icon: "refresh",
-          action({ selection }) {
+          action() {
             this.loadList();
           }
         }
@@ -376,7 +379,10 @@ export default {
     toEdit({ Id = "" } = {}) {
       let url = `${this.path.add}?q=${Id}`;
       let { name } = this.moduleInfo;
-      if (this.dialogMode) {
+      if (
+        (this.dialogMode && !this.$vuetify.breakpoint.smAndDown) ||
+        this.pageInfo.success
+      ) {
         let component = getComponent(`${name}_add`);
         showDialog(component, {
           id: Id
@@ -464,12 +470,12 @@ export default {
 }
 
 .full-page {
-  height: calc(100vh - 150px);
+  height: calc(100vh - 140px);
   overflow: auto;
 }
 
 .dialog-page {
-  height: calc(100vh - 265px);
+  height: calc(100vh - 255px);
   overflow: auto;
 }
 

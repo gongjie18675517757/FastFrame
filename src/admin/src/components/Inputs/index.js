@@ -1,10 +1,10 @@
 import SearchInput from "./SearchInput.vue";
 import RichInput from "./RichInput.vue";
-import TextInput from "./TextInput.js";
 import TextArea from './TextArea'
 import Checkbox from './Checkbox'
 import SelectInput from "./SelectInput";
 import DateInput from './DateInput.vue'
+import Cell from '@/components/Table/Cell.vue'
 
 import {
   getValue,
@@ -25,12 +25,7 @@ export default {
         return [];
       }
     },
-    errorMessages: {
-      type: Array,
-      default: function () {
-        return [];
-      }
-    },
+    errorMessages: Array,
     canEdit: Boolean,
     IsTextArea: Boolean,
     IsRichText: Boolean,
@@ -77,14 +72,15 @@ export default {
   methods: {
     change(val) {
       this.$emit('change', val)
-      this.evalRules()
+      if (this.errorMessages)
+        this.evalRules()
       if (typeof this.callback == 'function')
         this.callback.call(this.model || {}, val)
     },
     async evalRules() {
       let errs = []
       for (const rule of this.rules) {
-        let result = await rule.call(this.model || {}, this.val)
+        let result = (await rule.call(this.model || {}, this.val))
         if (typeof (result) == 'string') {
           errs.push(result);
           continue
@@ -97,12 +93,16 @@ export default {
     }
   },
   render(h) {
+    let errs = this.errorMessages || []
     let props = {
       value: this.val,
       disabled: this.evalDisabled,
-      //label: this.Description,
+      // label: this.Description,
       description: this.Description,
-      errorMessages: this.errorMessages
+      errorMessages: this.errorMessages,
+      errorCount: errs.length,
+      error: !!errs.find(r => r),
+      required: this.IsRequired
     }
 
     if (this.$vuetify.breakpoint.smAndDown) {
@@ -113,6 +113,7 @@ export default {
       ...this.$listeners,
       input: (val) => {
         this.val = val
+        this.change(val)
       },
       change: val => this.change(val)
     }
@@ -138,13 +139,19 @@ export default {
     //文本,数字,密码
     if (!this.Name.endsWith("Id") && (this.Name == "Password" || this.Type == "String" ||
         this.Type == "Int32" || this.Type == "Decimal")) {
-      component = h(TextInput, {
-        props,
-        on,
-        attrs: {
-          type: this.Name == 'Password' ? 'password' : ['Int32', 'Decimal'].includes(this.Type) ? 'number' : 'text'
-        }
-      })
+      if (!props.disabled)
+        component = h('v-text-field', {
+          props,
+          on,
+          attrs: {
+            type: this.Name == 'Password' ? 'password' : ['Int32', 'Decimal'].includes(this.Type) ? 'number' : 'text'
+          }
+        });
+      else
+        component = h('span', null,
+          (this.Name || '').toLowerCase().includes('password') ?
+          Array((props.value || '******').length).fill('*').join('') :
+          props.value)
     }
     if (this.Type == 'Boolean') {
       component = h(Checkbox, {
@@ -207,13 +214,15 @@ export default {
       //   attrs: {
       //     ...flex
       //   }
-      // }, [component])
+      // }, [component]) 
 
       return h('v-flex', {
         attrs: flex,
         class: ['input-container']
       }, [
-        h('v-layout', null,
+        h('v-layout', {
+            class: ['much-input']
+          },
           [
             h('v-flex', {
               attrs: {
@@ -224,28 +233,29 @@ export default {
                 'vertical-align': 'bottom',
               }
             }, [
-              h('span', null, this.Description),
+              h('span', null, `${this.Description}:`),
               h('span', {
                 style: {
                   color: 'red'
                 }
-              }, this.IsRequired ? '*' : '')
+              }, this.IsRequired && this.canEdit ? '*' : '')
             ]),
             h('v-flex', {
               attrs: {
-                xs6: 1,
+                xs6: !!this.errorMessages,
+                xs8: !this.errorMessages
               },
               style: {
-                padding: '5px'
+                padding: '12px'
               }
             }, [component]),
-            h('v-flex', {
-              style: {
-                display: 'table-cell',
-                'vertical-align': 'bottom',
-                color: 'red'
-              }
-            }, (this.errorMessages || []).join('\r\n'))
+            // h('v-flex', {
+            //   style: {
+            //     display: 'table-cell',
+            //     'vertical-align': 'bottom',
+            //     color: 'red'
+            //   }
+            // },null)
           ])
       ])
     } else if (this.Name && !this.Name.endsWith('Id')) {

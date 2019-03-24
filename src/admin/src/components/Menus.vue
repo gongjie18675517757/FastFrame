@@ -61,9 +61,7 @@ export default {
   },
   async created() {
     this.$eventBus.$on("init", this.initMenu);
-    await this.initMenu();
-    console.log(this.$vuetify);
-    
+    await this.initMenu(); 
   },
   destroyed() {
     this.$eventBus.$off("init", this.initMenu);

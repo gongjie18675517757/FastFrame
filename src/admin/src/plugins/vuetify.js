@@ -40,7 +40,8 @@ import {
   VItemGroup,
   VWindow,
   VSelect,
-  VDatePicker
+  VDatePicker,
+  VExpansionPanel
 } from 'vuetify'
 import 'vuetify/src/stylus/app.styl'
 import zhHans from 'vuetify/es5/locale/zh-Hans'
@@ -87,7 +88,8 @@ Vue.use(Vuetify, {
     VItemGroup,
     VWindow, 
     VSelect   ,
-    VDatePicker
+    VDatePicker,
+    VExpansionPanel
   },
   // theme: {
   //   primary: '#ee44aa',

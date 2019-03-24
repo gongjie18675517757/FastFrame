@@ -8,7 +8,7 @@
             <v-spacer></v-spacer>
             <a-btn
               icon
-              v-if="getId() && !changed"
+              v-if="hasManage && getId() && !changed"
               :moduleName="moduleInfo.name"
               name="Update"
               @click="handleEdit"
@@ -84,7 +84,7 @@
             <v-btn flat @click="cancel">取消</v-btn>
             <v-spacer></v-spacer>
             <v-btn
-              v-if="canEdit && changed"
+              v-if="hasManage && canEdit && changed"
               color="primary"
               flat
               @click="submit"

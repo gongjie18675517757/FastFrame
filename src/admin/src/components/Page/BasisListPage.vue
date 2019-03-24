@@ -60,7 +60,10 @@
                     <v-list-tile-sub-title>是否使用表单窗口</v-list-tile-sub-title>
                   </v-list-tile-content>
                 </v-list-tile>
-                <v-list-tile @click="showMamageField=!showMamageField">
+                <v-list-tile
+                  v-if="this.ModuleStrut.HasManage"
+                  @click="showMamageField=!showMamageField"
+                >
                   <v-list-tile-action>
                     <v-checkbox :value="showMamageField"></v-checkbox>
                   </v-list-tile-action>
@@ -174,7 +177,7 @@ export default {
       items: [],
       query: [],
 
-      RelateFields: [],
+      ModuleStrut: {},
       basisBtns: [
         {
           title: "新增",
@@ -183,6 +186,9 @@ export default {
           icon: "add",
           action() {
             this.toEdit({});
+          },
+          show() {
+            return this.ModuleStrut.HasManage;
           }
         },
         {
@@ -204,6 +210,9 @@ export default {
           },
           disabled({ selection }) {
             return selection.length != 1;
+          },
+          show() {
+            return this.ModuleStrut.HasManage;
           }
         },
         {
@@ -217,6 +226,9 @@ export default {
           disabled({ selection }) {
             return selection.length == 0;
           }
+          // show() {
+          //   return this.ModuleStrut.HasManage;
+          // }
         },
         {
           title: "刷新",
@@ -289,8 +301,8 @@ export default {
     }
   },
   created() {
-    getModuleStrut(this.moduleInfo.name).then(RelateFields => {
-      this.RelateFields = RelateFields;
+    getModuleStrut(this.moduleInfo.name).then(ModuleStrut => {
+      this.ModuleStrut = ModuleStrut;
     });
 
     getColumns(this.moduleInfo.name).then(cols => {

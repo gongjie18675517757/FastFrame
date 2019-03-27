@@ -2,6 +2,7 @@
 using FastFrame.Entity;
 using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Attrs;
+using FastFrame.Infrastructure.Interface;
 using FastFrame.Service;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -19,27 +20,16 @@ namespace FastFrame.Application.Controllers
         where TDto : class, IDto<TEntity>, new()
     {
         private readonly IService<TEntity, TDto> service;
+        public IScopeServiceLoader ServiceLoader { get; }
 
-        public Infrastructure.Interface.IScopeServiceLoader ServiceLoader { get; }
-
-        public BaseController(IService<TEntity, TDto> service, Infrastructure.Interface.IScopeServiceLoader serviceLoader)
+        public BaseController(IService<TEntity, TDto> service, IScopeServiceLoader serviceLoader)
         {
             this.service = service;
             ServiceLoader = serviceLoader;
         }
 
 
-        /// <summary>
-        /// 添加
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        [Permission("Add", "添加")]
-        [HttpPost]
-        public virtual async Task<TDto> Post([FromBody]TDto @input)
-        {
-            return await service.AddAsync(@input);
-        }
+       
 
         /// <summary>
         /// 删除
@@ -53,17 +43,7 @@ namespace FastFrame.Application.Controllers
             await service.DeleteAsync(id);
         }
 
-        /// <summary>
-        /// 修改
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        [HttpPut]
-        [Permission("Update", "修改")]
-        public virtual async Task<TDto> Put([FromBody]TDto @input)
-        {
-            return await service.UpdateAsync(@input);
-        }
+        
 
         /// <summary>
         /// 查看

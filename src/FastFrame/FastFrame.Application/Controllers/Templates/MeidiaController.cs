@@ -9,7 +9,7 @@ namespace FastFrame.Application.Controllers.Basis
 	///图片库 
 	/// </summary>
 	[Permission(nameof(Meidia),"图片库")]
-	public partial class MeidiaController:BaseController<Meidia, MeidiaDto>
+	public partial class MeidiaController:BaseCURDController<Meidia, MeidiaDto>
 	{
 		private readonly MeidiaService service;
 		private readonly IScopeServiceLoader serviceLoader;

@@ -41,25 +41,11 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.Application.Controllers.BaseController`2.Post(`1)">
-            <summary>
-            添加
-            </summary>
-            <param name="input"></param>
-            <returns></returns>
-        </member>
         <member name="M:FastFrame.Application.Controllers.BaseController`2.Delete(System.String)">
             <summary>
             删除
             </summary>
             <param name="id"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Application.Controllers.BaseController`2.Put(`1)">
-            <summary>
-            修改
-            </summary>
-            <param name="input"></param>
             <returns></returns>
         </member>
         <member name="M:FastFrame.Application.Controllers.BaseController`2.Get(System.String)">
@@ -74,6 +60,20 @@
             列表
             </summary>
             <param name="pageInfo"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.Controllers.BaseCURDController`2.Post(`1)">
+            <summary>
+            添加
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.Controllers.BaseCURDController`2.Put(`1)">
+            <summary>
+            修改
+            </summary>
+            <param name="input"></param>
             <returns></returns>
         </member>
         <member name="T:FastFrame.Application.Controllers.Basis.MeidiaController">

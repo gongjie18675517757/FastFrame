@@ -9,7 +9,7 @@ namespace FastFrame.Application.Controllers.Chat
 	///通知 
 	/// </summary>
 	[Permission(nameof(Notify),"通知")]
-	public partial class NotifyController:BaseController<Notify, NotifyDto>
+	public partial class NotifyController:BaseCURDController<Notify, NotifyDto>
 	{
 		private readonly NotifyService service;
 		private readonly IScopeServiceLoader serviceLoader;

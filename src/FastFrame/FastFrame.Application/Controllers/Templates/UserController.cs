@@ -9,7 +9,7 @@ namespace FastFrame.Application.Controllers.Basis
 	///用户 
 	/// </summary>
 	[Permission(nameof(User),"用户")]
-	public partial class UserController:BaseController<User, UserDto>
+	public partial class UserController:BaseCURDController<User, UserDto>
 	{
 		private readonly UserService service;
 		private readonly IScopeServiceLoader serviceLoader;

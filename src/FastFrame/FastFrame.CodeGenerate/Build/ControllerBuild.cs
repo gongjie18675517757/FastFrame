@@ -30,6 +30,13 @@ namespace FastFrame.CodeGenerate.Build
                 var spaceName = T4Help.GenerateNameSpace(type, null);
                 var name = type.Name;
                 var summary = T4Help.GetClassSummary(type, XmlDocDir);
+
+                var baseNames = new List<string>();
+                if (typeof(Entity.IHasManage).IsAssignableFrom(type))
+                    baseNames.Add($"BaseCURDController<{name}, {name}Dto>");
+                else
+                    baseNames.Add($"BaseController<{name}, {name}Dto>");
+
                 yield return new TargetInfo()
                 {
                     Summary = summary,
@@ -44,7 +51,7 @@ namespace FastFrame.CodeGenerate.Build
                     },
                     CategoryName = "class",
                     Name = $"{name}Controller",
-                    BaseNames = new string[] { $"BaseController<{name}, {name}Dto>" },
+                    BaseNames = baseNames,
                     FieldInfos = new FieldInfo[] {
                         new FieldInfo(){ TypeName=$"{name}Service",FieldName="service"},
                         new FieldInfo(){ TypeName=$"IScopeServiceLoader",FieldName="serviceLoader"}

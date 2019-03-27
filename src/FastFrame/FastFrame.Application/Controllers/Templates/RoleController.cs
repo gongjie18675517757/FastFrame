@@ -9,7 +9,7 @@ namespace FastFrame.Application.Controllers.Basis
 	///角色 
 	/// </summary>
 	[Permission(nameof(Role),"角色")]
-	public partial class RoleController:BaseController<Role, RoleDto>
+	public partial class RoleController:BaseCURDController<Role, RoleDto>
 	{
 		private readonly RoleService service;
 		private readonly IScopeServiceLoader serviceLoader;

@@ -13,6 +13,8 @@ namespace FastFrame.Dto.Basis
 	[RelatedField("Name")]
 	public partial class MeidiaDto:BaseDto<Meidia>
 	{
+		
+		
 		/// <summary>
 		///上级 
 		/// </summary>
@@ -98,6 +100,9 @@ namespace FastFrame.Dto.Basis
 		/// </summary>
 		[Hide(HideMark.Form)]
 		[ReadOnly(ReadOnlyMark.All)]
-		public DateTime ModifyTime {get;set;} 
+		public DateTime ModifyTime {get;set;}
+		
+		
+		
 	}
 }

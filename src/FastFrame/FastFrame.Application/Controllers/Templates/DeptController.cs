@@ -9,7 +9,7 @@ namespace FastFrame.Application.Controllers.Basis
 	///部门 
 	/// </summary>
 	[Permission(nameof(Dept),"部门")]
-	public partial class DeptController:BaseController<Dept, DeptDto>
+	public partial class DeptController:BaseCURDController<Dept, DeptDto>
 	{
 		private readonly DeptService service;
 		private readonly IScopeServiceLoader serviceLoader;

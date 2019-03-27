@@ -3,18 +3,21 @@
     :headers="headers"
     :loading="loading"
     :items="items"
-    :total-items="total"
+    :total-items="totalItems"
     :pagination.sync="pager"
     :hide-actions="hidePager"
-    v-model="selection"
-    @update:pagination="pagerChangeHandle"
+    :value="value"
+    @input="$emit('input',$event)"
+    @update:pagination="$emit('loadList',pager)"
     :item-key="rowKey"
+    class="elevation-1 fixed-header v-table__overflow"
+    style="max-height: calc(100vh - 140px);backface-visibility: hidden;"
   >
     <template slot="items" slot-scope="props">
       <tr :active="props.selected" @click="handleRowClick(props)">
         <td>
           <v-icon small size="16" color="primary" v-if="!multiple && currentRow==props.item">check</v-icon>
-          <v-checkbox v-if="multiple" primary hide-details v-model="props.selected"></v-checkbox>
+          <v-checkbox v-if="multiple" primary hide-details :value="props.selected"></v-checkbox>
         </td>
         <td v-for="col in columns" :key="col.Name">
           <Cell :info="col" :model="props.item"/>
@@ -32,6 +35,12 @@ export default {
     Cell
   },
   props: {
+    value: {
+      type: Array,
+      default: function() {
+        return [];
+      }
+    },
     rowKey: {
       type: String,
       default: "Id"
@@ -48,18 +57,19 @@ export default {
         return [];
       }
     },
+    height: [String, Number],
+    totalItems: Number,
     multiple: Boolean,
     hidePager: {
       type: Boolean,
       default: true
-    }
+    },
+    loading: Boolean
   },
   data() {
     return {
-      loading: false,
-      total: 0,
       pager: {},
-      selection: []
+      currentRow: null
     };
   },
   computed: {
@@ -78,12 +88,38 @@ export default {
           };
         })
       ];
-    }
+    },
+    style() {
+      if (this.height) {
+        let val = this.height;
+        if (typeof val == "string")
+          return {
+            "max-height": val,
+            "backface-visibility": "hidden"
+          };
+        else if (typeof val == "number")
+          return {
+            "max-height": `${val}px`,
+            "backface-visibility": "hidden"
+          };
+      } else {
+        return {
+          "max-height": `calc(100vh - 140px)`,
+          "backface-visibility": "hidden"
+        };
+      }
+    },
+    class() {}
   },
   methods: {
-    handleRowClick() {},
-    pagerChangeHandle(){
-      
+    handleRowClick(props) {
+      if (!this.multiple) {
+        this.currentRow = props.item;
+        this.$emit("input", [props.item]);
+      } else {
+        props.selected = !props.selected;
+        // this.$emit("input", this.selection);
+      }
     }
   }
 };

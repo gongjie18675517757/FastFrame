@@ -81,46 +81,18 @@
           <v-divider></v-divider>
           <v-card-text class="pa-0">
             <vue-perfect-scrollbar :class="[this.pageInfo.success?'dialog-page':'full-page']">
-              <v-data-table
-                :headers="headers"
-                :loading="loading"
+              <Table
                 :items="items"
-                :total-items="total"
-                :pagination.sync="pager"
+                :totalItems="total"
+                :loading="loading"
+                :columns="columns"
+                @loadList="loadList"
+                @toEdit="toEdit"
+                rowKey="Id"
                 v-model="selection"
-                @update:pagination="loadList"
-                item-key="Id"
-                class="elevation-1 fixed-header v-table__overflow"
-                style="max-height: calc(100vh - 140px);backface-visibility: hidden;"
-              >
-                <template slot="items" slot-scope="props">
-                  <tr :active="!singleSelection && props.selected" @click="handleRowClick(props)">
-                    <td>
-                      <v-icon
-                        small
-                        size="16"
-                        color="primary"
-                        v-if="singleSelection && currentRow==props.item"
-                      >check</v-icon>
-                      <v-checkbox
-                        v-if="!singleSelection"
-                        primary
-                        hide-details
-                        :value="props.selected"
-                      ></v-checkbox>
-                    </td>
-                    <td v-for="col in columns" :key="col.Name">
-                      <Cell
-                        :info="col"
-                        :model="props.item"
-                        @toEdit="toEdit(props.item)"
-                        :moduleName="moduleInfo.name"
-                      />
-                    </td>
-                  </tr>
-                </template>
-                <template slot="no-data">没有加载数据</template>
-              </v-data-table>
+                :hidePager="false"
+                :multiple="!singleSelection"
+              />
             </vue-perfect-scrollbar>
           </v-card-text>
           <v-card-actions v-if="pageInfo.success">
@@ -139,11 +111,14 @@ import { getColumns, getModuleStrut, getQueryOptions } from "@/generate";
 import { showDialog } from "@/utils";
 import { getComponent } from "@/router";
 import Cell from "@/components/Table/Cell.vue";
+import Table from "@/components/Table/DataTable.vue";
 import VuePerfectScrollbar from "vue-perfect-scrollbar";
 import SearchDialogVue from "@/components/Dialog/SearchDialog.vue";
+
 export default {
   components: {
     Cell,
+    Table,
     VuePerfectScrollbar
   },
   props: {
@@ -167,11 +142,8 @@ export default {
   data() {
     return {
       selection: [],
-      currentRow: null,
-      pager: {},
-      loading: false,
       total: 0,
-
+      loading: false,
       showMamageField: false,
       cols: [],
       items: [],
@@ -250,21 +222,6 @@ export default {
     },
     singleSelection() {
       return this.pageInfo.pars && this.pageInfo.pars.single;
-    },
-    headers() {
-      return [
-        {
-          text: "#",
-          sortable: false,
-          width: "50px"
-        },
-        ...this.columns.map(c => {
-          return {
-            text: c.Description,
-            value: c.Name
-          };
-        })
-      ];
     },
     columns() {
       let adminColumns = [
@@ -381,13 +338,6 @@ export default {
     evalAction({ action }) {
       if (typeof action == "function") action.call(this, this.context);
     },
-    handleRowClick(props) {
-      if (this.singleSelection) {
-        this.currentRow = props.item;
-      } else {
-        props.selected = !props.selected;
-      }
-    },
     toEdit({ Id = "" } = {}) {
       let url = `${this.path.add}?q=${Id}`;
       let { name } = this.moduleInfo;
@@ -423,9 +373,9 @@ export default {
         }
       });
     },
-    async loadList() {
+    async loadList(val) {      
       this.loading = true;
-      let { page, rowsPerPage, sortBy, descending } = this.pager;
+      let { page, rowsPerPage, sortBy, descending } = val;
 
       /*条件1 */
       let { queryFilter = [] } = this.pageInfo.pars || {};

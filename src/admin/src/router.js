@@ -27,7 +27,7 @@ function loadAreas() {
             title: `${item.name == 'List'?'':'新增'}${page.title}${item.name == 'List'?'列表':''}`,
             keepAlive: item.name == 'List',
             moduleName: page.name,
-            pageName: item.name
+            pageName: item.name == 'List'?'List':'Get'
           },
           component: () =>
             import(`@/views/${area.name}/${page.name}/${item.name}.vue`)

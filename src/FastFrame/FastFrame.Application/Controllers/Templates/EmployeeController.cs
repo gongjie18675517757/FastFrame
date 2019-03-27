@@ -9,7 +9,7 @@ namespace FastFrame.Application.Controllers.Basis
 	///员工 
 	/// </summary>
 	[Permission(nameof(Employee),"员工")]
-	public partial class EmployeeController:BaseController<Employee, EmployeeDto>
+	public partial class EmployeeController:BaseCURDController<Employee, EmployeeDto>
 	{
 		private readonly EmployeeService service;
 		private readonly IScopeServiceLoader serviceLoader;

@@ -183,7 +183,7 @@ namespace FastFrame.Repository
         /// <param name="id"></param>
         /// <returns></returns>
         public virtual async Task<T> GetAsync(string id)
-        {
+        { 
             return await Queryable.Where("Id=@0", id).FirstOrDefaultAsync();
         }
 

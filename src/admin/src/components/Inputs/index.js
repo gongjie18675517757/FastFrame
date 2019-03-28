@@ -94,6 +94,7 @@ export default {
   },
   render(h) {
     let errs = this.errorMessages || []
+    let isXs = this.$vuetify.breakpoint.smAndDown
     let props = {
       value: this.val,
       disabled: this.evalDisabled,
@@ -102,10 +103,11 @@ export default {
       errorMessages: this.errorMessages,
       errorCount: errs.length,
       error: !!errs.find(r => r),
-      required: this.IsRequired
+      required: this.IsRequired,
+      isXs
     }
 
-    if (this.$vuetify.breakpoint.smAndDown) {
+    if (isXs) {
       props.label = this.Description
     }
 
@@ -139,15 +141,21 @@ export default {
     //文本,数字,密码
     if (!this.Name.endsWith("Id") && (this.Name == "Password" || this.Type == "String" ||
         this.Type == "Int32" || this.Type == "Decimal")) {
-      if (!props.disabled)
+      if (!props.disabled || isXs) {
+        let textProps = {
+          ...props,
+          readonly: props.disabled
+        }
+        delete textProps.disabled
+
         component = h('v-text-field', {
-          props,
+          props: textProps,
           on,
           attrs: {
             type: this.Name == 'Password' ? 'password' : ['Int32', 'Decimal'].includes(this.Type) ? 'number' : 'text'
           }
         });
-      else
+      } else
         component = h('span', null,
           (this.Name || '').toLowerCase().includes('password') ?
           Array((props.value || '******').length).fill('*').join('') :

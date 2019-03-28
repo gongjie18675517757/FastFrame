@@ -1,6 +1,6 @@
 <template>
   <span>
-    <span v-if="this.disabled">{{this.value}}</span>
+    <span v-if="this.disabled && !isXs">{{this.value}}</span>
     <v-menu
       v-else
       v-model="menu2"
@@ -12,7 +12,7 @@
       full-width
       max-width="290px"
       min-width="290px"
-      :disabled="disabled"
+      :readonly="disabled"
     >
       <template v-slot:activator="{ on }">
         <v-text-field
@@ -42,7 +42,8 @@ export default {
     disabled: Boolean,
     label: String,
     description: String,
-    errorMessages: Array
+    errorMessages: Array,
+     isXs: Boolean
   },
   data() {
     return {

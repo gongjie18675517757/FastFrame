@@ -4,10 +4,11 @@ export default {
     disabled: Boolean,
     label: String,
     description: String,
-    errorMessages: Array
+    errorMessages: Array,
+    isXs: Boolean
   },
   render(h) {
-    if (this.disabled) {
+    if (this.disabled && !this.isXs) {
       return h(span, null, this.value)
     }
     return h('v-textarea', {

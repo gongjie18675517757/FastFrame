@@ -67,7 +67,7 @@ namespace FastFrame.Infrastructure
                     var values = item.Value.Split("".ToArray(), StringSplitOptions.RemoveEmptyEntries);
                     if (values.Any())
                     {
-                        var queryStr = string.Join(" or ", conds.SelectMany((r) => values.Select((x, i) => $"{r}.Contains(@{i})")));
+                        var queryStr = string.Join(" or ", conds.SelectMany((r) => values.Select((x, i) => $"@{r}.Contains(@{i})")));
                         query = query.Where(queryStr, values);
                     }
                     else

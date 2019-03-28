@@ -27,7 +27,7 @@ function loadAreas() {
             title: `${item.name == 'List'?'':'新增'}${page.title}${item.name == 'List'?'列表':''}`,
             keepAlive: item.name == 'List',
             moduleName: page.name,
-            pageName: item.name == 'List'?'List':'Get'
+            pageName: item.name == 'List' ? 'List' : 'Get'
           },
           component: () =>
             import(`@/views/${area.name}/${page.name}/${item.name}.vue`)
@@ -70,7 +70,17 @@ let routes = [{
           keepAlive: true
         },
         component: () =>
-          import(`./views/About.vue`)
+          import(`./views/About`)
+      },
+      {
+        path: '/about2',
+        name: 'about2',
+        meta: {
+          title: '关于页',
+          keepAlive: true
+        },
+        component: () =>
+          import(`./views/Basis/Permission/List2.vue`)
       },
       {
         path: '/chat',

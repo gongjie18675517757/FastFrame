@@ -8,14 +8,14 @@ namespace FastFrame.Entity.Basis
     /// </summary> 
     [Export]
     [Tree(nameof(Parent_Id))]
-    [RelatedField(nameof(Name), nameof(EnCode), nameof(AreaName))]
+    [RelatedField(nameof(Name), nameof(EnCode))]
     public class Permission : IEntity,IHasTenant
     {
         /// <summary>
-        /// 父级
+        /// 名称
         /// </summary>
-        [RelatedTo(typeof(Permission))]
-        public string Parent_Id { get; set; }
+        [StringLength(50), Required]
+        public string Name { get; set; }
 
         /// <summary>
         /// 编码
@@ -27,13 +27,13 @@ namespace FastFrame.Entity.Basis
         /// 区域
         /// </summary>
         [StringLength(50), Required]
-        public string AreaName { get; set; }
+        public string AreaName { get; set; } 
 
         /// <summary>
-        /// 名称
+        /// 父级
         /// </summary>
-        [StringLength(50), Required]
-        public string Name { get; set; }
+        [RelatedTo(typeof(Permission))]
+        public string Parent_Id { get; set; }
 
         /// <summary>
         /// 主键

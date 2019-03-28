@@ -1,6 +1,6 @@
 <template>
   <span>
-    <span v-if="this.disabled">{{getField(select) || '无'}}</span>
+    <span v-if="this.disabled && !isXs">{{getField(select) || '无'}}</span>
     <v-autocomplete
       v-else
       :loading="loading"
@@ -10,7 +10,7 @@
       v-model="select"
       :clearable="!disabled"
       :label="label"
-      :disabled="disabled"
+      :readonly="disabled"
       :errorMessages="errorMessages"
       @change="change"
     >
@@ -52,7 +52,8 @@ export default {
     Relate: {
       type: String,
       required: true
-    }
+    },
+    isXs: Boolean
   },
   data() {
     return {

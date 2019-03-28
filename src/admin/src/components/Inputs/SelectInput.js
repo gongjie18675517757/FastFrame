@@ -19,9 +19,10 @@ export default {
       type: String,
       default: 'Key'
     },
+    isXs: Boolean
   },
   render(h) {
-    if (this.disabled) {
+    if (this.disabled && !this.isXs) {
       return h('span', {}, (this.values.find(r => r[this.itemValue] == this.value) || {})[this.itemText] || '')
     }
     return h('v-select', {

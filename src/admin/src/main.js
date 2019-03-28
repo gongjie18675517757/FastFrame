@@ -43,12 +43,14 @@ Vue.prototype.$message = {
   },
   dialog(component, pars) {
     return showDialog(component, pars)
-  }  
+  }
 }
 Vue.config.productionTip = false
 Vue.prototype.$eventBus = eventBus
 Vue.prototype.$http = $http
 Vue.component('a-btn', Btn)
+
+ 
 
 new Vue({
   router,

@@ -134,9 +134,9 @@
             权限
             </summary> 
         </member>
-        <member name="P:FastFrame.Entity.Basis.Permission.Parent_Id">
+        <member name="P:FastFrame.Entity.Basis.Permission.Name">
             <summary>
-            父级
+            名称
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Basis.Permission.EnCode">
@@ -149,9 +149,9 @@
             区域
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Basis.Permission.Name">
+        <member name="P:FastFrame.Entity.Basis.Permission.Parent_Id">
             <summary>
-            名称
+            父级
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Basis.Permission.Id">

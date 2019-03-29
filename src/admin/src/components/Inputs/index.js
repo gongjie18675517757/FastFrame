@@ -4,7 +4,6 @@ import TextArea from './TextArea'
 import Checkbox from './Checkbox'
 import SelectInput from "./SelectInput";
 import DateInput from './DateInput.vue'
-import Cell from '@/components/Table/Cell.vue'
 
 import {
   getValue,

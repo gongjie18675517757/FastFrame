@@ -1,32 +1,28 @@
-<template>
-  <Page v-bind="page"/>
-</template>
-<script>
-import Page from '@/components/Page/BasisListPage.vue'
+ <script>
+import {
+  ListPageMixin,
+  data,
+  pageProps,
+  pageListeners
+} from "@/components/Page/ListPageCore.js";
+
 export default {
-  props:{
-      success:Function,
-      close:Function,
-      pars:Object
-  },
-  components: {
-    Page    
-  },
+  mixins: [ListPageMixin],
   data() {
     return {
-      page: {
-        moduleInfo: {
-          area:'Basis',
-          name: 'Dept',
-          direction: '部门'
-        },
-        pageInfo:{
-          success:this.success,
-          close:this.close,
-          pars:this.pars
-        }
-      }
-    }
+      ...data,
+      area: "Basis",
+      name: "Dept",
+      direction: "部门"
+    };
+  },
+  render(h) {
+    let props = pageProps.call(this),
+      listeners = pageListeners.call(this);
+    return h("v-list-page", {
+      props,
+      on: listeners
+    });
   }
-}
+};
 </script>

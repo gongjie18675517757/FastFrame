@@ -1,7 +1,12 @@
 <template>
   <span>
-    <a v-if="info.IsLink" :moduleName="moduleName" name="Get" @click="$emit('toEdit')">{{value}}</a>
-    <a v-else-if="isFile" @click="toRelate">下载</a>
+    <a
+      v-if="info.IsLink && val"
+      :moduleName="moduleName"
+      name="Get"
+      @click="$emit('toEdit',model)"
+    >{{value}}</a>
+    <a v-else-if="isFile &&  val" @click="toRelate">下载</a>
     <a v-else-if="Foreignkey" :moduleName="moduleName" name="Get" @click="toRelate">{{value}}</a>
     <span v-else>{{value}}</span>
   </span>
@@ -72,7 +77,7 @@ export default {
   },
   methods: {
     toRelate() {
-      if (this.isFile) {
+      if (this.isFile && this.val) {
         let url = `/api/resource/get/${this.val}`;
         window.open(url);
         return;

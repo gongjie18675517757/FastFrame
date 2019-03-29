@@ -9,7 +9,7 @@ export default {
   },
   render(h) {
     if (this.disabled && !this.isXs) {
-      return h(span, null, this.value)
+      return h('span', null, this.value)
     }
     return h('v-textarea', {
       props: {

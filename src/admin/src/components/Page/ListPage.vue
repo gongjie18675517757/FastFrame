@@ -6,7 +6,7 @@
           <v-toolbar flat dense card color="transparent">
             <v-toolbar-title>{{direction}}列表</v-toolbar-title>
             <v-spacer></v-spacer>
-            <span class="hidden-sm-and-down">
+            <span class="hidden-sm-and-down btn-group">
               <a-btn
                 v-for="btn in baseToolItems"
                 :key="btn.key || btn.name"
@@ -16,6 +16,7 @@
                 :disabled="evalDisabled(btn)"
                 @click="evalAction(btn)"
                 small
+                flat
               >
                 <v-icon>{{btn.icon}}</v-icon>
                 <span>{{btn.title}}</span>
@@ -27,6 +28,7 @@
                 slot="activator"
                 title="设置"
                 small
+                flat
                 :color="$vuetify.breakpoint.smAndDown?'':'success'"
                 :icon="$vuetify.breakpoint.smAndDown"
               >
@@ -86,13 +88,13 @@
                 :totalItems="total"
                 :loading="loading"
                 :columns="columns"
-                @loadList="$emit('loadList',$event)"
-                @toEdit="$emit('toEdit',$event)"
                 rowKey="Id"
                 :value="selection"
-                @input="$emit('selection_update',$event)"
                 :hidePager="hidePager"
                 :multiple="!singleSelection"
+                :classArr="tableClassArr"
+                :styleObj="tableStyleObj"
+                v-on="tableListenter"
               />
             </vue-perfect-scrollbar>
           </v-card-text>
@@ -111,7 +113,6 @@
 import Cell from "@/components/Table/Cell.vue";
 import Table from "@/components/Table/DataTable.vue";
 import VuePerfectScrollbar from "vue-perfect-scrollbar";
-import SearchDialogVue from "@/components/Dialog/SearchDialog.vue";
 
 export default {
   components: {
@@ -143,9 +144,11 @@ export default {
       default: () => []
     },
     loading: Boolean,
+    tableClassArr: Array,
+    tableStyleObj: Object,
     total: Number,
     singleSelection: Boolean,
-    hidePager:Boolean,
+    hidePager: Boolean,
     ModuleStrut: {
       type: Object,
       default: () => ({})
@@ -153,14 +156,20 @@ export default {
   },
   data() {
     return {
-      showMamageField: false, 
+      showMamageField: false
     };
   },
-  computed: { 
+  computed: {
     context() {
       return {
         selection: this.selection,
         rows: this.rows
+      };
+    },
+    tableListenter() {
+      return {
+        ...this.$listeners,
+        input: val => this.$emit("selection_update", val)
       };
     },
     dialogMode: {
@@ -201,8 +210,18 @@ export default {
 
 <style scoped lang="stylus">
 .btn-group .v-btn {
-  padding: 0px;
-  margin: 1px;
+  // padding: 0px;
+  // margin: 1px;
+}
+
+.btn-group {
+  .v-btn {
+    margin: 1px;
+  }
+
+  button, html [type='button'], [type='reset'], [type='submit'] {
+    margin: 1px;
+  }
 }
 
 .selection {

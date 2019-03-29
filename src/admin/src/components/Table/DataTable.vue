@@ -7,11 +7,12 @@
     :pagination.sync="pager"
     :hide-actions="hidePager"
     :value="value"
-    @input="$emit('input',$event)"
-    @update:pagination="$emit('loadList',pager)"
+    v-on="listeners"
     :item-key="rowKey"
-    class="elevation-1 fixed-header v-table__overflow"
-    style="max-height: calc(100vh - 140px);backface-visibility: hidden;"
+    :class="classArr"
+    :style="styleObj"
+    :hide-headers="false"
+    :selectAll="multiple"
   >
     <template slot="items" slot-scope="props">
       <tr :active="props.selected" @click="handleRowClick(props)">
@@ -20,7 +21,14 @@
           <v-checkbox v-if="multiple" primary hide-details :value="props.selected"></v-checkbox>
         </td>
         <td v-for="col in columns" :key="col.Name">
-          <Cell :info="col" :model="props.item"/>
+          <component
+            v-if="col.component"
+            :is="col.component"
+            :info="col"
+            :model="props.item"
+            v-on="listeners"
+          />
+          <Cell v-else :info="col" :model="props.item" v-on="listeners"/>
         </td>
       </tr>
     </template>
@@ -57,14 +65,15 @@ export default {
         return [];
       }
     },
-    height: [String, Number],
     totalItems: Number,
     multiple: Boolean,
     hidePager: {
       type: Boolean,
       default: true
     },
-    loading: Boolean
+    loading: Boolean,
+    classArr: Array,
+    styleObj: Object
   },
   data() {
     return {
@@ -75,11 +84,15 @@ export default {
   computed: {
     headers() {
       return [
-        {
-          text: "#",
-          sortable: false,
-          width: "50px"
-        },
+        ...(this.multiple
+          ? []
+          : [
+              {
+                text: "#",
+                sortable: false,
+                width: "50px"
+              }
+            ]),
         ...this.columns.map(c => {
           return {
             text: c.Description,
@@ -89,27 +102,17 @@ export default {
         })
       ];
     },
-    style() {
-      if (this.height) {
-        let val = this.height;
-        if (typeof val == "string")
-          return {
-            "max-height": val,
-            "backface-visibility": "hidden"
-          };
-        else if (typeof val == "number")
-          return {
-            "max-height": `${val}px`,
-            "backface-visibility": "hidden"
-          };
-      } else {
-        return {
-          "max-height": `calc(100vh - 140px)`,
-          "backface-visibility": "hidden"
-        };
-      }
-    },
-    class() {}
+    listeners() {
+      return {
+        ...this.$listeners,
+        toEdit: val => {
+          console.log(val);
+          this.$emit("toEdit", val);
+        },
+        input: val => this.$emit("input", val),
+        "update:pagination": val => this.$emit("loadList", val)
+      };
+    }
   },
   methods: {
     handleRowClick(props) {
@@ -118,7 +121,6 @@ export default {
         this.$emit("input", [props.item]);
       } else {
         props.selected = !props.selected;
-        // this.$emit("input", this.selection);
       }
     }
   }

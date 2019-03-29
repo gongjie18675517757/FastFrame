@@ -4,7 +4,7 @@
    getQueryOptions
  } from "@/generate";
 
- 
+
  /**
   * 按钮组1
   */
@@ -18,7 +18,7 @@
      title: "修改",
      color: "warning",
      name: "Update",
-     icon: "search",
+     icon: "edit",
      disabled({
        selection
      }) {
@@ -68,6 +68,11 @@
    selection: [],
    total: 0,
    loading: false,
+   tableClassArr: ['elevation-1', 'fixed-header', 'v-table__overflow'],
+   tableStyleObj: {
+     'max-height': 'calc(100vh - 140px)',
+     'backface-visibility': 'hidden'
+   },
    ModuleStrut: {},
    pager: null,
    hidePager: false,
@@ -90,6 +95,8 @@
      total: this.total,
      selection: this.selection,
      loading: this.loading,
+     tableClassArr: this.tableClassArr,
+     tableStyleObj: this.tableStyleObj,
      baseToolItems: [
        ...(this.ModuleStrut.HasManage ? this.curdToolItems : []),
        ...this.baseToolItems
@@ -121,8 +128,10 @@
      },
      selection_update: val => (this.selection = val),
      loadList: this.loadList,
-     toEdit: this.toEdit,
-     Add_toolBtnClick: this.toEdit,
+     toEdit: (val) => {
+       this.toEdit(val)
+     },
+     Add_toolBtnClick: () => this.toEdit(),
      Update_toolBtnClick: () => this.toEdit(this.selection[0]),
      Delete_toolBtnClick: () => this.remove(this.selection),
      Search_toolBtnClick: this.search,
@@ -188,8 +197,8 @@
      getColumns() {
        return getColumns(this.name)
      },
-     frmColumns(){
-      
+     frmColumns() {
+
      },
      DataDeleted(id) {
        this.$nextTick(() => {
@@ -205,9 +214,8 @@
        this.items.splice(0, 0, item);
      },
      toEdit({
-       Id
+       Id = ""
      } = {}) {
-       if (!Id) return;
        if (
          this.success ||
          this.dialogMode ||

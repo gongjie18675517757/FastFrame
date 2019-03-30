@@ -79,7 +79,7 @@ export async function getColumns(name = '') {
     }
   }
 
-  return columns
+  return columns.filter(r => !['Create_User_Id', 'CreateTime', 'Modify_User_Id', 'ModifyTime'].includes(r.Name))
 }
 
 /**

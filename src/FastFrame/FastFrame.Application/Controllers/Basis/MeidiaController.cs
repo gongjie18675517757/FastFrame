@@ -1,9 +1,6 @@
 ﻿using FastFrame.Dto.Basis;
 using FastFrame.Infrastructure.Attrs;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace FastFrame.Application.Controllers.Basis
@@ -12,11 +9,11 @@ namespace FastFrame.Application.Controllers.Basis
     {
         [Permission(new string[] { nameof(List) })]
         [HttpGet("{id}")]
-        public async Task<MeidiaOutput> Meidias(string id,string v="")
+        public async Task<MeidiaOutput> Meidias(string id, string v = "")
         {
             if (id == "null")
                 id = null;
-            return await service.Meidias(id,v);
+            return await service.Meidias(id, v);
         }
     }
 }

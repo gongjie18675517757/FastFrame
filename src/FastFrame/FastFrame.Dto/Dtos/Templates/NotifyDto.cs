@@ -1,10 +1,9 @@
-namespace FastFrame.Dto.Chat
+namespace FastFrame.Dto.Basis
 {
-	using FastFrame.Entity.Chat; 
+	using FastFrame.Entity.Basis; 
 	using FastFrame.Infrastructure.Attrs; 
 	using global::System.ComponentModel.DataAnnotations; 
 	using FastFrame.Entity.Enums; 
-	using FastFrame.Entity.Basis; 
 	using System; 
 	using FastFrame.Dto.Basis; 
 	/// <summary>
@@ -22,21 +21,33 @@ namespace FastFrame.Dto.Chat
 		public string Title {get;set;}
 		
 		/// <summary>
-		///内容 
-		/// </summary>
-		[Required()]
-		public string Content {get;set;}
-		
-		/// <summary>
 		///发布人 
 		/// </summary>
-		[RelatedTo(typeof(Employee))]
+		[RelatedTo(typeof(User))]
 		public string Publush_Id {get;set;}
 		
 		/// <summary>
 		///发布人 
 		/// </summary>
-		public EmployeeDto Publush {get;set;}
+		public UserDto Publush {get;set;}
+		
+		/// <summary>
+		///附件 
+		/// </summary>
+		[RelatedTo(typeof(Resource))]
+		public string Resource_Id {get;set;}
+		
+		/// <summary>
+		///附件 
+		/// </summary>
+		public ResourceDto Resource {get;set;}
+		
+		/// <summary>
+		///内容 
+		/// </summary>
+		[StringLength(8000)]
+		[Required()]
+		public string Content {get;set;}
 		
 		/// <summary>
 		///创建人 

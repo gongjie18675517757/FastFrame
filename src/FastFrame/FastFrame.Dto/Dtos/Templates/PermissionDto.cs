@@ -9,21 +9,17 @@ namespace FastFrame.Dto.Basis
 	/// <summary>
 	///权限 
 	/// </summary>
-	[RelatedField("Name","EnCode","AreaName")]
+	[RelatedField("Name","EnCode")]
 	public partial class PermissionDto:BaseDto<Permission>
 	{
 		
 		
 		/// <summary>
-		///父级 
+		///名称 
 		/// </summary>
-		[RelatedTo(typeof(Permission))]
-		public string Parent_Id {get;set;}
-		
-		/// <summary>
-		///父级 
-		/// </summary>
-		public PermissionDto Parent {get;set;}
+		[StringLength(50)]
+		[Required()]
+		public string Name {get;set;}
 		
 		/// <summary>
 		///编码 
@@ -40,11 +36,15 @@ namespace FastFrame.Dto.Basis
 		public string AreaName {get;set;}
 		
 		/// <summary>
-		///名称 
+		///父级 
 		/// </summary>
-		[StringLength(50)]
-		[Required()]
-		public string Name {get;set;}
+		[RelatedTo(typeof(Permission))]
+		public string Parent_Id {get;set;}
+		
+		/// <summary>
+		///父级 
+		/// </summary>
+		public PermissionDto Parent {get;set;}
 		
 		
 		

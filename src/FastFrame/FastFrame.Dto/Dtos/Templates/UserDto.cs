@@ -55,6 +55,17 @@ namespace FastFrame.Dto.Basis
 		public string PhoneNumber {get;set;}
 		
 		/// <summary>
+		///部门 
+		/// </summary>
+		[RelatedTo(typeof(Dept))]
+		public string Dept_Id {get;set;}
+		
+		/// <summary>
+		///部门 
+		/// </summary>
+		public DeptDto Dept {get;set;}
+		
+		/// <summary>
 		///头像 
 		/// </summary>
 		[StringLength(200)]

@@ -1,6 +1,6 @@
-namespace FastFrame.Database.Mapping.Chat
+namespace FastFrame.Database.Mapping.Basis
 {
-	using FastFrame.Entity.Chat; 
+	using FastFrame.Entity.Basis; 
 	/// <summary>
 	///通知 
 	/// </summary>

@@ -4,7 +4,7 @@
       <v-flex xs12>
         <v-card>
           <v-toolbar flat dense card color="transparent">
-            <v-toolbar-title>{{direction}}列表</v-toolbar-title>
+            <v-toolbar-title>{{direction}}</v-toolbar-title>
             <v-spacer></v-spacer>
             <span class="hidden-sm-and-down btn-group">
               <a-btn
@@ -64,7 +64,7 @@
                 </v-list-tile>
                 <v-list-tile
                   v-if="this.ModuleStrut.HasManage"
-                  @click="showMamageField=!showMamageField"
+                  @click="$emit('changeShowMamageField')"
                 >
                   <v-list-tile-action>
                     <v-checkbox :value="showMamageField"></v-checkbox>
@@ -149,15 +149,11 @@ export default {
     total: Number,
     singleSelection: Boolean,
     hidePager: Boolean,
+    showMamageField: Boolean,
     ModuleStrut: {
       type: Object,
       default: () => ({})
     }
-  },
-  data() {
-    return {
-      showMamageField: false
-    };
   },
   computed: {
     context() {

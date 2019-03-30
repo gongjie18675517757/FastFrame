@@ -52,7 +52,7 @@
               <vue-perfect-scrollbar :class="[!this.pageInfo.close?'fullPage':'dialogPage','form-page']">
                 <v-expansion-panel expand v-model="formGroupExpandValue" style="margin-top:-15px;">
                   <v-expansion-panel-content v-for="group in formGroup" :key="group.key.title">
-                    <template v-slot:header>
+                    <template v-if="canEdit" v-slot:header>
                       <div class="form-page-group-header">{{group.key.title}}</div>
                     </template>
                     <v-card>
@@ -145,7 +145,7 @@ export default {
           Type: "String",
           Description: r.Description,
           Readonly: "All",
-          FormGroup: ["管理字段"]
+          GroupNames: ["管理字段"]
         };
       }),
       submiting: false,
@@ -189,7 +189,7 @@ export default {
       }
 
       let brr = selectMany(opts, r => {
-        return (r.FormGroup || ["基础信息"]).map(p => {
+        return (r.GroupNames || ["基础信息"]).map(p => {
           return {
             ...r,
             title: p

@@ -25,6 +25,12 @@ export default [{
       permission: 'Role'
     },
     {
+      icon: 'notifications',
+      title: '通知管理',
+      path: '/notify/list',
+      permission: 'Notify'
+    },
+    {
       icon: 'view_agenda',
       title: '下级企业',
       path: '/tenant/list',

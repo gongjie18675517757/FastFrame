@@ -88,19 +88,9 @@ namespace FastFrame.Application.Controllers
                 var nullableType = T4Help.GetNullableType(x.PropertyType);
 
                 /*长度*/
-                var isTextArea = false;
-                var isRichText = false;
-                if (TryGetAttribute<StringLengthAttribute>(x, out var stringLengthAttribute)
-                    && stringLengthAttribute.MaximumLength >= 200)
-                {
-                    isTextArea = true;
-                }
-                else if (stringLengthAttribute != null && stringLengthAttribute.MaximumLength >= 8000)
-                {
-                    isRichText = true;
-                    isTextArea = false;
-                }
+                TryGetAttribute<StringLengthAttribute>(x, out var stringLengthAttribute);
 
+                TryGetAttribute<FormGroupAttribute>(x, out var formGroupAttribute);
 
                 /*字段信息*/
                 fieldInfoStructs.Add(new FieldInfoStrut()
@@ -113,10 +103,10 @@ namespace FastFrame.Application.Controllers
                     DefaultValue = instance.GetValue(x.Name)?.ToString(),
                     Rules = GetRules(x),
                     Relate = relatedToAttribute?.RelatedType.Name,
-                    IsTextArea = isTextArea,
-                    IsRichText = isRichText,
+                    Length = stringLengthAttribute?.MaximumLength,
                     EnumValues = getEnumValues(nullableType),
-                    IsRequired= requiredAttribute!=null
+                    IsRequired = requiredAttribute != null,
+                    GroupNames = formGroupAttribute?.GroupNames
                 });
             }
 
@@ -223,10 +213,10 @@ namespace FastFrame.Application.Controllers
         public string DefaultValue { get; internal set; }
         public IEnumerable<Rule> Rules { get; internal set; }
         public string Relate { get; internal set; }
-        public bool IsTextArea { get; internal set; }
-        public bool IsRichText { get; internal set; }
         public IEnumerable<KeyValuePair<string, string>> EnumValues { get; internal set; }
         public bool IsRequired { get; internal set; }
+        public int? Length { get; internal set; }
+        public string[] GroupNames { get; internal set; }
     }
 
     public class Rule

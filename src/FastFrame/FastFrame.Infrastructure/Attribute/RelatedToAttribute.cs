@@ -8,7 +8,7 @@ namespace FastFrame.Infrastructure.Attrs
     [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
     public sealed class RelatedToAttribute : Attribute
     {
-        public RelatedToAttribute(Type relatedType,string relatedKey="Id")
+        public RelatedToAttribute(Type relatedType, string relatedKey = "Id")
         {
             RelatedType = relatedType;
             RelatedKey = relatedKey;
@@ -19,5 +19,24 @@ namespace FastFrame.Infrastructure.Attrs
         /// </summary>
         public Type RelatedType { get; }
         public string RelatedKey { get; }
+    }
+
+    /// <summary>
+    /// 表单分组
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = true)]
+    public sealed class FormGroupAttribute : Attribute
+    {
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="groupNames">归属分组名称</param>
+        public FormGroupAttribute(params string[] groupNames)
+        {
+            this.GroupNames = groupNames;
+        }
+
+        public string[] GroupNames { get; }
     }
 }

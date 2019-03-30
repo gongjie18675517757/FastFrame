@@ -106,7 +106,6 @@ export default {
       return {
         ...this.$listeners,
         toEdit: val => {
-          console.log(val);
           this.$emit("toEdit", val);
         },
         input: val => this.$emit("input", val),

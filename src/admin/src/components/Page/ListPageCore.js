@@ -63,6 +63,7 @@
  export let data = {
    curdToolItems,
    baseToolItems,
+   childToolItems: [],
    columns: [],
    rows: [],
    selection: [],
@@ -76,6 +77,7 @@
    ModuleStrut: {},
    pager: null,
    hidePager: false,
+   showMamageField: false,
    query: [],
    props: {},
    listeners: {}
@@ -89,9 +91,28 @@
      ...this.$props,
      area: this.area,
      name: this.name,
-     direction: this.direction,
-     columns: this.columns,
+     direction: this.direction + '列表',
+     columns: [...this.columns, ...(this.showMamageField && this.ModuleStrut.HasManage ? [{
+         Name: 'Create_User.Name',
+         Description: '录入人',
+         sortable: true
+       }, {
+         Name: 'CreateTime',
+         Description: '录入时间',
+         sortable: true
+       },
+       {
+         Name: 'Modify_User.Name',
+         Description: '修改人',
+         sortable: true
+       }, {
+         Name: 'ModifyTime',
+         Description: '修改时间',
+         sortable: true
+       }
+     ] : [])],
      rows: this.rows,
+     showMamageField: this.showMamageField,
      total: this.total,
      selection: this.selection,
      loading: this.loading,
@@ -129,8 +150,10 @@
      selection_update: val => (this.selection = val),
      loadList: this.loadList,
      toEdit: (val) => {
+       debugger
        this.toEdit(val)
      },
+     changeShowMamageField: () => this.showMamageField = !this.showMamageField,
      Add_toolBtnClick: () => this.toEdit(),
      Update_toolBtnClick: () => this.toEdit(this.selection[0]),
      Delete_toolBtnClick: () => this.remove(this.selection),
@@ -261,6 +284,9 @@
            });
        });
      },
+     getRequestUrl() {
+       return `/api/${this.name}/list`
+     },
      async loadList(pager) {
        if (pager) this.pager = pager;
        else pager = this.pager;
@@ -298,8 +324,7 @@
          let {
            Total,
            Data
-         } = await this.$http.post(
-           "/api/" + this.name + "/list",
+         } = await this.$http.post(this.getRequestUrl(),
            pageInfo
          );
          this.rows = Data;

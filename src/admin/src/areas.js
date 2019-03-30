@@ -17,15 +17,15 @@ let generateItem = (name, title) => {
 }
 
 export default [{
-    name: 'Basis',
-    title: '基础设置',
-    items: [
-      generateItem('User', '员工'),
-      generateItem('Dept', '部门'),
-      generateItem('Permission', '权限'),
-      generateItem('Role', '角色'),     
-      generateItem('Tenant', '组织'), 
-      generateItem('Meidia', '资源库'),
-    ]
-  } 
-]
+  name: 'Basis',
+  title: '基础设置',
+  items: [
+    generateItem('User', '员工'),
+    generateItem('Dept', '部门'),
+    generateItem('Permission', '权限'),
+    generateItem('Role', '角色'),
+    generateItem('Tenant', '组织'),
+    generateItem('Meidia', '资源库'),
+    generateItem('Notify', '通知'),
+  ]
+}]

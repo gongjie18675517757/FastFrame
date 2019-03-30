@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace FastFrame.Service.Services.Basis
 {
-    public partial class UserService  
+    public partial class UserService
     {
         private readonly ICurrentUserProvider currentUserProvider;
         private readonly IRepository<RoleMember> roleMemberRepository;
@@ -22,13 +22,15 @@ namespace FastFrame.Service.Services.Basis
             ICurrentUserProvider currentUserProvider,
             IRepository<RoleMember> roleMemberRepository,
             IRepository<Role> roleRepository,
+            IRepository<Dept> deptRepository,
             IRepository<Resource> resourceRepository,
             IRepository<User> userRepository,
-            IScopeServiceLoader loader) : this(resourceRepository, userRepository, loader)
+            IScopeServiceLoader loader) : this(deptRepository, resourceRepository, userRepository, loader)
         {
             this.currentUserProvider = currentUserProvider;
             this.roleMemberRepository = roleMemberRepository;
             this.roleRepository = roleRepository;
+            this.deptRepository = deptRepository;
         }
 
 
@@ -64,7 +66,7 @@ namespace FastFrame.Service.Services.Basis
             await userRepository.UpdateAsync(user);
             await userRepository.CommmitAsync();
 
-            var cache =await RedisHelper.GetAsync<CurrUser>(id);
+            var cache = await RedisHelper.GetAsync<CurrUser>(id);
             if (cache != null)
             {
                 cache.IsAdmin = user.IsAdmin;
@@ -128,11 +130,11 @@ namespace FastFrame.Service.Services.Basis
                      where a.User_Id == id
                      select b;
             return await iq.MapTo<Role, RoleDto>().ToListAsync();
-        } 
+        }
 
         protected override Task OnUpdateing(UserDto input, User entity)
         {
             return base.OnUpdateing(input, entity);
-        } 
+        }
     }
 }

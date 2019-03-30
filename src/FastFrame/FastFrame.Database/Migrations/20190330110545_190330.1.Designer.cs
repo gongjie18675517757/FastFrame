@@ -3,14 +3,16 @@ using System;
 using FastFrame.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FastFrame.Database.Migrations
 {
     [DbContext(typeof(DataBase))]
-    partial class DataBaseModelSnapshot : ModelSnapshot
+    [Migration("20190330110545_190330.1")]
+    partial class _1903301
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -221,7 +223,6 @@ namespace FastFrame.Database.Migrations
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnName("content")
-                        .HasMaxLength(8000)
                         .IsUnicode(true);
 
                     b.Property<DateTime>("CreateTime")
@@ -248,11 +249,6 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
-                    b.Property<string>("Resource_Id")
-                        .HasColumnName("resource_id")
-                        .HasMaxLength(25)
-                        .IsUnicode(true);
-
                     b.Property<string>("Tenant_Id")
                         .HasColumnName("tenant_id")
                         .HasMaxLength(25)
@@ -274,9 +270,6 @@ namespace FastFrame.Database.Migrations
 
                     b.HasIndex("Publush_Id")
                         .HasName("Index_Notify_Publush_Id");
-
-                    b.HasIndex("Resource_Id")
-                        .HasName("Index_Notify_Resource_Id");
 
                     b.HasIndex("Tenant_Id")
                         .HasName("Index_Notify_Tenant_Id");
@@ -802,14 +795,14 @@ namespace FastFrame.Database.Migrations
                             Account = "admin",
                             CreateTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "gongjie@qq.com",
-                            EncryptionKey = "0756803045b3dd96ace39af25ab0d83a",
+                            EncryptionKey = "d84fbfd1b6709f99d600cedc23579891",
                             IsAdmin = true,
                             IsDeleted = false,
                             IsDisabled = false,
                             IsRoot = true,
                             ModifyTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "超级管理员",
-                            Password = "77f688a672ed34adb885444b93ddc77e",
+                            Password = "0f9b3cbb1734efe2018bdd562f13f0a2",
                             PhoneNumber = "18675517757",
                             Tenant_Id = "00F6P5G2VC2SAP1UJV7HTBYGU"
                         });

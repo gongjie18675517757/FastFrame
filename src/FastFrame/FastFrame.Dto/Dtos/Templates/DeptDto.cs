@@ -45,13 +45,13 @@ namespace FastFrame.Dto.Basis
 		///主管 
 		/// </summary>
 		[StringLength(50)]
-		[RelatedTo(typeof(Employee))]
+		[RelatedTo(typeof(User))]
 		public string Supervisor_Id {get;set;}
 		
 		/// <summary>
 		///主管 
 		/// </summary>
-		public EmployeeDto Supervisor {get;set;}
+		public UserDto Supervisor {get;set;}
 		
 		/// <summary>
 		///创建人 

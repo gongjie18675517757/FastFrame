@@ -4,7 +4,7 @@ import TextArea from './TextArea'
 import Checkbox from './Checkbox'
 import SelectInput from "./SelectInput";
 import DateInput from './DateInput.vue'
-
+import FileInput from './FileInput'
 import {
   getValue,
   setValue
@@ -26,9 +26,7 @@ export default {
     },
     errorMessages: Array,
     canEdit: Boolean,
-    IsTextArea: Boolean,
-    IsRichText: Boolean,
-    IsRequired: Boolean,
+    Length: Number,
     ModuleName: String,
     Relate: String,
     Type: {
@@ -119,26 +117,50 @@ export default {
       change: val => this.change(val)
     }
 
+    let flex = {
+      xs12: 1,
+      sm8: 1,
+      md6: 1,
+      lg6: 1,
+      xl4: 1
+    }
+
+    if (this.singleLine) {
+      flex = {
+        xs12: 1,
+      }
+    }
+
     let component = null;
 
     //长文本
-    if (this.IsTextArea) {
+    if (!component && this.Length && this.Length >= 200 && this.Length < 4000) {
       component = h(TextArea, {
         props,
         on
       })
+
+      flex = {
+        xs12: 1,
+        sm8: 1,
+        md6: 1,
+        lg6: 1,
+        xl4: 1
+      }
     }
 
     //富文本
-    if (this.IsRichText) {
+    else if (!component && this.Length && this.Length >= 4000) {
       component = h(RichInput, {
         props,
         on
       })
+
+      return component
     }
 
     //文本,数字,密码
-    if (!this.Name.endsWith("Id") && (this.Name == "Password" || this.Type == "String" ||
+    else if (!component && !this.Name.endsWith("Id") && (this.Name == "Password" || this.Type == "String" ||
         this.Type == "Int32" || this.Type == "Decimal")) {
       if (!props.disabled || isXs) {
         let textProps = {
@@ -159,21 +181,28 @@ export default {
           (this.Name || '').toLowerCase().includes('password') ?
           Array((props.value || '******').length).fill('*').join('') :
           props.value)
-    }
-    if (this.Type == 'Boolean') {
+    } else if (!component && this.Type == 'Boolean') {
       component = h(Checkbox, {
         props,
         on
       })
-    }
-    if (this.Type == 'DateTime') {
+    } else if (!component && this.Type == 'DateTime') {
       component = h(DateInput, {
         props,
         on
       })
+    } else if (!component && this.Relate == 'Resource') {
+      component = h(FileInput, {
+        props: {
+          ...props,
+          model: this.model || {},
+          Name: this.Name,
+        },
+        on
+      })
     }
     //远程选择框
-    if (this.Relate) {
+    else if (!component && this.Relate) {
       component = h(SearchInput, {
         props: {
           ...props,
@@ -185,9 +214,7 @@ export default {
         },
         on
       })
-    }
-
-    if (Array.isArray(this.EnumValues) && this.EnumValues.length > 0) {
+    } else if (!component && Array.isArray(this.EnumValues) && this.EnumValues.length > 0) {
       component = h(SelectInput, {
         props: {
           ...props,
@@ -205,18 +232,8 @@ export default {
           }
         }, [component]);
       }
-      let flex = {
-        xs12: 1,
-        sm8: 1,
-        md6: 1,
-        lg6: 1,
-        xl4: 1
-      }
-      if (this.singleLine) {
-        flex = {
-          xs12: 1,
-        }
-      }
+
+
       // return h('v-flex', {
       //   attrs: {
       //     ...flex

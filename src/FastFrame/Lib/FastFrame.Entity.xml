@@ -29,46 +29,6 @@
             主管
             </summary>
         </member>
-        <member name="T:FastFrame.Entity.Basis.Employee">
-            <summary>
-            员工
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.Employee.EnCode">
-            <summary>
-            编码
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.Employee.Name">
-            <summary>
-            名称
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.Employee.Email">
-            <summary>
-            邮箱
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.Employee.PhoneNumber">
-            <summary>
-            手机号码
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.Employee.Gender">
-            <summary>
-            性别
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.Employee.User_Id">
-            <summary>
-            用户
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.Employee.Dept_Id">
-            <summary>
-            部门
-            </summary>
-        </member>
         <member name="P:FastFrame.Entity.Basis.EnumItem.EnumName">
             <summary>
             键
@@ -117,6 +77,31 @@
         <member name="P:FastFrame.Entity.Basis.Meidia.IsFolder">
             <summary>
             是否文件夹
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Basis.Notify">
+            <summary>
+            通知
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.Notify.Title">
+            <summary>
+            标题
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.Notify.Publush_Id">
+            <summary>
+            发布人
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.Notify.Resource_Id">
+            <summary>
+            附件
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.Notify.Content">
+            <summary>
+            内容
             </summary>
         </member>
         <member name="T:FastFrame.Entity.Basis.NotifyTarget">
@@ -334,6 +319,11 @@
             手机号码
             </summary>
         </member>
+        <member name="P:FastFrame.Entity.Basis.User.Dept_Id">
+            <summary>
+            部门
+            </summary>
+        </member>
         <member name="P:FastFrame.Entity.Basis.User.HandIcon_Id">
             <summary>
             头像
@@ -366,26 +356,6 @@
             </summary>
             <param name="password"></param>
             <returns></returns>
-        </member>
-        <member name="T:FastFrame.Entity.Chat.Notify">
-            <summary>
-            通知
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Chat.Notify.Title">
-            <summary>
-            标题
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Chat.Notify.Content">
-            <summary>
-            内容
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Chat.Notify.Publush_Id">
-            <summary>
-            发布人
-            </summary>
         </member>
         <member name="T:FastFrame.Entity.Chat.Email">
             <summary>

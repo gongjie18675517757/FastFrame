@@ -81,6 +81,23 @@
             图片库 
              </summary>
         </member>
+        <member name="T:FastFrame.Application.Controllers.Basis.NotifyController">
+             <summary>
+            通知 
+             </summary>
+        </member>
+        <member name="M:FastFrame.Application.Controllers.Basis.NotifyController.AllList(FastFrame.Infrastructure.PagePara)">
+            <summary>
+            所有通知
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Application.Controllers.Basis.NotifyController.GetNotify(System.String)">
+            <summary>
+            通知内容
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
         <member name="T:FastFrame.Application.Controllers.Basis.PermissionController">
              <summary>
             权限 
@@ -172,11 +189,6 @@
             部门 
              </summary>
         </member>
-        <member name="T:FastFrame.Application.Controllers.Basis.EmployeeController">
-             <summary>
-            员工 
-             </summary>
-        </member>
         <member name="T:FastFrame.Application.Controllers.Chat.ChatController">
             <summary>
             聊天
@@ -196,11 +208,6 @@
             <summary>
             好友列表
             </summary> 
-        </member>
-        <member name="T:FastFrame.Application.Controllers.Chat.NotifyController">
-             <summary>
-            通知 
-             </summary>
         </member>
         <member name="M:FastFrame.Application.Controllers.CommonController.VerififyUnique(FastFrame.Dto.UniqueInput)">
             <summary>

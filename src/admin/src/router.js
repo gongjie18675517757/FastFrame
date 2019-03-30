@@ -122,6 +122,16 @@ let routes = [{
         component: () =>
           import(`./views/UserCenter.vue`)
       },
+      {
+        path: '/notifyCenter',
+        name: 'notifyCenter',
+        meta: {
+          title: '个人中心',
+          keepAlive: false
+        },
+        component: () =>
+          import(`./views/Index/NotifyCenter`)
+      },
       ...childs
     ]
   },

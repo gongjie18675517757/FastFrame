@@ -7,7 +7,7 @@
       @click="$emit('toEdit',model)"
     >{{value}}</a>
     <a v-else-if="isFile &&  val" @click="toRelate">下载</a>
-    <a v-else-if="Foreignkey" :moduleName="moduleName" name="Get" @click="toRelate">{{value}}</a>
+    <!-- <a v-else-if="Foreignkey" :moduleName="moduleName" name="Get" @click="toRelate">{{value}}</a> -->
     <span v-else>{{value}}</span>
   </span>
 </template>
@@ -57,6 +57,8 @@ export default {
     },
     value() {
       let val = this.val;
+      let length = this.info.Length || 0;
+      if (length >= 4000) return val.replace(/<[^>]+>/g,"").substring(0, 200);
       if (this.info.Type == "Boolean") {
         if (val) return "是";
         else return "否";

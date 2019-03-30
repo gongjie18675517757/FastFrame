@@ -1,8 +1,8 @@
-namespace FastFrame.Application.Controllers.Chat
+namespace FastFrame.Application.Controllers.Basis
 {
-	using FastFrame.Dto.Chat; 
-	using FastFrame.Entity.Chat; 
-	using FastFrame.Service.Services.Chat; 
+	using FastFrame.Dto.Basis; 
+	using FastFrame.Entity.Basis; 
+	using FastFrame.Service.Services.Basis; 
 	using FastFrame.Infrastructure.Attrs; 
 	using FastFrame.Infrastructure.Interface; 
 	/// <summary>

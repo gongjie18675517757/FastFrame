@@ -23,8 +23,7 @@ export default [{
       generateItem('User', '员工'),
       generateItem('Dept', '部门'),
       generateItem('Permission', '权限'),
-      generateItem('Role', '角色'),
-      generateItem('Employee', '员工'), 
+      generateItem('Role', '角色'),     
       generateItem('Tenant', '组织'), 
       generateItem('Meidia', '资源库'),
     ]

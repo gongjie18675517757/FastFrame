@@ -32,7 +32,7 @@ namespace FastFrame.Entity.Basis
         /// <summary>
         /// 主管
         /// </summary>
-        [StringLength(50), RelatedTo(typeof(Employee))]
+        [StringLength(50), RelatedTo(typeof(User))]
         public string Supervisor_Id { get; set; }
     }
 }

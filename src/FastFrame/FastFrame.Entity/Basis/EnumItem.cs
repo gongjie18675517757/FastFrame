@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 namespace FastFrame.Entity.Basis
-{
+{    
     public class EnumItem : IEntity, IHasSoftDelete, IHasTenant
     {
         /// <summary>

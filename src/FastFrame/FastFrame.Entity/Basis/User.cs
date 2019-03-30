@@ -39,7 +39,7 @@ namespace FastFrame.Entity.Basis
         /// 姓名
         /// </summary>
         [StringLength(50), Required]
-        public string Name { get; set; } 
+        public string Name { get; set; }
 
         /// <summary>
         /// 邮箱
@@ -52,6 +52,12 @@ namespace FastFrame.Entity.Basis
         /// </summary>
         [StringLength(20), Unique]
         public string PhoneNumber { get; set; }
+
+        /// <summary>
+        /// 部门
+        /// </summary>
+        [RelatedTo(typeof(Dept))]
+        public string Dept_Id { get; set; }
 
         /// <summary>
         /// 头像

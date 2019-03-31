@@ -42,11 +42,8 @@ const onError = async (err) => {
   await start()
 }
 
-async function onConnectioned() {
-  while (true) {
-    await connection.invoke('SendMessage', 'xx', 'xxxxxx')
-    await sleep(10000)
-  }
+function onConnectioned() {
+
 }
 
 connection.on("ReceiveMessage", () => {

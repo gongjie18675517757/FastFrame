@@ -61,7 +61,7 @@ let routes = [{
         },
         component: () =>
           import(`./views/Index/Index.vue`)
-      },
+      }, 
       {
         path: '/about',
         name: 'about',
@@ -69,6 +69,7 @@ let routes = [{
           title: '关于页',
           keepAlive: true
         },
+        props: true,
         component: () =>
           import(`./views/About`)
       },
@@ -77,10 +78,10 @@ let routes = [{
         name: 'about2',
         meta: {
           title: '关于页',
-          keepAlive: true
-        },
+          keepAlive: false
+        }, 
         component: () =>
-          import(`./views/Basis/Permission/List2.vue`)
+          import(`./views/Basis/Dept/Add2.vue`)
       },
       {
         path: '/chat',
@@ -126,7 +127,7 @@ let routes = [{
         path: '/notifyCenter',
         name: 'notifyCenter',
         meta: {
-          title: '个人中心',
+          title: '通知中心',
           keepAlive: false
         },
         component: () =>
@@ -176,16 +177,10 @@ let router = new Router({
 
 
 const getSiteName = async () => {
-  let name = ''
-  while (true) {
-    name = store.state.tenant.FullName
-    if (!name) {
-      await sleep(100)
-    } else {
-      break;
-    }
+  while (!store.state.tenant.FullName) {
+    await sleep(100)
   }
-  return name
+  return store.state.tenant.FullName
 }
 const existLogin = () => {
   return new Promise((resolve, reject) => {

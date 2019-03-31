@@ -104,7 +104,7 @@ export default {
   },
 
   methods: {
-    getAvatar(uid) {
+    getAvatar() {
       return "/static/avatar/a2.jpg";
     }
   }

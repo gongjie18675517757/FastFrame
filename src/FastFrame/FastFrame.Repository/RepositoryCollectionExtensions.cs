@@ -7,10 +7,14 @@ namespace FastFrame.Repository
     {
         public static IServiceCollection AddRepository(this IServiceCollection services)
         {
-            //var interfaceType = typeof(IUnitOfWork);
-            //var types = typeof(IUnitOfWork).Assembly.GetTypes()
-            //    .Where(x => interfaceType.IsAssignableFrom(x) && x.IsClass 
-            //        && !x.IsAbstract && !x.Name.StartsWith("BaseRepository"));
+            var interfaceType = typeof(IUnitOfWork);
+            var types = typeof(IUnitOfWork).Assembly.GetTypes()
+                .Where(x =>
+                    interfaceType.IsAssignableFrom(x) &&
+                    x.IsClass &&
+                    !x.IsAbstract &&
+                    !x.Name.StartsWith("BaseRepository") &&
+                    !x.IsGenericType);
 
             //foreach (var type in types)
             //{
@@ -20,8 +24,18 @@ namespace FastFrame.Repository
             //    }
             //    services.AddScoped(type);
             //}
-            services.AddScoped(typeof(IRepository<>),typeof(BaseRepository<>));
+
+            services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
             services.AddScoped(typeof(IQueryRepository<>), typeof(BaseQueryable<>));
+
+            foreach (var type in types)
+            {
+                foreach (var interfaceItem in type.GetInterfaces().Where(x => x != interfaceType))
+                {
+                    services.AddScoped(interfaceItem, type);
+                } 
+            }
+
             return services;
         }
     }

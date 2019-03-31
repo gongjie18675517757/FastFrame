@@ -100,7 +100,6 @@
 <script>
 import VuePerfectScrollbar from "vue-perfect-scrollbar";
 import Input from "@/components/Inputs";
-// import timg from "@/assets/timg.jpg";
 import { alert, groupBy, selectMany } from "@/utils";
 import { getDefaultModel, getFormItems, getRules, hasManage } from "@/generate";
 export default {

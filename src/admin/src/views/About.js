@@ -1,5 +1,7 @@
 export default {
+  props: ['id'],
   render(h) {
-    return h(<h1>abcd</h1>)
+
+    return h('span', null, JSON.stringify(this.$route))
   }
 }

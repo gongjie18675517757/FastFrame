@@ -1,6 +1,5 @@
 import {
-  lock,
-  mapMany
+  lock
 } from '@/utils'
 import $http from '@/http'
 import rules from '@/rules'

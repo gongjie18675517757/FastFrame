@@ -149,10 +149,7 @@
      },
      selection_update: val => (this.selection = val),
      loadList: this.loadList,
-     toEdit: (val) => {
-       debugger
-       this.toEdit(val)
-     },
+     toEdit: (val) => this.toEdit(val),
      changeShowMamageField: () => this.showMamageField = !this.showMamageField,
      Add_toolBtnClick: () => this.toEdit(),
      Update_toolBtnClick: () => this.toEdit(this.selection[0]),
@@ -225,16 +222,16 @@
      },
      DataDeleted(id) {
        this.$nextTick(() => {
-         let index = this.items.findIndex(r => r.Id == id);
-         if (index >= 0) this.items.splice(index, 1);
+         let index = this.rows.findIndex(r => r.Id == id);
+         if (index >= 0) this.rows.splice(index, 1);
        });
      },
      DataUpdated(item) {
-       let index = this.items.findIndex(r => r.Id == item.Id);
-       if (index >= 0) this.items.splice(index, 1, item);
+       let index = this.rows.findIndex(r => r.Id == item.Id);
+       if (index >= 0) this.rows.splice(index, 1, item);
      },
      DataAdded(item) {
-       this.items.splice(0, 0, item);
+       this.rows.splice(0, 0, item);
      },
      toEdit({
        Id = ""

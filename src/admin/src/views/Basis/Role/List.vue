@@ -28,7 +28,7 @@ export default {
             let data = await this.$http.get(
               `/api/role/GetRolePermission/${Id}`
             );
-            let ids = this.$message.dialog(
+            let ids =await this.$message.dialog(
               () => import("@/components/Page/TreeSelect"),
               {
                 title: "设置权限",

@@ -34,9 +34,9 @@
               <vue-perfect-scrollbar class="dialog-page">
                 <component :is="singleLine?'span':'v-layout'" wrap>
                   <Input
-                    v-for="(item,index) in options"
+                    v-for="(item) in options"
                     v-bind="item"
-                    v-model="form[`${item.Name}_${index}`]"
+                    v-model="form[item.Description]"
                     :key="item.Description"
                     :singleLine="singleLine"
                     canEdit
@@ -81,7 +81,7 @@ export default {
       let form = {};
       for (let index = 0; index < this.options.length; index++) {
         const opt = this.options[index];
-        form[`${opt.Name}_${index}`] = opt.value;
+        form[opt.Description] = opt.value;
       }
       this.form = form;
     },
@@ -95,7 +95,7 @@ export default {
     query() {
       for (let index = 0; index < this.options.length; index++) {
         const opt = this.options[index];
-        opt.value = this.form[`${opt.Name}_${index}`];
+        opt.value = this.form[opt.Description];
       }
 
       let val = this.options

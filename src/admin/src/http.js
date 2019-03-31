@@ -19,7 +19,6 @@ axios.interceptors.request.use(function (config) {
 axios.interceptors.response.use(function (response) {
   return response.data;
 }, function (error) {
-  console.log(error)
   if (error.response && error.response.status) {
     switch (error.response.status) {
       case 401:

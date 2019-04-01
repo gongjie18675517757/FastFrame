@@ -22,4 +22,13 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Add.vue">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="List.vue">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

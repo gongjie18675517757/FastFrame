@@ -49,7 +49,9 @@
           <v-divider></v-divider>
           <v-form ref="form">
             <v-card-text>
-              <vue-perfect-scrollbar :class="[!this.pageInfo.close?'fullPage':'dialogPage','form-page']">
+              <vue-perfect-scrollbar
+                :class="[!this.pageInfo.close?'fullPage':'dialogPage','form-page']"
+              >
                 <v-expansion-panel expand v-model="formGroupExpandValue" style="margin-top:-15px;">
                   <v-expansion-panel-content v-for="group in formGroup" :key="group.key.title">
                     <template v-if="canEdit" v-slot:header>
@@ -277,6 +279,7 @@ export default {
       this.reload();
     },
     async load() {
+      console.log(" exec load");
       let id = this.getId(),
         form;
       if (id) {

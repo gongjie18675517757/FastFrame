@@ -1,57 +1,115 @@
- <script>
-import Page from "@/components/Page/FormPage.vue";
-import { alert, groupBy, selectMany } from "@/utils";
-import { getDefaultModel, getFormItems, getRules, hasManage } from "@/generate";
+import {
+  alert,
+  groupBy,
+  selectMany
+} from "@/utils";
+import {
+  getDefaultModel,
+  getFormItems,
+  getRules,
+  hasManage
+} from "@/generate";
 
-export default {
+export let formData = {
+  canEdit: false,
+  form: {},
+  formErrorMessages: {},
+  options: [],
+  rules: {},
+  manageOptions: [{
+      Name: "Create_User.Name",
+      Description: "创建人"
+    },
+    {
+      Name: "CreateTime",
+      Description: "创建时间"
+    },
+    {
+      Name: "Modify_User.Name",
+      Description: "最后修改人"
+    },
+    {
+      Name: "ModifyTime",
+      Description: "最后修改时间"
+    }
+  ].map(r => {
+    return {
+      Name: r.Name,
+      Type: "String",
+      Description: r.Description,
+      Readonly: "All",
+      GroupNames: ["管理字段"]
+    };
+  }),
+  submiting: false,
+  singleLine: false,
+  showMamageField: false,
+  changed: false,
+  hasManage: false
+};
+
+export let pageProps = function () {
+  return {
+    ...this.$props,
+    ...this.$attrs,
+    title: this.title,
+    id: this.id,
+    form: this.form,
+    formErrorMessages: this.formErrorMessages,
+    options: this.options,
+    rules: this.rules,
+    submiting: this.submiting,
+    singleLine: this.singleLine,
+    showMamageField: this.showMamageField,
+    canEdit: this.canEdit,
+    changed: this.changed,
+    formGroups: this.formGroups,
+    isDialog: this.isDialog,
+    hasManage: this.hasManage
+  };
+};
+
+export let pageListeners = function () {
+  return {
+    success: val => this.$emit("success", val),
+    cancel: this.cancel,
+    chaneShowMode: () => (this.singleLine = !this.singleLine),
+    changeShowMamageField: () => (this.showMamageField = !this.showMamageField),
+    changed: $event => {
+      this.changed = true;
+      this.evalRule($event.item.Name);
+    },
+    reload: this.load,
+    update_errorMessages: val => {
+      this.formErrorMessages[val.item.Name] = val.value;
+    },
+    submit: this.submit
+  };
+};
+
+export let FormPageMixin = {
   props: {
     success: Function,
     close: Function,
     pars: Object
   },
   components: {
-    "v-page": Page
+    "v-page": () => import("@/components/Page/FormPage.vue")
   },
   data() {
-    return {
-      area: "Basis",
-      name: "Dept",
-      direction: "部门",
-      canEdit: false,
-      form: {},
-      formErrorMessages: {},
-      options: [],
-      rules: {},
-      manageOptions: [
-        { Name: "Create_User.Name", Description: "创建人" },
-        { Name: "CreateTime", Description: "创建时间" },
-        { Name: "Modify_User.Name", Description: "最后修改人" },
-        { Name: "ModifyTime", Description: "最后修改时间" }
-      ].map(r => {
-        return {
-          Name: r.Name,
-          Type: "String",
-          Description: r.Description,
-          Readonly: "All",
-          GroupNames: ["管理字段"]
-        };
-      }),
-      submiting: false,
-      singleLine: false,
-      showMamageField: false,
-      changed: false,
-      hasManage: false
-    };
+    return {};
   },
   computed: {
     isDialog() {
-      return this.success;
+      return !!this.success;
     },
     id() {
       if (this.pars && this.pars.id) {
         return this.pars.id;
       } else {
-        let { q: id } = this.$route.query;
+        let {
+          q: id
+        } = this.$route.query;
         return id;
       }
     },
@@ -91,34 +149,42 @@ export default {
     }
   },
   async mounted() {
-    let id = this.id;
-    if (!id) this.canEdit = true;
-    let moduleName = this.name;
-    hasManage(moduleName)
-      .then(val => {
-        this.hasManage = val;
-        return getRules(moduleName);
-      })
-      .then(rules => {
-        this.rules = rules;
-        return this.load();
-      })
-      .then(() => {
-        return getFormItems(moduleName);
-      })
-      .then(options => {
-        this.options = options;
-      });
-
-    this.$eventBus.$on(`${this.name}_DataUpdated`, this.DataUpdated);
-    this.$eventBus.$on(`${this.name}_DataDeleted`, this.DataDeleted);
+    if (this.name) {
+      this.init();
+      this.$eventBus.$on(`${this.name}_DataUpdated`, this.DataUpdated);
+      this.$eventBus.$on(`${this.name}_DataDeleted`, this.DataDeleted);
+    }
   },
   destroyed() {
-    this.$eventBus.$off(`${this.name}_DataUpdated`, this.DataUpdated);
-    this.$eventBus.$off(`${this.name}_DataDeleted`, this.DataDeleted);
+    if (this.name) {
+      this.$eventBus.$off(`${this.name}_DataUpdated`, this.DataUpdated);
+      this.$eventBus.$off(`${this.name}_DataDeleted`, this.DataDeleted);
+    }
   },
   methods: {
-    DataUpdated({ Id }) {
+    init() {
+      let id = this.id;
+      if (!id) this.canEdit = true;
+      let moduleName = this.name;
+      hasManage(moduleName)
+        .then(val => {
+          this.hasManage = val;
+          return getRules(moduleName);
+        })
+        .then(rules => {
+          this.rules = rules;
+          return this.load();
+        })
+        .then(() => {
+          return getFormItems(moduleName);
+        })
+        .then(options => {
+          this.options = options;
+        });
+    },
+    DataUpdated({
+      Id
+    }) {
       if (Id == this.id) this.load();
     },
     DataDeleted() {
@@ -128,7 +194,6 @@ export default {
     },
     async load() {
       let id = this.id,
-        form,
         promise;
       if (id) {
         promise = this.$http.get(`/api/${this.name}/get/${id}`);
@@ -175,7 +240,9 @@ export default {
 
         let id = this.id,
           data,
-          postData = { ...this.form };
+          postData = {
+            ...this.form
+          };
         delete postData.Create_User;
         delete postData.Modify_User;
 
@@ -209,46 +276,5 @@ export default {
         this.goList();
       }
     }
-  },
-  render(h) {
-    let props = {
-      ...this.$props,
-      ...this.$attrs,
-      title: this.title,
-      id: this.id,
-      form: this.form,
-      formErrorMessages: this.formErrorMessages,
-      options: this.options,
-      rules: this.rules,
-      submiting: this.submiting,
-      singleLine: this.singleLine,
-      showMamageField: this.showMamageField,
-      canEdit: this.canEdit,
-      changed: this.changed,
-      formGroups: this.formGroups,
-      isDialog: this.isDialog,
-      hasManage: this.hasManage
-    };
-
-    let listeners = {
-      success: val => this.$emit("success", val),
-      cancel: this.cancel,
-      chaneShowMode: () => (this.singleLine = !this.singleLine),
-      changeShowMamageField: () =>
-        (this.showMamageField = !this.showMamageField),
-      changed: $event => {
-        this.changed = true;
-        this.evalRule($event.item.Name);
-      },
-      reload: this.load(),
-      update_errorMessages: val => {
-        this.formErrorMessages[val.item.Name] = val.value;
-      },
-      submit: this.submit
-    };
-    return h("v-page", { props, on: listeners });
   }
 };
-</script>
-
- 

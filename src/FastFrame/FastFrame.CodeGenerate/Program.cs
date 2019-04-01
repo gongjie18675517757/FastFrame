@@ -60,6 +60,16 @@ namespace FastFrame.CodeGenerate
 
             var basePath = $@"{Directory.GetParent(rootPath).Parent}\Admin\src\views";
             var docPath = $@"{rootPath}Lib";
+            var listVueContent = File.ReadAllLines(Path.Combine(Directory.GetCurrentDirectory(), "List.vue"));
+            var addVueContent = File.ReadAllLines(Path.Combine(Directory.GetCurrentDirectory(), "Add.vue"));
+
+            string ReplacePlaceholder(string line, Type type)
+            {
+                return line.Replace("{{AreaName}}", T4Help.GenerateNameSpace(type, ""))
+                    .Replace("{{ModuleName}}", type.Name)
+                    .Replace("{{Description}}", T4Help.GetClassSummary(type, docPath));
+            }
+
             foreach (var area in types2.GroupBy(x => T4Help.GenerateNameSpace(x, null)))
             {
                 var path = Path.Combine(basePath, area.Key);
@@ -70,87 +80,20 @@ namespace FastFrame.CodeGenerate
                     if (!Directory.Exists(pagePath)) Directory.CreateDirectory(pagePath);
 
                     var listPath = Path.Combine(pagePath, "List.vue");
+
                     if (!File.Exists(listPath))
                     {
-                        var lines = new[] {
-                            "<template>",
-                            "  <Page v-bind=\"page\"/>",
-                            "</template>",
-                            "<script>",
-                            "import Page from '@/components/Page/BasisListPage.vue'",
-                            "export default {",
-                              "  props:{",
-                             "      success:Function,",
-                             "      close:Function,",
-                             "      pars:Object",
-                             "  },",
-                            "  components: {",
-                            "    Page",
-                            "  },",
-                            "  data() {",
-                            "    return {",
-                            "      page: {",
-                            "        moduleInfo: {",
-                             $"          area:'{area.Key}',",
-                             $"          name: '{type.Name}',",
-                             $"          direction: '{T4Help.GetClassSummary(type,docPath)}'",
-                             "        },",
-                             "        pageInfo:{",
-                             "          success:this.success,",
-                             "          close:this.close,",
-                             "          pars:this.pars",
-                             "        }",
-                             "      }",
-                             "    }",
-                             "  }",
-                             "}",
-                             "</script>"
-                        };
-                        WriteLines(listPath, lines);
+                        WriteLines(listPath,
+                            listVueContent.Select(r => ReplacePlaceholder(r, type)));
                     }
 
                     var addPath = Path.Combine(pagePath, "Add.vue");
-                    if (!File.Exists(addPath))
+
+
+                    if (!File.Exists(addPath) && typeof(IHasManage).IsAssignableFrom(type))
                     {
-                        var lines = new[] {
-                            "<template>",
-                             "  <Page v-bind=\"page\" @success=\"$emit('success',$event)\"/>",
-                             "</template>",
-                             "",
-                             "<script>",
-                             "import Page from '@/components/Page/BasisFormPage.vue'",
-                             "export default {",
-                             "  props:{",
-                             "      success:Function,",
-                             "      close:Function,",
-                             "      pars:Object",
-                             "  },",
-                             "  components: {",
-                             "    Page",
-                             "  },",
-                             "  data() {",
-                             "    return {",
-                             "      page: {",
-                             "        moduleInfo: {",
-                            $"          area:'{area.Key}',",
-                            $"          name: '{type.Name}',",
-                            $"          direction: '{T4Help.GetClassSummary(type,docPath)}',",
-                             "        },",
-                             "        pageInfo:{",
-                             "          success:this.success,",
-                             "          close:this.close,",
-                             "          pars:this.pars",
-                             "        }",
-                             "      }",
-                             "    }",
-                             "  }",
-                             "}",
-                             "</script>",
-                             "",
-                             "<style>",
-                             "</style>"
-                        };
-                        WriteLines(addPath, lines);
+                        WriteLines(addPath, addVueContent
+                            .Select(r => ReplacePlaceholder(r, type)));
                     }
                 }
             }

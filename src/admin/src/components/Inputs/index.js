@@ -69,25 +69,25 @@ export default {
   methods: {
     change(val) {
       this.$emit('change', val)
-      if (this.errorMessages)
-        this.evalRules()
-      if (typeof this.callback == 'function')
-        this.callback.call(this.model || {}, val)
+      // if (this.errorMessages)
+      //   this.evalRules()
+      // if (typeof this.callback == 'function')
+      //   this.callback.call(this.model || {}, val)
     },
-    async evalRules() {
-      let errs = []
-      for (const rule of this.rules) {
-        let result = (await rule.call(this.model || {}, this.val))
-        if (typeof (result) == 'string') {
-          errs.push(result);
-          continue
-        }
-      }
-      // this.errorMessages = errs
+    // async evalRules() {
+    //   let errs = []
+    //   for (const rule of this.rules) {
+    //     let result = (await rule.call(this.model || {}, this.val))
+    //     if (typeof (result) == 'string') {
+    //       errs.push(result);
+    //       continue
+    //     }
+    //   }
+    //   // this.errorMessages = errs
 
-      this.$emit('update_errorMessages', errs)
-      return errs
-    }
+    //   this.$emit('update_errorMessages', errs)
+    //   return errs
+    // }
   },
   render(h) {
     let errs = this.errorMessages || []

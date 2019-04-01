@@ -15,14 +15,11 @@
                   v-for="item in options"
                   :key="item.Name"
                   :model="form"
-                  :rules="item.rules"
                   v-bind="item"
                   singleLine
                   canEdit
                   :errorMessages="formErrorMessages[item.Name]"
-                  @change="changed=true"
-                  @update_errorMessages="formErrorMessages[item.Name]=$event"
-                  :ref="item.Name"
+                  @change="handleChange(item)"
                 />
               </v-layout>
               <v-divider class="mt-5"></v-divider>
@@ -76,24 +73,37 @@ export default {
     cancel() {
       this.$emit("close");
     },
-    async success() {
-      let errs = [];
-      let names = Object.keys(this.form);
-      for (const name of names) {
-        if (
-          this.$refs[name] &&
-          this.$refs[name].length > 0 &&
-          typeof this.$refs[name][0].evalRules == "function"
-        ) {
-          let err = await this.$refs[name][0].evalRules();
-          errs.push(...err);
+    handleChange(item) {
+      this.changed = true;
+      this.evalRule(item);
+    },
+    async evalRule(item) {
+      let name = item.Name;
+      let rules = item.rules;
+      let val = this.form[name];
+      this.formErrorMessages[name] = [];
+      for (const rule of rules) {
+        if (this.formErrorMessages[name].length == 0) {
+          let err = await rule.call(this.form, val);
+          if (typeof err == "string") {
+            this.formErrorMessages[name].push(err);
+            return err;
+          }
         }
       }
+    },
+    async success() {
+      let errs = [];
+      for (const item of this.options) {
+        let err = await this.evalRule(item);
+        errs.push(err);
+      }
+
       if (errs.length > 0) {
-        this.$eventBus.$emit("alert", {
-          type: "error",
-          msg: "表单填写不完整"
-        });
+        // this.$eventBus.$emit("alert", {
+        //   type: "error",
+        //   msg: "表单填写不完整"
+        // });
 
         return;
       }

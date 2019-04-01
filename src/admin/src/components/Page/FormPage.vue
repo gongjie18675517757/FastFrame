@@ -67,7 +67,7 @@
                             :canEdit="canEdit"
                             :singleLine="singleLine"
                             :errorMessages="formErrorMessages[item.Name]"
-                            @change="$emit('changed',{item:item,value:$event})"                           
+                            @change="$emit('changed',{item:item,value:$event})"
                             :ref="item.Name"
                           />
                         </component>
@@ -128,7 +128,7 @@ export default {
   },
   watch: {
     $route: function() {
-      this.load();
+      this.$emit('reload');
     }
   },
   computed: {
@@ -165,13 +165,13 @@ export default {
       this.canEdit = !this.canEdit;
     },
     refresh() {
-      this.$emit('reload');
+      this.reload();
     },
     getRules(item) {
-      return this.rules[item.Name];
+      return item.rules || this.rules[item.Name];
     },
     goList() {
-      this.$router.push(`/${this.name}/list`);
+      if (this.name) this.$router.push(`/${this.name}/list`);
     }
   }
 };

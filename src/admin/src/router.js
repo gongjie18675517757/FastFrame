@@ -72,17 +72,7 @@ let routes = [{
         props: true,
         component: () =>
           import(`./views/About`)
-      },
-      {
-        path: '/about2',
-        name: 'about2',
-        meta: {
-          title: '关于页',
-          keepAlive: false
-        }, 
-        component: () =>
-          import(`./views/Basis/Dept/Add2.vue`)
-      },
+      }, 
       {
         path: '/chat',
         name: 'chat',

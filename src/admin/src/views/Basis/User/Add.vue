@@ -1,34 +1,30 @@
-<template>
-  <Page v-bind="page" @success="$emit('success',$event)"/>
-</template>
 <script>
-import Page from '@/components/Page/BasisFormPage.vue'
+import {
+  formData,
+  pageProps,
+  pageListeners,
+  FormPageMixin
+} from "@/components/Page/FormPageCore.js";
+
 export default {
-  props: {
-    success: Function,
-    close: Function,
-    pars: Object
-  },
-  components: {
-    Page
-  },
+  mixins: [FormPageMixin],
   data() {
     return {
-      page: {
-        moduleInfo: {
-          area: 'Basis',
-          name: 'User',
-          direction: '用户', 
-        },
-        pageInfo: {
-          success: this.success,
-          close: this.close,
-          pars: this.pars
-        }
-      }
-    }
+      ...formData,
+      area: "Basis",
+      name: "User",
+      direction: "用户"
+    };
+  },
+  render(h) {
+    let props = pageProps.call(this);
+    let listeners = pageListeners.call(this);
+    return h("v-page", { props, on: listeners });
   }
-}
+};
 </script>
+
+ 
+ 
 
  

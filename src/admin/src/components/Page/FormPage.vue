@@ -6,45 +6,50 @@
           <v-toolbar flat dense card color="transparent">
             <v-toolbar-title>{{title}}</v-toolbar-title>
             <v-spacer></v-spacer>
-            <a-btn
-              icon
-              v-if="hasManage && id && !changed"
-              :moduleName="name"
-              name="Update"
-              @click="handleEdit"
-              title="修改"
-            >
-              <v-icon>edit</v-icon>
-            </a-btn>
-            <v-btn icon @click="refresh" title="刷新">
-              <v-icon>refresh</v-icon>
-            </v-btn>
-            <v-menu offset-y>
-              <v-btn icon slot="activator" title="设置">
-                <v-icon>more_vert</v-icon>
+            <v-toolbar-items>
+              <a-btn
+                icon
+                v-if="hasManage && id && !changed"
+                :moduleName="name"
+                name="Update"
+                @click="handleEdit"
+                title="修改"
+              >
+                <v-icon>edit</v-icon>
+              </a-btn>
+              <v-btn icon @click="refresh" title="刷新">
+                <v-icon>refresh</v-icon>
               </v-btn>
-              <v-list>
-                <v-list-tile @click="$emit('chaneShowMode')">
-                  <v-list-tile-action>
-                    <v-checkbox :value="singleLine"></v-checkbox>
-                  </v-list-tile-action>
-                  <v-list-tile-content>
-                    <v-list-tile-title>{{'单行布局'}}</v-list-tile-title>
-                  </v-list-tile-content>
-                </v-list-tile>
-                <v-list-tile v-if="hasManage &&  form.Id" @click="$emit('changeShowMamageField')">
-                  <v-list-tile-action>
-                    <v-checkbox :value="showMamageField"></v-checkbox>
-                  </v-list-tile-action>
-                  <v-list-tile-content>
-                    <v-list-tile-title>{{ '显示管理字段'}}</v-list-tile-title>
-                  </v-list-tile-content>
-                </v-list-tile>
-              </v-list>
-            </v-menu>
-            <v-btn icon @click="$emit('cancel')" title="关闭" v-if="isDialog">
-              <v-icon>close</v-icon>
-            </v-btn>
+              <v-menu offset-y>
+                <v-btn icon slot="activator" title="设置">
+                  <v-icon>more_vert</v-icon>
+                </v-btn>
+                <v-list>
+                  <v-list-tile @click="$emit('toggle:singleLine')">
+                    <v-list-tile-action>
+                      <v-checkbox :value="singleLine"></v-checkbox>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                      <v-list-tile-title>{{'单行布局'}}</v-list-tile-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                  <v-list-tile
+                    v-if="hasManage &&  form.Id"
+                    @click="$emit('toggle:showMamageField')"
+                  >
+                    <v-list-tile-action>
+                      <v-checkbox :value="showMamageField"></v-checkbox>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                      <v-list-tile-title>{{ '显示管理字段'}}</v-list-tile-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-list>
+              </v-menu>
+              <v-btn icon @click="$emit('cancel')" title="关闭" v-if="isDialog">
+                <v-icon>close</v-icon>
+              </v-btn>
+            </v-toolbar-items>
           </v-toolbar>
           <v-divider></v-divider>
           <v-form ref="form">
@@ -53,7 +58,10 @@
                 <v-expansion-panel expand v-model="formGroupExpandValue" style="margin-top:-15px;">
                   <v-expansion-panel-content v-for="group in formGroups" :key="group.key.title">
                     <template v-if="canEdit" v-slot:header>
-                      <div class="form-page-group-header">{{group.key.title}}</div>
+                      <v-toolbar flat  color="transparent">
+                        <v-toolbar-title>{{group.key.title}}</v-toolbar-title> 
+                      </v-toolbar>
+                      <!-- <div class="form-page-group-header">{{group.key.title}}</div> -->
                     </template>
                     <v-card>
                       <v-card-text>
@@ -128,7 +136,7 @@ export default {
   },
   watch: {
     $route: function() {
-      this.$emit('reload');
+      this.$emit("reload");
     }
   },
   computed: {
@@ -162,7 +170,7 @@ export default {
 
   methods: {
     handleEdit() {
-      this.canEdit = !this.canEdit;
+      this.$emit("tooggle:canEdit");
     },
     refresh() {
       this.reload();

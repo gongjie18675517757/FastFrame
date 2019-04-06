@@ -125,3 +125,10 @@ export default {
   }
 };
 </script>
+
+
+<style>
+/* table th {
+  border: 1px solid #fff;
+} */
+</style>

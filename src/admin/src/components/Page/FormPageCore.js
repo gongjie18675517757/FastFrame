@@ -55,6 +55,7 @@ export let pageProps = function () {
     title: this.title,
     id: this.id,
     form: this.form,
+    name: this.name,
     formErrorMessages: this.formErrorMessages,
     options: this.options,
     rules: this.rules,
@@ -73,16 +74,14 @@ export let pageListeners = function () {
   return {
     success: val => this.$emit("success", val),
     cancel: this.cancel,
-    chaneShowMode: () => (this.singleLine = !this.singleLine),
-    changeShowMamageField: () => (this.showMamageField = !this.showMamageField),
+    'tooggle:canEdit': () => this.canEdit = !this.canEdit,
+    'toggle:singleLine': () => (this.singleLine = !this.singleLine),
+    'toggle:showMamageField': () => (this.showMamageField = !this.showMamageField),
     changed: $event => {
       this.changed = true;
       this.evalRule($event.item.Name);
     },
-    reload: this.load,
-    update_errorMessages: val => {
-      this.formErrorMessages[val.item.Name] = val.value;
-    },
+    reload: this.load, 
     submit: this.submit
   };
 };
@@ -104,7 +103,7 @@ export let FormPageMixin = {
       return !!this.success;
     },
     id() {
-      if (this.pars && this.pars.id) {
+      if (this.pars) {
         return this.pars.id;
       } else {
         let {
@@ -259,8 +258,7 @@ export let FormPageMixin = {
           this.goList();
         }
       } catch (error) {
-        alert.error(error.message);
-        console.error(error);
+        alert.error(error.message);       
       } finally {
         this.submiting = false;
       }

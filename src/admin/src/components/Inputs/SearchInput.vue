@@ -12,6 +12,7 @@
       :label="label"
       :readonly="disabled"
       :errorMessages="errorMessages"
+      :placeholder="description"
       @change="change"
     >
       <template slot="no-data">
@@ -53,7 +54,8 @@ export default {
       type: String,
       required: true
     },
-    isXs: Boolean
+    isXs: Boolean,
+    description:String,
   },
   data() {
     return {

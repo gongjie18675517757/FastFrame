@@ -11,7 +11,7 @@
               <v-subheader class="px-1 my-2">导航颜色</v-subheader>
               <v-divider></v-divider>
               <div class="color-option">
-                <v-layout wrap="">
+                <v-layout wrap>
                   <label
                     class="color-option--label flex xs6 pa-1"
                     v-for="(option,index) in themeColorOptions"
@@ -45,6 +45,16 @@
                   </v-btn-toggle>
                 </div>
               </div>
+              <div class="theme-options">
+                <v-subheader class="px-1 my-2">页面模式</v-subheader>
+                <v-divider></v-divider>
+                <div class="my-3">
+                  <v-btn-toggle v-model="singlePageMode">
+                    <v-btn flat :value="true">单页</v-btn>
+                    <v-btn flat :value="false">多页签</v-btn>
+                  </v-btn-toggle>
+                </div>
+              </div>
             </v-flex>
           </v-layout>
         </v-container>
@@ -54,8 +64,8 @@
 </template>
 
 <script>
-import colors from 'vuetify/es5/util/colors'
-import VuePerfectScrollbar from 'vue-perfect-scrollbar'
+import colors from "vuetify/es5/util/colors";
+import VuePerfectScrollbar from "vue-perfect-scrollbar";
 
 export default {
   components: {
@@ -65,110 +75,118 @@ export default {
   data() {
     return {
       show: false,
-      sideBarOption: 'light',
+      sideBarOption: "light",
       colors: colors,
-      themeColor: 'indigo',
+      themeColor: "indigo",
       scrollSettings: {
         maxScrollbarLength: 160
       },
       themeColorOptions: [
         {
-          key: 'blue',
+          key: "blue",
           value: {
-            sideNav: 'blue',
-            mainNav: 'blue',
-            sideManu: 'white'
+            sideNav: "blue",
+            mainNav: "blue",
+            sideManu: "white"
           }
         },
         {
-          key: 'teal',
+          key: "teal",
           value: {
-            sideNav: 'teal',
-            mainNav: 'teal',
-            sideManu: 'white'
+            sideNav: "teal",
+            mainNav: "teal",
+            sideManu: "white"
           }
         },
         {
-          key: 'red',
+          key: "red",
           value: {
-            sideNav: 'red',
-            mainNav: 'red',
-            sideManu: 'white'
+            sideNav: "red",
+            mainNav: "red",
+            sideManu: "white"
           }
         },
         {
-          key: 'orange',
+          key: "orange",
           value: {
-            sideNav: 'orange',
-            mainNav: 'orange',
-            sideManu: 'white'
+            sideNav: "orange",
+            mainNav: "orange",
+            sideManu: "white"
           }
         },
         {
-          key: 'purple',
+          key: "purple",
           value: {
-            sideNav: 'purple',
-            mainNav: 'purple',
-            sideManu: 'white'
+            sideNav: "purple",
+            mainNav: "purple",
+            sideManu: "white"
           }
         },
         {
-          key: 'indigo',
+          key: "indigo",
           value: {
-            sideNav: 'indigo',
-            mainNav: 'indigo',
-            sideManu: 'white'
+            sideNav: "indigo",
+            mainNav: "indigo",
+            sideManu: "white"
           }
         },
         {
-          key: 'cyan',
+          key: "cyan",
           value: {
-            sideNav: 'cyan',
-            mainNav: 'cyan',
-            sideManu: 'white'
+            sideNav: "cyan",
+            mainNav: "cyan",
+            sideManu: "white"
           }
         },
         {
-          key: 'pink',
+          key: "pink",
           value: {
-            sideNav: 'pink',
-            mainNav: 'pink',
-            sideManu: 'white'
+            sideNav: "pink",
+            mainNav: "pink",
+            sideManu: "white"
           }
         },
         {
-          key: 'green',
+          key: "green",
           value: {
-            sideNav: 'green',
-            mainNav: 'green',
-            sideManu: 'white'
+            sideNav: "green",
+            mainNav: "green",
+            sideManu: "white"
           }
         }
       ]
-    }
+    };
   },
   computed: {
     rightDrawer: {
       get() {
-        return this.$store.state.rightDrawer
+        return this.$store.state.rightDrawer;
       },
       set(val) {
         this.$store.commit({
-          type: 'toggleRightDrawer',
+          type: "toggleRightDrawer",
           value: val
-        })
+        });
+      }
+    },
+    singlePageMode: {
+      get() {
+        return this.$store.state.singlePageMode;
+      },
+      set(val) {
+        this.$store.state.singlePageMode = val;
       }
     }
   },
   watch: {
     themeColor(val) {
-      this.$vuetify.theme.primary = this.colors[val].base
+      this.$vuetify.theme.primary = this.colors[val].base;
     },
     sideBarOption(val) {
-      this.$vuetify.dark = val === 'dark'
+      this.$vuetify.dark = val === "dark";
     }
   }
-}
+};
 </script>
 
 <style lang="stylus" scoped>

@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="log4net.config" />
+    <Content Remove="Nlog.config" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,22 +42,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="log4net.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
     <!--<PackageReference Include="AspectCore.Core" Version="1.0.1" />-->
     <!--<PackageReference Include="EasyCaching.Serialization.Json" Version="0.3.1" />-->
    
     <PackageReference Include="AspectCore.Extensions.DependencyInjection" Version="1.2.0" />   
-    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />   
+    <!--<PackageReference Include="NLog" Version="4.6.3" />   
+    <PackageReference Include="NLog.Web.AspNetCore" Version="4.8.1" />-->
     <!--<PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />-->
     <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="2.2.10" />
-    <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.0.165" />
+    <!--<PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.0.165" />
     <PackageReference Include="MiniProfiler.EntityFrameworkCore" Version="4.0.165" />
-    <PackageReference Include="MiniProfiler.Providers.MySql" Version="4.0.165" />
+    <PackageReference Include="MiniProfiler.Providers.MySql" Version="4.0.165" />-->
     <!--<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.2" />-->
     <!--<PackageReference Include="Newtonsoft.Json" Version="12.0.1" />-->
     <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" /> 

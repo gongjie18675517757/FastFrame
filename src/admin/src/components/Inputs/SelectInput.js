@@ -31,7 +31,7 @@ export default {
         value: this.value,
         readonly: this.disabled,
         label: this.label,
-        description: this.description,
+        placeholder: this.description,
         errorMessages: this.errorMessages,
         items: this.values,
         itemText: this.itemText,

@@ -9,11 +9,12 @@ namespace FastFrame.Application.Privder
 
         public ScopeServiceLoader(IServiceProvider serviceProvider)
         {
+             
             this.serviceProvider = serviceProvider;
         }
 
         public T GetService<T>()
-        {
+        { 
             return serviceProvider.GetService<T>();
         }
 

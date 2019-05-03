@@ -187,9 +187,7 @@ namespace FastFrame.Service
         protected virtual IQueryable<TDto> QueryMain()
         {
             return repository.Queryable.MapTo<TEntity, TDto>();
-        }
-
-
+        } 
 
         /// <summary>
         /// 验证属性

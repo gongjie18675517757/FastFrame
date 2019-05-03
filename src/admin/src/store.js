@@ -10,6 +10,7 @@ export default new Vuex.Store({
     leftDrawer: true,
     rightDrawer: false,
     dialogMode: false,
+    singlePageMode: true,
     mapMode: '',
     notifys: [{
         title: '您的帐户入帐100元',

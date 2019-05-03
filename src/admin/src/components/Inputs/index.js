@@ -97,6 +97,7 @@ export default {
       disabled: this.evalDisabled,
       // label: this.Description,
       description: this.Description,
+      placeholder: this.Description,
       errorMessages: this.errorMessages,
       errorCount: errs.length,
       error: !!errs.find(r => r),

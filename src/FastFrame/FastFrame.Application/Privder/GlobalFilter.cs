@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Reflection;
 using AspectCore.DynamicProxy;
+using Microsoft.Extensions.Logging;
 
 namespace FastFrame.Application.Privder
 {
@@ -18,15 +19,19 @@ namespace FastFrame.Application.Privder
         private readonly ICurrentUserProvider operaterProvider;
         private readonly PermissionService permissionService;
         private readonly IDescriptionProvider descriptionProvider;
+        private readonly ILogger<GlobalFilter> logger;
         private const string StopwatchName = "Stopwatch";
 
-        public GlobalFilter(ICurrentUserProvider operaterProvider,
+        public GlobalFilter(
+            ICurrentUserProvider operaterProvider,
             PermissionService permissionService,
-            IDescriptionProvider descriptionProvider)
+            IDescriptionProvider descriptionProvider,
+            ILogger<GlobalFilter> logger)
         {
             this.operaterProvider = operaterProvider;
             this.permissionService = permissionService;
             this.descriptionProvider = descriptionProvider;
+            this.logger = logger;
         }
         /// <summary>
         /// 权限验证
@@ -103,6 +108,8 @@ namespace FastFrame.Application.Privder
 #endif
             }
 
+
+            logger.LogError(ex,ex.Message);
             return Task.CompletedTask;
         }
     }

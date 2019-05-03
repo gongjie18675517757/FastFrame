@@ -21,6 +21,7 @@
           v-on="on"
           :label="label"
           :errorMessages="errorMessages"
+          :placeholder="description"
         ></v-text-field>
       </template>
       <v-date-picker

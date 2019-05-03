@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,9 +23,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
-using StackExchange.Profiling;
-using Swashbuckle.AspNetCore.Swagger;
-using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -108,15 +104,8 @@ namespace FastFrame.Application
                 var xmlPath = Path.Combine(basePath, "FastFrame.Application.xml");
                 options.IncludeXmlComments(xmlPath);
                 xmlPath = Path.Combine(basePath, "FastFrame.Dto.xml");
-                options.IncludeXmlComments(xmlPath);
-
-                options.DocumentFilter<InjectMiniProfiler>();
-            });
-
-            services.AddMiniProfiler(options =>
-            {
-                options.RouteBasePath = "/profiler";
-            }).AddEntityFramework();
+                options.IncludeXmlComments(xmlPath); 
+            }); 
 
             services.AddSingleton(x =>
             {
@@ -126,7 +115,8 @@ namespace FastFrame.Application
                 return redisClient;
             });
             var container = services.ToServiceContainer();
-            var serviceResolver = container.Build();
+            var serviceResolver = container.Build(); 
+
             return serviceResolver;
         }
 
@@ -140,9 +130,8 @@ namespace FastFrame.Application
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-            } 
-
-            app.UseMiniProfiler();
+            }  
+             
 
             app.UseSignalR(routes =>
             {
@@ -168,7 +157,7 @@ namespace FastFrame.Application
             });
             //app.UseRewriter(new RewriteOptions().AddRewrite())
 
-
+            app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions
             {
@@ -188,32 +177,16 @@ namespace FastFrame.Application
 
             applicationLifetime.ApplicationStarted.Register(() =>
             {
-                Console.WriteLine("ApplicationStarted");
+                app.ApplicationServices.GetService<ILogger<Startup>>().LogInformation("ApplicationStarted");
             });
             applicationLifetime.ApplicationStopped.Register(() =>
             {
-                Console.WriteLine("ApplicationStopped");
+                app.ApplicationServices.GetService<ILogger<Startup>>().LogInformation("ApplicationStopped");
             });
             applicationLifetime.ApplicationStopping.Register(() =>
             {
-                Console.WriteLine("ApplicationStopping");
+                app.ApplicationServices.GetService<ILogger<Startup>>().LogInformation("ApplicationStopping");
             });
         }
-    }
-
-    public class InjectMiniProfiler : IDocumentFilter
-    {
-        private readonly IHttpContextAccessor _httpContext;
-        public InjectMiniProfiler(IHttpContextAccessor httpContext)
-        {
-            _httpContext = httpContext;
-        }
-        public void Apply(SwaggerDocument swaggerDoc, DocumentFilterContext context)
-        {
-            swaggerDoc.Info.Contact = new Contact()
-            {
-                Name = MiniProfiler.Current.RenderIncludes(_httpContext.HttpContext).ToString()
-            };
-        }
-    }
+    } 
 }

@@ -31,26 +31,6 @@ namespace FastFrame.Application.Controllers.Basis
         public async Task<UserDto> ToogleDisabled(string id)
         {
             return await service.ToogleDisabled(id);
-        }
-
-        /// <summary>
-        /// 设置用户角色
-        /// </summary>        
-        [HttpPut("{id}")]
-        [Permission(nameof(SetUserRoles), "切换状态")]
-        public async Task SetUserRoles(string id, [FromBody]IEnumerable<string> roles)
-        {
-            await service.SetUserRoles(id, roles);
-        }
-
-        /// <summary>
-        /// 获取用户角色
-        /// </summary> 
-        [HttpGet("{id}")]
-        [Permission(new string[] { nameof(SetUserRoles) })]
-        public async Task<IEnumerable<RoleDto>> GetUserRoles(string id)
-        {
-            return await service.GetUserRoles(id);
-        }
+        } 
     }
 }

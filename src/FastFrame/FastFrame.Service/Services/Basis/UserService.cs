@@ -93,48 +93,6 @@ namespace FastFrame.Service.Services.Basis
             await userRepository.CommmitAsync();
 
             return await GetAsync(id);
-        }
-
-        /// <summary>
-        /// 设置用户角色
-        /// </summary>         
-        public async Task SetUserRoles(string id, IEnumerable<string> roles)
-        {
-            var before = await roleMemberRepository.Queryable.Where(x => x.User_Id == id).ToListAsync();
-            var comparisonCollection = new ComparisonCollection<RoleMember, string>(before, roles, (a, b) => a.Role_Id == b);
-            foreach (var item in comparisonCollection.GetCollectionByAdded())
-            {
-                await roleMemberRepository.AddAsync(new RoleMember()
-                {
-                    Role_Id = item,
-                    User_Id = id
-                });
-            }
-
-            foreach (var item in comparisonCollection.GetCollectionByDeleted())
-            {
-                await roleMemberRepository.DeleteAsync(item);
-            }
-
-            await roleMemberRepository.CommmitAsync();
-        }
-
-        /// <summary>
-        /// 获取角色权限
-        /// </summary>
-        /// <param name="id"></param>        
-        public async Task<IEnumerable<RoleDto>> GetUserRoles(string id)
-        {
-            var iq = from a in roleMemberRepository.Queryable
-                     join b in roleRepository.Queryable on a.Role_Id equals b.Id
-                     where a.User_Id == id
-                     select b;
-            return await iq.MapTo<Role, RoleDto>().ToListAsync();
-        }
-
-        protected override Task OnUpdateing(UserDto input, User entity)
-        {
-            return base.OnUpdateing(input, entity);
-        }
+        } 
     }
 }

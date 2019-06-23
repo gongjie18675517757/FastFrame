@@ -59,7 +59,7 @@ namespace FastFrame.CodeGenerate
                 .Where(x => (typeName.IsNullOrWhiteSpace() || x.Name == typeName) && x.GetCustomAttribute<ExportAttribute>() != null);
 
             var basePath = $@"{Directory.GetParent(rootPath).Parent}\Admin\src\views";
-            var docPath = $@"{rootPath}Lib";
+            var docPath = Directory.GetCurrentDirectory();
             var listVueContent = File.ReadAllLines(Path.Combine(Directory.GetCurrentDirectory(), "List.vue"));
             var addVueContent = File.ReadAllLines(Path.Combine(Directory.GetCurrentDirectory(), "Add.vue"));
 

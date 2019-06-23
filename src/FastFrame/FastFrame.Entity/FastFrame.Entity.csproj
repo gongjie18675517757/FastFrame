@@ -40,10 +40,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FastFrame.Infrastructure\FastFrame.Infrastructure.csproj" />
-  </ItemGroup>
-
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy $(TargetPath) $(SolutionDir)Lib /y&#xD;&#xA;if exist &quot;$(TargetDir)$(ProjectName).xml&quot; xcopy $(TargetDir)$(ProjectName).xml  $(SolutionDir)Lib /y" />
-  </Target>
+  </ItemGroup> 
 
 </Project>

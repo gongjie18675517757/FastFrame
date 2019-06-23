@@ -15,41 +15,6 @@
             </summary>
             <typeparam name="T"></typeparam>
         </member>
-        <member name="T:FastFrame.Dto.Basis.PermissionDto">
-             <summary>
-            权限 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.PermissionDto.Permissions">
-            <summary>
-            下级权限
-            </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.PermissionDto.Name">
-             <summary>
-            名称 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.PermissionDto.EnCode">
-             <summary>
-            编码 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.PermissionDto.AreaName">
-             <summary>
-            区域 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.PermissionDto.Parent_Id">
-             <summary>
-            父级 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.PermissionDto.Parent">
-             <summary>
-            父级 
-             </summary>
-        </member>
         <member name="T:FastFrame.Dto.Basis.DeptDto">
              <summary>
             部门 
@@ -115,6 +80,191 @@
             修改时间 
              </summary>
         </member>
+        <member name="T:FastFrame.Dto.Basis.PermissionDto">
+             <summary>
+            权限 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.PermissionDto.Permissions">
+            <summary>
+            下级权限
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.PermissionDto.Name">
+             <summary>
+            名称 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.PermissionDto.EnCode">
+             <summary>
+            编码 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.PermissionDto.AreaName">
+             <summary>
+            区域 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.PermissionDto.Parent_Id">
+             <summary>
+            父级 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.PermissionDto.Parent">
+             <summary>
+            父级 
+             </summary>
+        </member>
+        <member name="T:FastFrame.Dto.Basis.RoleDto">
+             <summary>
+            角色 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.RoleDto.EnCode">
+             <summary>
+            编码 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.RoleDto.Name">
+             <summary>
+            名称 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.RoleDto.Create_User_Id">
+             <summary>
+            创建人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.RoleDto.Create_User">
+             <summary>
+            创建人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.RoleDto.CreateTime">
+             <summary>
+            创建时间 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.RoleDto.Modify_User_Id">
+             <summary>
+            修改人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.RoleDto.Modify_User">
+             <summary>
+            修改人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.RoleDto.ModifyTime">
+             <summary>
+            修改时间 
+             </summary>
+        </member>
+        <member name="T:FastFrame.Dto.Basis.UserDto">
+             <summary>
+            用户 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.UserDto.Account">
+             <summary>
+            帐号 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.UserDto.Password">
+             <summary>
+            密码 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.UserDto.Name">
+             <summary>
+            姓名 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.UserDto.Email">
+             <summary>
+            邮箱 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.UserDto.PhoneNumber">
+             <summary>
+            手机号码 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.UserDto.Dept_Id">
+             <summary>
+            部门 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.UserDto.Dept">
+             <summary>
+            部门 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.UserDto.HandIcon_Id">
+             <summary>
+            头像 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.UserDto.HandIcon">
+             <summary>
+            头像 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.UserDto.IsAdmin">
+             <summary>
+            是否管理员 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.UserDto.IsDisabled">
+             <summary>
+            是否禁用 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.UserDto.Create_User_Id">
+             <summary>
+            创建人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.UserDto.Create_User">
+             <summary>
+            创建人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.UserDto.CreateTime">
+             <summary>
+            创建时间 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.UserDto.Modify_User_Id">
+             <summary>
+            修改人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.UserDto.Modify_User">
+             <summary>
+            修改人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.UserDto.ModifyTime">
+             <summary>
+            修改时间 
+             </summary>
+        </member>
+        <member name="T:FastFrame.Dto.Basis.DeptMemberDto">
+             <summary>
+            部门成员 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.DeptMemberDto.User_Id">
+             <summary>
+            用户 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.DeptMemberDto.IsManager">
+             <summary>
+            是否管理员 
+             </summary>
+        </member>
         <member name="T:FastFrame.Dto.Basis.EnumItemDto">
             <summary>
             
@@ -133,6 +283,36 @@
         <member name="P:FastFrame.Dto.Basis.EnumItemDto.Parent_Id">
              <summary>
             上级 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.EnumItemDto.Create_User_Id">
+             <summary>
+            创建人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.EnumItemDto.Create_User">
+             <summary>
+            创建人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.EnumItemDto.CreateTime">
+             <summary>
+            创建时间 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.EnumItemDto.Modify_User_Id">
+             <summary>
+            修改人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.EnumItemDto.Modify_User">
+             <summary>
+            修改人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.EnumItemDto.ModifyTime">
+             <summary>
+            修改时间 
              </summary>
         </member>
         <member name="T:FastFrame.Dto.Basis.MeidiaDto">
@@ -325,51 +505,6 @@
             MD5摘要 
              </summary>
         </member>
-        <member name="T:FastFrame.Dto.Basis.RoleDto">
-             <summary>
-            角色 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.RoleDto.EnCode">
-             <summary>
-            编码 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.RoleDto.Name">
-             <summary>
-            名称 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.RoleDto.Create_User_Id">
-             <summary>
-            创建人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.RoleDto.Create_User">
-             <summary>
-            创建人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.RoleDto.CreateTime">
-             <summary>
-            创建时间 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.RoleDto.Modify_User_Id">
-             <summary>
-            修改人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.RoleDto.Modify_User">
-             <summary>
-            修改人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.RoleDto.ModifyTime">
-             <summary>
-            修改时间 
-             </summary>
-        </member>
         <member name="T:FastFrame.Dto.Basis.TenantDto">
              <summary>
             组织信息 
@@ -403,96 +538,6 @@
         <member name="P:FastFrame.Dto.Basis.TenantDto.HandIcon_Id">
              <summary>
             头像 
-             </summary>
-        </member>
-        <member name="T:FastFrame.Dto.Basis.UserDto">
-             <summary>
-            用户 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.UserDto.Account">
-             <summary>
-            帐号 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.UserDto.Password">
-             <summary>
-            密码 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.UserDto.Name">
-             <summary>
-            姓名 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.UserDto.Email">
-             <summary>
-            邮箱 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.UserDto.PhoneNumber">
-             <summary>
-            手机号码 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.UserDto.Dept_Id">
-             <summary>
-            部门 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.UserDto.Dept">
-             <summary>
-            部门 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.UserDto.HandIcon_Id">
-             <summary>
-            头像 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.UserDto.HandIcon">
-             <summary>
-            头像 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.UserDto.IsAdmin">
-             <summary>
-            是否管理员 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.UserDto.IsDisabled">
-             <summary>
-            是否禁用 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.UserDto.Create_User_Id">
-             <summary>
-            创建人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.UserDto.Create_User">
-             <summary>
-            创建人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.UserDto.CreateTime">
-             <summary>
-            创建时间 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.UserDto.Modify_User_Id">
-             <summary>
-            修改人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.UserDto.Modify_User">
-             <summary>
-            修改人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.UserDto.ModifyTime">
-             <summary>
-            修改时间 
              </summary>
         </member>
         <member name="T:FastFrame.Dto.Dtos.Chat.FriendMsgInput">

@@ -55,6 +55,7 @@ namespace FastFrame.CodeGenerate.Build
                 ImportNames = new string[] {
                         $"FastFrame.Entity.{areaNameSpace}",
                         "FastFrame.Infrastructure.Attrs",
+                        "FastFrame.Infrastructure",
                         "global::System.ComponentModel.DataAnnotations",
                         "FastFrame.Entity.Enums",
                         "FastFrame.Entity.Basis",

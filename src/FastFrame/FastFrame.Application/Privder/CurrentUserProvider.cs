@@ -18,7 +18,7 @@ namespace FastFrame.Application.Privder
         private string tokenName = "_code";
         private string token;
         private ICurrUser currUser;
-        private ITenant  tenant =null;
+        private ITenant tenant = null;
 
         public CurrentUserProvider(IHttpContextAccessor httpContextAccessor,
             CSRedisClient cSRedisClient, IDescriptionProvider descriptionProvider, Database.DataBase dataBase)
@@ -44,7 +44,7 @@ namespace FastFrame.Application.Privder
         }
         public ITenant GetCurrOrganizeId()
         {
-            if (tenant!=null)
+            if (tenant != null)
                 return tenant;
             /*
              * X-ORIGINAL-HOST
@@ -53,8 +53,8 @@ namespace FastFrame.Application.Privder
              */
             var host = getHost();
 
-            var tenantId = dataBase.Set<TenantHost>().Where(x => x.Host == host).Select(x=>x.Tenant_Id).FirstOrDefault();
-            tenant= dataBase.Set<Tenant>()
+            var tenantId = dataBase.Set<TenantHost>().Where(x => x.Host == host).Select(x => x.Tenant_Id).FirstOrDefault();
+            tenant = dataBase.Set<Tenant>()
                 .Where(x => x.Id == tenantId || x.Parent_Id == "")
                 .OrderByDescending(x => x.Parent_Id)
                 .FirstOrDefault();
@@ -64,7 +64,7 @@ namespace FastFrame.Application.Privder
 
         private string getHost()
         {
-            string host;
+            string host = httpContextAccessor.HttpContext.Request.Host.Value;
             if (!tryGetHost(new string[] { "X-ORIGINAL-HOST", "Origin", "Referer" }, out host))
                 host = httpContextAccessor.HttpContext.Request.Host.Value;
             return host;
@@ -97,8 +97,8 @@ namespace FastFrame.Application.Privder
                 Expires = new DateTimeOffset(DateTime.Now.AddYears(1)),
                 HttpOnly = true,
                 //Domain = ".localhost",
-                Path="/",
-                
+                Path = "/",
+
             });
         }
 

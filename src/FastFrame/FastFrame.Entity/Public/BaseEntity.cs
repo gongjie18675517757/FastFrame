@@ -5,24 +5,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FastFrame.Entity
 {
-    public abstract class BaseEntity : IEntity, IHasTenant, IHasSoftDelete,IHasManage
+    public abstract class BaseEntity : IEntity, IHasTenant, IHasSoftDelete,IHasManage, IHaveConcurrencyCheck
     {
         /// <summary>
         /// 主键
         /// </summary>
-        public string Id { get; set; }
-
-        /// <summary>
-        /// 组织
-        /// </summary>
-        [Exclude]
-        public string Tenant_Id { get; set; }
-
-        /// <summary>
-        /// 删除码
-        /// </summary>
-        [Exclude]
-        public bool IsDeleted { get; set; }
+        public string Id { get; set; } 
 
         /// <summary>
         /// 创建人

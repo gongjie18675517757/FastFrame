@@ -37,6 +37,7 @@ namespace FastFrame.Database
             foreach (var item in types)
             {
                 var mapping = (IEntityMapping)item.Assembly.CreateInstance(item.FullName);
+               
                 mapping.ModelCreating(modelBuilder); 
             }
 

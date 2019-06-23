@@ -4,18 +4,21 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>D:\CoreProject\FastFrame\src\FastFrame\FastFrame.Infrastructure\FastFrame.Infrastructure.xml</DocumentationFile>
+    <NoWarn>1701;1702;1591;</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <!--<PackageReference Include="EasyCaching.Core" Version="0.3.0" />-->
-    <PackageReference Include="CSRedisCore" Version="3.0.53" />
+    <PackageReference Include="CSRedisCore" Version="3.0.62" />
     <PackageReference Include="AspectCore.Core" Version="1.2.0" />
     <PackageReference Include="Funcular.DotNetCore.IdGenerators.Net" Version="1.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.DynamicLinq" Version="1.0.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.DynamicLinq" Version="1.0.17" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <!--<PackageReference Include="StackExchange.Redis" Version="2.0.513" />-->
     <PackageReference Include="ZKWeb.System.Drawing" Version="4.0.1" /> 
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy $(TargetPath) $(SolutionDir)Lib /y" />
-  </Target> 
+ 
 </Project>

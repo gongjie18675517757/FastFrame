@@ -13,13 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FastFrame.Entity\FastFrame.Entity.csproj" />
     <ProjectReference Include="..\FastFrame.Infrastructure\FastFrame.Infrastructure.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="FastFrame.Entity">
-      <HintPath>..\Lib\FastFrame.Entity.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
   <ItemGroup>

@@ -1,14 +1,14 @@
 namespace FastFrame.Dto.Basis
 {
-	using FastFrame.Entity.Basis; 
-	using FastFrame.Infrastructure.Attrs; 
-	using global::System.ComponentModel.DataAnnotations; 
-	using FastFrame.Entity.Enums; 
-	using System; 
-	/// <summary>
-	/// 
-	/// </summary>
-	public partial class EnumItemDto:BaseDto<EnumItem>
+    using FastFrame.Entity.Basis;
+    using FastFrame.Infrastructure;
+    using FastFrame.Infrastructure.Attrs;
+    using global::System.ComponentModel.DataAnnotations;
+    using System;
+    /// <summary>
+    /// 
+    /// </summary>
+    public partial class EnumItemDto:BaseDto<EnumItem>
 	{
 		
 		
@@ -16,7 +16,7 @@ namespace FastFrame.Dto.Basis
 		///键 
 		/// </summary>
 		[StringLength(150)]
-		public string EnumName {get;set;}
+		public EnumName EnumName {get;set;}
 		
 		/// <summary>
 		///值 
@@ -28,6 +28,47 @@ namespace FastFrame.Dto.Basis
 		///上级 
 		/// </summary>
 		public string Parent_Id {get;set;}
+		
+		/// <summary>
+		///创建人 
+		/// </summary>
+		[Hide(HideMark.Form)]
+		[ReadOnly(ReadOnlyMark.All)]
+		[RelatedTo(typeof(User))]
+		public string Create_User_Id {get;set;}
+		
+		/// <summary>
+		///创建人 
+		/// </summary>
+		public UserDto Create_User {get;set;}
+		
+		/// <summary>
+		///创建时间 
+		/// </summary>
+		[Required()]
+		[Hide(HideMark.Form)]
+		[ReadOnly(ReadOnlyMark.All)]
+		public DateTime CreateTime {get;set;}
+		
+		/// <summary>
+		///修改人 
+		/// </summary>
+		[Hide(HideMark.Form)]
+		[ReadOnly(ReadOnlyMark.All)]
+		[RelatedTo(typeof(User))]
+		public string Modify_User_Id {get;set;}
+		
+		/// <summary>
+		///修改人 
+		/// </summary>
+		public UserDto Modify_User {get;set;}
+		
+		/// <summary>
+		///修改时间 
+		/// </summary>
+		[Hide(HideMark.Form)]
+		[ReadOnly(ReadOnlyMark.All)]
+		public DateTime ModifyTime {get;set;}
 		
 		
 		

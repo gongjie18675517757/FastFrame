@@ -75,7 +75,7 @@ namespace FastFrame.Application
                 .AddHttpContextAccessor()
                 .AddDbContextPool<Database.DataBase>(o =>
                 {
-                    o.UseMySql(Configuration.GetConnectionString("Local_Mysql"), mySqlOptions=> {
+                    o.UseMySql(Configuration.GetConnectionString("MyDbConnection"), mySqlOptions=> {
                         mySqlOptions.ServerVersion(new Version(5, 6, 40), ServerType.MySql);
                     });
                     //o.UseInMemoryDatabase("Local_Mysql");
@@ -109,7 +109,7 @@ namespace FastFrame.Application
 
             services.AddSingleton(x =>
             {
-                var redisClient = new CSRedisClient("127.0.0.1:6379,writeBuffer=10240,prefix=Test");
+                var redisClient = new CSRedisClient(Configuration.GetConnectionString("RedisConnection"));
                 RedisHelper.Initialization(redisClient);
                 redisClient.Del("CacheUserMapKey");
                 return redisClient;

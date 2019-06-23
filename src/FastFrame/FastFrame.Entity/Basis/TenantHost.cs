@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace FastFrame.Entity.Basis
 {
     [Exclude]
-    public class TenantHost:IEntity,IHasTenant
+    public class TenantHost:IEntity
     {
         /// <summary>
         /// 域名

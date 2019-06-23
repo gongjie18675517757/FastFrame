@@ -63,11 +63,11 @@ namespace FastFrame.Service
             await repository.AddAsync(entity);
             await OnAdding(input, entity);
             input.Id = entity.Id;
-            await EventBus?.TriggerAsync(new Events.DoMainAdding<TDto>(input));
+            await EventBus?.TriggerAsync(new DoMainAdding<TDto>(input));
             await repository.CommmitAsync();
 
             var dto = await GetAsync(entity.Id);
-            await EventBus?.TriggerAsync(new Events.DoMainAdded<TDto>(dto));
+            await EventBus?.TriggerAsync(new DoMainAdded<TDto>(dto));
 
             await ClientManage.SendAsync(
                 new DoMainMessage<TDto>(typeof(TEntity).Name, MsgType.DataAdded, dto)
@@ -153,6 +153,7 @@ namespace FastFrame.Service
             if (entity == null)
                 throw new Exception("ID不正确");
             await OnGeting(entity);
+            await EventBus.TriggerAsync(new DoMainResulting<TDto>(entity));
             return entity;
         }
 
@@ -165,13 +166,16 @@ namespace FastFrame.Service
         {
             var query = Query().DynamicQuery(pageInfo.Condition);
             query = GetListQueryableing(query);
+            var list = await query.DynamicSort(pageInfo.SortInfo)
+                    .Skip(pageInfo.PageSize * (pageInfo.PageIndex - 1))
+                    .Take(pageInfo.PageSize)
+                    .ToListAsync();
+
+            await EventBus.TriggerAsync(new DoMainResultListing<TDto>(list));
             return new PageList<TDto>()
             {
                 Total = await query.CountAsync(),
-                Data = await query.DynamicSort(pageInfo.SortInfo)
-                    .Skip(pageInfo.PageSize * (pageInfo.PageIndex - 1))
-                    .Take(pageInfo.PageSize)
-                    .ToListAsync(),
+                Data = list,
             };
         }
 
@@ -187,7 +191,7 @@ namespace FastFrame.Service
         protected virtual IQueryable<TDto> QueryMain()
         {
             return repository.Queryable.MapTo<TEntity, TDto>();
-        } 
+        }
 
         /// <summary>
         /// 验证属性

@@ -49,12 +49,6 @@ namespace FastFrame.Entity.Basis
         /// <summary>
         /// 主键
         /// </summary>
-        public string Id { get; set; }
-
-        /// <summary>
-        /// 删除码
-        /// </summary>
-        [Exclude]
-        public bool IsDeleted { get; set; }
+        public string Id { get; set; } 
     }
 }

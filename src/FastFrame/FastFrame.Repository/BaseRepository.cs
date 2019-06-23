@@ -35,15 +35,15 @@ namespace FastFrame.Repository
 
         /// <summary>
         /// 添加
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
+        /// </summary> 
         public virtual async Task<T> AddAsync(T entity)
         {
             /*验证唯一性+关联性*/
             entity.Id = IdGenerate.NetId();
             if (entity is IHasTenant tenant)
-                tenant.Tenant_Id = currentUserProvider.GetCurrOrganizeId().Id;
+            {
+                context.Entry(entity).Property<string>("tenant_id").CurrentValue = currentUserProvider.GetCurrOrganizeId().Id;
+            }
 
             await Verification(entity);
 
@@ -68,9 +68,7 @@ namespace FastFrame.Repository
 
         /// <summary>
         /// 验证数据
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
+        /// </summary> 
         public virtual async Task Verification(T entity)
         {
             /*验证唯一性
@@ -121,8 +119,7 @@ namespace FastFrame.Repository
 
         /// <summary>
         /// 删除
-        /// </summary>
-        /// <param name="entity"></param>
+        /// </summary> 
         public virtual async Task DeleteAsync(T entity)
         {
             if (entity is IHasManage hasManage)
@@ -130,9 +127,9 @@ namespace FastFrame.Repository
                 hasManage.Modify_User_Id = currUser?.Id;
                 hasManage.ModifyTime = DateTime.Now;
             }
-            if (entity is IHasSoftDelete softDelete)
+            if (entity is IHasSoftDelete)
             {
-                softDelete.IsDeleted = true;
+                context.Entry(entity).Property("isdeleted").CurrentValue = true;
                 context.Entry(entity).State = EntityState.Modified;
             }
             else
@@ -145,9 +142,7 @@ namespace FastFrame.Repository
 
         /// <summary>
         /// 删除
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// </summary> 
         public virtual async Task DeleteAsync(string id)
         {
             var entity = await Queryable.FirstOrDefaultAsync(x => x.Id == id);
@@ -156,9 +151,7 @@ namespace FastFrame.Repository
 
         /// <summary>
         /// 更新数据
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
+        /// </summary> 
         public virtual async Task<T> UpdateAsync(T entity)
         {
             /*需要验证唯一性和关联性*/
@@ -179,26 +172,24 @@ namespace FastFrame.Repository
 
         /// <summary>
         /// 获取单条数据
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// </summary> 
         public virtual async Task<T> GetAsync(string id)
-        { 
+        {
             return await Queryable.Where("Id=@0", id).FirstOrDefaultAsync();
         }
 
         /// <summary>
         /// 查询表达式
-        /// </summary>
-        /// <returns></returns>
+        /// </summary> 
         public virtual IQueryable<T> Queryable
         {
             get
             {
                 IQueryable<T> queryable = context.Set<T>();
                 var tenant = currentUserProvider.GetCurrOrganizeId();
-                if (typeof(IHasTenant).IsAssignableFrom(typeof(T)) /*&& !tenant.Parent_Id.IsNullOrWhiteSpace()*/)
+                if (typeof(IHasTenant).IsAssignableFrom(typeof(T)))
                 {
+                    queryable.Where(v => EF.Property<string>(v, "Tenant_Id") == tenant.Id);
                     queryable = queryable.Where("Tenant_Id=@0", tenant.Id);
                 }
                 return queryable;

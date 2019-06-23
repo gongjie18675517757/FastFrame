@@ -10,6 +10,4 @@ namespace FastFrame.Database
     internal interface IEntityMapping<T> : IEntityMapping where T:IEntity
     {
     }
-
-   
 }

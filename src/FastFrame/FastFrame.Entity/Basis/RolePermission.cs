@@ -7,7 +7,7 @@ namespace FastFrame.Entity.Basis
     /// 角色权限
     /// </summary>
     [Exclude]
-    public class RolePermission : BaseEntity
+    public class RolePermission : IEntity
     {
         /// <summary>
         /// 角色ID
@@ -19,6 +19,8 @@ namespace FastFrame.Entity.Basis
         /// 权限ID
         /// </summary>
         [Required]
-        public string Permission_Id { get; set; } 
+        public string Permission_Id { get; set; }
+
+        public string Id { get; set; }
     }
 }

@@ -38,11 +38,6 @@ namespace FastFrame.Entity.Basis
         /// <summary>
         /// 主键
         /// </summary>
-        public string Id { get; set; }
-
-        /// <summary>
-        /// 租户
-        /// </summary> 
-        public string Tenant_Id { get; set; }
+        public string Id { get; set; } 
     }
 }

@@ -1,14 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using FastFrame.Entity.Enums;
+using FastFrame.Infrastructure;
+using System.ComponentModel.DataAnnotations;
 
 namespace FastFrame.Entity.Basis
 {    
-    public class EnumItem : IEntity, IHasSoftDelete, IHasTenant
+    public class EnumItem : BaseEntity, IHasSoftDelete, IHasTenant
     {
         /// <summary>
         /// 键
         /// </summary>
         [StringLength(150)]
-        public string EnumName { get; set; }
+        public EnumName EnumName { get; set; }
 
         /// <summary>
         /// 值
@@ -19,12 +21,6 @@ namespace FastFrame.Entity.Basis
         /// <summary>
         /// 上级
         /// </summary>
-        public string Parent_Id { get; set; }
-
-        public string Tenant_Id { get; set; }
-
-        public bool IsDeleted { get; set; }
-
-        public string Id { get; set; }
+        public string Parent_Id { get; set; }  
     }
 }

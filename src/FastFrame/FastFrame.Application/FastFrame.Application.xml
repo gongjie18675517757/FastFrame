@@ -128,28 +128,6 @@
             角色 
              </summary>
         </member>
-        <member name="M:FastFrame.Application.Controllers.Basis.RoleController.SetRoleMember(System.String,System.Collections.Generic.IEnumerable{System.String})">
-            <summary>
-            设置角色成员
-            </summary> 
-        </member>
-        <member name="M:FastFrame.Application.Controllers.Basis.RoleController.GetRoleMember(System.String)">
-            <summary>
-            获取角色成员
-            </summary>
-            <param name="id"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Application.Controllers.Basis.RoleController.SetRolePermission(System.String,System.Collections.Generic.IEnumerable{System.String})">
-            <summary>
-            设置角色权限
-            </summary> 
-        </member>
-        <member name="M:FastFrame.Application.Controllers.Basis.RoleController.GetRolePermission(System.String)">
-            <summary>
-            获取角色权限
-            </summary> 
-        </member>
         <member name="T:FastFrame.Application.Controllers.Basis.TenantController">
              <summary>
             组织信息 
@@ -173,16 +151,6 @@
             </summary>
             <param name="id"></param>
             <returns></returns>
-        </member>
-        <member name="M:FastFrame.Application.Controllers.Basis.UserController.SetUserRoles(System.String,System.Collections.Generic.IEnumerable{System.String})">
-            <summary>
-            设置用户角色
-            </summary>        
-        </member>
-        <member name="M:FastFrame.Application.Controllers.Basis.UserController.GetUserRoles(System.String)">
-            <summary>
-            获取用户角色
-            </summary> 
         </member>
         <member name="T:FastFrame.Application.Controllers.Basis.DeptController">
              <summary>

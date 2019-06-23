@@ -7,7 +7,7 @@ namespace FastFrame.Entity.Basis
     /// 角色成员
     /// </summary>
     [Exclude]
-    public class RoleMember : BaseEntity
+    public class RoleMember : IEntity
     {
         /// <summary>
         /// 角色
@@ -20,5 +20,7 @@ namespace FastFrame.Entity.Basis
         /// </summary>
         [Required]
         public string User_Id { get; set; }
+
+        public string Id { get; set; }
     }
 }

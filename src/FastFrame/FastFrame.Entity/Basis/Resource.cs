@@ -33,9 +33,7 @@ namespace FastFrame.Entity.Basis
         /// <summary>
         /// MD5摘要
         /// </summary>
-        public string MD5 { get; set; }
-
-        public string Tenant_Id { get; set; }
+        public string MD5 { get; set; } 
 
         public string Id { get; set; }
     }

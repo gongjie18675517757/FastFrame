@@ -1,6 +1,7 @@
 ﻿using FastFrame.Entity;
 using FastFrame.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -11,26 +12,30 @@ using System.Reflection;
 namespace FastFrame.Database
 {
     public abstract class BaseEntityMapping<T> : IEntityMapping<T> where T : class, IEntity
-    {
+    { 
         public virtual void ModelCreating(ModelBuilder modelBuilder)
         {
             var entityType = typeof(T);
-            var entity = modelBuilder.Entity<T>();
+         
+            var Entity = modelBuilder.Entity<T>();
             var currNameSpace = string.Join(",", entityType.Namespace.Split(new char[] { '.' }).Skip(2));
-            entity.ToTable($"{currNameSpace}_{entityType.Name}".ToLower());
+            Entity.ToTable($"{currNameSpace}_{entityType.Name}".ToLower());
 
             /*指定主键*/
-            entity.HasKey(x => x.Id);
-            entity.Property(x => x.Id).ValueGeneratedNever(); 
+            Entity.HasKey(x => x.Id);
+            Entity.Property(x => x.Id).ValueGeneratedNever();
 
             /*过滤掉软删除的*/
             if (typeof(IHasSoftDelete).IsAssignableFrom(entityType))
+            { 
+                Entity.Property<bool>("isdeleted");
+                Entity.HasQueryFilter(v => !EF.Property<bool>(v, "isdeleted"));
+            }
+
+           
+            if (typeof(IHasTenant).IsAssignableFrom(entityType))
             {
-                var parameterExpression = Expression.Parameter(typeof(T));
-                var memberExpression = Expression.Property(parameterExpression, nameof(IHasSoftDelete.IsDeleted));
-                var unaryExpression = Expression.Not(memberExpression);
-                var expression = Expression.Lambda<Func<T, bool>>(unaryExpression, parameterExpression);
-                entity.HasQueryFilter(expression);
+                Entity.Property<string>("tenant_id"); 
             }
 
             foreach (var item in typeof(T).GetProperties())
@@ -40,7 +45,7 @@ namespace FastFrame.Database
 
                 /*索引ID*/
                 if (item.Name.EndsWith("Id") && item.Name != "Id")
-                    entity.HasIndex(item.Name).HasName($"Index_{entityType.Name}_{item.Name}");
+                    Entity.HasIndex(item.Name).HasName($"Index_{entityType.Name}_{item.Name}");
 
                 var propType = T4Help.GetNullableType(item.PropertyType);
 
@@ -61,10 +66,7 @@ namespace FastFrame.Database
                     {
                         prop.HasMaxLength(200);
                     }
-                    else if (item.Name != "Content")
-                    {
-                        //prop.HasDefaultValue("");
-                    }
+                     
                 }
 
                 if (propType.IsEnum)
@@ -83,10 +85,7 @@ namespace FastFrame.Database
                     prop.HasDefaultValue(0);
 
                 if (propType == typeof(decimal))
-                    prop.HasDefaultValue(0.0m);
-
-                //if (propType == typeof(DateTime))
-                //    prop.HasColumnType("date");
+                    prop.HasDefaultValue(0.0m); 
             }
         }
     }

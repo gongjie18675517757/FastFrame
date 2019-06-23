@@ -29,6 +29,21 @@
             主管
             </summary>
         </member>
+        <member name="T:FastFrame.Entity.Basis.DeptMember">
+            <summary>
+            部门成员
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.DeptMember.User_Id">
+            <summary>
+            用户
+            </summary> 
+        </member>
+        <member name="P:FastFrame.Entity.Basis.DeptMember.IsManager">
+            <summary>
+            是否管理员
+            </summary>
+        </member>
         <member name="P:FastFrame.Entity.Basis.EnumItem.EnumName">
             <summary>
             键
@@ -144,11 +159,6 @@
             主键
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Basis.Permission.Tenant_Id">
-            <summary>
-            租户
-            </summary> 
-        </member>
         <member name="T:FastFrame.Entity.Basis.Resource">
             <summary>
             资源
@@ -262,11 +272,6 @@
         <member name="P:FastFrame.Entity.Basis.Tenant.Id">
             <summary>
             主键
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.Tenant.IsDeleted">
-            <summary>
-            删除码
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Basis.TenantHost.Host">
@@ -807,16 +812,6 @@
             主键
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.BaseEntity.Tenant_Id">
-            <summary>
-            组织
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.BaseEntity.IsDeleted">
-            <summary>
-            删除码
-            </summary>
-        </member>
         <member name="P:FastFrame.Entity.BaseEntity.Create_User_Id">
             <summary>
             创建人
@@ -872,19 +867,14 @@
             使用软删除
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.IHasSoftDelete.IsDeleted">
-            <summary>
-            删除
-            </summary>
-        </member>
         <member name="T:FastFrame.Entity.IHasTenant">
             <summary>
             标记使用多租户
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.IHasTenant.Tenant_Id">
+        <member name="T:FastFrame.Entity.IHaveConcurrencyCheck">
             <summary>
-            租户
+            需要并发检查  未实现
             </summary>
         </member>
         <member name="T:FastFrame.Entity.TargetInfo">

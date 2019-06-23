@@ -24,6 +24,7 @@ namespace FastFrame.Service
             }
 
             services.AddScoped(typeof(IService<,>), typeof(BaseService<,>));
+            services.AddScoped(typeof(HandleOne2ManyService<,>));
             return services;
         }
     }

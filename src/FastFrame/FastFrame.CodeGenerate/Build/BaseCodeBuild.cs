@@ -17,7 +17,7 @@ namespace FastFrame.CodeGenerate.Build
         /// <summary>
         /// XML文档目录
         /// </summary>
-        public string XmlDocDir => $"{SolutionDir}\\Lib";
+        public string XmlDocDir => System.IO.Directory.GetCurrentDirectory();
 
         /// <summary>
         /// 目标存放路径

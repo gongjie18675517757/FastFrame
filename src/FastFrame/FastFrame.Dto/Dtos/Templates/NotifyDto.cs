@@ -89,5 +89,8 @@ namespace FastFrame.Dto.Basis
 		[Hide(HideMark.Form)]
 		[ReadOnly(ReadOnlyMark.All)]
 		public DateTime ModifyTime {get;set;}
+		
+		
+		
 	}
 }

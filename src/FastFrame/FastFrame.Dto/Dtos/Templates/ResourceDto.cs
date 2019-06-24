@@ -2,6 +2,7 @@ namespace FastFrame.Dto.Basis
 {
 	using FastFrame.Entity.Basis; 
 	using FastFrame.Infrastructure.Attrs; 
+	using FastFrame.Infrastructure; 
 	using global::System.ComponentModel.DataAnnotations; 
 	using FastFrame.Entity.Enums; 
 	using System; 

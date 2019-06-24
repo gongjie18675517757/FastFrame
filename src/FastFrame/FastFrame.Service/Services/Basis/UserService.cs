@@ -21,19 +21,15 @@ namespace FastFrame.Service.Services.Basis
         public UserService(
             ICurrentUserProvider currentUserProvider,
             IRepository<RoleMember> roleMemberRepository,
-            IRepository<Role> roleRepository,
-            IRepository<Dept> deptRepository,
+            IRepository<Role> roleRepository,          
             IRepository<Resource> resourceRepository,
             IRepository<User> userRepository,
-            IScopeServiceLoader loader) : this(deptRepository, resourceRepository, userRepository, loader)
+            IScopeServiceLoader loader) : this(resourceRepository, userRepository, loader)
         {
             this.currentUserProvider = currentUserProvider;
             this.roleMemberRepository = roleMemberRepository;
             this.roleRepository = roleRepository;
-            this.deptRepository = deptRepository;
-        }
-
-
+        } 
 
         protected override Task OnAdding(UserDto input, User entity)
         {

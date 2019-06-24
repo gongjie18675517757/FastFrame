@@ -177,6 +177,16 @@
             好友列表
             </summary> 
         </member>
+        <member name="M:FastFrame.Application.Controllers.CommonController.Get(System.Int32)">
+            <summary>
+            生成ID
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Application.Controllers.CommonController.MakePassword(System.String)">
+            <summary>
+            生成密码
+            </summary> 
+        </member>
         <member name="M:FastFrame.Application.Controllers.CommonController.VerififyUnique(FastFrame.Dto.UniqueInput)">
             <summary>
             验证唯一性
@@ -185,9 +195,7 @@
         <member name="M:FastFrame.Application.Controllers.CommonController.ModuleStruts(System.String)">
             <summary>
             生成模块结构
-            </summary>
-            <param name="name"></param>
-            <returns></returns>
+            </summary> 
         </member>
         <member name="P:FastFrame.Application.Controllers.ModuleStruct.Name">
             <summary>

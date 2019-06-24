@@ -2,6 +2,7 @@ namespace FastFrame.Dto.Chat
 {
 	using FastFrame.Entity.Chat; 
 	using FastFrame.Infrastructure.Attrs; 
+	using FastFrame.Infrastructure; 
 	using global::System.ComponentModel.DataAnnotations; 
 	using FastFrame.Entity.Enums; 
 	using FastFrame.Entity.Basis; 

@@ -3,14 +3,16 @@ using System;
 using FastFrame.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FastFrame.Database.Migrations
 {
     [DbContext(typeof(DataBase))]
-    partial class DataBaseModelSnapshot : ModelSnapshot
+    [Migration("20190624155105_190624.1")]
+    partial class _1906241
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -848,8 +850,10 @@ namespace FastFrame.Database.Migrations
 
                     b.Property<string>("Category")
                         .IsRequired()
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("category")
-                        .HasMaxLength(100);
+                        .HasMaxLength(100)
+                        .HasDefaultValue("To");
 
                     b.Property<string>("Email_Id")
                         .HasColumnName("email_id")
@@ -884,8 +888,10 @@ namespace FastFrame.Database.Migrations
 
                     b.Property<string>("Category")
                         .IsRequired()
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("category")
-                        .HasMaxLength(100);
+                        .HasMaxLength(100)
+                        .HasDefaultValue("Text");
 
                     b.Property<string>("Content")
                         .HasColumnName("content")
@@ -1028,8 +1034,10 @@ namespace FastFrame.Database.Migrations
 
                     b.Property<string>("Category")
                         .IsRequired()
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("category")
-                        .HasMaxLength(100);
+                        .HasMaxLength(100)
+                        .HasDefaultValue("Text");
 
                     b.Property<string>("Content")
                         .HasColumnName("content")

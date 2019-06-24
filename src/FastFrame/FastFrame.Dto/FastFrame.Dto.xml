@@ -190,16 +190,6 @@
             手机号码 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.UserDto.Dept_Id">
-             <summary>
-            部门 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.UserDto.Dept">
-             <summary>
-            部门 
-             </summary>
-        </member>
         <member name="P:FastFrame.Dto.Basis.UserDto.HandIcon_Id">
              <summary>
             头像 
@@ -248,21 +238,6 @@
         <member name="P:FastFrame.Dto.Basis.UserDto.ModifyTime">
              <summary>
             修改时间 
-             </summary>
-        </member>
-        <member name="T:FastFrame.Dto.Basis.DeptMemberDto">
-             <summary>
-            部门成员 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.DeptMemberDto.User_Id">
-             <summary>
-            用户 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.DeptMemberDto.IsManager">
-             <summary>
-            是否管理员 
              </summary>
         </member>
         <member name="T:FastFrame.Dto.Basis.EnumItemDto">

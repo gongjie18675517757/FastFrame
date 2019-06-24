@@ -34,6 +34,11 @@
             部门成员
             </summary>
         </member>
+        <member name="P:FastFrame.Entity.Basis.DeptMember.Dept_Id">
+            <summary>
+            部门
+            </summary>
+        </member>
         <member name="P:FastFrame.Entity.Basis.DeptMember.User_Id">
             <summary>
             用户
@@ -324,11 +329,6 @@
             手机号码
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Basis.User.Dept_Id">
-            <summary>
-            部门
-            </summary>
-        </member>
         <member name="P:FastFrame.Entity.Basis.User.HandIcon_Id">
             <summary>
             头像
@@ -352,15 +352,12 @@
         <member name="M:FastFrame.Entity.Basis.User.GeneratePassword(System.String)">
             <summary>
             生成密码
-            </summary>
-            <param name="password"></param>
+            </summary> 
         </member>
         <member name="M:FastFrame.Entity.Basis.User.VerificationPassword(System.String)">
             <summary>
             验证密码
-            </summary>
-            <param name="password"></param>
-            <returns></returns>
+            </summary> 
         </member>
         <member name="T:FastFrame.Entity.Chat.Email">
             <summary>

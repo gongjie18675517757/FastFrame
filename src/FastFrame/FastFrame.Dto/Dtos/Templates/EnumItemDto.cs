@@ -1,14 +1,16 @@
 namespace FastFrame.Dto.Basis
 {
-    using FastFrame.Entity.Basis;
-    using FastFrame.Infrastructure;
-    using FastFrame.Infrastructure.Attrs;
-    using global::System.ComponentModel.DataAnnotations;
-    using System;
-    /// <summary>
-    /// 
-    /// </summary>
-    public partial class EnumItemDto:BaseDto<EnumItem>
+	using FastFrame.Entity.Basis; 
+	using FastFrame.Infrastructure.Attrs; 
+	using FastFrame.Infrastructure; 
+	using global::System.ComponentModel.DataAnnotations; 
+	using FastFrame.Entity.Enums; 
+	using System; 
+	using FastFrame.Dto.Basis; 
+	/// <summary>
+	/// 
+	/// </summary>
+	public partial class EnumItemDto:BaseDto<EnumItem>
 	{
 		
 		

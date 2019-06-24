@@ -2,6 +2,7 @@ namespace FastFrame.Dto.Basis
 {
 	using FastFrame.Entity.Basis; 
 	using FastFrame.Infrastructure.Attrs; 
+	using FastFrame.Infrastructure; 
 	using global::System.ComponentModel.DataAnnotations; 
 	using FastFrame.Entity.Enums; 
 	using System; 
@@ -53,17 +54,6 @@ namespace FastFrame.Dto.Basis
 		[StringLength(20)]
 		[Unique()]
 		public string PhoneNumber {get;set;}
-		
-		/// <summary>
-		///部门 
-		/// </summary>
-		[RelatedTo(typeof(Dept))]
-		public string Dept_Id {get;set;}
-		
-		/// <summary>
-		///部门 
-		/// </summary>
-		public DeptDto Dept {get;set;}
 		
 		/// <summary>
 		///头像 

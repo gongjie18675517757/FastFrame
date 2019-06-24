@@ -51,13 +51,7 @@ namespace FastFrame.Entity.Basis
         /// 手机号码
         /// </summary>
         [StringLength(20), Unique]
-        public string PhoneNumber { get; set; }
-
-        /// <summary>
-        /// 部门
-        /// </summary>
-        [RelatedTo(typeof(Dept))]
-        public string Dept_Id { get; set; }
+        public string PhoneNumber { get; set; } 
 
         /// <summary>
         /// 头像
@@ -89,8 +83,7 @@ namespace FastFrame.Entity.Basis
 
         /// <summary>
         /// 生成密码
-        /// </summary>
-        /// <param name="password"></param>
+        /// </summary> 
         public void GeneratePassword(string password = "")
         {
             if (password.IsNullOrWhiteSpace())
@@ -101,9 +94,7 @@ namespace FastFrame.Entity.Basis
 
         /// <summary>
         /// 验证密码
-        /// </summary>
-        /// <param name="password"></param>
-        /// <returns></returns>
+        /// </summary> 
         public bool VerificationPassword(string password = "")
         {
             return $"{EncryptionKey}{password}".ToMD5() == Password;

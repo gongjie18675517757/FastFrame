@@ -71,21 +71,8 @@ namespace FastFrame.Database
 
                 if (propType.IsEnum)
                 {
-                    prop.HasConversion<string>().HasMaxLength(100);
-                    var names = Enum.GetNames(propType);
-                    if (names.Any())
-                    {
-                        var val = Enum.Parse(propType, names.First());
-                        prop.HasDefaultValue(val);
-                    }
-
-                }
-
-                if (propType == typeof(int))
-                    prop.HasDefaultValue(0);
-
-                if (propType == typeof(decimal))
-                    prop.HasDefaultValue(0.0m); 
+                    prop.HasConversion<string>().HasMaxLength(100); 
+                } 
             }
         }
     }

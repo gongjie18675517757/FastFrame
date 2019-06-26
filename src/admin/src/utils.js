@@ -216,7 +216,8 @@ export function showDialog(component, pars = {}) {
                         ...pars,
                         pars,
                         success,
-                        close
+                        close,
+                        isDialog:true
                     }
                     child = [
                         h(component, {

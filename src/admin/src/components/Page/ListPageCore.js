@@ -93,7 +93,7 @@
  /**
   * 需要传递的参数
   */
- export let pageProps = function () {
+ export let makeChildProps = function () {
    return {
      ...this.$props,
      area: this.area,
@@ -146,7 +146,7 @@
  /**
   * 监听事件
   */
- export let pageListeners = function () {
+ export let makeChildListeners = function () {
    return {
      close: () => this.close(),
      success: () => {

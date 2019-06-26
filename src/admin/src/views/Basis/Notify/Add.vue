@@ -2,8 +2,8 @@
  <script>
 import {
   formData,
-  pageProps,
-  pageListeners,
+  makeChildProps,
+  makeChildListeners,
   FormPageMixin
 } from "@/components/Page/FormPageCore.js";
 
@@ -18,8 +18,8 @@ export default {
     };
   },
   render(h) {
-    let props = pageProps.call(this);
-    let listeners = pageListeners.call(this);
+    let props = makeChildProps.call(this);
+    let listeners = makeChildListeners.call(this);
     return h("v-page", { props, on: listeners });
   }
 };

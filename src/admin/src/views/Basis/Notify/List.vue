@@ -2,8 +2,8 @@
 import {
   ListPageMixin,
   data,
-  pageProps,
-  pageListeners
+  makeChildProps,
+  makeChildListeners
 } from "@/components/Page/ListPageCore.js";
 
 export default {
@@ -17,8 +17,8 @@ export default {
     };
   },
   render(h) {
-    let props = pageProps.call(this),
-      listeners = pageListeners.call(this);
+    let props = makeChildProps.call(this),
+      listeners = makeChildListeners.call(this);
     return h("v-list-page", {
       props,
       on: listeners

@@ -1,7 +1,8 @@
 import {
   alert,
   groupBy,
-  selectMany
+  selectMany,
+  distinct
 } from "@/utils";
 
 import {
@@ -68,50 +69,6 @@ export let formData = {
 };
 
 /**
- * 生成传递给子组件的参数
- */
-export let makeChildProps = function () {
-  return {
-    ...this.$props,
-    ...this.$attrs,
-    title: this.title,
-    id: this.id,
-    form: this.form,
-    name: this.name,
-    formErrorMessages: this.formErrorMessages,
-    options: this.options,
-    rules: this.rules,
-    submiting: this.submiting,
-    singleLine: this.singleLine,
-    showMamageField: this.showMamageField,
-    canEdit: this.canEdit,
-    changed: this.changed,
-    formGroups: this.formGroups,
-    isDialog: this.isDialog,
-    hasManage: this.hasManage
-  };
-};
-
-/**
- * 生成监听子组件事件
- */
-export let makeChildListeners = function () {
-  return {
-    success: val => this.$emit("success", val),
-    cancel: this.cancel,
-    'tooggle:canEdit': () => this.canEdit = !this.canEdit,
-    'toggle:singleLine': () => (this.singleLine = !this.singleLine),
-    'toggle:showMamageField': () => (this.showMamageField = !this.showMamageField),
-    changed: $event => {
-      this.changed = true;
-      this.evalRule($event.item.Name);
-    },
-    reload: this.load,
-    submit: this.submit
-  };
-};
-
-/**
  * 计算属性
  */
 export let formComputed = {
@@ -139,6 +96,18 @@ export let formComputed = {
     if (this.hasManage && this.showMamageField && this.form && this.form.Id) {
       opts = [...opts, ...this.manageOptions];
     }
+    opts = distinct(opts, v => v.Name, (a, b) => ({
+      ...a,
+      ...b
+    }))
+    opts = opts.filter(v => {
+      if (typeof v.visible == 'function')
+        return v.visible.call(this.this.form)
+      else if (typeof v.visible == 'boolean')
+        return v.visible
+      else
+        return true;
+    })
 
     let brr = selectMany(opts, r => {
       return (r.GroupNames || ["基础信息"]).map(p => {
@@ -179,6 +148,7 @@ export let formMethods = {
       })
 
       .then(this.getForm)
+      .then(this.frmLoadForm)
       .then((form) => {
         let formErrs = {};
         for (const name of Object.keys(form)) {
@@ -191,7 +161,11 @@ export let formMethods = {
       .then(this.getFormItems)
       .then(options => {
         this.options = options;
-      });
+      })
+      .then(() => {
+        this.changed = false;
+        this.canEdit = false;
+      })
   },
   getRules() {
     return getRules(this.name)
@@ -202,81 +176,102 @@ export let formMethods = {
   DataUpdated({
     Id
   }) {
-    if (Id == this.id) this.getForm();
+    if (Id == this.id || Id == this.form.Id) {
+      this.$message.confirm("提示", "当前内容已被其它人修改,是否重新加载?").then(this.init)
+    }
   },
   DataDeleted() {
     this.$message.alert("提示", "当前内容已被其它人删除!").then(() => {
       this.cancel();
     });
   },
+  getRequestUrl(id) {
+    return `/api/${this.name}/get/${id}`
+  },
   getForm() {
     let id = this.id
     if (id) {
-      return this.$http.get(`/api/${this.name}/get/${id}`);
+      return this.$http.get(this.getRequestUrl(id));
     } else {
       return getDefaultModel(this.name);
     }
   },
-  async evalRule(name) {
+  frmLoadForm(frm) {
+    return frm;
+  },
+  evalRule(name) {
     let rules = this.rules[name];
     let val = this.form[name];
     this.formErrorMessages[name] = [];
-    for (const rule of rules) {
-      if (this.formErrorMessages[name].length == 0) {
-        let err = await rule.call(this.form, val);
-        if (typeof err == "string") {
-          this.formErrorMessages[name].push(err);
-          return err;
-        }
-      }
+
+    let promiseArr = rules.map(v => v.call(this.form, val))
+    return Promise.all(promiseArr).then(arr => {
+      return arr.fill(v => typeof v == 'string')
+    }).then(errs => {
+      this.formErrorMessages[name].push(...errs);
+      return errs;
+    })
+  },
+  evalRules() {
+    let promiseArr = Object.keys(this.rules).map(v => this.evalRule(v));
+    return Promise.all(promiseArr).then(arr => {
+      return arr.filter(v => v)
+    })
+  },
+  getPostMethod(id) {
+    if (!id) {
+      return this.$http.post;
+    } else {
+      return this.$http.put;
     }
+  },
+  getPostUrl(id) {
+    if (!id) {
+      return `/api/${this.name}/post`;
+    } else {
+      return `/api/${this.name}/put`
+    }
+  },
+  getPostData() {
+    let postData = JSON.parse(JSON.stringify(this.form))
+    delete postData.Create_User;
+    delete postData.Modify_User;
+    return postData
   },
   async submit() {
     try {
       this.submiting = true;
-      let errs = [];
-      for (const name of Object.keys(this.rules)) {
-        let err = await this.evalRule(name);
-        if (err) errs.push(err);
-      }
-
+      let errs = await this.evalRules();
       if (errs.length > 0) {
         alert.error("表单填写不完整");
         return;
       }
 
-      let id = this.id,
-        data,
-        postData = {
-          ...this.form
-        };
-      delete postData.Create_User;
-      delete postData.Modify_User;
+      let id = this.id;
+      let postData = this.getPostData();
+      let method = this.getPostMethod(id);
+      let url = this.getPostUrl(id)
+      let data = await method(url, postData)
+      data = this.frmLoadForm(data)
 
-      if (!id) {
-        data = await this.$http.post(`/api/${this.name}/post`, postData);
-      } else {
-        data = await this.$http.put(`/api/${this.name}/put`, postData);
-      }
-
-      this.$emit("success", data);
-      if (typeof this.success == "function") {
-        this.success(data);
-      } else {
-        this.goList();
-      }
+      this.goList(data)
     } catch (error) {
       alert.error(error.message);
     } finally {
       this.submiting = false;
     }
   },
-  goList() {
-    this.$router.push(`/${this.name}/list`);
+  goList(data) {
+    if (this.isDialog) {
+      this.$emit("success", data);
+      this.success(data);
+    } else {
+      this.$router.push(`/${this.name}/list`);
+    }
   },
   cancel() {
-    this.$emit("close");
-    if (typeof this.close == "function") {
+    if (this.isDialog) {
+      this.$emit("close");
       this.close();
     } else {
       this.goList();
@@ -284,6 +279,49 @@ export let formMethods = {
   }
 }
 
+/**
+ * 生成传递给子组件的参数
+ */
+export let makeChildProps = function () {
+  return {
+    ...this.$props,
+    ...this.$attrs,
+    title: this.title,
+    id: this.id,
+    form: this.form,
+    name: this.name,
+    formErrorMessages: this.formErrorMessages,
+    options: this.options,
+    rules: this.rules,
+    submiting: this.submiting,
+    singleLine: this.singleLine,
+    showMamageField: this.showMamageField,
+    canEdit: this.canEdit,
+    changed: this.changed,
+    formGroups: this.formGroups,
+    isDialog: this.isDialog,
+    hasManage: this.hasManage
+  };
+};
+
+/**
+ * 生成监听子组件事件
+ */
+export let makeChildListeners = function () {
+  return {
+    ...this.$listeners,
+    cancel: this.cancel,
+    'tooggle:canEdit': () => this.canEdit = !this.canEdit,
+    'toggle:singleLine': () => (this.singleLine = !this.singleLine),
+    'toggle:showMamageField': () => (this.showMamageField = !this.showMamageField),
+    changed: $event => {
+      this.changed = true;
+      this.evalRule($event.item.Name);
+    },
+    reload: this.load,
+    submit: this.submit
+  };
+};
 
 /**
  * 混入生命周期事件

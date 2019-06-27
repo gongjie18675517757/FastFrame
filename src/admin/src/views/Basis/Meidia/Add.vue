@@ -1,35 +1,45 @@
-<template>
-  <Page v-bind="page" @success="$emit('success',$event)"/>
-</template>
-
 <script>
-import Page from '@/components/Page/BasisFormPage.vue'
+let pageInfo = {
+  area: "Basis",
+  name: "Meidia",
+  direction: "图片库"
+};
+
+import {
+  formData,
+  makeChildProps,
+  makeChildListeners,
+  FormPageMixin,
+  formInject,
+  formProps,
+  formComputed,
+  formMethods
+} from "@/components/Page/FormPageCore.js";
+
 export default {
-  props:{
-      success:Function,
-      close:Function,
-      pars:Object
-  },
-  components: {
-    Page
+  mixins: [FormPageMixin],
+  inject: [...formInject],
+  props: {
+    ...formProps
   },
   data() {
     return {
-      page: {
-        moduleInfo: {
-          area:'Basis',
-          name: 'Meidia',
-          direction: '图片库',
-        },
-        pageInfo:{
-          success:this.success,
-          close:this.close,
-          pars:this.pars
-        }
-      }
-    }
+      ...formData,
+      ...pageInfo
+    };
+  },
+  computed: {
+    ...formComputed
+  },
+  methods: {
+    ...formMethods
+  },
+  render(h) {
+    let props = makeChildProps.call(this);
+    let listeners = makeChildListeners.call(this);
+    return h("v-page", { props, on: listeners });
   }
-}
+};
 </script>
 
  

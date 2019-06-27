@@ -1,20 +1,37 @@
  <script>
+let pageInfo = {
+  area: "Basis",
+  name: "Dept",
+  direction: "部门"
+};
 import {
   formData,
   makeChildProps,
   makeChildListeners,
-  FormPageMixin
+  FormPageMixin,
+  formInject,
+  formProps,
+  formComputed,
+  formMethods
 } from "@/components/Page/FormPageCore.js";
 
 export default {
   mixins: [FormPageMixin],
+  inject: [...formInject],
+  props: {
+    ...formProps
+  },
   data() {
     return {
       ...formData,
-      area: "Basis",
-      name: "Dept",
-      direction: "部门"
+      ...pageInfo
     };
+  },
+  computed: {
+    ...formComputed
+  },
+  methods: {
+    ...formMethods
   },
   render(h) {
     let props = makeChildProps.call(this);

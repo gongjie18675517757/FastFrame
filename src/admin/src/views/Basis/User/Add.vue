@@ -1,20 +1,38 @@
-<script>
+ <script>
+let pageInfo = {
+  area: "Basis",
+  name: "User",
+  direction: "用户"
+};
+
 import {
   formData,
   makeChildProps,
   makeChildListeners,
-  FormPageMixin
+  FormPageMixin,
+  formInject,
+  formProps,
+  formComputed,
+  formMethods
 } from "@/components/Page/FormPageCore.js";
 
 export default {
   mixins: [FormPageMixin],
+  inject: [...formInject],
+  props: {
+    ...formProps
+  },
   data() {
     return {
       ...formData,
-      area: "Basis",
-      name: "User",
-      direction: "用户"
+      ...pageInfo
     };
+  },
+  computed: {
+    ...formComputed
+  },
+  methods: {
+    ...formMethods
   },
   render(h) {
     let props = makeChildProps.call(this);
@@ -22,9 +40,4 @@ export default {
     return h("v-page", { props, on: listeners });
   }
 };
-</script>
-
- 
- 
-
- 
+</script>  

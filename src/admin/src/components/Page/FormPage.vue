@@ -137,6 +137,7 @@ export default {
   watch: {
     $route: function() {
       this.$emit("reload");
+      
     }
   },
   computed: {

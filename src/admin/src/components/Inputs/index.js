@@ -36,7 +36,7 @@ export default {
     Description: String,
     Name: String,
     Readonly: String,
-    EnumValues: Array,
+    EnumValues: [Array, Function],
     filter: [Array, Function],
     singleLine: Boolean
   },
@@ -69,25 +69,10 @@ export default {
   methods: {
     change(val) {
       this.$emit('change', val)
-      // if (this.errorMessages)
-      //   this.evalRules()
-      // if (typeof this.callback == 'function')
-      //   this.callback.call(this.model || {}, val)
+      if (typeof this.callback == 'function') {
+        this.callback(this, this.model, val)
+      }
     },
-    // async evalRules() {
-    //   let errs = []
-    //   for (const rule of this.rules) {
-    //     let result = (await rule.call(this.model || {}, this.val))
-    //     if (typeof (result) == 'string') {
-    //       errs.push(result);
-    //       continue
-    //     }
-    //   }
-    //   // this.errorMessages = errs
-
-    //   this.$emit('update_errorMessages', errs)
-    //   return errs
-    // }
   },
   render(h) {
     let errs = this.errorMessages || []
@@ -148,6 +133,22 @@ export default {
         lg6: 1,
         xl4: 1
       }
+    } else if (!component && Array.isArray(this.EnumValues) && this.EnumValues.length > 0) {
+      component = h(SelectInput, {
+        props: {
+          ...props,
+          values: this.EnumValues
+        },
+        on
+      })
+    } else if (!component && typeof this.EnumValues == 'function') {
+      component = h(SelectInput, {
+        props: {
+          ...props,
+          values: this.EnumValues.call(this, this.model)
+        },
+        on
+      })
     }
 
     //富文本
@@ -212,14 +213,6 @@ export default {
           filter: this.filter,
           ModuleName: this.ModuleName,
           model: this.model || {}
-        },
-        on
-      })
-    } else if (!component && Array.isArray(this.EnumValues) && this.EnumValues.length > 0) {
-      component = h(SelectInput, {
-        props: {
-          ...props,
-          values: this.EnumValues
         },
         on
       })

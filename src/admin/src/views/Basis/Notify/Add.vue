@@ -1,21 +1,38 @@
- 
- <script>
+<script> 
+let pageInfo = {
+  area: "Basis",
+      name: "Notify",
+      direction: "通知"
+};
+
 import {
   formData,
   makeChildProps,
   makeChildListeners,
-  FormPageMixin
+  FormPageMixin,
+  formInject,
+  formProps,
+  formComputed,
+  formMethods
 } from "@/components/Page/FormPageCore.js";
 
 export default {
   mixins: [FormPageMixin],
+  inject: [...formInject],
+  props: {
+    ...formProps
+  },
   data() {
     return {
       ...formData,
-      area: "Basis",
-      name: "Notify",
-      direction: "通知"
+      ...pageInfo
     };
+  },
+  computed: {
+    ...formComputed
+  },
+  methods: {
+    ...formMethods
   },
   render(h) {
     let props = makeChildProps.call(this);
@@ -24,9 +41,4 @@ export default {
   }
 };
 </script>
-
  
-
-
-<style>
-</style>

@@ -135,8 +135,7 @@ export let formComputed = {
  */
 export let formMethods = {
   init() {
-    let id = this.id;
-    if (!id) this.canEdit = true;
+    this.canEdit = false;
     let moduleName = this.name;
     return hasManage(moduleName)
       .then(val => {
@@ -164,7 +163,7 @@ export let formMethods = {
       })
       .then(() => {
         this.changed = false;
-        this.canEdit = false;
+        this.canEdit = !this.form.Id;
       })
   },
   getRules() {
@@ -318,7 +317,7 @@ export let makeChildListeners = function () {
       this.changed = true;
       this.evalRule($event.item.Name);
     },
-    reload: this.load,
+    reload: this.init,
     submit: this.submit
   };
 };

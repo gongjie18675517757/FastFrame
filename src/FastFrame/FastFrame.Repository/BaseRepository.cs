@@ -189,8 +189,7 @@ namespace FastFrame.Repository
                 var tenant = currentUserProvider.GetCurrOrganizeId();
                 if (typeof(IHasTenant).IsAssignableFrom(typeof(T)))
                 {
-                    queryable.Where(v => EF.Property<string>(v, "Tenant_Id") == tenant.Id);
-                    queryable = queryable.Where("Tenant_Id=@0", tenant.Id);
+                    queryable.Where(v => EF.Property<string>(v, "tenant_id") == tenant.Id); 
                 }
                 return queryable;
             }

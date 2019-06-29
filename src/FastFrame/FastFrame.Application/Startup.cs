@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -77,7 +78,7 @@ namespace FastFrame.Application
                 {
                     o.UseMySql(Configuration.GetConnectionString("MyDbConnection"), mySqlOptions=> {
                         mySqlOptions.ServerVersion(new Version(5, 6, 40), ServerType.MySql);
-                    });
+                    }).ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
                     //o.UseInMemoryDatabase("Local_Mysql");
                 })
                 .AddSingleton<ITypeProvider, TypeProvider>()

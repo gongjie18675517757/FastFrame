@@ -79,7 +79,7 @@ export default {
       this.loading = true;
       try {
         let request = await this.$http.post("/api/account/login", this.model);
-        alert.success("登陆成功!");
+        // alert.success("登陆成功!");
         this.$store.commit("login", request);
 
         let redirect = this.$route.query.redirect || "/";

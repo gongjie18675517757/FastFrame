@@ -60,10 +60,11 @@ export default {
       }
     },
     evalDisabled() {
-      if (typeof this.Readonly == 'function') return this.this.Readonly
+      if (!this.canEdit) return true;
+      if (typeof this.Readonly == 'function') return this.Readonly.call(this, this.model)
       if (this.Readonly == "All") return true;
       if (this.Readonly == "Edit") return !!(this.model || {}).Id;
-      return !this.canEdit;
+      return false;
     },
   },
   methods: {
@@ -225,15 +226,7 @@ export default {
             xs12: true
           }
         }, [component]);
-      }
-
-
-      // return h('v-flex', {
-      //   attrs: {
-      //     ...flex
-      //   }
-      // }, [component]) 
-
+      } 
       return h('v-flex', {
         attrs: flex,
         class: ['input-container']
@@ -266,14 +259,7 @@ export default {
               style: {
                 padding: '12px'
               }
-            }, [component]),
-            // h('v-flex', {
-            //   style: {
-            //     display: 'table-cell',
-            //     'vertical-align': 'bottom',
-            //     color: 'red'
-            //   }
-            // },null)
+            }, [component])
           ])
       ])
     } else if (this.Name && !this.Name.endsWith('Id')) {

@@ -14,6 +14,7 @@
                 name="Update"
                 @click="handleEdit"
                 title="修改"
+                color="info"
               >
                 <v-icon>edit</v-icon>
               </a-btn>
@@ -21,7 +22,7 @@
                 <v-icon>refresh</v-icon>
               </v-btn>
               <v-menu offset-y>
-                <v-btn icon slot="activator" title="设置">
+                <v-btn icon slot="activator" title="更多">
                   <v-icon>more_vert</v-icon>
                 </v-btn>
                 <v-list>
@@ -58,8 +59,8 @@
                 <v-expansion-panel expand v-model="formGroupExpandValue" style="margin-top:-15px;">
                   <v-expansion-panel-content v-for="group in formGroups" :key="group.key.title">
                     <template v-if="canEdit" v-slot:header>
-                      <v-toolbar flat  color="transparent">
-                        <v-toolbar-title>{{group.key.title}}</v-toolbar-title> 
+                      <v-toolbar flat color="transparent">
+                        <v-toolbar-title>{{group.key.title}}</v-toolbar-title>
                       </v-toolbar>
                       <!-- <div class="form-page-group-header">{{group.key.title}}</div> -->
                     </template>
@@ -137,7 +138,6 @@ export default {
   watch: {
     $route: function() {
       this.$emit("reload");
-      
     }
   },
   computed: {
@@ -178,9 +178,6 @@ export default {
     },
     getRules(item) {
       return item.rules || this.rules[item.Name];
-    },
-    goList() {
-      if (this.name) this.$router.push(`/${this.name}/list`);
     }
   }
 };

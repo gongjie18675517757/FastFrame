@@ -1,10 +1,19 @@
+let pageInfo = {
+  area: "Basis",
+  name: "Notify",
+  direction: "通知中心"
+};
 import {
   ListPageMixin,
-  data,
+  pageInjects,
+  pageProps,
+  makePageData,
+  pageComputed,
+  pageMethods,
   makeChildProps,
   makeChildListeners
 } from "@/components/Page/ListPageCore.js";
-import Vue from 'vue'
+
 
 let dialog = {
   props: ['content'],
@@ -38,34 +47,34 @@ let dialog = {
 
 export default {
   mixins: [ListPageMixin],
+  inject: pageInjects,
+  props: pageProps,
   data() {
+    let data = makePageData.call(this)
     return {
       ...data,
-      area: "Basis",
-      name: "Notify",
-      direction: "通知中心",
+      ...pageInfo
     };
   },
+  computed: pageComputed,
   methods: {
+    ...pageMethods,
     getRequestUrl() {
       return '/api/notify/AllList'
     },
+    toEdit(model) {
+      this.$message.dialog(dialog, {
+        content: model.Content
+      })
+    }
   },
   render(h) {
     let props = makeChildProps.call(this),
       listeners = makeChildListeners.call(this);
 
     listeners = {
-      ...listeners,
-      toEdit: ({
-        Content
-      }) => {
-        this.$message.dialog(Vue.extend(dialog), {
-          content: Content
-        })
-      }
+      ...listeners
     }
-
     return h("v-list-page", {
       props: {
         ...props,

@@ -1,21 +1,28 @@
  <script>
+let pageInfo = { area: "Basis", name: "Notify", direction: "通知" };
 import {
   ListPageMixin,
-  data,
+  pageInjects,
+  pageProps,
+  makePageData,
+  pageComputed,
+  pageMethods,
   makeChildProps,
   makeChildListeners
 } from "@/components/Page/ListPageCore.js";
-
 export default {
   mixins: [ListPageMixin],
+  inject: pageInjects,
+  props: pageProps,
   data() {
+    let data = makePageData.call(this);
     return {
       ...data,
-      area: "Basis",
-      name: "Notify",
-      direction: "通知"
+      ...pageInfo
     };
   },
+  computed: pageComputed,
+  methods: pageMethods,
   render(h) {
     let props = makeChildProps.call(this),
       listeners = makeChildListeners.call(this);
@@ -25,4 +32,4 @@ export default {
     });
   }
 };
-</script>
+</script> 

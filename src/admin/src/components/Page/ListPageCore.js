@@ -56,39 +56,208 @@
      icon: "refresh"
    },
    {
-    title: "导出",
-    color: "basis",
-    name: "List",
-    key: "export",
-    icon: "import_export"
-  }
+     title: "导出",
+     color: "basis",
+     name: "List",
+     key: "export",
+     icon: "import_export"
+   }
  ];
+
+ /**
+  * 要导入的依赖
+  */
+ export let pageInjects = ['reload']
+
+ /**
+  * 生成参数
+  */
+ export let pageProps = {
+   success: Function,
+   close: Function,
+   pars: Object,
+   isDialog: Boolean
+ };
+
 
  /**
   * 数据
   */
- export let data = {
-   curdToolItems,
-   baseToolItems,
-   childToolItems: [],
-   columns: [],
-   rows: [],
-   selection: [],
-   total: 0,
-   loading: false,
-   tableClassArr: ['elevation-1', 'fixed-header', 'v-table__overflow'],
-   tableStyleObj: {
-     'max-height': 'calc(100vh - 140px)',
-     'backface-visibility': 'hidden'
+ export let makePageData = function () {
+   return {
+     curdToolItems,
+     baseToolItems,
+     childToolItems: [],
+     columns: [],
+     rows: [],
+     selection: [],
+     total: 0,
+     loading: false,
+     tableClassArr: ['elevation-1', 'fixed-header', 'v-table__overflow'],
+     tableStyleObj: {
+       'max-height': 'calc(100vh - 140px)',
+       'backface-visibility': 'hidden'
+     },
+     ModuleStrut: {},
+     pager: null,
+     hidePager: false,
+     showMamageField: false,
+     query: [],
+     props: {},
+     listeners: {}
+   };
+ }
+
+ /**
+  * 计算属性
+  */
+ export let pageComputed = {
+   dialogMode() {
+     return this.$store.state.dialogMode;
+   }
+ }
+
+ /**
+  * 页面方法
+  */
+ export let pageMethods = {
+   init() {
+     Promise.resolve()
+       .then(this.getModuleStrut)
+       .then(strut => this.ModuleStrut = strut)
+       .then(this.getColumns)
+       .then(cols => this.columns = cols)
+     //  .then(this.loadList)
    },
-   ModuleStrut: {},
-   pager: null,
-   hidePager: false,
-   showMamageField: false,
-   query: [],
-   props: {},
-   listeners: {}
- };
+   getModuleStrut() {
+     return getModuleStrut(this.name)
+   },
+   getColumns() {
+     return getColumns(this.name)
+   },
+   DataDeleted(id) {
+     this.$nextTick(() => {
+       let index = this.rows.findIndex(r => r.Id == id);
+       if (index >= 0) this.rows.splice(index, 1);
+     });
+   },
+   DataUpdated(item) {
+     let index = this.rows.findIndex(r => r.Id == item.Id);
+     if (index >= 0) this.rows.splice(index, 1, item);
+   },
+   DataAdded(item) {
+     this.rows.splice(0, 0, item);
+   },
+   toEdit({
+     Id = ""
+   } = {}) {
+     if (
+       this.success ||
+       this.dialogMode ||
+       this.$vuetify.breakpoint.smAndDown
+     ) {
+       this.$message.dialog(`${this.name}_Add`, {
+         id: Id
+       });
+     } else {
+       this.$router.push(`/${this.name}/add?q=${Id}`);
+     }
+   },
+   remove(arr = []) {
+     this.$message.confirm("提示", "确认要删除吗?").then(() => {
+       let ids = arr.map(r => r.Id);
+       for (const id of ids) {
+         let index = this.selection.findIndex(r => r.Id == id);
+         this.$http.delete(`/api/${this.name}/delete/${id}`).then(() => {
+           this.selection.splice(index, 1);
+         });
+       }
+     });
+   },
+   search() {
+     getQueryOptions(this.name).then(options => {
+       for (const item of this.query) {
+         let opt = options.find(
+           r => r.Name == item.Name && r.compare == item.compare
+         );
+         if (opt) {
+           opt.value = item.value;
+         }
+       }
+
+       this.$message
+         .dialog(() => import('@/components/Dialog/SearchDialog.vue'), {
+           title: `查询${this.direction}列表`,
+           options
+         })
+         .then(query => {
+           this.query = query;
+           this.loadList();
+         });
+     });
+   },
+   getRequestUrl() {
+     return `/api/${this.name}/list`
+   },
+   getRequedtMethod() {
+     return this.$http.post
+   },
+   async getRequestPars(pager) {
+     if (pager) this.pager = pager;
+     else pager = this.pager;
+     let {
+       page,
+       rowsPerPage,
+       sortBy,
+       descending
+     } = pager;
+
+
+     /*条件1 */
+     let {
+       queryFilter = []
+     } = this.pars || {};
+     if (typeof queryFilter == "function") {
+       queryFilter = await queryFilter.call(this, {
+         selection: this.selection,
+         rows: this.items
+       });
+     }
+
+     let pageInfo = {
+       PageIndex: page,
+       PageSize: rowsPerPage,
+       Condition: {
+         Filters: [...queryFilter, ...this.query]
+       },
+       SortInfo: {
+         Name: sortBy || "Id",
+         Mode: descending ? "asc" : "desc"
+       }
+     };
+
+     return pageInfo;
+   },
+   loadList(pager) {
+     this.loading = true;
+     Promise.resolve(pager)
+       .then(this.getRequestPars)
+       .then(pagePars => {
+         let method = this.getRequedtMethod()
+         let url = this.getRequestUrl()
+         return method(url, pagePars)
+       }).then(({
+         Total,
+         Data
+       }) => {
+         this.rows = Data;
+         this.total = Total;
+         this.loading = false;
+       }).catch(() => {
+         this.loading = false;
+       })
+   }
+ }
 
  /**
   * 需要传递的参数
@@ -175,167 +344,18 @@
   * 组件基础混入
   */
  export let ListPageMixin = {
-   inject: ["reload"],
    components: {
      "v-list-page": () => import("@/components/Page/ListPage.vue")
-   },
-   props: {
-     success: Function,
-     close: Function,
-     pars: Object
-   },
-   computed: {
-     dialogMode() {
-       return this.$store.state.dialogMode;
-     }
    },
    mounted() {
      this.$eventBus.$on(`${this.name}_DataAdded`, this.DataAdded);
      this.$eventBus.$on(`${this.name}_DataUpdated`, this.DataUpdated);
      this.$eventBus.$on(`${this.name}_DataDeleted`, this.DataDeleted);
-
-     let strutPromise = this.getModuleStrut()
-     if (strutPromise instanceof Promise) {
-       strutPromise.then(ModuleStrut => {
-         this.ModuleStrut = ModuleStrut;
-       })
-     } else {
-       this.ModuleStrut = strutPromise;
-     }
-
-     let colPromise = this.getColumns()
-     if (colPromise instanceof Promise) {
-       colPromise.then(cols => {
-         this.columns = cols;
-       });
-     } else {
-       this.columns = colPromise;
-     }
+     this.init()
    },
    destroyed() {
      this.$eventBus.$off(`${this.name}_DataAdded`, this.DataAdded);
      this.$eventBus.$off(`${this.name}_DataUpdated`, this.DataUpdated);
      this.$eventBus.$off(`${this.name}_DataDeleted`, this.DataDeleted);
-   },
-   methods: {
-     getModuleStrut() {
-       return getModuleStrut(this.name)
-     },
-     getColumns() {
-       return getColumns(this.name)
-     },
-     frmColumns() {
-
-     },
-     DataDeleted(id) {
-       this.$nextTick(() => {
-         let index = this.rows.findIndex(r => r.Id == id);
-         if (index >= 0) this.rows.splice(index, 1);
-       });
-     },
-     DataUpdated(item) {
-       let index = this.rows.findIndex(r => r.Id == item.Id);
-       if (index >= 0) this.rows.splice(index, 1, item);
-     },
-     DataAdded(item) {
-       this.rows.splice(0, 0, item);
-     },
-     toEdit({
-       Id = ""
-     } = {}) {
-       if (
-         this.success ||
-         this.dialogMode ||
-         this.$vuetify.breakpoint.smAndDown
-       ) {
-         this.$message.dialog(`${this.name}_Add`, {
-           id: Id
-         });
-       } else {
-         this.$router.push(`/${this.name}/add?q=${Id}`);
-       }
-     },
-     remove(arr = []) {
-       this.$message.confirm("提示", "确认要删除吗?").then(() => {
-         let ids = arr.map(r => r.Id);
-         for (const id of ids) {
-           let index = this.selection.findIndex(r => r.Id == id);
-           this.$http.delete(`/api/${this.name}/delete/${id}`).then(() => {
-             this.selection.splice(index, 1);
-           });
-         }
-       });
-     },
-     search() {
-       getQueryOptions(this.name).then(options => {
-         for (const item of this.query) {
-           let opt = options.find(
-             r => r.Name == item.Name && r.compare == item.compare
-           );
-           if (opt) {
-             opt.value = item.value;
-           }
-         }
-
-         this.$message
-           .dialog(() => import('@/components/Dialog/SearchDialog.vue'), {
-             title: `查询${this.direction}列表`,
-             options
-           })
-           .then(query => {
-             this.query = query;
-             this.loadList();
-           });
-       });
-     },
-     getRequestUrl() {
-       return `/api/${this.name}/list`
-     },
-     async loadList(pager) {
-       if (pager) this.pager = pager;
-       else pager = this.pager;
-       this.loading = true;
-       let {
-         page,
-         rowsPerPage,
-         sortBy,
-         descending
-       } = pager;
-
-       /*条件1 */
-       let {
-         queryFilter = []
-       } = this.pars || {};
-       if (typeof queryFilter == "function") {
-         queryFilter = await queryFilter.call(this, {
-           selection: this.selection,
-           rows: this.items
-         });
-       }
-
-       let pageInfo = {
-         PageIndex: page,
-         PageSize: rowsPerPage,
-         Condition: {
-           Filters: [...queryFilter, ...this.query]
-         },
-         SortInfo: {
-           Name: sortBy || "Id",
-           Mode: descending ? "asc" : "desc"
-         }
-       };
-       try {
-         let {
-           Total,
-           Data
-         } = await this.$http.post(this.getRequestUrl(),
-           pageInfo
-         );
-         this.rows = Data;
-         this.total = Total;
-       } finally {
-         this.loading = false;
-       }
-     }
    }
  };

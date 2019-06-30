@@ -97,7 +97,8 @@ export default {
           return {
             text: c.Description,
             value: c.Name,
-            sortBy: !!c.sortBy
+            sortBy: !!c.sortBy,
+            width: c.width || "150px"
           };
         })
       ];

@@ -126,7 +126,7 @@ export let formComputed = {
       }),
       (a, b) => a.title == b.title
     );
-    return arr;
+    return arr.filter(v => v.values.length > 0);
   }
 }
 
@@ -196,10 +196,10 @@ export let formMethods = {
     }
   },
   frmLoadForm(frm) {
-    return frm;
+    return Promise.resolve(frm);
   },
   evalRule(name) {
-    let rules = this.rules[name];
+    let rules = this.rules[name] || [];
     let val = this.form[name];
     this.formErrorMessages[name] = [];
 
@@ -214,7 +214,7 @@ export let formMethods = {
   evalRules() {
     let promiseArr = Object.keys(this.rules).map(v => this.evalRule(v));
     return Promise.all(promiseArr).then(arr => {
-      return arr.filter(v => v)
+      return arr.filter(v => v.length > 0)
     })
   },
   getPostMethod(id) {
@@ -251,7 +251,7 @@ export let formMethods = {
       let method = this.getPostMethod(id);
       let url = this.getPostUrl(id)
       let data = await method(url, postData)
-      data = this.frmLoadForm(data)
+      data = await this.frmLoadForm(data)
 
       this.goList(data)
     } catch (error) {

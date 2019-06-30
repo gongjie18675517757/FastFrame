@@ -6,25 +6,30 @@
           <v-toolbar flat dense card color="transparent">
             <v-toolbar-title>{{title}}</v-toolbar-title>
             <v-spacer></v-spacer>
+            <v-btn icon @click="cancel">
+              <v-icon>close</v-icon>
+            </v-btn>
           </v-toolbar>
           <v-divider></v-divider>
           <v-form ref="form">
             <v-card-text>
-              <v-layout wrap>
-                <Input
-                  v-for="item in options"
-                  :key="item.Name"
-                  :model="form"
-                  v-bind="item"
-                  singleLine
-                  canEdit
-                  :errorMessages="formErrorMessages[item.Name]"
-                  @change="handleChange(item)"
-                />
-              </v-layout>
-              <v-divider class="mt-5"></v-divider>
+              <div class="dialog-form-content">
+                <v-layout wrap>
+                  <Input
+                    v-for="item in options"
+                    :key="item.Name"
+                    :model="form"
+                    v-bind="item"
+                    singleLine
+                    canEdit
+                    :errorMessages="formErrorMessages[item.Name]"
+                    @change="handleChange(item)"
+                  />
+                </v-layout>
+              </div>
             </v-card-text>
           </v-form>
+          <v-divider></v-divider>
           <v-card-actions>
             <v-btn flat @click="cancel">取消</v-btn>
             <v-spacer></v-spacer>
@@ -38,14 +43,20 @@
 
 <script>
 import Input from "@/components/Inputs";
+import VuePerfectScrollbar from "vue-perfect-scrollbar";
 export default {
   components: {
-    Input
+    Input,
+    VuePerfectScrollbar
   },
   props: {
     options: Array,
     title: String,
-    model: Object
+    model: Object,
+    rules: {
+      type: Object,
+      default: () => ({})
+    }
   },
   data() {
     return {
@@ -77,40 +88,38 @@ export default {
       this.changed = true;
       this.evalRule(item);
     },
-    async evalRule(item) {
-      let name = item.Name;
-      let rules = item.rules;
-      let val = this.form[name];
-      this.formErrorMessages[name] = [];
-      for (const rule of rules) {
-        if (this.formErrorMessages[name].length == 0) {
-          let err = await rule.call(this.form, val);
-          if (typeof err == "string") {
-            this.formErrorMessages[name].push(err);
-            return err;
-          }
-        }
-      }
+    evalRule(item) {
+      let rules = this.rules[item.Name] || item.rules;
+      let val = this.form[item.Name];
+      this.formErrorMessages[item.Name] = [];
+
+      let promiseArr = rules.map(v => v.call(this.form, val));
+      return Promise.all(promiseArr)
+        .then(arr => {
+          return arr.filter(v => typeof v == "string");
+        })
+        .then(errs => {
+          this.formErrorMessages[item.Name].push(...errs);
+          return errs;
+        });
     },
-    async success() {
-      let errs = [];
-      for (const item of this.options) {
-        let err = await this.evalRule(item);
-        errs.push(err);
-      }
-
-      if (errs.length > 0) {
-        // this.$eventBus.$emit("alert", {
-        //   type: "error",
-        //   msg: "表单填写不完整"
-        // });
-
-        return;
-      }
-      this.$emit("success", this.form);
+    success() {
+      let promiseArr = this.options.map(v => this.evalRule(v));
+      Promise.all(promiseArr).then(errs => {
+        errs = errs.filter(v => v.length > 0);
+        if (errs.length == 0) {
+          this.$emit("success", this.form);
+        }
+      });
     }
   }
 };
 </script>
+<style>
+.dialog-form-content {
+  max-height: 50vh;
+}
+</style>
+
 
  

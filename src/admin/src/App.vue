@@ -112,6 +112,7 @@ export default {
 .v-dialog {
   box-shadow: none;
   -webkit-box-shadow: none;
+  overflow: hidden;
 }
 .form {
   padding: 5px;

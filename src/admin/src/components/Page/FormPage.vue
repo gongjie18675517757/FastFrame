@@ -56,34 +56,42 @@
           <v-form ref="form">
             <v-card-text>
               <vue-perfect-scrollbar :class="[!isDialog?'fullPage':'dialogPage','form-page']">
-                <v-expansion-panel expand v-model="formGroupExpandValue" style="margin-top:-15px;">
-                  <v-expansion-panel-content v-for="group in formGroups" :key="group.key.title">
-                    <template v-if="canEdit" v-slot:header>
-                      <v-toolbar flat color="transparent">
-                        <v-toolbar-title>{{group.key.title}}</v-toolbar-title>
-                      </v-toolbar>
-                      <!-- <div class="form-page-group-header">{{group.key.title}}</div> -->
-                    </template>
-                    <v-card>
-                      <v-card-text>
-                        <component :is="singleLine?'span':'v-layout'" wrap>
-                          <Input
-                            v-for="item in group.values"
-                            v-bind="item"
-                            :key="item.Name"
-                            :model="form"
-                            :rules="getRules(item)"
-                            :canEdit="canEdit"
-                            :singleLine="singleLine"
-                            :errorMessages="formErrorMessages[item.Name]"
-                            @change="$emit('changed',{item:item,value:$event})"
-                            :ref="item.Name"
-                          />
-                        </component>
-                      </v-card-text>
-                    </v-card>
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
+                <template v-for="group in formGroups">
+                  <v-card :key="group.key.title" v-if="group.values.length>1">
+                    <v-toolbar flat dense card color="transparent">
+                      <v-toolbar-title>{{group.key.title}}:</v-toolbar-title>
+                    </v-toolbar>
+                    <v-card-text>
+                      <component :is="singleLine?'span':'v-layout'" wrap>
+                        <Input
+                          v-for="item in group.values"
+                          v-bind="item"
+                          :key="item.Name"
+                          :model="form"
+                          :rules="getRules(item)"
+                          :canEdit="canEdit"
+                          :singleLine="singleLine"
+                          :errorMessages="formErrorMessages[item.Name]"
+                          @change="$emit('changed',{item:item,value:$event})"
+                          :ref="item.Name"
+                        />
+                      </component>
+                    </v-card-text>
+                  </v-card>
+                  <component
+                    v-else
+                    v-for="item in group.values"
+                    :key="item.Name"
+                    :is="item.template"
+                    v-bind="item"
+                    :model="form"
+                    :canEdit="canEdit"
+                    :singleLine="singleLine"
+                    :errorMessages="formErrorMessages[item.Name]"
+                    @change="$emit('changed',{item:item,value:$event})"
+                    :ref="item.Name"
+                  />
+                </template>
               </vue-perfect-scrollbar>
             </v-card-text>
           </v-form>

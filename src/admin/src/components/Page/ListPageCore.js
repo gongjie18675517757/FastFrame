@@ -320,7 +320,7 @@
      close: () => this.close(),
      success: () => {
        let pars = this.selection;
-       this.emit("success", pars);
+       this.$emit("success", pars);
        if (typeof this.success == "function") this.success(pars);
      },
      selection_update: val => (this.selection = val),

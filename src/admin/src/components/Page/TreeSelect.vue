@@ -30,66 +30,72 @@ export default {
       type: Object,
       default: function() {
         return {
-          pageSize: 999
-        }
+          pageSize: 9999
+        };
       }
     },
     parentKey: {
-      default: 'Parent_Id',
+      default: "Parent_Id",
       type: String
     },
     treeKey: {
       type: String,
-      default: 'Id'
+      default: "Id"
     },
     treeText: {
       type: String,
-      default: 'Name'
+      default: "Name"
     },
     model: {
       type: Array,
       default: function() {
-        return []
+        return [];
       }
     },
     formatter: {
       type: Function,
       default: function(items) {
-        return items
+        return items;
       }
     }
   },
   data() {
     return {
       selection: [],
-      items: []
-    }
+      items: [],
+      allItems: []
+    };
   },
   async created() {
-    let { Data: items } = await this.$http.post(this.requestUrl, this.requestPars)
-    items = this.formatter(items)
+    let { Data: items } = await this.$http.post(
+      this.requestUrl,
+      this.requestPars
+    );
+    this.allItems = [...items];
+    items = this.formatter(items);
     let loadTree = parentId => {
-      return items.filter(r => r[this.parentKey] == parentId).map(r => {
-        return {
-          ...r,
-          children: loadTree(r.Id)
-        }
-      })
-    }
+      return items
+        .filter(r => r[this.parentKey] == parentId)
+        .map(r => {
+          return {
+            ...r,
+            children: loadTree(r.Id)
+          };
+        });
+    };
 
-    this.items = loadTree(null)
-    this.selection = [...this.model]
-     
+    this.items = loadTree(null);
+    this.selection = [...this.model];
   },
   methods: {
     cancel() {
-      this.$emit('close')
+      this.$emit("close");
     },
     success() {
-      this.$emit('success', this.selection)
+      this.$emit("success",this.allItems.filter(v=>this.selection.includes(v[this.treeKey])));
     }
   }
-}
+};
 </script>
 
  

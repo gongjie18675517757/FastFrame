@@ -9,7 +9,7 @@
     :value="value"
     v-on="listeners"
     :item-key="rowKey"
-    :class="classArr"
+    :class="[...classArr,'elevation-1']"
     :style="styleObj"
     :hide-headers="false"
     :selectAll="multiple"
@@ -72,7 +72,10 @@ export default {
       default: true
     },
     loading: Boolean,
-    classArr: Array,
+    classArr: {
+      type: Array,
+      default: () => []
+    },
     styleObj: Object
   },
   data() {

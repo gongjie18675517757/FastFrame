@@ -58,7 +58,7 @@ export default {
     value() {
       let val = this.val;
       let length = this.info.Length || 0;
-      if (length >= 4000) return val.replace(/<[^>]+>/g,"").substring(0, 200);
+      if (length >= 4000) return val.replace(/<[^>]+>/g, "").substring(0, 200);
       if (this.info.Type == "Boolean") {
         if (val) return "是";
         else return "否";
@@ -70,8 +70,11 @@ export default {
       if (this.info.Relate) {
         let tempName = this.info.Name.replace("_Id", "");
         let name = this.info.Relate.RelateFields[0];
-        if (this.model[tempName]) {
-          return this.model[tempName][name];
+        let obj = this.model[tempName];
+        if (obj) {
+          return this.info.Relate.RelateFields.map(v => obj[v])
+            .map((v, i) => (i > 0 ? `[${v}]` : v))
+            .join("");
         }
       }
       return val;

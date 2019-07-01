@@ -61,7 +61,9 @@ export const BasisDetaiTable = {
           }
         }, [v.icon ? h('v-icon', null, v.icon) : null, h('span', null, v.caption)]))
       ]),
-      h('v-card-text', {}, [
+      h('v-card-text', {
+        class: ['form-content']
+      }, [
         h(Table, {
           props: {
             items: this.value,
@@ -85,7 +87,7 @@ export const BasisDetaiTable = {
 export const FormDetailTable = {
   props: {
     value: defArray,
-    model:Object,
+    model: Object,
     title: String,
     canEdit: Boolean,
     typeName: String,
@@ -259,9 +261,9 @@ export const SelectDetailTable = {
     add() {
       this.$message.dialog(`${this.typeName}_List`).then(rows => {
         return Promise.all(rows.map(v => this.frmFormFunc(v)))
-      }).then(rows => { 
-        console.log(this.model,this.value);
-        
+      }).then(rows => {
+        console.log(this.model, this.value);
+
         this.value.push(...rows)
         this.$emit('change', this.value)
       })

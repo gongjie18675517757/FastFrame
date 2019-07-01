@@ -176,7 +176,7 @@ export let formMethods = {
     Id
   }) {
     if (Id == this.id || Id == this.form.Id) {
-      this.$message.confirm("提示", "当前内容已被其它人修改,是否重新加载?").then(this.init)
+      // this.$message.confirm("提示", "当前内容已被其它人修改,是否重新加载?").then(this.init)
     }
   },
   DataDeleted() {
@@ -205,7 +205,7 @@ export let formMethods = {
 
     let promiseArr = rules.map(v => v.call(this.form, val))
     return Promise.all(promiseArr).then(arr => {
-      return arr.fill(v => typeof v == 'string')
+      return arr.filter(v => typeof v == 'string')
     }).then(errs => {
       this.formErrorMessages[name].push(...errs);
       return errs;

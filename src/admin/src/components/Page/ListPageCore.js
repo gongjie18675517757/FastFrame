@@ -93,10 +93,10 @@
      selection: [],
      total: 0,
      loading: false,
-     tableClassArr: ['elevation-1', 'fixed-header', 'v-table__overflow'],
+     tableClassArr: [], // ['elevation-1', 'fixed-header', 'v-table__overflow'],
      tableStyleObj: {
-       'max-height': 'calc(100vh - 140px)',
-       'backface-visibility': 'hidden'
+      //  'max-height': 'calc(100vh - 140px)',
+      //  'backface-visibility': 'hidden'
      },
      ModuleStrut: {},
      pager: null,

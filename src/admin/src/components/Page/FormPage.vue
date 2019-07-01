@@ -88,6 +88,7 @@
                     :canEdit="canEdit"
                     :singleLine="singleLine"
                     :errorMessages="formErrorMessages[item.Name]"
+                    v-model="form[item.Name]"
                     @change="$emit('changed',{item:item,value:$event})"
                     :ref="item.Name"
                   />

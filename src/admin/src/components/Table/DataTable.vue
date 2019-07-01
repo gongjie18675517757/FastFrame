@@ -132,4 +132,7 @@ export default {
 /* table th {
   border: 1px solid #fff;
 } */
+table.v-table.v-datatable--select-all thead th:first-child {
+  width: 50px;
+}
 </style>

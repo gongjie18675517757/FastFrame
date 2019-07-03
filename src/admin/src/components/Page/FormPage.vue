@@ -58,7 +58,7 @@
               <vue-perfect-scrollbar :class="[!isDialog?'fullPage':'dialogPage','form-page']">
                 <template v-for="group in formGroups">
                   <v-flex :key="group.key.title" xs12>
-                    <v-card v-if="group.values.length>1">
+                    <v-card v-if="group.values.length>1"  tile>
                       <v-toolbar flat dense card color="transparent">
                         <v-toolbar-title>{{group.key.title}}:</v-toolbar-title>
                       </v-toolbar>

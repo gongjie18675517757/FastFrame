@@ -16,7 +16,7 @@ import {
   formMethods
 } from "@/components/Page/FormPageCore.js";
 
-import { alert } from "@/utils";
+ 
 import { FormDetailTable,SelectDetailTable  } from "@/components/Table";
 
 const PermissionTable = {

@@ -1,19 +1,20 @@
 <template>
   <v-flex xs12 sm3 md3 lg2 xl1 :class="{selected:selected}">
-    <v-card height="200" @click="$emit('click')">
-      <v-card-text @dblclick="$emit('dblclick')">
+    <v-card height="176" @click="$emit('click')">
+      <v-card-text @dblclick="$emit('dblclick')" style="padding:0px;">
         <v-icon size="135" class="mx-auto" color="indigo" v-if="item.IsFolder">folder</v-icon>
         <img
           :src="imgSrc"
           v-else-if="isImage"
-          style="max-height:130px;"
+          class="card-image"
+          style="max-width:100%;max-height:135px;"
           @dblclick.stop="handleDbClick"
         >
         <v-icon size="135" class="mx-auto" color="indigo" v-else>insert_drive_file</v-icon>
       </v-card-text>
       <v-divider></v-divider>
       <v-card-actions class="grid-item" @dblclick="reName">
-        <div style="margin:0 auto;">{{item.Name}}</div>
+        <nobr>{{item.Name}}</nobr>
       </v-card-actions>
     </v-card>
   </v-flex>
@@ -140,6 +141,8 @@ export default {
   border-style: solid;
   border-color: #eee;
   text-align: center;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .link {
   cursor: default;
@@ -147,8 +150,10 @@ export default {
 .selected {
   background-color: #cce8ff;
 }
-.img {
-  max-width: 150px;
-  max-height: 150px;
+.card-image {
+  max-width: 100%;
+  max-height: 135px;
+  display: block;
+  margin: 0 auto;
 }
 </style>

@@ -1,12 +1,13 @@
 import Table from "./DataTable.vue";
-import Cell from './Cell'
 import {
   getDefaultModel,
   getFormItems,
   getRules,
   getColumns
 } from "@/generate";
-
+import {
+  distinct
+} from '@/utils'
 
 
 let defArray = {
@@ -39,7 +40,11 @@ export const BasisDetaiTable = {
     }
   },
   render(h) {
-    return h('v-card', {}, [
+    return h('v-card', {
+      props: {
+        tile: true
+      }
+    }, [
       h('v-toolbar', {
         props: {
           flat: true,
@@ -157,6 +162,10 @@ export const FormDetailTable = {
   created() {
     getColumns(this.typeName)
       .then(this.frmColsfunc)
+      .then(cols => distinct(cols, v => v.Name, (a, b) => ({
+        ...a,
+        ...b
+      })))
       .then(cols => this.columns = cols)
   },
   methods: {
@@ -168,6 +177,10 @@ export const FormDetailTable = {
         .then(this.frmFormFunc)
         .then(frm => model = frm)
         .then(() => getFormItems(this.typeName))
+        .then(opts => distinct(opts, v => v.Name, (a, b) => ({
+          ...a,
+          ...b
+        })))
         .then(this.frmOptionFunc)
         .then(opts => options = opts)
         .then(() => getRules(this.typeName))
@@ -262,8 +275,6 @@ export const SelectDetailTable = {
       this.$message.dialog(`${this.typeName}_List`).then(rows => {
         return Promise.all(rows.map(v => this.frmFormFunc(v)))
       }).then(rows => {
-        console.log(this.model, this.value);
-
         this.value.push(...rows)
         this.$emit('change', this.value)
       })

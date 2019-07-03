@@ -118,7 +118,7 @@ namespace FastFrame.Application.Controllers
                     Rules = GetRules(x),
                     Relate = relatedToAttribute?.RelatedType.Name,
                     Length = stringLengthAttribute?.MaximumLength,
-                    EnumValues = getEnumValues(nullableType),
+                    EnumValues = GetEnumValues(nullableType),
                     IsRequired = requiredAttribute != null,
                     GroupNames = formGroupAttribute?.GroupNames
                 });
@@ -141,7 +141,7 @@ namespace FastFrame.Application.Controllers
             };
         }
 
-        private IEnumerable<KeyValuePair<string, string>> getEnumValues(Type type)
+        private IEnumerable<KeyValuePair<string, string>> GetEnumValues(Type type)
         {
             if (!type.IsEnum)
                 yield break;
@@ -155,13 +155,13 @@ namespace FastFrame.Application.Controllers
         }
         private IEnumerable<Rule> GetRules(PropertyInfo prop)
         {
-            if (TryGetAttribute<RequiredAttribute>(prop, out var requiredAttribute))
+            if (TryGetAttribute<RequiredAttribute>(prop, out _))
                 yield return new Rule("required");
             if (TryGetAttribute<StringLengthAttribute>(prop, out var stringLengthAttribute))
                 yield return new Rule("stringLength",
                     stringLengthAttribute.MinimumLength.ToString(),
                     stringLengthAttribute.MaximumLength.ToString());
-            if (TryGetAttribute<UniqueAttribute>(prop, out var uniqueAttribute))
+            if (TryGetAttribute<UniqueAttribute>(prop, out _))
                 yield return new Rule("unique", prop.DeclaringType.Name, prop.Name);
         }
 

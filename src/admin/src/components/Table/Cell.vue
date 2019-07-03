@@ -7,13 +7,11 @@
       @click="$emit('toEdit',model)"
     >{{value}}</a>
     <a v-else-if="isFile &&  val" @click="toRelate">下载</a>
-    <!-- <a v-else-if="Foreignkey" :moduleName="moduleName" name="Get" @click="toRelate">{{value}}</a> -->
     <span v-else>{{value}}</span>
   </span>
 </template>
 
 <script>
-import { existBtn } from "@/permission.js";
 import { showDialog, getValue } from "@/utils";
 export default {
   props: {
@@ -32,15 +30,7 @@ export default {
     moduleName: String
   },
   data() {
-    return {
-      RelatePermission: false
-    };
-  },
-  async created() {
-    if (this.info.Relate) {
-      let exists = await existBtn(this.info.Relate.ModuleName, "Get");
-      this.RelatePermission = exists;
-    }
+    return {};
   },
   computed: {
     isRelate() {
@@ -68,8 +58,7 @@ export default {
         return kv.Value || "";
       }
       if (this.info.Relate) {
-        let tempName = this.info.Name.replace("_Id", "");
-        let name = this.info.Relate.RelateFields[0];
+        let tempName = this.info.Name.replace("_Id", "");      
         let obj = this.model[tempName];
         if (obj) {
           return this.info.Relate.RelateFields.map(v => obj[v])

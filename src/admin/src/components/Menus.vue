@@ -38,7 +38,7 @@
 
 <script>
 import menu from "@/menu.js";
-import { getPermission } from "@/permission.js";
+
 import VuePerfectScrollbar from "vue-perfect-scrollbar";
 import MenuGroup from "./MenuGroup.vue";
 import MenuItem from "./MenuItem.vue";
@@ -53,16 +53,12 @@ export default {
     return {
       miniVariant: false,
       items: menu,
-      menus: [],
       scrollSettings: {
         maxScrollbarLength: 160
       }
     };
   },
-  async created() {
-    this.$eventBus.$on("init", this.initMenu);
-    await this.initMenu(); 
-  },
+  async created() {},
   destroyed() {
     this.$eventBus.$off("init", this.initMenu);
   },
@@ -88,30 +84,12 @@ export default {
           value: val
         });
       }
+    },
+    menus() {
+      return this.items;
     }
   },
   methods: {
-    async initMenu() {
-      let list = await getPermission();
-      this.menus = this.items.map(r => {
-        return {
-          ...r,
-          items: r.items.filter(x => {
-            return !!list.find(p => p.EnCode == x.permission);
-          })
-        };
-      });
-    },
-    genChildTarget(item, subItem) {
-      if (subItem.href) return;
-      if (subItem.component) {
-        return {
-          name: subItem.component
-        };
-      }
-      //   return { name: `${item.group}/${subItem.name}` }
-      return "/about";
-    },
     toTenantCenter() {
       this.$router.push({
         path: "/tenantCenter"

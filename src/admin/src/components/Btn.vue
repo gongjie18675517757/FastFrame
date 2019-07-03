@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { existBtn } from '@/permission'
+ 
 export default {
   props: {
     name: String,
@@ -19,29 +19,25 @@ export default {
     }
   },
   data() {
-    return {
-      attrs: {},
-      permission: true
-    }
+    return {};
   },
   computed: {
     evalDisabled() {
-      return this.disabled || !this.permission
+      return this.disabled || !this.permission;
     },
     evalTitle() {
-      if (!this.permission) return `${this.title}(权限不足)`
-      else return this.title
+      if (!this.permission) return `${this.title}(权限不足)`;
+      else return this.title;
+    },
+    permission() {
+      return this.$store.getters.existsPermission(this.moduleName, this.name);
     }
-  },
-  async created() {
-    this.attrs = this.$attrs
-    this.permission = await existBtn(this.moduleName, this.name)
   },
   methods: {
     handleClick($event) {
-      this.$emit('click', $event)
+      this.$emit("click", $event);
     }
   }
-}
+};
 </script>
  

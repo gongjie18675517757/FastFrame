@@ -3,11 +3,8 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import areas from '@/areas.js'
 import store from '@/store.js'
-import {
-  existBtn
-} from '@/permission.js'
-import {
 
+import {
   mapMany,
   sleep
 } from './utils'
@@ -61,7 +58,7 @@ let routes = [{
         },
         component: () =>
           import(`./views/Index/Index.vue`)
-      }, 
+      },
       {
         path: '/about',
         name: 'about',
@@ -72,7 +69,7 @@ let routes = [{
         props: true,
         component: () =>
           import(`./views/About`)
-      }, 
+      },
       {
         path: '/chat',
         name: 'chat',
@@ -199,7 +196,7 @@ router.beforeEach(async (to, from, next) => {
     return
   }
 
-  let exists = await existBtn(to.meta.moduleName, to.meta.pageName)
+  let exists = await store.getters.existsPermissionAsync(to.meta.moduleName, to.meta.pageName)
   if (exists) {
     next()
   } else {

@@ -1,12 +1,18 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
+import $http from '@/http'
+import {
+  sleep
+} from '@/utils'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
     currUser: {},
     tenant: {},
+
+    isLoadPermission: false,
+    permissionList: [],
     leftDrawer: true,
     rightDrawer: false,
     dialogMode: false,
@@ -45,7 +51,11 @@ export default new Vuex.Store({
       state.currUser = payload
     },
     logout(state) {
+      state.isLoadPermission = false
       state.currUser = null
+    },
+    setPermission(state, payload) {
+      state.permissionList = payload
     },
     toggleLeftDrawer(state, payload) {
       state.leftDrawer = payload.value
@@ -75,10 +85,38 @@ export default new Vuex.Store({
       state.friendMsgs.push(payload.FriendMsg)
     }
   },
-  actions: {},
+  actions: {
+    login({
+      commit,
+      state
+    }, {
+      user
+    }) {
+      commit('login', user)
+      $http.get('/api/Permission/Permissions').then(data => {
+        commit('setPermission', data)
+        state.isLoadPermission = true
+      })
+    }
+  },
   getters: {
     mapMode: state => {
       return state.mapMode || window.localStorage.getItem('mapMode') || 'bd'
+    },
+    existsPermission: state => (moduleName, actionName = 'List') => {
+      let patent = state.permissionList.find(v => v.EnCode == moduleName)
+      return !!patent && !!state.permissionList.find(v => v.EnCode == actionName && v.Parent_Id == patent.Id)
+    },
+    existsPermissionAsync: state => (moduleName, actionName = 'List') => {
+      let next = Promise.resolve();
+      if (!state.isLoadPermission) {
+        next = sleep(1000)
+      }
+
+      return next.then(() => {
+        let patent = state.permissionList.find(v => v.EnCode == moduleName)
+        return !!patent && !!state.permissionList.find(v => v.EnCode == actionName && v.Parent_Id == patent.Id)
+      })
     }
   }
 })

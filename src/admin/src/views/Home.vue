@@ -24,7 +24,7 @@
 import Setting from "@/components/Setting.vue";
 import Menus from "@/components/Menus.vue";
 import Toolbar from "@/components/Toolbar.vue";
-import { init } from "@/permission.js";
+ 
 
 export default {
   components: {
@@ -60,22 +60,29 @@ export default {
       return this.$store.state.singlePageMode;
     }
   },
-  async created() {
-    try {
-      let request = await this.$http.get("/api/account/GetCurrent");
-      this.$store.commit("login", request);
-      await init();
-      this.$eventBus.$emit("init");
-    } catch (error) {
-      if (this.$route.fullpath != "/login") {
-        this.$router.push({
-          path: "/login",
-          query: {
-            redirect: this.$route.fullpath
+  created() {
+    if (!this.$store.state.currUser || !this.$store.state.currUser.Id) {
+      this.$http
+        .get("/api/account/GetCurrent")
+        .then(user => {
+          this.$store.dispatch({
+            type: "login",
+            user
+          });
+        })
+        .catch(() => {
+          if (this.$route.fullpath != "/login") {
+            this.$router.push({
+              path: "/login",
+              query: {
+                redirect: this.$route.fullpath
+              }
+            });
           }
         });
-      }
-    }
+    } 
+ 
+    this.$eventBus.$emit("init");
   },
   methods: {
     resufresh() {

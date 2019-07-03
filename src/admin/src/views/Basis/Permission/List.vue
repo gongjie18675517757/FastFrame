@@ -1,4 +1,5 @@
 <script>
+import { alert } from "@/utils";
 let pageInfo = {
   area: "Basis",
   name: "Permission",

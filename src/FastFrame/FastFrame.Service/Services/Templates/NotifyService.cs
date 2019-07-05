@@ -42,6 +42,7 @@ namespace FastFrame.Service.Services.Basis
 						 select new NotifyDto
 						{
 							Title=_notify.Title,
+							Type_Id=_notify.Type_Id,
 							Publush_Id=_notify.Publush_Id,
 							Resource_Id=_notify.Resource_Id,
 							Content=_notify.Content,

@@ -1,26 +1,33 @@
 ﻿using FastFrame.Entity.Enums;
-using FastFrame.Infrastructure;
+using FastFrame.Infrastructure.Attrs;
 using System.ComponentModel.DataAnnotations;
 
 namespace FastFrame.Entity.Basis
-{    
-    public class EnumItem : BaseEntity, IHasSoftDelete, IHasTenant
+{
+    /// <summary>
+    /// 数字字典
+    /// </summary>
+    [RelatedField(nameof(Value), nameof(Key))]
+    [Export]
+    public class EnumItem : BaseEntity
     {
         /// <summary>
         /// 键
         /// </summary>
-        [StringLength(150)]
-        public EnumName EnumName { get; set; }
+        [Required]
+        public EnumName Key { get; set; }
 
         /// <summary>
         /// 值
         /// </summary>
-        [StringLength(200)]
-        public string EnumValue { get; set; }
+        [StringLength(150)]
+        [Required]
+        public string Value { get; set; }
 
         /// <summary>
         /// 上级
         /// </summary>
-        public string Parent_Id { get; set; }  
+        [RelatedTo(typeof(EnumItem))]
+        public string Super_Id { get; set; }
     }
 }

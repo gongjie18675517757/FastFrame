@@ -5,39 +5,14 @@ let pageInfo = {
   direction: "权限"
 };
 
-import {
-  formData,
-  makeChildProps,
-  makeChildListeners,
-  FormPageMixin,
-  formInject,
-  formProps,
-  formComputed,
-  formMethods
-} from "@/components/Page/FormPageCore.js";
-
+import Page from "@/components/Page/FormPageCore.js";
 export default {
-  mixins: [FormPageMixin],
-  inject: [...formInject],
-  props: {
-    ...formProps
-  },
+  ...Page,
   data() {
     return {
-      ...formData,
+      ...Page.data.call(this),
       ...pageInfo
     };
-  },
-  computed: {
-    ...formComputed
-  },
-  methods: {
-    ...formMethods
-  },
-  render(h) {
-    let props = makeChildProps.call(this);
-    let listeners = makeChildListeners.call(this);
-    return h("v-page", { props, on: listeners });
   }
 };
 </script>

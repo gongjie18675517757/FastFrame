@@ -1,28 +1,13 @@
 <script>
-import {
-  ListPageMixin,
-  data,
-  pageProps,
-  pageListeners
-} from "@/components/Page/ListPageCore.js";
-
-export default {
-  mixins: [ListPageMixin],
-  data() {
-    return {
-      ...data,
-        area: "{{AreaName}}",
-        name: "{{ModuleName}}",
-        direction: "{{Description}}"
+    let pageInfo = { area: "{{AreaName}}", name: "{{ModuleName}}", direction: "{{Description}}" };
+    import Page from "@/components/Page/ListPageCore.js";
+    export default {
+        ...Page,
+        data() {
+            return {
+                ...Page.data.call(this),
+                ...pageInfo
+            };
+        }
     };
-  },
-  render(h) {
-    let props = pageProps.call(this),
-      listeners = pageListeners.call(this);
-    return h("v-list-page", {
-      props,
-      on: listeners
-    });
-  }
-};
 </script>

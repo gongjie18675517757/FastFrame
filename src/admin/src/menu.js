@@ -2,7 +2,7 @@ export default [{
     title: '存货管理',
     items: [{
       icon: 'account_box',
-      title: '用户管理', 
+      title: '用户管理',
       permission: 'User',
       items: [{
         icon: 'account_box',
@@ -55,6 +55,12 @@ export default [{
         title: '资源库',
         path: '/meidia/list',
         permission: 'Meidia'
+      },
+      {
+        icon: 'perm_media',
+        title: '数据字典',
+        path: '/enumItem/list',
+        permission: 'EnumItem'
       }
     ]
   },

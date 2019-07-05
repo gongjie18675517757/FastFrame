@@ -104,7 +104,11 @@ namespace FastFrame.Application.Controllers
                 /*长度*/
                 TryGetAttribute<StringLengthAttribute>(x, out var stringLengthAttribute);
 
+                /*分组*/
                 TryGetAttribute<FormGroupAttribute>(x, out var formGroupAttribute);
+
+                /*数据字典*/
+                TryGetAttribute<EnumItemAttribute>(x, out var enumItemAttribute);
 
                 /*字段信息*/
                 fieldInfoStructs.Add(new FieldInfoStrut()
@@ -120,7 +124,8 @@ namespace FastFrame.Application.Controllers
                     Length = stringLengthAttribute?.MaximumLength,
                     EnumValues = GetEnumValues(nullableType),
                     IsRequired = requiredAttribute != null,
-                    GroupNames = formGroupAttribute?.GroupNames
+                    GroupNames = formGroupAttribute?.GroupNames,
+                    EnumItemInfo = enumItemAttribute == null ? null : new EnumInfo { Name = enumItemAttribute.Name, SuperPropName = enumItemAttribute.SuperPropName }
                 });
             }
 
@@ -231,6 +236,7 @@ namespace FastFrame.Application.Controllers
         public bool IsRequired { get; internal set; }
         public int? Length { get; internal set; }
         public string[] GroupNames { get; internal set; }
+        public EnumInfo EnumItemInfo { get; internal set; }
     }
 
     public class Rule
@@ -244,5 +250,12 @@ namespace FastFrame.Application.Controllers
         public string RuleName { get; }
 
         public string[] RulePars { get; }
+    }
+
+    public class EnumInfo
+    {
+        public string Name { get; set; }
+
+        public string SuperPropName { get; set; }
     }
 }

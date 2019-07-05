@@ -3,17 +3,6 @@ let pageInfo = {
   name: "Notify",
   direction: "通知中心"
 };
-import {
-  ListPageMixin,
-  pageInjects,
-  pageProps,
-  makePageData,
-  pageComputed,
-  pageMethods,
-  makeChildProps,
-  makeChildListeners
-} from "@/components/Page/ListPageCore.js";
-
 
 let dialog = {
   props: ['content'],
@@ -44,21 +33,18 @@ let dialog = {
   }
 }
 
+import Page from "@/components/Page/ListPageCore.js";
 
 export default {
-  mixins: [ListPageMixin],
-  inject: pageInjects,
-  props: pageProps,
+  ...Page,
   data() {
-    let data = makePageData.call(this)
     return {
-      ...data,
+      ...Page.data.call(this),
       ...pageInfo
     };
   },
-  computed: pageComputed,
   methods: {
-    ...pageMethods,
+    ...Page.methods,
     getRequestUrl() {
       return '/api/notify/AllList'
     },
@@ -67,23 +53,5 @@ export default {
         content: model.Content
       })
     }
-  },
-  render(h) {
-    let props = makeChildProps.call(this),
-      listeners = makeChildListeners.call(this);
-
-    listeners = {
-      ...listeners
-    }
-    return h("v-list-page", {
-      props: {
-        ...props,
-        baseToolItems: [],
-        direction: this.direction
-      },
-      on: {
-        ...listeners,
-      }
-    });
   }
 };

@@ -76,6 +76,11 @@
             <param name="input"></param>
             <returns></returns>
         </member>
+        <member name="T:FastFrame.Application.Controllers.Basis.EnumItemController">
+             <summary>
+            数字字典 
+             </summary>
+        </member>
         <member name="T:FastFrame.Application.Controllers.Basis.MeidiaController">
              <summary>
             图片库 

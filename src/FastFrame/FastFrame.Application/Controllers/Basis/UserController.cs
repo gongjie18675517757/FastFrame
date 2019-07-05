@@ -2,7 +2,6 @@
 using FastFrame.Entity.Basis;
 using FastFrame.Infrastructure.Attrs;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace FastFrame.Application.Controllers.Basis
@@ -31,6 +30,6 @@ namespace FastFrame.Application.Controllers.Basis
         public async Task<UserDto> ToogleDisabled(string id)
         {
             return await service.ToogleDisabled(id);
-        } 
+        }
     }
 }

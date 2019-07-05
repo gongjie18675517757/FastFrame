@@ -4,6 +4,21 @@
         <name>FastFrame.Infrastructure</name>
     </assembly>
     <members>
+        <member name="T:FastFrame.Infrastructure.Attrs.EnumItemAttribute">
+            <summary>
+            数据字典
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Attrs.EnumItemAttribute.Name">
+            <summary>
+            字典值
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Attrs.EnumItemAttribute.SuperPropName">
+            <summary>
+            上级
+            </summary>
+        </member>
         <member name="T:FastFrame.Infrastructure.Attrs.ExcludeAttribute">
             <summary>
             排除标识[不生成DTO]
@@ -23,6 +38,17 @@
             <summary>
             导出标记
             </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Attrs.FormGroupAttribute">
+            <summary>
+            表单分组
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Attrs.FormGroupAttribute.#ctor(System.String[])">
+            <summary>
+            
+            </summary>
+            <param name="groupNames">归属分组名称</param>
         </member>
         <member name="T:FastFrame.Infrastructure.Attrs.PermissionAttribute">
             <summary>
@@ -88,17 +114,6 @@
             <summary>
             被关联的类型
             </summary>
-        </member>
-        <member name="T:FastFrame.Infrastructure.Attrs.FormGroupAttribute">
-            <summary>
-            表单分组
-            </summary>
-        </member>
-        <member name="M:FastFrame.Infrastructure.Attrs.FormGroupAttribute.#ctor(System.String[])">
-            <summary>
-            
-            </summary>
-            <param name="groupNames">归属分组名称</param>
         </member>
         <member name="T:FastFrame.Infrastructure.Attrs.TreeAttribute">
             <summary>
@@ -193,11 +208,6 @@
             <param name="enumValue"></param>
             <param name="path"></param>
             <returns></returns>
-        </member>
-        <member name="T:FastFrame.Infrastructure.EnumName">
-            <summary>
-            键名
-            </summary>
         </member>
         <member name="T:FastFrame.Infrastructure.EventBus.BaseEventData`1">
             <summary>

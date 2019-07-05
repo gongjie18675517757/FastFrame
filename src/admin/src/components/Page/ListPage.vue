@@ -195,9 +195,8 @@ export default {
 
       return val;
     },
-    evalAction({ action, name, key }) {
-      if (typeof action == "function") action.call(this, this.context);
-      else this.$emit(`${key || name}_toolBtnClick`, this.context);
+    evalAction(item) {
+      this.$emit(`toolItemClick`, item); 
     }
   },
   watch: {}

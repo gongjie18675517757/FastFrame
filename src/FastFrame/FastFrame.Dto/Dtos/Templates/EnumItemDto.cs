@@ -8,8 +8,9 @@ namespace FastFrame.Dto.Basis
 	using System; 
 	using FastFrame.Dto.Basis; 
 	/// <summary>
-	/// 
+	///数字字典 
 	/// </summary>
+	[RelatedField("Value","Key")]
 	public partial class EnumItemDto:BaseDto<EnumItem>
 	{
 		
@@ -17,19 +18,26 @@ namespace FastFrame.Dto.Basis
 		/// <summary>
 		///键 
 		/// </summary>
-		[StringLength(150)]
-		public EnumName EnumName {get;set;}
+		[Required()]
+		public EnumName Key {get;set;}
 		
 		/// <summary>
 		///值 
 		/// </summary>
-		[StringLength(200)]
-		public string EnumValue {get;set;}
+		[StringLength(150)]
+		[Required()]
+		public string Value {get;set;}
 		
 		/// <summary>
 		///上级 
 		/// </summary>
-		public string Parent_Id {get;set;}
+		[RelatedTo(typeof(EnumItem))]
+		public string Super_Id {get;set;}
+		
+		/// <summary>
+		///上级 
+		/// </summary>
+		public EnumItemDto Super {get;set;}
 		
 		/// <summary>
 		///创建人 

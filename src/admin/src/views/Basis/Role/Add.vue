@@ -5,19 +5,9 @@ let pageInfo = {
   direction: "角色"
 };
 
-import {
-  formData,
-  makeChildProps,
-  makeChildListeners,
-  FormPageMixin,
-  formInject,
-  formProps,
-  formComputed,
-  formMethods
-} from "@/components/Page/FormPageCore.js";
+import Page from "@/components/Page/FormPageCore.js";
 
- 
-import { FormDetailTable,SelectDetailTable  } from "@/components/Table";
+import { FormDetailTable, SelectDetailTable } from "@/components/Table";
 
 const PermissionTable = {
   ...FormDetailTable,
@@ -76,31 +66,24 @@ const PermissionTable = {
 };
 
 export default {
-  mixins: [FormPageMixin],
-  inject: [...formInject],
-  props: {
-    ...formProps
-  },
+  ...Page,
   data() {
     return {
-      ...formData,
+      ...Page.data.call(this),
       ...pageInfo
     };
   },
-  computed: {
-    ...formComputed
-  },
   methods: {
-    ...formMethods,
+    ...Page.methods,
     frmLoadForm(frm) {
-      return formMethods.frmLoadForm.call(this, frm).then(frm => {
+      return Page.methods.frmLoadForm.call(this, frm).then(frm => {
         frm.Members = frm.Members || [];
         frm.Permissions = frm.Permissions || [];
         return frm;
       });
     },
     getFormItems(opts) {
-      return formMethods.getFormItems.call(this, opts).then(opts => {
+      return Page.methods.getFormItems.call(this, opts).then(opts => {
         opts.push({
           Name: "Members",
           GroupNames: ["角色成员"],
@@ -116,11 +99,6 @@ export default {
         return opts;
       });
     }
-  },
-  render(h) {
-    let props = makeChildProps.call(this);
-    let listeners = makeChildListeners.call(this);
-    return h("v-page", { props, on: listeners });
   }
 };
 </script> 

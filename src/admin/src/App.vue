@@ -1,10 +1,10 @@
 <template>
   <div>
     <v-fade-transition mode="out-in">
-      <router-view v-if="resufreshed"/>
+      <router-view v-if="resufreshed" />
     </v-fade-transition>
-    <Alert/>
-    <component v-for="dialog in dialogs" :key="dialog.key" :is="dialog.render"/>
+    <Alert />
+    <component v-for="dialog in dialogs" :key="dialog.key" :is="dialog.render" />
   </div>
 </template>
 
@@ -14,12 +14,7 @@ import Alert from "@/components/Alert.vue";
 export default {
   components: {
     Alert
-  },
-  // provide() {
-  //   return {
-  //     reload: this.resufresh
-  //   };
-  // },
+  }, 
   data() {
     return {
       resufreshed: true
@@ -30,7 +25,16 @@ export default {
       return this.$store.state.dialogs;
     }
   },
-  async created() {},
+  created() {
+    if (!this.$store.state.currUser || !this.$store.state.currUser.Id) {
+      this.$http.get("/api/account/GetCurrent").then(user => {
+        this.$store.dispatch({
+          type: "login",
+          user
+        }); 
+      });
+    }
+  },
   methods: {
     resufresh() {
       this.resufreshed = false;
@@ -105,7 +109,7 @@ export default {
 .form-page .v-expansion-panel__container--active .v-expansion-panel__header {
   padding: 0px;
 }
-.form-page-group-header{
+.form-page-group-header {
   font-weight: bold;
   font-size: 20px;
 }

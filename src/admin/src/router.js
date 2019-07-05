@@ -6,7 +6,6 @@ import store from '@/store.js'
 
 import {
   mapMany,
-  sleep
 } from './utils'
 
 Vue.use(Router)
@@ -161,31 +160,13 @@ let router = new Router({
   routes
 })
 
-
-
-const getSiteName = async () => {
-  while (!store.state.tenant.FullName) {
-    await sleep(100)
-  }
-  return store.state.tenant.FullName
-}
-const existLogin = () => {
-  return new Promise((resolve, reject) => {
-    if (store.state.currUser.Id)
-      return resolve();
-
-    setTimeout(() => {
-      if (!store.state.currUser.Id)
-        return reject()
-      else
-        return resolve();
-    }, 500);
-  })
-}
-
 router.beforeEach(async (to, from, next) => {
-  let name = await getSiteName()
-  window.document.title = to.meta.title ? `${to.meta.title}-${name}` : name;
+  store.getters.getSiteNameAsync().then(({
+    FullName = ""
+  }) => {
+    window.document.title = to.meta.title ? `${to.meta.title}-${FullName}` : FullName;
+  })
+
   if (to.meta.allowAnonymous) {
     next();
     return
@@ -209,7 +190,7 @@ router.beforeEach(async (to, from, next) => {
   }
 
   try {
-    await existLogin()
+    await store.getters.existsLoginAsync()
   } catch (error) {
     next({
       path: '/login',

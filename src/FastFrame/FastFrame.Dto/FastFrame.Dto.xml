@@ -241,21 +241,26 @@
              </summary>
         </member>
         <member name="T:FastFrame.Dto.Basis.EnumItemDto">
-            <summary>
-            
-            </summary>
+             <summary>
+            数字字典 
+             </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.EnumItemDto.EnumName">
+        <member name="P:FastFrame.Dto.Basis.EnumItemDto.Key">
              <summary>
             键 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.EnumItemDto.EnumValue">
+        <member name="P:FastFrame.Dto.Basis.EnumItemDto.Value">
              <summary>
             值 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.EnumItemDto.Parent_Id">
+        <member name="P:FastFrame.Dto.Basis.EnumItemDto.Super_Id">
+             <summary>
+            上级 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.EnumItemDto.Super">
              <summary>
             上级 
              </summary>
@@ -373,6 +378,11 @@
         <member name="P:FastFrame.Dto.Basis.NotifyDto.Title">
              <summary>
             标题 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.NotifyDto.Type_Id">
+             <summary>
+            类型 
              </summary>
         </member>
         <member name="P:FastFrame.Dto.Basis.NotifyDto.Publush_Id">
@@ -513,6 +523,16 @@
         <member name="P:FastFrame.Dto.Basis.TenantDto.HandIcon_Id">
              <summary>
             头像 
+             </summary>
+        </member>
+        <member name="T:FastFrame.Dto.Basis.TenantHostDto">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.TenantHostDto.Host">
+             <summary>
+            域名 
              </summary>
         </member>
         <member name="T:FastFrame.Dto.Dtos.Chat.FriendMsgInput">

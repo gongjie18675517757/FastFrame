@@ -22,6 +22,11 @@ namespace FastFrame.Dto.Basis
 		public string Title {get;set;}
 		
 		/// <summary>
+		///类型 
+		/// </summary>
+		public string Type_Id {get;set;}
+		
+		/// <summary>
 		///发布人 
 		/// </summary>
 		[RelatedTo(typeof(User))]

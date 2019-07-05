@@ -8,61 +8,77 @@
  /**
   * 按钮组1
   */
- export let curdToolItems = [{
-     title: "新增",
-     color: "success",
-     name: "Add",
-     icon: "add"
-   },
-   {
-     title: "修改",
-     color: "warning",
-     name: "Update",
-     icon: "edit",
-     disabled({
-       selection
-     }) {
-       return selection.length != 1;
+ export let makeCurdToolItems = function () {
+   return [{
+       title: "新增",
+       color: "success",
+       name: "Add",
+       icon: "add",
+       action: this.toEdit
+     },
+     {
+       title: "修改",
+       color: "warning",
+       name: "Update",
+       icon: "edit",
+       disabled({
+         selection
+       }) {
+         return selection.length != 1;
+       },
+       update() {
+         this.toEdit(this.selection[0])
+       }
      }
-   }
- ];
+   ]
+ }
 
  /**
   * 按钮组2
   */
- export let baseToolItems = [{
-     title: "搜索",
-     color: "info",
-     name: "List",
-     key: "Search",
-     icon: "search"
-   },
-   {
-     title: "删除",
-     color: "warning",
-     name: "Delete",
-     icon: "delete",
-     disabled({
-       selection
-     }) {
-       return selection.length == 0;
+ export let makeBaseToolItems = function () {
+   return [{
+       title: "搜索",
+       color: "info",
+       name: "List",
+       key: "Search",
+       icon: "search",
+       action: this.search
+     },
+     {
+       title: "删除",
+       color: "warning",
+       name: "Delete",
+       icon: "delete",
+       disabled({
+         selection
+       }) {
+         return selection.length == 0;
+       },
+       action() {
+         this.remove(this.selection)
+       }
+     },
+     {
+       title: "刷新",
+       color: "success",
+       name: "List",
+       key: "Refresh",
+       icon: "refresh",
+       action() {
+         this.query = []
+         this.loadList()
+       }
+     },
+     {
+       title: "导出",
+       color: "basis",
+       name: "List",
+       key: "export",
+       icon: "import_export"
      }
-   },
-   {
-     title: "刷新",
-     color: "success",
-     name: "List",
-     key: "Refresh",
-     icon: "refresh"
-   },
-   {
-     title: "导出",
-     color: "basis",
-     name: "List",
-     key: "export",
-     icon: "import_export"
-   }
- ];
+   ]
+ }
 
  /**
   * 要导入的依赖
@@ -85,8 +101,8 @@
   */
  export let makePageData = function () {
    return {
-     curdToolItems,
-     baseToolItems,
+     curdToolItems: makeCurdToolItems.call(this),
+     baseToolItems: makeBaseToolItems.call(this),
      childToolItems: [],
      columns: [],
      rows: [],
@@ -95,8 +111,8 @@
      loading: false,
      tableClassArr: [], // ['elevation-1', 'fixed-header', 'v-table__overflow'],
      tableStyleObj: {
-      //  'max-height': 'calc(100vh - 140px)',
-      //  'backface-visibility': 'hidden'
+       //  'max-height': 'calc(100vh - 140px)',
+       //  'backface-visibility': 'hidden'
      },
      ModuleStrut: {},
      pager: null,
@@ -325,16 +341,9 @@
      },
      selection_update: val => (this.selection = val),
      loadList: this.loadList,
+     toolItemClick: item => item.action.call(this, item),
      toEdit: (val) => this.toEdit(val),
      changeShowMamageField: () => this.showMamageField = !this.showMamageField,
-     Add_toolBtnClick: () => this.toEdit(),
-     Update_toolBtnClick: () => this.toEdit(this.selection[0]),
-     Delete_toolBtnClick: () => this.remove(this.selection),
-     Search_toolBtnClick: this.search,
-     Refresh_toolBtnClick: () => {
-       this.query = []
-       this.loadList()
-     },
      ...this.listeners
    };
  };
@@ -359,3 +368,28 @@
      this.$eventBus.$off(`${this.name}_DataDeleted`, this.DataDeleted);
    }
  };
+
+ /**
+  * 导出基础组件
+  */
+ export default {
+   mixins: [ListPageMixin],
+   inject: pageInjects,
+   props: pageProps,
+   data() {
+     let data = makePageData.call(this);
+     return {
+       ...data,
+     };
+   },
+   computed: pageComputed,
+   methods: pageMethods,
+   render(h) {
+     let props = makeChildProps.call(this),
+       listeners = makeChildListeners.call(this);
+     return h("v-list-page", {
+       props,
+       on: listeners
+     });
+   }
+ }

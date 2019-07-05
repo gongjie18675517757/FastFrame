@@ -4,10 +4,7 @@ using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.EventBus;
 using FastFrame.Infrastructure.Interface;
 using FastFrame.Repository;
-using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace FastFrame.Service.Services.Basis
@@ -21,7 +18,7 @@ namespace FastFrame.Service.Services.Basis
         public UserService(
             ICurrentUserProvider currentUserProvider,
             IRepository<RoleMember> roleMemberRepository,
-            IRepository<Role> roleRepository,          
+            IRepository<Role> roleRepository,
             IRepository<Resource> resourceRepository,
             IRepository<User> userRepository,
             IScopeServiceLoader loader) : this(resourceRepository, userRepository, loader)
@@ -29,7 +26,7 @@ namespace FastFrame.Service.Services.Basis
             this.currentUserProvider = currentUserProvider;
             this.roleMemberRepository = roleMemberRepository;
             this.roleRepository = roleRepository;
-        } 
+        }
 
         protected override Task OnAdding(UserDto input, User entity)
         {
@@ -89,6 +86,6 @@ namespace FastFrame.Service.Services.Basis
             await userRepository.CommmitAsync();
 
             return await GetAsync(id);
-        } 
+        }
     }
 }

@@ -344,3 +344,34 @@ export let FormPageMixin = {
     }
   },
 };
+
+
+/**
+ * 导出基础类型
+ */
+export default {
+  mixins: [FormPageMixin],
+  inject: [...formInject],
+  props: {
+    ...formProps
+  },
+  data() {
+    return {
+      ...formData, 
+    };
+  },
+  computed: {
+    ...formComputed
+  },
+  methods: {
+    ...formMethods
+  },
+  render(h) {
+    let props = makeChildProps.call(this);
+    let listeners = makeChildListeners.call(this);
+    return h("v-page", {
+      props,
+      on: listeners
+    });
+  }
+};

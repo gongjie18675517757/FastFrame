@@ -1,25 +1,13 @@
 <script>
-    import {
-        formData,
-        pageProps,
-        pageListeners,
-        FormPageMixin
-    } from "@/components/Page/FormPageCore.js";
-
+    let pageInfo = {area: "{{AreaName}}",name: "{{ModuleName}}",direction: "{{Description}}"};
+    import Page from "@/components/Page/FormPageCore.js";
     export default {
-        mixins: [FormPageMixin],
+        ...Page,
         data() {
             return {
-                ...formData,
-                area: "{{AreaName}}",
-                name: "{{ModuleName}}",
-                direction: "{{Description}}"
+                ...Page.data.call(this),
+                ...pageInfo
             };
-        },
-        render(h) {
-            let props = pageProps.call(this);
-            let listeners = pageListeners.call(this);
-            return h("v-page", { props, on: listeners });
         }
     };
 </script>

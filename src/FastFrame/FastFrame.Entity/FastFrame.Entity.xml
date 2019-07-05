@@ -49,17 +49,22 @@
             是否管理员
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Basis.EnumItem.EnumName">
+        <member name="T:FastFrame.Entity.Basis.EnumItem">
+            <summary>
+            数字字典
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.EnumItem.Key">
             <summary>
             键
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Basis.EnumItem.EnumValue">
+        <member name="P:FastFrame.Entity.Basis.EnumItem.Value">
             <summary>
             值
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Basis.EnumItem.Parent_Id">
+        <member name="P:FastFrame.Entity.Basis.EnumItem.Super_Id">
             <summary>
             上级
             </summary>
@@ -107,6 +112,11 @@
         <member name="P:FastFrame.Entity.Basis.Notify.Title">
             <summary>
             标题
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.Notify.Type_Id">
+            <summary>
+            类型
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Basis.Notify.Publush_Id">
@@ -597,6 +607,16 @@
         <member name="F:FastFrame.Entity.Chat.MsgType.File">
             <summary>
             文件
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Enums.EnumName">
+            <summary>
+            字典键
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.EnumName.NotifyType">
+            <summary>
+            通知类型
             </summary>
         </member>
         <member name="T:FastFrame.Entity.Enums.GenderMark">

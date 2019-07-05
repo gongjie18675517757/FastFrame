@@ -60,29 +60,8 @@ export default {
       return this.$store.state.singlePageMode;
     }
   },
-  created() {
-    if (!this.$store.state.currUser || !this.$store.state.currUser.Id) {
-      this.$http
-        .get("/api/account/GetCurrent")
-        .then(user => {
-          this.$store.dispatch({
-            type: "login",
-            user
-          });
-        })
-        .catch(() => {
-          if (this.$route.fullpath != "/login") {
-            this.$router.push({
-              path: "/login",
-              query: {
-                redirect: this.$route.fullpath
-              }
-            });
-          }
-        });
-    } 
- 
-    this.$eventBus.$emit("init");
+  created() { 
+    
   },
   methods: {
     resufresh() {

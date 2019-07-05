@@ -4,43 +4,27 @@ let pageInfo = {
   name: "Dept",
   direction: "部门"
 };
-import {
-  formData,
-  makeChildProps,
-  makeChildListeners,
-  FormPageMixin,
-  formInject,
-  formProps,
-  formComputed,
-  formMethods
-} from "@/components/Page/FormPageCore.js";
 import { SelectDetailTable } from "@/components/Table";
+import Page from "@/components/Page/FormPageCore.js";
 export default {
-  mixins: [FormPageMixin],
-  inject: [...formInject],
-  props: {
-    ...formProps
-  },
+  ...Page,
   data() {
     return {
-      ...formData,
+      ...Page.data.call(this),
       ...pageInfo
     };
   },
-  computed: {
-    ...formComputed
-  },
   methods: {
-    ...formMethods,
+    ...Page.methods,
     frmLoadForm(frm) {
-      return formMethods.frmLoadForm.call(this, frm).then(frm => {
+      return Page.methods.frmLoadForm.call(this, frm).then(frm => {
         frm.Members = frm.Members || [];
         frm.Managers = frm.Managers || [];
         return frm;
       });
     },
     getFormItems(opts) {
-      return formMethods.getFormItems.call(this, opts).then(opts => {
+      return Page.methods.getFormItems.call(this, opts).then(opts => {
         opts.push({
           Name: "Members",
           GroupNames: ["部门所有成员"],
@@ -51,16 +35,11 @@ export default {
           Name: "Managers",
           GroupNames: ["部门管理人员"],
           template: SelectDetailTable,
-          typeName: "User" 
+          typeName: "User"
         });
         return opts;
       });
     }
-  },
-  render(h) {
-    let props = makeChildProps.call(this);
-    let listeners = makeChildListeners.call(this);
-    return h("v-page", { props, on: listeners });
   }
 };
 </script>

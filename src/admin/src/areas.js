@@ -27,5 +27,6 @@ export default [{
     generateItem('Tenant', '组织'),
     generateItem('Meidia', '资源库'),
     generateItem('Notify', '通知'),
+    generateItem('EnumItem', '数据字典'),
   ]
 }]

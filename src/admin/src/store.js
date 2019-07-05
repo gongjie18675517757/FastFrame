@@ -2,7 +2,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import $http from '@/http'
 import {
-  sleep
+  sleep,
+  eventBus
 } from '@/utils'
 Vue.use(Vuex)
 
@@ -97,26 +98,37 @@ export default new Vuex.Store({
         commit('setPermission', data)
         state.isLoadPermission = true
       })
+      eventBus.$emit("init");
     }
   },
   getters: {
     mapMode: state => {
       return state.mapMode || window.localStorage.getItem('mapMode') || 'bd'
     },
+    getSiteNameAsync: state => async () => {
+      if (!state.tenant || !state.tenant.Id) { 
+        await sleep(1000) 
+      }
+      return state.tenant || {};
+    },
+    existsLoginAsync: state => async () => {
+      if (!state.currUser.Id) {
+        await sleep(1000)
+      }
+      if (!state.currUser.Id) {
+        throw new Error('未登陆');
+      }
+    },
     existsPermission: state => (moduleName, actionName = 'List') => {
       let patent = state.permissionList.find(v => v.EnCode == moduleName)
       return !!patent && !!state.permissionList.find(v => v.EnCode == actionName && v.Parent_Id == patent.Id)
     },
-    existsPermissionAsync: state => (moduleName, actionName = 'List') => {
-      let next = Promise.resolve();
+    existsPermissionAsync: state => async (moduleName, actionName = 'List') => {
       if (!state.isLoadPermission) {
-        next = sleep(1000)
+        await sleep(2000)
       }
-
-      return next.then(() => {
-        let patent = state.permissionList.find(v => v.EnCode == moduleName)
-        return !!patent && !!state.permissionList.find(v => v.EnCode == actionName && v.Parent_Id == patent.Id)
-      })
+      let patent = state.permissionList.find(v => v.EnCode == moduleName);
+      return !!patent && !!state.permissionList.find(v => v.EnCode == actionName && v.Parent_Id == patent.Id);
     }
   }
 })

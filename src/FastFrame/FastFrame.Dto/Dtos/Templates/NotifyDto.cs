@@ -35,7 +35,7 @@ namespace FastFrame.Dto.Basis
 		/// <summary>
 		///发布人 
 		/// </summary>
-		public UserDto Publush {get;set;}
+		public UserViewModel Publush {get;set;}
 		
 		/// <summary>
 		///附件 
@@ -46,7 +46,7 @@ namespace FastFrame.Dto.Basis
 		/// <summary>
 		///附件 
 		/// </summary>
-		public ResourceDto Resource {get;set;}
+		public ResourceViewModel Resource {get;set;}
 		
 		/// <summary>
 		///内容 
@@ -66,7 +66,7 @@ namespace FastFrame.Dto.Basis
 		/// <summary>
 		///创建人 
 		/// </summary>
-		public UserDto Create_User {get;set;}
+		public UserViewModel Create_User {get;set;}
 		
 		/// <summary>
 		///创建时间 
@@ -87,7 +87,7 @@ namespace FastFrame.Dto.Basis
 		/// <summary>
 		///修改人 
 		/// </summary>
-		public UserDto Modify_User {get;set;}
+		public UserViewModel Modify_User {get;set;}
 		
 		/// <summary>
 		///修改时间 

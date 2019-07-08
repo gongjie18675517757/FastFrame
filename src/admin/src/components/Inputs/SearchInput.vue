@@ -30,9 +30,6 @@
         <v-list-tile-content>
           <v-list-tile-title v-text="getField(item)"></v-list-tile-title>
         </v-list-tile-content>
-        <!-- <v-list-tile-action>
-                <v-icon>mdi-coin</v-icon>
-        </v-list-tile-action>-->
       </template>
     </v-autocomplete>
   </span>
@@ -44,7 +41,7 @@ import { showDialog, getValue, setValue } from "@/utils";
 export default {
   props: {
     model: Object,
-    value: String,
+    value: [String, Array],
     disabled: Boolean,
     label: String,
     filter: [Array, Function],
@@ -55,7 +52,7 @@ export default {
       required: true
     },
     isXs: Boolean,
-    description:String,
+    description: String
   },
   data() {
     return {
@@ -63,7 +60,8 @@ export default {
       items: [],
       search: null,
       select: null,
-      fields: []
+      fields: [],
+      canQueryFields: []
     };
   },
   computed: {
@@ -73,8 +71,11 @@ export default {
     }
   },
   async mounted() {
-    let { RelateFields } = await getModuleStrut(this.Relate);
+    let { RelateFields, FieldInfoStruts } = await getModuleStrut(this.Relate);
     this.fields = RelateFields;
+    this.canQueryFields = FieldInfoStruts.filter(v => v.Type != "EnumName").map(
+      v => v.Name
+    );
     if (this.value) {
       this.items = [this.relateModel];
       this.select = this.relateModel;
@@ -115,7 +116,9 @@ export default {
           Condition: {
             Filters: [
               {
-                Name: this.fields.join(";"),
+                Name: this.fields
+                  .filter(v => this.canQueryFields.includes(v))
+                  .join(";"),
                 Compare: "$",
                 Value: v
               },

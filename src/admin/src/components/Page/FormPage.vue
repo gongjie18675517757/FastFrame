@@ -58,7 +58,7 @@
               <vue-perfect-scrollbar :class="[!isDialog?'fullPage':'dialogPage','form-page']">
                 <template v-for="group in formGroups">
                   <v-flex :key="group.key.title" xs12>
-                    <v-card v-if="group.values.length>1"  tile>
+                    <v-card v-if="group.values.length>1" tile>
                       <v-toolbar flat dense card color="transparent">
                         <v-toolbar-title>{{group.key.title}}:</v-toolbar-title>
                       </v-toolbar>
@@ -74,6 +74,7 @@
                             :singleLine="singleLine"
                             :errorMessages="formErrorMessages[item.Name]"
                             @change="$emit('changed',{item:item,value:$event})"
+                            @input="$emit('tooggle:changed')"
                             :ref="item.Name"
                           />
                         </component>
@@ -91,6 +92,7 @@
                       :errorMessages="formErrorMessages[item.Name]"
                       v-model="form[item.Name]"
                       @change="$emit('changed',{item:item,value:$event})"
+                      @input="$emit('tooggle:changed')"
                       :ref="item.Name"
                     />
                   </v-flex>

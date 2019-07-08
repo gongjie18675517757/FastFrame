@@ -8,6 +8,19 @@ export default {
       ...Page.data.call(this),
       ...pageInfo
     };
+  },
+  methods: {
+    ...Page.methods,
+    frmLoadForm(frm) {
+      return Page.methods.frmLoadForm.call(this, frm).then(frm => {
+        return frm;
+      });
+    },
+    getFormItems() {
+      return Page.methods.getFormItems.call(this).then(opts => {         
+        return opts;
+      });
+    }
   }
 };
 </script>

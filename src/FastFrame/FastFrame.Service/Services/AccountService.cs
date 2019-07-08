@@ -20,12 +20,7 @@ namespace FastFrame.Service.Services
         {
             this.userRepository = userRepository;
             this.currentUserProvider = currentUserProvider;
-        }
-        public Task<bool> VerifyUnique(string id, string propName, string value)
-        {
-            throw new NotImplementedException();
-        }
-
+        } 
         /// <summary>
         /// 登陆
         /// </summary>

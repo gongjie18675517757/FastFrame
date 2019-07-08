@@ -5,6 +5,8 @@ import Checkbox from './Checkbox'
 import SelectInput from "./SelectInput";
 import DateInput from './DateInput.vue'
 import FileInput from './FileInput'
+import EnumItemInput from './EnumItemInput.js'
+
 import {
   getValue,
   setValue
@@ -29,6 +31,7 @@ export default {
     Length: Number,
     ModuleName: String,
     Relate: String,
+    EnumItemInfo: Object,
     Type: {
       type: String,
       default: "text"
@@ -78,6 +81,7 @@ export default {
   render(h) {
     let errs = this.errorMessages || []
     let isXs = this.$vuetify.breakpoint.smAndDown
+    let multiple = this.Type == 'Array'
     let props = {
       value: this.val,
       disabled: this.evalDisabled,
@@ -97,10 +101,7 @@ export default {
 
     let on = {
       ...this.$listeners,
-      input: (val) => {
-        this.val = val
-        this.change(val)
-      },
+      input: (val) => this.val = val,
       change: val => this.change(val)
     }
 
@@ -134,18 +135,41 @@ export default {
         lg6: 1,
         xl4: 1
       }
-    } else if (!component && Array.isArray(this.EnumValues) && this.EnumValues.length > 0) {
+    }
+    /**
+     * 数据字典选择
+     */
+    else if (!component && this.EnumItemInfo) {
+      component = h(EnumItemInput, {
+        props: {
+          ...props,
+          multiple,
+          EnumItemInfo: this.EnumItemInfo,
+          model: this.model || {}
+        },
+        on
+      })
+    }
+    /**
+     * 单选下拉框
+     */
+    else if (!component && Array.isArray(this.EnumValues) && this.EnumValues.length > 0) {
       component = h(SelectInput, {
         props: {
           ...props,
+          multiple,
           values: this.EnumValues
         },
         on
       })
-    } else if (!component && typeof this.EnumValues == 'function') {
+    }
+
+    /* 单选下拉框 */
+    else if (!component && typeof this.EnumValues == 'function') {
       component = h(SelectInput, {
         props: {
           ...props,
+          multiple,
           values: this.EnumValues.call(this, this.model)
         },
         on
@@ -226,22 +250,24 @@ export default {
             xs12: true
           }
         }, [component]);
-      } 
+      }
       return h('v-flex', {
         attrs: flex,
-        class: ['input-container']
+        class: ['input-container'],
+        style: {
+          padding: '20px'
+        }
       }, [
         h('v-layout', {
             class: ['much-input']
           },
           [
-            h('v-flex', {
-              attrs: {
-                xs3: 1,
-              },
+            h('div', {
               style: {
                 display: 'table-cell',
                 'vertical-align': 'bottom',
+                width: '150px',
+                'text-align': 'center'
               }
             }, [
               h('span', null, `${this.Description}:`),
@@ -251,13 +277,9 @@ export default {
                 }
               }, this.IsRequired && this.canEdit ? '*' : '')
             ]),
-            h('v-flex', {
-              attrs: {
-                xs6: !!this.errorMessages,
-                xs8: !this.errorMessages
-              },
+            h('div', {
               style: {
-                padding: '12px'
+                width: this.errorMessages ? 'calc(80% - 150px)' : 'calc(100% - 150px)'
               }
             }, [component])
           ])

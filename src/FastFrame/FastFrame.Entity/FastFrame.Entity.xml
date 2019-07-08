@@ -19,14 +19,14 @@
             名称
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Basis.Dept.Parent_Id">
-            <summary>
-            上级
-            </summary>
-        </member>
         <member name="P:FastFrame.Entity.Basis.Dept.Supervisor_Id">
             <summary>
             主管
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.Dept.Super_Id">
+            <summary>
+            上级
             </summary>
         </member>
         <member name="T:FastFrame.Entity.Basis.DeptMember">
@@ -164,7 +164,7 @@
             区域
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Basis.Permission.Parent_Id">
+        <member name="P:FastFrame.Entity.Basis.Permission.Super_Id">
             <summary>
             父级
             </summary>

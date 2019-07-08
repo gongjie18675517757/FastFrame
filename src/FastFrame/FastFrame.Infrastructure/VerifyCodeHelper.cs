@@ -122,14 +122,10 @@ namespace FastFrame.Infrastructure
 
         /// <summary>
         /// 产生验证码（随机产生4-6位）
-        /// </summary>
-        /// <param name="type">验证码类型：数字，字符，符合</param>
-        /// <returns></returns>
-        public string CreateVerifyCode(VerifyCodeType type,int length=6)
+        /// </summary> 
+        public string CreateVerifyCode(VerifyCodeType type, int length = 6)
         {
             string verifyCode = string.Empty;
-            Random random = new Random();
-            //int length = random.Next(4, 6);
             switch (type)
             {
                 case VerifyCodeType.NumberVerifyCode:
@@ -149,12 +145,8 @@ namespace FastFrame.Infrastructure
         #region 验证码图片
         /// <summary>
         /// 验证码图片 => Bitmap
-        /// </summary>
-        /// <param name="verifyCode">验证码</param>
-        /// <param name="width">宽</param>
-        /// <param name="height">高</param>
-        /// <returns>Bitmap</returns>
-        public Bitmap CreateBitmapByImgVerifyCode(string verifyCode, int width, int height,float fontSize=14)
+        /// </summary>  
+        public Bitmap CreateBitmapByImgVerifyCode(string verifyCode, int width, int height, float fontSize = 14)
         {
             Font font = new Font("Arial", fontSize, (FontStyle.Bold | FontStyle.Italic));
             Brush brush;

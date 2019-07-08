@@ -3,6 +3,7 @@ import {
 } from '@/utils'
 import $http from '@/http'
 import rules from '@/rules'
+import store from './store'
 let moduleStruts = {}
 
 /**
@@ -31,13 +32,21 @@ export async function getModuleStrut(name = '') {
  */
 export async function getDefaultModel(name = '') {
   let {
+    Form,
+    HasManage,
     FieldInfoStruts
   } = await getModuleStrut(name)
-  let model = {}
+  let model = Form
   for (const field of FieldInfoStruts) {
-    if (field.DefaultValue == "False") field.DefaultValue = false;
-    if (field.DefaultValue == "True") field.DefaultValue = true;
-    model[field.Name] = field.DefaultValue
+    if (/_Id$/.test(field.Name)) {
+      model[field.Name.replace(/_Id$/, '')] = null
+    }
+  }
+  if (HasManage) {
+    model.Create_User_Id = store.state.currUser.Id
+    model.Create_User = store.state.currUser
+    model.Modify_User_Id = store.state.currUser.Id
+    model.Modify_User = store.state.currUser
   }
   return model
 }
@@ -53,11 +62,12 @@ export async function getColumns(name = '') {
     Name: ModuleName
   } = await getModuleStrut(name)
   let columns = FieldInfoStruts.filter(f => {
-    return f.Hide != 'List' && f.Hide != 'All' && (!f.Name.endsWith('Id') || f.Relate)
+    return f.Hide != 'List' && f.Hide != 'All' && (!f.Name.endsWith('Id') || f.Relate || f.EnumItemInfo)
   }).map(f => {
     return {
       ...f,
-      ModuleName
+      ModuleName,
+      sortable: true
     }
   })
 
@@ -143,43 +153,52 @@ export async function hasManage(name) {
  * 获取查询字段
  * @param {*} name 
  */
-export async function getQueryOptions(name) {
-  let {
-    FieldInfoStruts
-  } = await getModuleStrut(name)
-
+export async function getQueryOptions(columns) {
   let arr = []
   for (const {
       Type,
       Name,
       Description,
       Relate,
-      EnumValues
-    } of FieldInfoStruts) {
+      EnumValues,
+      EnumItemInfo,
+      sortable
+    } of columns) {
 
-    if (Name.includes("Password") || Relate == "Resource")
+    if (Name.includes("Password") || Relate == "Resource" || !sortable)
       continue;
-    if (!Name.endsWith('_Id') && Type == 'String') {
-      arr.push({
-        Type,
-        Description,
-        Name,
-        compare: '$'
-      })
-    } else if (Name.endsWith('_Id') && !!Relate) {
+    else if (Name.endsWith('_Id') && !!Relate) {
       let temp = Name.replace('_Id', '')
       let {
         RelateFields
-      } = await getModuleStrut(Relate)
+      } = Relate
       if (RelateFields.length > 0) {
         arr.push({
           Type,
           Description,
           Name: RelateFields.map(r => `${temp}.${r}`).join(';'),
-          compare: '$'
+          compare: '$',
         })
       }
-    } else if (EnumValues.length > 0 || Type == 'Boolean') {
+    } else if (EnumItemInfo) {
+      arr.push({
+        Description,
+        Name,
+        EnumItemInfo,
+        compare: 'in',
+        Type: 'Array',
+        value: []
+      })
+    } else if (EnumValues && EnumValues.length > 0 || typeof EnumValues == 'function') {
+      arr.push({
+        Description,
+        Name,
+        EnumValues,
+        compare: 'in',
+        Type: 'Array',
+        value: []
+      })
+    } else if (Type == 'Boolean') {
       arr.push({
         Description,
         Name,
@@ -200,13 +219,22 @@ export async function getQueryOptions(name) {
         Type,
         compare: '<='
       })
+    } else if (!Name.endsWith('_Id') && (Type == 'String' || !Type)) {
+      arr.push({
+        Type,
+        Description,
+        Name,
+        compare: '$'
+      })
+    } else {
+      console.error(Name)
     }
   }
 
   arr = arr.map(r => {
     return {
       ...r,
-      value: null
+      value: r.value || null
     }
   });
 

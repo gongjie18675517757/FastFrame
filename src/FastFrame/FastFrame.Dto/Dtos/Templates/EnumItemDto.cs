@@ -37,7 +37,7 @@ namespace FastFrame.Dto.Basis
 		/// <summary>
 		///上级 
 		/// </summary>
-		public EnumItemDto Super {get;set;}
+		public EnumItemViewModel Super {get;set;}
 		
 		/// <summary>
 		///创建人 
@@ -50,7 +50,7 @@ namespace FastFrame.Dto.Basis
 		/// <summary>
 		///创建人 
 		/// </summary>
-		public UserDto Create_User {get;set;}
+		public UserViewModel Create_User {get;set;}
 		
 		/// <summary>
 		///创建时间 
@@ -71,7 +71,7 @@ namespace FastFrame.Dto.Basis
 		/// <summary>
 		///修改人 
 		/// </summary>
-		public UserDto Modify_User {get;set;}
+		public UserViewModel Modify_User {get;set;}
 		
 		/// <summary>
 		///修改时间 

@@ -31,7 +31,7 @@
           <v-divider></v-divider>
           <v-form ref="form">
             <v-card-text>
-              <vue-perfect-scrollbar class="dialog-page">
+              <div class="dialog-page">
                 <component :is="singleLine?'span':'v-layout'" wrap>
                   <Input
                     v-for="(item) in options"
@@ -42,7 +42,7 @@
                     canEdit
                   />
                 </component>
-              </vue-perfect-scrollbar>
+              </div>
             </v-card-text>
           </v-form>
 
@@ -104,7 +104,7 @@ export default {
           return {
             Name: r.Name,
             compare: r.compare,
-            value: r.value
+            value: Array.isArray(r.value) ? r.value.join(",") : r.value
           };
         });
       this.$emit("success", val);
@@ -120,5 +120,6 @@ export default {
 .dialog-page {
   height: calc(100vh - 265px);
   overflow: auto;
+  padding: 12px;
 }
 </style>

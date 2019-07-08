@@ -311,6 +311,7 @@ export let makeChildListeners = function () {
     ...this.$listeners,
     cancel: this.cancel,
     'tooggle:canEdit': () => this.canEdit = !this.canEdit,
+    'tooggle:changed': () => this.changed = true,
     'toggle:singleLine': () => (this.singleLine = !this.singleLine),
     'toggle:showMamageField': () => (this.showMamageField = !this.showMamageField),
     changed: $event => {
@@ -357,7 +358,7 @@ export default {
   },
   data() {
     return {
-      ...formData, 
+      ...formData,
     };
   },
   computed: {

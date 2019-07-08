@@ -117,11 +117,11 @@ namespace FastFrame.CodeGenerate.Build
                     yield return new PropInfo()
                     {
                         Summary = summary,
-                        TypeName = $"{T4Help.GetTypeName(relatedToAttribute.RelatedType)}Dto",
+                        TypeName = $"{T4Help.GetTypeName(relatedToAttribute.RelatedType)}ViewModel",
                         Name = item.Name.Replace("_Id", "")
                     };
                 }
-            } 
+            }
         }
 
         public IEnumerable<AttrInfo> GetAttrInfos(PropertyInfo propertyInfo)

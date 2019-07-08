@@ -39,14 +39,14 @@ namespace FastFrame.Service.Services.Basis
         {
             var beforeEntitys = await permissionRepository.Queryable.ToListAsync();
             var comparisonCollection = new ComparisonCollection<Permission, PermissionDto>(beforeEntitys, permissionDtos,
-                (a, b) => a.EnCode == b.EnCode && a.Parent_Id == b.Parent_Id);
+                (a, b) => a.EnCode == b.EnCode && a.Super_Id == b.Super_Id);
             foreach (var item in comparisonCollection.GetCollectionByAdded().ToList())
             {
                 var entity = item.MapTo<PermissionDto, Permission>();
                 entity = await permissionRepository.AddAsync(entity);
                 item.Id = entity.Id;
                 foreach (var child in item.Permissions)
-                    child.Parent_Id = entity.Id;
+                    child.Super_Id = entity.Id;
             }
 
             foreach (var (before, after) in comparisonCollection.GetCollectionByModify())
@@ -54,13 +54,13 @@ namespace FastFrame.Service.Services.Basis
                 after.Id = before.Id;
                 before.AreaName = after.AreaName;
                 foreach (var child in after.Permissions)
-                    child.Parent_Id = before.Id;
+                    child.Super_Id = before.Id;
             }
             beforeEntitys = comparisonCollection.GetCollectionByDeleted().ToList();
             comparisonCollection = new ComparisonCollection<Permission, PermissionDto>(
                     beforeEntitys,
                     permissionDtos.SelectMany(x => x.Permissions),
-                    (a, b) => a.EnCode == b.EnCode && a.Parent_Id == b.Parent_Id);
+                    (a, b) => a.EnCode == b.EnCode && a.Super_Id == b.Super_Id);
 
             foreach (var item in comparisonCollection.GetCollectionByAdded())
             {
@@ -104,12 +104,12 @@ namespace FastFrame.Service.Services.Basis
             var iq = from a in roleMemberRepository.Queryable.Where(x => x.User_Id == userId)
                      join b in rolePermissionRepository.Queryable on a.Role_Id equals b.Role_Id
                      join c in permissionRepository.Queryable on b.Permission_Id equals c.Id
-                     where c.Parent_Id != null
+                     where c.Super_Id != null
                      select c;
 
 
             var iq2 = from a in iq
-                      join b in permissionRepository on a.Parent_Id equals b.Id
+                      join b in permissionRepository on a.Super_Id equals b.Id
                       select b;
 
             return (await iq.ToListAsync())
@@ -129,13 +129,13 @@ namespace FastFrame.Service.Services.Basis
                 return true;
             /*一级权限*/
             var permissionId = await permissionRepository
-                .Where(r => r.EnCode == moduleName && r.Parent_Id == null)
+                .Where(r => r.EnCode == moduleName && r.Super_Id == null)
                 .Select(r => r.Id)
                 .FirstOrDefaultAsync();
 
             /*二级权限*/
             var permissionIds = await permissionRepository
-                .Where(r => r.Parent_Id == permissionId && methodNames.Contains(r.EnCode))
+                .Where(r => r.Super_Id == permissionId && methodNames.Contains(r.EnCode))
                 .Select(r => r.Id)
                 .ToListAsync();
 

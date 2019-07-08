@@ -232,6 +232,11 @@
             有管理属性
             </summary>
         </member>
+        <member name="P:FastFrame.Application.Controllers.ModuleStruct.Form">
+            <summary>
+            默认表单
+            </summary>
+        </member>
         <member name="T:FastFrame.Application.Controllers.ResourceController">
             <summary>
             资源

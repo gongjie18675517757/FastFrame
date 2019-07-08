@@ -11,7 +11,16 @@ namespace FastFrame.Service.Services.Basis
     {
         public async Task<IEnumerable<EnumItemDto>> GetValues(EnumName name)
         {
-            return await Query().Where(v => v.Key == name).ToListAsync();
+            return await enumItemRepository
+                .Where(v => v.Key == name)
+                .Select(v => new EnumItemDto
+                {
+                    Id = v.Id,
+                    Key = v.Key,
+                    Value = v.Value,
+                    Super_Id = v.Super_Id
+                })
+                .ToListAsync();
         }
     }
 }

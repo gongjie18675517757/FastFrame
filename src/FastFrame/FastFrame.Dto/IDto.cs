@@ -18,4 +18,9 @@ namespace FastFrame.Dto
     {
 
     }
+
+    public interface IViewModel
+    {
+        string Id { get; }
+    }
 }

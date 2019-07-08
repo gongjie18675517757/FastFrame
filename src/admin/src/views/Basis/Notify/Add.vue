@@ -13,6 +13,14 @@ export default {
       ...Page.data.call(this),
       ...pageInfo
     };
+  },
+  methods: {
+    ...Page.methods,
+    getFormItems() {
+      return Page.methods.getFormItems.call(this).then(opts => {
+        return opts;
+      });
+    }
   }
 };
 </script>

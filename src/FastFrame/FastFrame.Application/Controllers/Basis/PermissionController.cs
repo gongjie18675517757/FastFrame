@@ -44,7 +44,7 @@ namespace FastFrame.Application.Controllers.Basis
         [HttpGet]
         public async Task<bool> ExistPermission(string moduleName, string methodName)
         {
-            return await  service.ExistPermission(moduleName, methodName);
+            return await service.ExistPermission(moduleName, methodName);
         }
 
         private IEnumerable<PermissionDto> GetPermissions()
@@ -84,7 +84,7 @@ namespace FastFrame.Application.Controllers.Basis
                             AreaName = areaName,
                             EnCode = attr.EnCode,
                             Name = attr.Name,
-                            Parent = dto
+                            Super = dto.MapTo<PermissionDto, PermissionViewModel>()
                         });
                     }
                 }

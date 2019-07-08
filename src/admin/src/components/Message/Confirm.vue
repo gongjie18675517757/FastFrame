@@ -8,7 +8,7 @@
         </v-toolbar>
         <v-divider></v-divider>
         <v-card-text>
-          {{content}}
+          <div v-html="content"></div>
           <v-divider class="mt-5"></v-divider>
         </v-card-text>
         <v-card-actions>

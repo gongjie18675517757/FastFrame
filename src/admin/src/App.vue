@@ -14,7 +14,7 @@ import Alert from "@/components/Alert.vue";
 export default {
   components: {
     Alert
-  }, 
+  },
   data() {
     return {
       resufreshed: true
@@ -31,7 +31,7 @@ export default {
         this.$store.dispatch({
           type: "login",
           user
-        }); 
+        });
       });
     }
   },
@@ -126,9 +126,9 @@ export default {
   padding: 2px;
 }
 
-/* .input-container,.input-container .flex {
-  padding: 0px;
-} */
+.input-container {
+  padding: 20px;
+}
 
 .input-container .v-input {
   padding: 0px;

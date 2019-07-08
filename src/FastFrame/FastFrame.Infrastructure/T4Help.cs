@@ -74,17 +74,7 @@ namespace FastFrame.Infrastructure
         }
 
 
-        /// <summary>
-        /// 判断文件是否存在过
-        /// </summary>
-        /// <param name="type"></param>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public static bool ExistFile(Type type, string fileNameTemplate, string path)
-        {
-            var fileName = string.Format(fileNameTemplate, type.Name);
-            return Directory.GetFiles(path).Any(x => Path.GetFileNameWithoutExtension(x) == fileName);
-        }
+        
 
         /// <summary>
         /// 生成命名空间

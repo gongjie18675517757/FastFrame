@@ -7,7 +7,7 @@ namespace FastFrame.Entity.Basis
     /// 权限
     /// </summary> 
     [Export]
-    [Tree(nameof(Parent_Id))]
+    [Tree(nameof(Super_Id))]
     [RelatedField(nameof(Name), nameof(EnCode))]
     public class Permission : IEntity,IHasTenant
     {
@@ -33,7 +33,7 @@ namespace FastFrame.Entity.Basis
         /// 父级
         /// </summary>
         [RelatedTo(typeof(Permission))]
-        public string Parent_Id { get; set; }
+        public string Super_Id { get; set; }
 
         /// <summary>
         /// 主键

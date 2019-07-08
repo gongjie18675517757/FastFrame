@@ -35,7 +35,7 @@ export default {
       }
     },
     parentKey: {
-      default: "Parent_Id",
+      default: "Super_Id",
       type: String
     },
     treeKey: {

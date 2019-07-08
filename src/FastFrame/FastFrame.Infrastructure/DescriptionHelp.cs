@@ -13,9 +13,11 @@ namespace FastFrame.Infrastructure
         private static XmlDocument GetXmlDocument(string path)
         {
             if (dicXmlDocument == null)
+            {
                 dicXmlDocument = new Dictionary<string, XmlDocument>();
+            }
 
-            if (!dicXmlDocument.TryGetValue(path, out var xmlDocument))
+            if (!dicXmlDocument.TryGetValue(path, out XmlDocument xmlDocument))
             {
                 xmlDocument = new XmlDocument();
                 xmlDocument.Load(path);
@@ -26,37 +28,49 @@ namespace FastFrame.Infrastructure
 
         private static XmlDocument GetXmlDocument(Type type, string path)
         {
-            var assemblyPath = type.Assembly.Location;
-            var assemblyName = Path.GetFileNameWithoutExtension(assemblyPath);
+            string assemblyPath = type.Assembly.Location;
+            string assemblyName = Path.GetFileNameWithoutExtension(assemblyPath);
             path = Path.Combine(path, assemblyName + ".xml");
             if (File.Exists(path))
+            {
                 return GetXmlDocument(path);
-            else return null;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         /// <summary>
         /// 返回类型的注释说明
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
+        /// </summary>　
         public static string GetDescription(Type type, string path)
         {
             try
             {
-                var xmldoc = GetXmlDocument(type, path);
+                XmlDocument xmldoc = GetXmlDocument(type, path);
                 if (xmldoc == null)
+                {
                     return "";
-                var nodename = $"T:{type.FullName}";
-                var node = xmldoc.SelectSingleNode("//member[@name=\"" + nodename + "\"]/summary");
+                }
+
+                string nodename = $"T:{type.FullName}";
+                XmlNode node = xmldoc.SelectSingleNode("//member[@name=\"" + nodename + "\"]/summary");
 
                 if (node != null)
+                {
                     return node.InnerText.Trim();
+                }
 
                 if (node == null && type.BaseType == null)
+                {
                     return "";
+                }
 
                 if (node == null && type.BaseType != null)
+                {
                     return GetDescription(type.BaseType, path);
+                }
 
                 return "";
             }
@@ -68,21 +82,26 @@ namespace FastFrame.Infrastructure
 
         /// <summary>
         /// 获取属性的说明 
-        /// </summary>
-        /// <param name="entitytype"></param>
-        /// <param name="propertyName"></param>
-        /// <param name="path"></param>
-        /// <returns></returns>
+        /// </summary>　　
         public static string GetPropSummary(Type entitytype, PropertyInfo property, string path)
         {
-            var doc = GetXmlDocument(entitytype, path);
+            XmlDocument doc = GetXmlDocument(entitytype, path);
             if (doc == null)
+            {
                 return "";
-            var node = doc.SelectSingleNode("/doc/members/member[@name=\"" + "P:" + entitytype.FullName + "." + property.Name + "\"]/summary");
+            }
+
+            XmlNode node = doc.SelectSingleNode("/doc/members/member[@name=\"" + "P:" + entitytype.FullName + "." + property.Name + "\"]/summary");
             if (node != null)
+            {
                 return node.InnerText.Trim();
+            }
+
             if (entitytype.BaseType != null && entitytype.BaseType != typeof(object))
+            {
                 return GetPropSummary(entitytype.BaseType, property, path);
+            }
+
             return "";
         }
 
@@ -95,12 +114,17 @@ namespace FastFrame.Infrastructure
         /// <returns></returns>
         public static string GetEnumSummary(Type enumType, string enumValue, string path)
         {
-            var doc = GetXmlDocument(enumType, path);
+            XmlDocument doc = GetXmlDocument(enumType, path);
             if (doc == null)
+            {
                 return "";
-            var node = doc.SelectSingleNode("/doc/members/member[@name=\"" + "F:" + enumType.FullName + "." + enumValue + "\"]/summary");
+            }
+
+            XmlNode node = doc.SelectSingleNode("/doc/members/member[@name=\"" + "F:" + enumType.FullName + "." + enumValue + "\"]/summary");
             if (node != null)
+            {
                 return node.InnerText.Trim();
+            }
 
             return "";
         }

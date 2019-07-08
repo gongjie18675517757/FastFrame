@@ -65,13 +65,7 @@ export default {
     };
   },
   created() {
-    if (!this.model) {
-      let obj = {};
-      for (const item of this.options) {
-        obj[item.Name] = item.DefaultValue;
-      }
-      this.form = obj;
-    }
+    this.form = this.model;
 
     let formErrs = {};
     for (const name of Object.keys(this.form)) {

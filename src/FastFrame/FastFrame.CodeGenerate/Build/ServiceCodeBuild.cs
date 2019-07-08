@@ -128,12 +128,6 @@ namespace FastFrame.CodeGenerate.Build
             if (!props.Any(x => x.Attr.RelatedType == type))
                 yield return $"var {typeName}Queryable={typeName}Repository.Queryable;";
 
-            if (hasManage)
-            {
-                // yield return "var userQuerable = userRepository.Queryable;";
-            }
-
-
             foreach (var prop in props.GroupBy(x => x.Attr.RelatedType.Name))
             {
                 var relatedTypeName = prop.Key.ToFirstLower();
@@ -148,19 +142,14 @@ namespace FastFrame.CodeGenerate.Build
                 var name = "_" + prop.Prop.Name.ToFirstLower();
                 var isRequired = prop.Prop.GetCustomAttribute<RequiredAttribute>() != null;
                 var relateType = prop.Attr.RelatedType;
-                yield return $"\t\t\tjoin {name} in {relateType.Name.ToFirstLower()}Queryable.TagWith(\"{name}\") on _{typeName}.{prop.Prop.Name} equals {name}.Id "
+                yield return $"\t\t\tjoin {name} in {relateType.Name.ToFirstLower()}Queryable on _{typeName}.{prop.Prop.Name} equals {name}.Id "
                     + (isRequired ? "" : $"into t_{name}");
                 if (!isRequired)
                     yield return $"\t\t\tfrom {name} in t_{name}.DefaultIfEmpty()";
             }
             if (hasManage)
             {
-                //yield return $"\t\tjoin foreing in foreignQueryable on _{typeName}.Id equals foreing.EntityId into t_foreing";
-                //yield return "\t\tfrom foreing in t_foreing.DefaultIfEmpty()";
-                //yield return "\t\tjoin user2 in userQuerable on foreing.CreateUserId equals user2.Id into t_user2";
-                //yield return "\t\tfrom user2 in t_user2.DefaultIfEmpty()";
-                //yield return "\t\tjoin user3 in userQuerable on foreing.ModifyUserId equals user3.Id into t_user3";
-                //yield return "\t\tfrom user3 in t_user3.DefaultIfEmpty()";
+
             }
 
             yield return $"\t\t\t select new {type.Name}Dto";
@@ -183,16 +172,24 @@ namespace FastFrame.CodeGenerate.Build
                 var isDto = prop.Attr.RelatedType.GetCustomAttribute<ExcludeAttribute>() == null;
                 if (isDto)
                 {
-                    yield return $"\t\t\t\t{prop.Prop.Name.Replace("_Id", "")}={linqTempName}==null?null:new {prop.Attr.RelatedType.Name}Dto";
+                    yield return $"\t\t\t\t{prop.Prop.Name.Replace("_Id", "")}=new {prop.Attr.RelatedType.Name}ViewModel";
                     yield return "\t\t\t\t{";
                     yield return $"\t\t\t\t\tId = {linqTempName}.Id,";
-                    foreach (var targetDtoProp in GetDtoProps(prop.Attr.RelatedType))
+
+                    var fieldNames = prop.Attr.RelatedType.GetCustomAttribute<RelatedFieldAttribute>()?.FieldNames;
+                    if (fieldNames == null)
                     {
-                        if (targetDtoProp.TypeName.EndsWith("Dto"))
-                            yield return $"\t\t\t\t\t{targetDtoProp.Name} = null,";
-                        else
-                            yield return $"\t\t\t\t\t{targetDtoProp.Name} = {linqTempName}.{targetDtoProp.Name},";
+                        fieldNames = prop.Attr.RelatedType.GetProperties().Select(v => v.Name).ToArray();
+                        var baseFieldNames = prop.Attr.RelatedType.BaseType.GetProperties().Select(v => v.Name).ToArray();
+                        fieldNames = fieldNames.Where(v => !baseFieldNames.Any(r => r == v)).ToArray();
                     }
+                    foreach (var item in fieldNames)
+                    {
+                        if (item == "Id")
+                            continue;
+                        yield return $"\t\t\t\t\t{item} = {linqTempName}.{item},";
+                    }
+
                     yield return "\t\t\t\t},";
                 }
                 else
@@ -203,12 +200,7 @@ namespace FastFrame.CodeGenerate.Build
             }
 
 
-            if (hasManage)
-            {
-                //yield return "\t\t\tForeign = foreing,";
-                //yield return "\t\t\tCreate_User = user2,";
-                //yield return "\t\t\tModify_User = user3,";
-            }
+
 
 
             yield return "\t\t};";

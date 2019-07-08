@@ -30,9 +30,7 @@ namespace FastFrame.Infrastructure.Interface
 
         /// <summary>
         /// 登出
-        /// </summary>
-        /// <param name="currUser"></param>
-        /// <returns></returns>
+        /// </summary> 
         Task LogOut();
 
         void Refresh();

@@ -31,18 +31,6 @@ namespace FastFrame.Dto.Basis
 		public string Name {get;set;}
 		
 		/// <summary>
-		///上级 
-		/// </summary>
-		[StringLength(50)]
-		[RelatedTo(typeof(Dept))]
-		public string Parent_Id {get;set;}
-		
-		/// <summary>
-		///上级 
-		/// </summary>
-		public DeptDto Parent {get;set;}
-		
-		/// <summary>
 		///主管 
 		/// </summary>
 		[StringLength(50)]
@@ -52,7 +40,19 @@ namespace FastFrame.Dto.Basis
 		/// <summary>
 		///主管 
 		/// </summary>
-		public UserDto Supervisor {get;set;}
+		public UserViewModel Supervisor {get;set;}
+		
+		/// <summary>
+		///上级 
+		/// </summary>
+		[StringLength(50)]
+		[RelatedTo(typeof(Dept))]
+		public string Super_Id {get;set;}
+		
+		/// <summary>
+		///上级 
+		/// </summary>
+		public DeptViewModel Super {get;set;}
 		
 		/// <summary>
 		///创建人 
@@ -65,7 +65,7 @@ namespace FastFrame.Dto.Basis
 		/// <summary>
 		///创建人 
 		/// </summary>
-		public UserDto Create_User {get;set;}
+		public UserViewModel Create_User {get;set;}
 		
 		/// <summary>
 		///创建时间 
@@ -86,7 +86,7 @@ namespace FastFrame.Dto.Basis
 		/// <summary>
 		///修改人 
 		/// </summary>
-		public UserDto Modify_User {get;set;}
+		public UserViewModel Modify_User {get;set;}
 		
 		/// <summary>
 		///修改时间 

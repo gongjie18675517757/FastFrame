@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace FastFrame.Infrastructure.Attrs
 {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
     public sealed class RelatedFieldAttribute : Attribute
     {
         public RelatedFieldAttribute(string defaultName,params string[] otherNames)

@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Linq.Expressions;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -51,7 +53,8 @@ namespace FastFrame.Infrastructure
 
             if (!condition.KeyWord.IsNullOrWhiteSpace())
             {
-                var props = typeof(T).GetProperties().Where(x => x.PropertyType == typeof(string) && !x.Name.EndsWith("Id"));
+                var props = typeof(T).GetProperties()
+                    .Where(x => x.PropertyType == typeof(string) && !x.Name.EndsWith("Id"));
                 query = query.Where(string.Join(" or ", props.Select(x => $"{x.Name}.Contains(@0)")), condition.KeyWord);
             }
 
@@ -74,6 +77,35 @@ namespace FastFrame.Infrastructure
                     {
                         var queryStr = string.Join(" or ", conds.Select((r) => $"{r}.Contains(@0)"));
                         query = query.Where(queryStr, item.Value);
+                    }
+                }
+                else if (item.Compare.ToLower().EndsWith("in"))
+                {
+                    var names = item.Name.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+                    var parameterExpression = Expression.Parameter(typeof(T), "v");
+                    var propertyInfo = typeof(T).GetProperty(names[0]);
+                    var memberExpression = Expression.Property(parameterExpression, propertyInfo);
+
+                    foreach (var name in names.Skip(1))
+                    {
+                        propertyInfo = propertyInfo.PropertyType.GetProperty(name);
+                        memberExpression = Expression.Property(parameterExpression, propertyInfo);
+                    }
+
+                    var values = item.Value.Split("".ToArray(), StringSplitOptions.RemoveEmptyEntries);
+                    if (!values.Any())
+                    {
+                        continue;
+                    }
+                    if (!propertyInfo.PropertyType.IsArray)
+                    {
+                        //var queryStr = string.Join(" or ", values.Select((value, index) => $"{item.Name} == @{index}"));
+                        query = query.Where($"@0.Contains({item.Name})", values);
+                    }
+                    else
+                    {
+                        var queryStr = string.Join(" or ", values.Select((value, index) => $"{item.Name}.Contains(@{index})"));
+                        query = query.Where(queryStr, values);
                     }
                 }
                 else
@@ -230,7 +262,7 @@ namespace FastFrame.Infrastructure
         {
             if (@in.IsNullOrWhiteSpace())
             {
-                return default(T);
+                return default;
             }
             try
             {
@@ -238,7 +270,7 @@ namespace FastFrame.Infrastructure
             }
             catch (Exception)
             {
-                return default(T);
+                return default;
             }
         }
     }

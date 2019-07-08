@@ -40,12 +40,12 @@ namespace FastFrame.Dto.Basis
 		///父级 
 		/// </summary>
 		[RelatedTo(typeof(Permission))]
-		public string Parent_Id {get;set;}
+		public string Super_Id {get;set;}
 		
 		/// <summary>
 		///父级 
 		/// </summary>
-		public PermissionDto Parent {get;set;}
+		public PermissionViewModel Super {get;set;}
 		
 		
 		

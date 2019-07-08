@@ -3,7 +3,9 @@
    getModuleStrut,
    getQueryOptions
  } from "@/generate";
-
+ import {
+   distinct
+ } from '@/utils'
 
  /**
   * 按钮组1
@@ -26,7 +28,7 @@
        }) {
          return selection.length != 1;
        },
-       update() {
+       action() {
          this.toEdit(this.selection[0])
        }
      }
@@ -75,7 +77,8 @@
        color: "basis",
        name: "List",
        key: "export",
-       icon: "import_export"
+       icon: "import_export",
+       action: () => alert('未实现')
      }
    ]
  }
@@ -130,6 +133,31 @@
  export let pageComputed = {
    dialogMode() {
      return this.$store.state.dialogMode;
+   },
+   dynamicColumns() {
+     return [...this.columns, ...(this.showMamageField && this.ModuleStrut.HasManage ? [{
+         Name: 'Create_User.Name',
+         Description: '录入人',
+         Type: 'String',
+         sortable: true
+       }, {
+         Name: 'CreateTime',
+         Description: '录入时间',
+         sortable: true,
+         Type: 'DateTime',
+       },
+       {
+         Name: 'Modify_User.Name',
+         Description: '修改人',
+         sortable: true,
+         Type: 'String',
+       }, {
+         Name: 'ModifyTime',
+         Description: '修改时间',
+         sortable: true,
+         Type: 'DateTime',
+       }
+     ] : [])]
    }
  }
 
@@ -142,8 +170,10 @@
        .then(this.getModuleStrut)
        .then(strut => this.ModuleStrut = strut)
        .then(this.getColumns)
-       .then(cols => this.columns = cols)
-     //  .then(this.loadList)
+       .then(cols => this.columns = distinct(cols, v => v.Name, (a, b) => ({
+         ...a,
+         ...b
+       })))
    },
    getModuleStrut() {
      return getModuleStrut(this.name)
@@ -191,7 +221,7 @@
      });
    },
    search() {
-     getQueryOptions(this.name).then(options => {
+     getQueryOptions(this.dynamicColumns).then(options => {
        for (const item of this.query) {
          let opt = options.find(
            r => r.Name == item.Name && r.compare == item.compare
@@ -284,25 +314,7 @@
      area: this.area,
      name: this.name,
      direction: this.direction + '列表',
-     columns: [...this.columns, ...(this.showMamageField && this.ModuleStrut.HasManage ? [{
-         Name: 'Create_User.Name',
-         Description: '录入人',
-         sortable: true
-       }, {
-         Name: 'CreateTime',
-         Description: '录入时间',
-         sortable: true
-       },
-       {
-         Name: 'Modify_User.Name',
-         Description: '修改人',
-         sortable: true
-       }, {
-         Name: 'ModifyTime',
-         Description: '修改时间',
-         sortable: true
-       }
-     ] : [])],
+     columns: this.dynamicColumns,
      rows: this.rows,
      showMamageField: this.showMamageField,
      total: this.total,

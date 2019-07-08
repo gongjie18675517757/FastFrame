@@ -52,8 +52,8 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(50)
                         .IsUnicode(true);
 
-                    b.Property<string>("Parent_Id")
-                        .HasColumnName("parent_id")
+                    b.Property<string>("Super_Id")
+                        .HasColumnName("super_id")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
@@ -74,8 +74,8 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("Modify_User_Id")
                         .HasName("Index_Dept_Modify_User_Id");
 
-                    b.HasIndex("Parent_Id")
-                        .HasName("Index_Dept_Parent_Id");
+                    b.HasIndex("Super_Id")
+                        .HasName("Index_Dept_Super_Id");
 
                     b.HasIndex("Supervisor_Id")
                         .HasName("Index_Dept_Supervisor_Id");
@@ -377,8 +377,8 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(50)
                         .IsUnicode(true);
 
-                    b.Property<string>("Parent_Id")
-                        .HasColumnName("parent_id")
+                    b.Property<string>("Super_Id")
+                        .HasColumnName("super_id")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
@@ -386,8 +386,8 @@ namespace FastFrame.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Parent_Id")
-                        .HasName("Index_Permission_Parent_Id");
+                    b.HasIndex("Super_Id")
+                        .HasName("Index_Permission_Super_Id");
 
                     b.ToTable("basis_permission");
                 });

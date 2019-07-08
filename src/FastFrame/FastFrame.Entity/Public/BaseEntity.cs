@@ -5,12 +5,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FastFrame.Entity
 {
-    public abstract class BaseEntity : IEntity, IHasTenant, IHasSoftDelete,IHasManage, IHaveConcurrencyCheck
+    public abstract class BaseEntity : IEntity, IHasTenant, IHasSoftDelete, IHasManage, IHaveConcurrencyCheck
     {
         /// <summary>
         /// 主键
         /// </summary>
-        public string Id { get; set; } 
+        public string Id { get; set; }
 
         /// <summary>
         /// 创建人
@@ -26,7 +26,7 @@ namespace FastFrame.Entity
         [Required]
         [ReadOnly]
         [Hide(HideMark.Form)]
-        public DateTime CreateTime { get; set; }
+        public DateTime CreateTime { get; set; } = DateTime.Now;
 
         /// <summary>
         /// 修改人
@@ -41,6 +41,6 @@ namespace FastFrame.Entity
         /// </summary>
         [ReadOnly]
         [Hide(HideMark.Form)]
-        public DateTime ModifyTime { get; set; }
+        public DateTime ModifyTime { get; set; } = DateTime.Now;
     }
 }

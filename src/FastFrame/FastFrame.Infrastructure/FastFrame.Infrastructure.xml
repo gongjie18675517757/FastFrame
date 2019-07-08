@@ -187,18 +187,12 @@
         <member name="M:FastFrame.Infrastructure.DescriptionHelp.GetDescription(System.Type,System.String)">
             <summary>
             返回类型的注释说明
-            </summary>
-            <param name="type"></param>
-            <returns></returns>
+            </summary>　
         </member>
         <member name="M:FastFrame.Infrastructure.DescriptionHelp.GetPropSummary(System.Type,System.Reflection.PropertyInfo,System.String)">
             <summary>
             获取属性的说明 
-            </summary>
-            <param name="entitytype"></param>
-            <param name="propertyName"></param>
-            <param name="path"></param>
-            <returns></returns>
+            </summary>　　
         </member>
         <member name="M:FastFrame.Infrastructure.DescriptionHelp.GetEnumSummary(System.Type,System.String,System.String)">
             <summary>
@@ -409,9 +403,7 @@
         <member name="M:FastFrame.Infrastructure.Interface.ICurrentUserProvider.LogOut">
             <summary>
             登出
-            </summary>
-            <param name="currUser"></param>
-            <returns></returns>
+            </summary> 
         </member>
         <member name="T:FastFrame.Infrastructure.Interface.ICurrUser">
             <summary>
@@ -718,14 +710,6 @@
             <param name="type"></param>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.Infrastructure.T4Help.ExistFile(System.Type,System.String,System.String)">
-            <summary>
-            判断文件是否存在过
-            </summary>
-            <param name="type"></param>
-            <param name="path"></param>
-            <returns></returns>
-        </member>
         <member name="M:FastFrame.Infrastructure.T4Help.GenerateNameSpace(System.Type,System.String)">
             <summary>
             生成命名空间
@@ -779,18 +763,12 @@
         <member name="M:FastFrame.Infrastructure.VerifyCodeExtended.CreateVerifyCode(FastFrame.Infrastructure.VerifyCodeExtended.VerifyCodeType,System.Int32)">
             <summary>
             产生验证码（随机产生4-6位）
-            </summary>
-            <param name="type">验证码类型：数字，字符，符合</param>
-            <returns></returns>
+            </summary> 
         </member>
         <member name="M:FastFrame.Infrastructure.VerifyCodeExtended.CreateBitmapByImgVerifyCode(System.String,System.Int32,System.Int32,System.Single)">
             <summary>
             验证码图片 => Bitmap
-            </summary>
-            <param name="verifyCode">验证码</param>
-            <param name="width">宽</param>
-            <param name="height">高</param>
-            <returns>Bitmap</returns>
+            </summary>  
         </member>
         <member name="M:FastFrame.Infrastructure.VerifyCodeExtended.CreateByteByImgVerifyCode(System.String,System.Int32,System.Int32)">
             <summary>

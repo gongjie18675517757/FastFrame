@@ -79,6 +79,10 @@ namespace FastFrame.Application.Controllers
             var fieldInfoStructs = new List<FieldInfoStrut>();
 
             var instance = type.Assembly.CreateInstance(type.FullName);
+            if (instance is IHasManage hasManage)
+            {
+
+            }
 
             foreach (var x in type.GetProperties())
             {
@@ -114,11 +118,10 @@ namespace FastFrame.Application.Controllers
                 fieldInfoStructs.Add(new FieldInfoStrut()
                 {
                     Name = x.Name,
-                    Type = nullableType.Name,
+                    Type = nullableType.IsArray ? "Array" : nullableType.Name,
                     Description = descriptionProvider.GetPropertyDescription(x),
                     Hide = hideAttribute?.HideMark,
                     Readonly = readOnlyAttribute?.ReadOnlyMark,
-                    DefaultValue = instance.GetValue(x.Name)?.ToString(),
                     Rules = GetRules(x),
                     Relate = relatedToAttribute?.RelatedType.Name,
                     Length = stringLengthAttribute?.MaximumLength,
@@ -138,6 +141,7 @@ namespace FastFrame.Application.Controllers
             return new ModuleStruct()
             {
                 Name = type.Name,
+                Form = instance,
                 Description = descriptionProvider.GetClassDescription(type),
                 FieldInfoStruts = fieldInfoStructs,
                 RelateFields = relatedFieldAttribute?.FieldNames ?? new[] { type.GetProperties().FirstOrDefault().Name },
@@ -148,8 +152,11 @@ namespace FastFrame.Application.Controllers
 
         private IEnumerable<KeyValuePair<string, string>> GetEnumValues(Type type)
         {
+            if (type.IsArray)
+                type = type.GetElementType();
+
             if (!type.IsEnum)
-                yield break;
+                yield break; 
 
             foreach (var item in Enum.GetNames(type))
             {
@@ -220,6 +227,11 @@ namespace FastFrame.Application.Controllers
         /// 有管理属性
         /// </summary>
         public bool HasManage { get; internal set; }
+
+        /// <summary>
+        /// 默认表单
+        /// </summary>
+        public object Form { get; internal set; }
     }
 
     public class FieldInfoStrut
@@ -229,7 +241,7 @@ namespace FastFrame.Application.Controllers
         public string Description { get; set; }
         public HideMark? Hide { get; internal set; }
         public ReadOnlyMark? Readonly { get; internal set; }
-        public string DefaultValue { get; internal set; }
+
         public IEnumerable<Rule> Rules { get; internal set; }
         public string Relate { get; internal set; }
         public IEnumerable<KeyValuePair<string, string>> EnumValues { get; internal set; }

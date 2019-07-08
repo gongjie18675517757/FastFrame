@@ -1,19 +1,61 @@
-<template>
-  <span>
-    <a
-      v-if="info.IsLink && val"
-      :moduleName="moduleName"
-      name="Get"
-      @click="$emit('toEdit',model)"
-    >{{value}}</a>
-    <a v-else-if="isFile &&  val" @click="toRelate">下载</a>
-    <span v-else>{{value}}</span>
-  </span>
-</template>
-
-<script>
+ <script>
 import { showDialog, getValue } from "@/utils";
+import EnumItemInput from "@/components/Inputs/EnumItemInput";
+import SelectInput from "@/components/Inputs/SelectInput";
 export default {
+  render(h) {
+    let { IsLink, EnumItemInfo, EnumValues } = this.info;
+    if (!this.val) {
+      return null;
+    }
+    if (IsLink) {
+      return h(
+        "a",
+        {
+          on: {
+            click: () => this.$emit("toEdit", this.model)
+          }
+        },
+        this.value
+      );
+    } else if (this.isFile) {
+      return h(
+        "a",
+        {
+          on: {
+            click: this.toRelate
+          }
+        },
+        this.value
+      );
+    } else if (EnumItemInfo) {
+      return h(EnumItemInput, {
+        props: {
+          value: this.val,
+          EnumItemInfo,
+          disabled: true,
+          multiple: this.info.Type == "Array"
+        }
+      });
+    } else if (
+      (Array.isArray(EnumValues) && EnumValues.length > 0) ||
+      typeof EnumValues == "function"
+    ) {
+      if (typeof EnumValues == "function") {
+        EnumValues = EnumValues.call(this, this.model);
+        return h(SelectInput, {
+          props: {
+            value: this.val,
+            EnumValues,
+            disabled: true,
+            multiple: this.info.Type == "Array"
+          }
+        });
+      }
+    } else {
+      return h("span", null, this.value);
+    }
+  },
   props: {
     info: {
       type: Object,
@@ -58,7 +100,7 @@ export default {
         return kv.Value || "";
       }
       if (this.info.Relate) {
-        let tempName = this.info.Name.replace("_Id", "");      
+        let tempName = this.info.Name.replace("_Id", "");
         let obj = this.model[tempName];
         if (obj) {
           return this.info.Relate.RelateFields.map(v => obj[v])

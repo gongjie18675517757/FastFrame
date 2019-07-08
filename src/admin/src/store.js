@@ -19,33 +19,10 @@ export default new Vuex.Store({
     dialogMode: false,
     singlePageMode: true,
     mapMode: '',
-    notifys: [{
-        title: '您的帐户入帐100元',
-        color: 'light-green',
-        icon: 'account_circle',
-        timeLabel: '刚刚'
-      },
-      {
-        title: '您的帐户入帐100元',
-        color: 'light-blue',
-        icon: 'shopping_cart',
-        timeLabel: '2分钟前'
-      },
-      {
-        title: '您的帐户入帐100元',
-        color: 'cyan',
-        icon: 'payment',
-        timeLabel: '24分钟前'
-      },
-      {
-        title: '您的帐户入帐100元',
-        color: 'red',
-        icon: 'email',
-        timeLabel: '1小时前'
-      }
-    ],
+    notifys: [],
     dialogs: [],
-    friendMsgs: []
+    friendMsgs: [],
+    enumItemValues: {}
   },
   mutations: {
     login(state, payload) {
@@ -84,6 +61,9 @@ export default new Vuex.Store({
     },
     addFriendMsg(state, payload) {
       state.friendMsgs.push(payload.FriendMsg)
+    },
+    addEnumItem(state, payload) {
+      state.enumItemValues[payload.Key].push(payload)
     }
   },
   actions: {
@@ -99,6 +79,21 @@ export default new Vuex.Store({
         state.isLoadPermission = true
       })
       eventBus.$emit("init");
+    },
+    loadEnumValues({
+      state
+    }, name) {
+      if (!state.enumItemValues[name]) {
+        let obj = {}
+        obj[name] = []
+        state.enumItemValues = {
+          ...state.enumItemValues,
+          ...obj
+        }
+        $http.get(`/api/EnumItem/GetValues/${name}`).then((data) => {
+          state.enumItemValues[name] = data
+        })
+      }
     }
   },
   getters: {
@@ -106,8 +101,8 @@ export default new Vuex.Store({
       return state.mapMode || window.localStorage.getItem('mapMode') || 'bd'
     },
     getSiteNameAsync: state => async () => {
-      if (!state.tenant || !state.tenant.Id) { 
-        await sleep(1000) 
+      if (!state.tenant || !state.tenant.Id) {
+        await sleep(1000)
       }
       return state.tenant || {};
     },
@@ -121,14 +116,25 @@ export default new Vuex.Store({
     },
     existsPermission: state => (moduleName, actionName = 'List') => {
       let patent = state.permissionList.find(v => v.EnCode == moduleName)
-      return !!patent && !!state.permissionList.find(v => v.EnCode == actionName && v.Parent_Id == patent.Id)
+      return !!patent && !!state.permissionList.find(v => v.EnCode == actionName && v.Super_Id == patent.Id)
     },
     existsPermissionAsync: state => async (moduleName, actionName = 'List') => {
       if (!state.isLoadPermission) {
         await sleep(2000)
       }
       let patent = state.permissionList.find(v => v.EnCode == moduleName);
-      return !!patent && !!state.permissionList.find(v => v.EnCode == actionName && v.Parent_Id == patent.Id);
+      return !!patent && !!state.permissionList.find(v => v.EnCode == actionName && v.Super_Id == patent.Id);
+    },
+    getItemValues: state => (enumKey, superId) => {
+      if (state.enumItemValues[enumKey]) {
+        let items = state.enumItemValues[enumKey]
+        if (superId) {
+          items = items.filter(v => v.Super_Id == superId)
+        }
+        return items;
+      } else {
+        return []
+      }
     }
   }
 })

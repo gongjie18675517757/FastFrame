@@ -1,6 +1,7 @@
 ﻿using FastFrame.Database;
 using FastFrame.Entity;
 using FastFrame.Infrastructure.Interface;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -29,11 +30,11 @@ namespace FastFrame.Repository
         {
             get
             {
-                IQueryable<T> queryable = context.Query<T>();
+                IQueryable<T> queryable = context.Set<T>();
                 var tenant = currentUserProvider.GetCurrOrganizeId();
                 if (typeof(IHasTenant).IsAssignableFrom(typeof(T)))
                 {
-                    queryable = queryable.Where("Tenant_Id=@0", tenant.Id);
+                    queryable.Where(v => EF.Property<string>(v, "tenant_id") == tenant.Id);
                 }
                 return queryable;
             }

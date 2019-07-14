@@ -9,7 +9,7 @@ namespace FastFrame.Service.Services.Chat
 	using System.Linq; 
 	using Microsoft.EntityFrameworkCore; 
 	/// <summary>
-	///群组消息 服务类 
+	///群组消息 服务实现 
 	/// </summary>
 	public partial class GroupMessageService:BaseService<GroupMessage, GroupMessageDto>
 	{
@@ -26,8 +26,7 @@ namespace FastFrame.Service.Services.Chat
 		
 		protected override IQueryable<GroupMessageDto> QueryMain() 
 		{
-			var groupMessageQueryable=groupMessageRepository.Queryable;
-			 var query = from _groupMessage in groupMessageQueryable 
+			 var query = from _groupMessage in groupMessageRepository 
 						 select new GroupMessageDto
 						{
 							Group_Id=_groupMessage.Group_Id,

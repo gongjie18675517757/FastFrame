@@ -115,6 +115,11 @@
             被关联的类型
             </summary>
         </member>
+        <member name="P:FastFrame.Infrastructure.Attrs.RelatedToAttribute.FullProps">
+            <summary>
+            是否全属性
+            </summary>
+        </member>
         <member name="T:FastFrame.Infrastructure.Attrs.TreeAttribute">
             <summary>
             标记是树形结构

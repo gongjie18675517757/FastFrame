@@ -8,7 +8,7 @@ namespace FastFrame.Service.Services.Basis
 	using System.Linq; 
 	using Microsoft.EntityFrameworkCore; 
 	/// <summary>
-	///资源 服务类 
+	///资源 服务实现 
 	/// </summary>
 	public partial class ResourceService:BaseService<Resource, ResourceDto>
 	{
@@ -25,8 +25,7 @@ namespace FastFrame.Service.Services.Basis
 		
 		protected override IQueryable<ResourceDto> QueryMain() 
 		{
-			var resourceQueryable=resourceRepository.Queryable;
-			 var query = from _resource in resourceQueryable 
+			 var query = from _resource in resourceRepository 
 						 select new ResourceDto
 						{
 							Name=_resource.Name,

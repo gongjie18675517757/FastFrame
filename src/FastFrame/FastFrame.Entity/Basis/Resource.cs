@@ -5,7 +5,8 @@ namespace FastFrame.Entity.Basis
     /// <summary>
     /// 资源
     /// </summary>     
-    public class Resource:IEntity,IHasTenant
+    [Infrastructure.Attrs.RelatedField(nameof(Name))]
+    public class Resource : IEntity, IHasTenant
     {
         /// <summary>
         /// 资源名称
@@ -33,7 +34,7 @@ namespace FastFrame.Entity.Basis
         /// <summary>
         /// MD5摘要
         /// </summary>
-        public string MD5 { get; set; } 
+        public string MD5 { get; set; }
 
         public string Id { get; set; }
     }

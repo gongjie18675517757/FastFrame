@@ -9,6 +9,7 @@ namespace FastFrame.Dto.Basis
 	/// <summary>
 	///资源 
 	/// </summary>
+	[RelatedField("Name")]
 	public partial class ResourceDto:BaseDto<Resource>
 	{
 		

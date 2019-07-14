@@ -20,6 +20,12 @@ namespace FastFrame.Dto.Basis
 		[Required()]
 		public string Host {get;set;}
 		
+		/// <summary>
+		///租户 
+		/// </summary>
+		[Required()]
+		public string Tenant_Id {get;set;}
+		
 		
 		
 	}

@@ -8,7 +8,7 @@ namespace FastFrame.Service.Services.Basis
 	using System.Linq; 
 	using Microsoft.EntityFrameworkCore; 
 	/// <summary>
-	/// 服务类 
+	/// 服务实现 
 	/// </summary>
 	public partial class TenantHostService:BaseService<TenantHost, TenantHostDto>
 	{
@@ -25,12 +25,12 @@ namespace FastFrame.Service.Services.Basis
 		
 		protected override IQueryable<TenantHostDto> QueryMain() 
 		{
-			var tenantHostQueryable=tenantHostRepository.Queryable;
-			 var query = from _tenantHost in tenantHostQueryable 
+			 var query = from _tenantHost in tenantHostRepository 
 						 select new TenantHostDto
 						{
 							Host=_tenantHost.Host,
 							Id=_tenantHost.Id,
+							Tenant_Id=_tenantHost.Tenant_Id,
 					};
 			return query;
 		}

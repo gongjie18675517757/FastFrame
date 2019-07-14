@@ -1,4 +1,5 @@
 ﻿using AspectCore.Extensions.Reflection;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
@@ -11,11 +12,28 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace FastFrame.Infrastructure
 {
     public static class Extension
     {
+        public static async Task<PageList<T>> PageListAsync<T>(this IQueryable<T> query, PagePara pageInfo)
+        {
+            query = query.DynamicQuery(pageInfo.Condition);
+
+            var list = await query.DynamicSort(pageInfo.SortInfo)
+                    .Skip(pageInfo.PageSize * (pageInfo.PageIndex - 1))
+                    .Take(pageInfo.PageSize)
+                    .ToListAsync();
+
+            return new PageList<T>()
+            {
+                Total = await query.CountAsync(),
+                Data = list,
+            };
+        }
+
         public static IQueryable<T> DynamicSort<T>(this IQueryable<T> query, SortInfo sortInfo)
         {
             if (query == null)
@@ -118,6 +136,7 @@ namespace FastFrame.Infrastructure
 
             return query;
         }
+
         public static void WriteCodeLine(this StreamWriter writer, string line, int tagCount = 0)
         {
             writer.WriteLine($"{new string('\t', tagCount)}{line}");

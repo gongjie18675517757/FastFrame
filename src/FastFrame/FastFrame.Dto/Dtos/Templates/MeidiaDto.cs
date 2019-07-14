@@ -49,7 +49,7 @@ namespace FastFrame.Dto.Basis
 		/// <summary>
 		///资源 
 		/// </summary>
-		public ResourceViewModel Resource {get;set;}
+		public Resource Resource {get;set;}
 		
 		/// <summary>
 		///资源标识 

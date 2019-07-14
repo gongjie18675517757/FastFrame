@@ -535,6 +535,11 @@
             域名 
              </summary>
         </member>
+        <member name="P:FastFrame.Dto.Basis.TenantHostDto.Tenant_Id">
+             <summary>
+            租户 
+             </summary>
+        </member>
         <member name="T:FastFrame.Dto.Basis.DeptViewModel">
              <summary>
             部门 
@@ -563,11 +568,6 @@
         <member name="P:FastFrame.Dto.Basis.EnumItemViewModel.Value">
              <summary>
             值 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.EnumItemViewModel.Key">
-             <summary>
-            键 
              </summary>
         </member>
         <member name="P:FastFrame.Dto.Basis.EnumItemViewModel.Id">
@@ -668,26 +668,6 @@
         <member name="P:FastFrame.Dto.Basis.ResourceViewModel.Name">
              <summary>
             资源名称 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.ResourceViewModel.Size">
-             <summary>
-            资源大小 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.ResourceViewModel.Path">
-             <summary>
-            相对路径 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.ResourceViewModel.ContentType">
-             <summary>
-            资源标识 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.ResourceViewModel.MD5">
-             <summary>
-            MD5摘要 
              </summary>
         </member>
         <member name="P:FastFrame.Dto.Basis.ResourceViewModel.Id">
@@ -1298,11 +1278,6 @@
         <member name="P:FastFrame.Dto.Chat.EmailViewModel.FromUser_Id">
              <summary>
             发件人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.EmailViewModel.Tenant_Id">
-             <summary>
-            组织 
              </summary>
         </member>
         <member name="P:FastFrame.Dto.Chat.EmailViewModel.Id">

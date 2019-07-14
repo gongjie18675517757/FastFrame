@@ -99,8 +99,11 @@ namespace FastFrame.Service.Services.Basis
         public async Task HandleEventAsync(DoMainResultListing<DeptDto> @event)
         {
             var input = @event.Data;
-            var query = from a in userService.Query()
+            var keys = input.Select(v => v.Id).ToList();
+            var userQuery = userService.Query();
+            var query = from a in userQuery
                         join b in deptMembers on a.Id equals b.User_Id
+                        where keys.Contains(b.Dept_Id)
                         select new
                         {
                             Item = a,

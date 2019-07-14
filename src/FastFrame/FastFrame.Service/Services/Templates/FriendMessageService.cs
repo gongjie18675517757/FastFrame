@@ -9,7 +9,7 @@ namespace FastFrame.Service.Services.Chat
 	using System.Linq; 
 	using Microsoft.EntityFrameworkCore; 
 	/// <summary>
-	///好友消息 服务类 
+	///好友消息 服务实现 
 	/// </summary>
 	public partial class FriendMessageService:BaseService<FriendMessage, FriendMessageDto>
 	{
@@ -26,8 +26,7 @@ namespace FastFrame.Service.Services.Chat
 		
 		protected override IQueryable<FriendMessageDto> QueryMain() 
 		{
-			var friendMessageQueryable=friendMessageRepository.Queryable;
-			 var query = from _friendMessage in friendMessageQueryable 
+			 var query = from _friendMessage in friendMessageRepository 
 						 select new FriendMessageDto
 						{
 							Content=_friendMessage.Content,

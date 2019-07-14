@@ -15,11 +15,6 @@ namespace FastFrame.Dto.Basis
 		public string Value {get;set;}
 		
 		/// <summary>
-		///键 
-		/// </summary>
-		public EnumName Key {get;set;}
-		
-		/// <summary>
 		///主键 
 		/// </summary>
 		public string Id {get;set;}

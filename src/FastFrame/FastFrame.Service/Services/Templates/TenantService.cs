@@ -8,7 +8,7 @@ namespace FastFrame.Service.Services.Basis
 	using System.Linq; 
 	using Microsoft.EntityFrameworkCore; 
 	/// <summary>
-	///组织信息 服务类 
+	///组织信息 服务实现 
 	/// </summary>
 	public partial class TenantService:BaseService<Tenant, TenantDto>
 	{
@@ -25,8 +25,7 @@ namespace FastFrame.Service.Services.Basis
 		
 		protected override IQueryable<TenantDto> QueryMain() 
 		{
-			var tenantQueryable=tenantRepository.Queryable;
-			 var query = from _tenant in tenantQueryable 
+			 var query = from _tenant in tenantRepository 
 						 select new TenantDto
 						{
 							FullName=_tenant.FullName,

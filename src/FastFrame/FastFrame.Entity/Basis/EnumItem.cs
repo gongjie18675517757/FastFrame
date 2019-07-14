@@ -7,7 +7,7 @@ namespace FastFrame.Entity.Basis
     /// <summary>
     /// 数字字典
     /// </summary>
-    [RelatedField(nameof(Value), nameof(Key))]
+    [RelatedField(nameof(Value))]
     [Export]
     public class EnumItem : BaseEntity
     {

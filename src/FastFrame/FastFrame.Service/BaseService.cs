@@ -9,6 +9,7 @@ using FastFrame.Repository;
 using FastFrame.Service.Events;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
@@ -43,7 +44,8 @@ namespace FastFrame.Service
         /// <summary>
         /// 新增前
         /// </summary> 
-        protected virtual Task OnAdding(TDto input, TEntity entity) => Task.CompletedTask;
+        protected virtual Task OnAdding(TDto input, TEntity entity)
+            => EventBus?.TriggerAsync(new DoMainAdding<TDto>(input));
 
         /// <summary>
         /// 新增
@@ -56,14 +58,10 @@ namespace FastFrame.Service
                 throw new ArgumentNullException(nameof(input));
             }
 
-
-
-
             var entity = input.MapTo<TDto, TEntity>();
             await repository.AddAsync(entity);
-            await OnAdding(input, entity);
             input.Id = entity.Id;
-            await EventBus?.TriggerAsync(new DoMainAdding<TDto>(input));
+            await OnAdding(input, entity);
             await repository.CommmitAsync();
 
             var dto = await GetAsync(entity.Id);
@@ -79,7 +77,8 @@ namespace FastFrame.Service
         /// <summary>
         /// 删除前
         /// </summary> 
-        protected virtual Task OnDeleteing(TEntity input) => Task.CompletedTask;
+        protected virtual Task OnDeleteing(TEntity input)
+            => EventBus?.TriggerAsync(new Events.DoMainDeleteing<TDto>(input.Id));
 
 
         /// <summary>
@@ -92,7 +91,6 @@ namespace FastFrame.Service
             {
                 var entity = await repository.GetAsync(id);
                 await OnDeleteing(entity);
-                await EventBus?.TriggerAsync(new Events.DoMainDeleteing<TDto>(id));
                 if (entity == null)
                     throw new Exception("ID不正确");
                 await repository.DeleteAsync(entity);
@@ -110,7 +108,8 @@ namespace FastFrame.Service
         /// <summary>
         /// 更新前
         /// </summary> 
-        protected virtual Task OnUpdateing(TDto input, TEntity entity) => Task.CompletedTask;
+        protected virtual Task OnUpdateing(TDto input, TEntity entity)
+            => EventBus?.TriggerAsync(new Events.DoMainUpdateing<TDto>(input));
 
         /// <summary>
         /// 更新
@@ -125,7 +124,6 @@ namespace FastFrame.Service
             var entity = await repository.GetAsync(input.Id);
             input.MapSet(entity);
             await OnUpdateing(input, entity);
-            await EventBus?.TriggerAsync(new Events.DoMainUpdateing<TDto>(input));
             await repository.UpdateAsync(entity);
             await repository.CommmitAsync();
             await RedisHelper.DelAsync(input.Id);
@@ -141,7 +139,8 @@ namespace FastFrame.Service
         /// <summary>
         /// 返回前
         /// </summary> 
-        protected virtual Task OnGeting(TDto dto) => Task.CompletedTask;
+        protected virtual Task OnGeting(TDto dto)
+            => EventBus.TriggerAsync(new DoMainResulting<TDto>(dto));
 
         /// <summary>
         /// 获取单条数据
@@ -149,34 +148,30 @@ namespace FastFrame.Service
         //[AutoCacheInterceptor(AutoCacheOperate.Get)]
         public virtual async Task<TDto> GetAsync(string id)
         {
-            var entity = (await Query().Where("Id=@0", id).ToListAsync()).FirstOrDefault();
-            if (entity == null)
-                throw new Exception("ID不正确");
-            await OnGeting(entity);
-            await EventBus.TriggerAsync(new DoMainResulting<TDto>(entity));
-            return entity;
+            var dto = (await Query().Where("Id=@0", id).ToListAsync()).FirstOrDefault();
+            if (dto != null)
+                await OnGeting(dto);
+            return dto;
         }
 
         protected virtual IQueryable<TDto> GetListQueryableing(IQueryable<TDto> query) => query;
+
+        /// <summary>
+        /// 返回列表数据时
+        /// </summary> 
+        protected virtual Task OnGetListing(IEnumerable<TDto> dtos)
+            => EventBus.TriggerAsync(new DoMainResultListing<TDto>(dtos));
 
         /// <summary>
         /// 获取分页列表
         /// </summary> 
         public virtual async Task<PageList<TDto>> GetListAsync(PagePara pageInfo)
         {
-            var query = Query().DynamicQuery(pageInfo.Condition);
-            query = GetListQueryableing(query);
-            var list = await query.DynamicSort(pageInfo.SortInfo)
-                    .Skip(pageInfo.PageSize * (pageInfo.PageIndex - 1))
-                    .Take(pageInfo.PageSize)
-                    .ToListAsync();
+            var query = GetListQueryableing(Query());
+            var pageList = await query.PageListAsync(pageInfo);
 
-            await EventBus.TriggerAsync(new DoMainResultListing<TDto>(list));
-            return new PageList<TDto>()
-            {
-                Total = await query.CountAsync(),
-                Data = list,
-            };
+            await OnGetListing(pageList.Data);
+            return pageList;
         }
 
         /// <summary>
@@ -194,7 +189,7 @@ namespace FastFrame.Service
         }
 
         /// <summary>
-        /// 验证属性
+        /// 验证重复属性
         /// </summary> 
         public virtual async Task<bool> VerifyUnique(UniqueInput input)
         {

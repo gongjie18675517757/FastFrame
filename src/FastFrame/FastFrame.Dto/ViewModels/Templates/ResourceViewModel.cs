@@ -15,26 +15,6 @@ namespace FastFrame.Dto.Basis
 		public string Name {get;set;}
 		
 		/// <summary>
-		///资源大小 
-		/// </summary>
-		public long Size {get;set;}
-		
-		/// <summary>
-		///相对路径 
-		/// </summary>
-		public string Path {get;set;}
-		
-		/// <summary>
-		///资源标识 
-		/// </summary>
-		public string ContentType {get;set;}
-		
-		/// <summary>
-		///MD5摘要 
-		/// </summary>
-		public string MD5 {get;set;}
-		
-		/// <summary>
 		/// 
 		/// </summary>
 		public string Id {get;set;}

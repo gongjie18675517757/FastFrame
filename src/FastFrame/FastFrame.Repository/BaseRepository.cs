@@ -184,14 +184,13 @@ namespace FastFrame.Repository
         public virtual IQueryable<T> Queryable
         {
             get
-            {
-                // return context.Set<T>();
+            {                 
                 IQueryable<T> queryable = context.Set<T>();
-                var tenant = currentUserProvider.GetCurrOrganizeId();
-                if (typeof(IHasTenant).IsAssignableFrom(typeof(T)))
-                {
-                    queryable.Where(v => EF.Property<string>(v, "tenant_id") == tenant.Id);
-                }
+                //var tenant = currentUserProvider.GetCurrOrganizeId();
+                //if (typeof(IHasTenant).IsAssignableFrom(typeof(T)))
+                //{
+                //    queryable.Where(v => EF.Property<string>(v, "tenant_id") == tenant.Id);
+                //}
                 return queryable;
             }
         }

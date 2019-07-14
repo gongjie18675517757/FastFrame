@@ -8,7 +8,7 @@ namespace FastFrame.Service.Services.Basis
 	using System.Linq; 
 	using Microsoft.EntityFrameworkCore; 
 	/// <summary>
-	///数字字典 服务类 
+	///数字字典 服务实现 
 	/// </summary>
 	public partial class EnumItemService:BaseService<EnumItem, EnumItemDto>
 	{
@@ -27,13 +27,16 @@ namespace FastFrame.Service.Services.Basis
 		{
 			 var enumItemQueryable = enumItemRepository.Queryable;
 			 var userQueryable = userRepository.Queryable;
-			 var query = from _enumItem in enumItemQueryable 
+			 var query = from _enumItem in enumItemRepository 
 						join _super_Id in enumItemQueryable on _enumItem.Super_Id equals _super_Id.Id into t__super_Id
 						from _super_Id in t__super_Id.DefaultIfEmpty()
 						join _create_User_Id in userQueryable on _enumItem.Create_User_Id equals _create_User_Id.Id into t__create_User_Id
 						from _create_User_Id in t__create_User_Id.DefaultIfEmpty()
 						join _modify_User_Id in userQueryable on _enumItem.Modify_User_Id equals _modify_User_Id.Id into t__modify_User_Id
 						from _modify_User_Id in t__modify_User_Id.DefaultIfEmpty()
+						let Super=new EnumItemViewModel {Value=_super_Id.Value,Id=_super_Id.Id}
+						let Create_User=new UserViewModel {Name=_create_User_Id.Name,Account=_create_User_Id.Account,Id=_create_User_Id.Id}
+						let Modify_User=new UserViewModel {Name=_modify_User_Id.Name,Account=_modify_User_Id.Account,Id=_modify_User_Id.Id}
 						 select new EnumItemDto
 						{
 							Key=_enumItem.Key,
@@ -44,24 +47,9 @@ namespace FastFrame.Service.Services.Basis
 							CreateTime=_enumItem.CreateTime,
 							Modify_User_Id=_enumItem.Modify_User_Id,
 							ModifyTime=_enumItem.ModifyTime,
-							Super=new EnumItemViewModel
-							{
-								Id = _super_Id.Id,
-								Value = _super_Id.Value,
-								Key = _super_Id.Key,
-							},
-							Create_User=new UserViewModel
-							{
-								Id = _create_User_Id.Id,
-								Name = _create_User_Id.Name,
-								Account = _create_User_Id.Account,
-							},
-							Modify_User=new UserViewModel
-							{
-								Id = _modify_User_Id.Id,
-								Name = _modify_User_Id.Name,
-								Account = _modify_User_Id.Account,
-							},
+							Super=Super,
+							Create_User=Create_User,
+							Modify_User=Modify_User,
 					};
 			return query;
 		}

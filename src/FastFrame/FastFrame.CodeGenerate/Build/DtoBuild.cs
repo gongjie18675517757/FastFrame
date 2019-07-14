@@ -86,10 +86,6 @@ namespace FastFrame.CodeGenerate.Build
             {
                 if (item.Name == "Id")
                     continue;
-                if (item.Name == "Tenant_Id")
-                    continue;
-                if (item.Name == "IsDeleted")
-                    continue;
 
                 if (item.GetCustomAttribute<ExcludeAttribute>() != null)
                     continue;
@@ -114,10 +110,11 @@ namespace FastFrame.CodeGenerate.Build
 
                 if (TryGetAttribute<RelatedToAttribute>(item, out var relatedToAttribute))
                 {
+                    var relateTypeName = relatedToAttribute.RelatedType.Name;
                     yield return new PropInfo()
                     {
                         Summary = summary,
-                        TypeName = $"{T4Help.GetTypeName(relatedToAttribute.RelatedType)}ViewModel",
+                        TypeName = relatedToAttribute.FullProps ? $"{relateTypeName}" : $"{relateTypeName}ViewModel",
                         Name = item.Name.Replace("_Id", "")
                     };
                 }

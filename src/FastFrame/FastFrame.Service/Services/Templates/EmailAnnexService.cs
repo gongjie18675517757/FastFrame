@@ -9,7 +9,7 @@ namespace FastFrame.Service.Services.Chat
 	using System.Linq; 
 	using Microsoft.EntityFrameworkCore; 
 	/// <summary>
-	///邮件附件 服务类 
+	///邮件附件 服务实现 
 	/// </summary>
 	public partial class EmailAnnexService:BaseService<EmailAnnex, EmailAnnexDto>
 	{
@@ -26,8 +26,7 @@ namespace FastFrame.Service.Services.Chat
 		
 		protected override IQueryable<EmailAnnexDto> QueryMain() 
 		{
-			var emailAnnexQueryable=emailAnnexRepository.Queryable;
-			 var query = from _emailAnnex in emailAnnexQueryable 
+			 var query = from _emailAnnex in emailAnnexRepository 
 						 select new EmailAnnexDto
 						{
 							Email_Id=_emailAnnex.Email_Id,

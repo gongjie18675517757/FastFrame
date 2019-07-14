@@ -9,7 +9,7 @@ namespace FastFrame.Service.Services.Chat
 	using System.Linq; 
 	using Microsoft.EntityFrameworkCore; 
 	/// <summary>
-	///群组管理员 服务类 
+	///群组管理员 服务实现 
 	/// </summary>
 	public partial class GroupManagerService:BaseService<GroupManager, GroupManagerDto>
 	{
@@ -26,8 +26,7 @@ namespace FastFrame.Service.Services.Chat
 		
 		protected override IQueryable<GroupManagerDto> QueryMain() 
 		{
-			var groupManagerQueryable=groupManagerRepository.Queryable;
-			 var query = from _groupManager in groupManagerQueryable 
+			 var query = from _groupManager in groupManagerRepository 
 						 select new GroupManagerDto
 						{
 							Group_Id=_groupManager.Group_Id,

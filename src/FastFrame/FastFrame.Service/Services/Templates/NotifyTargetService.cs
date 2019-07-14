@@ -8,7 +8,7 @@ namespace FastFrame.Service.Services.Basis
 	using System.Linq; 
 	using Microsoft.EntityFrameworkCore; 
 	/// <summary>
-	///通知目标 服务类 
+	///通知目标 服务实现 
 	/// </summary>
 	public partial class NotifyTargetService:BaseService<NotifyTarget, NotifyTargetDto>
 	{
@@ -25,8 +25,7 @@ namespace FastFrame.Service.Services.Basis
 		
 		protected override IQueryable<NotifyTargetDto> QueryMain() 
 		{
-			var notifyTargetQueryable=notifyTargetRepository.Queryable;
-			 var query = from _notifyTarget in notifyTargetQueryable 
+			 var query = from _notifyTarget in notifyTargetRepository 
 						 select new NotifyTargetDto
 						{
 							Notify_Id=_notifyTarget.Notify_Id,

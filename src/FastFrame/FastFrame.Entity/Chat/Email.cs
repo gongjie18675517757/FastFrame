@@ -22,12 +22,7 @@ namespace FastFrame.Entity.Chat
         /// <summary>
         /// 发件人
         /// </summary>
-        public string FromUser_Id { get; set; }
-
-        /// <summary>
-        /// 组织
-        /// </summary>
-        public string Tenant_Id { get; set; }
+        public string FromUser_Id { get; set; } 
 
         /// <summary>
         /// 主键

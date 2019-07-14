@@ -9,7 +9,7 @@ namespace FastFrame.Service.Services.Chat
 	using System.Linq; 
 	using Microsoft.EntityFrameworkCore; 
 	/// <summary>
-	///邮件正文 服务类 
+	///邮件正文 服务实现 
 	/// </summary>
 	public partial class EmailContentService:BaseService<EmailContent, EmailContentDto>
 	{
@@ -26,8 +26,7 @@ namespace FastFrame.Service.Services.Chat
 		
 		protected override IQueryable<EmailContentDto> QueryMain() 
 		{
-			var emailContentQueryable=emailContentRepository.Queryable;
-			 var query = from _emailContent in emailContentQueryable 
+			 var query = from _emailContent in emailContentRepository 
 						 select new EmailContentDto
 						{
 							Email_Id=_emailContent.Email_Id,

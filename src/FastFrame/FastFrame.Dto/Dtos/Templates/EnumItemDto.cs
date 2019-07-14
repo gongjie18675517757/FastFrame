@@ -10,7 +10,7 @@ namespace FastFrame.Dto.Basis
 	/// <summary>
 	///数字字典 
 	/// </summary>
-	[RelatedField("Value","Key")]
+	[RelatedField("Value")]
 	public partial class EnumItemDto:BaseDto<EnumItem>
 	{
 		

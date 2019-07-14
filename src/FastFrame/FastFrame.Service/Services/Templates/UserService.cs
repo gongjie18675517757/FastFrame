@@ -8,7 +8,7 @@ namespace FastFrame.Service.Services.Basis
 	using System.Linq; 
 	using Microsoft.EntityFrameworkCore; 
 	/// <summary>
-	///用户 服务类 
+	///用户 服务实现 
 	/// </summary>
 	public partial class UserService:BaseService<User, UserDto>
 	{
@@ -27,13 +27,16 @@ namespace FastFrame.Service.Services.Basis
 		{
 			 var resourceQueryable = resourceRepository.Queryable;
 			 var userQueryable = userRepository.Queryable;
-			 var query = from _user in userQueryable 
+			 var query = from _user in userRepository 
 						join _handIcon_Id in resourceQueryable on _user.HandIcon_Id equals _handIcon_Id.Id into t__handIcon_Id
 						from _handIcon_Id in t__handIcon_Id.DefaultIfEmpty()
 						join _create_User_Id in userQueryable on _user.Create_User_Id equals _create_User_Id.Id into t__create_User_Id
 						from _create_User_Id in t__create_User_Id.DefaultIfEmpty()
 						join _modify_User_Id in userQueryable on _user.Modify_User_Id equals _modify_User_Id.Id into t__modify_User_Id
 						from _modify_User_Id in t__modify_User_Id.DefaultIfEmpty()
+						let HandIcon=new ResourceViewModel {Name=_handIcon_Id.Name,Id=_handIcon_Id.Id}
+						let Create_User=new UserViewModel {Name=_create_User_Id.Name,Account=_create_User_Id.Account,Id=_create_User_Id.Id}
+						let Modify_User=new UserViewModel {Name=_modify_User_Id.Name,Account=_modify_User_Id.Account,Id=_modify_User_Id.Id}
 						 select new UserDto
 						{
 							Account=_user.Account,
@@ -49,27 +52,9 @@ namespace FastFrame.Service.Services.Basis
 							CreateTime=_user.CreateTime,
 							Modify_User_Id=_user.Modify_User_Id,
 							ModifyTime=_user.ModifyTime,
-							HandIcon=new ResourceViewModel
-							{
-								Id = _handIcon_Id.Id,
-								Name = _handIcon_Id.Name,
-								Size = _handIcon_Id.Size,
-								Path = _handIcon_Id.Path,
-								ContentType = _handIcon_Id.ContentType,
-								MD5 = _handIcon_Id.MD5,
-							},
-							Create_User=new UserViewModel
-							{
-								Id = _create_User_Id.Id,
-								Name = _create_User_Id.Name,
-								Account = _create_User_Id.Account,
-							},
-							Modify_User=new UserViewModel
-							{
-								Id = _modify_User_Id.Id,
-								Name = _modify_User_Id.Name,
-								Account = _modify_User_Id.Account,
-							},
+							HandIcon=HandIcon,
+							Create_User=Create_User,
+							Modify_User=Modify_User,
 					};
 			return query;
 		}

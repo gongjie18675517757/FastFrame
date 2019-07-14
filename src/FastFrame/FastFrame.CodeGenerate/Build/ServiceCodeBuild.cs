@@ -1,5 +1,4 @@
-﻿using FastFrame.CodeGenerate.Info;
-using FastFrame.Entity;
+﻿using FastFrame.Entity;
 using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Attrs;
 using System;
@@ -28,12 +27,18 @@ namespace FastFrame.CodeGenerate.Build
 
         public override IEnumerable<Info.TargetInfo> BuildCodeInfo(string typeName)
         {
-            foreach (var type in GetTypes())
+            foreach (Type type in GetTypes())
             {
                 if (!string.IsNullOrWhiteSpace(typeName) && type.Name != typeName)
+                {
                     continue;
+                }
+
                 if (type.GetCustomAttribute<ExcludeAttribute>() != null)
+                {
                     continue;
+                }
+
                 yield return Build(type);
             }
         }
@@ -41,15 +46,15 @@ namespace FastFrame.CodeGenerate.Build
         public Info.TargetInfo Build(Type type)
         {
             /*当前类型区域名称*/
-            var areaName = T4Help.GenerateNameSpace(type, null);
+            string areaName = T4Help.GenerateNameSpace(type, null);
 
             /*所依赖[引用]的类型*/
-            var relatedTypes = type.GetProperties()
+            IEnumerable<RelatedToAttribute> relatedTypes = type.GetProperties()
                     .Select(x => x.GetCustomAttribute<RelatedToAttribute>())
                     .Where(x => x != null);
 
             /*要导入的命名空间*/
-            var importNames = relatedTypes
+            IEnumerable<string> importNames = relatedTypes
                  .Select(x => T4Help.GenerateNameSpace(x.RelatedType, null))
                  .Union(new[] { areaName })
                  .SelectMany(x => new string[] { $"FastFrame.Entity.{x}", })
@@ -93,7 +98,7 @@ namespace FastFrame.CodeGenerate.Build
                     CodeBlock = depends.Select(x => $"this.{x.name}={x.name};")
                 },
                 MethodInfos = GetMethods(type),
-                Summary = $"{T4Help.GetClassSummary(type, XmlDocDir)} 服务类",
+                Summary = $"{T4Help.GetClassSummary(type, XmlDocDir)} 服务实现",
                 Path = TargetPath
             };
         }
@@ -110,103 +115,82 @@ namespace FastFrame.CodeGenerate.Build
             };
         }
 
-        public IEnumerable<PropInfo> GetDtoProps(Type type)
-        {
-            return dtoBuild.GetPropInfos(type);//.Where(r => !r.TypeName.EndsWith("Dto"));
-        }
-
         public IEnumerable<string> GetQueryMainCodeBlock(Type type)
         {
-            var hasManage = typeof(IHasManage).IsAssignableFrom(type);
-            var typeName = type.Name.ToFirstLower();
+            string typeName = type.Name.ToFirstLower();
             var props = type.GetProperties().Select(x => new
             {
                 Attr = x.GetCustomAttribute<RelatedToAttribute>(),
                 Prop = x
             }).Where(x => x.Attr != null);
 
-            if (!props.Any(x => x.Attr.RelatedType == type))
-                yield return $"var {typeName}Queryable={typeName}Repository.Queryable;";
-
-            foreach (var prop in props.GroupBy(x => x.Attr.RelatedType.Name))
+            foreach (Type relateType in props.GroupBy(x => x.Attr.RelatedType).Select(v => v.Key))
             {
-                var relatedTypeName = prop.Key.ToFirstLower();
+                string relatedTypeName = relateType.Name.ToFirstLower();
                 yield return $" var {relatedTypeName}Queryable = {relatedTypeName}Repository.Queryable;";
             }
 
 
-            yield return $" var query = from _{typeName} in {typeName}Queryable ";
+            yield return $" var query = from _{typeName} in {typeName}Repository ";
 
             foreach (var prop in props)
             {
-                var name = "_" + prop.Prop.Name.ToFirstLower();
-                var isRequired = prop.Prop.GetCustomAttribute<RequiredAttribute>() != null;
-                var relateType = prop.Attr.RelatedType;
+                string name = "_" + prop.Prop.Name.ToFirstLower();
+                bool isRequired = prop.Prop.GetCustomAttribute<RequiredAttribute>() != null;
+                Type relateType = prop.Attr.RelatedType;
                 yield return $"\t\t\tjoin {name} in {relateType.Name.ToFirstLower()}Queryable on _{typeName}.{prop.Prop.Name} equals {name}.Id "
                     + (isRequired ? "" : $"into t_{name}");
                 if (!isRequired)
+                {
                     yield return $"\t\t\tfrom {name} in t_{name}.DefaultIfEmpty()";
+                }
             }
-            if (hasManage)
-            {
 
+            foreach (var prop in props)
+            {
+                string name = prop.Prop.Name.Replace("_Id", "");
+                Type relateType = prop.Attr.RelatedType;
+                string relatedTypeName = relateType.Name.ToFirstLower();
+
+
+                var fieldNames = relateType.GetCustomAttribute<RelatedFieldAttribute>()?.FieldNames.ToArray();
+                if (fieldNames == null)
+                {
+                    fieldNames = relateType.GetProperties()
+                        //.Where(v => v.PropertyType == typeof(string))
+                        .Select(v => v.Name).ToArray();
+                    string[] baseFieldNames = relateType.BaseType.GetProperties().Select(v => v.Name).ToArray();
+                    fieldNames = fieldNames.Where(v => !baseFieldNames.Any(r => r == v)).ToArray();
+                }
+                string linqTempName = "_" + prop.Prop.Name.ToFirstLower();
+                fieldNames = fieldNames.Concat(new[] { "Id" }).Distinct().Select(v => $"{v}={linqTempName}.{v}").ToArray();
+                string fieldCtorStr = string.Join(",", fieldNames);
+                if (prop.Attr.FullProps)
+                    yield return $"\t\t\tlet {name}={linqTempName}";
+                else
+                    yield return $"\t\t\tlet {name}=new {relateType.Name}{(prop.Attr.FullProps ? "" : "ViewModel")} {{{fieldCtorStr}}}";
             }
+
 
             yield return $"\t\t\t select new {type.Name}Dto";
             yield return "\t\t\t{";
 
-            foreach (var prop in type.GetProperties())
+            foreach (PropertyInfo prop in type.GetProperties())
             {
                 if (prop.GetCustomAttribute<ExcludeAttribute>() != null)
+                {
                     continue;
-                if (prop.Name == "Tenant_Id" || prop.Name == "IsDeleted")
-                    continue;
+                }
+
                 yield return $"\t\t\t\t{prop.Name}=_{typeName}.{prop.Name},";
             }
             foreach (var prop in props)
             {
-                if (prop.Prop.Name == "Tenant_Id" || prop.Prop.Name == "IsDeleted")
-                    continue;
-
-                var linqTempName = "_" + prop.Prop.Name.ToFirstLower();
-                var isDto = prop.Attr.RelatedType.GetCustomAttribute<ExcludeAttribute>() == null;
-                if (isDto)
-                {
-                    yield return $"\t\t\t\t{prop.Prop.Name.Replace("_Id", "")}=new {prop.Attr.RelatedType.Name}ViewModel";
-                    yield return "\t\t\t\t{";
-                    yield return $"\t\t\t\t\tId = {linqTempName}.Id,";
-
-                    var fieldNames = prop.Attr.RelatedType.GetCustomAttribute<RelatedFieldAttribute>()?.FieldNames;
-                    if (fieldNames == null)
-                    {
-                        fieldNames = prop.Attr.RelatedType.GetProperties().Select(v => v.Name).ToArray();
-                        var baseFieldNames = prop.Attr.RelatedType.BaseType.GetProperties().Select(v => v.Name).ToArray();
-                        fieldNames = fieldNames.Where(v => !baseFieldNames.Any(r => r == v)).ToArray();
-                    }
-                    foreach (var item in fieldNames)
-                    {
-                        if (item == "Id")
-                            continue;
-                        yield return $"\t\t\t\t\t{item} = {linqTempName}.{item},";
-                    }
-
-                    yield return "\t\t\t\t},";
-                }
-                else
-                {
-                    yield return $"\t\t\t\t{prop.Prop.Name.Replace("_Id", "")}={linqTempName},";
-                }
-
+                //var linqTempName = "_" + prop.Prop.Name.ToFirstLower();
+                yield return $"\t\t\t\t{prop.Prop.Name.Replace("_Id", "")}={prop.Prop.Name.Replace("_Id", "")},";
             }
-
-
-
-
-
             yield return "\t\t};";
-
             yield return "return query;";
-
         }
     }
 }

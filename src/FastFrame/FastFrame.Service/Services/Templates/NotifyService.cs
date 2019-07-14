@@ -8,7 +8,7 @@ namespace FastFrame.Service.Services.Basis
 	using System.Linq; 
 	using Microsoft.EntityFrameworkCore; 
 	/// <summary>
-	///通知 服务类 
+	///通知 服务实现 
 	/// </summary>
 	public partial class NotifyService:BaseService<Notify, NotifyDto>
 	{
@@ -27,10 +27,9 @@ namespace FastFrame.Service.Services.Basis
 		
 		protected override IQueryable<NotifyDto> QueryMain() 
 		{
-			var notifyQueryable=notifyRepository.Queryable;
 			 var userQueryable = userRepository.Queryable;
 			 var resourceQueryable = resourceRepository.Queryable;
-			 var query = from _notify in notifyQueryable 
+			 var query = from _notify in notifyRepository 
 						join _publush_Id in userQueryable on _notify.Publush_Id equals _publush_Id.Id into t__publush_Id
 						from _publush_Id in t__publush_Id.DefaultIfEmpty()
 						join _resource_Id in resourceQueryable on _notify.Resource_Id equals _resource_Id.Id into t__resource_Id
@@ -39,6 +38,10 @@ namespace FastFrame.Service.Services.Basis
 						from _create_User_Id in t__create_User_Id.DefaultIfEmpty()
 						join _modify_User_Id in userQueryable on _notify.Modify_User_Id equals _modify_User_Id.Id into t__modify_User_Id
 						from _modify_User_Id in t__modify_User_Id.DefaultIfEmpty()
+						let Publush=new UserViewModel {Name=_publush_Id.Name,Account=_publush_Id.Account,Id=_publush_Id.Id}
+						let Resource=new ResourceViewModel {Name=_resource_Id.Name,Id=_resource_Id.Id}
+						let Create_User=new UserViewModel {Name=_create_User_Id.Name,Account=_create_User_Id.Account,Id=_create_User_Id.Id}
+						let Modify_User=new UserViewModel {Name=_modify_User_Id.Name,Account=_modify_User_Id.Account,Id=_modify_User_Id.Id}
 						 select new NotifyDto
 						{
 							Title=_notify.Title,
@@ -51,33 +54,10 @@ namespace FastFrame.Service.Services.Basis
 							CreateTime=_notify.CreateTime,
 							Modify_User_Id=_notify.Modify_User_Id,
 							ModifyTime=_notify.ModifyTime,
-							Publush=new UserViewModel
-							{
-								Id = _publush_Id.Id,
-								Name = _publush_Id.Name,
-								Account = _publush_Id.Account,
-							},
-							Resource=new ResourceViewModel
-							{
-								Id = _resource_Id.Id,
-								Name = _resource_Id.Name,
-								Size = _resource_Id.Size,
-								Path = _resource_Id.Path,
-								ContentType = _resource_Id.ContentType,
-								MD5 = _resource_Id.MD5,
-							},
-							Create_User=new UserViewModel
-							{
-								Id = _create_User_Id.Id,
-								Name = _create_User_Id.Name,
-								Account = _create_User_Id.Account,
-							},
-							Modify_User=new UserViewModel
-							{
-								Id = _modify_User_Id.Id,
-								Name = _modify_User_Id.Name,
-								Account = _modify_User_Id.Account,
-							},
+							Publush=Publush,
+							Resource=Resource,
+							Create_User=Create_User,
+							Modify_User=Modify_User,
 					};
 			return query;
 		}

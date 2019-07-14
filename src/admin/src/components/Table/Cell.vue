@@ -43,15 +43,15 @@ export default {
     ) {
       if (typeof EnumValues == "function") {
         EnumValues = EnumValues.call(this, this.model);
-        return h(SelectInput, {
-          props: {
-            value: this.val,
-            EnumValues,
-            disabled: true,
-            multiple: this.info.Type == "Array"
-          }
-        });
       }
+      return h(SelectInput, {
+        props: {
+          value: this.val,
+          values:EnumValues,
+          disabled: true,
+          multiple: this.info.Type == "Array"
+        }
+      });
     } else {
       return h("span", null, this.value);
     }

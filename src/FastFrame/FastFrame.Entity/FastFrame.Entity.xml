@@ -389,11 +389,6 @@
             发件人
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Chat.Email.Tenant_Id">
-            <summary>
-            组织
-            </summary>
-        </member>
         <member name="P:FastFrame.Entity.Chat.Email.Id">
             <summary>
             主键
@@ -562,11 +557,6 @@
         <member name="P:FastFrame.Entity.Chat.Message.Id">
             <summary>
             主键
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Chat.Message.Tenant_Id">
-            <summary>
-            组织
             </summary>
         </member>
         <member name="T:FastFrame.Entity.Chat.MessageTarget">

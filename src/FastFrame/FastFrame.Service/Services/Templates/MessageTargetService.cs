@@ -9,7 +9,7 @@ namespace FastFrame.Service.Services.Chat
 	using System.Linq; 
 	using Microsoft.EntityFrameworkCore; 
 	/// <summary>
-	///消息接收人 服务类 
+	///消息接收人 服务实现 
 	/// </summary>
 	public partial class MessageTargetService:BaseService<MessageTarget, MessageTargetDto>
 	{
@@ -26,8 +26,7 @@ namespace FastFrame.Service.Services.Chat
 		
 		protected override IQueryable<MessageTargetDto> QueryMain() 
 		{
-			var messageTargetQueryable=messageTargetRepository.Queryable;
-			 var query = from _messageTarget in messageTargetQueryable 
+			 var query = from _messageTarget in messageTargetRepository 
 						 select new MessageTargetDto
 						{
 							Message_Id=_messageTarget.Message_Id,

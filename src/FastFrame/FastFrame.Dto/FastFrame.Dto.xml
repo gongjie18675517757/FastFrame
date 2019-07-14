@@ -380,7 +380,7 @@
             标题 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.NotifyDto.Type_Id">
+        <member name="P:FastFrame.Dto.Basis.NotifyDto.Type_Value">
              <summary>
             类型 
              </summary>
@@ -615,7 +615,7 @@
             标题 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.NotifyViewModel.Type_Id">
+        <member name="P:FastFrame.Dto.Basis.NotifyViewModel.Type_Value">
              <summary>
             类型 
              </summary>

@@ -17,7 +17,7 @@ namespace FastFrame.Dto.Basis
 		/// <summary>
 		///类型 
 		/// </summary>
-		public string Type_Id {get;set;}
+		public string Type_Value {get;set;}
 		
 		/// <summary>
 		///发布人 

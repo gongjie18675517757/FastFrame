@@ -114,7 +114,7 @@
             标题
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Basis.Notify.Type_Id">
+        <member name="P:FastFrame.Entity.Basis.Notify.Type_Value">
             <summary>
             类型
             </summary>

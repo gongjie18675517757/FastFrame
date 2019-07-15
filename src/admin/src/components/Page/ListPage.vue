@@ -11,14 +11,13 @@
                 v-for="btn in items1"
                 :key="btn.key || btn.name"
                 :title="btn.title"
-                :color="btn.color"
                 :moduleName="moduleName"
                 :disabled="evalDisabled(btn)"
                 @click="evalAction(btn)"
-                small
+                color="primary"
                 flat
+                small
               >
-                <v-icon>{{btn.icon}}</v-icon>
                 <span>{{btn.title}}</span>
               </a-btn>
             </span>
@@ -26,7 +25,7 @@
             <v-menu offset-y :close-on-content-click="false">
               <v-btn
                 slot="activator"
-                title="设置"
+                title="更多"
                 small
                 flat
                 :color="$vuetify.breakpoint.smAndDown?'':'success'"
@@ -220,6 +219,8 @@ export default {
 .btn-group {
   .v-btn {
     margin: 1px;
+    // padding: 1px;
+    min-width: 50px;
   }
 
   button, html [type='button'], [type='reset'], [type='submit'] {

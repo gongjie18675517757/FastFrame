@@ -1,13 +1,4 @@
-<template>
-  <span>
-    <v-btn v-bind="$attrs" @click="handleClick" :disabled="evalDisabled" :title="evalTitle">
-      <slot></slot>
-    </v-btn>
-  </span>
-</template>
-
-<script>
- 
+ <script>
 export default {
   props: {
     name: String,
@@ -37,6 +28,22 @@ export default {
     handleClick($event) {
       this.$emit("click", $event);
     }
+  },
+  render(h) {
+    return h(
+      "v-btn",
+      {
+        props: {
+          ...this.$attrs,
+          disabled: this.evalDisabled,
+          title: this.evalTitle
+        },
+        on: {
+          click: () => this.handleClick()
+        }
+      },
+      [this.$slots.default]
+    );
   }
 };
 </script>

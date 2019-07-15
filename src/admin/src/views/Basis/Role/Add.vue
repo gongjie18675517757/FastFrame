@@ -54,6 +54,7 @@ const PermissionTable = {
       this.$message
         .dialog(() => import("@/components/Page/TreeSelect"), {
           title: "设置权限",
+          width: "500px",
           requestUrl: "/api/Permission/list",
           model: this.value.map(r => r.Id)
         })

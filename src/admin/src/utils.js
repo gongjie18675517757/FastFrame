@@ -430,3 +430,21 @@ export function distinct(arr = [], keyFunc = v => v, mergefunc = (a, b) => b) {
     }
     return Object.values(dic)
 }
+
+/**
+ * 跳过指定个数
+ * @param {*} arr 
+ * @param {*} skipCount 
+ */
+export function skip(arr = [], skipCount = 0) {
+    return arr.filter((_val, index) => index + 1 > skipCount)
+}
+
+/**
+ * 返回指定个数
+ * @param {*} arr 
+ * @param {*} takeCount 
+ */
+export function take(arr = [], takeCount = 0) {
+    return arr.filter((_val, index) => index < takeCount)
+}

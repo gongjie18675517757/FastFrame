@@ -3,7 +3,7 @@ let pageInfo = {
   area: "Basis",
   name: "User",
   direction: "用户",
-  childToolItems: [
+  toolItems: [
     {
       name: "ToogleAdminIdentity",
       title: "切换身份[管理员<>普通用户]",
@@ -47,9 +47,11 @@ import Page from "@/components/Page/ListPageCore.js";
 export default {
   ...Page,
   data() {
+    let data = Page.data.call(this);
     return {
-      ...Page.data.call(this),
-      ...pageInfo
+      ...data,
+      ...pageInfo,
+      toolItems: data.toolItems.concat(pageInfo.toolItems)
     };
   }
 };

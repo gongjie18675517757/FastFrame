@@ -238,6 +238,10 @@ export const FormDetailTable = {
  */
 export const SelectDetailTable = {
   ...FormDetailTable,
+  props: {
+    ...FormDetailTable.props,
+    dialogWidth: String
+  },
   computed: {
     ...FormDetailTable.computed,
     dynamicColumns() {
@@ -272,7 +276,9 @@ export const SelectDetailTable = {
   methods: {
     ...FormDetailTable.methods,
     add() {
-      this.$message.dialog(`${this.typeName}_List`).then(rows => {
+      this.$message.dialog(`${this.typeName}_List`, {
+        width: this.dialogWidth
+      }).then(rows => {
         return Promise.all(rows.map(v => this.frmFormFunc(v)))
       }).then(rows => {
         this.value.push(...rows)

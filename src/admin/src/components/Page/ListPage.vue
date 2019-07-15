@@ -8,11 +8,11 @@
             <v-spacer></v-spacer>
             <span class="hidden-sm-and-down btn-group">
               <a-btn
-                v-for="btn in baseToolItems"
+                v-for="btn in items1"
                 :key="btn.key || btn.name"
                 :title="btn.title"
                 :color="btn.color"
-                :moduleName="btn.moduleName"
+                :moduleName="moduleName"
                 :disabled="evalDisabled(btn)"
                 @click="evalAction(btn)"
                 small
@@ -37,11 +37,9 @@
               </v-btn>
               <v-list two-line dense expand>
                 <v-list-tile
-                  v-for="item in [...($vuetify.breakpoint.smAndDown?baseToolItems:[]),...childToolItems].filter(r=>evalShow(r))"
+                  v-for="item in [...($vuetify.breakpoint.smAndDown?items:items2)]"
                   :key="item.key || item.name"
                   :title="item.title"
-                  :moduleName="item.name"
-                  :name="item.name"
                   :disabled="evalDisabled(item)"
                   @click="evalAction(item)"
                 >
@@ -113,6 +111,7 @@
 import Cell from "@/components/Table/Cell.vue";
 import Table from "@/components/Table/DataTable.vue";
 import VuePerfectScrollbar from "vue-perfect-scrollbar";
+import { skip, take } from "@/utils";
 
 export default {
   components: {
@@ -121,14 +120,12 @@ export default {
     VuePerfectScrollbar
   },
   props: {
-    baseToolItems: {
+    toolItems: {
       type: Array,
       default: () => []
     },
-    childToolItems: {
-      type: Array,
-      default: () => []
-    },
+    toolSpliceCount: Number,
+    moduleName: String,
     direction: String,
     isDialog: Boolean,
     columns: {
@@ -162,6 +159,15 @@ export default {
         rows: this.rows
       };
     },
+    items() {
+      return this.toolItems.filter(this.evalVisible);
+    },
+    items1() {
+      return take(this.items, this.toolSpliceCount);
+    },
+    items2() {
+      return skip(this.items, this.toolSpliceCount);
+    },
     tableListenter() {
       return {
         ...this.$listeners,
@@ -178,25 +184,27 @@ export default {
     }
   },
   methods: {
-    evalShow({ show }) {
+    evalVisible({ visible }) {
       let val = true;
-      if (typeof show == "function") val = show.call(this, this.context);
-      if (typeof show == "boolean") val = show;
-      if (typeof show == "string") val = !!show;
+      if (typeof visible == "function") val = visible.call(this, this.context);
+      if (typeof visible == "boolean") val = visible;
+      if (typeof visible == "string") val = !!visible;
 
       return val;
     },
-    evalDisabled({ disabled }) {
+    evalDisabled({ disabled, name }) {
       let val = false;
       if (typeof disabled == "function")
         val = disabled.call(this, this.context);
       if (typeof disabled == "boolean") val = disabled;
       if (typeof disabled == "string") val = !!disabled;
 
-      return val;
+      return (
+        val || !this.$store.getters.existsPermission(this.moduleName, name)
+      );
     },
     evalAction(item) {
-      this.$emit(`toolItemClick`, item); 
+      this.$emit(`toolItemClick`, item);
     }
   },
   watch: {}

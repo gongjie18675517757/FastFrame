@@ -10,36 +10,28 @@
  /**
   * 按钮组1
   */
- export let makeCurdToolItems = function () {
+ export let makeToolItems = function () {
    return [{
        title: "新增",
        color: "success",
        name: "Add",
        icon: "add",
-       action: this.toEdit
+       action: this.toEdit,
+       visible: () => this.ModuleStrut.HasManage
      },
      {
        title: "修改",
        color: "warning",
        name: "Update",
        icon: "edit",
-       disabled({
-         selection
-       }) {
-         return selection.length != 1;
+       visible: () => this.ModuleStrut.HasManage,
+       disabled: () => {
+         let val = this.selection.length != 1;
+         return val;
        },
-       action() {
-         this.toEdit(this.selection[0])
-       }
-     }
-   ]
- }
-
- /**
-  * 按钮组2
-  */
- export let makeBaseToolItems = function () {
-   return [{
+       action: () => this.toEdit(this.selection[0])
+     },
+     {
        title: "搜索",
        color: "info",
        name: "List",
@@ -52,14 +44,9 @@
        color: "warning",
        name: "Delete",
        icon: "delete",
-       disabled({
-         selection
-       }) {
-         return selection.length == 0;
-       },
-       action() {
-         this.remove(this.selection)
-       }
+       visible: () => this.ModuleStrut.HasManage,
+       disabled: () => this.selection.length != 1,
+       action: () => this.remove(this.selection)
      },
      {
        title: "刷新",
@@ -67,7 +54,7 @@
        name: "List",
        key: "Refresh",
        icon: "refresh",
-       action() {
+       action: () => {
          this.query = []
          this.loadList()
        }
@@ -82,6 +69,8 @@
      }
    ]
  }
+
+
 
  /**
   * 要导入的依赖
@@ -104,9 +93,8 @@
   */
  export let makePageData = function () {
    return {
-     curdToolItems: makeCurdToolItems.call(this),
-     baseToolItems: makeBaseToolItems.call(this),
-     childToolItems: [],
+     toolItems: makeToolItems.call(this),
+     toolSpliceCount: 6,
      columns: [],
      rows: [],
      selection: [],
@@ -302,6 +290,12 @@
        }).catch(() => {
          this.loading = false;
        })
+   },
+   formatterToolItems(items) {
+     return distinct(items, v => v.name, (a, b) => ({
+       ...a,
+       ...b
+     }));
    }
  }
 
@@ -312,7 +306,7 @@
    return {
      ...this.$props,
      area: this.area,
-     name: this.name,
+     moduleName: this.name,
      direction: this.direction + '列表',
      columns: this.dynamicColumns,
      rows: this.rows,
@@ -322,17 +316,8 @@
      loading: this.loading,
      tableClassArr: this.tableClassArr,
      tableStyleObj: this.tableStyleObj,
-     baseToolItems: [
-       ...(this.ModuleStrut.HasManage ? this.curdToolItems : []),
-       ...this.baseToolItems
-     ].map(r => ({
-       ...r,
-       moduleName: this.name
-     })),
-     childToolItems: [...this.childToolItems].map(r => ({
-       ...r,
-       moduleName: this.name
-     })),
+     toolItems: this.formatterToolItems(this.toolItems),
+     toolSpliceCount:this.toolSpliceCount,
      ModuleStrut: this.ModuleStrut,
      isDialog: !!this.success,
      singleSelection: this.pars && this.pars.single,

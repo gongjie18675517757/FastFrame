@@ -194,7 +194,7 @@
          id: Id
        });
      } else {
-       this.$router.push(`/${this.name}/add?q=${Id}`);
+       this.$router.push(`/${this.name}/${Id}`);
      }
    },
    remove(arr = []) {

@@ -10,25 +10,55 @@ import {
 
 Vue.use(Router)
 
+let props = (route) => ({
+  ...route.query,
+  ...route.params
+})
 
 
 function loadAreas() {
-  return mapMany(areas, area => {
-    return mapMany(area.items, page => {
-      return page.items.map(item => {
-        return {
-          path: `/${page.name.toLowerCase()}/${item.name.toLowerCase()}`,
-          name: `${page.name}_${item.name}`.toLowerCase(),
+  return mapMany(areas, ({
+    name,
+    items
+  }) => {
+    return mapMany(Object.entries(items), ([key, val]) => {
+      return [{
+          path: `/${key.toLowerCase()}/list`,
+          name: `${key}_List`.toLowerCase(),
           meta: {
-            title: `${item.name == 'List'?'':'新增'}${page.title}${item.name == 'List'?'列表':''}`,
-            keepAlive: item.name == 'List',
-            moduleName: page.name,
-            pageName: item.name == 'List' ? 'List' : 'Get'
+            title: `${val}列表`,
+            keepAlive: true,
+            moduleName: key,
+            pageName: 'List'
           },
           component: () =>
-            import(`@/views/${area.name}/${page.name}/${item.name}.vue`)
+            import(`@/views/${name}/${key}/List.vue`)
+        },
+        {
+          path: `/${key.toLowerCase()}/add`,
+          name: `${key}_Add`.toLowerCase(),
+          meta: {
+            title: `添加${val}`,
+            keepAlive: false,
+            moduleName: key,
+            pageName: 'Add'
+          },
+          component: () =>
+            import(`@/views/${name}/${key}/Add.vue`)
+        },
+        {
+          path: `/${key.toLowerCase()}/:id`,
+          name: `${key}`.toLowerCase(),
+          meta: {
+            title: `修改${val}`,
+            keepAlive: false,
+            moduleName: key,
+            pageName: 'Get'
+          },
+          component: () =>
+            import(`@/views/${name}/${key}/Add.vue`)
         }
-      })
+      ]
     })
   })
 }
@@ -120,7 +150,10 @@ let routes = [{
           import(`./views/Index/NotifyCenter`)
       },
       ...childs
-    ]
+    ].map(v => ({
+      ...v,
+      props
+    }))
   },
   {
     path: '/login',
@@ -160,7 +193,13 @@ let router = new Router({
   routes
 })
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to, from, nextFunc) => {
+  let next = () => {
+    if (routes[0].children.find(v => v.name == to.name)) {
+      
+    }
+    nextFunc()
+  }
   store.getters.getSiteNameAsync().then(({
     FullName = ""
   }) => {

@@ -147,12 +147,7 @@ export default {
   },
   data() {
     return {};
-  },
-  watch: {
-    $route: function() {
-      this.$emit("reload");
-    }
-  },
+  }, 
   computed: {
     flex() {
       if (!this.singleLine) {

@@ -24,7 +24,8 @@ export let formProps = {
   success: Function,
   close: Function,
   pars: Object,
-  isDialog: Boolean
+  isDialog: Boolean,
+  id: String
 };
 
 /**
@@ -72,16 +73,6 @@ export let formData = {
  * 计算属性
  */
 export let formComputed = {
-  id() {
-    if (this.pars) {
-      return this.pars.id;
-    } else {
-      let {
-        q: id
-      } = this.$route.query;
-      return id;
-    }
-  },
   title() {
     if (this.canEdit && this.id) {
       return `修改${this.direction}`;
@@ -279,6 +270,17 @@ export let formMethods = {
 }
 
 /**
+ * 页面观察属性
+ */
+export let formWatch = {
+  id(val) {
+    if (val != this.form.Id) {
+      this.init()
+    }
+  }
+}
+
+/**
  * 生成传递给子组件的参数
  */
 export let makeChildProps = function () {
@@ -363,6 +365,9 @@ export default {
   },
   computed: {
     ...formComputed
+  },
+  watch: {
+    ...formWatch
   },
   methods: {
     ...formMethods

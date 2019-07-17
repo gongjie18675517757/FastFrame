@@ -7,21 +7,72 @@ import {
 } from '@/utils'
 Vue.use(Vuex)
 
+
+
 export default new Vuex.Store({
   state: {
+    /**
+     * 是否使用单页签模式
+     */
+    singlePageMode: true,
+
+    /**
+     * 当前登陆用户
+     */
     currUser: {},
+
+    /**
+     * 当前企业
+     */
     tenant: {},
 
+    /**
+     * 是否已加载权限
+     */
     isLoadPermission: false,
+
+    /**
+     * 权限列表
+     */
     permissionList: [],
+
+    /**
+     * 左边菜单栏是否显示
+     */
     leftDrawer: true,
+
+    /**
+     * 右边菜单栏是否显示
+     */
     rightDrawer: false,
+    /**
+     * 使用弹窗模式
+     */
     dialogMode: false,
-    singlePageMode: true,
+  
+    /**
+     * 地图模式[百度/谷歌]
+     */
     mapMode: '',
+
+    /**
+     * 通知列表
+     */
     notifys: [],
+
+    /**
+     * 弹窗列表
+     */
     dialogs: [],
+
+    /**
+     * 好友消息
+     */
     friendMsgs: [],
+
+    /**
+     * 所有数据字典
+     */
     enumItemValues: {}
   },
   mutations: {

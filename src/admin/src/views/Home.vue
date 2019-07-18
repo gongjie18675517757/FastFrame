@@ -1,9 +1,9 @@
 <template>
   <v-app color="primary" fixed :dark="$vuetify.dark" app>
-    <Menus/>
-    <Toolbar :title="title"/>
+    <Menus />
+    <Toolbar :title="title" />
     <v-content>
-      <v-fade-transition mode="out-in">
+      <v-fade-transition mode="out-in" v-if="$store.state.singlePageMode">
         <div>
           <keep-alive>
             <router-view v-if="$route.meta.keepAlive && resufreshed"></router-view>
@@ -11,9 +11,11 @@
           <router-view v-if="!$route.meta.keepAlive && resufreshed"></router-view>
         </div>
       </v-fade-transition>
-      <!-- <router-view></router-view> -->
+      <div v-else>
+        
+      </div>
     </v-content>
-    <Setting/>
+    <Setting />
     <v-footer :fixed="fixed" app inset>
       <span>&copy; 2017</span>
     </v-footer>
@@ -24,7 +26,6 @@
 import Setting from "@/components/Setting.vue";
 import Menus from "@/components/Menus.vue";
 import Toolbar from "@/components/Toolbar.vue";
- 
 
 export default {
   components: {
@@ -40,16 +41,7 @@ export default {
   data() {
     return {
       fixed: false,
-      resufreshed: true,
-      activePage: null,
-      pages: [
-        {
-          key: new Date().getTime().toString(),
-          src: "@/views/Index/Index.vue",
-          title: "首页",
-          canClose: false
-        }
-      ]
+      resufreshed: true
     };
   },
   computed: {
@@ -60,9 +52,7 @@ export default {
       return this.$store.state.singlePageMode;
     }
   },
-  created() { 
-    
-  },
+  created() {},
   methods: {
     resufresh() {
       this.resufreshed = false;

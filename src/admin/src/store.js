@@ -7,14 +7,22 @@ import {
 } from '@/utils'
 Vue.use(Vuex)
 
-
-
 export default new Vuex.Store({
   state: {
     /**
      * 是否使用单页签模式
      */
     singlePageMode: true,
+
+    /**
+     * 多页内容
+     */
+    pages: [],
+
+    /**
+     * 当前页
+     */
+    currPageFullPath: null,
 
     /**
      * 当前登陆用户
@@ -49,7 +57,7 @@ export default new Vuex.Store({
      * 使用弹窗模式
      */
     dialogMode: false,
-  
+
     /**
      * 地图模式[百度/谷歌]
      */
@@ -118,6 +126,40 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    /**
+     * 添加页
+     * @param {*} param0 
+     * @param {*} page 
+     */
+    addPage({
+      state
+    }, page) {
+      if (!state.pages.find(v => v.fullPath == page.fullPath)) {
+        state.pages.push({
+          ...page,
+          closeable: true
+        });
+      }
+      state.currPageFullPath = page.fullPath;
+    },
+    /**
+     * 关闭页
+     * @param {*} param0 
+     * @param {*} fullPath 
+     */
+    closePage({
+      state
+    }, fullPath) {
+      let index = state.pages.find(v => v.fullPath == fullPath);
+      if (index.length > -1) {
+        let page = state.pages[index]
+        if (page.closeable) {
+          page = state.pages[index - 1];
+          state.currPageFullPath = page.fullPath;
+          state.pages.splice(index, 1)
+        }
+      }
+    },
     login({
       commit,
       state

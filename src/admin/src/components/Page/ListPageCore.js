@@ -182,11 +182,11 @@
    DataAdded(item) {
      this.rows.splice(0, 0, item);
    },
-   toEdit({
-     Id = ""
-   } = {}) {
+   toEdit(model) {
+     model = model || {}
+     let Id = model.Id || ''
      if (
-       this.success ||
+       this.isDialog ||
        this.dialogMode ||
        this.$vuetify.breakpoint.smAndDown
      ) {
@@ -194,7 +194,10 @@
          id: Id
        });
      } else {
-       this.$router.push(`/${this.name}/${Id}`);
+       if (Id)
+         this.$router.push(`/${this.name}/${Id}`);
+       else
+         this.$router.push(`/${this.name}/Add`);
      }
    },
    remove(arr = []) {
@@ -317,9 +320,9 @@
      tableClassArr: this.tableClassArr,
      tableStyleObj: this.tableStyleObj,
      toolItems: this.formatterToolItems(this.toolItems),
-     toolSpliceCount:this.toolSpliceCount,
+     toolSpliceCount: this.toolSpliceCount,
      ModuleStrut: this.ModuleStrut,
-     isDialog: !!this.success,
+     isDialog: this.isDialog,
      singleSelection: this.pars && this.pars.single,
      ...this.props
    };

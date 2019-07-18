@@ -62,6 +62,7 @@ function loadAreas() {
     })
   })
 }
+
 let childs = loadAreas()
 
 /**
@@ -194,9 +195,19 @@ let router = new Router({
 })
 
 router.beforeEach(async (to, from, nextFunc) => {
-  let next = () => {
-    if (routes[0].children.find(v => v.name == to.name)) {
-      
+  let next = store.state.singlePageMode ? nextFunc : () => {
+    let route = routes[0].children.find(v => v.name == to.name)
+    if (route) {
+      let page = {
+        fullPath: to.fullPath,
+        title: to.meta.title,
+        pars: {
+          ...to.query,
+          ...to.params
+        },
+        component: route.component
+      }
+      store.dispatch('addPage', page)
     }
     nextFunc()
   }

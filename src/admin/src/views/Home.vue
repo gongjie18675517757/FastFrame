@@ -11,9 +11,15 @@
           <router-view v-if="!$route.meta.keepAlive && resufreshed"></router-view>
         </div>
       </v-fade-transition>
-      <div v-else>
-        
-      </div>
+      <v-tabs v-else>
+        <v-tab v-for="n in 3" :key="n">
+          Item {{ n }}
+          <v-spacer></v-spacer>
+          <v-btn flat icon>
+            <v-icon>close</v-icon>
+          </v-btn>
+        </v-tab>
+      </v-tabs>
     </v-content>
     <Setting />
     <v-footer :fixed="fixed" app inset>
@@ -77,5 +83,9 @@ body {
   padding: 5px;
 }
 </style>
+<style>
+ 
+</style>
+
 
  

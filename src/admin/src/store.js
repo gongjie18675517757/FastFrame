@@ -12,7 +12,7 @@ export default new Vuex.Store({
     /**
      * 是否使用单页签模式
      */
-    singlePageMode: true,
+    singlePageMode: false,
 
     /**
      * 多页内容

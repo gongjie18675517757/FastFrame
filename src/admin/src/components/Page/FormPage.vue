@@ -55,7 +55,7 @@
           <v-divider></v-divider>
           <v-form ref="form">
             <v-card-text class="form-content">
-              <vue-perfect-scrollbar :class="[!isDialog?'fullPage':'dialogPage','form-page']">
+              <div :class="[!isDialog?'fullPage':'dialogPage','form-page']">
                 <template v-for="group in formGroups">
                   <v-flex :key="group.key.title" xs12>
                     <v-card v-if="group.values.length>1" tile>
@@ -97,7 +97,7 @@
                     />
                   </v-flex>
                 </template>
-              </vue-perfect-scrollbar>
+              </div>
             </v-card-text>
           </v-form>
 

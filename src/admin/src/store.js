@@ -17,12 +17,18 @@ export default new Vuex.Store({
     /**
      * 多页内容
      */
-    pages: [],
+    pages: [{
+      fullPath: '/',
+      title: '首页',
+      pars: {},
+      component: () =>
+        import(`@/views/Index/Index.vue`)
+    }],
 
     /**
      * 当前页
      */
-    currPageFullPath: null,
+    currPageFullPath: '/',
 
     /**
      * 当前登陆用户
@@ -150,11 +156,11 @@ export default new Vuex.Store({
     closePage({
       state
     }, fullPath) {
-      let index = state.pages.find(v => v.fullPath == fullPath);
-      if (index.length > -1) {
+      let index = state.pages.findIndex(v => v.fullPath == fullPath);
+      if (index > -1) {
         let page = state.pages[index]
         if (page.closeable) {
-          page = state.pages[index - 1];
+          page = state.pages[state.pages.length - 1];
           state.currPageFullPath = page.fullPath;
           state.pages.splice(index, 1)
         }

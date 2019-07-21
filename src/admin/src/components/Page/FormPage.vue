@@ -47,7 +47,7 @@
                   </v-list-tile>
                 </v-list>
               </v-menu>
-              <v-btn icon @click="$emit('cancel')" title="关闭" v-if="isDialog">
+              <v-btn icon @click="$emit('close')" title="关闭" v-if="isDialog">
                 <v-icon>close</v-icon>
               </v-btn>
             </v-toolbar-items>
@@ -55,7 +55,7 @@
           <v-divider></v-divider>
           <v-form ref="form">
             <v-card-text class="form-content">
-              <div :class="[!isDialog?'fullPage':'dialogPage','form-page']">
+              <div :class="[isDialog?'dialogPage':isTab?'tabPage':'fullPage','form-page']">
                 <template v-for="group in formGroups">
                   <v-flex :key="group.key.title" xs12>
                     <v-card v-if="group.values.length>1" tile>
@@ -102,7 +102,7 @@
           </v-form>
 
           <v-card-actions>
-            <v-btn flat @click="$emit('cancel')">取消</v-btn>
+            <v-btn flat @click="$emit('close')">取消</v-btn>
             <v-spacer></v-spacer>
             <v-btn
               v-if="hasManage && canEdit && changed"
@@ -130,6 +130,7 @@ export default {
   inject: ["reload"],
   props: {
     isDialog: Boolean,
+    isTab: Boolean,
     title: String,
     id: String,
     name: String,
@@ -147,7 +148,7 @@ export default {
   },
   data() {
     return {};
-  }, 
+  },
   computed: {
     flex() {
       if (!this.singleLine) {
@@ -202,6 +203,11 @@ export default {
 
 .fullPage {
   height: calc(100vh - 225px);
+  overflow: auto;
+}
+
+.tabPage {
+  height: calc(100vh - 266px);
   overflow: auto;
 }
 

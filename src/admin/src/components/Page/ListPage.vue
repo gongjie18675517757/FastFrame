@@ -79,7 +79,7 @@
           </v-toolbar>
           <v-divider></v-divider>
           <v-card-text class="pa-0">
-            <vue-perfect-scrollbar :class="[isDialog?'dialog-page':'full-page']">
+            <vue-perfect-scrollbar :class="[isDialog?'dialog-page':isTab?'tab-page':'full-page']">
               <Table
                 :items="rows"
                 :totalItems="total"
@@ -127,6 +127,7 @@ export default {
     moduleName: String,
     direction: String,
     isDialog: Boolean,
+    isTab: Boolean,
     columns: {
       type: Array,
       default: () => []
@@ -236,7 +237,10 @@ export default {
   height: calc(100vh - 140px);
   overflow: auto;
 }
-
+.tab-page {
+  height: calc(100vh - 200px);
+  overflow: auto;
+}
 .dialog-page {
   height: calc(100vh - 255px);
   overflow: auto;

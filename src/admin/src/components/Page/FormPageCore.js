@@ -21,8 +21,6 @@ export let formInject = []
  * 生成参数
  */
 export let formProps = {
-  success: Function,
-  close: Function,
   pars: Object,
   isDialog: Boolean,
   id: String
@@ -172,7 +170,7 @@ export let formMethods = {
   },
   DataDeleted() {
     this.$message.alert("提示", "当前内容已被其它人删除!").then(() => {
-      this.cancel();
+      this.close();
     });
   },
   getRequestUrl(id) {
@@ -252,17 +250,20 @@ export let formMethods = {
     }
   },
   goList(data) {
-    if (this.isDialog) {
+    if (this.isTab) {
+      this.$router.push(`/${this.name}/list`);
+    } else if (this.isDialog) {
       this.$emit("success", data);
-      this.success(data);
     } else {
       this.$router.push(`/${this.name}/list`);
     }
   },
-  cancel() {
+  close() {
+    if (this.isTab) {
+      this.$emit("close");
+    }
     if (this.isDialog) {
       this.$emit("close");
-      this.close();
     } else {
       this.goList();
     }
@@ -310,8 +311,7 @@ export let makeChildProps = function () {
  */
 export let makeChildListeners = function () {
   return {
-    ...this.$listeners,
-    cancel: this.cancel,
+    ...this.$listeners,   
     'tooggle:canEdit': () => this.canEdit = !this.canEdit,
     'tooggle:changed': () => this.changed = true,
     'toggle:singleLine': () => (this.singleLine = !this.singleLine),

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import $http from '@/http'
+import router from '@/router'
 import {
   sleep,
   eventBus
@@ -22,7 +23,8 @@ export default new Vuex.Store({
       title: '首页',
       pars: {},
       component: () =>
-        import(`@/views/Index/Index.vue`)
+        import(`@/views/Index/Index.vue`),
+      lastTime: new Date().getTime()
     }],
 
     /**
@@ -143,9 +145,11 @@ export default new Vuex.Store({
       if (!state.pages.find(v => v.fullPath == page.fullPath)) {
         state.pages.push({
           ...page,
-          closeable: true
+          closeable: true,
+          lastTime: new Date().getTime()
         });
       }
+      state.lastTime = new Date().getTime()
       state.currPageFullPath = page.fullPath;
     },
     /**
@@ -160,9 +164,13 @@ export default new Vuex.Store({
       if (index > -1) {
         let page = state.pages[index]
         if (page.closeable) {
-          page = state.pages[state.pages.length - 1];
-          state.currPageFullPath = page.fullPath;
           state.pages.splice(index, 1)
+          if (state.currPageFullPath == fullPath) {
+            let pages = [...state.pages]
+            pages.sort((a, b) => a.lastTime - b.lastTime)
+            page = pages[pages.length - 1];
+            router.push(page.fullPath);
+          }
         }
       }
     },

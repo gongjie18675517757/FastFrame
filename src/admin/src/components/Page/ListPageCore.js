@@ -80,11 +80,10 @@
  /**
   * 生成参数
   */
- export let pageProps = {
-   success: Function,
-   close: Function,
+ export let pageProps = {    
    pars: Object,
-   isDialog: Boolean
+   isDialog: Boolean,
+   isTab: Boolean
  };
 
 
@@ -146,7 +145,8 @@
          Type: 'DateTime',
        }
      ] : [])]
-   }
+   },
+
  }
 
  /**
@@ -323,6 +323,7 @@
      toolSpliceCount: this.toolSpliceCount,
      ModuleStrut: this.ModuleStrut,
      isDialog: this.isDialog,
+     isTab: this.isTab,
      singleSelection: this.pars && this.pars.single,
      ...this.props
    };
@@ -337,7 +338,6 @@
      success: () => {
        let pars = this.selection;
        this.$emit("success", pars);
-       if (typeof this.success == "function") this.success(pars);
      },
      selection_update: val => (this.selection = val),
      loadList: this.loadList,

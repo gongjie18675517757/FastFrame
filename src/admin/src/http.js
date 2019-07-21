@@ -17,8 +17,8 @@ function frmPostData(data) {
   } else if (typeof data == 'object') {
     let keys = Object.keys(data)
     keys = keys.filter(v => /_Id$/.test(v))
-    for (const key of keys) {
-      key = key.replace(/_Id$/, '')
+    for (const keyName of keys) {
+      let key = keyName.replace(/_Id$/, '')
       delete data[key]
     }
   }

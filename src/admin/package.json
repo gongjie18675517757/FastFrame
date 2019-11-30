@@ -10,7 +10,7 @@
   "dependencies": {
     "@aspnet/signalr": "^1.1.2",
     "@babel/polyfill": "^7.2.5",
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "material-design-icons-iconfont": "^3.0.3",
     "roboto-fontface": "*",
     "vue": "^2.6.8",

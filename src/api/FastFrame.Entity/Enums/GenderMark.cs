@@ -12,11 +12,11 @@ namespace FastFrame.Entity.Enums
         /// <summary>
         /// 男
         /// </summary>
-        Man=0,
+        Man = 0,
 
         /// <summary>
         /// 女
         /// </summary>
-        WoMan=1
+        WoMan = 1
     }
 }

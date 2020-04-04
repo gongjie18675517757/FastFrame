@@ -27,7 +27,7 @@ namespace FastFrame.Dto.Basis
 		/// <summary>
 		///上级 
 		/// </summary>
-		public string Parent_Id {get;set;}
+		public string Super_Id {get;set;}
 		
 		/// <summary>
 		///是否可发展下级 

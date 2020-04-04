@@ -6,10 +6,9 @@ namespace FastFrame.Entity.Basis
     /// <summary>
     /// 权限
     /// </summary> 
-    [Export]
-    [Tree(nameof(Super_Id))]
-    [RelatedField(nameof(Name), nameof(EnCode))]
-    public class Permission : IEntity,IHasTenant
+    [Export] 
+    [RelatedField(nameof(Name))]
+    public class Permission : IEntity, IHasTenant, ITreeEntity
     {
         /// <summary>
         /// 名称
@@ -27,7 +26,7 @@ namespace FastFrame.Entity.Basis
         /// 区域
         /// </summary>
         [StringLength(50), Required]
-        public string AreaName { get; set; } 
+        public string AreaName { get; set; }
 
         /// <summary>
         /// 父级
@@ -38,6 +37,6 @@ namespace FastFrame.Entity.Basis
         /// <summary>
         /// 主键
         /// </summary>
-        public string Id { get; set; } 
+        public string Id { get; set; }
     }
 }

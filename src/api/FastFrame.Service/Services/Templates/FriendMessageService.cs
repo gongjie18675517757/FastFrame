@@ -8,6 +8,7 @@ namespace FastFrame.Service.Services.Chat
 	using FastFrame.Entity.Basis; 
 	using System.Linq; 
 	using Microsoft.EntityFrameworkCore; 
+	using System.Threading.Tasks; 
 	/// <summary>
 	///好友消息 服务实现 
 	/// </summary>
@@ -26,7 +27,7 @@ namespace FastFrame.Service.Services.Chat
 		
 		protected override IQueryable<FriendMessageDto> QueryMain() 
 		{
-			 var query = from _friendMessage in friendMessageRepository 
+			var query = from _friendMessage in friendMessageRepository 
 						 select new FriendMessageDto
 						{
 							Content=_friendMessage.Content,
@@ -37,6 +38,15 @@ namespace FastFrame.Service.Services.Chat
 							Id=_friendMessage.Id,
 					};
 			return query;
+		}
+		protected  Task<PageList<FriendMessageViewModel>> ViewModelListAsync(PagePara page) 
+		{
+			var query = from _friendMessage in friendMessageRepository 
+						select new FriendMessageViewModel
+						{
+							Id = _friendMessage.Id,
+						};
+			return query.PageListAsync(page);
 		}
 		
 	}

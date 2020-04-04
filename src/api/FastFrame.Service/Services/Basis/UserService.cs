@@ -5,6 +5,8 @@ using FastFrame.Infrastructure.EventBus;
 using FastFrame.Infrastructure.Interface;
 using FastFrame.Repository;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FastFrame.Service.Services.Basis
@@ -86,6 +88,27 @@ namespace FastFrame.Service.Services.Basis
             await userRepository.CommmitAsync();
 
             return await GetAsync(id);
+        }
+
+        protected override async Task OnGeting(UserDto dto)
+        {
+            await base.OnGeting(dto);
+            dto.Roles = await EventBus.TriggerRequestAsync<RoleViewModel[], string>(dto.Id);
+            dto.Depts = await EventBus.TriggerRequestAsync<DeptViewModel[], string>(dto.Id);
+        }
+
+        protected override async Task OnGetListing(IEnumerable<UserDto> dtos)
+        {
+            await base.OnGetListing(dtos);
+            var keys = dtos.Select(v => v.Id).ToArray();
+
+            var roleMaps = await EventBus.TriggerRequestAsync<IEnumerable<KeyValuePair<string, RoleViewModel[]>>, string[]>(keys);
+            var deptMaps = await EventBus.TriggerRequestAsync<IEnumerable<KeyValuePair<string, DeptViewModel[]>>, string[]>(keys);
+            foreach (var item in dtos)
+            {
+                item.Roles = roleMaps.Where(v => v.Key == item.Id).SelectMany(v => v.Value);
+                item.Depts= deptMaps.Where(v => v.Key == item.Id).SelectMany(v => v.Value);
+            }
         }
     }
 }

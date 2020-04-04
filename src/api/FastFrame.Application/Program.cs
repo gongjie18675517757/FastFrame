@@ -1,27 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
+﻿using AspectCore.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Hosting;
 
 namespace FastFrame.Application
 {
     public class Program
     {
         public static void Main(string[] args)
-        { 
-            CreateWebHostBuilder(args).Build().Run();
+        {
+            CreateHostBuilder(args).Build().Run();
         }
 
-     
-
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseIIS()
-                .UseStartup<Startup>();
-    }
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+             Host.CreateDefaultBuilder(args)
+                 /*替换成AspectCore的容器实现，性能更高*/
+                 .UseServiceProviderFactory(new ServiceContextProviderFactory())      
+                 .ConfigureWebHostDefaults(webBuilder =>
+                   {
+                       webBuilder.UseStartup<Startup>();
+                   });
+    } 
 }

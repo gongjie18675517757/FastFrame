@@ -14,57 +14,68 @@ namespace FastFrame.Database.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
+                .HasAnnotation("ProductVersion", "3.1.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("FastFrame.Entity.Basis.Dept", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnName("id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<DateTime>("CreateTime")
-                        .HasColumnName("createtime");
+                        .HasColumnName("createtime")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Create_User_Id")
                         .HasColumnName("create_user_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("EnCode")
                         .IsRequired()
                         .HasColumnName("encode")
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
                         .HasMaxLength(50)
                         .IsUnicode(true);
 
                     b.Property<DateTime>("ModifyTime")
-                        .HasColumnName("modifytime");
+                        .HasColumnName("modifytime")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Modify_User_Id")
                         .HasColumnName("modify_user_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnName("name")
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
                         .HasMaxLength(50)
                         .IsUnicode(true);
 
                     b.Property<string>("Super_Id")
                         .HasColumnName("super_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("Supervisor_Id")
                         .HasColumnName("supervisor_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
-                    b.Property<bool>("isdeleted");
+                    b.Property<bool>("isdeleted")
+                        .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("tenant_id");
+                    b.Property<string>("tenant_id")
+                        .HasColumnType("varchar(95) CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 
@@ -80,6 +91,12 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("Supervisor_Id")
                         .HasName("Index_Dept_Supervisor_Id");
 
+                    b.HasIndex("isdeleted")
+                        .HasName("Index_Dept_isdeleted");
+
+                    b.HasIndex("tenant_id")
+                        .HasName("Index_Dept_tenant_id");
+
                     b.ToTable("basis_dept");
                 });
 
@@ -87,21 +104,25 @@ namespace FastFrame.Database.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnName("id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("Dept_Id")
                         .IsRequired()
                         .HasColumnName("dept_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<bool>("IsManager")
-                        .HasColumnName("ismanager");
+                        .HasColumnName("ismanager")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("User_Id")
                         .IsRequired()
                         .HasColumnName("user_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
@@ -120,44 +141,54 @@ namespace FastFrame.Database.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnName("id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<DateTime>("CreateTime")
-                        .HasColumnName("createtime");
+                        .HasColumnName("createtime")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Create_User_Id")
                         .HasColumnName("create_user_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("Key")
                         .IsRequired()
                         .HasColumnName("key")
-                        .HasMaxLength(100);
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
+                        .HasMaxLength(50);
 
                     b.Property<DateTime>("ModifyTime")
-                        .HasColumnName("modifytime");
+                        .HasColumnName("modifytime")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Modify_User_Id")
                         .HasColumnName("modify_user_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("Super_Id")
                         .HasColumnName("super_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("Value")
                         .IsRequired()
                         .HasColumnName("value")
+                        .HasColumnType("varchar(150) CHARACTER SET utf8mb4")
                         .HasMaxLength(150)
                         .IsUnicode(true);
 
-                    b.Property<bool>("isdeleted");
+                    b.Property<bool>("isdeleted")
+                        .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("tenant_id");
+                    b.Property<string>("tenant_id")
+                        .HasColumnType("varchar(95) CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 
@@ -170,6 +201,12 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("Super_Id")
                         .HasName("Index_EnumItem_Super_Id");
 
+                    b.HasIndex("isdeleted")
+                        .HasName("Index_EnumItem_isdeleted");
+
+                    b.HasIndex("tenant_id")
+                        .HasName("Index_EnumItem_tenant_id");
+
                     b.ToTable("basis_enumitem");
                 });
 
@@ -177,57 +214,70 @@ namespace FastFrame.Database.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnName("id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("ContentType")
                         .HasColumnName("contenttype")
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
                         .HasMaxLength(50)
                         .IsUnicode(true);
 
                     b.Property<DateTime>("CreateTime")
-                        .HasColumnName("createtime");
+                        .HasColumnName("createtime")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Create_User_Id")
                         .HasColumnName("create_user_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("Href")
                         .HasColumnName("href")
+                        .HasColumnType("varchar(200) CHARACTER SET utf8mb4")
                         .HasMaxLength(200)
                         .IsUnicode(true);
 
                     b.Property<bool>("IsFolder")
-                        .HasColumnName("isfolder");
+                        .HasColumnName("isfolder")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime>("ModifyTime")
-                        .HasColumnName("modifytime");
+                        .HasColumnName("modifytime")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Modify_User_Id")
                         .HasColumnName("modify_user_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnName("name")
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
                         .HasMaxLength(50)
-                        .IsUnicode(true);
-
-                    b.Property<string>("Parent_Id")
-                        .HasColumnName("parent_id")
-                        .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("Resource_Id")
                         .HasColumnName("resource_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
-                    b.Property<bool>("isdeleted");
+                    b.Property<string>("Super_Id")
+                        .HasColumnName("super_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
+                        .HasMaxLength(25)
+                        .IsUnicode(true);
 
-                    b.Property<string>("tenant_id");
+                    b.Property<bool>("isdeleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("tenant_id")
+                        .HasColumnType("varchar(95) CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 
@@ -237,11 +287,17 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("Modify_User_Id")
                         .HasName("Index_Meidia_Modify_User_Id");
 
-                    b.HasIndex("Parent_Id")
-                        .HasName("Index_Meidia_Parent_Id");
-
                     b.HasIndex("Resource_Id")
                         .HasName("Index_Meidia_Resource_Id");
+
+                    b.HasIndex("Super_Id")
+                        .HasName("Index_Meidia_Super_Id");
+
+                    b.HasIndex("isdeleted")
+                        .HasName("Index_Meidia_isdeleted");
+
+                    b.HasIndex("tenant_id")
+                        .HasName("Index_Meidia_tenant_id");
 
                     b.ToTable("basis_meidia");
                 });
@@ -250,55 +306,67 @@ namespace FastFrame.Database.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnName("id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnName("content")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4")
                         .HasMaxLength(8000)
                         .IsUnicode(true);
 
                     b.Property<DateTime>("CreateTime")
-                        .HasColumnName("createtime");
+                        .HasColumnName("createtime")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Create_User_Id")
                         .HasColumnName("create_user_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<DateTime>("ModifyTime")
-                        .HasColumnName("modifytime");
+                        .HasColumnName("modifytime")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Modify_User_Id")
                         .HasColumnName("modify_user_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("Publush_Id")
                         .HasColumnName("publush_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("Resource_Id")
                         .HasColumnName("resource_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnName("title")
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
                         .HasMaxLength(50)
                         .IsUnicode(true);
 
-                    b.Property<string>("Type_Value")
-                        .HasColumnName("type_value")
-                        .HasMaxLength(200)
+                    b.Property<string>("Type_Id")
+                        .HasColumnName("type_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
+                        .HasMaxLength(25)
                         .IsUnicode(true);
 
-                    b.Property<bool>("isdeleted");
+                    b.Property<bool>("isdeleted")
+                        .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("tenant_id");
+                    b.Property<string>("tenant_id")
+                        .HasColumnType("varchar(95) CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 
@@ -314,77 +382,63 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("Resource_Id")
                         .HasName("Index_Notify_Resource_Id");
 
+                    b.HasIndex("Type_Id")
+                        .HasName("Index_Notify_Type_Id");
+
+                    b.HasIndex("isdeleted")
+                        .HasName("Index_Notify_isdeleted");
+
+                    b.HasIndex("tenant_id")
+                        .HasName("Index_Notify_tenant_id");
+
                     b.ToTable("basis_notify");
-                });
-
-            modelBuilder.Entity("FastFrame.Entity.Basis.NotifyTarget", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnName("id")
-                        .HasMaxLength(25)
-                        .IsUnicode(true);
-
-                    b.Property<bool>("HaveRead")
-                        .HasColumnName("haveread");
-
-                    b.Property<string>("Notify_Id")
-                        .IsRequired()
-                        .HasColumnName("notify_id")
-                        .HasMaxLength(25)
-                        .IsUnicode(true);
-
-                    b.Property<string>("To_Id")
-                        .HasColumnName("to_id")
-                        .HasMaxLength(25)
-                        .IsUnicode(true);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Notify_Id")
-                        .HasName("Index_NotifyTarget_Notify_Id");
-
-                    b.HasIndex("To_Id")
-                        .HasName("Index_NotifyTarget_To_Id");
-
-                    b.ToTable("basis_notifytarget");
                 });
 
             modelBuilder.Entity("FastFrame.Entity.Basis.Permission", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnName("id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("AreaName")
                         .IsRequired()
                         .HasColumnName("areaname")
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
                         .HasMaxLength(50)
                         .IsUnicode(true);
 
                     b.Property<string>("EnCode")
                         .IsRequired()
                         .HasColumnName("encode")
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
                         .HasMaxLength(50)
                         .IsUnicode(true);
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnName("name")
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
                         .HasMaxLength(50)
                         .IsUnicode(true);
 
                     b.Property<string>("Super_Id")
                         .HasColumnName("super_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
-                    b.Property<string>("tenant_id");
+                    b.Property<string>("tenant_id")
+                        .HasColumnType("varchar(95) CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Super_Id")
                         .HasName("Index_Permission_Super_Id");
+
+                    b.HasIndex("tenant_id")
+                        .HasName("Index_Permission_tenant_id");
 
                     b.ToTable("basis_permission");
                 });
@@ -393,35 +447,57 @@ namespace FastFrame.Database.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnName("id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("ContentType")
                         .HasColumnName("contenttype")
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
                         .HasMaxLength(50)
                         .IsUnicode(true);
 
                     b.Property<string>("MD5")
                         .HasColumnName("md5")
-                        .HasMaxLength(200)
+                        .HasColumnType("longtext CHARACTER SET utf8mb4")
                         .IsUnicode(true);
 
                     b.Property<string>("Name")
                         .HasColumnName("name")
+                        .HasColumnType("varchar(150) CHARACTER SET utf8mb4")
                         .HasMaxLength(150)
                         .IsUnicode(true);
 
                     b.Property<string>("Path")
                         .HasColumnName("path")
+                        .HasColumnType("varchar(150) CHARACTER SET utf8mb4")
                         .HasMaxLength(150)
                         .IsUnicode(true);
 
                     b.Property<long>("Size")
-                        .HasColumnName("size");
+                        .HasColumnName("size")
+                        .HasColumnType("bigint");
 
-                    b.Property<string>("tenant_id");
+                    b.Property<DateTime>("UploadTime")
+                        .HasColumnName("uploadtime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Uploader_Id")
+                        .HasColumnName("uploader_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
+                        .HasMaxLength(25)
+                        .IsUnicode(true);
+
+                    b.Property<string>("tenant_id")
+                        .HasColumnType("varchar(95) CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Uploader_Id")
+                        .HasName("Index_Resource_Uploader_Id");
+
+                    b.HasIndex("tenant_id")
+                        .HasName("Index_Resource_tenant_id");
 
                     b.ToTable("basis_resource");
                 });
@@ -430,40 +506,49 @@ namespace FastFrame.Database.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnName("id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<DateTime>("CreateTime")
-                        .HasColumnName("createtime");
+                        .HasColumnName("createtime")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Create_User_Id")
                         .HasColumnName("create_user_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("EnCode")
                         .IsRequired()
                         .HasColumnName("encode")
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
                         .HasMaxLength(50)
                         .IsUnicode(true);
 
                     b.Property<DateTime>("ModifyTime")
-                        .HasColumnName("modifytime");
+                        .HasColumnName("modifytime")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Modify_User_Id")
                         .HasColumnName("modify_user_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnName("name")
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
                         .HasMaxLength(50)
                         .IsUnicode(true);
 
-                    b.Property<bool>("isdeleted");
+                    b.Property<bool>("isdeleted")
+                        .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("tenant_id");
+                    b.Property<string>("tenant_id")
+                        .HasColumnType("varchar(95) CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 
@@ -473,6 +558,12 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("Modify_User_Id")
                         .HasName("Index_Role_Modify_User_Id");
 
+                    b.HasIndex("isdeleted")
+                        .HasName("Index_Role_isdeleted");
+
+                    b.HasIndex("tenant_id")
+                        .HasName("Index_Role_tenant_id");
+
                     b.ToTable("basis_role");
                 });
 
@@ -480,18 +571,19 @@ namespace FastFrame.Database.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnName("id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("Role_Id")
-                        .IsRequired()
                         .HasColumnName("role_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("User_Id")
-                        .IsRequired()
                         .HasColumnName("user_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
@@ -510,18 +602,19 @@ namespace FastFrame.Database.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnName("id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("Permission_Id")
-                        .IsRequired()
                         .HasColumnName("permission_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("Role_Id")
-                        .IsRequired()
                         .HasColumnName("role_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
@@ -540,58 +633,68 @@ namespace FastFrame.Database.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnName("id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<bool>("CanHaveChildren")
-                        .HasColumnName("canhavechildren");
+                        .HasColumnName("canhavechildren")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasColumnName("fullname")
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
                         .HasMaxLength(50)
                         .IsUnicode(true);
 
                     b.Property<string>("HandIcon_Id")
                         .HasColumnName("handicon_id")
-                        .HasMaxLength(25)
-                        .IsUnicode(true);
-
-                    b.Property<string>("Parent_Id")
-                        .HasColumnName("parent_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("ShortName")
                         .IsRequired()
                         .HasColumnName("shortname")
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
                         .HasMaxLength(50)
+                        .IsUnicode(true);
+
+                    b.Property<string>("Super_Id")
+                        .HasColumnName("super_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
+                        .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("UrlMark")
                         .HasColumnName("urlmark")
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
                         .HasMaxLength(50)
                         .IsUnicode(true);
 
-                    b.Property<bool>("isdeleted");
+                    b.Property<bool>("isdeleted")
+                        .HasColumnType("tinyint(1)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("HandIcon_Id")
                         .HasName("Index_Tenant_HandIcon_Id");
 
-                    b.HasIndex("Parent_Id")
-                        .HasName("Index_Tenant_Parent_Id");
+                    b.HasIndex("Super_Id")
+                        .HasName("Index_Tenant_Super_Id");
+
+                    b.HasIndex("isdeleted")
+                        .HasName("Index_Tenant_isdeleted");
 
                     b.ToTable("basis_tenant");
 
                     b.HasData(
                         new
                         {
-                            Id = "00F6P5G2VC2SAP1UJV7HTBYGU",
+                            Id = "00fm5yfgzpgp93ylkuxshsc73",
                             CanHaveChildren = true,
                             FullName = "默认组织",
-                            Parent_Id = "",
                             ShortName = "default",
                             isdeleted = false
                         });
@@ -601,18 +704,21 @@ namespace FastFrame.Database.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnName("id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("Host")
                         .IsRequired()
                         .HasColumnName("host")
+                        .HasColumnType("varchar(200) CHARACTER SET utf8mb4")
                         .HasMaxLength(200)
                         .IsUnicode(true);
 
                     b.Property<string>("Tenant_Id")
                         .IsRequired()
                         .HasColumnName("tenant_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
@@ -626,15 +732,21 @@ namespace FastFrame.Database.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "00F6P5G2VC2SAP1UJV7HTBYGB",
-                            Host = "192.168.1.100:8081",
-                            Tenant_Id = "00F6P5G2VC2SAP1UJV7HTBYGU"
+                            Id = "00fm5yfh942593ylkueadrwah",
+                            Host = "*",
+                            Tenant_Id = "00fm5yfgzpgp93ylkuxshsc73"
                         },
                         new
                         {
-                            Id = "00F6P5G2VC2SAP1UJV7HTBYGc",
+                            Id = "00fm5yfhhpy393ylku9dk1u5b",
+                            Host = "192.168.1.100:8081",
+                            Tenant_Id = "00fm5yfgzpgp93ylkuxshsc73"
+                        },
+                        new
+                        {
+                            Id = "00fm5yfhqq1h93ylkumx3gm53",
                             Host = "192.168.1.100:82",
-                            Tenant_Id = "00F6P5G2VC2SAP1UJV7HTBYGU"
+                            Tenant_Id = "00fm5yfgzpgp93ylkuxshsc73"
                         });
                 });
 
@@ -642,76 +754,93 @@ namespace FastFrame.Database.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnName("id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("Account")
                         .IsRequired()
                         .HasColumnName("account")
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
                         .HasMaxLength(50)
                         .IsUnicode(true);
 
                     b.Property<DateTime>("CreateTime")
-                        .HasColumnName("createtime");
+                        .HasColumnName("createtime")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Create_User_Id")
                         .HasColumnName("create_user_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("Email")
                         .HasColumnName("email")
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
                         .HasMaxLength(50)
                         .IsUnicode(true);
 
                     b.Property<string>("EncryptionKey")
                         .IsRequired()
                         .HasColumnName("encryptionkey")
+                        .HasColumnType("varchar(36) CHARACTER SET utf8mb4")
                         .HasMaxLength(36)
                         .IsUnicode(true);
 
                     b.Property<string>("HandIcon_Id")
                         .HasColumnName("handicon_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<bool>("IsAdmin")
-                        .HasColumnName("isadmin");
+                        .HasColumnName("isadmin")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("IsDisabled")
-                        .HasColumnName("isdisabled");
+                        .HasColumnName("isdisabled")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("IsRoot")
-                        .HasColumnName("isroot");
+                        .HasColumnName("isroot")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime>("ModifyTime")
-                        .HasColumnName("modifytime");
+                        .HasColumnName("modifytime")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Modify_User_Id")
                         .HasColumnName("modify_user_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnName("name")
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
                         .HasMaxLength(50)
                         .IsUnicode(true);
 
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnName("password")
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
                         .HasMaxLength(50)
                         .IsUnicode(true);
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnName("phonenumber")
+                        .HasColumnType("varchar(20) CHARACTER SET utf8mb4")
                         .HasMaxLength(20)
                         .IsUnicode(true);
 
-                    b.Property<bool>("isdeleted");
+                    b.Property<bool>("isdeleted")
+                        .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("tenant_id");
+                    b.Property<string>("tenant_id")
+                        .HasColumnType("varchar(95) CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 
@@ -724,27 +853,33 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("Modify_User_Id")
                         .HasName("Index_User_Modify_User_Id");
 
+                    b.HasIndex("isdeleted")
+                        .HasName("Index_User_isdeleted");
+
+                    b.HasIndex("tenant_id")
+                        .HasName("Index_User_tenant_id");
+
                     b.ToTable("basis_user");
 
                     b.HasData(
                         new
                         {
-                            Id = "00F6P5G2VC2SAP1UJV7HTBYGA",
+                            Id = "00fm5yfgq3q893ylku6uzb57i",
                             Account = "admin",
                             CreateTime = new DateTime(2019, 6, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Create_User_Id = "00F6P5G2VC2SAP1UJV7HTBYGA",
+                            Create_User_Id = "00fm5yfgq3q893ylku6uzb57i",
                             Email = "gongjie@qq.com",
                             EncryptionKey = "0ee3dcf0e832334f63876a30b45fdece",
                             IsAdmin = true,
                             IsDisabled = false,
                             IsRoot = true,
                             ModifyTime = new DateTime(2019, 6, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Modify_User_Id = "00F6P5G2VC2SAP1UJV7HTBYGA",
-                            Name = "超级管理员",
-                            Password = "123456",
+                            Modify_User_Id = "00fm5yfgq3q893ylku6uzb57i",
+                            Name = "管理员",
+                            Password = "000000",
                             PhoneNumber = "18675517757",
                             isdeleted = false,
-                            tenant_id = "00F6P5G2VC2SAP1UJV7HTBYGU"
+                            tenant_id = "00fm5yfgzpgp93ylkuxshsc73"
                         });
                 });
 
@@ -752,26 +887,31 @@ namespace FastFrame.Database.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnName("id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("FromUser_Id")
                         .HasColumnName("fromuser_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("Replay_Email_Id")
                         .HasColumnName("replay_email_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnName("title")
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
                         .HasMaxLength(50)
                         .IsUnicode(true);
 
-                    b.Property<string>("tenant_id");
+                    b.Property<string>("tenant_id")
+                        .HasColumnType("varchar(95) CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 
@@ -781,6 +921,9 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("Replay_Email_Id")
                         .HasName("Index_Email_Replay_Email_Id");
 
+                    b.HasIndex("tenant_id")
+                        .HasName("Index_Email_tenant_id");
+
                     b.ToTable("chat_email");
                 });
 
@@ -788,16 +931,19 @@ namespace FastFrame.Database.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnName("id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("Email_Id")
                         .HasColumnName("email_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("Resource_Id")
                         .HasColumnName("resource_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
@@ -816,15 +962,18 @@ namespace FastFrame.Database.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnName("id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("Content")
                         .HasColumnName("content")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4")
                         .IsUnicode(true);
 
                     b.Property<string>("Email_Id")
                         .HasColumnName("email_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
@@ -840,24 +989,29 @@ namespace FastFrame.Database.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnName("id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("Category")
                         .IsRequired()
                         .HasColumnName("category")
-                        .HasMaxLength(100);
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
+                        .HasMaxLength(50);
 
                     b.Property<string>("Email_Id")
                         .HasColumnName("email_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<bool>("HaveRead")
-                        .HasColumnName("haveread");
+                        .HasColumnName("haveread")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("To_Id")
                         .HasColumnName("to_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
@@ -876,33 +1030,40 @@ namespace FastFrame.Database.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnName("id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("Category")
                         .IsRequired()
                         .HasColumnName("category")
-                        .HasMaxLength(100);
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
+                        .HasMaxLength(50);
 
                     b.Property<string>("Content")
                         .HasColumnName("content")
+                        .HasColumnType("varchar(500) CHARACTER SET utf8mb4")
                         .HasMaxLength(500)
                         .IsUnicode(true);
 
                     b.Property<string>("From_Id")
                         .HasColumnName("from_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<DateTime>("MessageTime")
-                        .HasColumnName("messagetime");
+                        .HasColumnName("messagetime")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Resource_Id")
                         .HasColumnName("resource_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
-                    b.Property<string>("tenant_id");
+                    b.Property<string>("tenant_id")
+                        .HasColumnType("varchar(95) CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 
@@ -912,6 +1073,9 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("Resource_Id")
                         .HasName("Index_FriendMessage_Resource_Id");
 
+                    b.HasIndex("tenant_id")
+                        .HasName("Index_FriendMessage_tenant_id");
+
                     b.ToTable("chat_friendmessage");
                 });
 
@@ -919,48 +1083,59 @@ namespace FastFrame.Database.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnName("id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<DateTime>("CreateTime")
-                        .HasColumnName("createtime");
+                        .HasColumnName("createtime")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Create_User_Id")
                         .HasColumnName("create_user_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("HandIcon_Id")
                         .HasColumnName("handicon_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("LordUser_Id")
                         .HasColumnName("lorduser_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<DateTime>("ModifyTime")
-                        .HasColumnName("modifytime");
+                        .HasColumnName("modifytime")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Modify_User_Id")
                         .HasColumnName("modify_user_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("Name")
                         .HasColumnName("name")
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
                         .HasMaxLength(50)
                         .IsUnicode(true);
 
                     b.Property<string>("Summary")
                         .HasColumnName("summary")
+                        .HasColumnType("varchar(200) CHARACTER SET utf8mb4")
                         .HasMaxLength(200)
                         .IsUnicode(true);
 
-                    b.Property<bool>("isdeleted");
+                    b.Property<bool>("isdeleted")
+                        .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("tenant_id");
+                    b.Property<string>("tenant_id")
+                        .HasColumnType("varchar(95) CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 
@@ -976,6 +1151,12 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("Modify_User_Id")
                         .HasName("Index_Group_Modify_User_Id");
 
+                    b.HasIndex("isdeleted")
+                        .HasName("Index_Group_isdeleted");
+
+                    b.HasIndex("tenant_id")
+                        .HasName("Index_Group_tenant_id");
+
                     b.ToTable("chat_group");
                 });
 
@@ -983,16 +1164,19 @@ namespace FastFrame.Database.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnName("id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("Group_Id")
                         .HasColumnName("group_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("User_Id")
                         .HasColumnName("user_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
@@ -1011,38 +1195,46 @@ namespace FastFrame.Database.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnName("id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("Category")
                         .IsRequired()
                         .HasColumnName("category")
-                        .HasMaxLength(100);
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
+                        .HasMaxLength(50);
 
                     b.Property<string>("Content")
                         .HasColumnName("content")
+                        .HasColumnType("varchar(500) CHARACTER SET utf8mb4")
                         .HasMaxLength(500)
                         .IsUnicode(true);
 
                     b.Property<string>("From_Id")
                         .HasColumnName("from_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("Group_Id")
                         .HasColumnName("group_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<DateTime>("MessageTime")
-                        .HasColumnName("messagetime");
+                        .HasColumnName("messagetime")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Resource_Id")
                         .HasColumnName("resource_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
-                    b.Property<string>("tenant_id");
+                    b.Property<string>("tenant_id")
+                        .HasColumnType("varchar(95) CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 
@@ -1055,6 +1247,9 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("Resource_Id")
                         .HasName("Index_GroupMessage_Resource_Id");
 
+                    b.HasIndex("tenant_id")
+                        .HasName("Index_GroupMessage_tenant_id");
+
                     b.ToTable("chat_groupmessage");
                 });
 
@@ -1062,19 +1257,23 @@ namespace FastFrame.Database.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnName("id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<bool>("HaveRead")
-                        .HasColumnName("haveread");
+                        .HasColumnName("haveread")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Message_Id")
                         .HasColumnName("message_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
                     b.Property<string>("To_Id")
                         .HasColumnName("to_id")
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4")
                         .HasMaxLength(25)
                         .IsUnicode(true);
 

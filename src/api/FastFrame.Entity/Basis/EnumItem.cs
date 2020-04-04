@@ -9,7 +9,7 @@ namespace FastFrame.Entity.Basis
     /// </summary>
     [RelatedField(nameof(Value))]
     [Export]
-    public class EnumItem : BaseEntity
+    public class EnumItem : BaseEntity, ITreeEntity
     {
         /// <summary>
         /// 键

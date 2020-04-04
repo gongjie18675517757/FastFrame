@@ -1,41 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <RunPostBuildEvent>Always</RunPostBuildEvent>
+    <TargetFramework>netstandard2.1</TargetFramework> 
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>D:\CoreProject\FastFrame\src\FastFrame\FastFrame.Entity\FastFrame.Entity.xml</DocumentationFile>
+    <DocumentationFile>.\FastFrame.Entity.xml</DocumentationFile>
     <NoWarn>1701;1702;1591;</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <NoWarn>1701;1702;1591;</NoWarn>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-    <DocumentationFile>D:\CoreProject\FastFrame\src\FastFrame\FastFrame.Entity\FastFrame.Entity.xml</DocumentationFile>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="CMS\**" />
-    <Compile Remove="Module\**" />
-    <EmbeddedResource Remove="CMS\**" />
-    <EmbeddedResource Remove="Module\**" />
-    <None Remove="CMS\**" />
-    <None Remove="Module\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Basis\Foreign.cs" />
-    <Compile Remove="Basis\Menu.cs" />
-    <Compile Remove="Basis\QueryProgram.cs" />
-    <Compile Remove="Basis\QueryProgramDetail.cs" /> 
-  </ItemGroup>
+    <DocumentationFile>.\FastFrame.Entity.xml</DocumentationFile>
+  </PropertyGroup> 
 
   <ItemGroup>
     <PackageReference Include="System.ComponentModel" Version="4.3.0" />
-    <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,4 +1,4 @@
-﻿using AspectCore.Injector;
+﻿using AspectCore.DependencyInjection;
 using FastFrame.Dto;
 using FastFrame.Entity;
 using FastFrame.Infrastructure;
@@ -27,13 +27,14 @@ namespace FastFrame.Service
     {
         private readonly IRepository<TEntity> repository;
 
-        public IScopeServiceLoader Loader { get; }
+        [FromServiceContext]
+        protected IScopeServiceLoader Loader { get; }
 
-        [FromContainer]
-        public IEventBus EventBus { get; set; }
+        [FromServiceContext]
+        protected IEventBus EventBus { get; set; } 
 
-        [FromContainer]
-        public IClientManage ClientManage { get; set; }
+        [FromServiceContext]
+        protected ICurrentUserProvider UserProvider { get; set; }
 
         public BaseService(IRepository<TEntity> repository, IScopeServiceLoader loader)
         {
@@ -45,13 +46,12 @@ namespace FastFrame.Service
         /// 新增前
         /// </summary> 
         protected virtual Task OnAdding(TDto input, TEntity entity)
-            => EventBus?.TriggerAsync(new DoMainAdding<TDto>(input));
+            => EventBus?.TriggerEventAsync(new DoMainAdding<TDto>(input));
 
         /// <summary>
         /// 新增
-        /// </summary> 
-        [AutoCacheInterceptor(AutoCacheOperate.Add)]
-        public virtual async Task<TDto> AddAsync(TDto input)
+        /// </summary>  
+        public virtual async Task<string> AddAsync(TDto input)
         {
             if (input == null)
             {
@@ -64,93 +64,91 @@ namespace FastFrame.Service
             await OnAdding(input, entity);
             await repository.CommmitAsync();
 
-            var dto = await GetAsync(entity.Id);
-            await EventBus?.TriggerAsync(new DoMainAdded<TDto>(dto));
+            await EventBus?.TriggerEventAsync(new DoMainAdded<TDto>(input));
 
-            await ClientManage.SendAsync(
-                new DoMainMessage<TDto>(typeof(TEntity).Name, MsgType.DataAdded, dto)
-            );
-
-            return dto;
+            return entity.Id;
         }
 
         /// <summary>
         /// 删除前
         /// </summary> 
         protected virtual Task OnDeleteing(TEntity input)
-            => EventBus?.TriggerAsync(new Events.DoMainDeleteing<TDto>(input.Id));
+            => EventBus?.TriggerEventAsync(new DoMainDeleteing<TDto>(input.Id, input));
 
 
         /// <summary>
         /// 删除
-        /// </summary> 
-        [AutoCacheInterceptor(AutoCacheOperate.Remove)]
+        /// </summary>  
         public virtual async Task DeleteAsync(params string[] ids)
         {
-            foreach (var id in ids)
+            var entitys = await repository
+                        .Where(v => ids.Contains(v.Id))
+                        .ToListAsync();
+            foreach (var entity in entitys)
             {
-                var entity = await repository.GetAsync(id);
                 await OnDeleteing(entity);
-                if (entity == null)
-                    throw new Exception("ID不正确");
                 await repository.DeleteAsync(entity);
+                await OnDeleteing(entity);
             }
             await repository.CommmitAsync();
-            foreach (var id in ids)
+
+            foreach (var entity in entitys)
             {
-                await EventBus?.TriggerAsync(new Events.DoMainDeleted<TDto>(id));
-                await ClientManage.SendAsync(
-                    new DoMainMessage<string>(typeof(TEntity).Name, MsgType.DataDeleted, id)
-              );
+                await EventBus?.TriggerEventAsync(new DoMainDeleted<TDto>(entity.Id, entity));
             }
         }
 
         /// <summary>
-        /// 更新前
+        /// 更新时
         /// </summary> 
         protected virtual Task OnUpdateing(TDto input, TEntity entity)
-            => EventBus?.TriggerAsync(new Events.DoMainUpdateing<TDto>(input));
+            => EventBus?.TriggerEventAsync(new DoMainUpdateing<TDto>(input));
+
+        /// <summary>
+        /// 更新前
+        /// </summary> 
+        protected virtual Task OnBeforeUpdate(TEntity before, TDto after)
+            => Task.CompletedTask;
 
         /// <summary>
         /// 更新
-        /// </summary> 
-        [AutoCacheInterceptor(AutoCacheOperate.Update)]
-        public virtual async Task<TDto> UpdateAsync(TDto input)
+        /// </summary>  
+        public virtual async Task UpdateAsync(TDto input)
         {
             if (input == null)
             {
                 throw new ArgumentNullException(nameof(input));
             }
             var entity = await repository.GetAsync(input.Id);
+            await OnBeforeUpdate(entity, input);
             input.MapSet(entity);
             await OnUpdateing(input, entity);
             await repository.UpdateAsync(entity);
             await repository.CommmitAsync();
-            await RedisHelper.DelAsync(input.Id);
-            var dto = await GetAsync(input.Id);
-            await EventBus?.TriggerAsync(new DoMainUpdated<TDto>(dto));
-
-            await ClientManage.SendAsync(
-                new DoMainMessage<TDto>(typeof(TEntity).Name, MsgType.DataUpdated, dto)
-            );
-            return dto;
+            await EventBus?.TriggerEventAsync(new DoMainUpdated<TDto>(input));
         }
 
         /// <summary>
         /// 返回前
         /// </summary> 
         protected virtual Task OnGeting(TDto dto)
-            => EventBus.TriggerAsync(new DoMainResulting<TDto>(dto));
+            => Task.CompletedTask;
 
         /// <summary>
         /// 获取单条数据
-        /// </summary> 
-        //[AutoCacheInterceptor(AutoCacheOperate.Get)]
+        /// </summary>  
+        [AutoCacheInterceptor(AutoCacheOperate.Get)]
         public virtual async Task<TDto> GetAsync(string id)
         {
-            var dto = (await Query().Where("Id=@0", id).ToListAsync()).FirstOrDefault();
-            if (dto != null)
-                await OnGeting(dto);
+            if (id.IsNullOrWhiteSpace())
+                throw new NotFoundException();
+
+            var dto = await Query().Where(v => v.Id == id).SingleOrDefaultAsync();
+
+            if (dto == null)
+                throw new NotFoundException();
+
+            await OnGeting(dto);
             return dto;
         }
 
@@ -160,7 +158,7 @@ namespace FastFrame.Service
         /// 返回列表数据时
         /// </summary> 
         protected virtual Task OnGetListing(IEnumerable<TDto> dtos)
-            => EventBus.TriggerAsync(new DoMainResultListing<TDto>(dtos));
+            => Task.CompletedTask;
 
         /// <summary>
         /// 获取分页列表
@@ -205,10 +203,7 @@ namespace FastFrame.Service
                 Value = input.Id,
                 Name = "Id"
             });
-            return await repository.Queryable.DynamicQuery(new QueryCondition()
-            {
-                Filters = filters
-            }).AnyAsync();
+            return await repository.Queryable.DynamicQuery(null, filters).AnyAsync();
         }
     }
 }

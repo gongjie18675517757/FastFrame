@@ -12,12 +12,25 @@ namespace FastFrame.Infrastructure.EventBus
         {
             this.serviceProvider = serviceProvider;
         }
-        public async Task TriggerAsync<T>(T @event) where T:IEventData
+        public async Task TriggerEventAsync<T>(T @event) where T : IEventData
         {
             var servers = serviceProvider.GetServices<IEventHandle<T>>();
             foreach (var server in servers)
             {
                 await server.HandleEventAsync(@event);
+            }
+        }
+
+        public async Task<TResult> TriggerRequestAsync<TResult, TRequest>(TRequest request)
+        {
+            var requestHandle = serviceProvider.GetService<IRequestHandle<TResult, TRequest>>();
+            if (requestHandle != null)
+            {
+                return await requestHandle.HandleRequestAsync(request);
+            }
+            else
+            {
+                throw new Exception($"未匹配到请求处理服务！{typeof(TRequest)}=>${typeof(TResult)}");
             }
         }
     }

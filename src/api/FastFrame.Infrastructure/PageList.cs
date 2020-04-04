@@ -17,5 +17,5 @@ namespace FastFrame.Infrastructure
         /// 数据
         /// </summary>
         public List<T> Data { get; set; }
-    } 
+    }
 }

@@ -115,21 +115,6 @@
             被关联的类型
             </summary>
         </member>
-        <member name="P:FastFrame.Infrastructure.Attrs.RelatedToAttribute.FullProps">
-            <summary>
-            是否全属性
-            </summary>
-        </member>
-        <member name="T:FastFrame.Infrastructure.Attrs.TreeAttribute">
-            <summary>
-            标记是树形结构
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Attrs.TreeAttribute.Key">
-            <summary>
-            关键属性
-            </summary>
-        </member>
         <member name="T:FastFrame.Infrastructure.Attrs.UniqueAttribute">
             <summary>
             唯一标识
@@ -140,21 +125,6 @@
             
             </summary>
             <param name="uniqueNames">需要验证唯一的属性</param>
-        </member>
-        <member name="T:FastFrame.Infrastructure.Attrs.UniqueException">
-            <summary>
-            数据重复异常
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Attrs.UniqueException.Type">
-            <summary>
-            类型
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Attrs.UniqueException.PropNames">
-            <summary>
-            重复的字段名称
-            </summary>
         </member>
         <member name="T:FastFrame.Infrastructure.ComparisonCollection`2">
             <summary>
@@ -219,9 +189,14 @@
             事件总线
             </summary>
         </member>
-        <member name="M:FastFrame.Infrastructure.EventBus.IEventBus.TriggerAsync``1(``0)">
+        <member name="M:FastFrame.Infrastructure.EventBus.IEventBus.TriggerEventAsync``1(``0)">
             <summary>
             触发事件
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Infrastructure.EventBus.IEventBus.TriggerRequestAsync``2(``1)">
+            <summary>
+            触发请求
             </summary> 
         </member>
         <member name="T:FastFrame.Infrastructure.EventBus.IEventData`1">
@@ -243,9 +218,34 @@
             <param name="event"></param>
             <returns></returns>
         </member>
-        <member name="T:FastFrame.Infrastructure.EventBus.IEventHandleService">
+        <member name="T:FastFrame.Infrastructure.EventBus.IRequestHandle`2">
             <summary>
-            事件处理服务
+            事件处理
+            </summary> 
+        </member>
+        <member name="P:FastFrame.Infrastructure.MsgException.Code">
+            <summary>
+            错误码
+            </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.NotFoundException">
+            <summary>
+            未匹配到内容
+            </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.UniqueException">
+            <summary>
+            数据重复异常
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.UniqueException.Type">
+            <summary>
+            类型
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.UniqueException.PropNames">
+            <summary>
+            重复的字段名称
             </summary>
         </member>
         <member name="T:FastFrame.Infrastructure.ExpressionExtended">
@@ -308,6 +308,22 @@
             判空
             </summary>
             <param name="in"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Extension.ToSplitArray(System.String,System.String)">
+            <summary>
+            分割字符串
+            </summary>
+            <param name="in"></param>
+            <param name="separator"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Extension.ToJoinString(System.Collections.Generic.IEnumerator{System.String},System.String)">
+            <summary>
+            连接字符串
+            </summary>
+            <param name="in"></param>
+            <param name="separator"></param>
             <returns></returns>
         </member>
         <member name="M:FastFrame.Infrastructure.Extension.ToBase64(System.String)">
@@ -482,22 +498,23 @@
         </member>
         <member name="T:FastFrame.Infrastructure.Interface.IResourceProvider">
             <summary>
-            资源操作提供者
+            附件资源操作提供者
             </summary>
         </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IResourceProvider.SetResource(System.IO.Stream)">
+        <member name="M:FastFrame.Infrastructure.Interface.IResourceProvider.WriteAsync(System.IO.Stream)">
             <summary>
-            保存资源
-            </summary>
-            <param name="stream"></param>
-            <returns></returns>
+            保存
+            </summary> 
         </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IResourceProvider.GetResource(System.String)">
+        <member name="M:FastFrame.Infrastructure.Interface.IResourceProvider.ReadAsync(System.String)">
             <summary>
-            打开资源
-            </summary>
-            <param name="path"></param>
-            <returns></returns>
+            读取
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IResourceProvider.ExistsAsync(System.String)">
+            <summary>
+            检查是否存在
+            </summary> 
         </member>
         <member name="M:FastFrame.Infrastructure.Interface.IResourceProvider.GetFilePath(System.String)">
             <summary>
@@ -640,34 +657,24 @@
             每页数量
             </summary>
         </member>
-        <member name="P:FastFrame.Infrastructure.PagePara.Condition">
-            <summary>
-            查询条件
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.PagePara.SortInfo">
-            <summary>
-            排序条件
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.SortInfo.Name">
-            <summary>
-            排序列名称
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.SortInfo.Mode">
-            <summary>
-            排序方式
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.QueryCondition.KeyWord">
+        <member name="P:FastFrame.Infrastructure.PagePara.KeyWord">
             <summary>
             模糊条件
             </summary>
         </member>
-        <member name="P:FastFrame.Infrastructure.QueryCondition.Filters">
+        <member name="P:FastFrame.Infrastructure.PagePara.Filters">
             <summary>
             条件
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.PagePara.SortName">
+            <summary>
+            排序列名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.PagePara.SortMode">
+            <summary>
+            排序方式
             </summary>
         </member>
         <member name="T:FastFrame.Infrastructure.Snowflake">

@@ -13,6 +13,12 @@ namespace FastFrame.Infrastructure.EventBus
         /// <summary>
         /// 触发事件
         /// </summary> 
-        Task TriggerAsync<T>(T @event) where T:IEventData;
+        Task TriggerEventAsync<T>(T @event) where T : IEventData;
+
+
+        /// <summary>
+        /// 触发请求
+        /// </summary> 
+        Task<TResult> TriggerRequestAsync<TResult, TRequest>(TRequest request);
     }
 }

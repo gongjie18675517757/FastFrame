@@ -6,7 +6,7 @@ namespace FastFrame.Infrastructure.EventBus
     /// 事件处理
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IEventHandle<T> where T:IEventData
+    public interface IEventHandle<T> where T : IEventData
     {
 
         /// <summary>

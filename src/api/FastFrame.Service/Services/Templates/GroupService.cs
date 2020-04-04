@@ -8,6 +8,7 @@ namespace FastFrame.Service.Services.Chat
 	using FastFrame.Repository; 
 	using System.Linq; 
 	using Microsoft.EntityFrameworkCore; 
+	using System.Threading.Tasks; 
 	using FastFrame.Dto.Basis; 
 	/// <summary>
 	///群组 服务实现 
@@ -27,8 +28,8 @@ namespace FastFrame.Service.Services.Chat
 		
 		protected override IQueryable<GroupDto> QueryMain() 
 		{
-			 var userQueryable = userRepository.Queryable;
-			 var query = from _group in groupRepository 
+			var userQueryable = userRepository.Queryable;
+			var query = from _group in groupRepository 
 						join _create_User_Id in userQueryable on _group.Create_User_Id equals _create_User_Id.Id into t__create_User_Id
 						from _create_User_Id in t__create_User_Id.DefaultIfEmpty()
 						join _modify_User_Id in userQueryable on _group.Modify_User_Id equals _modify_User_Id.Id into t__modify_User_Id
@@ -50,6 +51,19 @@ namespace FastFrame.Service.Services.Chat
 							Modify_User=Modify_User,
 					};
 			return query;
+		}
+		protected  Task<PageList<GroupViewModel>> ViewModelListAsync(PagePara page) 
+		{
+			var query = from _group in groupRepository 
+						select new GroupViewModel
+						{
+							Name = _group.Name,
+							LordUser_Id = _group.LordUser_Id,
+							HandIcon_Id = _group.HandIcon_Id,
+							Summary = _group.Summary,
+							Id = _group.Id,
+						};
+			return query.PageListAsync(page);
 		}
 		
 	}

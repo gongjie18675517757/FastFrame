@@ -24,7 +24,7 @@ namespace FastFrame.Service.Services.Basis
             if (!string.IsNullOrWhiteSpace(keyword))
                 query = query.Where(r => r.Name.Contains(keyword));
             else
-                query = query.Where(r => r.Parent_Id == id);
+                query = query.Where(r => r.Super_Id == id);
             output.Children = await query.OrderByDescending(x => x.IsFolder)
                 .ThenBy(x => x.CreateTime)
                 .ToListAsync();

@@ -38,7 +38,7 @@ namespace FastFrame.Service
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task<TDto> AddAsync(TDto input);
+        Task<string> AddAsync(TDto input);
 
         /// <summary>
         /// 删除
@@ -52,7 +52,7 @@ namespace FastFrame.Service
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task<TDto> UpdateAsync(TDto input);
+        Task UpdateAsync(TDto input);
 
         /// <summary>
         /// 获取单条数据

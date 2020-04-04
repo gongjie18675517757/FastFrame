@@ -1,7 +1,7 @@
 ﻿namespace FastFrame.Entity
 {
     /// <summary>
-    /// 目标信息
+    /// 消息目标
     /// </summary>
     public abstract class TargetInfo : IEntity
     {

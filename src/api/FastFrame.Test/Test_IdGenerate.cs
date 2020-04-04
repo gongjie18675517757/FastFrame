@@ -13,11 +13,11 @@ namespace FastFrame.UnitTest
         public void Test_NewId()
         {
             //var id= Infrastructure.IdGenerate.NetId();
-            var list = new List<string>();
+            var list = new List<string>(100 * 10000);
             var syncLock = new object();
             Task.WaitAll(Enumerable.Range(1, 100).Select(x => Task.Run(() =>
             {
-                var ids = new List<string>();
+                var ids = new List<string>(10000);
                 for (int i = 0; i < 10000; i++)
                 {
                     ids.Add(IdGenerate.NetId());
@@ -31,10 +31,41 @@ namespace FastFrame.UnitTest
             Assert.AreEqual(dic.Count(), list.Count);
         }
 
+        [TestMethod]
+        public void Test_NewLongId()
+        {
+            //var id= Infrastructure.IdGenerate.NetId();
+            var list = new List<long>(100 * 10000);
+            var syncLock = new object();
+            Task.WaitAll(Enumerable.Range(1, 100).Select(x => Task.Run(() =>
+            {
+                var ids = new List<long>(10000);
+                for (int i = 0; i < 10000; i++)
+                {
+                    ids.Add(IdGenerate.NetLongId());
+                }
+                lock (syncLock)
+                {
+                    list.AddRange(ids);
+                }
+            })).ToArray());
+            var dic = list.Distinct();
+            Assert.AreEqual(dic.Count(), list.Count);
+        }
+
+        [TestMethod]
         public void Test_NewId2()
         {
             var id = IdGenerate.NetId();
+            System.Diagnostics.Trace.WriteLine(id);
             Assert.AreEqual(id.Length, 25);
+        }
+
+        [TestMethod]
+        public void Test_NewLongId2()
+        {
+            var id = IdGenerate.NetLongId();
+            System.Diagnostics.Trace.WriteLine(id); 
         }
 
         //[TestMethod]

@@ -1,5 +1,4 @@
-﻿using AspectCore.Extensions.DependencyInjection;
-using AspectCore.Injector;
+﻿using AspectCore.DependencyInjection;
 using FastFrame.Database;
 using FastFrame.Infrastructure.EventBus;
 using FastFrame.Infrastructure.Interface;
@@ -36,15 +35,15 @@ namespace FastFrame.Test
                 .AddRepository();
 
 
-            var container = services.ToServiceContainer();
-            var serviceResolver = container.Build();
+            var serviceResolver = services.BuildServiceProvider();
+
             serviceScope = serviceResolver.CreateScope();
-            ServiceProvider = serviceScope;
+            ServiceProvider = serviceScope.ServiceProvider;
         }
 
         public IConfigurationRoot Configuration { get; }
 
-        private IServiceResolver serviceScope;
+        private IServiceScope serviceScope;
 
         public IServiceProvider ServiceProvider { get; }
 

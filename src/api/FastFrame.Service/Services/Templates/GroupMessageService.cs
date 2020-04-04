@@ -8,6 +8,7 @@ namespace FastFrame.Service.Services.Chat
 	using FastFrame.Entity.Basis; 
 	using System.Linq; 
 	using Microsoft.EntityFrameworkCore; 
+	using System.Threading.Tasks; 
 	/// <summary>
 	///群组消息 服务实现 
 	/// </summary>
@@ -26,7 +27,7 @@ namespace FastFrame.Service.Services.Chat
 		
 		protected override IQueryable<GroupMessageDto> QueryMain() 
 		{
-			 var query = from _groupMessage in groupMessageRepository 
+			var query = from _groupMessage in groupMessageRepository 
 						 select new GroupMessageDto
 						{
 							Group_Id=_groupMessage.Group_Id,
@@ -38,6 +39,16 @@ namespace FastFrame.Service.Services.Chat
 							Id=_groupMessage.Id,
 					};
 			return query;
+		}
+		protected  Task<PageList<GroupMessageViewModel>> ViewModelListAsync(PagePara page) 
+		{
+			var query = from _groupMessage in groupMessageRepository 
+						select new GroupMessageViewModel
+						{
+							Group_Id = _groupMessage.Group_Id,
+							Id = _groupMessage.Id,
+						};
+			return query.PageListAsync(page);
 		}
 		
 	}

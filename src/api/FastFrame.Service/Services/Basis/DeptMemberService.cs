@@ -14,32 +14,32 @@ namespace FastFrame.Service.Services.Basis
         IEventHandle<DoMainAdding<DeptDto>>,
         IEventHandle<DoMainDeleteing<DeptDto>>,
         IEventHandle<DoMainUpdateing<DeptDto>>,
-        IEventHandle<DoMainResulting<DeptDto>>,
-        IEventHandle<DoMainResultListing<DeptDto>>,
+        IRequestHandle<(UserViewModel[], UserViewModel[]), string>,
+        IRequestHandle<IEnumerable<KeyValuePair<string, (UserViewModel[], UserViewModel[])>>, string[]>,
 
         IEventHandle<DoMainAdding<UserDto>>,
         IEventHandle<DoMainDeleteing<UserDto>>,
         IEventHandle<DoMainUpdateing<UserDto>>,
-        IEventHandle<DoMainResulting<UserDto>>,
-        IEventHandle<DoMainResultListing<UserDto>>
+        IRequestHandle<DeptViewModel[], string>,
+        IRequestHandle<IEnumerable<KeyValuePair<string, DeptViewModel[]>>, string[]>
     {
         private readonly IRepository<DeptMember> deptMembers;
-        private readonly DeptService deptService;
-        private readonly UserService userService;
-        private readonly HandleOne2ManyService<DeptDto, DeptMember> handleUserDeptService;
-        private readonly HandleOne2ManyService<UserDto, DeptMember> handleDeptMemberService;
+        private readonly IRepository<User> users;
+        private readonly IRepository<Dept> depts;
+        private readonly HandleOne2ManyService<DeptViewModel, DeptMember> handleUserDeptService;
+        private readonly HandleOne2ManyService<UserViewModel, DeptMember> handleDeptMemberService;
 
         public DeptMemberService(
             IRepository<DeptMember> deptMembers,
-            DeptService deptService,
-            UserService userService,
-            HandleOne2ManyService<DeptDto, DeptMember> handleUserDeptService,
-            HandleOne2ManyService<UserDto, DeptMember> handleDeptMemberService
+            IRepository<User> users,
+            IRepository<Dept> depts,
+            HandleOne2ManyService<DeptViewModel, DeptMember> handleUserDeptService,
+            HandleOne2ManyService<UserViewModel, DeptMember> handleDeptMemberService
             )
         {
             this.deptMembers = deptMembers;
-            this.deptService = deptService;
-            this.userService = userService;
+            this.users = users;
+            this.depts = depts;
             this.handleUserDeptService = handleUserDeptService;
             this.handleDeptMemberService = handleDeptMemberService;
         }
@@ -81,42 +81,51 @@ namespace FastFrame.Service.Services.Basis
                 );
         }
 
-        public async Task HandleEventAsync(DoMainResulting<DeptDto> @event)
+        public async Task<(UserViewModel[], UserViewModel[])> HandleRequestAsync(string request)
         {
-            var input = @event.Data;
-            input.Members = await userService
-                        .Query()
-                        .Where(v =>
-                            deptMembers.Any(r => r.User_Id == v.Id && r.Dept_Id == input.Id)
-                         ).ToListAsync();
-            input.Managers = await userService
-                        .Query()
-                        .Where(v =>
-                            deptMembers.Any(r => r.User_Id == v.Id && r.Dept_Id == input.Id && r.IsManager)
-                         ).ToListAsync();
+            var query = users.Select(v =>
+                    new UserViewModel { Account = v.Account, Id = v.Id, Name = v.Name });
+
+            return (
+               await query
+                       .Where(v =>
+                           deptMembers.Any(r => r.User_Id == v.Id && r.Dept_Id == request)
+                        ).ToArrayAsync(),
+                await query
+                       .Where(v =>
+                           deptMembers.Any(r => r.User_Id == v.Id && r.Dept_Id == request && r.IsManager)
+                        ).ToArrayAsync()
+               );
         }
 
-        public async Task HandleEventAsync(DoMainResultListing<DeptDto> @event)
+        public async Task<IEnumerable<KeyValuePair<string, (UserViewModel[], UserViewModel[])>>> HandleRequestAsync(string[] request)
         {
-            var input = @event.Data;
-            var keys = input.Select(v => v.Id).ToList();
-            var userQuery = userService.Query();
-            var query = from a in userQuery
+            var query = from a in users
                         join b in deptMembers on a.Id equals b.User_Id
-                        where keys.Contains(b.Dept_Id)
+                        where request.Contains(b.Dept_Id)
                         select new
                         {
-                            Item = a,
+                            Item = new UserViewModel
+                            {
+                                Id = a.Id,
+                                Name = a.Name,
+                                Account = a.Account
+                            },
                             b.Dept_Id,
                             b.IsManager
                         };
             var list = await query.ToListAsync();
-            foreach (var item in input)
-            {
-                item.Members = list.Where(v => v.Dept_Id == item.Id).Select(v => v.Item);
-                item.Managers = list.Where(v => v.Dept_Id == item.Id && v.IsManager).Select(v => v.Item);
-            }
+
+            return list
+                        .GroupBy(v => v.Dept_Id)
+                        .Select(v =>
+                                new KeyValuePair<string, (UserViewModel[], UserViewModel[])>(
+                                    v.Key,
+                                    (v.Select(v => v.Item).ToArray(),
+                                        v.Where(v => v.IsManager).Select(v => v.Item).ToArray())
+                                ));
         }
+
 
         public async Task HandleEventAsync(DoMainAdding<UserDto> @event)
         {
@@ -149,28 +158,38 @@ namespace FastFrame.Service.Services.Basis
                 );
         }
 
-        public async Task HandleEventAsync(DoMainResulting<UserDto> @event)
+        async Task<DeptViewModel[]> IRequestHandle<DeptViewModel[], string>.HandleRequestAsync(string request)
         {
-            var input = @event.Data;
-            input.Depts = await deptService
-                        .Query()
-                        .Where(v =>
-                            deptMembers.Any(r => r.Dept_Id == v.Id && r.User_Id == input.Id))
-                        .ToListAsync();
+            return await depts
+                         .Where(v =>
+                             deptMembers.Any(r => r.Dept_Id == v.Id && r.User_Id == request))
+                         .Select(v => new DeptViewModel
+                         {
+                             Id = v.Id,
+                             Name = v.Name
+                         })
+                         .ToArrayAsync();
         }
 
-        public async Task HandleEventAsync(DoMainResultListing<UserDto> @event)
+        async Task<IEnumerable<KeyValuePair<string, DeptViewModel[]>>> IRequestHandle<IEnumerable<KeyValuePair<string, DeptViewModel[]>>, string[]>.HandleRequestAsync(string[] request)
         {
-            var input = @event.Data;
-            var query = from a in deptService.Query()
+            var query = from a in depts
                         join b in deptMembers on a.Id equals b.Dept_Id
-                        select new { Item = a, b.User_Id };
+                        where request.Contains(b.User_Id)
+                        select new
+                        {
+                            b.User_Id,
+                            Dept = new DeptViewModel
+                            {
+                                Id = a.Id,
+                                Name = a.Name
+                            }
+                        };
 
             var list = await query.ToListAsync();
-            foreach (var item in input)
-            {
-                item.Depts = list.Where(v => v.User_Id == item.Id).Select(r => r.Item);
-            }
+            return list
+                    .GroupBy(v => v.User_Id)
+                    .Select(v => new KeyValuePair<string, DeptViewModel[]>(v.Key, v.Select(r => r.Dept).ToArray()));
         }
     }
 }

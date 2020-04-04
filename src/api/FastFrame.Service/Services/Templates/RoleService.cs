@@ -7,6 +7,7 @@ namespace FastFrame.Service.Services.Basis
 	using FastFrame.Repository; 
 	using System.Linq; 
 	using Microsoft.EntityFrameworkCore; 
+	using System.Threading.Tasks; 
 	/// <summary>
 	///角色 服务实现 
 	/// </summary>
@@ -25,8 +26,8 @@ namespace FastFrame.Service.Services.Basis
 		
 		protected override IQueryable<RoleDto> QueryMain() 
 		{
-			 var userQueryable = userRepository.Queryable;
-			 var query = from _role in roleRepository 
+			var userQueryable = userRepository.Queryable;
+			var query = from _role in roleRepository 
 						join _create_User_Id in userQueryable on _role.Create_User_Id equals _create_User_Id.Id into t__create_User_Id
 						from _create_User_Id in t__create_User_Id.DefaultIfEmpty()
 						join _modify_User_Id in userQueryable on _role.Modify_User_Id equals _modify_User_Id.Id into t__modify_User_Id
@@ -46,6 +47,17 @@ namespace FastFrame.Service.Services.Basis
 							Modify_User=Modify_User,
 					};
 			return query;
+		}
+		protected  Task<PageList<RoleViewModel>> ViewModelListAsync(PagePara page) 
+		{
+			var query = from _role in roleRepository 
+						select new RoleViewModel
+						{
+							Name = _role.Name,
+							EnCode = _role.EnCode,
+							Id = _role.Id,
+						};
+			return query.PageListAsync(page);
 		}
 		
 	}

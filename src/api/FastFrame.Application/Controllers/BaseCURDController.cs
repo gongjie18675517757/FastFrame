@@ -26,7 +26,7 @@ namespace FastFrame.Application.Controllers
         /// <returns></returns>
         [Permission("Add", "添加")]
         [HttpPost]
-        public virtual async Task<TDto> Post([FromBody]TDto @input)
+        public virtual async Task<string> Post([FromBody]TDto @input)
         {
             return await service.AddAsync(@input);
         }
@@ -38,9 +38,9 @@ namespace FastFrame.Application.Controllers
         /// <returns></returns>
         [HttpPut]
         [Permission("Update", "修改")]
-        public virtual async Task<TDto> Put([FromBody]TDto @input)
+        public virtual async Task Put([FromBody]TDto @input)
         {
-            return await service.UpdateAsync(@input);
+            await service.UpdateAsync(@input);
         }
 
     }

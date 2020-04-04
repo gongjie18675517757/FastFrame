@@ -21,15 +21,10 @@ namespace FastFrame.Database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             /*循环添加DbSet*/
-            var entityType = typeof(IEntity);
+            var entityType = typeof(IQuery);
             var types = entityType.Assembly.GetTypes().Where(x => entityType.IsAssignableFrom(x) && x.IsClass && !x.IsAbstract);
             foreach (var item in types)
-                modelBuilder.Model.AddEntityType(item);
-
-            entityType = typeof(IQuery);
-            types = entityType.Assembly.GetTypes().Where(x => entityType.IsAssignableFrom(x) && x.IsClass && !x.IsAbstract);
-            foreach (var item in types)
-                modelBuilder.Model.AddQueryType(item);
+                modelBuilder.Model.AddEntityType(item); 
 
             /*循环添加Mapping*/
             var type = typeof(IEntityMapping);
@@ -39,15 +34,7 @@ namespace FastFrame.Database
                 var mapping = (IEntityMapping)item.Assembly.CreateInstance(item.FullName);
                
                 mapping.ModelCreating(modelBuilder); 
-            }
-
-            type = typeof(IQueryMapping);
-            types = type.Assembly.GetTypes().Where(x => type.IsAssignableFrom(x) && x.IsClass && !x.IsAbstract);
-            foreach (var item in types)
-            {
-                var mapping = (IQueryMapping)item.Assembly.CreateInstance(item.FullName);
-                mapping.ModelCreating(modelBuilder);
-            }
+            } 
 
 
             base.OnModelCreating(modelBuilder);

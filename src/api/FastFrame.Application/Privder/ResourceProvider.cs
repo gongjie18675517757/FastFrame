@@ -18,7 +18,7 @@ namespace FastFrame.Application.Privder
         {
             this.option = option;
         }
-        public async Task<Stream> GetResource(string path)
+        public async Task<Stream> ReadAsync(string path)
         {
             await Task.CompletedTask;
             path = Path.Combine(option.Value.BasePath, path);
@@ -27,7 +27,7 @@ namespace FastFrame.Application.Privder
             return null;
         }
 
-        public async Task<string> SetResource(Stream stream)
+        public async Task<string> WriteAsync(Stream stream)
         {
             var relativelyPath = Path.Combine(
                     $"{DateTime.Now.Year}",
@@ -50,5 +50,12 @@ namespace FastFrame.Application.Privder
 
         public string GetFilePath(string relativelyPath)
             => Path.Combine(option.Value.BasePath, relativelyPath);
+
+        public async Task<bool> ExistsAsync(string relativelyPath)
+        {
+            await Task.CompletedTask;
+            var path = Path.Combine(option.Value.BasePath, relativelyPath);
+            return File.Exists(path);
+        }
     }
 }

@@ -7,6 +7,7 @@ namespace FastFrame.Service.Services.Basis
 	using FastFrame.Repository; 
 	using System.Linq; 
 	using Microsoft.EntityFrameworkCore; 
+	using System.Threading.Tasks; 
 	/// <summary>
 	///用户 服务实现 
 	/// </summary>
@@ -25,9 +26,9 @@ namespace FastFrame.Service.Services.Basis
 		
 		protected override IQueryable<UserDto> QueryMain() 
 		{
-			 var resourceQueryable = resourceRepository.Queryable;
-			 var userQueryable = userRepository.Queryable;
-			 var query = from _user in userRepository 
+			var resourceQueryable = resourceRepository.Queryable;
+			var userQueryable = userRepository.Queryable;
+			var query = from _user in userRepository 
 						join _handIcon_Id in resourceQueryable on _user.HandIcon_Id equals _handIcon_Id.Id into t__handIcon_Id
 						from _handIcon_Id in t__handIcon_Id.DefaultIfEmpty()
 						join _create_User_Id in userQueryable on _user.Create_User_Id equals _create_User_Id.Id into t__create_User_Id
@@ -57,6 +58,17 @@ namespace FastFrame.Service.Services.Basis
 							Modify_User=Modify_User,
 					};
 			return query;
+		}
+		protected  Task<PageList<UserViewModel>> ViewModelListAsync(PagePara page) 
+		{
+			var query = from _user in userRepository 
+						select new UserViewModel
+						{
+							Name = _user.Name,
+							Account = _user.Account,
+							Id = _user.Id,
+						};
+			return query.PageListAsync(page);
 		}
 		
 	}

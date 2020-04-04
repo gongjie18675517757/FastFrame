@@ -12,8 +12,9 @@ namespace FastFrame.Infrastructure
                delimiter: "-",
                delimiterPositions: new[] { 20, 15, 10, 5 });
 
-        public static string NetId() => generator.NewId();
-        //public static string NetId() => Snowflake.Instance().GetId().ToString();
+        public static string NetId() => generator.NewId().ToLower();
+
+        public static long NetLongId() => Snowflake.Instance().GetId();
     }
 
 }

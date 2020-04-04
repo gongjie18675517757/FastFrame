@@ -10,7 +10,7 @@ namespace FastFrame.Dto.Basis
 	/// <summary>
 	///部门 
 	/// </summary>
-	[RelatedField("Name","EnCode")]
+	[RelatedField("Name")]
 	public partial class DeptDto:BaseDto<Dept>
 	{
 		
@@ -33,7 +33,6 @@ namespace FastFrame.Dto.Basis
 		/// <summary>
 		///主管 
 		/// </summary>
-		[StringLength(50)]
 		[RelatedTo(typeof(User))]
 		public string Supervisor_Id {get;set;}
 		
@@ -45,7 +44,6 @@ namespace FastFrame.Dto.Basis
 		/// <summary>
 		///上级 
 		/// </summary>
-		[StringLength(50)]
 		[RelatedTo(typeof(Dept))]
 		public string Super_Id {get;set;}
 		

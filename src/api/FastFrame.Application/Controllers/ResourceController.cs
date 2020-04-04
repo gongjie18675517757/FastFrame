@@ -30,25 +30,33 @@ namespace FastFrame.Application.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IEnumerable<ResourceDto>> Post()
-        { 
+        public async Task<IEnumerable<string>> Post()
+        {
             if (Request.Form.Files.Count == 0)
                 throw new System.Exception("无有效文件!");
-            var result = new List<ResourceDto>();
+            var result = new List<string>();
 
             var files = Request.Form.Files;
 
             foreach (var formFile in files)
             {
                 var stream = formFile.OpenReadStream();
-                var path = await resourceProvider.SetResource(stream);
+                stream.Position = 0;
+                var md5 = stream.ToMD5();
+                stream.Position = 0;
+
+                var path = await resourceService.GetPathByMd5Async(md5);
+
+                if (path.IsNullOrWhiteSpace())
+                    path = await resourceProvider.WriteAsync(stream);
+
                 result.Add(await resourceService.AddAsync(new ResourceDto()
                 {
                     ContentType = formFile.ContentType,
                     Name = formFile.FileName,
                     Path = path,
                     Size = formFile.Length,
-                    MD5 = stream.ToMD5()
+                    MD5 = md5,
                 }));
             }
 
@@ -57,17 +65,17 @@ namespace FastFrame.Application.Controllers
 
         /// <summary>
         /// 下载
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [HttpGet("{id}")]
-        //[Route("/resource/{id}")]
-        public async Task<IActionResult> Get(string id)
+        /// </summary> 
+        [HttpGet("{id}/{name?}")]
+        public async Task<IActionResult> Get(string id, string name)
         {
             var resource = await resourceService.GetAsync(id);
             if (resource == null)
-                throw new System.Exception("资源不存在");
-            var stream = await resourceProvider.GetResource(resource.Path);
+                return NotFound();
+
+            var stream = await resourceProvider.ReadAsync(resource.Path);
+            if (stream == null)
+                return NotFound();
 
             Response.Headers.Add("cache-control", new[] { "public,max-age=31536000" });
             Response.Headers.Add("Expires", new[] { DateTime.UtcNow.AddYears(1).ToString("R") });
@@ -82,7 +90,7 @@ namespace FastFrame.Application.Controllers
             }
             else
             {
-                return File(stream, resource.ContentType, resource.Name, true);
+                return File(stream, resource.ContentType, name ?? resource.Name, true);
             }
         }
     }

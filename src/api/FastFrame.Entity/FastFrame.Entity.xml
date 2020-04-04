@@ -74,7 +74,7 @@
             图片库
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Basis.Meidia.Parent_Id">
+        <member name="P:FastFrame.Entity.Basis.Meidia.Super_Id">
             <summary>
             上级
             </summary>
@@ -114,7 +114,7 @@
             标题
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Basis.Notify.Type_Value">
+        <member name="P:FastFrame.Entity.Basis.Notify.Type_Id">
             <summary>
             类型
             </summary>
@@ -132,16 +132,6 @@
         <member name="P:FastFrame.Entity.Basis.Notify.Content">
             <summary>
             内容
-            </summary>
-        </member>
-        <member name="T:FastFrame.Entity.Basis.NotifyTarget">
-            <summary>
-            通知目标
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.NotifyTarget.Notify_Id">
-            <summary>
-            通知ID
             </summary>
         </member>
         <member name="T:FastFrame.Entity.Basis.Permission">
@@ -204,6 +194,16 @@
             MD5摘要
             </summary>
         </member>
+        <member name="P:FastFrame.Entity.Basis.Resource.Uploader_Id">
+            <summary>
+            上传人
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.Resource.UploadTime">
+            <summary>
+            上传时间
+            </summary>
+        </member>
         <member name="T:FastFrame.Entity.Basis.Role">
             <summary>
             角色
@@ -227,12 +227,12 @@
         <member name="P:FastFrame.Entity.Basis.RoleMember.Role_Id">
             <summary>
             角色
-            </summary>
+            </summary> 
         </member>
         <member name="P:FastFrame.Entity.Basis.RoleMember.User_Id">
             <summary>
             用户
-            </summary>
+            </summary> 
         </member>
         <member name="T:FastFrame.Entity.Basis.RolePermission">
             <summary>
@@ -242,12 +242,12 @@
         <member name="P:FastFrame.Entity.Basis.RolePermission.Role_Id">
             <summary>
             角色ID
-            </summary>
+            </summary> 
         </member>
         <member name="P:FastFrame.Entity.Basis.RolePermission.Permission_Id">
             <summary>
             权限ID
-            </summary>
+            </summary> 
         </member>
         <member name="T:FastFrame.Entity.Basis.Tenant">
             <summary>
@@ -269,7 +269,7 @@
             URL标识
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Basis.Tenant.Parent_Id">
+        <member name="P:FastFrame.Entity.Basis.Tenant.Super_Id">
             <summary>
             上级
             </summary>
@@ -624,196 +624,6 @@
             女
             </summary>
         </member>
-        <member name="T:FastFrame.Entity.OA.Form">
-            <summary>
-            表单
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.OA.Form.Name">
-            <summary>
-            名称
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.OA.Form.Title">
-            <summary>
-            标题
-            </summary>
-        </member>
-        <member name="T:FastFrame.Entity.OA.FormItem">
-            <summary>
-            表单项
-            </summary>   
-        </member>
-        <member name="P:FastFrame.Entity.OA.FormItem.Name">
-            <summary>
-            名称
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.OA.FormItem.Title">
-            <summary>
-            标题
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.OA.FormItem.Category">
-            <summary>
-            类型
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.OA.FormItem.Order">
-            <summary>
-            排序
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.OA.FormItem.IsRequired">
-            <summary>
-            是否必填
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.OA.FormItem.IsEmail">
-            <summary>
-            是否Email
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.OA.FormItem.IsPhone">
-            <summary>
-            是否手机号
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.OA.FormItem.MinValue">
-            <summary>
-            最小值[长度]
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.OA.FormItem.MaxValue">
-            <summary>
-            最大值[长度]
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.OA.FormItem.Form_Id">
-            <summary>
-            表单
-            </summary>
-        </member>
-        <member name="T:FastFrame.Entity.OA.FormItemCategory">
-            <summary>
-            表单项类型
-            </summary>
-        </member>
-        <member name="F:FastFrame.Entity.OA.FormItemCategory.Text">
-            <summary>
-            文本
-            </summary>
-        </member>
-        <member name="F:FastFrame.Entity.OA.FormItemCategory.TextArea">
-            <summary>
-            多行文本
-            </summary>
-        </member>
-        <member name="F:FastFrame.Entity.OA.FormItemCategory.Select">
-            <summary>
-            选择框
-            </summary>
-        </member>
-        <member name="F:FastFrame.Entity.OA.FormItemCategory.MuchSelect">
-            <summary>
-            多选框
-            </summary>
-        </member>
-        <member name="F:FastFrame.Entity.OA.FormItemCategory.Date">
-            <summary>
-            日期
-            </summary>
-        </member>
-        <member name="F:FastFrame.Entity.OA.FormItemCategory.Time">
-            <summary>
-            时间
-            </summary>
-        </member>
-        <member name="F:FastFrame.Entity.OA.FormItemCategory.DateTime">
-            <summary>
-            日期+时间
-            </summary>
-        </member>
-        <member name="F:FastFrame.Entity.OA.FormItemCategory.Number">
-            <summary>
-            数字
-            </summary>
-        </member>
-        <member name="T:FastFrame.Entity.OA.FormItemDataSource">
-            <summary>
-            选择项数据源
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.OA.FormItemDataSource.FormItem_Id">
-            <summary>
-            表单项
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.OA.FormItemDataSource.Value">
-            <summary>
-            值
-            </summary>
-        </member>
-        <member name="T:FastFrame.Entity.OA.FormItemTextValue">
-            <summary>
-            表单值:文本
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.OA.FormItemTextValue.Instance_Id">
-            <summary>
-            表单实例
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.OA.FormItemTextValue.FormItem_Id">
-            <summary>
-            表单项
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.OA.FormItemTextValue.Value">
-            <summary>
-            值
-            </summary>
-        </member>
-        <member name="T:FastFrame.Entity.OA.FormItemNumberValue">
-            <summary>
-            表单值:数值
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.OA.FormItemNumberValue.Instance_Id">
-            <summary>
-            表单实例
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.OA.FormItemNumberValue.FormItem_Id">
-            <summary>
-            表单项
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.OA.FormItemNumberValue.Value">
-            <summary>
-            值
-            </summary>
-        </member>
-        <member name="T:FastFrame.Entity.OA.FormItemDateTimeValue">
-            <summary>
-            表单值:数值
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.OA.FormItemDateTimeValue.Instance_Id">
-            <summary>
-            表单实例
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.OA.FormItemDateTimeValue.FormItem_Id">
-            <summary>
-            表单项
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.OA.FormItemDateTimeValue.Value">
-            <summary>
-            值
-            </summary>
-        </member>
         <member name="P:FastFrame.Entity.BaseEntity.Id">
             <summary>
             主键
@@ -839,10 +649,20 @@
             修改时间
             </summary>
         </member>
+        <member name="T:FastFrame.Entity.IEntity">
+            <summary>
+            标记为表
+            </summary>
+        </member>
         <member name="P:FastFrame.Entity.IEntity.Id">
              <summary>
             主键
              </summary>
+        </member>
+        <member name="T:FastFrame.Entity.ITreeEntity">
+            <summary>
+            树结构表
+            </summary>
         </member>
         <member name="T:FastFrame.Entity.IHasManage">
             <summary>
@@ -884,9 +704,14 @@
             需要并发检查  未实现
             </summary>
         </member>
+        <member name="T:FastFrame.Entity.IQuery">
+            <summary>
+            标记为视图或表
+            </summary>
+        </member>
         <member name="T:FastFrame.Entity.TargetInfo">
             <summary>
-            目标信息
+            消息目标
             </summary>
         </member>
         <member name="P:FastFrame.Entity.TargetInfo.To_Id">

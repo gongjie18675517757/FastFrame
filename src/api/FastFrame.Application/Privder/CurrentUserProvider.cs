@@ -53,10 +53,14 @@ namespace FastFrame.Application.Privder
              */
             var host = getHost();
 
-            var tenantId = dataBase.Set<TenantHost>().Where(x => x.Host == host).Select(x => x.Tenant_Id).FirstOrDefault();
+            var tenantId = dataBase.Set<TenantHost>()
+                .Where(x => x.Host == host)
+                .Select(x => x.Tenant_Id)
+                .FirstOrDefault();
+
             tenant = dataBase.Set<Tenant>()
-                .Where(x => x.Id == tenantId || x.Parent_Id == "")
-                .OrderByDescending(x => x.Parent_Id)
+                .Where(x => x.Id == tenantId)
+                .OrderByDescending(x => x.Super_Id)
                 .FirstOrDefault();
 
             return tenant;

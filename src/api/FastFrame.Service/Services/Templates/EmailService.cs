@@ -8,6 +8,7 @@ namespace FastFrame.Service.Services.Chat
 	using FastFrame.Entity.Basis; 
 	using System.Linq; 
 	using Microsoft.EntityFrameworkCore; 
+	using System.Threading.Tasks; 
 	/// <summary>
 	///邮件 服务实现 
 	/// </summary>
@@ -26,7 +27,7 @@ namespace FastFrame.Service.Services.Chat
 		
 		protected override IQueryable<EmailDto> QueryMain() 
 		{
-			 var query = from _email in emailRepository 
+			var query = from _email in emailRepository 
 						 select new EmailDto
 						{
 							Title=_email.Title,
@@ -35,6 +36,18 @@ namespace FastFrame.Service.Services.Chat
 							Id=_email.Id,
 					};
 			return query;
+		}
+		protected  Task<PageList<EmailViewModel>> ViewModelListAsync(PagePara page) 
+		{
+			var query = from _email in emailRepository 
+						select new EmailViewModel
+						{
+							Title = _email.Title,
+							Replay_Email_Id = _email.Replay_Email_Id,
+							FromUser_Id = _email.FromUser_Id,
+							Id = _email.Id,
+						};
+			return query.PageListAsync(page);
 		}
 		
 	}

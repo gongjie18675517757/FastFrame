@@ -114,7 +114,7 @@ namespace FastFrame.CodeGenerate.Build
                     yield return new PropInfo()
                     {
                         Summary = summary,
-                        TypeName = relatedToAttribute.FullProps ? $"{relateTypeName}" : $"{relateTypeName}ViewModel",
+                        TypeName = $"{relateTypeName}ViewModel",
                         Name = item.Name.Replace("_Id", "")
                     };
                 }

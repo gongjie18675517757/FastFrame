@@ -25,7 +25,7 @@ namespace FastFrame.Service.Services.Basis
         {
             return GetAsync(currentUserProvider.GetCurrOrganizeId().Id);
         }
-        public Task<TenantDto> UpdateCurrentAsync(TenantDto tenantDto)
+        public Task UpdateCurrentAsync(TenantDto tenantDto)
         {
             tenantDto.Id = currentUserProvider.GetCurrOrganizeId().Id;
             return UpdateAsync(tenantDto);
@@ -35,7 +35,7 @@ namespace FastFrame.Service.Services.Basis
         {
             var terantId = currentUserProvider.GetCurrOrganizeId().Id;
             query = base.GetListQueryableing(query);
-            query.Where(x => x.Id != terantId && x.Parent_Id == terantId);
+            query.Where(x => x.Id != terantId && x.Super_Id == terantId);
             return query;
         }
     }

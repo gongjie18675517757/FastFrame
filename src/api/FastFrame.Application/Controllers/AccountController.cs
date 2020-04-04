@@ -30,9 +30,9 @@ namespace FastFrame.Application.Controllers
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPost] 
-        [AllowAnonymous]
+        [EveryoneAccess]
         public async Task<CurrUser> Login([FromBody]LoginInput input)
-        {
+        { 
             return await service.LoginAsync(input);
         }
 

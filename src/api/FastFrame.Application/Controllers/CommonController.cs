@@ -134,9 +134,6 @@ namespace FastFrame.Application.Controllers
 
             TryGetAttribute<RelatedFieldAttribute>(type, out var relatedFieldAttribute);
 
-            /*树状标记*/
-            TryGetAttribute<TreeAttribute>(type, out var treeAttribute);
-
             /*模块信息*/
             return new ModuleStruct()
             {
@@ -145,7 +142,7 @@ namespace FastFrame.Application.Controllers
                 Description = descriptionProvider.GetClassDescription(type),
                 FieldInfoStruts = fieldInfoStructs,
                 RelateFields = relatedFieldAttribute?.FieldNames ?? new[] { type.GetProperties().FirstOrDefault().Name },
-                TreeKey = treeAttribute?.Key,
+                IsTree = typeof(ITreeEntity).IsAssignableFrom(type),
                 HasManage = typeof(IHasManage).IsAssignableFrom(type)
             };
         }
@@ -156,7 +153,7 @@ namespace FastFrame.Application.Controllers
                 type = type.GetElementType();
 
             if (!type.IsEnum)
-                yield break; 
+                yield break;
 
             foreach (var item in Enum.GetNames(type))
             {
@@ -219,9 +216,9 @@ namespace FastFrame.Application.Controllers
         public IEnumerable<string> RelateFields { get; internal set; }
 
         /// <summary>
-        /// 树状键
+        /// 树结构
         /// </summary>
-        public string TreeKey { get; internal set; }
+        public bool IsTree { get; internal set; }
 
         /// <summary>
         /// 有管理属性

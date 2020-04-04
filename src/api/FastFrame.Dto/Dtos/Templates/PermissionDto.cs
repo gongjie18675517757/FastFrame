@@ -10,7 +10,7 @@ namespace FastFrame.Dto.Basis
 	/// <summary>
 	///权限 
 	/// </summary>
-	[RelatedField("Name","EnCode")]
+	[RelatedField("Name")]
 	public partial class PermissionDto:BaseDto<Permission>
 	{
 		

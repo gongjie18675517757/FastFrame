@@ -25,18 +25,18 @@ namespace FastFrame.Test.Basis
             try
             {
                 var service = ServiceProvider.GetService<UserService>();
-                var user = await service.AddAsync(new FastFrame.Dto.Basis.UserDto()
+                var user = new Dto.Basis.UserDto()
                 {
                     Account = name,
                     Name = name,
                     Password = name
-                });
-                Assert.AreEqual(user.Name, name);
+                };
+                await service.AddAsync(user);
                 user.Email = $"{name}@xx.com";
-                user = await service.UpdateAsync(user);
+                await service.UpdateAsync(user);
                 Assert.AreEqual(user.Email, $"{name}@xx.com");
                 user = await service.GetAsync(user.Id);
-                Assert.AreEqual(user.Name, name); 
+                Assert.AreEqual(user.Name, name);
 
                 await service.DeleteAsync(user.Id);
                 var exists = await repository.Queryable.AnyAsync(x => x.Name == name);
@@ -47,7 +47,7 @@ namespace FastFrame.Test.Basis
                 throw ex;
             }
             finally
-            { 
+            {
                 var user = await repository.Queryable.Where(x => x.Account == name).FirstOrDefaultAsync();
                 if (user != null)
                     await repository.DeleteAsync(user);

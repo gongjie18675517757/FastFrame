@@ -42,6 +42,16 @@ namespace FastFrame.Dto.Basis
 		/// </summary>
 		public string MD5 {get;set;}
 		
+		/// <summary>
+		///上传人 
+		/// </summary>
+		public string Uploader_Id {get;set;}
+		
+		/// <summary>
+		///上传时间 
+		/// </summary>
+		public DateTime UploadTime {get;set;}
+		
 		
 		
 	}

@@ -2,6 +2,7 @@
 using FastFrame.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -11,31 +12,46 @@ using System.Reflection;
 
 namespace FastFrame.Database
 {
-    public abstract class BaseEntityMapping<T> : IEntityMapping<T> where T : class, IEntity
+    public abstract class BaseEntityMapping<T> : IEntityMapping<T> where T : class, IQuery
     {
         public virtual void ModelCreating(ModelBuilder modelBuilder)
         {
+            ModelEntityCreating(modelBuilder.Entity<T>());
+        }
+
+        public virtual void ModelEntityCreating(EntityTypeBuilder<T> entityTypeBuilder)
+        {
             var entityType = typeof(T);
-
-            var Entity = modelBuilder.Entity<T>();
             var currNameSpace = string.Join(",", entityType.Namespace.Split(new char[] { '.' }).Skip(2));
-            Entity.ToTable($"{currNameSpace}_{entityType.Name}".ToLower());
 
-            /*指定主键*/
-            Entity.HasKey(x => x.Id);
-            Entity.Property(x => x.Id).ValueGeneratedNever();
+
+            if (typeof(IEntity).IsAssignableFrom(entityType))
+            {
+                /*指定主键*/
+                entityTypeBuilder.HasKey("Id");
+                entityTypeBuilder.Property("Id").ValueGeneratedNever();
+                entityTypeBuilder.ToTable($"{currNameSpace}_{entityType.Name}".ToLower());
+            }
+            else
+            {
+                entityTypeBuilder
+                    .HasNoKey()
+                    .ToView($"{currNameSpace}_{entityType.Name}".ToLower());
+            }
+
 
             /*过滤掉软删除的*/
             if (typeof(IHasSoftDelete).IsAssignableFrom(entityType))
             {
-                Entity.Property<bool>("isdeleted");
-                Entity.HasQueryFilter(v => !EF.Property<bool>(v, "isdeleted"));
+                entityTypeBuilder.Property<bool>("isdeleted");
+                entityTypeBuilder.HasQueryFilter(v => !EF.Property<bool>(v, "isdeleted"));
+                entityTypeBuilder.HasIndex("isdeleted").HasName($"Index_{entityType.Name}_isdeleted");
             }
-
 
             if (typeof(IHasTenant).IsAssignableFrom(entityType))
             {
-                Entity.Property<string>("tenant_id");
+                entityTypeBuilder.Property<string>("tenant_id");
+                entityTypeBuilder.HasIndex("tenant_id").HasName($"Index_{entityType.Name}_tenant_id");
             }
 
             foreach (var item in typeof(T).GetProperties())
@@ -43,86 +59,72 @@ namespace FastFrame.Database
                 if (item.GetCustomAttribute<NotMappedAttribute>() != null)
                     continue;
 
-                /*索引ID*/
-                if (item.Name.EndsWith("Id") && item.Name != "Id")
-                    Entity.HasIndex(item.Name).HasName($"Index_{entityType.Name}_{item.Name}");
-
                 var propType = T4Help.GetNullableType(item.PropertyType);
 
-                var prop = modelBuilder.Entity<T>()
-                    .Property(item.Name)
-                    .HasColumnName(item.Name.ToLower());
-                if (propType == typeof(string))
+                var prop = entityTypeBuilder
+                              .Property(item.Name)
+                              .HasColumnName(item.Name.ToLower());
+
+                /*索引ID*/
+                if (typeof(IEntity).IsAssignableFrom(entityType))
                 {
-                    /*所有字符串,指定为unicode*/
-                    prop.IsUnicode();
+                    if (item.Name.EndsWith("Id") && item.Name != "Id")
+                        entityTypeBuilder.HasIndex(item.Name).HasName($"Index_{entityType.Name}_{item.Name}");
 
-                    /*所有ID,指定长度为25*/
-                    if (item.Name.EndsWith("Id"))
+                    if (propType == typeof(string))
                     {
-                        prop.HasMaxLength(25);
-                    }
+                        /*所有字符串,指定为unicode*/
+                        prop.IsUnicode();
 
-                    /*非ID字段，且没有指定长度的，默认200*/
-                    else if (item.GetCustomAttribute<StringLengthAttribute>() == null && item.Name != "Content")
-                    {
-                        prop.HasMaxLength(200);
+                        /*所有ID,指定长度为25*/
+                        if (item.Name.EndsWith("Id"))
+                        {
+                            prop.HasMaxLength(25);
+                        }
                     }
-
+                }
+                if (propType == typeof(decimal))
+                {
+                    prop.HasColumnType("decimal(10,2)");
                 }
 
-                if (propType.IsEnum)
+                else if (propType.IsEnum)
                 {
-                    prop.HasConversion<string>().HasMaxLength(100);
+                    prop.HasConversion<string>().HasMaxLength(50);
                 }
-
-                ///*字符串数组类型*/
-                //if (propType == typeof(string[]))
-                //{
-                //    var parameterExpression = Expression.Parameter(typeof(T));
-                //    var memberExpression = Expression.Property(parameterExpression, item.Name);
-                //    var expression = Expression.Lambda<Func<T, string[]>>(memberExpression, parameterExpression);
-                //    Entity.Property(expression)
-                //        .HasMaxLength(500)
-                //        .IsUnicode()
-                //        .HasConversion(
-                //        v => string.Join(",", v),
-                //        v => v.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries));
-                //}
-
-                ///*枚举数组类型*/
-                //else if (propType.IsArray)
-                //{
-                //    var elementType = propType.GetElementType();
-                //    if (elementType.IsEnum)
-                //    {
-                //        this.GetType()
-                //            .GetMethod(nameof(ConvertEnumArray))
-                //            .MakeGenericMethod(elementType)
-                //            .Invoke(this, new object[] {
-                //                Entity,
-                //                item.Name
-                //            });
-                //    }
-                //}
             }
         }
 
         public void ConvertEnumArray<TEnum>(EntityTypeBuilder<T> typeBuilder, string name)
         {
-            var parameterExpression = Expression.Parameter(typeof(T));
-            var memberExpression = Expression.Property(parameterExpression, name);
-            var expression = Expression.Lambda<Func<T, TEnum[]>>(memberExpression, parameterExpression);
-            typeBuilder
-                .Property(expression)
-                .HasMaxLength(500)
-                .IsUnicode()
-                .HasConversion(
-                       v => string.Join(",", v),
-                       v => v.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+            var converter = new ValueConverter<TEnum[], string>(
+                   v => string.Join(",", v ?? Array.Empty<TEnum>()),
+                   v => (v ?? "").Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                              .Select(r => (TEnum)Enum.Parse(typeof(TEnum), r))
                              .ToArray()
-                       );
+                 );
+
+            typeBuilder
+                .Property(name)
+                .HasMaxLength(500)
+                .IsUnicode()
+                .HasConversion(converter);
+        }
+
+
+        public void ConvertStringArray(EntityTypeBuilder<T> typeBuilder, string name)
+        {
+            var converter = new ValueConverter<string[], string>(
+                   v => string.Join(",", v ?? Array.Empty<string>()),
+                   v => (v ?? "").Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                             .ToArray()
+                 );
+
+            typeBuilder
+                .Property(name)
+                .HasMaxLength(500)
+                .IsUnicode()
+                .HasConversion(converter);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using FastFrame.Database;
 using FastFrame.Entity;
 using FastFrame.Infrastructure.Interface;
+using FastFrame.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections;
@@ -8,18 +9,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
+using AspectCore.DependencyInjection;
 
 namespace FastFrame.Repository
 {
     public class BaseQueryable<T> : IQueryRepository<T> where T : class, IQuery
     {
         private readonly DataBase context;
-        private readonly ICurrentUserProvider currentUserProvider;
+        private IQueryable<T> queryable;
 
-        public BaseQueryable(DataBase context, ICurrentUserProvider currentUserProvider)
+        [FromServiceContext]
+        protected ICurrentUserProvider CurrUserProvider { get; set; }
+
+        protected ICurrUser currUser => CurrUserProvider?.GetCurrUser();
+
+        public BaseQueryable(DataBase context)
         {
             this.context = context;
-            this.currentUserProvider = currentUserProvider;
         }
 
         /// <summary>
@@ -30,12 +36,22 @@ namespace FastFrame.Repository
         {
             get
             {
-                IQueryable<T> queryable = context.Set<T>();
-                var tenant = currentUserProvider.GetCurrOrganizeId();
-                if (typeof(IHasTenant).IsAssignableFrom(typeof(T)))
+                if (queryable != null)
+                    return queryable;
+                else
                 {
-                    queryable.Where(v => EF.Property<string>(v, "tenant_id") == tenant.Id);
+                    IQueryable<T> query = context.Set<T>().AsNoTracking();
+                    var tenant = CurrUserProvider.GetCurrOrganizeId();
+                    if (tenant != null &&
+                        !tenant.Id.IsNullOrWhiteSpace() &&
+                        typeof(IHasTenant).IsAssignableFrom(typeof(T)))
+                    {
+                        query = query.Where(v => EF.Property<string>(v, "tenant_id") == tenant.Id);
+                    }
+
+                    queryable = query;
                 }
+
                 return queryable;
             }
         }

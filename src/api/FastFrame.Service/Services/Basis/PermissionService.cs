@@ -1,8 +1,10 @@
 ﻿using FastFrame.Dto.Basis;
 using FastFrame.Entity.Basis;
 using FastFrame.Infrastructure;
+using FastFrame.Infrastructure.EventBus;
 using FastFrame.Infrastructure.Interface;
 using FastFrame.Repository;
+using FastFrame.Service.Events;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,28 +12,26 @@ using System.Threading.Tasks;
 
 namespace FastFrame.Service.Services.Basis
 {
-    public partial class PermissionService: IEqualityComparer<Permission>
+    public partial class PermissionService :
+        IEqualityComparer<Permission>
     {
-        private readonly IRepository<Role> roleRepository;
         private readonly IRepository<RoleMember> roleMemberRepository;
         private readonly IRepository<RolePermission> rolePermissionRepository;
-        private readonly ICurrentUserProvider currentUserProvider;
 
         public PermissionService(
-            IRepository<Permission> permissionRepository,
-            IRepository<User> userRepository,
-            IRepository<Role> roleRepository,
-            IRepository<RoleMember> roleMemberRepository,
-            IRepository<RolePermission> rolePermissionRepository,
-            ICurrentUserProvider currentUserProvider,
-            IScopeServiceLoader loader)
+                IRepository<Permission> permissionRepository,
+                IRepository<User> userRepository,
+                IRepository<RoleMember> roleMemberRepository,
+                IRepository<RolePermission> rolePermissionRepository,
+                IScopeServiceLoader loader)
             : this(permissionRepository, userRepository, loader)
         {
-            this.roleRepository = roleRepository;
+
             this.roleMemberRepository = roleMemberRepository;
             this.rolePermissionRepository = rolePermissionRepository;
-            this.currentUserProvider = currentUserProvider;
+
         }
+
         /// <summary>
         /// 初始化权限
         /// </summary>        
@@ -82,28 +82,26 @@ namespace FastFrame.Service.Services.Basis
         /// <summary>
         /// 获取用户权限
         /// </summary>        
-        public async Task<IEnumerable<PermissionDto>> Permissions()
+        public async Task<IEnumerable<PermissionModel>> Permissions()
         {
-            var currUser = currentUserProvider.GetCurrUser();
+            var currUser = UserProvider.GetCurrUser();
 
             var user = await userRepository.GetAsync(currUser.Id);
 
             if (user.IsAdmin)
-                return await permissionRepository.MapTo<Permission, PermissionDto>().ToListAsync();
+                return await permissionRepository.MapTo<Permission, PermissionModel>().ToListAsync();
             else
                 return await GetPermissions(user.Id);
-
-
         }
 
         /// <summary>
         /// 获取用户权限
         /// </summary> 
-        private async Task<IEnumerable<PermissionDto>> GetPermissions(string userId)
+        private async Task<IEnumerable<PermissionModel>> GetPermissions(string userId)
         {
-            var iq = from a in roleMemberRepository.Queryable.Where(x => x.User_Id == userId)
-                     join b in rolePermissionRepository.Queryable on a.Role_Id equals b.Role_Id
-                     join c in permissionRepository.Queryable on b.Permission_Id equals c.Id
+            var iq = from a in roleMemberRepository.Where(x => x.User_Id == userId)
+                     join b in rolePermissionRepository on a.Role_Id equals b.Role_Id
+                     join c in permissionRepository on b.Permission_Id equals c.Id
                      where c.Super_Id != null
                      select c;
 
@@ -115,7 +113,7 @@ namespace FastFrame.Service.Services.Basis
             return (await iq.ToListAsync())
                         .Concat(await iq2.ToListAsync())
                         .Distinct(this)
-                        .Select(r => r.MapTo<Permission, PermissionDto>());
+                        .Select(r => r.MapTo<Permission, PermissionModel>());
         }
 
         /// <summary>
@@ -123,8 +121,8 @@ namespace FastFrame.Service.Services.Basis
         /// </summary> 
         public async Task<bool> ExistPermission(string moduleName, params string[] methodNames)
         {
-            var currUser = currentUserProvider.GetCurrUser();
-            //var currUser = await userRepository.GetAsync(userId);
+            var currUser = UserProvider.GetCurrUser();
+
             if (currUser.IsAdmin)
                 return true;
             /*一级权限*/

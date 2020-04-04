@@ -1,5 +1,8 @@
 ﻿using FastFrame.Dto.Basis;
+using FastFrame.Entity.Basis;
+using FastFrame.Infrastructure.Interface;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -7,14 +10,18 @@ namespace FastFrame.Service.Services.Basis
 {
     public partial class ResourceService
     {
-        public override async Task<ResourceDto> AddAsync(ResourceDto input)
+        public Task<string> GetPathByMd5Async(string md5)
+            => resourceRepository
+                        .Where(r => r.MD5 == md5)
+                        .Select(r => r.Path)
+                        .FirstOrDefaultAsync();
+
+        protected override async Task OnAdding(ResourceDto input, Resource entity)
         {
-            var md5 = input.MD5;
-            var id = await resourceRepository.Where(r => r.MD5 == md5).Select(r => r.Id).FirstOrDefaultAsync();
-            if (id == null)
-                return await base.AddAsync(input);
-            else
-                return await GetAsync(id);
+            entity.Uploader_Id = UserProvider?.GetCurrUser().Id;
+            entity.UploadTime = DateTime.Now;
+
+            await base.OnAdding(input, entity);
         }
     }
 }

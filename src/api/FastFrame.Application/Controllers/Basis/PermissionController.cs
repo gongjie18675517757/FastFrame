@@ -30,22 +30,10 @@ namespace FastFrame.Application.Controllers.Basis
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IEnumerable<PermissionDto>> Permissions()
+        public async Task<IEnumerable<PermissionModel>> Permissions()
         {
             return await service.Permissions();
-        }
-
-        /// <summary>
-        /// 验证权限
-        /// </summary>
-        /// <param name="moduleName">模块名</param>
-        /// <param name="methodName">方法名</param>
-        /// <returns></returns>
-        [HttpGet]
-        public async Task<bool> ExistPermission(string moduleName, string methodName)
-        {
-            return await service.ExistPermission(moduleName, methodName);
-        }
+        } 
 
         private IEnumerable<PermissionDto> GetPermissions()
         {

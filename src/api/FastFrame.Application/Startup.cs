@@ -1,6 +1,4 @@
-﻿using AspectCore.Extensions.DependencyInjection;
-using AspectCore.Injector;
-using CSRedis;
+﻿using CSRedis;
 using FastFrame.Application.Hubs;
 using FastFrame.Application.Privder;
 using FastFrame.Dto.Dtos.Chat;
@@ -12,14 +10,13 @@ using FastFrame.Service;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
@@ -42,9 +39,9 @@ namespace FastFrame.Application
         public IConfiguration Configuration { get; }
 
 
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
-             
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 options.CheckConsentNeeded = context => true;
@@ -57,9 +54,7 @@ namespace FastFrame.Application
             services.AddMvc(opts =>
             {
                 opts.Filters.Add<GlobalFilter>();
-            })
-            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-                .AddJsonOptions(options =>
+            }).AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                     options.SerializerSettings.ContractResolver = new DefaultContractResolver();
@@ -67,7 +62,14 @@ namespace FastFrame.Application
                     options.SerializerSettings.NullValueHandling = NullValueHandling.Include;
                     options.SerializerSettings.Converters.Add(new StringEnumConverter());
                 });
-            services.AddSignalR();
+            services
+                .AddSignalR()
+                .AddJsonProtocol(config =>
+                {
+                    config.PayloadSerializerOptions.PropertyNamingPolicy = null;
+                    config.PayloadSerializerOptions.IgnoreNullValues = false;
+                    config.PayloadSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+                });
             services.AddLogging(r => r.AddLog4Net());
             services.AddOptions();
             services.Configure<ResourceOption>(Configuration.GetSection("ResourceOption"));
@@ -76,9 +78,10 @@ namespace FastFrame.Application
                 .AddHttpContextAccessor()
                 .AddDbContextPool<Database.DataBase>(o =>
                 {
-                    o.UseMySql(Configuration.GetConnectionString("MyDbConnection"), mySqlOptions=> {
+                    o.UseMySql(Configuration.GetConnectionString("MyDbConnection"), mySqlOptions =>
+                    {
                         mySqlOptions.ServerVersion(new Version(5, 6, 40), ServerType.MySql);
-                    }).ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
+                    });
                     //o.UseInMemoryDatabase("Local_Mysql");
                 })
                 .AddSingleton<ITypeProvider, TypeProvider>()
@@ -94,19 +97,19 @@ namespace FastFrame.Application
 
             services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info()
+                options.SwaggerDoc("v1", new OpenApiInfo()
                 {
                     Version = "v1",
                     Title = "API文档",
                     Description = "快速开发平台",
                 });
-                options.DescribeAllEnumsAsStrings();
+                options.UseInlineDefinitionsForEnums();
                 var basePath = AppDomain.CurrentDomain.BaseDirectory;
                 var xmlPath = Path.Combine(basePath, "FastFrame.Application.xml");
                 options.IncludeXmlComments(xmlPath);
                 xmlPath = Path.Combine(basePath, "FastFrame.Dto.xml");
-                options.IncludeXmlComments(xmlPath); 
-            }); 
+                options.IncludeXmlComments(xmlPath);
+            });
 
             services.AddSingleton(x =>
             {
@@ -115,31 +118,22 @@ namespace FastFrame.Application
                 redisClient.Del("CacheUserMapKey");
                 return redisClient;
             });
-            var container = services.ToServiceContainer();
-            var serviceResolver = container.Build(); 
-
-            return serviceResolver;
         }
 
         /*master*/
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime applicationLifetime)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime applicationLifetime)
         {
             app.ApplicationServices.GetService<IMessageBus>().SubscribeAsync<RecMsgOutPut>();
             app.ApplicationServices.GetService<RedisClient>();
             app.ApplicationServices.GetService<Database.DataBase>().Database.Migrate();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-            }  
-             
+            }
 
-            app.UseSignalR(routes =>
-            {
-                routes.MapHub<ChatHub>("/hub/chat");
-                routes.MapHub<MessageHub>("/hub/message");
-            });
-            app.UseMiddleware<ResourceMiddleware>();
+         
 
             app.Use(async (context, next) =>
             {
@@ -156,38 +150,50 @@ namespace FastFrame.Application
 
                 await next.Invoke();
             });
-            //app.UseRewriter(new RewriteOptions().AddRewrite())
+            //app.UseRewriter(new RewriteOptions().AddRewrite()) 
 
-            app.UseDefaultFiles();
             app.UseStaticFiles();
-            app.UseStaticFiles(new StaticFileOptions
+            app.UseDefaultFiles();
+            app.UseRouting();
+            app.UseAuthorization();
+            app.UseMiddleware<ResourceMiddleware>();
+            app.UseEndpoints(endpoints =>
             {
-                FileProvider = new PhysicalFileProvider(
-                    app.ApplicationServices.GetRequiredService<IOptions<ResourceOption>>().Value.BasePath),
-                RequestPath = "/resource"
+                //endpoints.MapHub<ChatHub>("/hub/chat");
+                endpoints.MapHub<MessageHub>("/hub/message");
+                endpoints.MapControllers();
+
+                //endpoints.MapControllerRoute(
+                //    name: "default",
+                //    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
-            app.UseMvc();
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.InjectJavascript("/swagger/ui/Customization.js");
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "MsSystem API V1");
                 c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
             });
 
+            var logger = app.ApplicationServices.GetService<ILogger<Startup>>();
+
             applicationLifetime.ApplicationStarted.Register(() =>
             {
-                app.ApplicationServices.GetService<ILogger<Startup>>().LogInformation("ApplicationStarted");
+                logger.LogInformation("ApplicationStarted");
+                logger.LogWarning("ApplicationStarted");
+                logger.LogDebug("ApplicationStarted");
+                logger.LogError("ApplicationStarted");
+                logger.LogTrace("ApplicationStarted");
+                logger.LogCritical("ApplicationStarted");
             });
             applicationLifetime.ApplicationStopped.Register(() =>
             {
-                app.ApplicationServices.GetService<ILogger<Startup>>().LogInformation("ApplicationStopped");
+                logger.LogInformation("ApplicationStopped");
             });
             applicationLifetime.ApplicationStopping.Register(() =>
             {
-                app.ApplicationServices.GetService<ILogger<Startup>>().LogInformation("ApplicationStopping");
+                logger.LogInformation("ApplicationStopping");
             });
         }
-    } 
+    }
 }

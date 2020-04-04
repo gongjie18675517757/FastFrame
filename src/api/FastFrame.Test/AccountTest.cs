@@ -21,6 +21,7 @@ namespace FastFrame.Test
         [DataRow("test2", "123456")]
         public async Task TestRegist(string name, string password)
         {
+            
             var accountService = ServiceProvider.GetService<AccountService>();
             try
             {

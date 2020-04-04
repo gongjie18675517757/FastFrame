@@ -7,6 +7,7 @@ namespace FastFrame.Service.Services.Basis
 	using FastFrame.Repository; 
 	using System.Linq; 
 	using Microsoft.EntityFrameworkCore; 
+	using System.Threading.Tasks; 
 	/// <summary>
 	///资源 服务实现 
 	/// </summary>
@@ -25,7 +26,7 @@ namespace FastFrame.Service.Services.Basis
 		
 		protected override IQueryable<ResourceDto> QueryMain() 
 		{
-			 var query = from _resource in resourceRepository 
+			var query = from _resource in resourceRepository 
 						 select new ResourceDto
 						{
 							Name=_resource.Name,
@@ -33,9 +34,21 @@ namespace FastFrame.Service.Services.Basis
 							Path=_resource.Path,
 							ContentType=_resource.ContentType,
 							MD5=_resource.MD5,
+							Uploader_Id=_resource.Uploader_Id,
+							UploadTime=_resource.UploadTime,
 							Id=_resource.Id,
 					};
 			return query;
+		}
+		protected  Task<PageList<ResourceViewModel>> ViewModelListAsync(PagePara page) 
+		{
+			var query = from _resource in resourceRepository 
+						select new ResourceViewModel
+						{
+							Name = _resource.Name,
+							Id = _resource.Id,
+						};
+			return query.PageListAsync(page);
 		}
 		
 	}

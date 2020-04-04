@@ -20,9 +20,9 @@ namespace FastFrame.Infrastructure
     {
         public static async Task<PageList<T>> PageListAsync<T>(this IQueryable<T> query, PagePara pageInfo)
         {
-            query = query.DynamicQuery(pageInfo.Condition);
+            query = query.DynamicQuery(pageInfo.KeyWord, pageInfo.Filters);
 
-            var list = await query.DynamicSort(pageInfo.SortInfo)
+            var list = await query.DynamicSort(pageInfo.SortName, pageInfo.SortMode)
                     .Skip(pageInfo.PageSize * (pageInfo.PageIndex - 1))
                     .Take(pageInfo.PageSize)
                     .ToListAsync();
@@ -34,49 +34,49 @@ namespace FastFrame.Infrastructure
             };
         }
 
-        public static IQueryable<T> DynamicSort<T>(this IQueryable<T> query, SortInfo sortInfo)
+        public static IQueryable<T> DynamicSort<T>(this IQueryable<T> query, string name, string mode)
         {
             if (query == null)
             {
                 throw new ArgumentNullException(nameof(query));
             }
 
-            if (sortInfo == null)
+            if (string.IsNullOrWhiteSpace(name))
             {
-                sortInfo = new SortInfo()
-                {
-                    Name = "Id",
-                    Mode = "asc"
-                };
+                name = "Id";
             }
 
-            return query.OrderBy($"{sortInfo.Name} {sortInfo.Mode}");
+            if (string.IsNullOrWhiteSpace(mode))
+            {
+                mode = "desc";
+            }
+
+            return query.OrderBy($"{name} {mode}");
         }
-        public static IQueryable<T> DynamicQuery<T>(this IQueryable<T> query, QueryCondition condition)
+        public static IQueryable<T> DynamicQuery<T>(this IQueryable<T> query, string kw, IEnumerable<Filter> filters)
         {
             if (query == null)
             {
                 throw new ArgumentNullException(nameof(query));
             }
 
-            if (condition == null)
-            {
+            if (kw.IsNullOrWhiteSpace() && (filters == null || !filters.Any()))
                 return query;
-            }
-            foreach (var item in condition.Filters)
+
+            foreach (var item in filters)
             {
                 if (item.Value?.Trim().ToLower() == "null")
                     item.Value = null;
             }
 
-            if (!condition.KeyWord.IsNullOrWhiteSpace())
+            if (!kw.IsNullOrWhiteSpace())
             {
                 var props = typeof(T).GetProperties()
                     .Where(x => x.PropertyType == typeof(string) && !x.Name.EndsWith("Id"));
-                query = query.Where(string.Join(" or ", props.Select(x => $"{x.Name}.Contains(@0)")), condition.KeyWord);
+                query = query.Where(string.Join(" or ", props.Select(x => $"{x.Name}.Contains(@0)")), kw);
             }
 
-            foreach (var item in condition.Filters)
+            foreach (var item in filters)
             {
                 var conds = item.Name.Split(";".ToArray(), StringSplitOptions.RemoveEmptyEntries);
 
@@ -157,6 +157,36 @@ namespace FastFrame.Infrastructure
         public static bool IsNullOrWhiteSpace(this string @in)
         {
             return string.IsNullOrWhiteSpace(@in);
+        }
+
+        /// <summary>
+        /// 分割字符串
+        /// </summary>
+        /// <param name="in"></param>
+        /// <param name="separator"></param>
+        /// <returns></returns>
+        public static string[] ToSplitArray(this string @in, string separator = ",;")
+        {
+            if (@in.IsNullOrWhiteSpace())
+                return Array.Empty<string>();
+
+            return @in.Split(separator.ToArray());
+        }
+
+        /// <summary>
+        /// 连接字符串
+        /// </summary>
+        /// <param name="in"></param>
+        /// <param name="separator"></param>
+        /// <returns></returns>
+        public static string ToJoinString(this IEnumerator<string> @in, string separator = ",")
+        {
+            if (@in is null)
+            {
+                return string.Empty;
+            }
+
+            return string.Join(separator, @in);
         }
 
         /// <summary>

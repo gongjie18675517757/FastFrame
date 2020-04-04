@@ -4,6 +4,6 @@
     {
         string Id { get; }
 
-        string Parent_Id { get; }
+        string Super_Id { get; }
     }
 }

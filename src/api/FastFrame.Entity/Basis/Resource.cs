@@ -1,11 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using FastFrame.Infrastructure.Attrs;
+using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace FastFrame.Entity.Basis
 {
     /// <summary>
     /// 资源
     /// </summary>     
-    [Infrastructure.Attrs.RelatedField(nameof(Name))]
+    [RelatedField(nameof(Name))]
     public class Resource : IEntity, IHasTenant
     {
         /// <summary>
@@ -35,6 +37,16 @@ namespace FastFrame.Entity.Basis
         /// MD5摘要
         /// </summary>
         public string MD5 { get; set; }
+
+        /// <summary>
+        /// 上传人
+        /// </summary>
+        public string Uploader_Id { get; set; }
+
+        /// <summary>
+        /// 上传时间
+        /// </summary>
+        public DateTime UploadTime { get; set; }
 
         public string Id { get; set; }
     }

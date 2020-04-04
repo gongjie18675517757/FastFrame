@@ -7,6 +7,7 @@ namespace FastFrame.Service.Services.Basis
 	using FastFrame.Repository; 
 	using System.Linq; 
 	using Microsoft.EntityFrameworkCore; 
+	using System.Threading.Tasks; 
 	/// <summary>
 	///数字字典 服务实现 
 	/// </summary>
@@ -25,9 +26,9 @@ namespace FastFrame.Service.Services.Basis
 		
 		protected override IQueryable<EnumItemDto> QueryMain() 
 		{
-			 var enumItemQueryable = enumItemRepository.Queryable;
-			 var userQueryable = userRepository.Queryable;
-			 var query = from _enumItem in enumItemRepository 
+			var enumItemQueryable = enumItemRepository.Queryable;
+			var userQueryable = userRepository.Queryable;
+			var query = from _enumItem in enumItemRepository 
 						join _super_Id in enumItemQueryable on _enumItem.Super_Id equals _super_Id.Id into t__super_Id
 						from _super_Id in t__super_Id.DefaultIfEmpty()
 						join _create_User_Id in userQueryable on _enumItem.Create_User_Id equals _create_User_Id.Id into t__create_User_Id
@@ -52,6 +53,16 @@ namespace FastFrame.Service.Services.Basis
 							Modify_User=Modify_User,
 					};
 			return query;
+		}
+		protected  Task<PageList<EnumItemViewModel>> ViewModelListAsync(PagePara page) 
+		{
+			var query = from _enumItem in enumItemRepository 
+						select new EnumItemViewModel
+						{
+							Value = _enumItem.Value,
+							Id = _enumItem.Id,
+						};
+			return query.PageListAsync(page);
 		}
 		
 	}

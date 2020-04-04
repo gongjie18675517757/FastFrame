@@ -8,7 +8,7 @@ namespace FastFrame.Entity.Basis
     /// 组织信息
     /// </summary>
     [Export]
-    public class Tenant : IEntity, IHasSoftDelete, ITenant
+    public class Tenant : IEntity, IHasSoftDelete, ITenant, ITreeEntity
     {
         /// <summary>
         /// 全称
@@ -34,7 +34,7 @@ namespace FastFrame.Entity.Basis
         /// <summary>
         /// 上级
         /// </summary>
-        public string Parent_Id { get; set; }
+        public string Super_Id { get; set; }
 
         /// <summary>
         /// 是否可发展下级

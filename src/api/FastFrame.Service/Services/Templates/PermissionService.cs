@@ -7,6 +7,7 @@ namespace FastFrame.Service.Services.Basis
 	using FastFrame.Repository; 
 	using System.Linq; 
 	using Microsoft.EntityFrameworkCore; 
+	using System.Threading.Tasks; 
 	/// <summary>
 	///权限 服务实现 
 	/// </summary>
@@ -25,11 +26,11 @@ namespace FastFrame.Service.Services.Basis
 		
 		protected override IQueryable<PermissionDto> QueryMain() 
 		{
-			 var permissionQueryable = permissionRepository.Queryable;
-			 var query = from _permission in permissionRepository 
+			var permissionQueryable = permissionRepository.Queryable;
+			var query = from _permission in permissionRepository 
 						join _super_Id in permissionQueryable on _permission.Super_Id equals _super_Id.Id into t__super_Id
 						from _super_Id in t__super_Id.DefaultIfEmpty()
-						let Super=new PermissionViewModel {Name=_super_Id.Name,EnCode=_super_Id.EnCode,Id=_super_Id.Id}
+						let Super=new PermissionViewModel {Name=_super_Id.Name,Id=_super_Id.Id}
 						 select new PermissionDto
 						{
 							Name=_permission.Name,
@@ -40,6 +41,16 @@ namespace FastFrame.Service.Services.Basis
 							Super=Super,
 					};
 			return query;
+		}
+		protected  Task<PageList<PermissionViewModel>> ViewModelListAsync(PagePara page) 
+		{
+			var query = from _permission in permissionRepository 
+						select new PermissionViewModel
+						{
+							Name = _permission.Name,
+							Id = _permission.Id,
+						};
+			return query.PageListAsync(page);
 		}
 		
 	}

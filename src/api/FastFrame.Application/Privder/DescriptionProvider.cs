@@ -1,21 +1,17 @@
-﻿using FastFrame.Infrastructure.Interface;
-using FastFrame.Infrastructure;
+﻿using FastFrame.Infrastructure;
+using FastFrame.Infrastructure.Interface;
 using System;
-using System.Threading.Tasks;
 using System.Reflection;
-using Microsoft.AspNetCore.Hosting;
 
 namespace FastFrame.Application.Privder
 {
     public class DescriptionProvider : IDescriptionProvider
     {
-        private readonly string docPath;
-        private readonly IHostingEnvironment hostingEnvironment;
+        private readonly string docPath; 
 
-        public DescriptionProvider(IHostingEnvironment hostingEnvironment)
+        public DescriptionProvider( )
         {
-            docPath = AppDomain.CurrentDomain.BaseDirectory;
-            this.hostingEnvironment = hostingEnvironment;
+            docPath = AppDomain.CurrentDomain.BaseDirectory; 
         }
         public string GetClassDescription(Type type)
         {

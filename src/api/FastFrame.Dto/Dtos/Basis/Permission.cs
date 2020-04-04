@@ -9,5 +9,4 @@ namespace FastFrame.Dto.Basis
         /// </summary>
         public IEnumerable<PermissionDto> Permissions { get; set; } = new List<PermissionDto>();
     }
-    
 }

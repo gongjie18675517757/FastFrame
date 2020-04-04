@@ -15,11 +15,6 @@ namespace FastFrame.Dto.Basis
 		public string Name {get;set;}
 		
 		/// <summary>
-		///编码 
-		/// </summary>
-		public string EnCode {get;set;}
-		
-		/// <summary>
 		///主键 
 		/// </summary>
 		public string Id {get;set;}

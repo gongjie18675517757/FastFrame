@@ -10,7 +10,7 @@ namespace FastFrame.Test
         ICurrUser curr = null;
         public ITenant GetCurrOrganizeId()
         {
-            return new Tenant() { Id = "test", Parent_Id = "" };
+            return new Tenant() { Id = "test", Super_Id = "" };
         }
 
         public ICurrUser GetCurrUser()

@@ -10,15 +10,12 @@ namespace FastFrame.Application.Privder
 {
     public class ResourceMiddleware
     {
-        private readonly RequestDelegate next;
-        //private readonly Regex reg;
+        private readonly RequestDelegate next; 
 
         public ResourceMiddleware(RequestDelegate next)
         {
-            this.next = next;
-            //reg = new Regex("^/resource/(.+)$");
-        }
-
+            this.next = next; 
+        } 
         public async Task Invoke(HttpContext context)
         {
             var path = context.Request.Path;
@@ -27,8 +24,7 @@ namespace FastFrame.Application.Privder
             {
                 context.Response.StatusCode = 304;
                 return;
-            }
-
+            } 
             await next(context);
         }
     }

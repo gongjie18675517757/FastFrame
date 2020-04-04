@@ -8,14 +8,14 @@ namespace FastFrame.Entity.Basis
     /// </summary>
     [Export]
     [RelatedField(nameof(Name))]
-    [Unique(nameof(Parent_Id), nameof(Name))]
-    public class Meidia : BaseEntity
+    [Unique(nameof(Super_Id), nameof(Name))]
+    public class Meidia : BaseEntity, ITreeEntity
     {
         /// <summary>
         /// 上级
         /// </summary>
         [RelatedTo(typeof(Meidia))]
-        public string Parent_Id { get; set; }
+        public string Super_Id { get; set; }
 
         /// <summary>
         /// 链接
@@ -33,7 +33,7 @@ namespace FastFrame.Entity.Basis
         /// <summary>
         /// 资源
         /// </summary>
-        [RelatedTo(typeof(Resource), true)]
+        [RelatedTo(typeof(Resource))]
         public string Resource_Id { get; set; }
 
         /// <summary>

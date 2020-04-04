@@ -1,4 +1,5 @@
-﻿using FastFrame.Database;
+﻿using AspectCore.DependencyInjection;
+using FastFrame.Database;
 using FastFrame.Entity;
 using FastFrame.Entity.Basis;
 using FastFrame.Infrastructure;
@@ -18,19 +19,16 @@ using System.Threading.Tasks;
 
 namespace FastFrame.Repository
 {
-    internal class BaseRepository<T> : BaseUnitOrWork, IRepository<T> where T : class, IEntity
+    internal class BaseRepository<T> : BaseQueryable<T>, IRepository<T> where T : class, IEntity
     {
         private readonly DataBase context;
-        private readonly ICurrentUserProvider currentUserProvider;
-        private readonly IEventBus eventBus;
-        private readonly ICurrUser currUser;
 
-        public BaseRepository(DataBase context, ICurrentUserProvider currentUserProvider, IEventBus eventBus) : base(context)
+        [FromServiceContext]
+        public IEventBus EventBus { get; set; }
+
+        public BaseRepository(DataBase context) : base(context)
         {
             this.context = context;
-            this.currentUserProvider = currentUserProvider;
-            this.eventBus = eventBus;
-            currUser = currentUserProvider.GetCurrUser();
         }
 
         /// <summary>
@@ -40,9 +38,9 @@ namespace FastFrame.Repository
         {
             /*验证唯一性+关联性*/
             entity.Id = IdGenerate.NetId();
-            if (entity is IHasTenant tenant)
+            if (entity is IHasTenant)
             {
-                context.Entry(entity).Property<string>("tenant_id").CurrentValue = currentUserProvider.GetCurrOrganizeId().Id;
+                context.Entry(entity).Property<string>("tenant_id").CurrentValue = CurrUserProvider.GetCurrOrganizeId().Id;
             }
 
             await Verification(entity);
@@ -51,18 +49,18 @@ namespace FastFrame.Repository
             {
                 hasManage.CreateTime = DateTime.Now;
                 hasManage.ModifyTime = DateTime.Now;
-                var curr = currentUserProvider.GetCurrUser();
-                if (curr != null)
+
+                if (currUser != null)
                 {
-                    hasManage.Create_User_Id = curr.Id;
-                    hasManage.Modify_User_Id = curr.Id;
+                    hasManage.Create_User_Id = currUser?.Id;
+                    hasManage.Modify_User_Id = currUser?.Id;
                 }
             }
 
             var entityEntry = context.Entry(entity);
             entityEntry.State = EntityState.Added;
 
-            await eventBus.TriggerAsync(new EntityAdding<T>(entityEntry.Entity));
+            await EventBus.TriggerEventAsync(new EntityAdding<T>(entityEntry.Entity));
             return entityEntry.Entity;
         }
 
@@ -79,22 +77,19 @@ namespace FastFrame.Repository
             foreach (var uniqueAttribute in uniqueAttributes)
             {
                 var names = uniqueAttribute.UniqueNames;
-                var exist = await Queryable.DynamicQuery(new QueryCondition()
+                var exist = await Queryable.DynamicQuery(null, names.Select(x => new Filter()
                 {
-                    Filters = names.Select(x => new Filter()
-                    {
-                        Compare = "==",
-                        Name = x,
-                        Value = entity.GetValue(x)?.ToString()
-                    }).Concat(new[] {
+                    Compare = "==",
+                    Name = x,
+                    Value = entity.GetValue(x)?.ToString()
+                }).Concat(new[] {
                             new Filter()
                             {
                                 Compare="!=",
-                                Value=entity.Id,
+                                Value=entity.Id.ToString(),
                                 Name="Id",
                             }
-                        })
-                }).AnyAsync();
+                        }).ToList()).AnyAsync();
                 if (exist) throw new UniqueException(typeof(T), names);
             }
             foreach (var prop in typeof(T).GetProperties())
@@ -137,7 +132,7 @@ namespace FastFrame.Repository
                 context.Entry(entity).State = EntityState.Deleted;
             }
 
-            await eventBus.TriggerAsync(new EntityDeleteing<T>(entity));
+            await EventBus.TriggerEventAsync(new EntityDeleteing<T>(entity));
         }
 
         /// <summary>
@@ -166,7 +161,7 @@ namespace FastFrame.Repository
             var entityEntry = context.Entry(entity);
             entityEntry.State = EntityState.Modified;
 
-            await eventBus.TriggerAsync(new EntityUpdateing<T>(entityEntry.Entity));
+            await EventBus.TriggerEventAsync(new EntityUpdateing<T>(entityEntry.Entity));
             return entityEntry.Entity;
         }
 
@@ -175,40 +170,12 @@ namespace FastFrame.Repository
         /// </summary> 
         public virtual async Task<T> GetAsync(string id)
         {
-            return await Queryable.Where("Id=@0", id).FirstOrDefaultAsync();
+            return await Queryable.Where(v => v.Id == id).SingleOrDefaultAsync();
         }
 
-        /// <summary>
-        /// 查询表达式
-        /// </summary> 
-        public virtual IQueryable<T> Queryable
+        public async Task<int> CommmitAsync()
         {
-            get
-            {                 
-                IQueryable<T> queryable = context.Set<T>();
-                //var tenant = currentUserProvider.GetCurrOrganizeId();
-                //if (typeof(IHasTenant).IsAssignableFrom(typeof(T)))
-                //{
-                //    queryable.Where(v => EF.Property<string>(v, "tenant_id") == tenant.Id);
-                //}
-                return queryable;
-            }
-        }
-
-        public Type ElementType => Queryable.ElementType;
-
-        public Expression Expression => Queryable.Expression;
-
-        public IQueryProvider Provider => Queryable.Provider;
-
-        public IEnumerator<T> GetEnumerator()
-        {
-            return Queryable.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return Queryable.GetEnumerator();
+            return await context.SaveChangesAsync();
         }
     }
 }

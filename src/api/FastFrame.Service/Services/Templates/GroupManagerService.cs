@@ -8,6 +8,7 @@ namespace FastFrame.Service.Services.Chat
 	using FastFrame.Entity.Basis; 
 	using System.Linq; 
 	using Microsoft.EntityFrameworkCore; 
+	using System.Threading.Tasks; 
 	/// <summary>
 	///群组管理员 服务实现 
 	/// </summary>
@@ -26,7 +27,7 @@ namespace FastFrame.Service.Services.Chat
 		
 		protected override IQueryable<GroupManagerDto> QueryMain() 
 		{
-			 var query = from _groupManager in groupManagerRepository 
+			var query = from _groupManager in groupManagerRepository 
 						 select new GroupManagerDto
 						{
 							Group_Id=_groupManager.Group_Id,
@@ -34,6 +35,17 @@ namespace FastFrame.Service.Services.Chat
 							Id=_groupManager.Id,
 					};
 			return query;
+		}
+		protected  Task<PageList<GroupManagerViewModel>> ViewModelListAsync(PagePara page) 
+		{
+			var query = from _groupManager in groupManagerRepository 
+						select new GroupManagerViewModel
+						{
+							Group_Id = _groupManager.Group_Id,
+							User_Id = _groupManager.User_Id,
+							Id = _groupManager.Id,
+						};
+			return query.PageListAsync(page);
 		}
 		
 	}

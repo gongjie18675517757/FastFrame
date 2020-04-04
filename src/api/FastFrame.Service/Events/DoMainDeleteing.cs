@@ -9,11 +9,13 @@ namespace FastFrame.Service.Events
     /// <typeparam name="T"></typeparam>
     public class DoMainDeleteing<T> : BaseEventData<T> 
     {
-        public DoMainDeleteing(string id)
+        public DoMainDeleteing(string id,object Data)
         {
             Id = id;
+            this.Data = Data;
         }
 
         public string Id { get; }
+        public object Data { get; }
     }
 }

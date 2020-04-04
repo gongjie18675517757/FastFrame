@@ -10,7 +10,7 @@ namespace FastFrame.Dto.Basis
 	/// <summary>
 	///图片库 
 	/// </summary>
-	[Unique("Parent_Id","Name")]
+	[Unique("Super_Id","Name")]
 	[RelatedField("Name")]
 	public partial class MeidiaDto:BaseDto<Meidia>
 	{
@@ -20,12 +20,12 @@ namespace FastFrame.Dto.Basis
 		///上级 
 		/// </summary>
 		[RelatedTo(typeof(Meidia))]
-		public string Parent_Id {get;set;}
+		public string Super_Id {get;set;}
 		
 		/// <summary>
 		///上级 
 		/// </summary>
-		public MeidiaViewModel Parent {get;set;}
+		public MeidiaViewModel Super {get;set;}
 		
 		/// <summary>
 		///链接 
@@ -49,7 +49,7 @@ namespace FastFrame.Dto.Basis
 		/// <summary>
 		///资源 
 		/// </summary>
-		public Resource Resource {get;set;}
+		public ResourceViewModel Resource {get;set;}
 		
 		/// <summary>
 		///资源标识 

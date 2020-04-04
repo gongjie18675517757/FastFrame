@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace FastFrame.Infrastructure
 {
@@ -20,41 +22,26 @@ namespace FastFrame.Infrastructure
         public int PageSize { get => _pageSize < 0 ? 10 : _pageSize; set => _pageSize = value; }
 
         /// <summary>
-        /// 查询条件
-        /// </summary>
-        public QueryCondition Condition { get; set; }
-
-        /// <summary>
-        /// 排序条件
-        /// </summary>
-        public SortInfo SortInfo { get; set; }
-    }
-
-    public class SortInfo
-    {
-        /// <summary>
-        /// 排序列名称
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// 排序方式
-        /// </summary>
-        public string Mode { get; set; }
-    }
-
-    public class QueryCondition
-    {
-        /// <summary>
         /// 模糊条件
         /// </summary>
-        public string KeyWord { get; set; }
+        public string KeyWord { get; set; } 
 
         /// <summary>
         /// 条件
         /// </summary>
-        public IEnumerable<Filter> Filters { get; set; } = new List<Filter>();
+        public List<Filter> Filters { get; set; }
+
+        /// <summary>
+        /// 排序列名称
+        /// </summary>
+        public string SortName { get; set; }
+
+        /// <summary>
+        /// 排序方式
+        /// </summary>
+        public string SortMode { get; set; } 
     }
+
 
     public class Filter
     {

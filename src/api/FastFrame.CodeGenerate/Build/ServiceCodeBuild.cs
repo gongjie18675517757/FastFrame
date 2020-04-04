@@ -65,7 +65,8 @@ namespace FastFrame.CodeGenerate.Build
                     "FastFrame.Repository",
                     "FastFrame.Entity.Basis",
                     "System.Linq",
-                    "Microsoft.EntityFrameworkCore"
+                    "Microsoft.EntityFrameworkCore",
+                    "System.Threading.Tasks"
                  })
                     .Union(type.GetProperties()
                     .Select(x => x.GetCustomAttribute<RelatedToAttribute>())
@@ -113,6 +114,57 @@ namespace FastFrame.CodeGenerate.Build
                 ResultTypeName = $"IQueryable<{type.Name}Dto>",
                 CodeBlock = GetQueryMainCodeBlock(type)
             };
+
+            yield return new MethodInfo()
+            {
+                IsOverride = false,
+                MethodName = "ViewModelListAsync",
+                Modifier = "protected",
+                ResultTypeName = $"Task<PageList<{type.Name}ViewModel>>",
+                CodeBlock = GetViewModelListCodeBlock(type),
+                Parms = new ParameterInfo[] {
+                    new ParameterInfo
+                    {
+                        DefineName="page",
+                        TypeName="PagePara"
+                    }
+                }
+            };
+        }
+
+        private IEnumerable<string> GetViewModelNames(Type type)
+        {
+            var fieldNames = type.GetCustomAttribute<RelatedFieldAttribute>()?.FieldNames.ToList();
+            if (fieldNames == null)
+            {
+                fieldNames = type.GetProperties().Select(v => v.Name).ToList();
+                var baseFieldNames = type.BaseType.GetProperties().Select(v => v.Name).ToList();
+                fieldNames = fieldNames.Where(v => !baseFieldNames.Any(r => r == v)).ToList();
+            }
+
+            if (!fieldNames.Contains("Id"))
+            {
+                fieldNames.Add("Id");
+            }
+            foreach (var item in fieldNames)
+            {
+                yield return item;
+            }
+        }
+
+        public IEnumerable<string> GetViewModelListCodeBlock(Type type)
+        {
+            string typeName = type.Name.ToFirstLower();
+            var propsNames = GetViewModelNames(type);
+            yield return $"var query = from _{typeName} in {typeName}Repository ";
+            yield return $"\t\t\tselect new {type.Name}ViewModel";
+            yield return "\t\t\t{";
+            foreach (var prop in propsNames)
+            {
+                yield return $"\t\t\t\t{prop} = _{typeName}.{prop},";
+            }
+            yield return "\t\t\t};";
+            yield return "return query.PageListAsync(page);";
         }
 
         public IEnumerable<string> GetQueryMainCodeBlock(Type type)
@@ -127,11 +179,11 @@ namespace FastFrame.CodeGenerate.Build
             foreach (Type relateType in props.GroupBy(x => x.Attr.RelatedType).Select(v => v.Key))
             {
                 string relatedTypeName = relateType.Name.ToFirstLower();
-                yield return $" var {relatedTypeName}Queryable = {relatedTypeName}Repository.Queryable;";
+                yield return $"var {relatedTypeName}Queryable = {relatedTypeName}Repository.Queryable;";
             }
 
 
-            yield return $" var query = from _{typeName} in {typeName}Repository ";
+            yield return $"var query = from _{typeName} in {typeName}Repository ";
 
             foreach (var prop in props)
             {
@@ -144,6 +196,7 @@ namespace FastFrame.CodeGenerate.Build
                 {
                     yield return $"\t\t\tfrom {name} in t_{name}.DefaultIfEmpty()";
                 }
+
             }
 
             foreach (var prop in props)
@@ -165,10 +218,8 @@ namespace FastFrame.CodeGenerate.Build
                 string linqTempName = "_" + prop.Prop.Name.ToFirstLower();
                 fieldNames = fieldNames.Concat(new[] { "Id" }).Distinct().Select(v => $"{v}={linqTempName}.{v}").ToArray();
                 string fieldCtorStr = string.Join(",", fieldNames);
-                if (prop.Attr.FullProps)
-                    yield return $"\t\t\tlet {name}={linqTempName}";
-                else
-                    yield return $"\t\t\tlet {name}=new {relateType.Name}{(prop.Attr.FullProps ? "" : "ViewModel")} {{{fieldCtorStr}}}";
+
+                yield return $"\t\t\tlet {name}=new {relateType.Name}ViewModel {{{fieldCtorStr}}}";
             }
 
 

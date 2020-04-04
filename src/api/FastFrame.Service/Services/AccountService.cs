@@ -32,7 +32,7 @@ namespace FastFrame.Service.Services
             if (user?.VerificationPassword(input.Password) == true)
             {
                 if (user.IsDisabled)
-                    throw new Exception("帐号已被停用");
+                    throw new MsgException("帐号已被停用");
                 var curr = new CurrUser()
                 {
                     IsAdmin = user.IsAdmin,
@@ -45,7 +45,7 @@ namespace FastFrame.Service.Services
                 await currentUserProvider.Login(curr);
                 return curr;
             }
-            throw new Exception("登陆失败,帐号或者密码错误!");
+            throw new MsgException("登陆失败,帐号或者密码错误!");
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace FastFrame.Service.Services
         {
             var curr = currentUserProvider.GetCurrUser();
             if (curr == null)
-                throw new Exception("未登陆吧!");
+                throw new MsgException("未登陆吧!");
             var user = await userRepository.GetAsync(curr?.Id);
             return user.MapTo<User, UserDto>();
         }

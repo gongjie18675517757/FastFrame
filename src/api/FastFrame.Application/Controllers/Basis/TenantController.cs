@@ -20,9 +20,9 @@ namespace FastFrame.Application.Controllers.Basis
 
         [Permission("UpdateTenantInfo", "更新企业信息")]
         [HttpPut]
-        public async Task<TenantDto> UpdateTenantInfo([FromBody]TenantDto tenantDto)
+        public async Task UpdateTenantInfo([FromBody]TenantDto tenantDto)
         {
-            return await service.UpdateCurrentAsync(tenantDto);
+            await service.UpdateCurrentAsync(tenantDto);
         }
     }
 }

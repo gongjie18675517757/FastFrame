@@ -7,6 +7,7 @@ namespace FastFrame.Service.Services.Basis
 	using FastFrame.Repository; 
 	using System.Linq; 
 	using Microsoft.EntityFrameworkCore; 
+	using System.Threading.Tasks; 
 	/// <summary>
 	/// 服务实现 
 	/// </summary>
@@ -25,7 +26,7 @@ namespace FastFrame.Service.Services.Basis
 		
 		protected override IQueryable<TenantHostDto> QueryMain() 
 		{
-			 var query = from _tenantHost in tenantHostRepository 
+			var query = from _tenantHost in tenantHostRepository 
 						 select new TenantHostDto
 						{
 							Host=_tenantHost.Host,
@@ -33,6 +34,17 @@ namespace FastFrame.Service.Services.Basis
 							Tenant_Id=_tenantHost.Tenant_Id,
 					};
 			return query;
+		}
+		protected  Task<PageList<TenantHostViewModel>> ViewModelListAsync(PagePara page) 
+		{
+			var query = from _tenantHost in tenantHostRepository 
+						select new TenantHostViewModel
+						{
+							Host = _tenantHost.Host,
+							Id = _tenantHost.Id,
+							Tenant_Id = _tenantHost.Tenant_Id,
+						};
+			return query.PageListAsync(page);
 		}
 		
 	}

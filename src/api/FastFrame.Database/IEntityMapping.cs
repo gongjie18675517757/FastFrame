@@ -7,7 +7,8 @@ namespace FastFrame.Database
     {
         void ModelCreating(ModelBuilder modelBuilder);
     }
-    internal interface IEntityMapping<T> : IEntityMapping where T:IEntity
+    internal interface IEntityMapping<T> : IEntityMapping where T:IQuery
     {
+
     }
 }

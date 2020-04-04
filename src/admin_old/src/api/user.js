@@ -1,4 +1,0 @@
-let list = []
-export {
-  list
-}

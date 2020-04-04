@@ -1,15 +1,16 @@
 import '@babel/polyfill'
 import Vue from 'vue'
-import vuetify  from  './plugins/vuetify'
+import vuetify from './plugins/vuetify'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import '@/hubs/messageHub'
 import $http from '@/http.js'
-import Alert from '@/components/Message/Alert.vue'
-import Confirm from '@/components/Message/Confirm.vue'
+
+
 import Prompt from '@/components/Message/Prompt.vue'
 import {
   eventBus,
@@ -27,13 +28,13 @@ import Btn from '@/components/Btn.vue'
 
 Vue.prototype.$message = {
   alert(title = "", content = "") {
-    return showDialog(Alert, {
+    return showDialog(() => import('./components/Message/Alert.vue'), {
       title,
       content
     })
   },
   confirm(title = "", content = "") {
-    return showDialog(Confirm, {
+    return showDialog(() => import('./components/Message/Confirm.vue'), {
       title,
       content
     })
@@ -50,7 +51,7 @@ Vue.prototype.$eventBus = eventBus
 Vue.prototype.$http = $http
 Vue.component('a-btn', Btn)
 
- 
+
 
 new Vue({
   router,

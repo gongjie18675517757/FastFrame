@@ -42,7 +42,7 @@ namespace FastFrame.Application.Controllers
         /// <param name="user"></param>
         /// <returns></returns>
         [HttpPost]
-        [AllowAnonymous]
+        [EveryoneAccess]
         public async Task<UserDto> Regist([FromBody]UserDto user)
         {
             return await service.RegistAsync(user);

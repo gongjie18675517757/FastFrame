@@ -10,7 +10,7 @@ namespace FastFrame.Application.Controllers.Basis
 {
     public partial class TenantController
     {
-        [AllowAnonymous]
+        [EveryoneAccess]
         [HttpGet]
         public async Task<TenantDto> GetCurrent()
         {

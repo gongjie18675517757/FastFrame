@@ -44,7 +44,7 @@ namespace FastFrame.Application.Privder
             /*取当前用户*/
             var curr = operaterProvider.GetCurrUser();
 
-            /*是否标记为可以匿名访问(AllowAnonymousFilter在.NET CORE 3.*下,不知道怎么获取不到了)*/
+            /*是否标记为可以匿名访问(EveryoneAccessFilter在.NET CORE 3.*下,不知道怎么获取不到了)*/
             if (curr == null && context.Filters.Any(x => x.GetType() == typeof(EveryoneAccessAttribute)))
             {
                 return;

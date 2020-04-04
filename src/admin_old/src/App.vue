@@ -106,7 +106,7 @@ export default {
 </style>
 
 <style >
-html{
+html {
   overflow-y: hidden;
 }
 .form-page .v-expansion-panel__container--active .v-expansion-panel__header {

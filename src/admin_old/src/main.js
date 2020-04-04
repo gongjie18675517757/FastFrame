@@ -1,6 +1,6 @@
 import '@babel/polyfill'
 import Vue from 'vue'
-import './plugins/vuetify'
+import vuetify  from  './plugins/vuetify'
 import App from './App.vue'
 import router from './router'
 import store from './store'
@@ -55,6 +55,7 @@ Vue.component('a-btn', Btn)
 new Vue({
   router,
   store,
+  vuetify,
   render: h => h(App),
   async created() {
     let tenant = await $http('/api/Tenant/GetCurrent')

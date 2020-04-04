@@ -1,6 +1,6 @@
 import Vue from 'vue'
-import {
-  Vuetify,
+import Vuetify from 'vuetify/lib';
+import { 
   VApp,
   VNavigationDrawer,
   VFooter,
@@ -34,7 +34,6 @@ import {
   VImg,
   VTextarea,
   VRadioGroup,
-  VBottomNav,
   VTabs,
   VTooltip,
   VItemGroup,
@@ -44,8 +43,7 @@ import {
   VExpansionPanel,
   VMessages,
   VInput
-} from 'vuetify'
-import 'vuetify/src/stylus/app.styl'
+} from 'vuetify' 
 import zhHans from 'vuetify/es5/locale/zh-Hans'
 
 Vue.use(Vuetify, {
@@ -83,13 +81,12 @@ Vue.use(Vuetify, {
     VResponsive,
     VImg,
     VTextarea,
-    VRadioGroup,
-    VBottomNav,
+    VRadioGroup, 
     VTabs,
-    VTooltip, 
+    VTooltip,
     VItemGroup,
-    VWindow, 
-    VSelect   ,
+    VWindow,
+    VSelect,
     VDatePicker,
     VExpansionPanel,
     VMessages,
@@ -115,3 +112,9 @@ Vue.use(Vuetify, {
     current: 'zhHans'
   },
 })
+
+export default new Vuetify({
+  icons: {
+    iconfont: 'mdi',
+  },
+});

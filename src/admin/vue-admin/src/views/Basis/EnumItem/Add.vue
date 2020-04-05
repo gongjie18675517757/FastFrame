@@ -11,13 +11,13 @@ export default {
   },
   methods: {
     ...Page.methods,
-    frmLoadForm(frm) {
-      return Page.methods.frmLoadForm.call(this, frm).then(frm => {
+    fmtModelObject(frm) {
+      return Page.methods.fmtModelObject.call(this, frm).then(frm => {
         return frm;
       });
     },
-    getFormItems() {
-      return Page.methods.getFormItems.call(this).then(opts => {         
+    getModelObjectItems() {
+      return Page.methods.getModelObjectItems.call(this).then(opts => {         
         return opts;
       });
     }

@@ -20,6 +20,7 @@ export default new Vuex.Store({
      * 多页内容
      */
     pages: [{
+      key: '/',
       fullPath: '/',
       title: '首页',
       pars: {},
@@ -114,17 +115,6 @@ export default new Vuex.Store({
     toggleRightDrawer(state, payload) {
       state.rightDrawer = payload.value
     },
-    showDialog(state, payload) {
-      state.dialogs.push({
-        key: payload.key || new Date().getTime(),
-        render: payload.render
-      })
-    },
-    hideDialog(state, payload) {
-      let index = state.dialogs.findIndex(x => x.key == payload.key || x.render == payload.render)
-      if (index != -1)
-        state.dialogs.splice(index, 1)
-    },
     setTenant(state, payload) {
       state.tenant = payload.info
     },
@@ -151,6 +141,7 @@ export default new Vuex.Store({
       if (!state.pages.find(v => v.fullPath == page.fullPath)) {
         state.pages.push({
           ...page,
+          key: new Date().getTime().toString(),
           closeable: true,
           lastTime: new Date().getTime()
         });

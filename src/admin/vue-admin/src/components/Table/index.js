@@ -1,7 +1,7 @@
 import Table from "./DataTable.vue";
 import {
   getDefaultModel,
-  getFormItems,
+  getModelObjectItems,
   getRules,
   getColumns
 } from "@/generate";
@@ -47,9 +47,8 @@ export const BasisDetaiTable = {
     }, [
       h('v-toolbar', {
         props: {
-          text: true,
           dense: true,
-          card: true,
+          flat: true,
           color: 'transparent'
         }
       }, [
@@ -176,7 +175,7 @@ export const FormDetailTable = {
       return Promise.resolve(model)
         .then(this.frmFormFunc)
         .then(frm => model = frm)
-        .then(() => getFormItems(this.typeName))
+        .then(() => getModelObjectItems(this.typeName))
         .then(opts => distinct(opts, v => v.Name, (a, b) => ({
           ...a,
           ...b
@@ -240,7 +239,11 @@ export const SelectDetailTable = {
   ...FormDetailTable,
   props: {
     ...FormDetailTable.props,
-    dialogWidth: String
+    dialogWidth: String,
+    dialogComponent: {
+      type: [Object,Function],
+      required: true
+    }
   },
   computed: {
     ...FormDetailTable.computed,
@@ -276,7 +279,7 @@ export const SelectDetailTable = {
   methods: {
     ...FormDetailTable.methods,
     add() {
-      this.$message.dialog(`${this.typeName}_List`, {
+      this.$message.dialog(this.dialogComponent, {
         width: this.dialogWidth
       }).then(rows => {
         return Promise.all(rows.map(v => this.frmFormFunc(v)))

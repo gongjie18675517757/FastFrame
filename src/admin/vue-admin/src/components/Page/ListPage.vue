@@ -110,7 +110,7 @@
 
 <script>
 import Table from "@/components/Table/DataTable.vue";
-import { skip, take } from "@/utils";
+import { skip, take } from "../../utils";
 
 export default {
   components: {
@@ -184,6 +184,9 @@ export default {
   },
   methods: {
     evalVisible({ visible }) {
+      if (!visible) {
+        return true;
+      }
       let val = true;
       if (typeof visible == "function") val = visible.call(this, this.context);
       if (typeof visible == "boolean") val = visible;

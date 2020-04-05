@@ -1,19 +1,27 @@
 import Vue from 'vue'
-import {
-    showDialog
-} from '../../utils';
-
+import store from '../../store'
 Vue.prototype.$message = {
     alert() {
-        return showDialog(() => import('./Alert.vue'), ...arguments)
+        return this.dialog(() => import('./Alert.vue'), ...arguments)
     },
     confirm() {
-        return showDialog(() => import('./Confirm.vue'), ...arguments)
+        return this.dialog(() => import('./Confirm.vue'), ...arguments)
     },
     prompt() {
-        return showDialog(() => import('./Prompt.vue'), ...arguments)
+        return this.dialog(() => import('./Prompt.vue'), ...arguments)
     },
     dialog(component, pars) {
-        return showDialog(component, pars)
+        return new Promise((resolve, reject) => {
+            store.state.dialogs.push({
+                component,
+                resolve,
+                reject,
+                pars: {
+                    ...pars,
+                    isDialog: true,
+
+                }
+            })
+        })
     }
 }

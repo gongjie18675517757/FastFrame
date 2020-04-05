@@ -20,7 +20,7 @@
     <component
       xs12
       v-for="page in $store.state.pages"
-      :key="`${page.fullPath}`"
+      :key="`${page.key}`"
       v-show="page.fullPath==$store.state.currPageFullPath"
       :is="page.component"
       v-bind="page.pars"

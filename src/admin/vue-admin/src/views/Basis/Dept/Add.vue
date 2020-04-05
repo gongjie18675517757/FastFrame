@@ -16,26 +16,28 @@ export default {
   },
   methods: {
     ...Page.methods,
-    frmLoadForm(frm) {
-      return Page.methods.frmLoadForm.call(this, frm).then(frm => {
+    fmtModelObject(frm) {
+      return Page.methods.fmtModelObject.call(this, frm).then(frm => {
         frm.Members = frm.Members || [];
         frm.Managers = frm.Managers || [];
         return frm;
       });
     },
-    getFormItems(opts) {
-      return Page.methods.getFormItems.call(this, opts).then(opts => {
+    getModelObjectItems(opts) {
+      return Page.methods.getModelObjectItems.call(this, opts).then(opts => {
         opts.push({
           Name: "Members",
           GroupNames: ["部门所有成员"],
           template: SelectDetailTable,
-          typeName: "User"
+          typeName: "User",
+          dialogComponent:()=>import('../User/List.vue'),
         });
         opts.push({
           Name: "Managers",
           GroupNames: ["部门管理人员"],
           template: SelectDetailTable,
-          typeName: "User"
+          typeName: "User",
+          dialogComponent:()=>import('../User/List.vue'),
         });
         return opts;
       });

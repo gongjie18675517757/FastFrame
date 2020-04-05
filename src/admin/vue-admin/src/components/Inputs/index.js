@@ -3,14 +3,10 @@ import RichInput from "./RichInput.vue";
 import TextArea from './TextArea'
 import Checkbox from './Checkbox'
 import SelectInput from "./SelectInput";
+import SelectMulitInput from "./SelectMulitInput";
 import DateInput from './DateInput.vue'
 import FileInput from './FileInput'
-import EnumItemInput from './EnumItemInput.js'
-
-import {
-  getValue,
-  setValue
-} from "@/utils";
+import EnumItemInput from './EnumItemInput.js' 
 
 export default {
   props: {
@@ -18,7 +14,7 @@ export default {
     model: Object,
     callback: {
       type: Function,
-      default: function () {}
+      default: function () { }
     },
     rules: {
       type: Array,
@@ -49,19 +45,19 @@ export default {
     }
   },
   computed: {
-    val: {
-      get() {
-        if (this.Name && this.model)
-          return getValue(this.model, this.Name)
-        else
-          return this.value
-      },
-      set(val) {
-        if (this.Name && this.model)
-          setValue(this.model, this.Name, val)
-        this.$emit('input', val)
-      }
-    },
+    // val: {
+    //   get() {
+    //     if (this.Name && this.model)
+    //       return getValue(this.model, this.Name)
+    //     else
+    //       return this.value
+    //   },
+    //   set(val) {
+    //     if (this.Name && this.model)
+    //       setValue(this.model, this.Name, val)
+    //     this.$emit('input', val)
+    //   }
+    // },
     evalDisabled() {
       if (!this.canEdit) return true;
       if (typeof this.Readonly == 'function') return this.Readonly.call(this, this.model)
@@ -83,7 +79,7 @@ export default {
     let isXs = this.$vuetify.breakpoint.smAndDown
     let multiple = this.Type == 'Array'
     let props = {
-      value: this.val,
+      value: this.value,
       disabled: this.evalDisabled,
       // label: this.Description,
       description: this.Description,
@@ -101,7 +97,9 @@ export default {
 
     let on = {
       ...this.$listeners,
-      input: (val) => this.val = val,
+      input: (val) => {
+        this.$emit('input', val)
+      },
       change: val => this.change(val)
     }
 
@@ -188,7 +186,7 @@ export default {
 
     //文本,数字,密码
     else if (!component && !this.Name.endsWith("Id") && (this.Name == "Password" || this.Type == "String" ||
-        this.Type == "Int32" || this.Type == "Decimal")) {
+      this.Type == "Int32" || this.Type == "Decimal")) {
       if (!props.disabled || isXs) {
         let textProps = {
           ...props,
@@ -206,8 +204,8 @@ export default {
       } else
         component = h('span', null,
           (this.Name || '').toLowerCase().includes('password') ?
-          Array((props.value || '******').length).fill('*').join('') :
-          props.value)
+            Array((props.value || '******').length).fill('*').join('') :
+            props.value)
     } else if (!component && this.Type == 'Boolean') {
       component = h(Checkbox, {
         props,
@@ -230,17 +228,35 @@ export default {
     }
     //远程选择框
     else if (!component && this.Relate) {
-      component = h(SearchInput, {
-        props: {
-          ...props,
-          Name: this.Name,
-          Relate: this.Relate,
-          filter: this.filter,
-          ModuleName: this.ModuleName,
-          model: this.model || {}
-        },
-        on
-      })
+      if (this.Type == 'Array') {
+        flex = {
+          xs12: true
+        }
+        component = h(SelectMulitInput, {
+          props: {
+            ...props,
+            Name: this.Name,
+            Relate: this.Relate,
+            filter: this.filter,
+            ModuleName: this.ModuleName,
+            model: this.model || {}
+          },
+          on
+        })
+      }
+      else {
+        component = h(SearchInput, {
+          props: {
+            ...props,
+            Name: this.Name,
+            Relate: this.Relate,
+            filter: this.filter,
+            ModuleName: this.ModuleName,
+            model: this.model || {}
+          },
+          on
+        })
+      }
     }
 
     if (component) {
@@ -259,8 +275,8 @@ export default {
         }
       }, [
         h('v-layout', {
-            class: ['much-input']
-          },
+          class: ['much-input']
+        },
           [
             h('div', {
               style: {

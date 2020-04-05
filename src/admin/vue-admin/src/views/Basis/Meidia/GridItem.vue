@@ -21,8 +21,8 @@
 </template>
 
 <script>
-import { showDialog, alert } from "@/utils";
-import Prompt from "@/components/Message/Prompt.vue";
+import { alert } from "@/utils";
+ 
 import rules from "@/rules";
 import Vue from "vue";
 export default {
@@ -52,7 +52,7 @@ export default {
   },
   methods: {
     async reName() {
-      let dialog = showDialog(Prompt, {
+      let dialog = this.$message.prompt({
         title: "名称",
         maxWidth: "500px",
         model: {
@@ -91,7 +91,7 @@ export default {
       // this.$emit("dblclick");
       if (this.isImage) {
         let src = this.imgSrc;
-        showDialog(
+        this.$message.dialog(
           Vue.extend({
             props: {
               success: Function

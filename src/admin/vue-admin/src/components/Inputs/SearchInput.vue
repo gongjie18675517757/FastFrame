@@ -17,12 +17,7 @@
     >
       <template slot="no-data">
         <v-list-item>
-          <v-list-item-title>
-            请输入关键字,或者
-            <strong>
-              <a @click="openDialog">搜索</a>
-            </strong>
-          </v-list-item-title>
+          <v-list-item-title>请输入关键字搜索</v-list-item-title>
         </v-list-item>
       </template>
       <template slot="selection" slot-scope="{ item }">{{getField(item)}}</template>
@@ -37,7 +32,7 @@
 
 <script>
 import { getModuleStrut } from "@/generate";
-import { showDialog, getValue, setValue } from "@/utils";
+import { getValue, setValue } from "@/utils";
 export default {
   props: {
     model: Object,
@@ -148,27 +143,6 @@ export default {
       } else {
         let name = this.Name.replace("_Id", "");
         setValue(this.model, name, $event);
-      }
-    },
-    async openDialog() {
-      let filter = this.filter || [];
-      if (typeof filter == "function")
-        filter = await filter.call(this, this.model);
-      let rows = await showDialog(`${this.Relate}_List`, {
-        single: true,
-        queryFilter: [
-          {
-            Name: "Id",
-            Compare: "!=",
-            Value: this.value || ""
-          },
-          ...filter
-        ]
-      });
-      if (rows.length > 0) {
-        this.items = rows;
-        this.select = rows[0];
-        this.change(rows[0]);
       }
     }
   }

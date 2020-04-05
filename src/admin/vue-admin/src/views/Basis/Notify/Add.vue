@@ -16,8 +16,8 @@ export default {
   },
   methods: {
     ...Page.methods,
-    getFormItems() {
-      return Page.methods.getFormItems.call(this).then(opts => {
+    getModelObjectItems() {
+      return Page.methods.getModelObjectItems.call(this).then(opts => {
         return opts;
       });
     }

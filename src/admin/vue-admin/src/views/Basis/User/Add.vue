@@ -16,27 +16,38 @@ export default {
   },
   methods: {
     ...Page.methods,
-    getFormItems(opts) {
-      return Page.methods.getFormItems.call(this, opts).then(opts => {
+    getModelObjectItems(opts) {
+      return Page.methods.getModelObjectItems.call(this, opts).then(opts => {
         opts.push({
           Name: "Depts",
           GroupNames: ["用户所在部门"],
           template: SelectDetailTable,
+          dialogComponent: () => import("../User/List.vue"),
           typeName: "Dept"
         });
         opts.push({
-          Name: "Roles",
-          GroupNames: ["用户归属角色"],
+          Name: "Depts",
+          GroupNames: ["用户所在部门"],
           template: SelectDetailTable,
-          typeName: "Role"
+          dialogComponent: () => import("../User/List.vue"),
+          typeName: "Dept"
+        });
+        opts.push({
+          Name: "Permissions", 
+          Description:'权限',
+          Relate:'Permission',
+          Type:'Array'
         });
         return opts;
       });
     },
-    frmLoadForm(frm) {
-      return Page.methods.frmLoadForm.call(this, frm).then(frm => {
+    fmtModelObject(frm) {
+      return Page.methods.fmtModelObject.call(this, frm).then(frm => {
+        console.log(frm);
+        
         frm.Depts = frm.Depts || [];
         frm.Roles = frm.Roles || [];
+        frm.Permissions = frm.Permissions || [];
         return frm;
       });
     }

@@ -24,7 +24,7 @@
           <div v-for="(group,index) in menus" :key="index">
             <v-subheader>{{ group.title }}</v-subheader>
             <div v-for="(menu,index2) in group.items" :key="index2">
-              <MenuGroup v-if="menu.items && menu.items.length>0" v-bind="menu" />
+              <MenuGroup v-if="menu.items && menu.items.length>0" v-bind="menu" :level="1 " />
               <menu-item v-else v-bind="menu" />
             </div>
           </div>
@@ -47,7 +47,7 @@ export default {
   },
   data() {
     return {
-      miniVariant: false,     
+      miniVariant: false,
       scrollSettings: {
         maxScrollbarLength: 160
       }
@@ -105,6 +105,10 @@ export default {
   .darken-1 {
     cursor: pointer;
   }
+}
+
+.v-application--is-ltr .v-list-item__action:last-of-type:not(:only-child), .v-application--is-ltr .v-list-item__avatar:last-of-type:not(:only-child), .v-application--is-ltr .v-list-item__icon:last-of-type:not(:only-child) {
+  padding-left: 6px;
 }
 </style>
 

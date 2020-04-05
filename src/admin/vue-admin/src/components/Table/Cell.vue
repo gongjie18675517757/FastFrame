@@ -1,5 +1,5 @@
  <script>
-import { showDialog, getValue } from "@/utils";
+import { getValue } from "@/utils";
 import EnumItemInput from "@/components/Inputs/EnumItemInput";
 import SelectInput from "@/components/Inputs/SelectInput";
 export default {
@@ -47,7 +47,7 @@ export default {
       return h(SelectInput, {
         props: {
           value: this.val,
-          values:EnumValues,
+          values: EnumValues,
           disabled: true,
           multiple: this.info.Type == "Array"
         }
@@ -118,11 +118,6 @@ export default {
         window.open(url);
         return;
       }
-      let { ModuleName } = this.info.Relate;
-      if (this.Foreignkey)
-        showDialog(`${ModuleName}_Add`, {
-          id: this.Foreignkey
-        });
     }
   }
 };

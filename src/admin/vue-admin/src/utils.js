@@ -1,9 +1,10 @@
 import Vue from 'vue'
 import $http from './httpClient'
-import store from './store'
-import {
-    getComponent
-} from './router'
+import {  throttle as _throttle, debounce as _debounce} from 'lodash'
+
+export const throttle = _throttle;
+
+export const debounce = _debounce;
 
 /**
  * 事件总线
@@ -167,99 +168,6 @@ export function upload({
 }
 
 /**
- * 弹出框 
- */
-export function showDialog(component, pars = {}) {
-    let key = new Date().getTime()
-    if (typeof component == 'string')
-        component = getComponent(component)
-    let hide = () => {
-        store.commit({
-            type: 'hideDialog',
-            key: key
-        })
-    }
-    return new Promise((resolve, reject) => {
-        let success = (e) => {
-            resolve(e)
-            hide()
-        }
-        let close = () => {
-            hide()
-            reject(1)
-        }
-
-        let render = {
-            data() {
-                return {
-                    visible: true,
-                    refresh: false,
-                }
-            },
-            provide() {
-                return {
-                    reload: this.reload
-                }
-            },
-            methods: {
-                reload() {
-                    this.refresh = true
-                    this.$nextTick(function () {
-                        this.refresh = false
-                    })
-                }
-            },
-            render(h) {
-                let child = []
-                if (!this.refresh) {
-                    let props = {
-                        ...pars,
-                        pars,
-                        success,
-                        close,
-                        isDialog: true
-                    }
-                    child = [
-                        h(component, {
-                            props,
-                            on: {
-                                success,
-                                close
-                            }
-                        })
-                    ]
-                }
-                return h(
-                    'v-dialog', {
-                    props: {
-                        // persistent: true,
-                        scrollable: true,
-                        value: this.visible,
-                        ...pars,
-                    },
-                    on: {
-                        input: val => {
-                            if (!val) {
-                                close()
-                            }
-                        }
-                    }
-                },
-                    child
-                )
-            }
-        }
-
-        store.commit({
-            type: 'showDialog',
-            render,
-            key
-        })
-    })
-
-}
-
-/**
  * 取数组中随机值
  * @param {*} arr 
  */
@@ -379,43 +287,3 @@ export function take(arr = [], takeCount = 0) {
     return arr.filter((_val, index) => index < takeCount)
 }
 
-
-/**
- * 防抖
- * @param {*} fn 
- * @param {*} delay 
- */
-export function debounce(fn, delay) {
-    var timer
-    return function () {
-        var context = this
-        var args = arguments
-        clearTimeout(timer)
-        timer = setTimeout(function () {
-            fn.apply(context, args)
-        }, delay)
-    }
-}
-
-/**
- * 节流
- * @param {*} func 
- * @param {*} delay 
- */
-export function throttle(func, delay) {
-    var timer = null;
-    var startTime = Date.now();
-    return function () {
-        var curTime = Date.now();
-        var remaining = delay - (curTime - startTime);
-        var context = this;
-        var args = arguments;
-        clearTimeout(timer);
-        if (remaining <= 0) {
-            func.apply(context, args);
-            startTime = Date.now();
-        } else {
-            timer = setTimeout(func, remaining);
-        }
-    }
-}

@@ -124,8 +124,7 @@ export default {
         input: val => this.$emit("input", val),
         "update:options": val => {
           this.$emit("loadList", val);
-          this.page = val.page;
-          console.log(this.page);
+          this.page = val.page; 
         },
         "click:row": row => {
           this.$emit("click:row", row);

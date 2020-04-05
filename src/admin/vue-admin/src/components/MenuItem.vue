@@ -1,9 +1,8 @@
 <template>
-  <v-list-item :to="path">
-    <v-list-item-icon>
+  <v-list-item :to="path" link>
+    <v-list-item-icon v-if="icon">
       <v-icon>{{icon}}</v-icon>
     </v-list-item-icon>
-
     <v-list-item-title>{{title}}</v-list-item-title>
   </v-list-item>
 </template>

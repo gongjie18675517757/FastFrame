@@ -95,7 +95,7 @@ export async function getColumns(name = '') {
  * 获取表单列表
  * @param {*} name
  */
-export async function getFormItems(name = '') {
+export async function getModelObjectItems(name = '') {
   let {
     FieldInfoStruts,
     Name: ModuleName

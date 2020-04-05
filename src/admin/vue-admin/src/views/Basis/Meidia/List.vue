@@ -3,7 +3,7 @@
     <v-layout row wrap>
       <v-flex xs12>
         <v-card>
-          <v-toolbar text dense   color="transparent">
+          <v-toolbar text dense color="transparent">
             <v-toolbar-title>资源列表</v-toolbar-title>
             <v-spacer></v-spacer>
             <span class="hidden-sm-and-down">
@@ -121,11 +121,9 @@
 import VuePerfectScrollbar from "vue-perfect-scrollbar";
 import GridItem from "./GridItem.vue";
 import ListItem from "./ListItem.vue";
-import { showDialog, alert, upload } from "@/utils";
-import Prompt from "@/components/Message/Prompt.vue";
+import { alert, upload } from "@/utils"; 
 import rules from "@/rules";
 export default {
-  inject: ["reload"],
   components: {
     VuePerfectScrollbar,
     ListItem,
@@ -302,7 +300,7 @@ export default {
       }
     },
     async addFolder() {
-      let { name } = await showDialog(Prompt, {
+      let { name } = await this.$message.prompt({
         title: "文件夹名称",
         maxWidth: "500px",
         options: [
@@ -324,24 +322,29 @@ export default {
       alert.success("添加成功!");
     },
     search() {
-      showDialog(Prompt, {
-        title: "文件夹名称",
-        maxWidth: "500px",
-        options: [
-          {
-            Name: "name",
-            Type: "String",
-            IsRequired: true,
-            Description: "搜索关键字",
-            rules: [rules.required("搜索关键字")]
-          }
-        ]
-      }).then(({ name }) => {
-        this.$router.push(`/meidia/list?v=${name}`);
-      });
+      this.$message
+        .prompt({
+          title: "文件夹名称",
+          maxWidth: "500px",
+          options: [
+            {
+              Name: "name",
+              Type: "String",
+              IsRequired: true,
+              Description: "搜索关键字",
+              rules: [rules.required("搜索关键字")]
+            }
+          ]
+        })
+        .then(({ name }) => {
+          this.$router.push(`/meidia/list?v=${name}`);
+        });
     },
     async handleDelete() {
-      await this.$message.confirm("提示", "确认要删除吗?");
+      await this.$message.confirm({
+        title: "提示",
+        content: "确认要删除吗?"
+      });
       let { Id } = this.currItem;
       let index = this.items.findIndex(r => r == this.currItem);
       await this.$http.delete(`/api/meidia/delete/${Id}`);

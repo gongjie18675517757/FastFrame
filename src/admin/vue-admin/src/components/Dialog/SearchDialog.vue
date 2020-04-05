@@ -60,8 +60,7 @@
 <script>
 import VuePerfectScrollbar from "vue-perfect-scrollbar";
 import Input from "@/components/Inputs";
-export default {
-  inject: ["reload"],
+export default { 
   components: { VuePerfectScrollbar, Input },
   props: {
     title: String,
@@ -89,8 +88,7 @@ export default {
       for (const option of this.options) {
         option.value = null;
       }
-      this.load();
-      this.reload();
+      this.load(); 
     },
     query() {
       for (let index = 0; index < this.options.length; index++) {

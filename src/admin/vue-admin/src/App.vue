@@ -4,7 +4,14 @@
       <router-view v-if="resufreshed" />
     </v-fade-transition>
     <Alert />
-    <component v-for="dialog in dialogs" :key="dialog.key" :is="dialog.render" />
+    <v-dialog v-for="(dialog,i) in dialogs" :key="i" :value="true" style="box-shadow:none;">
+      <component
+        :is="dialog.component"
+        v-bind="dialog.pars"
+        @success="handleDialogSuccess(dialog,$event)"
+        @close="handleDialogClose(dialog,$event)"
+      />
+    </v-dialog>
   </div>
 </template>
 
@@ -41,69 +48,21 @@ export default {
       this.$nextTick(function() {
         this.resufreshed = true;
       });
+    },
+    handleDialogSuccess(dialog, ...arges) {
+      dialog.resolve(...arges);
+      let index = this.dialogs.findIndex(v => v == dialog);
+      this.dialogs.splice(index, 1);
+    },
+    handleDialogClose(dialog, ...arges) {
+      dialog.reject(...arges);
+      let index = this.dialogs.findIndex(v => v == dialog);
+      this.dialogs.splice(index, 1);
     }
   }
 };
 </script>
-<style lang="stylus">
-/* Theme */
-.fixed-header {
-  & {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-
-  table {
-    table-layout: fixed;
-  }
-
-  th {
-    position: sticky;
-    top: 0;
-    z-index: 5;
-
-    &:after {
-      content: '';
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      width: 100%;
-    }
-  }
-
-  tr.v-datatable__progress {
-    th {
-      // top: 56px
-      height: 1px;
-    }
-  }
-
-  .v-table__overflow {
-    flex-grow: 1;
-    flex-shrink: 1;
-    overflow-x: auto;
-    overflow-y: auto;
-    // overflow: auto
-    // height: 100%
-  }
-
-  .v-datatable.v-table {
-    width: auto;
-    min-width: 100%;
-    flex-grow: 0;
-    flex-shrink: 1;
-
-    .v-datatable__actions {
-      flex-wrap: nowrap;
-
-      .v-datatable__actions__pagination {
-        white-space: nowrap;
-      }
-    }
-  }
-}
-</style>
+ 
 
 <style >
 html {
@@ -117,7 +76,7 @@ html {
   font-size: 20px;
 }
 .v-dialog {
-  box-shadow: none;
+  box-shadow: none !important;
   -webkit-box-shadow: none;
   overflow: hidden;
 }
@@ -143,6 +102,4 @@ html {
 .much-input .v-input__control {
   height: 30px;
 }
-
-
 </style>

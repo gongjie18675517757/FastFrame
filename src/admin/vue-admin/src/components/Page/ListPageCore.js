@@ -75,7 +75,7 @@ export let makeToolItems = function () {
 /**
  * 要导入的依赖
  */
-export let pageInjects = ['reload']
+export let pageInjects = []
 
 /**
  * 生成参数
@@ -208,7 +208,10 @@ export let pageMethods = {
     }
   },
   remove(arr = []) {
-    this.$message.confirm("提示", "确认要删除吗?").then(() => {
+    this.$message.confirm({
+      title: "提示",
+      content: "确认要删除吗?"
+    }).then(() => {
       let ids = arr.map(r => r.Id);
       for (const id of ids) {
         let index = this.selection.findIndex(r => r.Id == id);
@@ -303,10 +306,20 @@ export let pageMethods = {
       })
   }, 500),
   formatterToolItems(items) {
-    return distinct(items, v => v.name, (a, b) => ({
+    return distinct(items, v => v.key || v.name, (a, b) => ({
       ...a,
       ...b
     }));
+  },
+  close() {
+    if (this.isTab) {
+      this.$emit('close')
+    }
+    else if (this.isDialog) {
+      this.$emit('close')
+    } else {
+      this.$router.got(-1)
+    }
   }
 }
 

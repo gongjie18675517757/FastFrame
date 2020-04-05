@@ -7,7 +7,7 @@ import {
 
 import {
   getDefaultModel,
-  getFormItems,
+  getModelObjectItems,
   getRules,
   hasManage
 } from "@/generate";
@@ -31,26 +31,26 @@ export let formProps = {
  */
 export let formData = {
   canEdit: false,
-  form: {},
+  model: {},
   formErrorMessages: {},
   options: [],
   rules: {},
   manageOptions: [{
-      Name: "Create_User.Name",
-      Description: "创建人"
-    },
-    {
-      Name: "CreateTime",
-      Description: "创建时间"
-    },
-    {
-      Name: "Modify_User.Name",
-      Description: "最后修改人"
-    },
-    {
-      Name: "ModifyTime",
-      Description: "最后修改时间"
-    }
+    Name: "Create_User.Name",
+    Description: "创建人"
+  },
+  {
+    Name: "CreateTime",
+    Description: "创建时间"
+  },
+  {
+    Name: "Modify_User.Name",
+    Description: "最后修改人"
+  },
+  {
+    Name: "ModifyTime",
+    Description: "最后修改时间"
+  }
   ].map(r => {
     return {
       Name: r.Name,
@@ -82,7 +82,7 @@ export let formComputed = {
   },
   formGroups() {
     let opts = this.options || [];
-    if (this.hasManage && this.showMamageField && this.form && this.form.Id) {
+    if (this.hasManage && this.showMamageField && this.model && this.model.Id) {
       opts = [...opts, ...this.manageOptions];
     }
     opts = distinct(opts, v => v.Name, (a, b) => ({
@@ -91,7 +91,7 @@ export let formComputed = {
     }))
     opts = opts.filter(v => {
       if (typeof v.visible == 'function')
-        return v.visible.call(this.this.form)
+        return v.visible.call(this.this.model)
       else if (typeof v.visible == 'boolean')
         return v.visible
       else
@@ -135,48 +135,49 @@ export let formMethods = {
         this.rules = rules;
       })
 
-      .then(this.getForm)
-      .then(this.frmLoadForm)
-      .then((form) => {
+      .then(this.getModelObject)
+      .then(this.fmtModelObject)
+      .then((model) => {
         let formErrs = {};
-        for (const name of Object.keys(form)) {
+        for (const name of Object.keys(model)) {
           formErrs[name] = [];
         }
         this.formErrorMessages = formErrs;
-        this.form = form;
+
+
+        this.model = model;
       })
 
-      .then(this.getFormItems)
+      .then(this.getModelObjectItems)
       .then(options => {
         this.options = options;
       })
       .then(() => {
         this.changed = false;
-        this.canEdit = !this.form.Id;
+        this.canEdit = !this.model.Id;
       })
   },
   getRules() {
     return getRules(this.name)
   },
-  getFormItems() {
-    return getFormItems(this.name)
+  getModelObjectItems() {
+    return getModelObjectItems(this.name)
   },
-  DataUpdated({
-    Id
-  }) {
-    if (Id == this.id || Id == this.form.Id) {
-      // this.$message.confirm("提示", "当前内容已被其它人修改,是否重新加载?").then(this.init)
-    }
+  DataUpdated() {
+
   },
   DataDeleted() {
-    this.$message.alert("提示", "当前内容已被其它人删除!").then(() => {
+    this.$message.alert({
+      title: "提示",
+      content: "当前内容已被其它人删除!"
+    }).then(() => {
       this.close();
     });
   },
   getRequestUrl(id) {
     return `/api/${this.name}/get/${id}`
   },
-  getForm() {
+  getModelObject() {
     let id = this.id
     if (id) {
       return this.$http.get(this.getRequestUrl(id));
@@ -184,15 +185,15 @@ export let formMethods = {
       return getDefaultModel(this.name);
     }
   },
-  frmLoadForm(frm) {
+  fmtModelObject(frm) {
     return Promise.resolve(frm);
   },
   evalRule(name) {
     let rules = this.rules[name] || [];
-    let val = this.form[name];
+    let val = this.model[name];
     this.formErrorMessages[name] = [];
 
-    let promiseArr = rules.map(v => v.call(this.form, val))
+    let promiseArr = rules.map(v => v.call(this.model, val))
     return Promise.all(promiseArr).then(arr => {
       return arr.filter(v => typeof v == 'string')
     }).then(errs => {
@@ -221,7 +222,7 @@ export let formMethods = {
     }
   },
   getPostData() {
-    let postData = JSON.parse(JSON.stringify(this.form))
+    let postData = JSON.parse(JSON.stringify(this.model))
     delete postData.Create_User;
     delete postData.Modify_User;
     return postData
@@ -240,9 +241,12 @@ export let formMethods = {
       let method = this.getPostMethod(id);
       let url = this.getPostUrl(id)
       let data = await method(url, postData)
-      data = await this.frmLoadForm(data)
-
-      this.goList(data)
+      if (data) {
+        this.$emit('close');
+        this.$nextTick(() => {
+          this.$router.replace(`/${this.name}/${data}`);
+        })
+      }
     } catch (error) {
       alert.error(error.message);
     } finally {
@@ -275,7 +279,7 @@ export let formMethods = {
  */
 export let formWatch = {
   id(val) {
-    if (val != this.form.Id) {
+    if (val != this.model.Id) {
       this.init()
     }
   }
@@ -290,7 +294,7 @@ export let makeChildProps = function () {
     ...this.$attrs,
     title: this.title,
     id: this.id,
-    form: this.form,
+    model: this.model,
     name: this.name,
     formErrorMessages: this.formErrorMessages,
     options: this.options,
@@ -311,7 +315,7 @@ export let makeChildProps = function () {
  */
 export let makeChildListeners = function () {
   return {
-    ...this.$listeners,   
+    ...this.$listeners,
     'tooggle:canEdit': () => this.canEdit = !this.canEdit,
     'tooggle:changed': () => this.changed = true,
     'toggle:singleLine': () => (this.singleLine = !this.singleLine),
@@ -320,7 +324,7 @@ export let makeChildListeners = function () {
       this.changed = true;
       this.evalRule($event.item.Name);
     },
-    reload: this.init,
+    reload: () => this.init(),
     submit: this.submit
   };
 };

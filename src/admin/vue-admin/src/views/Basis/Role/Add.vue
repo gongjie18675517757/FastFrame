@@ -76,15 +76,15 @@ export default {
   },
   methods: {
     ...Page.methods,
-    frmLoadForm(frm) {
-      return Page.methods.frmLoadForm.call(this, frm).then(frm => {
+    fmtModelObject(frm) {
+      return Page.methods.fmtModelObject.call(this, frm).then(frm => {
         frm.Members = frm.Members || [];
         frm.Permissions = frm.Permissions || [];
         return frm;
       });
     },
-    getFormItems(opts) {
-      return Page.methods.getFormItems.call(this, opts).then(opts => {
+    getModelObjectItems(opts) {
+      return Page.methods.getModelObjectItems.call(this, opts).then(opts => {
         opts.push({
           Name: "Members",
           GroupNames: ["角色成员"],

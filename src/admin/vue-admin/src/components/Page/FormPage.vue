@@ -3,7 +3,7 @@
     <v-layout align-center justify-center :class="{singleLine:singleLine}">
       <v-flex v-bind="flex">
         <v-card>
-          <v-toolbar flat dense   color="transparent">
+          <v-toolbar flat dense color="transparent">
             <v-toolbar-title>{{title}}</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items>
@@ -18,13 +18,15 @@
               >
                 <v-icon>edit</v-icon>
               </a-btn>
-              <v-btn icon @click="refresh" title="刷新">
+              <!-- <v-btn icon @click="refresh" title="刷新">
                 <v-icon>refresh</v-icon>
-              </v-btn>
+              </v-btn> -->
               <v-menu offset-y>
-                <v-btn icon slot="activator" title="更多">
-                  <v-icon>more_vert</v-icon>
-                </v-btn>
+                <template v-slot:activator="{ on }">
+                  <v-btn icon v-on="on" title="更多">
+                    <v-icon>more_vert</v-icon>
+                  </v-btn>
+                </template>
                 <v-list>
                   <v-list-item @click="$emit('toggle:singleLine')">
                     <v-list-item-action>
@@ -35,7 +37,7 @@
                     </v-list-item-content>
                   </v-list-item>
                   <v-list-item
-                    v-if="hasManage &&  form.Id"
+                    v-if="hasManage &&  model.Id"
                     @click="$emit('toggle:showMamageField')"
                   >
                     <v-list-item-action>
@@ -54,12 +56,12 @@
           </v-toolbar>
           <v-divider></v-divider>
           <v-form ref="form">
-            <v-card-text class="form-content">
+            <v-card-text class="form-content" v-if="model">
               <div :class="[isDialog?'dialogPage':isTab?'tabPage':'fullPage','form-page']">
                 <template v-for="group in formGroups">
                   <v-flex :key="group.key.title" xs12>
                     <v-card v-if="group.values.length>1" tile>
-                      <v-toolbar flat dense   color="transparent">
+                      <v-toolbar flat dense color="transparent">
                         <v-toolbar-title>{{group.key.title}}:</v-toolbar-title>
                       </v-toolbar>
                       <v-card-text>
@@ -68,13 +70,14 @@
                             v-for="item in group.values"
                             v-bind="item"
                             :key="item.Name"
-                            :model="form"
+                            :model="model"
                             :rules="getRules(item)"
                             :canEdit="canEdit"
                             :singleLine="singleLine"
                             :errorMessages="formErrorMessages[item.Name]"
+                            :value="model[item.Name]"
                             @change="$emit('changed',{item:item,value:$event})"
-                            @input="$emit('tooggle:changed')"
+                            @input="handleInput(item,$event)"
                             :ref="item.Name"
                           />
                         </component>
@@ -86,13 +89,13 @@
                       :key="item.Name"
                       :is="item.template"
                       v-bind="item"
-                      :model="form"
+                      :model="model"
                       :canEdit="canEdit"
                       :singleLine="singleLine"
                       :errorMessages="formErrorMessages[item.Name]"
-                      v-model="form[item.Name]"
+                      :value="model[item.Name]"
                       @change="$emit('changed',{item:item,value:$event})"
-                      @input="$emit('tooggle:changed')"
+                      @input="handleInput(item,$event)"
                       :ref="item.Name"
                     />
                   </v-flex>
@@ -104,13 +107,14 @@
           <v-card-actions>
             <v-btn text @click="$emit('close')">取消</v-btn>
             <v-spacer></v-spacer>
-            <v-btn
+            <a-btn
               v-if="hasManage && canEdit && changed"
+              :module-name="name"
+              :name="model.Id?'Update':'Add'"
               color="primary"
-              text
               @click="$emit('submit')"
               :loading="submiting"
-            >保存</v-btn>
+            >保存</a-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -127,14 +131,14 @@ export default {
     Input,
     VuePerfectScrollbar
   },
-  inject: ["reload"],
+
   props: {
     isDialog: Boolean,
     isTab: Boolean,
     title: String,
     id: String,
     name: String,
-    form: Object,
+    model: Object,
     formErrorMessages: Object,
     options: Array,
     rules: Object,
@@ -183,10 +187,14 @@ export default {
       this.$emit("tooggle:canEdit");
     },
     refresh() {
-      this.reload();
+      this.$emit("reload");
     },
     getRules(item) {
       return item.rules || this.rules[item.Name];
+    },
+    handleInput(item, v) {
+      this.model[item.Name] = v;
+      this.$emit("tooggle:changed");
     }
   }
 };

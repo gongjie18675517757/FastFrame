@@ -105,7 +105,10 @@ export default {
   },
   methods: {
     addItem() {
-      this.$message.confirm('提示', `确认添加<strong>${this.keyword}</strong>吗?`)
+      this.$message.confirm({
+        title: '提示', 
+        content: `确认添加<strong>${this.keyword}</strong>吗?`
+      })
         .then(() => {
           return this.$http.post('/api/EnumItem/Post', {
             Key: this.itemKeyName,

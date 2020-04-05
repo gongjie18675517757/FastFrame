@@ -1,6 +1,8 @@
 <template>
-  <v-app-bar app color="primary" fixed dark dense>
-    <v-app-bar-nav-icon @click.stop="leftDrawer = !leftDrawer"></v-app-bar-nav-icon>
+  <v-app-bar color="primary" fixed dark dense app>
+    <v-app-bar-nav-icon @click.stop="leftDrawer = !leftDrawer">
+      <v-icon>menu</v-icon>
+    </v-app-bar-nav-icon>
     <v-toolbar-title v-text="title"></v-toolbar-title>
     <v-spacer></v-spacer>
     <v-menu

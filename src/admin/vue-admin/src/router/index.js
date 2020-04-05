@@ -23,41 +23,41 @@ function loadAreas() {
   }) => {
     return mapMany(Object.entries(items), ([key, val]) => {
       return [{
-          path: `/${key.toLowerCase()}/list`,
-          name: `${key}_List`.toLowerCase(),
-          meta: {
-            title: `${val}列表`,
-            keepAlive: true,
-            moduleName: key,
-            pageName: 'List'
-          },
-          component: () =>
-            import(`@/views/${name}/${key}/List.vue`)
+        path: `/${key.toLowerCase()}/list`,
+        name: `${key}_List`.toLowerCase(),
+        meta: {
+          title: `${val}列表`,
+          keepAlive: true,
+          moduleName: key,
+          pageName: 'List'
         },
-        {
-          path: `/${key.toLowerCase()}/add`,
-          name: `${key}_Add`.toLowerCase(),
-          meta: {
-            title: `添加${val}`,
-            keepAlive: false,
-            moduleName: key,
-            pageName: 'Add'
-          },
-          component: () =>
-            import(`@/views/${name}/${key}/Add.vue`)
+        component: () =>
+          import(`@/views/${name}/${key}/List.vue`)
+      },
+      {
+        path: `/${key.toLowerCase()}/add`,
+        name: `${key}_Add`.toLowerCase(),
+        meta: {
+          title: `添加${val}`,
+          keepAlive: false,
+          moduleName: key,
+          pageName: 'Add'
         },
-        {
-          path: `/${key.toLowerCase()}/:id`,
-          name: `${key}`.toLowerCase(),
-          meta: {
-            title: `修改${val}`,
-            keepAlive: false,
-            moduleName: key,
-            pageName: 'Get'
-          },
-          component: () =>
-            import(`@/views/${name}/${key}/Add.vue`)
-        }
+        component: () =>
+          import(`@/views/${name}/${key}/Add.vue`)
+      },
+      {
+        path: `/${key.toLowerCase()}/:id`,
+        name: `${key}`.toLowerCase(),
+        meta: {
+          title: `修改${val}`,
+          keepAlive: false,
+          moduleName: key,
+          pageName: 'Get'
+        },
+        component: () =>
+          import(`@/views/${name}/${key}/Add.vue`)
+      }
       ]
     })
   })
@@ -76,109 +76,119 @@ export function getComponent(name) {
 }
 
 let routes = [{
+  path: '/',
+
+  component: Home,
+  children: [{
     path: '/',
     name: 'home',
-    component: Home,
-    children: [{
-        path: '/',
-        name: 'index',
-        meta: {
-          title: '首页',
-          keepAlive: true
-        },
-        component: () =>
-          import(`@/views/Index/Index.vue`)
-      },
-      {
-        path: '/about',
-        name: 'about',
-        meta: {
-          title: '关于页',
-          keepAlive: true
-        },
-        props: true,
-        component: () =>
-          import(`@/views/About`)
-      },
- 
-      {
-        path: '/map',
-        name: 'map',
-        meta: {
-          title: '地图演示',
-          keepAlive: true
-        },
-        component: () =>
-          import(`@/views/Map.vue`)
-      },
-      {
-        path: '/tenantCenter',
-        name: 'tenantCenter',
-        meta: {
-          title: '企业中心',
-          keepAlive: false
-        },
-        component: () =>
-          import(`@/views/TenantCenter.vue`)
-      },
-      {
-        path: '/userCenter',
-        name: 'userCenter',
-        meta: {
-          title: '个人中心',
-          keepAlive: false
-        },
-        component: () =>
-          import(`@/views/UserCenter.vue`)
-      },
-      {
-        path: '/notifyCenter',
-        name: 'notifyCenter',
-        meta: {
-          title: '通知中心',
-          keepAlive: false
-        },
-        component: () =>
-          import(`@/views/Index/NotifyCenter`)
-      },
-      ...childs
-    ].map(v => ({
-      ...v,
-      props
-    }))
-  },
-  {
-    path: '/login',
-    name: 'login',
     meta: {
-      title: '登陆页',
-      keepAlive: false,
-      allowAnonymous: true,
+      title: '首页',
+      keepAlive: true
     },
     component: () =>
-      import(`@/views/Login.vue`)
+      import(`@/views/Index/Index.vue`)
   },
   {
-    path: '/regist',
-    name: 'regist',
+    path: '/about',
+    name: 'about',
     meta: {
-      title: '注册页',
-      keepAlive: false,
-      allowAnonymous: true,
+      title: '关于页',
+      keepAlive: true
     },
+    props: true,
     component: () =>
-      import(`@/views/Regist.vue`)
+      import(`@/views/About.vue`)
   },
   {
-    path: '/405',
-    name: '405',
+    path: '/icons',
+    name: 'icons',
     meta: {
-      title: '权限不足',
-      keepAlive: false,
+      title: '所有图标',
+      keepAlive: true
+    },
+    props: true,
+    component: () =>
+      import(`@/views/Icons.vue`)
+  },
+  {
+    path: '/map',
+    name: 'map',
+    meta: {
+      title: '地图演示',
+      keepAlive: true
     },
     component: () =>
-      import(`@/views/405.vue`)
+      import(`@/views/Map.vue`)
   },
+  {
+    path: '/tenantCenter',
+    name: 'tenantCenter',
+    meta: {
+      title: '企业中心',
+      keepAlive: false
+    },
+    component: () =>
+      import(`@/views/TenantCenter.vue`)
+  },
+  {
+    path: '/userCenter',
+    name: 'userCenter',
+    meta: {
+      title: '个人中心',
+      keepAlive: false
+    },
+    component: () =>
+      import(`@/views/UserCenter.vue`)
+  },
+  {
+    path: '/notifyCenter',
+    name: 'notifyCenter',
+    meta: {
+      title: '通知中心',
+      keepAlive: false
+    },
+    component: () =>
+      import(`@/views/Index/NotifyCenter`)
+  },
+  ...childs
+  ].map(v => ({
+    ...v,
+    props
+  }))
+},
+{
+  path: '/login',
+  name: 'login',
+  meta: {
+    title: '登陆页',
+    keepAlive: false,
+    allowAnonymous: true,
+  },
+  component: () =>
+    import(`@/views/Login.vue`)
+},
+{
+  path: '/regist',
+  name: 'regist',
+  meta: {
+    title: '注册页',
+    keepAlive: false,
+    allowAnonymous: true,
+  },
+  component: () =>
+    import(`@/views/Regist.vue`)
+},
+{
+  path: '/405',
+  name: '405',
+  meta: {
+    title: '权限不足',
+    keepAlive: false,
+  },
+  component: () =>
+    import(`@/views/405.vue`)
+},
 ]
 
 let router = new Router({

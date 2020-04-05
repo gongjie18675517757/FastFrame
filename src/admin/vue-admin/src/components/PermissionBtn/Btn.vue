@@ -1,3 +1,8 @@
+<template>
+  <v-btn @click="handleClick" v-bind="btnProps">
+    <slot />
+  </v-btn>
+</template>
  <script>
 export default {
   props: {
@@ -22,28 +27,19 @@ export default {
     },
     permission() {
       return this.$store.getters.existsPermission(this.moduleName, this.name);
+    },
+    btnProps() {
+      return {
+        ...this.$attrs,
+        disabled: this.evalDisabled,
+        title: this.evalTitle
+      };
     }
   },
   methods: {
     handleClick($event) {
       this.$emit("click", $event);
     }
-  },
-  render(h) {
-    return h(
-      "v-btn",
-      {
-        props: {
-          ...this.$attrs,
-          disabled: this.evalDisabled,
-          title: this.evalTitle
-        },
-        on: {
-          click: () => this.handleClick()
-        }
-      },
-      [this.$slots.default]
-    );
   }
 };
 </script>

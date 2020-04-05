@@ -56,7 +56,7 @@
                   </v-list-item-action>
                   <v-list-item-content>
                     <v-list-item-title>弹出模式</v-list-item-title>
-                    <v-list-item-sub-title>是否使用表单窗口</v-list-item-sub-title>
+                    <v-list-item-subtitle>是否使用表单窗口</v-list-item-subtitle>
                   </v-list-item-content>
                 </v-list-item>
                 <v-list-item
@@ -68,7 +68,7 @@
                   </v-list-item-action>
                   <v-list-item-content>
                     <v-list-item-title>显示管理字段</v-list-item-title>
-                    <v-list-item-sub-title>录入人,修改人,录入时间,修改时间</v-list-item-sub-title>
+                    <v-list-item-subtitle>录入人,修改人,录入时间,修改时间</v-list-item-subtitle>
                   </v-list-item-content>
                 </v-list-item>
               </v-list>

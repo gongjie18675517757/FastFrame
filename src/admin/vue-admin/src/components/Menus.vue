@@ -8,7 +8,7 @@
     width="200"
   >
     <div id="appDrawer">
-      <v-toolbar color="primary darken-1" dark dense @click="toTenantCenter">
+      <v-toolbar color="primary darken-1" dark dense flat @click="toTenantCenter">
         <img :src="handicon" height="36" alt="Vue Material Admin Template" />
         <v-toolbar-title class="ml-0 pl-3">
           <span class="hidden-sm-and-down">{{tenant.ShortName}}</span>
@@ -21,7 +21,7 @@
           <menu-item title="地图" icon="map" path="/map" />
           <menu-item title="邮件" icon="email" />
           <menu-item title="通知" icon="notifications" path="/notifyCenter" />
-          <menu-item title="消息" icon="chat" path="/chat" />
+          <!-- <menu-item title="消息" icon="chat" path="/chat" /> -->
           <v-divider></v-divider>
           <div v-for="(group,index) in menus" :key="index">
             <v-subheader>{{ group.title }}</v-subheader>

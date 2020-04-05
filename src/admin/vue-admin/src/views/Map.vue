@@ -3,14 +3,14 @@
     <InfoWindow v-bind="point">
       <v-card>
         <v-list>
-          <v-list-item avatar>
+          <v-list-item>
             <v-list-item-avatar>
               <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John">
             </v-list-item-avatar>
 
             <v-list-item-content>
               <v-list-item-title>John Leider</v-list-item-title>
-              <v-list-item-sub-title>Founder of Vuetify.js</v-list-item-sub-title>
+              <v-list-item-subtitle>Founder of Vuetify.js</v-list-item-subtitle>
             </v-list-item-content>
 
             <v-list-item-action>

@@ -12,7 +12,7 @@
                 </div>
                 <v-form v-model="valid" lazy-validation ref="form">
                   <v-text-field
-                    append-icon="place"
+                    append-icon="person"
                     label="帐号"
                     type="text"
                     v-model="model.account"

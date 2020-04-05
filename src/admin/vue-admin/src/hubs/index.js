@@ -58,6 +58,10 @@ connection.on("Notify", (msg) => {
     alert.success(msg.content)
 })
 
+connection.on('welcom', function () {
+
+})
+
 eventBus.$on('init', () => {
     start()
 })

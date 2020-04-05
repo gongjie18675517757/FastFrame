@@ -2,7 +2,7 @@
   <v-layout justify-center app class="form">
     <v-flex xs12 sm10 md8>
       <v-card>
-        <v-toolbar text dense   color="transparent">
+        <v-toolbar flat dense color="transparent">
           <v-toolbar-title>后台信息</v-toolbar-title>
           <v-spacer></v-spacer>
           <a-btn
@@ -28,7 +28,7 @@
                 class="handIcon"
                 title="更换"
               >
-                <img :src="handIcon" alt="avatar">
+                <img :src="handIcon" alt="avatar" />
               </v-avatar>
             </v-flex>
             <v-text-field
@@ -136,4 +136,5 @@ export default {
 .handIcon {
   cursor: pointer;
 }
+ 
 </style>

@@ -16,7 +16,7 @@
               <v-icon dark>{{item.icon}}</v-icon>
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-sub-title v-html="item.title"></v-list-item-sub-title>
+              <v-list-item-subtitle v-html="item.title"></v-list-item-subtitle>
             </v-list-item-content>
             <v-list-item-action class="caption">{{item.timeLabel}}</v-list-item-action>
           </v-list-item>

@@ -1,9 +1,9 @@
 <template>
   <v-container grid-list-xl fluid app>
     <v-layout row wrap>
-      <v-flex xs12>
+      <v-flex xs12 :style="{padding:isTab?'0px':null}">
         <v-card>
-          <v-toolbar flat dense   color="transparent">
+          <v-toolbar flat dense height="30px" color="transparent">
             <v-toolbar-title>{{direction}}</v-toolbar-title>
             <v-spacer></v-spacer>
             <span class="hidden-sm-and-down btn-group">
@@ -23,17 +23,20 @@
             </span>
             <!-- <span> -->
             <v-menu offset-y :close-on-content-click="false">
-              <v-btn
-                slot="activator"
-                title="更多"
-                small
-                text
-                :color="$vuetify.breakpoint.smAndDown?'':'success'"
-                :icon="$vuetify.breakpoint.smAndDown"
-              >
-                <v-icon>more_vert</v-icon>
-                <span v-if="!$vuetify.breakpoint.smAndDown">更多</span>
-              </v-btn>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  slot="activator"
+                  title="更多"
+                  small
+                  text
+                  v-on="on"
+                  :color="$vuetify.breakpoint.smAndDown?'':'success'"
+                  :icon="$vuetify.breakpoint.smAndDown"
+                >
+                  <v-icon>more_vert</v-icon>
+                  <span v-if="!$vuetify.breakpoint.smAndDown">更多</span>
+                </v-btn>
+              </template>
               <v-list two-line dense expand>
                 <v-list-item
                   v-for="item in [...($vuetify.breakpoint.smAndDown?items:items2)]"
@@ -79,21 +82,20 @@
           </v-toolbar>
           <v-divider></v-divider>
           <v-card-text class="pa-0">
-            <vue-perfect-scrollbar :class="[isDialog?'dialog-page':isTab?'tab-page':'full-page']">
-              <Table
-                :items="rows"
-                :totalItems="total"
-                :loading="loading"
-                :columns="columns"
-                rowKey="Id"
-                :value="selection"
-                :hidePager="hidePager"
-                :multiple="!singleSelection"
-                :classArr="tableClassArr"
-                :styleObj="tableStyleObj"
-                v-on="tableListenter"
-              />
-            </vue-perfect-scrollbar>
+            <Table
+              :items="rows"
+              :totalItems="total"
+              :loading="loading"
+              :columns="columns"
+              rowKey="Id"
+              :value="selection"
+              :hidePager="hidePager"
+              :multiple="!singleSelection"
+              :classArr="tableClassArr"
+              :styleObj="tableStyleObj"
+              :height="tableHeight"
+              v-on="tableListenter"
+            />
           </v-card-text>
           <v-card-actions v-if="isDialog">
             <v-btn text @click="$emit('close')">取消</v-btn>
@@ -108,13 +110,11 @@
 
 <script>
 import Table from "@/components/Table/DataTable.vue";
-import VuePerfectScrollbar from "vue-perfect-scrollbar";
 import { skip, take } from "@/utils";
 
 export default {
   components: {
-    Table,
-    VuePerfectScrollbar
+    Table
   },
   props: {
     toolItems: {
@@ -126,6 +126,7 @@ export default {
     direction: String,
     isDialog: Boolean,
     isTab: Boolean,
+    tableHeight: String,
     columns: {
       type: Array,
       default: () => []

@@ -1,36 +1,35 @@
 <template>
   <v-data-table
+    :fixed-header="!!height"
+    :height="height"
     :headers="headers"
     :loading="loading"
-    :items="items"
-    :total-items="totalItems"
-    :pagination.sync="pager"
+    :items="rows"
+    :server-items-length="totalItems"
+    :footer-props="pager"
     :hide-default-footer="hidePager"
     :value="value"
     v-on="listeners"
     :item-key="rowKey"
-    :class="[...classArr,'elevation-1']"
+    :items-per-page.sync="itemsPerPage"
+    :class="[...classArr]"
     :style="styleObj"
-    :hide-headers="false"
-    :selectAll="multiple"
+    :show-select="multiple"
+    :single-select="!multiple"
+    dense
   >
-    <template slot="items" slot-scope="props">
-      <tr :active="props.selected" @click="handleRowClick(props)">
-        <td>
-          <v-icon small size="16" color="primary" v-if="!multiple && currentRow==props.item">check</v-icon>
-          <v-checkbox v-if="multiple" primary hide-details :value="props.selected"></v-checkbox>
-        </td>
-        <td v-for="col in columns" :key="col.Name">
-          <component
-            v-if="col.component"
-            :is="col.component"
-            :info="col"
-            :model="props.item"
-            v-on="listeners"
-          />
-          <Cell v-else :info="col" :model="props.item" v-on="listeners"/>
-        </td>
-      </tr>
+    <template slot="item.index" slot-scope="props">{{props.item.index}}</template>
+    <template v-for="col in columns" :slot="`item.${col.Name}`" slot-scope="props">
+      <component
+        :key="col.Name"
+        v-if="col.component"
+        :is="col.component"
+        :info="col"
+        :model="props.item"
+        :props="props"
+        v-on="listeners"
+      />
+      <Cell :key="col.Name" v-else :info="col" :model="props.item" :props="props" v-on="listeners" />
     </template>
     <template slot="no-data">没有加载数据</template>
   </v-data-table>
@@ -65,6 +64,7 @@ export default {
         return [];
       }
     },
+    height: String,
     totalItems: Number,
     multiple: Boolean,
     hidePager: {
@@ -80,22 +80,25 @@ export default {
   },
   data() {
     return {
-      pager: {},
-      currentRow: null
+      itemsPerPage: 20,
+      page: 1,
+      pager: {
+        showFirstLastPage:true,
+        "items-per-page-options": [10, 15, 20, 30, 50],
+        firstIcon: "mdi-arrow-collapse-left",
+        lastIcon: "mdi-arrow-collapse-right"
+      }
     };
   },
   computed: {
     headers() {
       return [
-        ...(this.multiple
-          ? []
-          : [
-              {
-                text: "#",
-                sortable: false,
-                width: "50px"
-              }
-            ]),
+        {
+          text: "#",
+          value: "index",
+          sortable: false,
+          width: "50px"
+        },
         ...this.columns.map(c => {
           return {
             text: c.Description,
@@ -106,6 +109,12 @@ export default {
         })
       ];
     },
+    rows() {
+      return this.items.map((v, i) => ({
+        ...v,
+        index: i + 1 + (this.page - 1) * this.itemsPerPage
+      }));
+    },
     listeners() {
       return {
         ...this.$listeners,
@@ -113,7 +122,20 @@ export default {
           this.$emit("toEdit", val);
         },
         input: val => this.$emit("input", val),
-        "update:pagination": val => this.$emit("loadList", val)
+        "update:options": val => {
+          this.$emit("loadList", val);
+          this.page = val.page;
+          console.log(this.page);
+        },
+        "click:row": row => {
+          this.$emit("click:row", row);
+          let index = this.value.findIndex(v => v == row);
+          if (index > -1) {
+            this.value.splice(index, 1);
+          } else {
+            this.value.push(row);
+          }
+        }
       };
     }
   },
@@ -132,10 +154,13 @@ export default {
 
 
 <style>
-/* table th {
-  border: 1px solid #fff;
-} */
-table.v-table.v-datatable--select-all thead th:first-child {
-  width: 50px;
+.v-application--is-ltr .v-data-footer__select .v-select {
+  margin: 0;
+}
+.v-data-footer__select
+  .v-text-field
+  > .v-input__control
+  > .v-input__slot:before {
+  border-style: none;
 }
 </style>

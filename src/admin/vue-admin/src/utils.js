@@ -119,7 +119,7 @@ export function mapMany(arr, fn) {
  */
 export function upload({
     accept = "",
-    onProgress = () => {}
+    onProgress = () => { }
 } = {}) {
     let el = document.getElementById('uploadInput')
     if (el) {
@@ -231,20 +231,20 @@ export function showDialog(component, pars = {}) {
                 }
                 return h(
                     'v-dialog', {
-                        props: {
-                            // persistent: true,
-                            scrollable: true,
-                            value: this.visible,
-                            ...pars,
-                        },
-                        on: {
-                            input: val => {
-                                if (!val) {
-                                    close()
-                                }
+                    props: {
+                        // persistent: true,
+                        scrollable: true,
+                        value: this.visible,
+                        ...pars,
+                    },
+                    on: {
+                        input: val => {
+                            if (!val) {
+                                close()
                             }
                         }
-                    },
+                    }
+                },
                     child
                 )
             }
@@ -339,8 +339,8 @@ export function selectMany(arr = [], selector = r => [r]) {
 
     return brr;
 }
- 
- 
+
+
 
 /**
  * 去重
@@ -377,4 +377,45 @@ export function skip(arr = [], skipCount = 0) {
  */
 export function take(arr = [], takeCount = 0) {
     return arr.filter((_val, index) => index < takeCount)
+}
+
+
+/**
+ * 防抖
+ * @param {*} fn 
+ * @param {*} delay 
+ */
+export function debounce(fn, delay) {
+    var timer
+    return function () {
+        var context = this
+        var args = arguments
+        clearTimeout(timer)
+        timer = setTimeout(function () {
+            fn.apply(context, args)
+        }, delay)
+    }
+}
+
+/**
+ * 节流
+ * @param {*} func 
+ * @param {*} delay 
+ */
+export function throttle(func, delay) {
+    var timer = null;
+    var startTime = Date.now();
+    return function () {
+        var curTime = Date.now();
+        var remaining = delay - (curTime - startTime);
+        var context = this;
+        var args = arguments;
+        clearTimeout(timer);
+        if (remaining <= 0) {
+            func.apply(context, args);
+            startTime = Date.now();
+        } else {
+            timer = setTimeout(func, remaining);
+        }
+    }
 }

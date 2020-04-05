@@ -1,15 +1,10 @@
 <template>
-  <v-list-item :to="path" ripple="ripple" :disabled="disabled" rel="noopener">
-    <v-list-item-action v-if="icon">
-      <v-badge color="red" overlap v-if="count>0">
-        <span slot="badge">{{count}}</span>
-        <v-icon medium>{{ icon }}</v-icon>
-      </v-badge>
-      <v-icon v-else>{{ icon }}</v-icon>
-    </v-list-item-action>
-    <v-list-item-content>
-      <v-list-item-title>{{ title }}</v-list-item-title>
-    </v-list-item-content>
+  <v-list-item :to="path">
+    <v-list-item-icon>
+      <v-icon>{{icon}}</v-icon>
+    </v-list-item-icon>
+
+    <v-list-item-title>{{title}}</v-list-item-title>
   </v-list-item>
 </template>
 
@@ -25,6 +20,6 @@ export default {
       default: 0
     }
   }
-}
+};
 </script>
  

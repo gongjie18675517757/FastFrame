@@ -18,7 +18,12 @@ module.exports = {
         target: 'http://localhost:62431/',
         ws: true,
         changeOrigin: true
-      }
+      },
+      '/swagger': {
+        target: 'http://localhost:62431/',
+        ws: true,
+        changeOrigin: true
+      },
     }
   }
 }

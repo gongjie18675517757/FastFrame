@@ -139,14 +139,10 @@ html {
 .v-input {
   font-size: 14px;
 }
-/* .v-text-field__details {
-  display: none;
-} */
 
 .much-input .v-input__control {
   height: 30px;
 }
-/* .v-text-field__slot >input {
-  border: 1px solid #000;
-} */
+
+
 </style>

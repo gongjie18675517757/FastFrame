@@ -18,10 +18,8 @@
         <v-list dense expand>
           <v-subheader>常用</v-subheader>
           <menu-item title="首页" icon="dashboard" path="/" />
-          <menu-item title="地图" icon="map" path="/map" />
-          <menu-item title="邮件" icon="email" />
+          <menu-item title="地图演示" icon="map" path="/map" />
           <menu-item title="通知" icon="notifications" path="/notifyCenter" />
-          <!-- <menu-item title="消息" icon="chat" path="/chat" /> -->
           <v-divider></v-divider>
           <div v-for="(group,index) in menus" :key="index">
             <v-subheader>{{ group.title }}</v-subheader>
@@ -37,8 +35,6 @@
 </template>
 
 <script>
-import menu from "@/menu.js";
-
 import VuePerfectScrollbar from "vue-perfect-scrollbar";
 import MenuGroup from "./MenuGroup.vue";
 import MenuItem from "./MenuItem.vue";
@@ -51,8 +47,7 @@ export default {
   },
   data() {
     return {
-      miniVariant: false,
-      items: menu,
+      miniVariant: false,     
       scrollSettings: {
         maxScrollbarLength: 160
       }
@@ -85,30 +80,7 @@ export default {
       }
     },
     menus() {
-      let existsPermission = this.$store.getters.existsPermission;
-
-      function exists(menus) {
-        menus = [...menus];
-        for (const item of menus) {
-          let { items } = item;
-          if (Array.isArray(items)) {
-            item.items = exists(items);
-          }
-        }
-        return menus
-          .filter(
-            v =>
-              !v.permission ||
-              existsPermission(
-                ...(Array.isArray(v.permission)
-                  ? v.permission
-                  : [v.permission, "List"])
-              )
-          )
-          .filter(v => !v.items || v.items.length > 0);
-      }
-
-      return exists(this.items);
+      return this.$store.state.menuList;
     }
   },
   methods: {

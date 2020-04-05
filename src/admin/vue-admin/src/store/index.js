@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import $http from '../httpClient'
 import router from '../router'
+import menuList from './menu'
 import {
   sleep,
   eventBus
@@ -51,6 +52,11 @@ export default new Vuex.Store({
      * 权限列表
      */
     permissionList: [],
+
+    /**
+     * 菜单列表
+     */
+    menuList: [],
 
     /**
      * 左边菜单栏是否显示
@@ -152,6 +158,7 @@ export default new Vuex.Store({
       state.lastTime = new Date().getTime()
       state.currPageFullPath = page.fullPath;
     },
+
     /**
      * 关闭页
      * @param {*} param0 
@@ -174,19 +181,53 @@ export default new Vuex.Store({
         }
       }
     },
+
+
+
     login({
       commit,
       state
     }, {
       user
     }) {
-      commit('login', user)
+      commit('login', user);
+
       $http.get('/api/Permission/Permissions').then(data => {
         commit('setPermission', data)
-        state.isLoadPermission = true
+        state.isLoadPermission = true;
+
+        function existsMenuPermission(menu) {
+          if (Array.isArray(menu.items)) {
+            menu.items = menu.items.filter(existsMenuPermission);
+          }
+
+          let exists = Array.isArray(menu.items) ?
+            menu.items.length > 0 :
+            existsPermission(menu.permission);
+
+          return !!exists;
+        }
+
+        function existsPermission(permission) {
+          if (!permission) return true;
+          if (typeof permission == "string") permission = [permission, "List"];
+          if (Array.isArray(permission)) {
+            let [moduleName, pageName] = permission;
+            let parentIds = data.filter(r => r.EnCode == moduleName).map(v => v.Id);
+            let val = parentIds.length > 0 &&
+              !!data.find(
+                v => v.EnCode == pageName && parentIds.includes(v.Super_Id))
+
+
+            return val;
+          }
+        }
+
+        state.menuList = JSON.parse(JSON.stringify(menuList)).filter(existsMenuPermission)
       })
       eventBus.$emit("init");
     },
+
     loadEnumValues({
       state
     }, name) {
@@ -214,23 +255,38 @@ export default new Vuex.Store({
       return state.tenant || {};
     },
     existsLoginAsync: state => async () => {
-      if (!state.currUser.Id) {
-        await sleep(1000)
+      for (let count = 0; count < 10; count++) {
+        if (!state.currUser.Id) {
+          await sleep(100)
+        } else {
+          break;
+        }
       }
       if (!state.currUser.Id) {
         throw new Error('未登陆');
       }
     },
     existsPermission: state => (moduleName, actionName = 'List') => {
-      let patent = state.permissionList.find(v => v.EnCode == moduleName)
-      return !!patent && !!state.permissionList.find(v => v.EnCode == actionName && v.Super_Id == patent.Id)
+      let arr = Array.isArray(actionName) ? actionName : [actionName];
+      return !!arr.find(r => {
+        let patentIds = state.permissionList.filter(v => v.EnCode == moduleName).map(v => v.Id) || []
+        return patentIds.length > 0 && !!state.permissionList.find(v => v.EnCode == r && patentIds.includes(v.Super_Id))
+      })
     },
     existsPermissionAsync: state => async (moduleName, actionName = 'List') => {
-      if (!state.isLoadPermission) {
-        await sleep(2000)
+      let count = 0;
+      while (count < 20) {
+        if (!state.isLoadPermission) {
+          await sleep(100)
+        } else {
+          break;
+        }
+        count++;
       }
-      let patent = state.permissionList.find(v => v.EnCode == moduleName);
-      return !!patent && !!state.permissionList.find(v => v.EnCode == actionName && v.Super_Id == patent.Id);
+
+      let patentIds = state.permissionList.filter(v => v.EnCode == moduleName).map(v => v.Id);
+      let val = patentIds.length > 0 && !!state.permissionList.find(v => v.EnCode == actionName && patentIds.includes(v.Super_Id));
+      return val;
     },
     getItemValues: state => (enumKey, superId) => {
       if (state.enumItemValues[enumKey]) {

@@ -53,7 +53,7 @@ axios.interceptors.response.use(function (response) {
             case 400:
             case 403:
                 if (error.response.data.Message)
-                    alert.error(error.response.data.Message)
+                alert.error(error.response.data.Message)
                 break;
             default:
                 break;

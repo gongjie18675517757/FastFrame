@@ -3,59 +3,6 @@ import { getValue } from "@/utils";
 import EnumItemInput from "@/components/Inputs/EnumItemInput";
 import SelectInput from "@/components/Inputs/SelectInput";
 export default {
-  render(h) {
-    let { IsLink, EnumItemInfo, EnumValues } = this.info;
-    if (!this.val) {
-      return null;
-    }
-    if (IsLink) {
-      return h(
-        "a",
-        {
-          on: {
-            click: () => this.$emit("toEdit", this.model)
-          }
-        },
-        this.value
-      );
-    } else if (this.isFile) {
-      return h(
-        "a",
-        {
-          on: {
-            click: this.toRelate
-          }
-        },
-        this.value
-      );
-    } else if (EnumItemInfo) {
-      return h(EnumItemInput, {
-        props: {
-          value: this.val,
-          EnumItemInfo,
-          disabled: true,
-          multiple: this.info.Type == "Array"
-        }
-      });
-    } else if (
-      (Array.isArray(EnumValues) && EnumValues.length > 0) ||
-      typeof EnumValues == "function"
-    ) {
-      if (typeof EnumValues == "function") {
-        EnumValues = EnumValues.call(this, this.model);
-      }
-      return h(SelectInput, {
-        props: {
-          value: this.val,
-          values: EnumValues,
-          disabled: true,
-          multiple: this.info.Type == "Array"
-        }
-      });
-    } else {
-      return h("span", null, this.value);
-    }
-  },
   props: {
     info: {
       type: Object,
@@ -118,6 +65,66 @@ export default {
         window.open(url);
         return;
       }
+    }
+  },
+  render(h) {
+    let { IsLink, EnumItemInfo, EnumValues, getValueFunc, render } = this.info;
+    if (typeof render == "function") {
+      return render(h, { value: this.val, model: this.model, info: this.info });
+    }
+    else if (typeof getValueFunc == "function") {
+      return h(
+        "span",
+        null,
+        getValueFunc({ value: this.val, model: this.model, info: this.info })
+      );
+    }
+    else if (IsLink) {
+      return h(
+        "a",
+        {
+          on: {
+            click: () => this.$emit("toEdit", this.model)
+          }
+        },
+        this.value
+      );
+    } else if (this.isFile) {
+      return h(
+        "a",
+        {
+          on: {
+            click: this.toRelate
+          }
+        },
+        this.value
+      );
+    } else if (EnumItemInfo) {
+      return h(EnumItemInput, {
+        props: {
+          value: this.val,
+          EnumItemInfo,
+          disabled: true,
+          multiple: this.info.Type == "Array"
+        }
+      });
+    } else if (
+      (Array.isArray(EnumValues) && EnumValues.length > 0) ||
+      typeof EnumValues == "function"
+    ) {
+      if (typeof EnumValues == "function") {
+        EnumValues = EnumValues.call(this, this.model);
+      }
+      return h(SelectInput, {
+        props: {
+          value: this.val,
+          values: EnumValues,
+          disabled: true,
+          multiple: this.info.Type == "Array"
+        }
+      });
+    } else {
+      return h("span", null, this.value);
     }
   }
 };

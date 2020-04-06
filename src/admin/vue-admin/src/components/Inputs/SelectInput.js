@@ -60,7 +60,8 @@ export default {
           placeholder: this.placeholder,
           'item-text': 'Value',
           'item-value': 'Key',
-          multiple: this.multiple
+          multiple: this.multiple,
+          dense: true
         },
         on: {
           input: val => {

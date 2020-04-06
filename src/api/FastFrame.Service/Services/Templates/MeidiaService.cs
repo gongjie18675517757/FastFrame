@@ -64,7 +64,7 @@ namespace FastFrame.Service.Services.Basis
 					};
 			return query;
 		}
-		protected  Task<PageList<MeidiaViewModel>> ViewModelListAsync(PagePara page) 
+		public  Task<PageList<MeidiaViewModel>> ViewModelListAsync(PagePara page) 
 		{
 			var query = from _meidia in meidiaRepository 
 						select new MeidiaViewModel

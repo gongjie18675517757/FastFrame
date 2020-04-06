@@ -1,5 +1,5 @@
 import {
-  alert,
+   
   groupBy,
   selectMany,
   distinct
@@ -161,7 +161,14 @@ export let formMethods = {
     return getRules(this.name)
   },
   getModelObjectItems() {
-    return getModelObjectItems(this.name)
+    return getModelObjectItems(this.name).then(arr => {
+      arr.forEach(v => {
+        if (v.Relate) {
+          v.requestUrl = `/api/${this.name}/${v.Relate}List`
+        }
+      })
+      return arr;
+    })
   },
   DataUpdated() {
 
@@ -232,7 +239,7 @@ export let formMethods = {
       this.submiting = true;
       let errs = await this.evalRules();
       if (errs.length > 0) {
-        alert.error("表单填写不完整");
+        this.$message.toast.error("表单填写不完整");
         return;
       }
 
@@ -241,14 +248,21 @@ export let formMethods = {
       let method = this.getPostMethod(id);
       let url = this.getPostUrl(id)
       let data = await method(url, postData)
+      this.$message.toast.success('保存成功');
+      this.$eventBus.$emit(`${this.name}_update`)
       if (data) {
         this.$emit('close');
-        this.$nextTick(() => {
-          this.$router.replace(`/${this.name}/${data}`);
-        })
+        if (!this.isDialog) {
+          this.$nextTick(() => {
+            this.$router.replace(`/${this.name}/${data}`);
+          })
+        }
+      }else{
+        this.canEdit=false;
+        this.changed=false;
       }
     } catch (error) {
-      alert.error(error.message);
+      this.$message.toast.error(error.message);
     } finally {
       this.submiting = false;
     }

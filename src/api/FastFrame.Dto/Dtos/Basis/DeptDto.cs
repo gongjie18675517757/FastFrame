@@ -6,7 +6,7 @@ namespace FastFrame.Dto.Basis
     {
         public IEnumerable<UserViewModel> Members { get; set; }
 
-        public IEnumerable<UserViewModel> Managers { get; set; }
+        public IEnumerable<string> Managers { get; set; }
     }
 
 }

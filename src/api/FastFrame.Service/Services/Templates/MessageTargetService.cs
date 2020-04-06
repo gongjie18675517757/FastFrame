@@ -37,7 +37,7 @@ namespace FastFrame.Service.Services.Chat
 					};
 			return query;
 		}
-		protected  Task<PageList<MessageTargetViewModel>> ViewModelListAsync(PagePara page) 
+		public  Task<PageList<MessageTargetViewModel>> ViewModelListAsync(PagePara page) 
 		{
 			var query = from _messageTarget in messageTargetRepository 
 						select new MessageTargetViewModel

@@ -76,6 +76,11 @@
             <param name="input"></param>
             <returns></returns>
         </member>
+        <member name="T:FastFrame.Application.Controllers.Basis.DeptController">
+             <summary>
+            部门 
+             </summary>
+        </member>
         <member name="T:FastFrame.Application.Controllers.Basis.EnumItemController">
              <summary>
             数字字典 
@@ -148,11 +153,6 @@
             </summary>
             <param name="id"></param>
             <returns></returns>
-        </member>
-        <member name="T:FastFrame.Application.Controllers.Basis.DeptController">
-             <summary>
-            部门 
-             </summary>
         </member>
         <member name="T:FastFrame.Application.Controllers.Chat.ChatController">
             <summary>

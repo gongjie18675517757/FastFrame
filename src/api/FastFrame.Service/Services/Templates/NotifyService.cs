@@ -62,7 +62,7 @@ namespace FastFrame.Service.Services.Basis
 					};
 			return query;
 		}
-		protected  Task<PageList<NotifyViewModel>> ViewModelListAsync(PagePara page) 
+		public  Task<PageList<NotifyViewModel>> ViewModelListAsync(PagePara page) 
 		{
 			var query = from _notify in notifyRepository 
 						select new NotifyViewModel

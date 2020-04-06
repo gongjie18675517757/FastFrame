@@ -35,7 +35,7 @@ namespace FastFrame.Service.Services.Basis
 					};
 			return query;
 		}
-		protected  Task<PageList<TenantHostViewModel>> ViewModelListAsync(PagePara page) 
+		public  Task<PageList<TenantHostViewModel>> ViewModelListAsync(PagePara page) 
 		{
 			var query = from _tenantHost in tenantHostRepository 
 						select new TenantHostViewModel

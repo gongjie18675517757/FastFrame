@@ -121,7 +121,7 @@
 import VuePerfectScrollbar from "vue-perfect-scrollbar";
 import GridItem from "./GridItem.vue";
 import ListItem from "./ListItem.vue";
-import { alert, upload } from "@/utils"; 
+import {  upload } from "@/utils"; 
 import rules from "@/rules";
 export default {
   components: {
@@ -294,7 +294,7 @@ export default {
         };
         let entity = await this.$http.post("/api/Meidia/post", postData);
         this.items.push(entity);
-        alert.success("添加成功!");
+        this.$message.toast.success("添加成功!");
       } finally {
         this.uploading = false;
       }
@@ -319,7 +319,7 @@ export default {
       };
       let entity = await this.$http.post("/api/Meidia/post", postData);
       this.items.push(entity);
-      alert.success("添加成功!");
+      this.$message.toast.success("添加成功!");
     },
     search() {
       this.$message
@@ -348,7 +348,7 @@ export default {
       let { Id } = this.currItem;
       let index = this.items.findIndex(r => r == this.currItem);
       await this.$http.delete(`/api/meidia/delete/${Id}`);
-      alert.success("删除成功");
+      this.$message.toast.success("删除成功");
       this.currItem = null;
       this.items.splice(index, 1);
     },

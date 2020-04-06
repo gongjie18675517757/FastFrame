@@ -202,7 +202,10 @@ export async function getQueryOptions(columns) {
       arr.push({
         Description,
         Name,
-        EnumValues,
+        EnumValues: [
+          { Key: 'true', Value: '是' },
+          { Key: 'false', Value: '否' },
+        ],
         compare: '==',
         Type
       })

@@ -1,8 +1,11 @@
 ﻿using FastFrame.Dto.Basis;
 using FastFrame.Entity.Basis;
+using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Attrs;
+using FastFrame.Service.Services.Basis;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FastFrame.Application.Controllers.Basis
 {
@@ -31,5 +34,15 @@ namespace FastFrame.Application.Controllers.Basis
         {
             return await service.ToogleDisabled(id);
         }
+
+        [Permission(new string[] { "Add", "Update" })]
+        [HttpPost]
+        public Task<PageList<RoleViewModel>> RoleList(PagePara pagePara)
+            => HttpContext.RequestServices.GetService<RoleService>().ViewModelListAsync(pagePara);
+
+        [Permission(new string[] { "Add", "Update" })]
+        [HttpPost]
+        public Task<PageList<DeptViewModel>> DeptList(PagePara pagePara)
+            => HttpContext.RequestServices.GetService<DeptService>().ViewModelListAsync(pagePara);
     }
 }

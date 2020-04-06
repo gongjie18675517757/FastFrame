@@ -14,6 +14,7 @@
       :errorMessages="errorMessages"
       :placeholder="description"
       @change="change"
+      dense
     >
       <template slot="no-data">
         <v-list-item>
@@ -47,7 +48,8 @@ export default {
       required: true
     },
     isXs: Boolean,
-    description: String
+    description: String,
+    requestUrl: [String, Function]
   },
   data() {
     return {
@@ -106,8 +108,12 @@ export default {
       if (typeof filter == "function")
         filter = await filter.call(this, this.model);
 
+      let url = this.requestUrl;
+      if (typeof this.requestUrl == "function")
+        url = this.requestUrl.call(this, this.model);
+
       try {
-        let { Data } = await this.$http.post(`/api/${this.Relate}/list`, {
+        let { Data } = await this.$http.post(url, {
           Condition: {
             Filters: [
               {

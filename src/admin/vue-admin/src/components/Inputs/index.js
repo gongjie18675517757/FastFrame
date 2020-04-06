@@ -6,7 +6,7 @@ import SelectInput from "./SelectInput";
 import SelectMulitInput from "./SelectMulitInput";
 import DateInput from './DateInput.vue'
 import FileInput from './FileInput'
-import EnumItemInput from './EnumItemInput.js' 
+import EnumItemInput from './EnumItemInput.js'
 
 export default {
   props: {
@@ -24,6 +24,7 @@ export default {
     },
     errorMessages: Array,
     canEdit: Boolean,
+    IsRequired: Boolean,
     Length: Number,
     ModuleName: String,
     Relate: String,
@@ -88,7 +89,8 @@ export default {
       errorCount: errs.length,
       error: !!errs.find(r => r),
       required: this.IsRequired,
-      isXs
+      isXs,
+      ...this.$attrs
     }
 
     if (isXs) {
@@ -152,6 +154,11 @@ export default {
      * 单选下拉框
      */
     else if (!component && Array.isArray(this.EnumValues) && this.EnumValues.length > 0) {
+      if (multiple) {
+        flex = {
+          xs12: true
+        }
+      }
       component = h(SelectInput, {
         props: {
           ...props,
@@ -164,6 +171,11 @@ export default {
 
     /* 单选下拉框 */
     else if (!component && typeof this.EnumValues == 'function') {
+      if (multiple) {
+        flex = {
+          xs12: true
+        }
+      }
       component = h(SelectInput, {
         props: {
           ...props,
@@ -271,7 +283,8 @@ export default {
         attrs: flex,
         class: ['input-container'],
         style: {
-          padding: '20px'
+          padding: '10px',
+          color: props.error ? 'red' : null
         }
       }, [
         h('v-layout', {
@@ -280,13 +293,16 @@ export default {
           [
             h('div', {
               style: {
-                display: 'table-cell',
-                'vertical-align': 'bottom',
                 width: '150px',
-                'text-align': 'center'
+                'padding-left': '15px',
+                'padding-top': '7px'
               }
             }, [
-              h('span', null, `${this.Description}:`),
+              h('span', {
+                style: {
+
+                }
+              }, `${this.Description}:`),
               h('span', {
                 style: {
                   color: 'red'
@@ -295,7 +311,8 @@ export default {
             ]),
             h('div', {
               style: {
-                width: this.errorMessages ? 'calc(80% - 150px)' : 'calc(100% - 150px)'
+                width: this.errorMessages ? 'calc(100% - 150px - 150px)' : 'calc(100% - 150px)',
+                'padding-top': props.disabled ? '7px' : null
               }
             }, [component])
           ])

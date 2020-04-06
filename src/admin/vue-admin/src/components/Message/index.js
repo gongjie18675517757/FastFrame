@@ -1,8 +1,10 @@
 import Vue from 'vue'
 import store from '../../store'
+import { alert } from '../../utils'
+
 Vue.prototype.$message = {
     alert() {
-        return this.dialog(() => import('./Alert.vue'), ...arguments)
+        return this.dialog(() => import('./Alert'), ...arguments)
     },
     confirm() {
         return this.dialog(() => import('./Confirm.vue'), ...arguments)
@@ -23,5 +25,6 @@ Vue.prototype.$message = {
                 }
             })
         })
-    }
+    },
+    toast: alert
 }

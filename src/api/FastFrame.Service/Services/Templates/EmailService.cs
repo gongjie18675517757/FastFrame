@@ -37,7 +37,7 @@ namespace FastFrame.Service.Services.Chat
 					};
 			return query;
 		}
-		protected  Task<PageList<EmailViewModel>> ViewModelListAsync(PagePara page) 
+		public  Task<PageList<EmailViewModel>> ViewModelListAsync(PagePara page) 
 		{
 			var query = from _email in emailRepository 
 						select new EmailViewModel

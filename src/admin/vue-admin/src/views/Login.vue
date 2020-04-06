@@ -51,7 +51,7 @@
 <script>
 // import { validationMixin } from 'vuelidate'
 // import { required, maxLength, email } from 'vuelidate/lib/validators'
-import { alert } from "@/utils.js";
+ 
 export default {
   data: () => ({
     loading: false,
@@ -73,7 +73,7 @@ export default {
   methods: {
     async login() {
       if (!this.$refs.form.validate()) {
-        alert.warning("请填写完整信息!");
+        this.$message.toast.warning("请填写完整信息!");
         return;
       }
       this.loading = true;

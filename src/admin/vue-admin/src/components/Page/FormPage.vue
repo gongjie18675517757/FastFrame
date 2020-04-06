@@ -1,26 +1,40 @@
 <template>
   <v-container grid-list-xl fluid app>
     <v-layout align-center justify-center :class="{singleLine:singleLine}">
-      <v-flex v-bind="flex">
+      <v-flex v-bind="flex" :style="{padding:isTab?'1px':null}">
         <v-card>
-          <v-toolbar flat dense color="transparent">
+          <v-toolbar flat dense color="transparent" height="30px">
             <v-toolbar-title>{{title}}</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items>
               <a-btn
-                icon
                 v-if="hasManage && id && !changed"
                 :moduleName="name"
                 name="Update"
                 @click="handleEdit"
-                title="修改"
+                title="编辑"
                 color="info"
+                small
+                text
               >
-                <v-icon>edit</v-icon>
+                <v-icon small>edit</v-icon>编辑
               </a-btn>
-              <!-- <v-btn icon @click="refresh" title="刷新">
-                <v-icon>refresh</v-icon>
-              </v-btn> -->
+              <v-btn v-if="!isDialog" small text @click="$emit('close')" title="关闭">
+                <v-icon small>close</v-icon>关闭
+              </v-btn>
+
+              <a-btn
+                v-if="hasManage && canEdit && changed"
+                :module-name="name"
+                :name="model.Id?'Update':'Add'"
+                color="primary"
+                @click="$emit('submit')"
+                :loading="submiting"
+                small
+                text
+              >
+                <v-icon small>mdi-content-save-edit-outline</v-icon>保存
+              </a-btn>
               <v-menu offset-y>
                 <template v-slot:activator="{ on }">
                   <v-btn icon v-on="on" title="更多">
@@ -55,67 +69,56 @@
             </v-toolbar-items>
           </v-toolbar>
           <v-divider></v-divider>
-          <v-form ref="form">
-            <v-card-text class="form-content" v-if="model">
-              <div :class="[isDialog?'dialogPage':isTab?'tabPage':'fullPage','form-page']">
-                <template v-for="group in formGroups">
-                  <v-flex :key="group.key.title" xs12>
-                    <v-card v-if="group.values.length>1" tile>
-                      <v-toolbar flat dense color="transparent">
-                        <v-toolbar-title>{{group.key.title}}:</v-toolbar-title>
-                      </v-toolbar>
-                      <v-card-text>
-                        <component :is="singleLine?'span':'v-layout'" wrap>
-                          <Input
-                            v-for="item in group.values"
-                            v-bind="item"
-                            :key="item.Name"
-                            :model="model"
-                            :rules="getRules(item)"
-                            :canEdit="canEdit"
-                            :singleLine="singleLine"
-                            :errorMessages="formErrorMessages[item.Name]"
-                            :value="model[item.Name]"
-                            @change="$emit('changed',{item:item,value:$event})"
-                            @input="handleInput(item,$event)"
-                            :ref="item.Name"
-                          />
-                        </component>
-                      </v-card-text>
-                    </v-card>
-                    <component
-                      v-else
-                      v-for="item in group.values"
-                      :key="item.Name"
-                      :is="item.template"
-                      v-bind="item"
-                      :model="model"
-                      :canEdit="canEdit"
-                      :singleLine="singleLine"
-                      :errorMessages="formErrorMessages[item.Name]"
-                      :value="model[item.Name]"
-                      @change="$emit('changed',{item:item,value:$event})"
-                      @input="handleInput(item,$event)"
-                      :ref="item.Name"
-                    />
-                  </v-flex>
-                </template>
-              </div>
-            </v-card-text>
-          </v-form>
-
-          <v-card-actions>
-            <v-btn text @click="$emit('close')">取消</v-btn>
-            <v-spacer></v-spacer>
-            <a-btn
-              v-if="hasManage && canEdit && changed"
-              :module-name="name"
-              :name="model.Id?'Update':'Add'"
-              color="primary"
-              @click="$emit('submit')"
-              :loading="submiting"
-            >保存</a-btn>
-          </v-card-actions>
+          <v-card-text class="form-content" v-if="model">
+            <div :class="[isDialog?'dialogPage':isTab?'tabPage':'fullPage','form-page']">
+              <template v-for="group in formGroups">
+                <v-flex :key="group.key.title" xs12 style="padding:0 0 5px 0 ;">
+                  <v-card v-if="group.values.length>1" tile>
+                    <v-toolbar flat dense color="transparent" height="30px;">
+                      <v-toolbar-title>{{group.key.title}}:</v-toolbar-title>
+                    </v-toolbar>
+                    <v-card-text>
+                      <component
+                        :is="singleLine?'div':'v-layout'"
+                        wrap
+                        style="padding-bottom:15px;"
+                      >
+                        <Input
+                          v-for="item in group.values"
+                          v-bind="item"
+                          :key="item.Name"
+                          :model="model"
+                          :rules="getRules(item)"
+                          :canEdit="canEdit"
+                          :singleLine="singleLine"
+                          :errorMessages="formErrorMessages[item.Name]"
+                          :value="model[item.Name]"
+                          @change="$emit('changed',{item:item,value:$event})"
+                          @input="handleInput(item,$event)"
+                          :ref="item.Name"
+                        />
+                      </component>
+                    </v-card-text>
+                  </v-card>
+                  <component
+                    v-else
+                    v-for="item in group.values"
+                    :key="item.Name"
+                    :is="item.template"
+                    v-bind="item"
+                    :model="model"
+                    :canEdit="canEdit"
+                    :singleLine="singleLine"
+                    :errorMessages="formErrorMessages[item.Name]"
+                    :value="model[item.Name]"
+                    @change="$emit('changed',{item:item,value:$event})"
+                    @input="handleInput(item,$event)"
+                    :ref="item.Name"
+                  />
+                </v-flex>
+              </template>
+            </div>
+          </v-card-text>
         </v-card>
       </v-flex>
     </v-layout>
@@ -161,11 +164,7 @@ export default {
         };
       } else {
         return {
-          xs12: true,
-          sm10: true,
-          md8: true,
-          lg6: true,
-          xl6: true
+          xs12: true
         };
       }
     },
@@ -210,17 +209,17 @@ export default {
 }
 
 .fullPage {
-  height: calc(100vh - 225px);
+  height: calc(100vh - 135px);
   overflow: auto;
 }
 
 .tabPage {
-  height: calc(100vh - 266px);
+  height: calc(100vh - 170px);
   overflow: auto;
 }
 
 .dialogPage {
-  height: calc(100vh - 245px);
+  max-height: calc(100vh - 245px);
   overflow: auto;
 }
 
@@ -235,6 +234,10 @@ export default {
 <style lang="stylus">
 .form-content.v-card__text {
   padding: 5px;
+}
+
+.form-content .v-toolbar__title {
+  font-size: 15px;
 }
 </style>
 

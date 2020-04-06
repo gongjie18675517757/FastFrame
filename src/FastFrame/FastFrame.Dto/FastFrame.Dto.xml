@@ -30,16 +30,6 @@
             名称 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.DeptDto.Supervisor_Id">
-             <summary>
-            主管 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.DeptDto.Supervisor">
-             <summary>
-            主管 
-             </summary>
-        </member>
         <member name="P:FastFrame.Dto.Basis.DeptDto.Super_Id">
              <summary>
             上级 

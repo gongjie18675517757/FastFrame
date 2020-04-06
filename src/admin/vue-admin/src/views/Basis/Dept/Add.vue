@@ -4,7 +4,6 @@ let pageInfo = {
   name: "Dept",
   direction: "部门"
 };
-import { SelectDetailTable } from "@/components/Table";
 import Page from "@/components/Page/FormPageCore.js";
 export default {
   ...Page,
@@ -27,17 +26,17 @@ export default {
       return Page.methods.getModelObjectItems.call(this, opts).then(opts => {
         opts.push({
           Name: "Members",
-          GroupNames: ["部门所有成员"],
-          template: SelectDetailTable,
-          typeName: "User",
-          dialogComponent:()=>import('../User/List.vue'),
+          Description: "部门成员",
+          Relate: "User",
+          Type: "Array",
+          requestUrl: `/api/dept/UserList`
         });
         opts.push({
           Name: "Managers",
-          GroupNames: ["部门管理人员"],
-          template: SelectDetailTable,
-          typeName: "User",
-          dialogComponent:()=>import('../User/List.vue'),
+          Description: "部门主管",
+          Type: "Array",
+          EnumValues: model =>
+            model.Members.map(v => ({ Key: v.Id, Value: v.Name }))
         });
         return opts;
       });

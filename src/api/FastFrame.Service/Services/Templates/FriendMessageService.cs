@@ -39,7 +39,7 @@ namespace FastFrame.Service.Services.Chat
 					};
 			return query;
 		}
-		protected  Task<PageList<FriendMessageViewModel>> ViewModelListAsync(PagePara page) 
+		public  Task<PageList<FriendMessageViewModel>> ViewModelListAsync(PagePara page) 
 		{
 			var query = from _friendMessage in friendMessageRepository 
 						select new FriendMessageViewModel

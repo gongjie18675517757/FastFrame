@@ -2,7 +2,7 @@
   <v-layout justify-center app class="form">
     <v-flex xs12 sm10 md8>
       <v-card>
-        <v-toolbar text dense   color="transparent">
+        <v-toolbar text dense color="transparent">
           <v-toolbar-title>个人中心</v-toolbar-title>
           <v-spacer></v-spacer>
         </v-toolbar>
@@ -18,7 +18,7 @@
                 class="handIcon"
                 title="更换"
               >
-                <img :src="handIcon" alt="avatar">
+                <img :src="handIcon" alt="avatar" />
               </v-avatar>
             </v-flex>
             <v-text-field v-model="form.Account" label="帐号" readonly required></v-text-field>
@@ -61,7 +61,7 @@
 <script>
 import rules from "@/rules";
 import timg from "@/assets/timg.jpg";
-import { alert, upload } from "@/utils";
+import { upload } from "@/utils";
 export default {
   data() {
     return {
@@ -103,9 +103,9 @@ export default {
         this.form = request;
         this.$store.commit("login", JSON.parse(JSON.stringify(request)));
 
-        alert.success("更新成功");
+        this.$message.toast.success("更新成功");
       } catch (error) {
-        alert.error(error.message);
+        this.$message.toast.error(error.message);
       } finally {
         this.submiting = false;
       }

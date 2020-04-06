@@ -68,7 +68,7 @@
 <script>
 import rules from "@/rules";
 import timg from "@/assets/logo.png";
-import { alert, upload } from "@/utils";
+import { upload } from "@/utils";
 export default {
   data() {
     return {
@@ -118,9 +118,9 @@ export default {
           type: "setTenant",
           info: JSON.parse(JSON.stringify(request))
         });
-        alert.success("更新成功");
+        this.$message.toast.success("更新成功");
       } catch (error) {
-        alert.error(error.message);
+        this.$message.toast.error(error.message);
       } finally {
         this.submiting = false;
       }
@@ -136,5 +136,4 @@ export default {
 .handIcon {
   cursor: pointer;
 }
- 
 </style>

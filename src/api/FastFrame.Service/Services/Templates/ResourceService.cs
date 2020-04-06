@@ -40,7 +40,7 @@ namespace FastFrame.Service.Services.Basis
 					};
 			return query;
 		}
-		protected  Task<PageList<ResourceViewModel>> ViewModelListAsync(PagePara page) 
+		public  Task<PageList<ResourceViewModel>> ViewModelListAsync(PagePara page) 
 		{
 			var query = from _resource in resourceRepository 
 						select new ResourceViewModel

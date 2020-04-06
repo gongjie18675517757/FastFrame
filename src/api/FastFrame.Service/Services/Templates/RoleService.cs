@@ -48,7 +48,7 @@ namespace FastFrame.Service.Services.Basis
 					};
 			return query;
 		}
-		protected  Task<PageList<RoleViewModel>> ViewModelListAsync(PagePara page) 
+		public  Task<PageList<RoleViewModel>> ViewModelListAsync(PagePara page) 
 		{
 			var query = from _role in roleRepository 
 						select new RoleViewModel

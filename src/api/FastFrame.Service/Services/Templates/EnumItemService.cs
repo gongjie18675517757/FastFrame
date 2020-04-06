@@ -54,7 +54,7 @@ namespace FastFrame.Service.Services.Basis
 					};
 			return query;
 		}
-		protected  Task<PageList<EnumItemViewModel>> ViewModelListAsync(PagePara page) 
+		public  Task<PageList<EnumItemViewModel>> ViewModelListAsync(PagePara page) 
 		{
 			var query = from _enumItem in enumItemRepository 
 						select new EnumItemViewModel

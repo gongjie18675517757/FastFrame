@@ -37,7 +37,7 @@
                   <span v-if="!$vuetify.breakpoint.smAndDown">更多</span>
                 </v-btn>
               </template>
-              <v-list two-line dense expand>
+              <v-list dense>
                 <v-list-item
                   v-for="item in [...($vuetify.breakpoint.smAndDown?items:items2)]"
                   :key="item.key || item.name"
@@ -48,7 +48,10 @@
                   <v-list-item-action>
                     <v-icon>{{item.icon}}</v-icon>
                   </v-list-item-action>
-                  <v-list-item-content>{{item.title}}</v-list-item-content>
+
+                  <v-list-item-content>
+                    <v-list-item-title>{{item.title}}</v-list-item-title>
+                  </v-list-item-content>
                 </v-list-item>
                 <v-list-item
                   v-if="!$vuetify.breakpoint.smAndDown && !isDialog"

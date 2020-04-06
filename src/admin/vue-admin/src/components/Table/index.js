@@ -49,7 +49,8 @@ export const BasisDetaiTable = {
         props: {
           dense: true,
           flat: true,
-          color: 'transparent'
+          color: 'transparent',
+          height:'30px'
         }
       }, [
         h('v-toolbar-title', null, this.title),

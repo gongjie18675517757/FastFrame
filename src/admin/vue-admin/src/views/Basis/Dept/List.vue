@@ -9,6 +9,18 @@ export default {
       ...Page.data.call(this),
       ...pageInfo
     };
+  },
+  methods: {
+    ...Page.methods,
+    getColumns() {
+      return Page.methods.getColumns.call(this, ...arguments).then(arr => {
+        return [...arr, {
+          Name:'Members',
+          Description:'部门主管',
+          getValueFunc:({value})=>value.map(v=>v.Name).join(',')
+        }];
+      });
+    }
   }
 };
 </script>

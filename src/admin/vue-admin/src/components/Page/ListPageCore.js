@@ -176,19 +176,6 @@ export let pageMethods = {
   getColumns() {
     return getColumns(this.name)
   },
-  DataDeleted(id) {
-    this.$nextTick(() => {
-      let index = this.rows.findIndex(r => r.Id == id);
-      if (index >= 0) this.rows.splice(index, 1);
-    });
-  },
-  DataUpdated(item) {
-    let index = this.rows.findIndex(r => r.Id == item.Id);
-    if (index >= 0) this.rows.splice(index, 1, item);
-  },
-  DataAdded(item) {
-    this.rows.splice(0, 0, item);
-  },
   toEdit(model) {
     model = model || {}
     let Id = model.Id || ''
@@ -197,9 +184,15 @@ export let pageMethods = {
       this.dialogMode ||
       this.$vuetify.breakpoint.smAndDown
     ) {
-      this.$message.dialog(`${this.name}_Add`, {
-        id: Id
-      });
+      let components = this.$router.getMatchedComponents(`/${this.name}/add`);
+      if (components.length > 1) {
+        this.$message.dialog(components[1], {
+          id: Id
+        });
+      } else {
+        this.$message.toast.error('未匹配到页面！')
+      }
+
     } else {
       if (Id)
         this.$router.push(`/${this.name}/${Id}`);
@@ -277,9 +270,7 @@ export let pageMethods = {
       PageSize: itemsPerPage,
       SortName: sortBy.join(','),
       SortMode: sortDesc.length > 0 && !sortDesc[0] ? "asc" : "desc",
-      Condition: {
-        Filters: [...queryFilter, ...this.query]
-      },
+      Filters: [...queryFilter, ...this.query]
 
     };
 
@@ -365,7 +356,7 @@ export let makeChildListeners = function () {
       this.selection = val;
     },
     loadList: this.loadList,
-    toolItemClick: item => item.action.call(this, item),
+    toolItemClick: item => item.action.call(this, { item, selection: this.selection, rows: this.rows }),
     toEdit: (val) => this.toEdit(val),
     changeShowMamageField: () => this.showMamageField = !this.showMamageField,
     ...this.listeners
@@ -381,15 +372,12 @@ export let ListPageMixin = {
     "v-list-page": () => import("@/components/Page/ListPage.vue")
   },
   mounted() {
-    this.$eventBus.$on(`${this.name}_DataAdded`, this.DataAdded);
-    this.$eventBus.$on(`${this.name}_DataUpdated`, this.DataUpdated);
-    this.$eventBus.$on(`${this.name}_DataDeleted`, this.DataDeleted);
+
+    this.$eventBus.$on(`${this.name}_update`, this.loadList);
     this.init()
   },
   destroyed() {
-    this.$eventBus.$off(`${this.name}_DataAdded`, this.DataAdded);
-    this.$eventBus.$off(`${this.name}_DataUpdated`, this.DataUpdated);
-    this.$eventBus.$off(`${this.name}_DataDeleted`, this.DataDeleted);
+    this.$eventBus.$off(`${this.name}_update`, this.loadList);
   }
 };
 

@@ -102,4 +102,35 @@ html {
 .much-input .v-input__control {
   height: 30px;
 }
+
+.v-text-field {
+  margin: 0px;
+}
+.input-container,
+.much-input {
+  min-height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.v-text-field__details {
+  align-items: center;
+}
+.v-input input {
+  font-size: 14px;
+  line-height: 14px;
+}
+.v-text-field > .v-input__control > .v-input__slot:before,
+.v-text-field > .v-input__control > .v-input__slot:after {
+  display: none;
+}
+
+.v-text-field__slot input,
+.v-select__slot {
+  border-bottom: 1px solid #9c7a7a;
+}
+.v-select__selections {
+  font-size: 14px;
+  line-height: 14px;
+}
 </style>

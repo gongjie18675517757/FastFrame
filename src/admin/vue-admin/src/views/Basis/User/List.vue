@@ -16,7 +16,7 @@ let pageInfo = {
         let result = await this.$http.put(
           `/api/user/ToogleAdminIdentity/${Id}`
         );
-        alert.success("切换成功!");
+        this.$message.toast.success("切换成功!");
         let index = rows.findIndex(r => r.Id == Id);
         if (index > -1) {
           rows.splice(index, 1, result);
@@ -33,7 +33,7 @@ let pageInfo = {
       async action({ selection, rows }) {
         let { Id } = selection[0];
         let result = await this.$http.put(`/api/user/ToogleDisabled/${Id}`);
-        alert.success("切换成功!");
+        this.$message.toast.success("切换成功!");
         let index = rows.findIndex(r => r.Id == Id);
         if (index > -1) {
           rows.splice(index, 1, result);
@@ -53,6 +53,26 @@ export default {
       ...pageInfo,
       toolItems: data.toolItems.concat(pageInfo.toolItems)
     };
+  },
+  methods: {
+    ...Page.methods,
+    getColumns() {
+      return Page.methods.getColumns.call(this, ...arguments).then(arr => {
+        return [
+          ...arr,
+          {
+            Name: "Depts",
+            Description: "所属科室",
+            getValueFunc: ({ value }) => value.map(v => v.Name).join(",")
+          },
+          {
+            Name: "Roles",
+            Description: "拥有角色",
+            getValueFunc: ({ value }) => value.map(v => v.Name).join(",")
+          }
+        ];
+      });
+    }
   }
 };
 </script>

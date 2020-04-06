@@ -40,6 +40,7 @@ export default {
         timeout,
         key: guid()
       }
+ 
 
       self.alerts.push(item)
       setTimeout(

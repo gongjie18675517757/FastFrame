@@ -52,7 +52,7 @@ namespace FastFrame.Service.Services.Chat
 					};
 			return query;
 		}
-		protected  Task<PageList<GroupViewModel>> ViewModelListAsync(PagePara page) 
+		public  Task<PageList<GroupViewModel>> ViewModelListAsync(PagePara page) 
 		{
 			var query = from _group in groupRepository 
 						select new GroupViewModel

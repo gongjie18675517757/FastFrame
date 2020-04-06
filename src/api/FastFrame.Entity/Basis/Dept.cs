@@ -8,7 +8,7 @@ namespace FastFrame.Entity.Basis
     /// 部门
     /// </summary>
     [Export]
-    [RelatedField(nameof(Name))] 
+    [RelatedField(nameof(Name))]
     public class Dept : BaseEntity, ITreeEntity
     {
         /// <summary>
@@ -21,18 +21,14 @@ namespace FastFrame.Entity.Basis
         /// 名称
         /// </summary>
         [StringLength(50), Required]
-        public string Name { get; set; } 
-
-        /// <summary>
-        /// 主管
-        /// </summary>
-        [RelatedTo(typeof(User))]
-        public string Supervisor_Id { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// 上级
         /// </summary>
         [RelatedTo(typeof(Dept))]
         public string Super_Id { get; set; }
+
+
     }
 }

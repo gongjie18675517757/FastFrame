@@ -59,7 +59,7 @@ namespace FastFrame.Service.Services.Basis
 					};
 			return query;
 		}
-		protected  Task<PageList<UserViewModel>> ViewModelListAsync(PagePara page) 
+		public  Task<PageList<UserViewModel>> ViewModelListAsync(PagePara page) 
 		{
 			var query = from _user in userRepository 
 						select new UserViewModel

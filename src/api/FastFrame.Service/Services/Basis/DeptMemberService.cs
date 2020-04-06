@@ -14,8 +14,8 @@ namespace FastFrame.Service.Services.Basis
         IEventHandle<DoMainAdding<DeptDto>>,
         IEventHandle<DoMainDeleteing<DeptDto>>,
         IEventHandle<DoMainUpdateing<DeptDto>>,
-        IRequestHandle<(UserViewModel[], UserViewModel[]), string>,
-        IRequestHandle<IEnumerable<KeyValuePair<string, (UserViewModel[], UserViewModel[])>>, string[]>,
+        IRequestHandle<(UserViewModel[], string[]), string>,
+        IRequestHandle<IEnumerable<KeyValuePair<string, (UserViewModel[], string[])>>, string[]>,
 
         IEventHandle<DoMainAdding<UserDto>>,
         IEventHandle<DoMainDeleteing<UserDto>>,
@@ -51,7 +51,7 @@ namespace FastFrame.Service.Services.Basis
             {
                 User_Id = v.Id,
                 Dept_Id = input.Id,
-                IsManager = input.Managers.Any(r => r.Id == v.Id)
+                IsManager = input.Managers.Any(r => r == v.Id)
             });
         }
 
@@ -72,16 +72,16 @@ namespace FastFrame.Service.Services.Basis
                     {
                         User_Id = v.Id,
                         Dept_Id = input.Id,
-                        IsManager = input.Managers.Any(r => r.Id == v.Id)
+                        IsManager = input.Managers.Any(r => r == v.Id)
                     },
                     (before, after) =>
                     {
-                        before.IsManager = input.Managers.Any(r => r.Id == before.User_Id);
+                        before.IsManager = input.Managers.Any(r => r == before.User_Id);
                     }
                 );
         }
 
-        public async Task<(UserViewModel[], UserViewModel[])> HandleRequestAsync(string request)
+        public async Task<(UserViewModel[], string[])> HandleRequestAsync(string request)
         {
             var query = users.Select(v =>
                     new UserViewModel { Account = v.Account, Id = v.Id, Name = v.Name });
@@ -94,11 +94,11 @@ namespace FastFrame.Service.Services.Basis
                 await query
                        .Where(v =>
                            deptMembers.Any(r => r.User_Id == v.Id && r.Dept_Id == request && r.IsManager)
-                        ).ToArrayAsync()
+                        ).Select(v => v.Id).ToArrayAsync()
                );
         }
 
-        public async Task<IEnumerable<KeyValuePair<string, (UserViewModel[], UserViewModel[])>>> HandleRequestAsync(string[] request)
+        public async Task<IEnumerable<KeyValuePair<string, (UserViewModel[], string[])>>> HandleRequestAsync(string[] request)
         {
             var query = from a in users
                         join b in deptMembers on a.Id equals b.User_Id
@@ -119,10 +119,10 @@ namespace FastFrame.Service.Services.Basis
             return list
                         .GroupBy(v => v.Dept_Id)
                         .Select(v =>
-                                new KeyValuePair<string, (UserViewModel[], UserViewModel[])>(
+                                new KeyValuePair<string, (UserViewModel[], string[])>(
                                     v.Key,
                                     (v.Select(v => v.Item).ToArray(),
-                                        v.Where(v => v.IsManager).Select(v => v.Item).ToArray())
+                                        v.Where(v => v.IsManager).Select(v => v.Item.Id).ToArray())
                                 ));
         }
 

@@ -63,7 +63,7 @@
 
 import rules from '@/rules'
  
-import { alert } from '@/utils'
+ 
 export default {
   components: {
      
@@ -100,10 +100,10 @@ export default {
         }
         let request = await this.$http.post('/api/Account/Regist', this.form)
         this.form = request
-        alert.success('注册成功')
+        this.$message.toast.success('注册成功')
         this.$router.push('/login')
       } catch (error) {
-        alert.error(error.message)
+        this.$message.toast.error(error.message)
       } finally {
         this.submiting = false
       }

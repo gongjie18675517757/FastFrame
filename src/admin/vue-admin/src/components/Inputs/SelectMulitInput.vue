@@ -49,7 +49,8 @@ export default {
       required: true
     },
     isXs: Boolean,
-    description: String
+    description: String,
+    requestUrl: [String, Function]
   },
   data() {
     return {
@@ -62,7 +63,7 @@ export default {
   },
   computed: {
     text() {
-      return this.value.map(this.getField);
+      return this.value.map(this.getField).join(",");
     },
     allItems() {
       return distinct(
@@ -108,9 +109,12 @@ export default {
       let filter = this.filter || [];
       if (typeof filter == "function")
         filter = await filter.call(this, this.model);
+      let url = this.requestUrl;
+      if (typeof this.requestUrl == "function")
+        url = this.requestUrl.call(this, this.model);
 
       try {
-        let { Data } = await this.$http.post(`/api/${this.Relate}/list`, {
+        let { Data } = await this.$http.post(url, {
           Filters: [
             {
               Name: this.fields

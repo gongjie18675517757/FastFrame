@@ -3,16 +3,18 @@
     <v-layout align-center justify-center :class="{singleLine:singleLine}">
       <v-flex xs12 md8 xl6>
         <v-card>
-          <v-toolbar flat dense   color="transparent">
+          <v-toolbar flat dense color="transparent" height="30px">
             <v-toolbar-title>{{title}}</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-btn icon @click="refresh" title="刷新">
               <v-icon>refresh</v-icon>
             </v-btn>
             <v-menu offset-y>
-              <v-btn icon slot="activator" title="设置">
-                <v-icon>more_vert</v-icon>
-              </v-btn>
+              <template v-slot:activator="{ on }">
+                <v-btn icon v-on="on" title="设置">
+                  <v-icon>more_vert</v-icon>
+                </v-btn>
+              </template>
               <v-list>
                 <v-list-item>
                   <v-list-item-action>
@@ -60,7 +62,7 @@
 <script>
 import VuePerfectScrollbar from "vue-perfect-scrollbar";
 import Input from "@/components/Inputs";
-export default { 
+export default {
   components: { VuePerfectScrollbar, Input },
   props: {
     title: String,
@@ -88,7 +90,7 @@ export default {
       for (const option of this.options) {
         option.value = null;
       }
-      this.load(); 
+      this.load();
     },
     query() {
       for (let index = 0; index < this.options.length; index++) {

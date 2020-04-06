@@ -4,7 +4,6 @@ let pageInfo = {
   name: "User",
   direction: "用户"
 };
-import { SelectDetailTable } from "@/components/Table";
 import Page from "@/components/Page/FormPageCore.js";
 export default {
   ...Page,
@@ -20,34 +19,25 @@ export default {
       return Page.methods.getModelObjectItems.call(this, opts).then(opts => {
         opts.push({
           Name: "Depts",
-          GroupNames: ["用户所在部门"],
-          template: SelectDetailTable,
-          dialogComponent: () => import("../User/List.vue"),
-          typeName: "Dept"
+          Description: "用户所在部门",
+          Relate: "Dept",
+          Type: "Array",
+          requestUrl: `/api/user/deptList`
         });
         opts.push({
-          Name: "Depts",
-          GroupNames: ["用户所在部门"],
-          template: SelectDetailTable,
-          dialogComponent: () => import("../User/List.vue"),
-          typeName: "Dept"
-        });
-        opts.push({
-          Name: "Permissions", 
-          Description:'权限',
-          Relate:'Permission',
-          Type:'Array'
+          Name: "Roles",
+          Description: "用户拥有角色",
+          Relate: "Role",
+          Type: "Array",
+          requestUrl: `/api/user/roleList`
         });
         return opts;
       });
     },
     fmtModelObject(frm) {
       return Page.methods.fmtModelObject.call(this, frm).then(frm => {
-        console.log(frm);
-        
         frm.Depts = frm.Depts || [];
         frm.Roles = frm.Roles || [];
-        frm.Permissions = frm.Permissions || [];
         return frm;
       });
     }

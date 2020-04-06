@@ -42,7 +42,7 @@ namespace FastFrame.Service.Services.Basis
 					};
 			return query;
 		}
-		protected  Task<PageList<PermissionViewModel>> ViewModelListAsync(PagePara page) 
+		public  Task<PageList<PermissionViewModel>> ViewModelListAsync(PagePara page) 
 		{
 			var query = from _permission in permissionRepository 
 						select new PermissionViewModel

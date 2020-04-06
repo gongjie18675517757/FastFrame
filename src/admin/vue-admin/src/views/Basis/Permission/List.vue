@@ -1,5 +1,5 @@
 <script>
-import { alert } from "@/utils";
+ 
 let pageInfo = {
   area: "Basis",
   name: "Permission",
@@ -11,7 +11,7 @@ let pageInfo = {
       icon: "error_outline",
       async action() {
         await this.$http.post(`/api/Permission/InitPermission`);
-        alert.success("初始化成功!");
+        this.$message.toast.success("初始化成功!");
         this.init();
       }
     }

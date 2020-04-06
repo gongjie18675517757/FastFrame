@@ -31,17 +31,6 @@ namespace FastFrame.Dto.Basis
 		public string Name {get;set;}
 		
 		/// <summary>
-		///主管 
-		/// </summary>
-		[RelatedTo(typeof(User))]
-		public string Supervisor_Id {get;set;}
-		
-		/// <summary>
-		///主管 
-		/// </summary>
-		public UserViewModel Supervisor {get;set;}
-		
-		/// <summary>
 		///上级 
 		/// </summary>
 		[RelatedTo(typeof(Dept))]

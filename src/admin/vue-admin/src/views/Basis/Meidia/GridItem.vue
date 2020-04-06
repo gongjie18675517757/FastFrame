@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { alert } from "@/utils";
+ 
  
 import rules from "@/rules";
 import Vue from "vue";
@@ -80,7 +80,7 @@ export default {
         this.$http
           .put("/api/Meidia/put", postData)
           .then(() => {
-            alert.success("更新成功!");
+            this.$message.toast.success("更新成功!");
           })
           .catch(() => {
             this.item.Name = beforeName;

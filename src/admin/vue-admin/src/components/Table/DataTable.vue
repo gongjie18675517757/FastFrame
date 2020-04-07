@@ -16,6 +16,7 @@
     :style="styleObj"
     :show-select="multiple"
     :single-select="!multiple"
+    :show-expand="!!expandComponent"
     dense
   >
     <template slot="item.index" slot-scope="props">{{props.item.index}}</template>
@@ -32,6 +33,11 @@
       <Cell :key="col.Name" v-else :info="col" :model="props.item" :props="props" v-on="listeners" />
     </template>
     <template slot="no-data">没有加载数据</template>
+    <template v-if="!!expandComponent" v-slot:expanded-item="{ headers, item }">
+      <td :colspan="headers.length">
+        <component :is="expandComponent" :model="item" />
+      </td>
+    </template>
   </v-data-table>
 </template>
 
@@ -76,14 +82,15 @@ export default {
       type: Array,
       default: () => []
     },
-    styleObj: Object
+    styleObj: Object,
+    expandComponent: [Object, Function]
   },
   data() {
     return {
       itemsPerPage: 20,
       page: 1,
       pager: {
-        showFirstLastPage:true,
+        showFirstLastPage: true,
         "items-per-page-options": [10, 15, 20, 30, 50],
         firstIcon: "mdi-arrow-collapse-left",
         lastIcon: "mdi-arrow-collapse-right"
@@ -93,12 +100,14 @@ export default {
   computed: {
     headers() {
       return [
+        { text: "", width: "20px", value: "data-table-expand" },
         {
           text: "#",
           value: "index",
           sortable: false,
           width: "50px"
         },
+
         ...this.columns.map(c => {
           return {
             text: c.Description,
@@ -124,7 +133,7 @@ export default {
         input: val => this.$emit("input", val),
         "update:options": val => {
           this.$emit("loadList", val);
-          this.page = val.page; 
+          this.page = val.page;
         },
         "click:row": row => {
           this.$emit("click:row", row);

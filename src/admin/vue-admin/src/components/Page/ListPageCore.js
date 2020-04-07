@@ -83,7 +83,9 @@ export let pageInjects = []
 export let pageProps = {
   pars: Object,
   isDialog: Boolean,
-  isTab: Boolean
+  isTab: Boolean,
+  superId: String,
+  hideToolitem: Boolean
 };
 
 
@@ -109,6 +111,7 @@ export let makePageData = function () {
     showMamageField: false,
     query: [],
     props: {},
+    treeChildComponent: null,
     listeners: {}
   };
 }
@@ -146,6 +149,9 @@ export let pageComputed = {
     ] : [])]
   },
   tableHeight() {
+    if (this.superId) {
+      return null;
+    }
     if (this.isTab) {
       return `calc(100vh - 195px)`
     } else if (this.isDialog) {
@@ -270,7 +276,16 @@ export let pageMethods = {
       PageSize: itemsPerPage,
       SortName: sortBy.join(','),
       SortMode: sortDesc.length > 0 && !sortDesc[0] ? "asc" : "desc",
-      Filters: [...queryFilter, ...this.query]
+      Filters: [
+        ...queryFilter,
+        ...this.query,
+        ...(this.superId ? [
+          {
+            name: 'super_Id',
+            value: this.superId,
+            compare: '=='
+          }
+        ] : [])]
 
     };
 
@@ -318,6 +333,7 @@ export let pageMethods = {
  * 需要传递的参数
  */
 export let makeChildProps = function () {
+
   return {
     ...this.$props,
     area: this.area,
@@ -331,13 +347,32 @@ export let makeChildProps = function () {
     loading: this.loading,
     tableClassArr: this.tableClassArr,
     tableStyleObj: this.tableStyleObj,
-    toolItems: this.formatterToolItems(this.toolItems),
+    toolItems: this.superId ? [] : this.formatterToolItems(this.toolItems),
     toolSpliceCount: this.toolSpliceCount,
     ModuleStrut: this.ModuleStrut,
     isDialog: this.isDialog,
     isTab: this.isTab,
     tableHeight: this.tableHeight,
     singleSelection: this.pars && this.pars.single,
+    expandComponent: this.treeChildComponent ? {
+      props: ['model'],
+      components: {
+        'v-tree-child': this.treeChildComponent
+      },
+      render(h) {
+        return h('v-tree-child', {
+          props: {
+            superId: this.model.Id,
+            hideToolitem: true,
+            pars: {
+              single: true,
+            }
+          }
+
+        })
+      }
+    } : null,
+    hideToolitem: this.hideToolitem,
     ...this.props
   };
 };

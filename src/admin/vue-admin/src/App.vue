@@ -133,4 +133,7 @@ html {
   font-size: 14px;
   line-height: 14px;
 }
+.v-data-table__wrapper{
+  min-height: 100px;
+}
 </style>

@@ -6,7 +6,7 @@
           <v-toolbar flat dense height="30px" color="transparent">
             <v-toolbar-title>{{direction}}</v-toolbar-title>
             <v-spacer></v-spacer>
-            <span class="hidden-sm-and-down btn-group">
+            <span class="hidden-sm-and-down btn-group" v-if="!hideToolitem">
               <a-btn
                 v-for="btn in items1"
                 :key="btn.key || btn.name"
@@ -22,7 +22,7 @@
               </a-btn>
             </span>
             <!-- <span> -->
-            <v-menu offset-y :close-on-content-click="false">
+            <v-menu offset-y :close-on-content-click="false" v-if="!hideToolitem">
               <template v-slot:activator="{ on }">
                 <v-btn
                   slot="activator"
@@ -97,6 +97,7 @@
               :classArr="tableClassArr"
               :styleObj="tableStyleObj"
               :height="tableHeight"
+              :expandComponent="expandComponent"
               v-on="tableListenter"
             />
           </v-card-text>
@@ -130,6 +131,7 @@ export default {
     isDialog: Boolean,
     isTab: Boolean,
     tableHeight: String,
+    hideToolitem: Boolean,
     columns: {
       type: Array,
       default: () => []
@@ -152,7 +154,8 @@ export default {
     ModuleStrut: {
       type: Object,
       default: () => ({})
-    }
+    },
+    expandComponent: [Object, Function]
   },
   computed: {
     context() {

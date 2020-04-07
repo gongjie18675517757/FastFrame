@@ -6,7 +6,8 @@ export default {
   data() {
     return {
       ...Page.data.call(this),
-      ...pageInfo
+      ...pageInfo,
+      treeChildComponent: () => import("./List.vue")
     };
   }
 };

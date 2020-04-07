@@ -9,12 +9,12 @@ namespace FastFrame.Dto.Basis
         public string Super_Id { get; set; }
 
         /// <summary>
-        /// 名称
+        /// 标记
         /// </summary>
         public string EnCode { get; set; }
 
         /// <summary>
-        /// 描述
+        /// 名称
         /// </summary>
         public string Name { get; set; }
 

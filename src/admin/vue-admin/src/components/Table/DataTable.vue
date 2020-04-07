@@ -100,7 +100,9 @@ export default {
   computed: {
     headers() {
       return [
-        { text: "", width: "20px", value: "data-table-expand" },
+        ...(this.expandComponent
+          ? [{ text: "", width: "20px", value: "data-table-expand" }]
+          : []),
         {
           text: "#",
           value: "index",

@@ -18,7 +18,8 @@ import Vuetify, {
     VTextarea,
     VContainer,
     VImg,
-    VCheckbox
+    VCheckbox,
+    VRow
 } from 'vuetify/lib';
 import zhHans from 'vuetify/es5/locale/zh-Hans'
 
@@ -42,7 +43,8 @@ Vue.use(Vuetify, {
         VTextarea,
         VContainer,
         VImg,
-        VCheckbox
+        VCheckbox,
+        VRow
     },
 
 });

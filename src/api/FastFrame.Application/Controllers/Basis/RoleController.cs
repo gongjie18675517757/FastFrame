@@ -14,6 +14,13 @@ namespace FastFrame.Application.Controllers.Basis
         [HttpPost]
         public Task<PageList<UserViewModel>> UserList(PagePara pagePara)
             => Request.HttpContext.RequestServices
-                    .GetService<UserService>().ViewModelListAsync(pagePara); 
+                    .GetService<UserService>().ViewModelListAsync(pagePara);
+
+        [HttpGet]
+        [Permission(new string[] { "Add" })]
+        public Task<RolePermissionModel[]> PermissionList()
+                => Request.HttpContext.RequestServices
+                    .GetService<RolePermissionService>().GetPermissionModelListAsync();
+
     }
 }

@@ -130,6 +130,21 @@
             名称 
              </summary>
         </member>
+        <member name="P:FastFrame.Dto.Basis.RoleDto.IsDefault">
+             <summary>
+            是否缺省角色 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.RoleDto.IsAdmin">
+             <summary>
+            是否管理员角色 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.RoleDto.Remarks">
+             <summary>
+            备注 
+             </summary>
+        </member>
         <member name="P:FastFrame.Dto.Basis.RoleDto.Create_User_Id">
              <summary>
             创建人 

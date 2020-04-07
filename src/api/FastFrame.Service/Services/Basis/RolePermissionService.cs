@@ -68,6 +68,23 @@ namespace FastFrame.Service.Services.Basis
             return LoadTree(list, null).ToArray();
         }
 
+        public async Task<RolePermissionModel[]> GetPermissionModelListAsync()
+        {
+            var query = from a in permissions
+                        select new RolePermissionModel
+                        {
+                            Id = a.Id,
+                            EnCode = a.EnCode,
+                            Name = a.Name,
+                            Super_Id = a.Super_Id,
+                            IsAuthorization = false
+                        };
+
+            var list = await query.ToListAsync();
+
+            return LoadTree(list, null).ToArray();
+        }
+
         private IEnumerable<RolePermissionModel> LoadTree(IEnumerable<RolePermissionModel> rolePermissionModels, string key)
         {
             var children = rolePermissionModels.Where(v => v.Super_Id == key);

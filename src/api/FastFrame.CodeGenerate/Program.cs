@@ -19,7 +19,8 @@ namespace FastFrame.CodeGenerate
             string rootPath = new DirectoryInfo("../../../../").FullName;
             var baseType = typeof(IEntity);
             var types = baseType.Assembly.GetTypes().Where(x => baseType.IsAssignableFrom(x) && x.IsClass && !x.IsAbstract);
-            var typeNames = types.Select((x, index) => (index + 1, x.Name)).ToDictionary(x => x.Item1, x => x.Name);
+            var typeNames = types.Select((x, index) => (index + 1, x.Name))
+                    .ToDictionary(x => x.Item1, x => x.Name);
 
         START:
             Console.WriteLine("请输入要生成的类型:");
@@ -35,6 +36,10 @@ namespace FastFrame.CodeGenerate
             if (int.TryParse(inputIndex, out var intIndex) && (typeNames.ContainsKey(intIndex) || intIndex == 0))
             {
                 typeName = intIndex == 0 ? "" : typeNames[intIndex];
+            }
+            else if (typeNames.Values.Contains(inputIndex))
+            {
+                typeName = inputIndex;
             }
             else
             {

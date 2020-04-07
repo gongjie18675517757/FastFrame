@@ -7,6 +7,5 @@ namespace FastFrame.Dto.Basis
         public IEnumerable<UserViewModel> Members { get; set; }
 
         public IEnumerable<RolePermissionModel> Permissions { get; set; }
-    } 
-    
+    }  
 }

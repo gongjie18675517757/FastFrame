@@ -38,6 +38,9 @@ namespace FastFrame.Service.Services.Basis
 						{
 							EnCode=_role.EnCode,
 							Name=_role.Name,
+							IsDefault=_role.IsDefault,
+							IsAdmin=_role.IsAdmin,
+							Remarks=_role.Remarks,
 							Id=_role.Id,
 							Create_User_Id=_role.Create_User_Id,
 							CreateTime=_role.CreateTime,

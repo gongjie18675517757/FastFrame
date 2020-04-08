@@ -1,7 +1,7 @@
 import SearchInput from "./SearchInput.vue";
 import RichInput from "./RichInput.vue";
 import TextArea from './TextArea'
-import Checkbox from './Checkbox'
+import Checkbox from './Checkbox.vue'
 import SelectInput from "./SelectInput";
 import SelectMulitInput from "./SelectMulitInput";
 import DateInput from './DateInput.vue'
@@ -100,6 +100,8 @@ export default {
     let on = {
       ...this.$listeners,
       input: (val) => {
+        console.log(val);
+
         this.$emit('input', val)
       },
       change: val => this.change(val)
@@ -130,10 +132,7 @@ export default {
 
       flex = {
         xs12: 1,
-        sm8: 1,
-        md6: 1,
-        lg6: 1,
-        xl4: 1
+
       }
     }
     /**
@@ -202,7 +201,7 @@ export default {
       if (!props.disabled || isXs) {
         let textProps = {
           ...props,
-          readonly: props.disabled
+          readonly: props.disabled,
         }
         delete textProps.disabled
 
@@ -294,8 +293,10 @@ export default {
             h('div', {
               style: {
                 width: '150px',
-                'padding-left': '15px',
-                'padding-top': '7px'
+                'padding': '10px',
+                'text-align':'center',
+                display:'table-cell',
+                'line-height':'20px'
               }
             }, [
               h('span', {
@@ -312,7 +313,8 @@ export default {
             h('div', {
               style: {
                 width: this.errorMessages ? 'calc(100% - 150px - 150px)' : 'calc(100% - 150px)',
-                'padding-top': props.disabled ? '7px' : null
+                'padding-top': props.disabled ? '10px' : null,
+                'padding-left': '5px'
               }
             }, [component])
           ])

@@ -95,30 +95,33 @@ html {
 .input-container .v-input {
   padding: 0px;
 }
-.v-input {
+.much-input .v-input {
   font-size: 14px;
+}
+
+.much-input .v-input--selection-controls {
+  margin-top: 6px;
 }
 
 .much-input .v-input__control {
-  height: 30px;
+  min-height: 28px;
 }
 
-.v-text-field {
-  margin: 0px;
+.much-input .v-text-field {
+  padding-top: 0px;
+  margin-top: 4px;
 }
-.input-container,
-.much-input {
-  min-height: 35px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+ 
+
 .v-text-field__details {
   align-items: center;
 }
-.v-input input {
-  font-size: 14px;
-  line-height: 14px;
+.much-input .v-input input {
+  font-size: 12px;
+  line-height: 12px;
+}
+.much-input .v-input__slot {
+  margin-bottom: 2px;
 }
 .v-text-field > .v-input__control > .v-input__slot:before,
 .v-text-field > .v-input__control > .v-input__slot:after {
@@ -126,14 +129,15 @@ html {
 }
 
 .v-text-field__slot input,
-.v-select__slot {
+.v-select__slot,
+.v-text-field__slot textarea {
   border-bottom: 1px solid #9c7a7a;
 }
 .v-select__selections {
-  font-size: 14px;
-  line-height: 14px;
+  font-size: 12px;
+  line-height: 12px;
 }
-.v-data-table__wrapper{
+.v-data-table__wrapper {
   min-height: 100px;
 }
 </style>

@@ -19,6 +19,7 @@ export default {
         label: this.label,
         placeholder: this.description,
         errorMessages: this.errorMessages,
+        rows: 1,
         'auto-grow': true,
       },
       on: {

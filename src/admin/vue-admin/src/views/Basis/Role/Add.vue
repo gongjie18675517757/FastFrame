@@ -7,7 +7,6 @@ let pageInfo = {
 
 import Page from "@/components/Page/FormPageCore.js";
 import { BasisDetaiTable } from "@/components/Table";
-
 export default {
   ...Page,
   data() {
@@ -57,47 +56,60 @@ export default {
                       Description: "子级权限",
                       width: "500px",
                       render: (h, { value }) => {
-                        let indeterminate =
-                          !!value.find(v => v.IsAuthorization) &&
-                          !!value.find(v => v.IsAuthorization);
-                        let isAllCheck = !value.find(v => !v.IsAuthorization);
-                        return h("v-row", null, [
-                          // this.canEdit
-                          //   ? h("v-checkbox", {
-                          //       props: {
-                          //         indeterminate,
-                          //         value: indeterminate ? null : isAllCheck,
-                          //         label: "全选",
-                          //         dense: true
-                          //       },
-                          //       on: {
-                          //         change: val => {
-                          //           value.forEach(
-                          //             v => (v.IsAuthorization = val || false)
-                          //           );
-                          //           this.$emit("change", this.value);
-                          //         }
-                          //       }
-                          //     })
-                          //   : null,
-                          ...value.map(v =>
-                            h("v-checkbox", {
-                              key: v.Id,
-                              props: {
-                                value: v.IsAuthorization,
-                                label: v.Name,
-                                dense: true,
-                                readonly: !this.canEdit
-                              },
-                              on: {
-                                change: val => {
-                                  v.IsAuthorization = val || false;
-                                  this.$emit("change", this.value);
+                        return this.canEdit
+                          ? h(
+                              "v-btn-toggle",
+                              {
+                                props: {
+                                  multiple: true,
+                                  value: value
+                                    .filter(v => v.IsAuthorization && v.Id)
+                                    .map(v => v.Id)
+                                },
+                                on: {
+                                  change: arr => {
+                                    if (!this.canEdit) {
+                                      return;
+                                    }
+                                    for (const v of value) {
+                                      if (arr.includes(v.Id)) {
+                                        v.IsAuthorization = true;
+                                      }
+                                      this.$emit("change", this.value);
+                                    }
+                                  }
                                 }
-                              }
-                            })
-                          )
-                        ]);
+                              },
+                              [
+                                ...value.map(v =>
+                                  h(
+                                    "v-btn",
+                                    {
+                                      key: v.Id,
+                                      props: {
+                                        value: v.Id,
+                                        small: true,
+                                        text: true
+                                      }
+                                    },
+                                    v.Name
+                                  )
+                                )
+                              ]
+                            )
+                          : h("span", null, [
+                              ...value.map(v =>
+                                h(
+                                  "span",
+                                  {
+                                    style: {
+                                      "padding-left": "15px"
+                                    }
+                                  },
+                                  `${v.Name} ${v.IsAuthorization ? "√" : "×"}`
+                                )
+                              )
+                            ]);
                       }
                     }
                   ]

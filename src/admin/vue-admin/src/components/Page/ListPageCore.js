@@ -295,7 +295,7 @@ export let pageMethods = {
             ...queryFilter,
             ...(this.superId ? [
               {
-                name: 'super_Id',
+                Name: 'super_Id',
                 value: this.superId,
                 compare: '=='
               }

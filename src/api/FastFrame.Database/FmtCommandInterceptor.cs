@@ -17,6 +17,7 @@ namespace FastFrame.Database
                             RegexOptions.Compiled | RegexOptions.IgnoreCase);
         public override InterceptionResult<DbDataReader> ReaderExecuting(DbCommand command, CommandEventData eventData, InterceptionResult<DbDataReader> result)
         {
+            command.CommandText = Regex_Replace_MySql_Like.Replace(command.CommandText, " ${k} like '%${v}%' ");
             return base.ReaderExecuting(command, eventData, result);
         }
 
@@ -26,12 +27,7 @@ namespace FastFrame.Database
 
             /*1,处理未正确的在MYSQL下生成LIKE语句*/
             /*场景1：LOCATE(CONVERT('test' USING utf8mb4) COLLATE utf8mb4_bin, `b`.`account`) > 0*/
-            command.CommandText = Regex_Replace_MySql_Like.Replace(command.CommandText, " ${k} like '%${v}%' ");
-
-
-
-
-
+            command.CommandText = Regex_Replace_MySql_Like.Replace(command.CommandText, " ${k} like '%${v}%' ");　
 
             return base.ReaderExecutingAsync(command, eventData, result, cancellationToken);
         }

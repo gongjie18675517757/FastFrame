@@ -1,6 +1,7 @@
 ﻿using CSRedis;
 using FastFrame.Application.Hubs;
 using FastFrame.Application.Privder;
+using FastFrame.Database;
 using FastFrame.Dto.Dtos.Chat;
 using FastFrame.Infrastructure.EventBus;
 using FastFrame.Infrastructure.Interface;
@@ -22,6 +23,7 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using System;
+using System.Data.Common;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
@@ -81,19 +83,18 @@ namespace FastFrame.Application
                     o.UseMySql(Configuration.GetConnectionString("MyDbConnection"), mySqlOptions =>
                     {
                         mySqlOptions.ServerVersion(new Version(5, 6, 40), ServerType.MySql);
-                    });
+                    }).AddInterceptors(new FmtCommandInterceptor());
                     //o.UseInMemoryDatabase("Local_Mysql");
                 })
                 .AddSingleton<ITypeProvider, TypeProvider>()
-                .AddScoped<IScopeServiceLoader, ScopeServiceLoader>()
                 .AddScoped<ICurrentUserProvider, CurrentUserProvider>()
                 .AddScoped<IResourceProvider, ResourceProvider>()
                 .AddScoped<IDescriptionProvider, DescriptionProvider>()
                 .AddSingleton<IClientManage, ClientConMamage>()
                 .AddServices()
                 .AddRepository()
-                .AddMessageBus(this.GetType().Assembly)
-                .AddEventBus(this.GetType().Assembly);
+                .AddSingleton<IMessageBus, MessageBus>()
+                .AddScoped<IEventBus, EventBus>();
 
             services.AddSwaggerGen(options =>
             {
@@ -133,7 +134,7 @@ namespace FastFrame.Application
                 app.UseDeveloperExceptionPage();
             }
 
-         
+
 
             app.Use(async (context, next) =>
             {

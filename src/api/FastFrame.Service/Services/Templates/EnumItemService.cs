@@ -16,8 +16,8 @@ namespace FastFrame.Service.Services.Basis
 		private readonly IRepository<EnumItem> enumItemRepository;
 		private readonly IRepository<User> userRepository;
 		
-		public EnumItemService(IRepository<EnumItem> enumItemRepository,IRepository<User> userRepository,IScopeServiceLoader loader)
-			:base(enumItemRepository,loader)
+		public EnumItemService(IRepository<EnumItem> enumItemRepository,IRepository<User> userRepository)
+			:base(enumItemRepository)
 		{
 			this.enumItemRepository=enumItemRepository;
 			this.userRepository=userRepository;
@@ -54,7 +54,7 @@ namespace FastFrame.Service.Services.Basis
 					};
 			return query;
 		}
-		public  Task<PageList<EnumItemViewModel>> ViewModelListAsync(PagePara page) 
+		public  Task<PageList<EnumItemViewModel>> ViewModelListAsync(Pagination page) 
 		{
 			var query = from _enumItem in enumItemRepository 
 						select new EnumItemViewModel

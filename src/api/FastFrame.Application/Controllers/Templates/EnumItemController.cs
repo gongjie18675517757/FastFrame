@@ -12,13 +12,11 @@ namespace FastFrame.Application.Controllers.Basis
 	public partial class EnumItemController:BaseCURDController<EnumItem, EnumItemDto>
 	{
 		private readonly EnumItemService service;
-		private readonly IScopeServiceLoader serviceLoader;
 		
-		public EnumItemController(EnumItemService service,IScopeServiceLoader serviceLoader)
-			:base(service,serviceLoader)
+		public EnumItemController(EnumItemService service)
+			:base(service)
 		{
 			this.service = service;
-			this.serviceLoader = serviceLoader;
 		}
 		
 		

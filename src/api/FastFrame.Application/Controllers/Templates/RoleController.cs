@@ -12,13 +12,11 @@ namespace FastFrame.Application.Controllers.Basis
 	public partial class RoleController:BaseCURDController<Role, RoleDto>
 	{
 		private readonly RoleService service;
-		private readonly IScopeServiceLoader serviceLoader;
 		
-		public RoleController(RoleService service,IScopeServiceLoader serviceLoader)
-			:base(service,serviceLoader)
+		public RoleController(RoleService service)
+			:base(service)
 		{
 			this.service = service;
-			this.serviceLoader = serviceLoader;
 		}
 		
 		

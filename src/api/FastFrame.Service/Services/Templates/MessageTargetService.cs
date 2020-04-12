@@ -17,8 +17,8 @@ namespace FastFrame.Service.Services.Chat
 		private readonly IRepository<User> userRepository;
 		private readonly IRepository<MessageTarget> messageTargetRepository;
 		
-		public MessageTargetService(IRepository<User> userRepository,IRepository<MessageTarget> messageTargetRepository,IScopeServiceLoader loader)
-			:base(messageTargetRepository,loader)
+		public MessageTargetService(IRepository<User> userRepository,IRepository<MessageTarget> messageTargetRepository)
+			:base(messageTargetRepository)
 		{
 			this.userRepository=userRepository;
 			this.messageTargetRepository=messageTargetRepository;
@@ -37,7 +37,7 @@ namespace FastFrame.Service.Services.Chat
 					};
 			return query;
 		}
-		public  Task<PageList<MessageTargetViewModel>> ViewModelListAsync(PagePara page) 
+		public  Task<PageList<MessageTargetViewModel>> ViewModelListAsync(Pagination page) 
 		{
 			var query = from _messageTarget in messageTargetRepository 
 						select new MessageTargetViewModel

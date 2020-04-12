@@ -16,8 +16,8 @@ namespace FastFrame.Service.Services.Basis
 		private readonly IRepository<User> userRepository;
 		private readonly IRepository<Tenant> tenantRepository;
 		
-		public TenantService(IRepository<User> userRepository,IRepository<Tenant> tenantRepository,IScopeServiceLoader loader)
-			:base(tenantRepository,loader)
+		public TenantService(IRepository<User> userRepository,IRepository<Tenant> tenantRepository)
+			:base(tenantRepository)
 		{
 			this.userRepository=userRepository;
 			this.tenantRepository=tenantRepository;
@@ -39,7 +39,7 @@ namespace FastFrame.Service.Services.Basis
 					};
 			return query;
 		}
-		public  Task<PageList<TenantViewModel>> ViewModelListAsync(PagePara page) 
+		public  Task<PageList<TenantViewModel>> ViewModelListAsync(Pagination page) 
 		{
 			var query = from _tenant in tenantRepository 
 						select new TenantViewModel

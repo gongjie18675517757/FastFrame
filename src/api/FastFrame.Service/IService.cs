@@ -66,6 +66,6 @@ namespace FastFrame.Service
         /// </summary>
         /// <param name="pageInfo"></param>
         /// <returns></returns>
-        Task<PageList<TDto>> GetListAsync(PagePara pageInfo);
+        Task<PageList<TDto>> GetListAsync(Pagination pageInfo);
     }
 }

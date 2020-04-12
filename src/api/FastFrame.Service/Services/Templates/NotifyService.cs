@@ -17,8 +17,8 @@ namespace FastFrame.Service.Services.Basis
 		private readonly IRepository<Resource> resourceRepository;
 		private readonly IRepository<Notify> notifyRepository;
 		
-		public NotifyService(IRepository<User> userRepository,IRepository<Resource> resourceRepository,IRepository<Notify> notifyRepository,IScopeServiceLoader loader)
-			:base(notifyRepository,loader)
+		public NotifyService(IRepository<User> userRepository,IRepository<Resource> resourceRepository,IRepository<Notify> notifyRepository)
+			:base(notifyRepository)
 		{
 			this.userRepository=userRepository;
 			this.resourceRepository=resourceRepository;
@@ -62,7 +62,7 @@ namespace FastFrame.Service.Services.Basis
 					};
 			return query;
 		}
-		public  Task<PageList<NotifyViewModel>> ViewModelListAsync(PagePara page) 
+		public  Task<PageList<NotifyViewModel>> ViewModelListAsync(Pagination page) 
 		{
 			var query = from _notify in notifyRepository 
 						select new NotifyViewModel

@@ -19,13 +19,13 @@ namespace FastFrame.Application.Controllers
 {
     public class CommonController : BaseController
     {
-        private readonly IScopeServiceLoader scopeServiceLoader;
+         
         private readonly ITypeProvider typeProvider;
         private readonly IDescriptionProvider descriptionProvider;
 
-        public CommonController(IScopeServiceLoader scopeServiceLoader, ITypeProvider typeProvider, IDescriptionProvider descriptionProvider)
+        public CommonController( ITypeProvider typeProvider, IDescriptionProvider descriptionProvider)
         {
-            this.scopeServiceLoader = scopeServiceLoader;
+             
             this.typeProvider = typeProvider;
             this.descriptionProvider = descriptionProvider;
         }
@@ -64,8 +64,8 @@ namespace FastFrame.Application.Controllers
             var serviceType = typeof(IService).Assembly.GetType(serverName);
             if (serviceType == null)
                 throw new Exception("模块名称传入不正确!");
-
-            var service = (IVerifyUniqueService)scopeServiceLoader.GetService(serviceType);
+            
+            var service = (IVerifyUniqueService)Request.HttpContext.RequestServices.GetService(serviceType);
             return await service.VerifyUnique(uniqueInput);
         }
 

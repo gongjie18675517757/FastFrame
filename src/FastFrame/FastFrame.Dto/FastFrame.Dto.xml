@@ -132,12 +132,12 @@
         </member>
         <member name="P:FastFrame.Dto.Basis.RoleDto.IsDefault">
              <summary>
-            是否缺省角色 
+            缺省角色 
              </summary>
         </member>
         <member name="P:FastFrame.Dto.Basis.RoleDto.IsAdmin">
              <summary>
-            是否管理员角色 
+            管理员角色 
              </summary>
         </member>
         <member name="P:FastFrame.Dto.Basis.RoleDto.Remarks">
@@ -177,12 +177,12 @@
         </member>
         <member name="P:FastFrame.Dto.Basis.RolePermissionModel.EnCode">
             <summary>
-            名称
+            标记
             </summary>
         </member>
         <member name="P:FastFrame.Dto.Basis.RolePermissionModel.Name">
             <summary>
-            描述
+            名称
             </summary>
         </member>
         <member name="P:FastFrame.Dto.Basis.RolePermissionModel.IsAuthorization">

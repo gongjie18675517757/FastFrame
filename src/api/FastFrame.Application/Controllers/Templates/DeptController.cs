@@ -12,13 +12,11 @@ namespace FastFrame.Application.Controllers.Basis
 	public partial class DeptController:BaseCURDController<Dept, DeptDto>
 	{
 		private readonly DeptService service;
-		private readonly IScopeServiceLoader serviceLoader;
 		
-		public DeptController(DeptService service,IScopeServiceLoader serviceLoader)
-			:base(service,serviceLoader)
+		public DeptController(DeptService service)
+			:base(service)
 		{
 			this.service = service;
-			this.serviceLoader = serviceLoader;
 		}
 		
 		

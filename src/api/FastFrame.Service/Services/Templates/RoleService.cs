@@ -16,8 +16,8 @@ namespace FastFrame.Service.Services.Basis
 		private readonly IRepository<User> userRepository;
 		private readonly IRepository<Role> roleRepository;
 		
-		public RoleService(IRepository<User> userRepository,IRepository<Role> roleRepository,IScopeServiceLoader loader)
-			:base(roleRepository,loader)
+		public RoleService(IRepository<User> userRepository,IRepository<Role> roleRepository)
+			:base(roleRepository)
 		{
 			this.userRepository=userRepository;
 			this.roleRepository=roleRepository;
@@ -51,7 +51,7 @@ namespace FastFrame.Service.Services.Basis
 					};
 			return query;
 		}
-		public  Task<PageList<RoleViewModel>> ViewModelListAsync(PagePara page) 
+		public  Task<PageList<RoleViewModel>> ViewModelListAsync(Pagination page) 
 		{
 			var query = from _role in roleRepository 
 						select new RoleViewModel

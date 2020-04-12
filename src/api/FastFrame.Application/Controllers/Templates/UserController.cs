@@ -12,13 +12,11 @@ namespace FastFrame.Application.Controllers.Basis
 	public partial class UserController:BaseCURDController<User, UserDto>
 	{
 		private readonly UserService service;
-		private readonly IScopeServiceLoader serviceLoader;
 		
-		public UserController(UserService service,IScopeServiceLoader serviceLoader)
-			:base(service,serviceLoader)
+		public UserController(UserService service)
+			:base(service)
 		{
 			this.service = service;
-			this.serviceLoader = serviceLoader;
 		}
 		
 		

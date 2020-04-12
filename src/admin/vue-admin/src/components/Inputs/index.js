@@ -1,8 +1,8 @@
 import SearchInput from "./SearchInput.vue";
 import RichInput from "./RichInput.vue";
 import TextArea from './TextArea'
-import Checkbox from './Checkbox.vue'
-import SelectInput from "./SelectInput";
+// import Checkbox from './Checkbox.vue'
+import SelectInput from "./SelectInput.vue";
 import SelectMulitInput from "./SelectMulitInput";
 import DateInput from './DateInput.vue'
 import FileInput from './FileInput'
@@ -100,8 +100,6 @@ export default {
     let on = {
       ...this.$listeners,
       input: (val) => {
-        console.log(val);
-
         this.$emit('input', val)
       },
       change: val => this.change(val)
@@ -218,8 +216,21 @@ export default {
             Array((props.value || '******').length).fill('*').join('') :
             props.value)
     } else if (!component && this.Type == 'Boolean') {
-      component = h(Checkbox, {
-        props,
+      component = h(SelectInput, {
+        props: {
+          ...props,
+          value: `${props.value}`,
+          values: [
+            {
+              Key: 'true',
+              Value: '是'
+            },
+            {
+              Key: 'false',
+              Value: '否'
+            }
+          ]
+        },
         on
       })
     } else if (!component && this.Type == 'DateTime') {
@@ -294,9 +305,9 @@ export default {
               style: {
                 width: '150px',
                 'padding': '10px',
-                'text-align':'center',
-                display:'table-cell',
-                'line-height':'20px'
+                'text-align': 'center',
+                display: 'table-cell',
+                'line-height': '20px'
               }
             }, [
               h('span', {

@@ -11,11 +11,30 @@
             </v-btn>
             <v-menu offset-y>
               <template v-slot:activator="{ on }">
+                <v-btn v-on="on" title="添加组" text small>
+                  <v-icon>add</v-icon>添加查询组
+                </v-btn>
+              </template>
+              <v-list dense>
+                <v-list-item @click="addQueryOption('and')">
+                  <v-list-item-content>
+                    <v-list-item-title>且</v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-list-item @click="addQueryOption('or')">
+                  <v-list-item-content>
+                    <v-list-item-title>或</v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+            <v-menu offset-y>
+              <template v-slot:activator="{ on }">
                 <v-btn icon v-on="on" title="设置">
                   <v-icon>more_vert</v-icon>
                 </v-btn>
               </template>
-              <v-list>
+              <v-list dense>
                 <v-list-item>
                   <v-list-item-action>
                     <v-checkbox v-model="singleLine"></v-checkbox>
@@ -31,22 +50,36 @@
             </v-btn>
           </v-toolbar>
           <v-divider></v-divider>
-          <v-form ref="form">
-            <v-card-text>
-              <div class="dialog-page">
-                <component :is="singleLine?'span':'v-layout'" wrap>
-                  <Input
-                    v-for="(item) in options"
-                    v-bind="item"
-                    v-model="form[item.Description]"
-                    :key="item.Description"
-                    :singleLine="singleLine"
-                    canEdit
-                  />
-                </component>
-              </div>
-            </v-card-text>
-          </v-form>
+
+          <v-card-text>
+            <div class="dialog-page">
+              <v-expansion-panels multiple :value="groupValues">
+                <v-expansion-panel v-for="(v,i) in options" :key="i">
+                  <v-expansion-panel-header>
+                    查询组{{i+1}}({{conds[v.Key]}})
+                    <template slot="actions">
+                      <v-btn icon v-if="options.length>1" @click="removeGroup(i)">
+                        <v-icon>clear</v-icon>
+                      </v-btn>
+                    </template>
+                  </v-expansion-panel-header>
+                  <v-expansion-panel-content>
+                    <component :is="singleLine?'span':'v-layout'" wrap>
+                      <Input
+                        v-for="item in v.Value"
+                        v-bind="item"
+                        :value="item.value"
+                        :key="item.Description"
+                        :singleLine="singleLine"
+                        @input="handleInput(item,$event)"
+                        canEdit
+                      />
+                    </component>
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+              </v-expansion-panels>
+            </div>
+          </v-card-text>
 
           <v-card-actions>
             <v-btn text @click="cancel">取消</v-btn>
@@ -66,51 +99,49 @@ export default {
   components: { VuePerfectScrollbar, Input },
   props: {
     title: String,
-    options: Array
+    options: Array,
+    makeOptionsFunc: Function
   },
   data() {
     return {
       singleLine: false,
-      form: null
+      conds: {
+        and: "且",
+        or: "或"
+      }
     };
   },
-  created() {
-    this.load();
+  computed: {
+    groupValues() {
+      return this.options.map((_, i) => i);
+    }
   },
   methods: {
-    load() {
-      let form = {};
-      for (let index = 0; index < this.options.length; index++) {
-        const opt = this.options[index];
-        form[opt.Description] = opt.value;
-      }
-      this.form = form;
+    removeGroup(index) {
+      this.options.splice(index, 1);
     },
+    addQueryOption(key) {
+      this.options.push({
+        Key: key,
+        Value: this.makeOptionsFunc()
+      });
+    },
+    handleInput(item, val) {
+      item.value = val;
+    },
+
     refresh() {
-      for (const option of this.options) {
-        option.value = null;
-      }
-      this.load();
+      this.options.splice(0, this.options.length);
+      this.options.push({
+        Key: "and",
+        Value: this.makeOptionsFunc()
+      });
     },
     query() {
-      for (let index = 0; index < this.options.length; index++) {
-        const opt = this.options[index];
-        opt.value = this.form[opt.Description];
-      }
-
-      let val = this.options
-        .filter(r => r.value)
-        .map(r => {
-          return {
-            Name: r.Name,
-            compare: r.compare,
-            value: Array.isArray(r.value) ? r.value.join(",") : r.value
-          };
-        });
-      this.$emit("success", val);
+      this.$emit("success", this.options);
     },
     cancel() {
-      this.$emit("close");
+      this.$emit("close"); 
     }
   }
 };

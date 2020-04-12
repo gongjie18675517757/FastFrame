@@ -17,8 +17,8 @@ namespace FastFrame.Service.Services.Chat
 		private readonly IRepository<User> userRepository;
 		private readonly IRepository<EmailAnnex> emailAnnexRepository;
 		
-		public EmailAnnexService(IRepository<User> userRepository,IRepository<EmailAnnex> emailAnnexRepository,IScopeServiceLoader loader)
-			:base(emailAnnexRepository,loader)
+		public EmailAnnexService(IRepository<User> userRepository,IRepository<EmailAnnex> emailAnnexRepository)
+			:base(emailAnnexRepository)
 		{
 			this.userRepository=userRepository;
 			this.emailAnnexRepository=emailAnnexRepository;
@@ -36,7 +36,7 @@ namespace FastFrame.Service.Services.Chat
 					};
 			return query;
 		}
-		public  Task<PageList<EmailAnnexViewModel>> ViewModelListAsync(PagePara page) 
+		public  Task<PageList<EmailAnnexViewModel>> ViewModelListAsync(Pagination page) 
 		{
 			var query = from _emailAnnex in emailAnnexRepository 
 						select new EmailAnnexViewModel

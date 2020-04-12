@@ -16,8 +16,8 @@ namespace FastFrame.Service.Services.Basis
 		private readonly IRepository<Dept> deptRepository;
 		private readonly IRepository<User> userRepository;
 		
-		public DeptService(IRepository<Dept> deptRepository,IRepository<User> userRepository,IScopeServiceLoader loader)
-			:base(deptRepository,loader)
+		public DeptService(IRepository<Dept> deptRepository,IRepository<User> userRepository)
+			:base(deptRepository)
 		{
 			this.deptRepository=deptRepository;
 			this.userRepository=userRepository;
@@ -54,7 +54,7 @@ namespace FastFrame.Service.Services.Basis
 					};
 			return query;
 		}
-		public  Task<PageList<DeptViewModel>> ViewModelListAsync(PagePara page) 
+		public  Task<PageList<DeptViewModel>> ViewModelListAsync(Pagination page) 
 		{
 			var query = from _dept in deptRepository 
 						select new DeptViewModel

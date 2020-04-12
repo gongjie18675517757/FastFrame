@@ -55,7 +55,7 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.Application.Controllers.BaseController`2.List(FastFrame.Infrastructure.PagePara)">
+        <member name="M:FastFrame.Application.Controllers.BaseController`2.List(FastFrame.Infrastructure.Pagination)">
             <summary>
             列表
             </summary>
@@ -91,7 +91,7 @@
             通知 
              </summary>
         </member>
-        <member name="M:FastFrame.Application.Controllers.Basis.NotifyController.AllList(FastFrame.Infrastructure.PagePara)">
+        <member name="M:FastFrame.Application.Controllers.Basis.NotifyController.AllList(FastFrame.Infrastructure.Pagination)">
             <summary>
             所有通知
             </summary> 

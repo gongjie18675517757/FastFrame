@@ -93,9 +93,8 @@ namespace FastFrame.CodeGenerate.Build
                 FieldInfos = depends.Select(x => new FieldInfo() { FieldName = x.name, TypeName = x.type }),
                 Constructor = new Info.ConstructorInfo()
                 {
-                    Parms = depends.Select(x => new ParameterInfo() { TypeName = x.type, DefineName = x.name })
-                        .Union(new[] { new ParameterInfo() { TypeName = $"IScopeServiceLoader", DefineName = "loader" } }),
-                    Super = new string[] { $"{type.Name.ToFirstLower()}Repository", "loader" },
+                    Parms = depends.Select(x => new ParameterInfo() { TypeName = x.type, DefineName = x.name }),
+                    Super = new string[] { $"{type.Name.ToFirstLower()}Repository" },
                     CodeBlock = depends.Select(x => $"this.{x.name}={x.name};")
                 },
                 MethodInfos = GetMethods(type),
@@ -126,7 +125,7 @@ namespace FastFrame.CodeGenerate.Build
                     new ParameterInfo
                     {
                         DefineName="page",
-                        TypeName="PagePara"
+                        TypeName="Pagination"
                     }
                 }
             };

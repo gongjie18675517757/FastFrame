@@ -17,8 +17,8 @@ namespace FastFrame.Service.Services.Chat
 		private readonly IRepository<User> userRepository;
 		private readonly IRepository<FriendMessage> friendMessageRepository;
 		
-		public FriendMessageService(IRepository<User> userRepository,IRepository<FriendMessage> friendMessageRepository,IScopeServiceLoader loader)
-			:base(friendMessageRepository,loader)
+		public FriendMessageService(IRepository<User> userRepository,IRepository<FriendMessage> friendMessageRepository)
+			:base(friendMessageRepository)
 		{
 			this.userRepository=userRepository;
 			this.friendMessageRepository=friendMessageRepository;
@@ -39,7 +39,7 @@ namespace FastFrame.Service.Services.Chat
 					};
 			return query;
 		}
-		public  Task<PageList<FriendMessageViewModel>> ViewModelListAsync(PagePara page) 
+		public  Task<PageList<FriendMessageViewModel>> ViewModelListAsync(Pagination page) 
 		{
 			var query = from _friendMessage in friendMessageRepository 
 						select new FriendMessageViewModel

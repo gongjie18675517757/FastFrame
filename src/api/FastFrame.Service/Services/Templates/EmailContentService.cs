@@ -17,8 +17,8 @@ namespace FastFrame.Service.Services.Chat
 		private readonly IRepository<User> userRepository;
 		private readonly IRepository<EmailContent> emailContentRepository;
 		
-		public EmailContentService(IRepository<User> userRepository,IRepository<EmailContent> emailContentRepository,IScopeServiceLoader loader)
-			:base(emailContentRepository,loader)
+		public EmailContentService(IRepository<User> userRepository,IRepository<EmailContent> emailContentRepository)
+			:base(emailContentRepository)
 		{
 			this.userRepository=userRepository;
 			this.emailContentRepository=emailContentRepository;
@@ -36,7 +36,7 @@ namespace FastFrame.Service.Services.Chat
 					};
 			return query;
 		}
-		public  Task<PageList<EmailContentViewModel>> ViewModelListAsync(PagePara page) 
+		public  Task<PageList<EmailContentViewModel>> ViewModelListAsync(Pagination page) 
 		{
 			var query = from _emailContent in emailContentRepository 
 						select new EmailContentViewModel

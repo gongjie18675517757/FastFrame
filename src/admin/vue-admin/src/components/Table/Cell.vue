@@ -1,7 +1,7 @@
  <script>
 import { getValue } from "@/utils";
 import EnumItemInput from "@/components/Inputs/EnumItemInput";
-import SelectInput from "@/components/Inputs/SelectInput";
+import SelectInput from "@/components/Inputs/SelectInput.vue";
 export default {
   props: {
     info: {

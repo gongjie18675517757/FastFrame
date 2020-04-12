@@ -2,7 +2,7 @@ import {
   getColumns,
   getModuleStrut,
   getQueryOptions
-} from "@/generate";
+} from "../../generate";
 import {
   distinct, throttle
 } from '../../utils'
@@ -171,10 +171,25 @@ export let pageMethods = {
       .then(this.getModuleStrut)
       .then(strut => this.ModuleStrut = strut)
       .then(this.getColumns)
-      .then(cols => this.columns = distinct(cols, v => v.Name, (a, b) => ({
+      .then(arr => this.columns = distinct(arr, v => v.Name, (a, b) => ({
         ...a,
         ...b
       })))
+      .then(this.getQueryOptions)
+      .then(arr => distinct(arr, v => `${v.Name}${v.compare}`, (a, b) => ({
+        ...a, ...b
+      }))).then(arr => {
+        this.queryOptions = arr.map(v => ({
+          ...v,
+          value: JSON.parse(JSON.stringify(v.value))
+        }));
+        this.query = [
+          {
+            Key: 'and',
+            Value: arr
+          }
+        ]
+      })
   },
   getModuleStrut() {
     return getModuleStrut(this.name)
@@ -220,27 +235,23 @@ export let pageMethods = {
       }
     });
   },
+  getQueryOptions() {
+    return getQueryOptions(this.dynamicColumns)
+  },
   search() {
-    getQueryOptions(this.dynamicColumns).then(options => {
-      for (const item of this.query) {
-        let opt = options.find(
-          r => r.Name == item.Name && r.compare == item.compare
-        );
-        if (opt) {
-          opt.value = item.value;
-        }
-      }
-
-      this.$message
-        .dialog(() => import('@/components/Dialog/SearchDialog.vue'), {
-          title: `查询${this.direction}列表`,
-          options
-        })
-        .then(query => {
-          this.query = query;
-          this.loadList();
-        });
-    });
+    this.$message
+      .dialog(() => import('@/components/Dialog/SearchDialog.vue'), {
+        title: `查询${this.direction}列表`,
+        options: this.query,
+        makeOptionsFunc: () => [...this.queryOptions.map(v => ({
+          ...v,
+          value: JSON.parse(JSON.stringify(v.value))
+        }))]
+      })
+      .then(query => {
+        this.query = query;
+        this.loadList();
+      });
   },
   getRequestUrl() {
     return `/api/${this.name}/list`
@@ -277,15 +288,32 @@ export let pageMethods = {
       SortName: sortBy.join(','),
       SortMode: sortDesc.length > 0 && !sortDesc[0] ? "asc" : "desc",
       Filters: [
-        ...queryFilter,
         ...this.query,
-        ...(this.superId ? [
-          {
-            name: 'super_Id',
-            value: this.superId,
-            compare: '=='
-          }
-        ] : [])]
+        {
+          Key: 'and',
+          Value: [
+            ...queryFilter,
+            ...(this.superId ? [
+              {
+                name: 'super_Id',
+                value: this.superId,
+                compare: '=='
+              }
+            ] : [])
+          ]
+        }
+      ].map(kv => {
+        return ({
+          ...kv,
+          Value: kv.Value.filter(v => {
+            return Array.isArray(v.value) ? v.value.length > 0 : !!v.value
+          }).map(v => ({
+            Name: v.Name,
+            compare: v.compare,
+            value: v.value
+          }))
+        })
+      }).filter(v => v.Value.length > 0)
 
     };
 

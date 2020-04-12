@@ -12,9 +12,9 @@ namespace FastFrame.Application.Controllers.Basis
     {
         [Permission(new string[] { "Add", "Update" })]
         [HttpPost]
-        public Task<PageList<UserViewModel>> UserList(PagePara pagePara)
+        public Task<PageList<UserViewModel>> UserList(Pagination Pagination)
             => Request.HttpContext.RequestServices
-                    .GetService<UserService>().ViewModelListAsync(pagePara);
+                    .GetService<UserService>().ViewModelListAsync(Pagination);
 
         [HttpGet]
         [Permission(new string[] { "Add" })]

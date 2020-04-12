@@ -53,19 +53,16 @@ namespace FastFrame.CodeGenerate.Build
                     Name = $"{name}Controller",
                     BaseNames = baseNames,
                     FieldInfos = new FieldInfo[] {
-                        new FieldInfo(){ TypeName=$"{name}Service",FieldName="service"},
-                        new FieldInfo(){ TypeName=$"IScopeServiceLoader",FieldName="serviceLoader"}
+                        new FieldInfo(){ TypeName=$"{name}Service",FieldName="service"} 
                     },
                     Constructor = new Info.ConstructorInfo()
                     {
                         Parms = new ParameterInfo[] {
-                            new ParameterInfo() { TypeName = $"{name}Service", DefineName = "service" },
-                            new ParameterInfo(){ TypeName="IScopeServiceLoader",DefineName="serviceLoader"}
+                            new ParameterInfo() { TypeName = $"{name}Service", DefineName = "service" } 
                         },
-                        Super = new string[] { "service", "serviceLoader" },
+                        Super = new string[] { "service"},
                         CodeBlock = new string[] {
-                            "this.service = service;",
-                            "this.serviceLoader = serviceLoader;"
+                            "this.service = service;" 
                         }
                     },
                     AttrInfos = new[] {

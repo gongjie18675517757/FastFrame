@@ -14,9 +14,35 @@ namespace FastFrame.Application.Controllers
     {
         private readonly IService<TEntity, TDto> service;
 
-        public BaseCURDController(IService<TEntity, TDto> service, IScopeServiceLoader serviceLoader) : base(service, serviceLoader)
+        public BaseCURDController(IService<TEntity, TDto> service) : base(service)
         {
             this.service = service;
+        }
+
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpDelete("{id}")]
+        [Permission("Delete", "删除")]
+        public virtual async Task Delete(string id)
+        {
+            await service.DeleteAsync(id);
+        }
+
+
+
+        /// <summary>
+        /// 查看
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Permission("Get", "查看")]
+        [HttpGet("{id}")]
+        public virtual async Task<TDto> Get(string id)
+        {
+            return await service.GetAsync(id);
         }
 
         /// <summary>
@@ -41,7 +67,6 @@ namespace FastFrame.Application.Controllers
         public virtual async Task Put([FromBody]TDto @input)
         {
             await service.UpdateAsync(@input);
-        }
-
+        } 
     }
 }

@@ -1,5 +1,7 @@
 ﻿using FastFrame.Infrastructure.Attrs;
+using FastFrame.Infrastructure.Interface;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FastFrame.Entity.Basis
 {
@@ -30,7 +32,7 @@ namespace FastFrame.Entity.Basis
         /// <summary>
         /// 管理员角色
         /// </summary>
-        public bool IsAdmin { get; set; }
+        public bool IsAdmin { get; set; } 
 
         /// <summary>
         /// 备注

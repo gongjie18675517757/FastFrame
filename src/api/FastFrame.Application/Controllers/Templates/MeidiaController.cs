@@ -12,13 +12,11 @@ namespace FastFrame.Application.Controllers.Basis
 	public partial class MeidiaController:BaseCURDController<Meidia, MeidiaDto>
 	{
 		private readonly MeidiaService service;
-		private readonly IScopeServiceLoader serviceLoader;
 		
-		public MeidiaController(MeidiaService service,IScopeServiceLoader serviceLoader)
-			:base(service,serviceLoader)
+		public MeidiaController(MeidiaService service)
+			:base(service)
 		{
 			this.service = service;
-			this.serviceLoader = serviceLoader;
 		}
 		
 		

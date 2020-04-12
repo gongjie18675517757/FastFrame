@@ -4,6 +4,7 @@ using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.EventBus;
 using FastFrame.Infrastructure.Interface;
 using FastFrame.Repository;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,21 +14,16 @@ namespace FastFrame.Service.Services.Basis
 {
     public partial class UserService
     {
-        private readonly ICurrentUserProvider currentUserProvider;
-        private readonly IRepository<RoleMember> roleMemberRepository;
-        private readonly IRepository<Role> roleRepository;
+        private readonly ICurrentUserProvider currentUserProvider; 
 
         public UserService(
             ICurrentUserProvider currentUserProvider,
             IRepository<RoleMember> roleMemberRepository,
             IRepository<Role> roleRepository,
             IRepository<Resource> resourceRepository,
-            IRepository<User> userRepository,
-            IScopeServiceLoader loader) : this(resourceRepository, userRepository, loader)
+            IRepository<User> userRepository) : this(resourceRepository, userRepository)
         {
-            this.currentUserProvider = currentUserProvider;
-            this.roleMemberRepository = roleMemberRepository;
-            this.roleRepository = roleRepository;
+            this.currentUserProvider = currentUserProvider; 
         }
 
         protected override Task OnAdding(UserDto input, User entity)
@@ -47,9 +43,7 @@ namespace FastFrame.Service.Services.Basis
 
         /// <summary>
         /// 切换管理员身份
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// </summary> 
         public async Task<UserDto> ToogleAdminIdentity(string id)
         {
             if (!currentUserProvider.GetCurrUser().IsAdmin)
@@ -73,9 +67,7 @@ namespace FastFrame.Service.Services.Basis
 
         /// <summary>
         /// 切换禁用状态
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// </summary> 
         public async Task<UserDto> ToogleDisabled(string id)
         {
             if (!currentUserProvider.GetCurrUser().IsAdmin)
@@ -107,8 +99,8 @@ namespace FastFrame.Service.Services.Basis
             foreach (var item in dtos)
             {
                 item.Roles = roleMaps.Where(v => v.Key == item.Id).SelectMany(v => v.Value);
-                item.Depts= deptMaps.Where(v => v.Key == item.Id).SelectMany(v => v.Value);
+                item.Depts = deptMaps.Where(v => v.Key == item.Id).SelectMany(v => v.Value);
             }
-        }
+        } 
     }
 }

@@ -16,8 +16,8 @@ namespace FastFrame.Service.Services.Basis
 		private readonly IRepository<Resource> resourceRepository;
 		private readonly IRepository<User> userRepository;
 		
-		public UserService(IRepository<Resource> resourceRepository,IRepository<User> userRepository,IScopeServiceLoader loader)
-			:base(userRepository,loader)
+		public UserService(IRepository<Resource> resourceRepository,IRepository<User> userRepository)
+			:base(userRepository)
 		{
 			this.resourceRepository=resourceRepository;
 			this.userRepository=userRepository;
@@ -59,7 +59,7 @@ namespace FastFrame.Service.Services.Basis
 					};
 			return query;
 		}
-		public  Task<PageList<UserViewModel>> ViewModelListAsync(PagePara page) 
+		public  Task<PageList<UserViewModel>> ViewModelListAsync(Pagination page) 
 		{
 			var query = from _user in userRepository 
 						select new UserViewModel

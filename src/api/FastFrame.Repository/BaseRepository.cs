@@ -38,12 +38,8 @@ namespace FastFrame.Repository
         {
             /*验证唯一性+关联性*/
             entity.Id = IdGenerate.NetId();
-            if (entity is IHasTenant)
-            {
-                context.Entry(entity).Property<string>("tenant_id").CurrentValue = CurrUserProvider.GetCurrOrganizeId().Id;
-            }
-
-            await Verification(entity);
+            if (entity is IHasTenant) 
+                context.Entry(entity).Property<string>("tenant_id").CurrentValue = CurrUserProvider.GetCurrOrganizeId().Id; 
 
             if (entity is IHasManage hasManage)
             {
@@ -62,55 +58,7 @@ namespace FastFrame.Repository
 
             await EventBus.TriggerEventAsync(new EntityAdding<T>(entityEntry.Entity));
             return entityEntry.Entity;
-        }
-
-        /// <summary>
-        /// 验证数据
-        /// </summary> 
-        public virtual async Task Verification(T entity)
-        {
-            /*验证唯一性
-             *1,组合唯一
-             *2,单个唯一
-             */
-            var uniqueAttributes = entity.GetType().GetCustomAttributes<UniqueAttribute>();
-            foreach (var uniqueAttribute in uniqueAttributes)
-            {
-                var names = uniqueAttribute.UniqueNames;
-                var exist = await Queryable.DynamicQuery(null, names.Select(x => new Filter()
-                {
-                    Compare = "==",
-                    Name = x,
-                    Value = entity.GetValue(x)?.ToString()
-                }).Concat(new[] {
-                            new Filter()
-                            {
-                                Compare="!=",
-                                Value=entity.Id.ToString(),
-                                Name="Id",
-                            }
-                        }).ToList()).AnyAsync();
-                if (exist) throw new UniqueException(typeof(T), names);
-            }
-            foreach (var prop in typeof(T).GetProperties())
-            {
-                if (prop.GetCustomAttribute<UniqueAttribute>() is UniqueAttribute uniqueAttribute)
-                {
-                    var value = entity.GetValue(prop.Name)?.ToString();
-                    if (!value.IsNullOrWhiteSpace())
-                    {
-                        var any = await Queryable.Where($"{prop.Name}=@0 and Id!=@1", value, entity.Id).AnyAsync();
-                        if (any)
-                            throw new UniqueException(typeof(T), new string[] { prop.Name });
-                    }
-                }
-            }
-            /*验证关联性*/
-
-
-            /*检测树状的循环引用*/
-
-        }
+        } 
 
         /// <summary>
         /// 删除
@@ -148,10 +96,7 @@ namespace FastFrame.Repository
         /// 更新数据
         /// </summary> 
         public virtual async Task<T> UpdateAsync(T entity)
-        {
-            /*需要验证唯一性和关联性*/
-            await Verification(entity);
-
+        { 
             if (entity is IHasManage hasManage)
             {
                 hasManage.ModifyTime = DateTime.Now;

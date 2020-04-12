@@ -12,13 +12,11 @@ namespace FastFrame.Application.Controllers.Basis
 	public partial class PermissionController:BaseController<Permission, PermissionDto>
 	{
 		private readonly PermissionService service;
-		private readonly IScopeServiceLoader serviceLoader;
 		
-		public PermissionController(PermissionService service,IScopeServiceLoader serviceLoader)
-			:base(service,serviceLoader)
+		public PermissionController(PermissionService service)
+			:base(service)
 		{
 			this.service = service;
-			this.serviceLoader = serviceLoader;
 		}
 		
 		

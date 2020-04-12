@@ -15,9 +15,8 @@ namespace FastFrame.Service.Services.Basis
         public TenantService(
             ICurrentUserProvider currentUserProvider, 
             IRepository<User> userRepository,
-            IRepository<Tenant> tenantRepository,
-            IScopeServiceLoader loader)
-            : this(userRepository, tenantRepository, loader)
+            IRepository<Tenant> tenantRepository)
+            : this(userRepository, tenantRepository)
         {
             this.currentUserProvider = currentUserProvider;
         }

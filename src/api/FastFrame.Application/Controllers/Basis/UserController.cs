@@ -6,6 +6,7 @@ using FastFrame.Service.Services.Basis;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
 
 namespace FastFrame.Application.Controllers.Basis
 {
@@ -33,16 +34,16 @@ namespace FastFrame.Application.Controllers.Basis
         public async Task<UserDto> ToogleDisabled(string id)
         {
             return await service.ToogleDisabled(id);
-        }
+        } 
 
         [Permission(new string[] { "Add", "Update" })]
         [HttpPost]
-        public Task<PageList<RoleViewModel>> RoleList(PagePara pagePara)
-            => HttpContext.RequestServices.GetService<RoleService>().ViewModelListAsync(pagePara);
+        public Task<PageList<RoleViewModel>> RoleList(Pagination Pagination)
+            => HttpContext.RequestServices.GetService<RoleService>().ViewModelListAsync(Pagination);
 
         [Permission(new string[] { "Add", "Update" })]
         [HttpPost]
-        public Task<PageList<DeptViewModel>> DeptList(PagePara pagePara)
-            => HttpContext.RequestServices.GetService<DeptService>().ViewModelListAsync(pagePara);
+        public Task<PageList<DeptViewModel>> DeptList(Pagination Pagination)
+            => HttpContext.RequestServices.GetService<DeptService>().ViewModelListAsync(Pagination);
     }
 }

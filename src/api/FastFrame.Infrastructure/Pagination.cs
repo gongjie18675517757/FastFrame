@@ -7,7 +7,7 @@ namespace FastFrame.Infrastructure
     /// <summary>
     /// 查询列表参数
     /// </summary>
-    public class PagePara
+    public class Pagination
     {
         private int _pageIndex = 1;
         private int _pageSize = 10;
@@ -24,12 +24,13 @@ namespace FastFrame.Infrastructure
         /// <summary>
         /// 模糊条件
         /// </summary>
-        public string KeyWord { get; set; } 
+        public string KeyWord { get; set; }
 
         /// <summary>
         /// 条件
         /// </summary>
-        public List<Filter> Filters { get; set; }
+        public List<KeyValuePair<string, List<Filter>>> Filters { get; set; }
+            = new List<KeyValuePair<string, List<Filter>>>();
 
         /// <summary>
         /// 排序列名称
@@ -39,7 +40,7 @@ namespace FastFrame.Infrastructure
         /// <summary>
         /// 排序方式
         /// </summary>
-        public string SortMode { get; set; } 
+        public string SortMode { get; set; }
     }
 
 

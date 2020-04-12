@@ -12,13 +12,11 @@ namespace FastFrame.Application.Controllers.Basis
 	public partial class NotifyController:BaseCURDController<Notify, NotifyDto>
 	{
 		private readonly NotifyService service;
-		private readonly IScopeServiceLoader serviceLoader;
 		
-		public NotifyController(NotifyService service,IScopeServiceLoader serviceLoader)
-			:base(service,serviceLoader)
+		public NotifyController(NotifyService service)
+			:base(service)
 		{
 			this.service = service;
-			this.serviceLoader = serviceLoader;
 		}
 		
 		

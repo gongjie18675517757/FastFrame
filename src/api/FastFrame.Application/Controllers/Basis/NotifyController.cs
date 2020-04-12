@@ -11,7 +11,7 @@ namespace FastFrame.Application.Controllers.Basis
         /// 所有通知
         /// </summary> 
         [HttpPost]
-        public async Task<PageList<NotifyDto>> AllList([FromBody]PagePara pageInfo)
+        public async Task<PageList<NotifyDto>> AllList([FromBody]Pagination pageInfo)
         {
             return await service.GetListAsync(pageInfo);
         }

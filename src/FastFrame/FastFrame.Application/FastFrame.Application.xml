@@ -41,25 +41,28 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.Application.Controllers.BaseController`2.Delete(System.String)">
+        <member name="M:FastFrame.Application.Controllers.BaseController`2.List(FastFrame.Infrastructure.Pagination)">
+            <summary>
+            列表
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Application.Controllers.BaseController`2.List(System.Int32,System.Int32,System.String)">
+            <summary>
+            列表
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Application.Controllers.BaseCURDController`2.Delete(System.String)">
             <summary>
             删除
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.Application.Controllers.BaseController`2.Get(System.String)">
+        <member name="M:FastFrame.Application.Controllers.BaseCURDController`2.Get(System.String)">
             <summary>
             查看
             </summary>
             <param name="id"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Application.Controllers.BaseController`2.List(FastFrame.Infrastructure.PagePara)">
-            <summary>
-            列表
-            </summary>
-            <param name="pageInfo"></param>
             <returns></returns>
         </member>
         <member name="M:FastFrame.Application.Controllers.BaseCURDController`2.Post(`1)">
@@ -96,7 +99,7 @@
             通知 
              </summary>
         </member>
-        <member name="M:FastFrame.Application.Controllers.Basis.NotifyController.AllList(FastFrame.Infrastructure.PagePara)">
+        <member name="M:FastFrame.Application.Controllers.Basis.NotifyController.AllList(FastFrame.Infrastructure.Pagination)">
             <summary>
             所有通知
             </summary> 

@@ -31,12 +31,12 @@ namespace FastFrame.Dto.Basis
 		public string Name {get;set;}
 		
 		/// <summary>
-		///是否缺省角色 
+		///缺省角色 
 		/// </summary>
 		public bool IsDefault {get;set;}
 		
 		/// <summary>
-		///是否管理员角色 
+		///管理员角色 
 		/// </summary>
 		public bool IsAdmin {get;set;}
 		

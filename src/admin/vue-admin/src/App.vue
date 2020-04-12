@@ -107,11 +107,25 @@ html {
   min-height: 28px;
 }
 
+.much-input .mdi-close::before {
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+.much-input .mdi-menu-down::before {
+  margin-bottom: 5px;
+  /* font-size: 14px; */
+}
+
+.much-input .v-text-field.v-input--dense .v-input__prepend-inner .v-input__icon > .v-icon,
+.much-input .v-text-field.v-input--dense .v-input__append-inner .v-input__icon > .v-icon {
+  margin-top: 0px;
+}
+
 .much-input .v-text-field {
   padding-top: 0px;
   margin-top: 4px;
 }
- 
 
 .v-text-field__details {
   align-items: center;

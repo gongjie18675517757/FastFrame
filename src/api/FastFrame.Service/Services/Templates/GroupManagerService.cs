@@ -17,8 +17,8 @@ namespace FastFrame.Service.Services.Chat
 		private readonly IRepository<User> userRepository;
 		private readonly IRepository<GroupManager> groupManagerRepository;
 		
-		public GroupManagerService(IRepository<User> userRepository,IRepository<GroupManager> groupManagerRepository,IScopeServiceLoader loader)
-			:base(groupManagerRepository,loader)
+		public GroupManagerService(IRepository<User> userRepository,IRepository<GroupManager> groupManagerRepository)
+			:base(groupManagerRepository)
 		{
 			this.userRepository=userRepository;
 			this.groupManagerRepository=groupManagerRepository;
@@ -36,7 +36,7 @@ namespace FastFrame.Service.Services.Chat
 					};
 			return query;
 		}
-		public  Task<PageList<GroupManagerViewModel>> ViewModelListAsync(PagePara page) 
+		public  Task<PageList<GroupManagerViewModel>> ViewModelListAsync(Pagination page) 
 		{
 			var query = from _groupManager in groupManagerRepository 
 						select new GroupManagerViewModel

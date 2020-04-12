@@ -1,5 +1,4 @@
 ﻿using AspectCore.Extensions.Reflection;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
@@ -8,7 +7,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using System.Linq.Expressions;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
@@ -17,23 +15,7 @@ using System.Threading.Tasks;
 namespace FastFrame.Infrastructure
 {
     public static class Extension
-    {
-        public static async Task<PageList<T>> PageListAsync<T>(this IQueryable<T> query, PagePara pageInfo)
-        {
-            query = query.DynamicQuery(pageInfo.KeyWord, pageInfo.Filters);
-
-            var list = await query.DynamicSort(pageInfo.SortName, pageInfo.SortMode)
-                    .Skip(pageInfo.PageSize * (pageInfo.PageIndex - 1))
-                    .Take(pageInfo.PageSize)
-                    .ToListAsync();
-
-            return new PageList<T>()
-            {
-                Total = await query.CountAsync(),
-                Data = list,
-            };
-        }
-
+    { 
         public static IQueryable<T> DynamicSort<T>(this IQueryable<T> query, string name, string mode)
         {
             if (query == null)
@@ -53,20 +35,26 @@ namespace FastFrame.Infrastructure
 
             return query.OrderBy($"{name} {mode}");
         }
-        public static IQueryable<T> DynamicQuery<T>(this IQueryable<T> query, string kw, IEnumerable<Filter> filters)
+
+        public static IQueryable<T> DynamicQuery<T>(this IQueryable<T> query, string kw, List<KeyValuePair<string, List<Filter>>> kvsFilter)
         {
             if (query == null)
             {
                 throw new ArgumentNullException(nameof(query));
             }
 
-            if (kw.IsNullOrWhiteSpace() && (filters == null || !filters.Any()))
+            if (kw.IsNullOrWhiteSpace() &&
+                    (kvsFilter == null || !kvsFilter.Any()) &&
+                    (kvsFilter == null || !kvsFilter.Any(v => v.Value != null && v.Value.Any())))
                 return query;
 
-            foreach (var item in filters)
+            foreach (var kv in kvsFilter)
             {
-                if (item.Value?.Trim().ToLower() == "null")
-                    item.Value = null;
+                foreach (var v in kv.Value)
+                {
+                    if (v.Value?.Trim().ToLower() == "null")
+                        v.Value = null;
+                }
             }
 
             if (!kw.IsNullOrWhiteSpace())
@@ -76,65 +64,125 @@ namespace FastFrame.Infrastructure
                 query = query.Where(string.Join(" or ", props.Select(x => $"{x.Name}.Contains(@0)")), kw);
             }
 
+            var rIndex = 0;
+            var condList = new List<(string key, List<string> strList, List<object> valList)>();
+            foreach (var kv in kvsFilter)
+            {
+                var v = CalcFilter<T>(ref rIndex, kv);
+                condList.Add(v);
+            }
+
+            if (condList.Count > 0)
+            {
+                var stringBuilder = new StringBuilder(" 1=1 ");
+                var queryParList = new List<object>();
+                foreach (var (key, strList, valList) in condList)
+                {
+                    stringBuilder.Append(key);
+                    stringBuilder.Append(" ( (");
+                    stringBuilder.Append(string.Join(") and (", strList));
+                    stringBuilder.Append(") ) ");
+
+                    queryParList.AddRange(valList);
+                }
+
+                var queryStr = stringBuilder.ToString();
+
+                query = query.Where(queryStr, queryParList.ToArray());
+            }
+
+            return query;
+        }
+
+        public static PropertyInfo GetPropertyInfoByNames(Type type, string propNamePath)
+        {
+            var names = propNamePath.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+            var propertyInfo = type.GetProperty(names[0]);
+            if (propertyInfo == null)
+                return null;
+
+            foreach (var name in names.Skip(1))
+            {
+                propertyInfo = propertyInfo.PropertyType.GetProperty(name);
+                if (propertyInfo == null)
+                    return null;
+            }
+
+            return propertyInfo;
+        }
+
+        private static (string key, List<string> strList, List<object> valList) CalcFilter<T>(ref int rIndex, KeyValuePair<string, List<Filter>> kvs)
+        {
+            var filters = kvs.Value;
+            var queryStrList = new List<string>();
+            var queryValList = new List<object>();
             foreach (var item in filters)
             {
-                var conds = item.Name.Split(";".ToArray(), StringSplitOptions.RemoveEmptyEntries);
+                var conds = item.Name.Split(";,".ToArray(), StringSplitOptions.RemoveEmptyEntries);
 
                 if (!conds.Any())
                     continue;
 
                 if (item.Compare.ToLower() == "$")
                 {
-                    var values = item.Value.Split("".ToArray(), StringSplitOptions.RemoveEmptyEntries);
-                    if (values.Any())
+                    var values = item.Value.ToSplitArray(" ");
+                    if (values.Length == 0)
+                        continue;
+                    
+
+                    var qList = new List<string>();
+
+                    foreach (var value in values)
                     {
-                        var queryStr = string.Join(" or ", conds.SelectMany((r) => values.Select((x, i) => $"@{r}.Contains(@{i})")));
-                        query = query.Where(queryStr, values);
+                        foreach (var cond in conds)
+                        {
+                            qList.Add($"{cond}.Contains(@{rIndex})");
+                        }
+                        rIndex++;
                     }
-                    else
-                    {
-                        var queryStr = string.Join(" or ", conds.Select((r) => $"{r}.Contains(@0)"));
-                        query = query.Where(queryStr, item.Value);
-                    }
+                    var queryStr = string.Join(" or ", qList);
+                    queryStrList.Add(queryStr);
+                    queryValList.AddRange(values);
                 }
                 else if (item.Compare.ToLower().EndsWith("in"))
                 {
-                    var names = item.Name.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
-                    var parameterExpression = Expression.Parameter(typeof(T), "v");
-                    var propertyInfo = typeof(T).GetProperty(names[0]);
-                    var memberExpression = Expression.Property(parameterExpression, propertyInfo);
-
-                    foreach (var name in names.Skip(1))
-                    {
-                        propertyInfo = propertyInfo.PropertyType.GetProperty(name);
-                        memberExpression = Expression.Property(parameterExpression, propertyInfo);
-                    }
-
-                    var values = item.Value.Split("".ToArray(), StringSplitOptions.RemoveEmptyEntries);
-                    if (!values.Any())
-                    {
+                    var values = item.Value.ToSplitArray(",;");
+                    if (values.Length == 0)
                         continue;
-                    }
-                    if (!propertyInfo.PropertyType.IsArray)
+
+                    var propertyInfo = GetPropertyInfoByNames(typeof(T), item.Name);
+                    var operate = item.Compare.StartsWith("!")? "!=" : "==";
+
+                    /*如果属性为数组，则要拆出来成多个OR*/
+                    if (propertyInfo.PropertyType.IsArray)
                     {
-                        //var queryStr = string.Join(" or ", values.Select((value, index) => $"{item.Name} == @{index}"));
-                        query = query.Where($"@0.Contains({item.Name})", values);
+                        var qList = new List<string>();
+                        
+                        foreach (var v in values)
+                        {
+                            qList.Add($"{item.Name}.Contains(@{rIndex++})");
+                        }
+                        var queryStr = string.Join(" or ", qList);
+                        queryStrList.Add(queryStr);
+                        queryValList.AddRange(values);
                     }
                     else
                     {
-                        var queryStr = string.Join(" or ", values.Select((value, index) => $"{item.Name}.Contains(@{index})"));
-                        query = query.Where(queryStr, values);
+                        queryStrList.Add($"{operate}@{rIndex++}.Contains({item.Name})");
+                        queryValList.Add(values);
                     }
                 }
                 else
                 {
-                    var queryStr = string.Join(" or ", conds.Select((r) => $"{r} {item.Compare} @0"));
-                    query = query.Where(queryStr, item.Value);
+                    var index = rIndex;
+                    var queryStr = string.Join(" or ", conds.Select((r) => $"{r} {item.Compare} @{index}"));
+                    queryStrList.Add(queryStr);
+                    queryValList.Add(item.Value);
+                    rIndex++;
                 }
-
             }
 
-            return query;
+            return (kvs.Key, queryStrList, queryValList);
         }
 
         public static void WriteCodeLine(this StreamWriter writer, string line, int tagCount = 0)

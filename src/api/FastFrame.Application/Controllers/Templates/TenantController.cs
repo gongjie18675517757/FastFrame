@@ -12,13 +12,11 @@ namespace FastFrame.Application.Controllers.Basis
 	public partial class TenantController:BaseController<Tenant, TenantDto>
 	{
 		private readonly TenantService service;
-		private readonly IScopeServiceLoader serviceLoader;
 		
-		public TenantController(TenantService service,IScopeServiceLoader serviceLoader)
-			:base(service,serviceLoader)
+		public TenantController(TenantService service)
+			:base(service)
 		{
 			this.service = service;
-			this.serviceLoader = serviceLoader;
 		}
 		
 		

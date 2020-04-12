@@ -17,8 +17,8 @@ namespace FastFrame.Service.Services.Basis
 		private readonly IRepository<Resource> resourceRepository;
 		private readonly IRepository<User> userRepository;
 		
-		public MeidiaService(IRepository<Meidia> meidiaRepository,IRepository<Resource> resourceRepository,IRepository<User> userRepository,IScopeServiceLoader loader)
-			:base(meidiaRepository,loader)
+		public MeidiaService(IRepository<Meidia> meidiaRepository,IRepository<Resource> resourceRepository,IRepository<User> userRepository)
+			:base(meidiaRepository)
 		{
 			this.meidiaRepository=meidiaRepository;
 			this.resourceRepository=resourceRepository;
@@ -64,7 +64,7 @@ namespace FastFrame.Service.Services.Basis
 					};
 			return query;
 		}
-		public  Task<PageList<MeidiaViewModel>> ViewModelListAsync(PagePara page) 
+		public  Task<PageList<MeidiaViewModel>> ViewModelListAsync(Pagination page) 
 		{
 			var query = from _meidia in meidiaRepository 
 						select new MeidiaViewModel

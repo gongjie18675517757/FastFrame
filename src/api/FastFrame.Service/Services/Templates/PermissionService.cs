@@ -16,8 +16,8 @@ namespace FastFrame.Service.Services.Basis
 		private readonly IRepository<Permission> permissionRepository;
 		private readonly IRepository<User> userRepository;
 		
-		public PermissionService(IRepository<Permission> permissionRepository,IRepository<User> userRepository,IScopeServiceLoader loader)
-			:base(permissionRepository,loader)
+		public PermissionService(IRepository<Permission> permissionRepository,IRepository<User> userRepository)
+			:base(permissionRepository)
 		{
 			this.permissionRepository=permissionRepository;
 			this.userRepository=userRepository;
@@ -42,7 +42,7 @@ namespace FastFrame.Service.Services.Basis
 					};
 			return query;
 		}
-		public  Task<PageList<PermissionViewModel>> ViewModelListAsync(PagePara page) 
+		public  Task<PageList<PermissionViewModel>> ViewModelListAsync(Pagination page) 
 		{
 			var query = from _permission in permissionRepository 
 						select new PermissionViewModel

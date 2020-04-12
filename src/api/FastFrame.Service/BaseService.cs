@@ -28,18 +28,17 @@ namespace FastFrame.Service
         private readonly IRepository<TEntity> repository;
 
         [FromServiceContext]
-        protected IScopeServiceLoader Loader { get; }
+        protected IServiceProvider Loader { get; set; }
 
         [FromServiceContext]
-        protected IEventBus EventBus { get; set; } 
+        protected IEventBus EventBus { get; set; }
 
         [FromServiceContext]
         protected ICurrentUserProvider UserProvider { get; set; }
 
-        public BaseService(IRepository<TEntity> repository, IScopeServiceLoader loader)
+        public BaseService(IRepository<TEntity> repository)
         {
             this.repository = repository;
-            Loader = loader;
         }
 
         /// <summary>
@@ -163,7 +162,7 @@ namespace FastFrame.Service
         /// <summary>
         /// 获取分页列表
         /// </summary> 
-        public virtual async Task<PageList<TDto>> GetListAsync(PagePara pageInfo)
+        public virtual async Task<PageList<TDto>> GetListAsync(Pagination pageInfo)
         {
             var query = GetListQueryableing(Query());
             var pageList = await query.PageListAsync(pageInfo);
@@ -203,7 +202,10 @@ namespace FastFrame.Service
                 Value = input.Id,
                 Name = "Id"
             });
-            return await repository.Queryable.DynamicQuery(null, filters).AnyAsync();
+            return await repository.Queryable.DynamicQuery(null, new List<KeyValuePair<string, List<Filter>>>
+            {
+                new KeyValuePair<string, List<Filter>>("and",filters)
+            }).AnyAsync();
         }
     }
 }

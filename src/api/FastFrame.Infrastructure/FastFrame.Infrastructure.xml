@@ -461,6 +461,26 @@
             是否超级用户
             </summary>
         </member>
+        <member name="T:FastFrame.Infrastructure.Interface.DataPermission">
+            <summary>
+            数据权限
+            </summary>
+        </member>
+        <member name="F:FastFrame.Infrastructure.Interface.DataPermission.A">
+            <summary>
+            本人录入
+            </summary>
+        </member>
+        <member name="F:FastFrame.Infrastructure.Interface.DataPermission.B">
+            <summary>
+            本部门录入
+            </summary>
+        </member>
+        <member name="F:FastFrame.Infrastructure.Interface.DataPermission.C">
+            <summary>
+            全部
+            </summary>
+        </member>
         <member name="T:FastFrame.Infrastructure.Interface.IDescriptionProvider">
             <summary>
             类型/属性 说明提供
@@ -522,11 +542,6 @@
             </summary>
             <param name="relativelyPath"></param>
             <returns></returns>
-        </member>
-        <member name="T:FastFrame.Infrastructure.Interface.IScopeServiceLoader">
-            <summary>
-            服务加载器[IServiceProvider]
-            </summary>
         </member>
         <member name="T:FastFrame.Infrastructure.MessageBus.IAsyncMessageHandle`1">
             <summary>
@@ -642,37 +657,37 @@
             数据
             </summary>
         </member>
-        <member name="T:FastFrame.Infrastructure.PagePara">
+        <member name="T:FastFrame.Infrastructure.Pagination">
             <summary>
             查询列表参数
             </summary>
         </member>
-        <member name="P:FastFrame.Infrastructure.PagePara.PageIndex">
+        <member name="P:FastFrame.Infrastructure.Pagination.PageIndex">
             <summary>
             页码
             </summary>
         </member>
-        <member name="P:FastFrame.Infrastructure.PagePara.PageSize">
+        <member name="P:FastFrame.Infrastructure.Pagination.PageSize">
             <summary>
             每页数量
             </summary>
         </member>
-        <member name="P:FastFrame.Infrastructure.PagePara.KeyWord">
+        <member name="P:FastFrame.Infrastructure.Pagination.KeyWord">
             <summary>
             模糊条件
             </summary>
         </member>
-        <member name="P:FastFrame.Infrastructure.PagePara.Filters">
+        <member name="P:FastFrame.Infrastructure.Pagination.Filters">
             <summary>
             条件
             </summary>
         </member>
-        <member name="P:FastFrame.Infrastructure.PagePara.SortName">
+        <member name="P:FastFrame.Infrastructure.Pagination.SortName">
             <summary>
             排序列名称
             </summary>
         </member>
-        <member name="P:FastFrame.Infrastructure.PagePara.SortMode">
+        <member name="P:FastFrame.Infrastructure.Pagination.SortMode">
             <summary>
             排序方式
             </summary>

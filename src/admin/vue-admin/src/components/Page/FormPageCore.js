@@ -10,7 +10,7 @@ import {
   getModelObjectItems,
   getRules,
   hasManage
-} from "@/generate";
+} from "../../generate";
 
 /**
  * 要注入的方法名
@@ -189,10 +189,12 @@ export let formMethods = {
     if (id) {
       return this.$http.get(this.getRequestUrl(id));
     } else {
-      return getDefaultModel(this.name);
+      return getDefaultModel(this.name)
     }
   },
   fmtModelObject(frm) {
+   
+    
     return Promise.resolve(frm);
   },
   evalRule(name) {

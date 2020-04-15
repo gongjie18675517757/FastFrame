@@ -54,7 +54,7 @@ export default {
     async reName() {
       let dialog = this.$message.prompt({
         title: "名称",
-        maxWidth: "500px",
+        width: "500px",
         model: {
           name: this.item.Name
         },

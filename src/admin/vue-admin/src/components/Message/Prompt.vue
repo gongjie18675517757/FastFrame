@@ -3,7 +3,7 @@
     <v-layout align-center justify-center>
       <v-flex xs12>
         <v-card>
-          <v-toolbar flat dense   color="transparent">
+          <v-toolbar flat dense color="transparent">
             <v-toolbar-title>{{title}}</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-btn icon @click="cancel">
@@ -16,14 +16,16 @@
               <div class="dialog-form-content">
                 <v-layout wrap>
                   <Input
-                    v-for="item in options"
+                    v-for="item in formOptions"
                     :key="item.Name"
-                    :model="form"
+                    :model="model"
                     v-bind="item"
                     singleLine
                     canEdit
                     :errorMessages="formErrorMessages[item.Name]"
                     @change="handleChange(item)"
+                    :value="model[item.Name]"
+                    @input="model[item.Name]=$event"
                   />
                 </v-layout>
               </div>
@@ -42,16 +44,25 @@
 </template>
 
 <script>
-import Input from "@/components/Inputs";
-
+import Input from "../Inputs";
+import { distinct } from "../../utils";
 export default {
   components: {
     Input
   },
   props: {
-    options: Array,
-    title: String,
-    model: Object,
+    options: {
+      type: Array,
+      required: true
+    },
+    title: {
+      type: String,
+      required: true
+    },
+    model: {
+      type: Object,
+      required: true
+    },
     rules: {
       type: Object,
       default: () => ({})
@@ -59,16 +70,35 @@ export default {
   },
   data() {
     return {
-      form: this.model,
       formErrorMessages: {}
     };
   },
-  created() {
-    this.form = this.model;
+  computed: {
+    formOptions() {
+      let arr = this.options || [];
 
+      arr = distinct(
+        arr,
+        v => v.Name,
+        (a, b) => ({
+          ...a,
+          ...b
+        })
+      );
+      arr = arr.filter(v => {
+        if (typeof v.visible == "function")
+          return v.visible.call(this.this.model);
+        else if (typeof v.visible == "boolean") return v.visible;
+        else return true;
+      });
+
+      return arr;
+    }
+  },
+  created() {
     let formErrs = {};
-    for (const name of Object.keys(this.form)) {
-      formErrs[name] = [];
+    for (const { Name } of this.options) {
+      formErrs[Name] = [];
     }
 
     this.formErrorMessages = formErrs;
@@ -83,10 +113,10 @@ export default {
     },
     evalRule(item) {
       let rules = this.rules[item.Name] || item.rules;
-      let val = this.form[item.Name];
+      let val = this.model[item.Name];
       this.formErrorMessages[item.Name] = [];
 
-      let promiseArr = rules.map(v => v.call(this.form, val));
+      let promiseArr = rules.map(v => v.call(this.model, val));
       return Promise.all(promiseArr)
         .then(arr => {
           return arr.filter(v => typeof v == "string");
@@ -97,11 +127,13 @@ export default {
         });
     },
     success() {
-      let promiseArr = this.options.map(v => this.evalRule(v));
+      let promiseArr = this.formOptions.map(v => this.evalRule(v));
       Promise.all(promiseArr).then(errs => {
         errs = errs.filter(v => v.length > 0);
         if (errs.length == 0) {
-          this.$emit("success", this.form);
+          this.$emit("success", this.model);
+        } else {
+          window.console.error(errs);
         }
       });
     }

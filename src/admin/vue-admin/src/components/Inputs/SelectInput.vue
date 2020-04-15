@@ -76,9 +76,7 @@ export default {
           .join(",");
         if (this.multiple && this.value.length > index) {
           txt = `${txt},`;
-        }
-
-        console.log(this.value.length,index, txt);
+        } 
         return txt;
       } else {
         return "";

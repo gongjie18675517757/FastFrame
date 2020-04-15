@@ -34,7 +34,7 @@ namespace FastFrame.Service
         protected IEventBus EventBus { get; set; }
 
         [FromServiceContext]
-        protected ICurrentUserProvider UserProvider { get; set; }
+        protected ICurrentUserProvider AppSession { get; set; }
 
         public BaseService(IRepository<TEntity> repository)
         {

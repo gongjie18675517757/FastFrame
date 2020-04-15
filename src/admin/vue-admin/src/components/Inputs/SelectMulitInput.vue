@@ -117,18 +117,23 @@ export default {
         let { Data } = await this.$http.post(url, {
           Filters: [
             {
-              Name: this.fields
-                .filter(v => this.canQueryFields.includes(v))
-                .join(";"),
-              Compare: "$",
-              Value: v
-            },
-            {
-              Name: "Id",
-              Compare: "!=",
-              Value: this.value.join(",")
-            },
-            ...filter
+              Key: "and",
+              Value: [
+                {
+                  Name: this.fields
+                    .filter(v => this.canQueryFields.includes(v))
+                    .join(";"),
+                  Compare: "$",
+                  Value: v
+                },
+                {
+                  Name: "Id",
+                  Compare: "!=",
+                  Value: this.value.join(",")
+                },
+                ...filter
+              ]
+            }
           ]
         });
         this.items = Data;

@@ -4,7 +4,7 @@
       <v-tab
         v-for="page in $store.state.pages"
         :key="page.fullPath"
-        @click="$router.push(page.fullPath)"
+        @click="handleClick(page)"
         @contextmenu="show(page)"
       >
         {{page.title }}
@@ -119,6 +119,10 @@ export default {
     }
   },
   methods: {
+    handleClick(page) {
+      if (this.$store.state.currPageFullPath == page.fullPath) return;
+      this.$router.push(page.fullPath);
+    },
     closePage(page) {
       this.$store.dispatch("closePage", page.fullPath);
     },

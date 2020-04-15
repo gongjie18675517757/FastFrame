@@ -114,23 +114,26 @@ export default {
 
       try {
         let { Data } = await this.$http.post(url, {
-          Condition: {
-            Filters: [
-              {
-                Name: this.fields
-                  .filter(v => this.canQueryFields.includes(v))
-                  .join(";"),
-                Compare: "$",
-                Value: v
-              },
-              {
-                Name: "Id",
-                Compare: "!=",
-                Value: this.value || ""
-              },
-              ...filter
-            ]
-          }
+          Filters: [
+            {
+              Key: "and",
+              Value: [
+                {
+                  Name: this.fields
+                    .filter(v => this.canQueryFields.includes(v))
+                    .join(";"),
+                  Compare: "$",
+                  Value: v
+                },
+                {
+                  Name: "Id",
+                  Compare: "!=",
+                  Value: this.value || ""
+                },
+                ...filter
+              ]
+            }
+          ]
         });
         this.items = [...(this.select ? [this.select] : []), ...Data];
         this.loading = false;

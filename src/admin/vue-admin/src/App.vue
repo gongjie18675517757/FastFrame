@@ -4,7 +4,7 @@
       <router-view v-if="resufreshed" />
     </v-fade-transition>
     <Alert />
-    <v-dialog v-for="(dialog,i) in dialogs" :key="i" :value="true" style="box-shadow:none;">
+    <v-dialog v-for="(dialog,i) in dialogs" :key="i" :value="true" :width="dialog.pars.width" style="box-shadow:none;">
       <component
         :is="dialog.component"
         v-bind="dialog.pars"

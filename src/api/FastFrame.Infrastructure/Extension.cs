@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 namespace FastFrame.Infrastructure
 {
     public static class Extension
-    { 
+    {
         public static IQueryable<T> DynamicSort<T>(this IQueryable<T> query, string name, string mode)
         {
             if (query == null)
@@ -43,9 +43,15 @@ namespace FastFrame.Infrastructure
                 throw new ArgumentNullException(nameof(query));
             }
 
-            if (kw.IsNullOrWhiteSpace() &&
-                    (kvsFilter == null || !kvsFilter.Any()) &&
-                    (kvsFilter == null || !kvsFilter.Any(v => v.Value != null && v.Value.Any())))
+            var isExistsFilter = !kw.IsNullOrWhiteSpace();
+            isExistsFilter = isExistsFilter || (kvsFilter == null && kvsFilter.Any());
+            isExistsFilter = isExistsFilter ||
+                                (kvsFilter == null &&
+                                    kvsFilter.Any(v => v.Value != null &&
+                                                       v.Key != null &&
+                                                        v.Value.Any())); 
+
+            if (!isExistsFilter)
                 return query;
 
             foreach (var kv in kvsFilter)
@@ -128,7 +134,7 @@ namespace FastFrame.Infrastructure
                     var values = item.Value.ToSplitArray(" ");
                     if (values.Length == 0)
                         continue;
-                    
+
 
                     var qList = new List<string>();
 
@@ -151,13 +157,13 @@ namespace FastFrame.Infrastructure
                         continue;
 
                     var propertyInfo = GetPropertyInfoByNames(typeof(T), item.Name);
-                    var operate = item.Compare.StartsWith("!")? "!=" : "==";
+                    var operate = item.Compare.StartsWith("!") ? "!=" : "==";
 
                     /*如果属性为数组，则要拆出来成多个OR*/
                     if (propertyInfo.PropertyType.IsArray)
                     {
                         var qList = new List<string>();
-                        
+
                         foreach (var v in values)
                         {
                             qList.Add($"{item.Name}.Contains(@{rIndex++})");

@@ -83,7 +83,7 @@ namespace FastFrame.Service.Services.Basis
         /// </summary>        
         public async Task<IEnumerable<PermissionModel>> Permissions()
         {
-            var currUser = UserProvider.GetCurrUser();
+            var currUser = AppSession.GetCurrUser();
 
             var user = await userRepository.GetAsync(currUser.Id);
 
@@ -120,7 +120,7 @@ namespace FastFrame.Service.Services.Basis
         /// </summary> 
         public async Task<bool> ExistPermission(string moduleName, params string[] methodNames)
         {
-            var currUser = UserProvider.GetCurrUser();
+            var currUser = AppSession.GetCurrUser();
 
             if (currUser.IsAdmin)
                 return true;

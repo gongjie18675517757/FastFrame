@@ -48,7 +48,9 @@ export async function getDefaultModel(name = '') {
     model.Modify_User_Id = store.state.currUser.Id
     model.Modify_User = store.state.currUser
   }
-  return model
+  return {
+    ...model
+  }
 }
 
 /**

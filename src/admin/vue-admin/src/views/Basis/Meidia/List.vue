@@ -3,7 +3,7 @@
     <v-layout row wrap>
       <v-flex xs12>
         <v-card>
-          <v-toolbar text dense color="transparent">
+          <v-toolbar flat dense color="transparent" height="30px">
             <v-toolbar-title>资源列表</v-toolbar-title>
             <v-spacer></v-spacer>
             <span class="hidden-sm-and-down">
@@ -16,23 +16,19 @@
                 :disabled="evalDisabled(btn)"
                 @click="evalAction(btn)"
                 small
+                text
               >
                 <v-icon>{{btn.icon}}</v-icon>
                 <span>{{btn.title}}</span>
               </a-btn>
             </span>
-            <v-menu offset-y :close-on-content-click="false">
-              <v-btn
-                slot="activator"
-                title="设置"
-                small
-                :color="$vuetify.breakpoint.smAndDown?'':'success'"
-                :icon="$vuetify.breakpoint.smAndDown"
-              >
-                <v-icon>more_vert</v-icon>
-                <span v-if="!$vuetify.breakpoint.smAndDown">更多</span>
-              </v-btn>
-              <v-list two-line dense expand>
+            <v-menu offset-y>
+              <template v-slot:activator="{ on }">
+                <v-btn v-on="on" title="设置" small icon>
+                  <v-icon>more_vert</v-icon>
+                </v-btn>
+              </template>
+              <v-list dense>
                 <v-list-item
                   v-for="item in [...($vuetify.breakpoint.smAndDown?basisBtns:[])].filter(r=>evalShow(r))"
                   :key="`${item.title}_${item.name}`"
@@ -71,7 +67,7 @@
           <v-card-text class="pa-0">
             <vue-perfect-scrollbar
               class="media-content--warp"
-              :class="[success?'dialog-page':'full-page']"
+              :class="[isTab?'tab-page':isDialog?'dialog-page':'full-page']"
             >
               <v-container fluid>
                 <v-layout row wrap v-if="view ==='grid'">
@@ -121,7 +117,7 @@
 import VuePerfectScrollbar from "vue-perfect-scrollbar";
 import GridItem from "./GridItem.vue";
 import ListItem from "./ListItem.vue";
-import {  upload } from "@/utils"; 
+import { upload } from "@/utils";
 import rules from "@/rules";
 export default {
   components: {
@@ -131,7 +127,11 @@ export default {
   },
   props: {
     success: Function,
-    close: Function
+    close: Function,
+    isDialog: Boolean,
+    isTab: Boolean,
+    p: String, //上级
+    s: String //搜索
   },
   data() {
     return {
@@ -149,12 +149,13 @@ export default {
           title: "上传文件",
           color: "success",
           name: "Add",
+          text: true,
           icon: "cloud_upload",
           action() {
             this.upload();
           },
           disabled() {
-            return this.uploading;
+            return this.uploading || this.s || this.isDialog;
           }
         },
         {
@@ -164,6 +165,9 @@ export default {
           icon: "search",
           action() {
             this.search();
+          },
+          disabled() {
+            return this.uploading;
           }
         },
         {
@@ -173,6 +177,9 @@ export default {
           icon: "folder",
           action() {
             this.addFolder();
+          },
+          disabled() {
+            return this.uploading || this.s || this.isDialog;
           }
         },
         {
@@ -184,11 +191,11 @@ export default {
             this.handleDelete();
           },
           disabled({ selection }) {
-            return selection.length == 0;
+            return selection.length == 0 || this.isDialog;
           }
         },
         {
-          title: "刷新",
+          title: "重置",
           color: "info",
           name: "List",
           icon: "refresh",
@@ -203,10 +210,10 @@ export default {
           icon: "arrow_upward",
           action() {
             // this.stack.splice(this.stack.length - 1, 1);
-            this.$router.push(`/meidia/list?id=${this.curr.Parent_Id}`);
+            this.$router.push(`/meidia/list?p=${this.curr.Parent_Id}`);
           },
           disabled() {
-            return !this.curr;
+            return !this.curr || this.s;
           }
         }
       ]
@@ -223,13 +230,8 @@ export default {
       };
     }
   },
-  watch: {
-    $route({ query }) {
-      this.loadList(query.id || null, query.v);
-    }
-  },
   created() {
-    this.loadList(this.$route.query.id || null);
+    this.loadList();
   },
   methods: {
     evalShow({ show }) {
@@ -247,13 +249,16 @@ export default {
       if (typeof disabled == "boolean") val = disabled;
       if (typeof disabled == "string") val = !!disabled;
 
-      return val;
+      return !!val;
     },
     evalAction({ action }) {
       if (typeof action == "function") action.call(this, this.context);
     },
     refrsh() {
-      this.$router.push("/meidia/list");
+      this.$emit("close");
+      this.$nextTick(() => {
+        this.$router.replace(`/meidia/list`);
+      });
     },
     handleClick(item) {
       this.currItem = item;
@@ -265,8 +270,8 @@ export default {
         this.$router.push(`/meidia/list?id=${Id}`);
       }
     },
-    async loadList(val = "null", keyword = "") {
-      let url = `/api/Meidia/Meidias/${val}?v=${keyword}`;
+    async loadList() {
+      let url = `/api/Meidia/Meidias/${this.p}?v=${this.s}`;
       let { Curr, Children } = await this.$http.get(url);
       this.curr = Curr;
       this.items = Children;
@@ -302,7 +307,10 @@ export default {
     async addFolder() {
       let { name } = await this.$message.prompt({
         title: "文件夹名称",
-        maxWidth: "500px",
+        width: "500px",
+        model: {
+          name: null
+        },
         options: [
           {
             Name: "name",
@@ -324,8 +332,11 @@ export default {
     search() {
       this.$message
         .prompt({
-          title: "文件夹名称",
-          maxWidth: "500px",
+          title: "文件/文件夹名称",
+          width: "500px",
+          model: {
+            name: null
+          },
           options: [
             {
               Name: "name",
@@ -337,7 +348,10 @@ export default {
           ]
         })
         .then(({ name }) => {
-          this.$router.push(`/meidia/list?v=${name}`);
+          this.$emit("close");
+          this.$nextTick(() => {
+            this.$router.replace(`/meidia/list?s=${name}`);
+          });
         });
     },
     async handleDelete() {
@@ -380,6 +394,11 @@ export default {
 
 .dialog-page {
   height: calc(100vh - 214px);
+  overflow: auto;
+}
+
+.tab-page {
+  height: calc(100vh - 180px);
   overflow: auto;
 }
 </style>

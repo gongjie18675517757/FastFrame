@@ -323,7 +323,7 @@ export default {
             ]),
             h('div', {
               style: {
-                width: this.errorMessages ? 'calc(100% - 150px - 150px)' : 'calc(100% - 150px)',
+                width: this.errorMessages ? 'calc(100% - 150px - 50px)' : 'calc(100% - 150px)',
                 'padding-top': props.disabled ? '10px' : null,
                 'padding-left': '5px'
               }

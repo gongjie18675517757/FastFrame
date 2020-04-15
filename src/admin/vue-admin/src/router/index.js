@@ -27,7 +27,7 @@ function loadAreas() {
         name: `${key}_List`.toLowerCase(),
         meta: {
           title: `${val}列表`,
-          keepAlive: true,
+          keepAlive: false,
           moduleName: key,
           pageName: 'List'
         },

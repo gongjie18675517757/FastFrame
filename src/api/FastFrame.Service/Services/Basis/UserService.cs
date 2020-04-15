@@ -13,19 +13,7 @@ using System.Threading.Tasks;
 namespace FastFrame.Service.Services.Basis
 {
     public partial class UserService
-    {
-        private readonly ICurrentUserProvider currentUserProvider; 
-
-        public UserService(
-            ICurrentUserProvider currentUserProvider,
-            IRepository<RoleMember> roleMemberRepository,
-            IRepository<Role> roleRepository,
-            IRepository<Resource> resourceRepository,
-            IRepository<User> userRepository) : this(resourceRepository, userRepository)
-        {
-            this.currentUserProvider = currentUserProvider; 
-        }
-
+    { 
         protected override Task OnAdding(UserDto input, User entity)
         {
             entity.GeneratePassword();
@@ -46,7 +34,7 @@ namespace FastFrame.Service.Services.Basis
         /// </summary> 
         public async Task<UserDto> ToogleAdminIdentity(string id)
         {
-            if (!currentUserProvider.GetCurrUser().IsAdmin)
+            if (!AppSession.GetCurrUser().IsAdmin)
                 throw new Exception("没有权限!");
             var user = await userRepository.GetAsync(id);
             if (user == null)
@@ -70,7 +58,7 @@ namespace FastFrame.Service.Services.Basis
         /// </summary> 
         public async Task<UserDto> ToogleDisabled(string id)
         {
-            if (!currentUserProvider.GetCurrUser().IsAdmin)
+            if (!AppSession.GetCurrUser().IsAdmin)
                 throw new Exception("没有权限!");
             var user = await userRepository.GetAsync(id);
             if (user == null)

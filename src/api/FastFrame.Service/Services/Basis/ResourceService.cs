@@ -18,7 +18,7 @@ namespace FastFrame.Service.Services.Basis
 
         protected override async Task OnAdding(ResourceDto input, Resource entity)
         {
-            entity.Uploader_Id = UserProvider?.GetCurrUser().Id;
+            entity.Uploader_Id = AppSession?.GetCurrUser().Id;
             entity.UploadTime = DateTime.Now;
 
             await base.OnAdding(input, entity);

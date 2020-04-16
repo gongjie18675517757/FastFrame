@@ -3,10 +3,8 @@ import Vuex from 'vuex'
 import $http from '../httpClient'
 import router from '../router'
 import menuList from './menu'
-import {
-  sleep,
-  eventBus
-} from '@/utils'
+import { sleep } from '@/utils'
+import { start, stop } from '../hubs'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -102,10 +100,6 @@ export default new Vuex.Store({
     login(state, payload) {
       state.currUser = payload
     },
-    logout(state) {
-      state.isLoadPermission = false
-      state.currUser = null
-    },
     setPermission(state, payload) {
       state.permissionList = payload
     },
@@ -173,17 +167,49 @@ export default new Vuex.Store({
       }
     },
 
+    /**
+     * 登出
+     * @param {*} param0 
+     */
+    logout({ state }) {
+      state.isLoadPermission = false
+      state.currUser = {}
+      stop();
+      $http.post('/api/account/logout')
+    },
 
+    /**
+     * 验证身份
+     * @param {*} param0 
+     */
+    existsIdentity({
+      dispatch,
+      state 
+    }) {
+      if (state.currUser && state.currUser.Id) {
+        return;
+      }
+      return $http.get("/api/account/GetCurrent").then(data => {
+        start();
+        return dispatch('login', data)
+      }).catch((err) => {
+        stop();
+        dispatch('logout')
+        throw err;
+      })
+    },
 
+    /**
+     * 登陆
+     * @param {*} param0 
+     * @param {*} param1 
+     */
     login({
       commit,
       state
-    }, {
-      user
-    }) {
+    }, user) {
       commit('login', user);
-
-      $http.get('/api/Permission/Permissions').then(data => {
+      return $http.get('/api/Permission/Permissions').then(data => {
         commit('setPermission', data)
         state.isLoadPermission = true;
 
@@ -216,9 +242,13 @@ export default new Vuex.Store({
 
         state.menuList = JSON.parse(JSON.stringify(menuList)).filter(existsMenuPermission)
       })
-      eventBus.$emit("init");
     },
 
+    /**
+     * 加载数据字典
+     * @param {*} param0 
+     * @param {*} name 
+     */
     loadEnumValues({
       state
     }, name) {
@@ -244,18 +274,6 @@ export default new Vuex.Store({
         await sleep(1000)
       }
       return state.tenant || {};
-    },
-    existsLoginAsync: state => async () => {
-      for (let count = 0; count < 10; count++) {
-        if (!state.currUser.Id) {
-          await sleep(100)
-        } else {
-          break;
-        }
-      }
-      if (!state.currUser.Id) {
-        throw new Error('未登陆');
-      }
     },
     existsPermission: state => (moduleName, actionName = 'List') => {
       let arr = Array.isArray(actionName) ? actionName : [actionName];

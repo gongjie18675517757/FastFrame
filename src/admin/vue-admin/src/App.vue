@@ -33,14 +33,7 @@ export default {
     }
   },
   created() {
-    if (!this.$store.state.currUser || !this.$store.state.currUser.Id) {
-      this.$http.get("/api/account/GetCurrent").then(user => {
-        this.$store.dispatch({
-          type: "login",
-          user
-        });
-      });
-    }
+     
   },
   methods: {
     resufresh() {

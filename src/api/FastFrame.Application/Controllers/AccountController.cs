@@ -52,7 +52,8 @@ namespace FastFrame.Application.Controllers
         /// 登出
         /// </summary>
         /// <returns></returns>
-        [HttpPost]       
+        [HttpPost]
+        [EveryoneAccess]
         public async Task LogOut()
         {
             await currentUserProvider.LogOut();

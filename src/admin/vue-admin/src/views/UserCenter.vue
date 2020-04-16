@@ -2,7 +2,7 @@
   <v-layout justify-center app class="form">
     <v-flex xs12 sm10 md8>
       <v-card>
-        <v-toolbar text dense color="transparent">
+        <v-toolbar flat dense color="transparent">
           <v-toolbar-title>个人中心</v-toolbar-title>
           <v-spacer></v-spacer>
         </v-toolbar>

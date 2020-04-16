@@ -223,6 +223,21 @@ router.beforeEach(async (to, from, nextFunc) => {
     return
   }
 
+  try {
+    /**
+     * 验证登录身份
+     */
+    await store.dispatch('existsIdentity') 
+  } catch (error) { 
+    nextFunc({
+      path: '/login',
+      query: {
+        redirect: to.fullPath
+      }
+    })
+    return
+  }
+
   if (!to.meta.moduleName) {
     next();
     return
@@ -238,19 +253,7 @@ router.beforeEach(async (to, from, nextFunc) => {
         redirect: to.fullPath
       }
     })
-  }
-
-  try {
-    await store.getters.existsLoginAsync()
-  } catch (error) {
-    next({
-      path: '/login',
-      query: {
-        redirect: to.fullPath
-      }
-    })
-    return
-  }
+  } 
 })
 
 router.afterEach((to) => {

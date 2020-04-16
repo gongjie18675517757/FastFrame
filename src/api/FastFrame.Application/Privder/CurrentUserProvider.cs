@@ -109,8 +109,8 @@ namespace FastFrame.Application.Privder
 
         public async Task LogOut()
         {
-            var token = GetToken();
-            await cSRedisClient.DelAsync(currUser.ToKen);
+            if (currUser != null)
+                await cSRedisClient.DelAsync(currUser.ToKen);
         }
 
         public void Refresh()

@@ -1,9 +1,6 @@
 import * as signalR from "@microsoft/signalr";
-import {
-    alert,
-    sleep,
-    eventBus
-} from "../utils"
+
+import { sleep } from "../utils"
 
 import store from '../store'
 
@@ -12,7 +9,10 @@ const connection = new signalR.HubConnectionBuilder()
     .configureLogging(signalR.LogLevel.Information)
     .build()
 
-connection.onclose(onError)
+connection.onclose(function () {
+    window.console.log(`signalR断开连接`);
+    onError();
+})
 
 /**
  * 连接
@@ -24,7 +24,7 @@ export async function start() {
         window.console.error(err)
     }
     try {
-        window.console.log('开始连接');
+        window.console.log('signalR开始连接');
         await connection.start()
         onConnectioned()
     } catch (error) {
@@ -41,10 +41,10 @@ export async function stop() {
 
 
 const onError = async (err) => {
-    if (store.state.currUser && store.state.currUser.Id) {
-        window.console.err(err)
-        await sleep(5000)
-        await start()
+    window.console.error(err) 
+    await sleep(5000)
+    if (store.state.currUser && store.state.currUser.Id) { 
+        start()
     }
 }
 
@@ -52,16 +52,11 @@ async function onConnectioned() {
     window.console.log('signalR连接成功');
 }
 
-
-
-connection.on("Notify", (msg) => {
-    alert.success(msg.content)
+connection.on("Notify", function () {
+    window.console.log(...arguments)
 })
 
 connection.on('welcom', function () {
-
+    window.console.log(...arguments)
 })
 
-eventBus.$on('init', () => {
-    start()
-})

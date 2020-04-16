@@ -51,7 +51,7 @@
 <script>
 // import { validationMixin } from 'vuelidate'
 // import { required, maxLength, email } from 'vuelidate/lib/validators'
- 
+
 export default {
   data: () => ({
     loading: false,
@@ -78,13 +78,19 @@ export default {
       }
       this.loading = true;
       try {
-        let user = await this.$http.post("/api/account/login", this.model);
+        /**
+         * 登陆
+         */
+        await this.$http.post("/api/account/login", this.model);
 
-        this.$store.dispatch({
-          type: "login",
-          user
-        });
+        /**
+         * 验证登陆状态
+         */
+        await this.$store.dispatch("existsIdentity");
 
+        /**
+         * 跳转
+         */
         let redirect = this.$route.query.redirect || "/";
         this.$router.push(redirect);
       } finally {

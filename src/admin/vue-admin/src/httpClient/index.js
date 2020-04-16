@@ -43,17 +43,23 @@ axios.interceptors.response.use(function (response) {
     if (error.response && error.response.status) {
         switch (error.response.status) {
             case 401:
-                router.push({
-                    path: '/login',
-                    query: {
-                        redirect: store.state.lastUrl
-                    }
-                })
+                if (store.state.currUser && store.state.currUser.Id) {
+                    store.dispatch('logout')
+                    store.dispatch('existsIdentity').catch(() => {
+                        router.push({
+                            path: '/login',
+                            query: {
+                                redirect: store.state.lastUrl
+                            }
+                        })
+                    })
+                }
+
                 break;
             case 400:
             case 403:
                 if (error.response.data.Message)
-                alert.error(error.response.data.Message)
+                    alert.error(error.response.data.Message)
                 break;
             default:
                 break;

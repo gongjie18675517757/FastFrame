@@ -30,17 +30,17 @@ namespace FastFrame.Application.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IEnumerable<string>> Post()
+        public async Task<IEnumerable<ResourceDto>> Post()
         {
             if (Request.Form.Files.Count == 0)
-                throw new System.Exception("无有效文件!");
-            var result = new List<string>();
+                throw new Exception("无有效文件!");
+            var result = new List<ResourceDto>();
 
-            var files = Request.Form.Files;
-
-            foreach (var formFile in files)
+            foreach (var formFile in Request.Form.Files)
             {
-                var stream = formFile.OpenReadStream();
+                using var stream = new System.IO.MemoryStream();
+                await formFile.CopyToAsync(stream);
+
                 stream.Position = 0;
                 var md5 = stream.ToMD5();
                 stream.Position = 0;
@@ -50,14 +50,18 @@ namespace FastFrame.Application.Controllers
                 if (path.IsNullOrWhiteSpace())
                     path = await resourceProvider.WriteAsync(stream);
 
-                result.Add(await resourceService.AddAsync(new ResourceDto()
+                var resource = new ResourceDto()
                 {
                     ContentType = formFile.ContentType,
                     Name = formFile.FileName,
                     Path = path,
                     Size = formFile.Length,
                     MD5 = md5,
-                }));
+                };
+
+                await resourceService.AddAsync(resource);
+
+                result.Add(resource);
             }
 
             return result;

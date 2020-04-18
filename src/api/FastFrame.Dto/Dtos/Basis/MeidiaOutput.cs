@@ -5,8 +5,8 @@ namespace FastFrame.Dto.Basis
 {
     public partial class MeidiaOutput
     {
-        public Meidia Curr { get; set; }
+        public string Super_Id { get; set; }
 
-        public IEnumerable<MeidiaDto> Children { get; set; }
+        public IEnumerable<MeidiaModel> Children { get; set; }
     }
 }

@@ -256,11 +256,11 @@ router.beforeEach(async (to, from, nextFunc) => {
   } 
 })
 
-router.afterEach((to) => {
+router.afterEach((to) => { 
   if (!to.meta.allowAnonymous) {
     store.state.lastUrl = to.fullPath
   }
-})
+}) 
 
 export default router
 

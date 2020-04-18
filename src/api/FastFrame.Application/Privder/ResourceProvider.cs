@@ -38,7 +38,7 @@ namespace FastFrame.Application.Privder
             if (!Directory.Exists(dirPath))
                 Directory.CreateDirectory(dirPath);
 
-            relativelyPath = Path.Combine(relativelyPath, $"{IdGenerate.NetId()}");
+            relativelyPath = Path.Combine(relativelyPath, Path.GetRandomFileName());
             var path = Path.Combine(option.Value.BasePath, relativelyPath);
             using (var fileStream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.Write))
             {

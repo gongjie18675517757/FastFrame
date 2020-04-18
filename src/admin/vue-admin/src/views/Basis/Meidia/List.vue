@@ -58,7 +58,7 @@
                 </v-list-item>
               </v-list>
             </v-menu>
-            <v-btn icon @click="close" title="关闭" v-if="success">
+            <v-btn icon @click="$emit('close')" title="关闭" v-if="isDialog">
               <v-icon>close</v-icon>
             </v-btn>
           </v-toolbar>
@@ -69,18 +69,20 @@
               class="media-content--warp"
               :class="[isTab?'tab-page':isDialog?'dialog-page':'full-page']"
             >
-              <v-container fluid>
-                <v-layout row wrap v-if="view ==='grid'">
-                  <GridItem
-                    v-for="item in orderItems"
-                    :key="item.Id"
-                    :item="item"
-                    :selected="currItem==item"
-                    :mode="view"
-                    @click="handleClick(item)"
-                    @dblclick="handleDbClick(item)"
-                  />
-                </v-layout>
+              <v-container fluid v-if="items.length">
+                <v-row v-if="view ==='grid'">
+                  <v-col v-for="item in orderItems" :key="item.name" cols="12" sm="4" md="3" lg="2">
+                    <GridItem
+                      :item="item"
+                      :selected="currItem==item"
+                      :mode="view"
+                      @click="handleClick(item)"
+                      @dblclick="handleDbClick(item)"
+                      @remove="handleRemove"
+                    />
+                  </v-col>
+                </v-row>
+
                 <v-layout column v-else>
                   <v-list dense class="transparent">
                     <ListItem
@@ -95,17 +97,19 @@
                   </v-list>
                 </v-layout>
               </v-container>
+              <v-container fluid v-else style="height: 100%;">
+                <v-row align="center" justify="center" style="height: 100%;">
+                  <a @click="addFolder">创建文件夹</a>
+
+                  <a @click="upload" style="padding-left:15px;">上传文件</a>
+                </v-row>
+              </v-container>
             </vue-perfect-scrollbar>
           </v-card-text>
-          <v-card-actions v-if="success">
-            <v-btn text @click="close">取消</v-btn>
+          <v-card-actions v-if="isDialog">
+            <v-btn text @click="$emit('close')">取消</v-btn>
             <v-spacer></v-spacer>
-            <v-btn
-              color="primary"
-              text
-              @click="handleSuccess"
-              :disabled="!currItem || currItem.IsFolder"
-            >确认</v-btn>
+            <v-btn color="primary" text @click="handleSuccess" :disabled="!currItem">确认</v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -117,7 +121,7 @@
 import VuePerfectScrollbar from "vue-perfect-scrollbar";
 import GridItem from "./GridItem.vue";
 import ListItem from "./ListItem.vue";
-import { upload } from "@/utils";
+import { upload } from "../../../utils";
 import rules from "@/rules";
 export default {
   components: {
@@ -125,9 +129,7 @@ export default {
     ListItem,
     GridItem
   },
-  props: {
-    success: Function,
-    close: Function,
+  props: { 
     isDialog: Boolean,
     isTab: Boolean,
     p: String, //上级
@@ -141,10 +143,25 @@ export default {
       items: [],
       view: "grid",
       currItem: null,
-      curr: null,
+      Super_Id: null, //上级文件夹
+      current_Id: this.p, //当前文件夹
+      kw: this.s,
       uploading: false,
       uploadValue: 0,
       basisBtns: [
+        {
+          title: "返回上一级",
+          color: "info",
+          name: "List",
+          icon: "arrow_upward",
+          action() {
+            this.current_Id = this.Super_Id;
+            this.loadList();
+          },
+          disabled() {
+            return !this.current_Id;
+          }
+        },
         {
           title: "上传文件",
           color: "success",
@@ -155,7 +172,7 @@ export default {
             this.upload();
           },
           disabled() {
-            return this.uploading || this.s || this.isDialog;
+            return this.uploading || this.kw || this.isDialog;
           }
         },
         {
@@ -179,19 +196,7 @@ export default {
             this.addFolder();
           },
           disabled() {
-            return this.uploading || this.s || this.isDialog;
-          }
-        },
-        {
-          title: "删除",
-          color: "error",
-          name: "Delete",
-          icon: "delete",
-          action() {
-            this.handleDelete();
-          },
-          disabled({ selection }) {
-            return selection.length == 0 || this.isDialog;
+            return this.uploading || this.kw || this.isDialog;
           }
         },
         {
@@ -201,19 +206,6 @@ export default {
           icon: "refresh",
           action() {
             this.refrsh();
-          }
-        },
-        {
-          title: "返回上一级",
-          color: "info",
-          name: "List",
-          icon: "arrow_upward",
-          action() {
-            // this.stack.splice(this.stack.length - 1, 1);
-            this.$router.push(`/meidia/list?p=${this.curr.Parent_Id}`);
-          },
-          disabled() {
-            return !this.curr || this.s;
           }
         }
       ]
@@ -255,25 +247,30 @@ export default {
       if (typeof action == "function") action.call(this, this.context);
     },
     refrsh() {
-      this.$emit("close");
-      this.$nextTick(() => {
-        this.$router.replace(`/meidia/list`);
-      });
+      this.kw = null;
+      this.items = [];
+      this.$nextTick(this.loadList);
     },
     handleClick(item) {
       this.currItem = item;
+      let { Id, IsFolder } = item;
+      if (IsFolder) {
+        this.currItem = null;
+        this.current_Id = Id;
+        this.loadList();
+      }
     },
     handleDbClick({ Id, IsFolder }) {
       if (IsFolder) {
         this.currItem = null;
-        // this.stack.push(Id);
-        this.$router.push(`/meidia/list?id=${Id}`);
+        this.current_Id = Id;
+        this.loadList();
       }
     },
     async loadList() {
-      let url = `/api/Meidia/Meidias/${this.p}?v=${this.s}`;
-      let { Curr, Children } = await this.$http.get(url);
-      this.curr = Curr;
+      let url = `/api/Meidia/List/${this.current_Id || ""}?v=${this.kw || ""}`;
+      let { Super_Id, Children } = await this.$http.get(url);
+      this.Super_Id = Super_Id;
       this.items = Children;
     },
     async upload() {
@@ -293,13 +290,17 @@ export default {
 
         let postData = {
           Name: resource.Name,
-          parent_Id: (this.curr || {}).Id,
+          Super_Id: this.current_Id,
           Resource_Id: resource.Id,
           IsFolder: false
         };
-        let entity = await this.$http.post("/api/Meidia/post", postData);
-        this.items.push(entity);
-        this.$message.toast.success("添加成功!");
+        let Id = await this.$http.post("/api/Meidia/post", postData);
+        this.items.push({
+          ...postData,
+          ContentType: resource.ContentType,
+          Id
+        });
+         
       } finally {
         this.uploading = false;
       }
@@ -323,11 +324,14 @@ export default {
       let postData = {
         Name: name,
         IsFolder: true,
-        parent_Id: (this.curr || {}).Id
+        Super_Id: this.current_Id
       };
-      let entity = await this.$http.post("/api/Meidia/post", postData);
-      this.items.push(entity);
-      this.$message.toast.success("添加成功!");
+      let Id = await this.$http.post("/api/Meidia/post", postData);
+      this.items.push({
+        ...postData,
+        Id
+      });
+      
     },
     search() {
       this.$message
@@ -348,23 +352,37 @@ export default {
           ]
         })
         .then(({ name }) => {
-          this.$emit("close");
-          this.$nextTick(() => {
-            this.$router.replace(`/meidia/list?s=${name}`);
-          });
+          this.kw = name;
+          this.loadList();
         });
     },
-    async handleDelete() {
-      await this.$message.confirm({
-        title: "提示",
-        content: "确认要删除吗?"
-      });
-      let { Id } = this.currItem;
-      let index = this.items.findIndex(r => r == this.currItem);
-      await this.$http.delete(`/api/meidia/delete/${Id}`);
-      this.$message.toast.success("删除成功");
-      this.currItem = null;
-      this.items.splice(index, 1);
+    handleRemove(item) {
+      this.$message
+        .confirm({
+          title: "提示",
+          content: "确认要删除吗?"
+        })
+        .then(() => {
+          let confirmPromise = Promise.resolve();
+          if (item.IsFolder) {
+            confirmPromise = this.$message.confirm({
+              title: "提示",
+              content: "是否删除文件夹下的所有文件?"
+            });
+          }
+          return confirmPromise;
+        })
+        .then(() => {
+          let { Id } = item;
+          let index = this.items.findIndex(r => r == item);
+          this.$http.delete(`/api/meidia/delete/${Id}`).then(() => {
+            if (item.IsFolder) {
+              this.refrsh();
+            } else {
+              this.items.splice(index, 1);
+            }
+          });
+        });
     },
     handleSuccess() {
       this.$emit("success", [this.currItem]);

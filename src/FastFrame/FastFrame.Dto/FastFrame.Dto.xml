@@ -70,6 +70,46 @@
             修改时间 
              </summary>
         </member>
+        <member name="P:FastFrame.Dto.Basis.MeidiaModel.Super_Id">
+            <summary>
+            上级
+            </summary> 
+        </member>
+        <member name="P:FastFrame.Dto.Basis.MeidiaModel.Name">
+            <summary>
+            名称
+            </summary> 
+        </member>
+        <member name="P:FastFrame.Dto.Basis.MeidiaModel.Resource_Id">
+            <summary>
+            资源
+            </summary> 
+        </member>
+        <member name="P:FastFrame.Dto.Basis.MeidiaModel.IsFolder">
+            <summary>
+            是否文件夹
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.MeidiaModel.Size">
+            <summary>
+            资源大小
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.MeidiaModel.ContentType">
+            <summary>
+            资源标识
+            </summary> 
+        </member>
+        <member name="P:FastFrame.Dto.Basis.MeidiaModel.CreateName">
+            <summary>
+            创建人
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.MeidiaModel.CreateTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
         <member name="T:FastFrame.Dto.Basis.PermissionDto">
              <summary>
             权限 
@@ -345,11 +385,6 @@
             上级 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.MeidiaDto.Href">
-             <summary>
-            链接 
-             </summary>
-        </member>
         <member name="P:FastFrame.Dto.Basis.MeidiaDto.Name">
              <summary>
             名称 
@@ -358,16 +393,6 @@
         <member name="P:FastFrame.Dto.Basis.MeidiaDto.Resource_Id">
              <summary>
             资源 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.MeidiaDto.Resource">
-             <summary>
-            资源 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.MeidiaDto.ContentType">
-             <summary>
-            资源标识 
              </summary>
         </member>
         <member name="P:FastFrame.Dto.Basis.MeidiaDto.IsFolder">

@@ -89,10 +89,27 @@
             数字字典 
              </summary>
         </member>
-        <member name="T:FastFrame.Application.Controllers.Basis.MeidiaController">
-             <summary>
-            图片库 
-             </summary>
+        <member name="M:FastFrame.Application.Controllers.Basis.MeidiaController.Delete(System.String)">
+            <summary>
+            删除
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.Controllers.Basis.MeidiaController.Put(System.String,System.String)">
+            <summary>
+            修改名称
+            </summary>
+            <param name="id"></param>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.Controllers.Basis.MeidiaController.Post(FastFrame.Dto.Basis.MeidiaDto)">
+            <summary>
+            添加
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
         </member>
         <member name="T:FastFrame.Application.Controllers.Basis.NotifyController">
              <summary>

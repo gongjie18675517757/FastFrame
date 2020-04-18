@@ -3,11 +3,17 @@ import store from '../../store'
 import { alert } from '../../utils'
 
 Vue.prototype.$message = {
-    alert() {
-        return this.dialog(() => import('./Alert'), ...arguments)
+    alert(pars) {
+        return this.dialog(() => import('./Alert'), {
+            width: '600px',
+            ...pars
+        })
     },
-    confirm() {
-        return this.dialog(() => import('./Confirm.vue'), ...arguments)
+    confirm(pars) {
+        return this.dialog(() => import('./Confirm.vue'), {
+            width: '600px',
+            ...pars
+        })
     },
     prompt() {
         return this.dialog(() => import('./Prompt.vue'), ...arguments)

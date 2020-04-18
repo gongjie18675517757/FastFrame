@@ -28,12 +28,6 @@ namespace FastFrame.Dto.Basis
 		public MeidiaViewModel Super {get;set;}
 		
 		/// <summary>
-		///链接 
-		/// </summary>
-		[StringLength(200)]
-		public string Href {get;set;}
-		
-		/// <summary>
 		///名称 
 		/// </summary>
 		[StringLength(50)]
@@ -43,19 +37,7 @@ namespace FastFrame.Dto.Basis
 		/// <summary>
 		///资源 
 		/// </summary>
-		[RelatedTo(typeof(Resource))]
 		public string Resource_Id {get;set;}
-		
-		/// <summary>
-		///资源 
-		/// </summary>
-		public ResourceViewModel Resource {get;set;}
-		
-		/// <summary>
-		///资源标识 
-		/// </summary>
-		[StringLength(50)]
-		public string ContentType {get;set;}
 		
 		/// <summary>
 		///是否文件夹 

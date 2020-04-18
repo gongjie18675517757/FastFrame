@@ -27,7 +27,7 @@ function frmPostData(data) {
 }
 
 axios.interceptors.request.use(function (config) {
-    if (config && config.data) {
+    if (config && config.data && !(config.data instanceof FormData)) {
         let data = frmPostData(JSON.parse(JSON.stringify(config.data)))
         config.data = data;
     }

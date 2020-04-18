@@ -67,16 +67,11 @@
         <member name="T:FastFrame.Entity.Basis.Meidia">
             <summary>
             图片库
-            </summary>
+            </summary> 
         </member>
         <member name="P:FastFrame.Entity.Basis.Meidia.Super_Id">
             <summary>
             上级
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.Meidia.Href">
-            <summary>
-            链接
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Basis.Meidia.Name">
@@ -87,12 +82,7 @@
         <member name="P:FastFrame.Entity.Basis.Meidia.Resource_Id">
             <summary>
             资源
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.Meidia.ContentType">
-            <summary>
-            资源标识
-            </summary>
+            </summary> 
         </member>
         <member name="P:FastFrame.Entity.Basis.Meidia.IsFolder">
             <summary>

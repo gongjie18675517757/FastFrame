@@ -83,9 +83,9 @@ namespace FastFrame.Service
             var entitys = await repository
                         .Where(v => ids.Contains(v.Id))
                         .ToListAsync();
+
             foreach (var entity in entitys)
-            {
-                await OnDeleteing(entity);
+            { 
                 await repository.DeleteAsync(entity);
                 await OnDeleteing(entity);
             }

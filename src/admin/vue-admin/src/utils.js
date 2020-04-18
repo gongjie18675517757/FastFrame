@@ -155,8 +155,7 @@ export function upload({
                     var percentage = Math.round((e.loaded * 100) / e.total) || 0;
                     if (percentage < 100) {
                         onProgress(percentage)
-                    }
-                    window.console.log(percentage)
+                    } 
                 }
             }).then(function (resp) {
                 resolve(resp)

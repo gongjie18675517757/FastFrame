@@ -30,7 +30,7 @@ namespace FastFrame.Entity.Basis
         /// <summary>
         /// 资源标识
         /// </summary>
-        [StringLength(50)]
+        [StringLength(150)]
         public string ContentType { get; set; }
 
         /// <summary>

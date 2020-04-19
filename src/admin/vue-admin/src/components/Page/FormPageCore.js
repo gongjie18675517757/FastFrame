@@ -341,7 +341,8 @@ export let makeChildListeners = function () {
       this.evalRule($event.item.Name);
     },
     reload: () => this.init(),
-    submit: this.submit
+    submit: this.submit,
+    close:this.close
   };
 };
 

@@ -56,9 +56,10 @@ namespace FastFrame.Application.Controllers.Basis
         /// <returns></returns>
         [Permission("Add", "添加")]
         [HttpPost]
-        public virtual async Task<string> Post([FromBody]MeidiaDto @input)
+        public virtual async Task<MeidiaModel> Post([FromBody]MeidiaDto @input)
         {
-            return await service.AddAsync(@input);
+            var id = await service.AddAsync(@input);
+            return await service.GetMeidia(id);
         }
     }
 }

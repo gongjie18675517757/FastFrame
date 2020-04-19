@@ -14,23 +14,8 @@ namespace FastFrame.Service.Services.Basis
     {
         public async Task<MeidiaOutput> Meidias(string id = null, string keyword = "")
         {
-            var resourceRepository = Loader.GetService<IRepository<Resource>>();
-            var query = from a in meidiaRepository
-                        join b in resourceRepository on a.Resource_Id equals b.Id into t_b
-                        from b in t_b.DefaultIfEmpty()
-                        join c in userRepository on a.Create_User_Id equals c.Id
-                        select new MeidiaModel
-                        {
-                            Id = a.Id,
-                            ContentType = b.ContentType,
-                            Resource_Id = a.Resource_Id,
-                            CreateName = c.Name,
-                            Name = a.Name,
-                            CreateTime = a.CreateTime,
-                            IsFolder = a.IsFolder,
-                            Size = b.Size,
-                            Super_Id = a.Super_Id
-                        };
+
+            IQueryable<MeidiaModel> query = MeidiaQuery();
 
             if (!string.IsNullOrWhiteSpace(keyword))
                 query = query.Where(r => r.Name.Contains(keyword));
@@ -47,6 +32,28 @@ namespace FastFrame.Service.Services.Basis
                                             .FirstOrDefaultAsync()
                                             : null
             };
+        }
+
+        private IQueryable<MeidiaModel> MeidiaQuery()
+        {
+            var resourceRepository = Loader.GetService<IRepository<Resource>>();
+            return from a in meidiaRepository
+                   join b in resourceRepository on a.Resource_Id equals b.Id into t_b
+                   from b in t_b.DefaultIfEmpty()
+                   join c in userRepository on a.Create_User_Id equals c.Id
+                   orderby a.IsFolder descending, a.Id descending
+                   select new MeidiaModel
+                   {
+                       Id = a.Id,
+                       ContentType = b.ContentType,
+                       Resource_Id = a.Resource_Id,
+                       CreateName = c.Name,
+                       Name = a.Name,
+                       CreateTime = a.CreateTime,
+                       IsFolder = a.IsFolder,
+                       Size = b.Size,
+                       Super_Id = a.Super_Id
+                   };
         }
 
         public async Task ReName(string id, string name)
@@ -72,6 +79,11 @@ namespace FastFrame.Service.Services.Basis
                     await meidiaRepository.UpdateAsync(item);
                 }
             }
+        }
+
+        public Task<MeidiaModel> GetMeidia(string id)
+        {
+            return MeidiaQuery().Where(v => v.Id == id).FirstOrDefaultAsync();
         }
     }
 }

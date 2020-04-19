@@ -4,7 +4,13 @@
       <router-view v-if="resufreshed" />
     </v-fade-transition>
     <Alert />
-    <v-dialog v-for="(dialog,i) in dialogs" :key="i" :value="true" :width="dialog.pars.width" style="box-shadow:none;">
+    <v-dialog
+      v-for="(dialog,i) in dialogs"
+      :key="i"
+      :value="true"
+      :width="dialog.pars.width"
+      style="box-shadow:none;"
+    >
       <component
         :is="dialog.component"
         v-bind="dialog.pars"
@@ -30,10 +36,21 @@ export default {
   computed: {
     dialogs() {
       return this.$store.state.dialogs;
+    },
+    isXs() {
+      return this.$vuetify.breakpoint.xs;
     }
   },
-  created() {
-     
+  watch: {
+    isXs(val) {
+      this.$store.state.singlePageMode = val;
+      this.$store.state.isXs = val;
+    }
+  },
+  beforeCreate() {
+    let isXs = this.$vuetify.breakpoint.xs;
+    this.$store.state.singlePageMode = isXs;
+    this.$store.state.isXs = isXs;
   },
   methods: {
     resufresh() {
@@ -110,8 +127,16 @@ html {
   /* font-size: 14px; */
 }
 
-.much-input .v-text-field.v-input--dense .v-input__prepend-inner .v-input__icon > .v-icon,
-.much-input .v-text-field.v-input--dense .v-input__append-inner .v-input__icon > .v-icon {
+.much-input
+  .v-text-field.v-input--dense
+  .v-input__prepend-inner
+  .v-input__icon
+  > .v-icon,
+.much-input
+  .v-text-field.v-input--dense
+  .v-input__append-inner
+  .v-input__icon
+  > .v-icon {
   margin-top: 0px;
 }
 

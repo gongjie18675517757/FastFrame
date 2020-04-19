@@ -50,18 +50,16 @@ namespace FastFrame.Application.Controllers
                 if (path.IsNullOrWhiteSpace())
                     path = await resourceProvider.WriteAsync(stream);
 
-                var resource = new ResourceDto()
+                var id = await resourceService.AddAsync(new ResourceDto()
                 {
                     ContentType = formFile.ContentType,
                     Name = formFile.FileName,
                     Path = path,
                     Size = formFile.Length,
                     MD5 = md5,
-                };
+                });
 
-                await resourceService.AddAsync(resource);
-
-                result.Add(resource);
+                result.Add(await resourceService.GetAsync(id));
             }
 
             return result;

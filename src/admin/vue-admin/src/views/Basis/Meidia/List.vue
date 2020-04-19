@@ -79,28 +79,38 @@
                       @click="handleClick(item)"
                       @dblclick="handleDbClick(item)"
                       @remove="handleRemove"
-                    />
+                      @reName="handleReName"
+                      @download="handleDownload"
+                      @preview="handlePreview"
+                    >
+                      <!-- <template v-slot:action="item"></template> -->
+                    </GridItem>
                   </v-col>
                 </v-row>
 
                 <v-layout column v-else>
-                  <v-list dense class="transparent">
-                    <ListItem
-                      v-for="item in orderItems"
-                      :key="item.Id"
-                      :item="item"
-                      :mode="view"
-                      :selected="currItem==item"
-                      @click="handleClick(item)"
-                      @dblclick="handleDbClick(item)"
-                    />
+                  <v-list dense class="transparent" width="800px">
+                    <v-list-item-group v-model="currItem">
+                      <ListItem
+                        v-for="item in orderItems"
+                        :key="item.Id"
+                        :item="item"
+                        :mode="view"
+                        :selected="currItem==item"
+                        @click="handleClick(item)"
+                        @dblclick="handleDbClick(item)"
+                        @remove="handleRemove"
+                        @reName="handleReName"
+                        @download="handleDownload"
+                        @preview="handlePreview"
+                      />
+                    </v-list-item-group>
                   </v-list>
                 </v-layout>
               </v-container>
               <v-container fluid v-else style="height: 100%;">
                 <v-row align="center" justify="center" style="height: 100%;">
                   <a @click="addFolder">创建文件夹</a>
-
                   <a @click="upload" style="padding-left:15px;">上传文件</a>
                 </v-row>
               </v-container>
@@ -122,6 +132,7 @@ import VuePerfectScrollbar from "vue-perfect-scrollbar";
 import GridItem from "./GridItem.vue";
 import ListItem from "./ListItem.vue";
 import { upload } from "../../../utils";
+import fileIcons from "./fileIcons";
 import rules from "@/rules";
 export default {
   components: {
@@ -129,7 +140,7 @@ export default {
     ListItem,
     GridItem
   },
-  props: { 
+  props: {
     isDialog: Boolean,
     isTab: Boolean,
     p: String, //上级
@@ -271,7 +282,43 @@ export default {
       let url = `/api/Meidia/List/${this.current_Id || ""}?v=${this.kw || ""}`;
       let { Super_Id, Children } = await this.$http.get(url);
       this.Super_Id = Super_Id;
-      this.items = Children;
+      this.items = Children.map(this.fmtItem);
+    },
+    fmtItem(v) {
+      let isImage = v.ContentType && v.ContentType.startsWith("image/");
+      v.isImage = isImage;
+      v.icon = this.getIcon(v);
+      return v;
+    },
+    getIcon({ ContentType, Resource_Id, isImage, IsFolder }) {
+      let { folder, file, xlsx, pptx, js, txt, pdf } = fileIcons;
+      if (isImage) {
+        return `/api/resource/get/${Resource_Id}`;
+      } else if (IsFolder) {
+        return folder;
+      } else if (!ContentType) {
+        return file;
+      } else {
+        switch (ContentType) {
+          case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+            return xlsx;
+          case "application/vnd.ms-excel":
+            return xlsx;
+          case "application/vnd.ms-powerpoint":
+            return pptx;
+
+          case "text/javascript":
+            return js;
+
+          case "text/plain":
+            return txt;
+
+          case "application/pdf":
+            return pdf;
+          default:
+            return file;
+        }
+      }
     },
     async upload() {
       // let accept = "image/gif, image/jpeg";
@@ -294,13 +341,12 @@ export default {
           Resource_Id: resource.Id,
           IsFolder: false
         };
-        let Id = await this.$http.post("/api/Meidia/post", postData);
-        this.items.push({
-          ...postData,
-          ContentType: resource.ContentType,
-          Id
-        });
-         
+        let res = await this.$http.post("/api/Meidia/post", postData);
+        this.items.push(
+          this.fmtItem({
+            ...res
+          })
+        );
       } finally {
         this.uploading = false;
       }
@@ -327,11 +373,84 @@ export default {
         Super_Id: this.current_Id
       };
       let Id = await this.$http.post("/api/Meidia/post", postData);
-      this.items.push({
-        ...postData,
-        Id
+      this.items.push(
+        this.fmtItem({
+          ...postData,
+          Id
+        })
+      );
+    },
+    async handleReName(item) {
+      let dialog = this.$message.prompt({
+        title: "名称",
+        width: "500px",
+        model: {
+          name: item.Name
+        },
+        options: [
+          {
+            Name: "name",
+            Type: "String",
+            Description: "名称",
+            rules: [rules.required("文件夹名称")]
+          }
+        ]
       });
-      
+      dialog.then(({ name }) => {
+        if (name == item.Name) return;
+        let beforeName = item.Name;
+        item.Name = name;
+
+        this.$http.put(`/api/Meidia/Put/${item.Id}?name=${name}`).catch(() => {
+          item.Name = beforeName;
+        });
+      });
+    },
+    handleDownload({ IsFolder, Resource_Id, Name }) {
+      if (IsFolder) return;
+      window.open(`/api/resource/get/${Resource_Id}/${Name}`);
+    },
+    handlePreview({ isImage, icon }) {
+      if (!isImage) return;
+      let src = icon;
+      this.$message.dialog({
+        render(h) {
+          let img = h("v-img", {
+            props: {
+              "lazy-src": src,
+              src: src,
+              "max-height": "80vh"
+            },
+            on: {
+              click: () => {
+                this.$emit("success");
+              }
+            }
+          });
+
+          return h(
+            "v-layout",
+            {
+              props: {
+                "grid-list-xl": true,
+                fluid: true,
+                app: true,
+                "align-center": true,
+                "justify-center": true
+              }
+            },
+            [
+              h(
+                "v-flex",
+                {
+                  xs12: true
+                },
+                [img]
+              )
+            ]
+          );
+        }
+      });
     },
     search() {
       this.$message
@@ -391,21 +510,7 @@ export default {
 };
 </script>
 
-<style lang="stylus" scoped>
-.media {
-  &-cotent--wrap, &-menu {
-    min-width: 260px;
-    border-right: 1px solid #eee;
-    /* min-height: calc(100vh - 50px - 64px); */
-  }
-
-  &-detail {
-    min-width: 300px;
-    border-left: 1px solid #eee;
-  }
-}
-
-.full-page {
+<style lang="stylus" scoped>.full-page {
   height: calc(100vh - 140px);
   overflow: auto;
 }

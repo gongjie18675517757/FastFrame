@@ -202,8 +202,7 @@ export let pageMethods = {
     let Id = model.Id || ''
     if (
       this.isDialog ||
-      this.dialogMode ||
-      this.$vuetify.breakpoint.smAndDown
+      (this.dialogMode  && !this.$vuetify.breakpoint.smAndDown)
     ) {
       let components = this.$router.getMatchedComponents(`/${this.name}/add`);
       if (components.length > 1) {
@@ -319,6 +318,29 @@ export let pageMethods = {
 
     return pageInfo;
   },
+  loadMoreList: throttle(function (pager) {
+    this.loading = true;
+    this.loading = true;
+    if(pager.page){
+      pager.page+=1;
+    }
+    Promise.resolve(pager)
+      .then(this.getRequestPars)
+      .then(pagePars => {
+        let method = this.getRequedtMethod()
+        let url = this.getRequestUrl()
+        return method(url, pagePars)
+      }).then(({
+        Total,
+        Data
+      }) => {
+        this.rows.push(...Data)
+        this.total = Total;
+        this.loading = false;
+      }).catch(() => {
+        this.loading = false;
+      })
+  }),
   loadList: throttle(function (pager) {
     this.loading = true;
     this.rows = [];
@@ -332,7 +354,7 @@ export let pageMethods = {
         Total,
         Data
       }) => {
-        this.rows = Data //.map((v, i) => ({ ...v, index: i + 1 }));
+        this.rows = Data
         this.total = Total;
         this.loading = false;
       }).catch(() => {
@@ -419,6 +441,7 @@ export let makeChildListeners = function () {
       this.selection = val;
     },
     loadList: this.loadList,
+    loadMoreList: this.loadMoreList,
     toolItemClick: item => item.action.call(this, { item, selection: this.selection, rows: this.rows }),
     toEdit: (val) => this.toEdit(val),
     changeShowMamageField: () => this.showMamageField = !this.showMamageField,

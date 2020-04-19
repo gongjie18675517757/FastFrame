@@ -15,6 +15,11 @@ export default new Vuex.Store({
     singlePageMode: false,
 
     /**
+     * 是否在移动端模式下
+     */
+    isXs:false,
+
+    /**
      * 多页内容
      */
     pages: [{

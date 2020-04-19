@@ -7,15 +7,15 @@
     :items="rows"
     :server-items-length="totalItems"
     :footer-props="pager"
-    :hide-default-footer="hidePager"
+    :hide-default-footer="hidePager || isXs"
     :value="value"
     v-on="listeners"
     :item-key="rowKey"
     :items-per-page.sync="itemsPerPage"
     :class="[...classArr]"
     :style="styleObj"
-    :show-select="multiple"
-    :single-select="!multiple"
+    :show-select="!isXs && multiple"
+    :single-select="isXs || !multiple"
     :show-expand="!!expandComponent"
     dense
   >
@@ -37,6 +37,17 @@
       <td :colspan="headers.length">
         <component :is="expandComponent" :model="item" />
       </td>
+    </template>
+    <template v-slot:body.append="{ pagination,options}" v-if="!hidePager && isXs">
+      <v-divider />
+      <v-btn
+        v-if="pagination.pageCount>pagination.page"
+        text
+        color="primary"
+        block
+        @click="$emit('loadMoreList',options)"
+      >下一页</v-btn>
+      <p v-else style="height:50px;line-height:50px;text-align: center;color: #dababa;">数据已全部加载完成</p>
     </template>
   </v-data-table>
 </template>
@@ -98,23 +109,30 @@ export default {
     };
   },
   computed: {
+    isXs() {
+      return this.$vuetify.breakpoint.xs;
+    },
     headers() {
       return [
         ...(this.expandComponent
           ? [{ text: "", width: "20px", value: "data-table-expand" }]
           : []),
-        {
-          text: "#",
-          value: "index",
-          sortable: false,
-          width: "50px"
-        },
+        ...(this.isXs
+          ? []
+          : [
+              {
+                text: "#",
+                value: "index",
+                sortable: false,
+                width: "50px"
+              }
+            ]),
 
         ...this.columns.map(c => {
           return {
             text: c.Description,
             value: c.Name,
-            sortBy: !!c.sortBy,
+            sortBy: this.isXs ? false : !!c.sortBy,
             width: c.width || "150px"
           };
         })
@@ -172,5 +190,9 @@ export default {
   > .v-input__control
   > .v-input__slot:before {
   border-style: none;
+}
+
+.v-data-table-header-mobile {
+  display: none;
 }
 </style>

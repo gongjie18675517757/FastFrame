@@ -30,16 +30,6 @@
             名称 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.DeptDto.Supervisor_Id">
-             <summary>
-            主管 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.DeptDto.Supervisor">
-             <summary>
-            主管 
-             </summary>
-        </member>
         <member name="P:FastFrame.Dto.Basis.DeptDto.Super_Id">
              <summary>
             上级 
@@ -80,6 +70,46 @@
             修改时间 
              </summary>
         </member>
+        <member name="P:FastFrame.Dto.Basis.MeidiaModel.Super_Id">
+            <summary>
+            上级
+            </summary> 
+        </member>
+        <member name="P:FastFrame.Dto.Basis.MeidiaModel.Name">
+            <summary>
+            名称
+            </summary> 
+        </member>
+        <member name="P:FastFrame.Dto.Basis.MeidiaModel.Resource_Id">
+            <summary>
+            资源
+            </summary> 
+        </member>
+        <member name="P:FastFrame.Dto.Basis.MeidiaModel.IsFolder">
+            <summary>
+            是否文件夹
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.MeidiaModel.Size">
+            <summary>
+            资源大小
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.MeidiaModel.ContentType">
+            <summary>
+            资源标识
+            </summary> 
+        </member>
+        <member name="P:FastFrame.Dto.Basis.MeidiaModel.CreateName">
+            <summary>
+            创建人
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.MeidiaModel.CreateTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
         <member name="T:FastFrame.Dto.Basis.PermissionDto">
              <summary>
             权限 
@@ -115,6 +145,16 @@
             父级 
              </summary>
         </member>
+        <member name="P:FastFrame.Dto.Basis.PermissionModel.EnCode">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.PermissionModel.Name">
+            <summary>
+            描述
+            </summary>
+        </member>
         <member name="T:FastFrame.Dto.Basis.RoleDto">
              <summary>
             角色 
@@ -128,6 +168,21 @@
         <member name="P:FastFrame.Dto.Basis.RoleDto.Name">
              <summary>
             名称 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.RoleDto.IsDefault">
+             <summary>
+            缺省角色 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.RoleDto.IsAdmin">
+             <summary>
+            管理员角色 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.RoleDto.Remarks">
+             <summary>
+            备注 
              </summary>
         </member>
         <member name="P:FastFrame.Dto.Basis.RoleDto.Create_User_Id">
@@ -159,6 +214,26 @@
              <summary>
             修改时间 
              </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.RolePermissionModel.EnCode">
+            <summary>
+            标记
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.RolePermissionModel.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.RolePermissionModel.IsAuthorization">
+            <summary>
+            是否有权限
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.RolePermissionModel.Children">
+            <summary>
+            子级权限
+            </summary>
         </member>
         <member name="T:FastFrame.Dto.Basis.UserDto">
              <summary>
@@ -300,19 +375,14 @@
             图片库 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.MeidiaDto.Parent_Id">
+        <member name="P:FastFrame.Dto.Basis.MeidiaDto.Super_Id">
              <summary>
             上级 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.MeidiaDto.Parent">
+        <member name="P:FastFrame.Dto.Basis.MeidiaDto.Super">
              <summary>
             上级 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.MeidiaDto.Href">
-             <summary>
-            链接 
              </summary>
         </member>
         <member name="P:FastFrame.Dto.Basis.MeidiaDto.Name">
@@ -323,16 +393,6 @@
         <member name="P:FastFrame.Dto.Basis.MeidiaDto.Resource_Id">
              <summary>
             资源 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.MeidiaDto.Resource">
-             <summary>
-            资源 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.MeidiaDto.ContentType">
-             <summary>
-            资源标识 
              </summary>
         </member>
         <member name="P:FastFrame.Dto.Basis.MeidiaDto.IsFolder">
@@ -380,7 +440,7 @@
             标题 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.NotifyDto.Type_Value">
+        <member name="P:FastFrame.Dto.Basis.NotifyDto.Type_Id">
              <summary>
             类型 
              </summary>
@@ -440,26 +500,6 @@
             修改时间 
              </summary>
         </member>
-        <member name="T:FastFrame.Dto.Basis.NotifyTargetDto">
-             <summary>
-            通知目标 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.NotifyTargetDto.Notify_Id">
-             <summary>
-            通知ID 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.NotifyTargetDto.To_Id">
-             <summary>
-            接收人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.NotifyTargetDto.HaveRead">
-             <summary>
-            已读 
-             </summary>
-        </member>
         <member name="T:FastFrame.Dto.Basis.ResourceDto">
              <summary>
             资源 
@@ -490,6 +530,16 @@
             MD5摘要 
              </summary>
         </member>
+        <member name="P:FastFrame.Dto.Basis.ResourceDto.Uploader_Id">
+             <summary>
+            上传人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.ResourceDto.UploadTime">
+             <summary>
+            上传时间 
+             </summary>
+        </member>
         <member name="T:FastFrame.Dto.Basis.TenantDto">
              <summary>
             组织信息 
@@ -510,7 +560,7 @@
             URL标识 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.TenantDto.Parent_Id">
+        <member name="P:FastFrame.Dto.Basis.TenantDto.Super_Id">
              <summary>
             上级 
              </summary>
@@ -550,11 +600,6 @@
             名称 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.DeptViewModel.EnCode">
-             <summary>
-            编码 
-             </summary>
-        </member>
         <member name="P:FastFrame.Dto.Basis.DeptViewModel.Id">
              <summary>
             主键 
@@ -590,21 +635,6 @@
             主键 
              </summary>
         </member>
-        <member name="T:FastFrame.Dto.Basis.NotifyTargetViewModel">
-             <summary>
-            通知目标 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.NotifyTargetViewModel.Notify_Id">
-             <summary>
-            通知ID 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.NotifyTargetViewModel.Id">
-             <summary>
-            主键 
-             </summary>
-        </member>
         <member name="T:FastFrame.Dto.Basis.NotifyViewModel">
              <summary>
             通知 
@@ -615,7 +645,7 @@
             标题 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.NotifyViewModel.Type_Value">
+        <member name="P:FastFrame.Dto.Basis.NotifyViewModel.Type_Id">
              <summary>
             类型 
              </summary>
@@ -648,11 +678,6 @@
         <member name="P:FastFrame.Dto.Basis.PermissionViewModel.Name">
              <summary>
             名称 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.PermissionViewModel.EnCode">
-             <summary>
-            编码 
              </summary>
         </member>
         <member name="P:FastFrame.Dto.Basis.PermissionViewModel.Id">
@@ -735,7 +760,7 @@
             URL标识 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Basis.TenantViewModel.Parent_Id">
+        <member name="P:FastFrame.Dto.Basis.TenantViewModel.Super_Id">
              <summary>
             上级 
              </summary>

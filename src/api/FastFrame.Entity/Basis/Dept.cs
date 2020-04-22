@@ -27,8 +27,6 @@ namespace FastFrame.Entity.Basis
         /// 上级
         /// </summary>
         [RelatedTo(typeof(Dept))]
-        public string Super_Id { get; set; }
-
-
-    }
+        public string Super_Id { get; set; } 
+    } 
 }

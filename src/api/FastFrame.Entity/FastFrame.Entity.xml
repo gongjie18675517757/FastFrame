@@ -624,6 +624,171 @@
             女
             </summary>
         </member>
+        <member name="T:FastFrame.Entity.Flow.WorkFlow">
+            <summary>
+            工作流
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.WorkFlow.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.WorkFlow.BeModule">
+            <summary>
+            适用模块
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.WorkFlow.Remarks">
+            <summary>
+            备注
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Flow.FlowNode">
+            <summary>
+            流程节点
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowNode.WorkFlow_Id">
+            <summary>
+            关联:WorkFlow
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowNode.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowNode.Key">
+            <summary>
+            节点键
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowNode.DeptCheck">
+            <summary>
+            主管审核
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowNode.TriggerAppNotify">
+            <summary>
+            触发应用通知
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowNode.TriggerWxNotify">
+            <summary>
+            触发微信通知
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowNode.TriggerSmsNotify">
+            <summary>
+            触发短信通知
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Flow.FlowLink">
+            <summary>
+            流程线
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowLink.WorkFlow_Id">
+            <summary>
+            关联:WorkFlow
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowLink.Text">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowLink.From">
+            <summary>
+            从
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowLink.To">
+            <summary>
+            到
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Flow.FlowLinkCond">
+            <summary>
+            流程线条件
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowLinkCond.FlowLink_Id">
+            <summary>
+            关联:FlowLink
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowLinkCond.FieldName">
+            <summary>
+            字段名
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowLinkCond.FieldText">
+            <summary>
+            字段文本
+            </summary> 
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowLinkCond.Compare">
+            <summary>
+            比较方式
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowLinkCond.Value">
+            <summary>
+            值
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowLinkCond.ValueText">
+            <summary>
+            值文本
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Flow.FlowNodeRole">
+            <summary>
+            节点审核角色
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowNodeRole.FlowNode_Id">
+            <summary>
+            关联:FlowNode
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowNodeRole.Role_Id">
+            <summary>
+            关联:Role
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Flow.FlowNodeUser">
+            <summary>
+            节点审核人
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowNodeUser.FlowNode_Id">
+            <summary>
+            关联:FlowNode
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowNodeUser.User_Id">
+            <summary>
+            关联:User
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Flow.FlowNodeField">
+            <summary>
+            节点动态审核人
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowNodeField.FlowNode_Id">
+            <summary>
+            关联:FlowNode
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowNodeField.FieldName">
+            <summary>
+            字段名称
+            </summary>
+        </member>
         <member name="P:FastFrame.Entity.BaseEntity.Id">
             <summary>
             主键

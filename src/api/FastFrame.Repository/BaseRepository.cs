@@ -39,19 +39,7 @@ namespace FastFrame.Repository
             /*验证唯一性+关联性*/
             entity.Id = IdGenerate.NetId();
             if (entity is IHasTenant) 
-                context.Entry(entity).Property<string>("tenant_id").CurrentValue = CurrUserProvider.GetCurrOrganizeId().Id; 
-
-            if (entity is IHasManage hasManage)
-            {
-                hasManage.CreateTime = DateTime.Now;
-                hasManage.ModifyTime = DateTime.Now;
-
-                if (currUser != null)
-                {
-                    hasManage.Create_User_Id = currUser?.Id;
-                    hasManage.Modify_User_Id = currUser?.Id;
-                }
-            }
+                context.Entry(entity).Property<string>("tenant_id").CurrentValue = CurrUserProvider.GetCurrOrganizeId().Id;  
 
             var entityEntry = context.Entry(entity);
             entityEntry.State = EntityState.Added;
@@ -96,13 +84,7 @@ namespace FastFrame.Repository
         /// 更新数据
         /// </summary> 
         public virtual async Task<T> UpdateAsync(T entity)
-        { 
-            if (entity is IHasManage hasManage)
-            {
-                hasManage.ModifyTime = DateTime.Now;
-                hasManage.Modify_User_Id = currUser?.Id;
-            }
-
+        {  
             var entityEntry = context.Entry(entity);
             entityEntry.State = EntityState.Modified;
 

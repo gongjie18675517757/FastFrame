@@ -151,6 +151,16 @@ let routes = [{
     component: () =>
       import(`@/views/Index/NotifyCenter`)
   },
+  {
+    path: '/flowDesign',
+    name: 'flowDesign',
+    meta: {
+      title: '流程设计',
+      keepAlive: false
+    },
+    component: () =>
+      import(`@/views/Flow/Design/Add.vue`)
+  },
   ...childs
   ].map(v => ({
     ...v,

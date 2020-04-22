@@ -11,7 +11,8 @@ import './components/PermissionBtn'
 import './plugins/vueQuillEditor'
 import '@mdi/font/css/materialdesignicons.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
-import 'roboto-fontface/css/roboto/roboto-fontface.css'
+// import 'roboto-fontface/css/roboto/roboto-fontface.css'
+
 import {
   eventBus,
 } from './utils';

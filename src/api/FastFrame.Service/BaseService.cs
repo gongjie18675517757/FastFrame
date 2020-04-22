@@ -58,6 +58,20 @@ namespace FastFrame.Service
             }
 
             var entity = input.MapTo<TDto, TEntity>();
+
+            /*写审核字段*/
+            if (entity is IHasManage hasManage)
+            {
+                hasManage.CreateTime = DateTime.Now;
+                hasManage.ModifyTime = DateTime.Now;
+                var currUser = AppSession.GetCurrUser();
+                if (currUser != null)
+                {
+                    hasManage.Create_User_Id = currUser?.Id;
+                    hasManage.Modify_User_Id = currUser?.Id;
+                }
+            }
+
             await repository.AddAsync(entity);
             input.Id = entity.Id;
             await OnAdding(input, entity);
@@ -119,6 +133,14 @@ namespace FastFrame.Service
                 throw new ArgumentNullException(nameof(input));
             }
             var entity = await repository.GetAsync(input.Id);
+
+            if (entity is IHasManage hasManage)
+            {
+                var currUser = AppSession.GetCurrUser();
+                hasManage.ModifyTime = DateTime.Now;
+                hasManage.Modify_User_Id = currUser?.Id;
+            }
+
             await OnBeforeUpdate(entity, input);
             input.MapSet(entity);
             await OnUpdateing(input, entity);

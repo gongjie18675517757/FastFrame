@@ -50,6 +50,6 @@ namespace FastFrame.Application.Controllers
                 PageSize = pageSize,
                 KeyWord = kw
             });
-        }
+        } 
     }
 }

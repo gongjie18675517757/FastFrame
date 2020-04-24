@@ -128,11 +128,6 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="T:FastFrame.Application.Controllers.Basis.PermissionController">
-             <summary>
-            权限 
-             </summary>
-        </member>
         <member name="M:FastFrame.Application.Controllers.Basis.PermissionController.InitPermission">
             <summary>
             初始化权限
@@ -173,6 +168,11 @@
             </summary>
             <param name="id"></param>
             <returns></returns>
+        </member>
+        <member name="T:FastFrame.Application.Controllers.Basis.NumberOptionController">
+             <summary>
+            编号设置 
+             </summary>
         </member>
         <member name="T:FastFrame.Application.Controllers.Chat.ChatController">
             <summary>
@@ -264,6 +264,11 @@
             <summary>
             下载
             </summary> 
+        </member>
+        <member name="T:FastFrame.Application.Controllers.Flow.WorkFlowController">
+             <summary>
+            工作流 
+             </summary>
         </member>
         <member name="T:FastFrame.Application.EveryoneAccessAttribute">
             <summary>

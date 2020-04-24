@@ -8,6 +8,7 @@ namespace FastFrame.Entity.Basis
     /// </summary> 
     [RelatedField(nameof(Name))]
     [Unique(nameof(Super_Id), nameof(Name))]
+    [Export(ExportMark.Service, ExportMark.DTO, ExportMark.ViewModel)]
     public class Meidia : BaseEntity, ITreeEntity
     {
         /// <summary>

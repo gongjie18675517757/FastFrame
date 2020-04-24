@@ -1,7 +1,9 @@
 ﻿using FastFrame.CodeGenerate.Info;
 using FastFrame.Infrastructure;
+using FastFrame.Infrastructure.Attrs;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using FieldInfo = FastFrame.CodeGenerate.Info.FieldInfo;
 using ParameterInfo = FastFrame.CodeGenerate.Info.ParameterInfo;
@@ -24,7 +26,9 @@ namespace FastFrame.CodeGenerate.Build
             {
                 if (!string.IsNullOrWhiteSpace(typeName) && type.Name != typeName)
                     continue;
-                if (type.GetCustomAttribute<Infrastructure.Attrs.ExportAttribute>() == null)
+                var exportAttr = type.GetCustomAttribute<ExportAttribute>();
+
+                if (exportAttr == null || !exportAttr.ExportMarks.Contains(ExportMark.Controller))
                     continue;
 
                 var spaceName = T4Help.GenerateNameSpace(type, null);

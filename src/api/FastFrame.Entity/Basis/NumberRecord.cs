@@ -5,8 +5,7 @@ namespace FastFrame.Entity.Basis
 {
     /// <summary>
     /// 编号记录
-    /// </summary>
-    [Exclude]
+    /// </summary> 
     public class NumberRecord : IEntity,IHasSoftDelete,IHasTenant
     {
         public string Id { get; set; }

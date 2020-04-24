@@ -34,10 +34,10 @@ namespace FastFrame.CodeGenerate.Build
                     continue;
                 }
 
-                if (type.GetCustomAttribute<ExcludeAttribute>() != null)
-                {
+                var exportAttr = type.GetCustomAttribute<ExportAttribute>();
+
+                if (exportAttr == null || !exportAttr.ExportMarks.Contains(ExportMark.Service))
                     continue;
-                }
 
                 yield return Build(type);
             }

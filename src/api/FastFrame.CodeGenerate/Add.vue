@@ -4,8 +4,9 @@
     export default {
         ...Page,
         data() {
+            let data = Page.data.call(this);
             return {
-                ...Page.data.call(this),
+                ...data,
                 ...pageInfo
             };
         }

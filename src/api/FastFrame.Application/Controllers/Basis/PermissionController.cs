@@ -8,11 +8,22 @@ using FastFrame.Infrastructure;
 using System.Linq;
 using FastFrame.Entity.Basis;
 using FastFrame.Service;
+using FastFrame.Service.Services.Basis;
 
 namespace FastFrame.Application.Controllers.Basis
 {
-    public partial class PermissionController
+    [Permission("Permission", "权限管理")]
+    public partial class PermissionController : BaseController<Permission, PermissionDto>
     {
+        private readonly PermissionService service;
+
+        public PermissionController(PermissionService service) : base(service)
+        {
+            this.service = service;
+        }
+
+
+
         /// <summary>
         /// 初始化权限
         /// </summary>
@@ -33,7 +44,7 @@ namespace FastFrame.Application.Controllers.Basis
         public async Task<IEnumerable<PermissionModel>> Permissions()
         {
             return await service.Permissions();
-        } 
+        }
 
         private IEnumerable<PermissionDto> GetPermissions()
         {

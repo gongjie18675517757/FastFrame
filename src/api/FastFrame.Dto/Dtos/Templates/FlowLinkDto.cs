@@ -1,6 +1,6 @@
-namespace FastFrame.Dto.Chat
+namespace FastFrame.Dto.Flow
 {
-	using FastFrame.Entity.Chat; 
+	using FastFrame.Entity.Flow; 
 	using FastFrame.Infrastructure.Attrs; 
 	using FastFrame.Infrastructure; 
 	using global::System.ComponentModel.DataAnnotations; 
@@ -8,28 +8,32 @@ namespace FastFrame.Dto.Chat
 	using FastFrame.Entity.Basis; 
 	using System; 
 	/// <summary>
-	///邮件 
+	///流程线 
 	/// </summary>
-	public partial class EmailDto:BaseDto<Email>
+	public partial class FlowLinkDto:BaseDto<FlowLink>
 	{
 		
 		
 		/// <summary>
-		///标题 
+		///关联:WorkFlow 
 		/// </summary>
-		[StringLength(50)]
-		[Required()]
-		public string Title {get;set;}
+		public string WorkFlow_Id {get;set;}
 		
 		/// <summary>
-		///回复自 
+		///名称 
 		/// </summary>
-		public string Replay_Email_Id {get;set;}
+		[StringLength(100)]
+		public string Text {get;set;}
 		
 		/// <summary>
-		///发件人 
+		///从 
 		/// </summary>
-		public string FromUser_Id {get;set;}
+		public int From {get;set;}
+		
+		/// <summary>
+		///到 
+		/// </summary>
+		public int To {get;set;}
 		
 		
 		

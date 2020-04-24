@@ -5,8 +5,7 @@ namespace FastFrame.Entity.Basis
 {
     /// <summary>
     /// 角色权限
-    /// </summary>
-    [Exclude]
+    /// </summary> 
     public class RolePermission : IEntity
     {
         /// <summary>

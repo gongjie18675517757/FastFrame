@@ -5,8 +5,7 @@ namespace FastFrame.Entity.Basis
 {
     /// <summary>
     /// 角色成员
-    /// </summary>
-    [Exclude]
+    /// </summary> 
     public class RoleMember : IEntity
     {
         /// <summary>

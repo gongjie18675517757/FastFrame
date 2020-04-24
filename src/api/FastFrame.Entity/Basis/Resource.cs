@@ -8,6 +8,7 @@ namespace FastFrame.Entity.Basis
     /// 资源
     /// </summary>     
     [RelatedField(nameof(Name))]
+    [Export(ExportMark.ViewModel, ExportMark.Service,ExportMark.DTO)]
     public class Resource : IEntity, IHasTenant
     {
         /// <summary>

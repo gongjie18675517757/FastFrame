@@ -39,6 +39,41 @@
             导出标记
             </summary>
         </member>
+        <member name="F:FastFrame.Infrastructure.Attrs.ExportMark.All">
+            <summary>
+            全部
+            </summary>
+        </member>
+        <member name="F:FastFrame.Infrastructure.Attrs.ExportMark.ViewModel">
+            <summary>
+            视图模型
+            </summary>
+        </member>
+        <member name="F:FastFrame.Infrastructure.Attrs.ExportMark.DTO">
+            <summary>
+            DTO实体
+            </summary>
+        </member>
+        <member name="F:FastFrame.Infrastructure.Attrs.ExportMark.Service">
+            <summary>
+            服务层
+            </summary>
+        </member>
+        <member name="F:FastFrame.Infrastructure.Attrs.ExportMark.Controller">
+            <summary>
+            控制器
+            </summary>
+        </member>
+        <member name="F:FastFrame.Infrastructure.Attrs.ExportMark.VuePage">
+            <summary>
+            VUE页面
+            </summary>
+        </member>
+        <member name="F:FastFrame.Infrastructure.Attrs.ExportMark.ReactPage">
+            <summary>
+            React页面
+            </summary>
+        </member>
         <member name="T:FastFrame.Infrastructure.Attrs.FormGroupAttribute">
             <summary>
             表单分组

@@ -6,7 +6,7 @@ namespace FastFrame.Entity.Basis
     /// <summary>
     /// 权限
     /// </summary> 
-    [Export] 
+    [Export(ExportMark.Service, ExportMark.DTO, ExportMark.ViewModel)]
     [RelatedField(nameof(Name))]
     public class Permission : IEntity, IHasTenant, ITreeEntity
     {

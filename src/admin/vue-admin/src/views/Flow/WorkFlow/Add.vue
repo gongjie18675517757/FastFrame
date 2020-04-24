@@ -1,6 +1,6 @@
 <script>
-    let pageInfo = { area: "{{AreaName}}", name: "{{ModuleName}}", direction: "{{Description}}" };
-    import Page from "@/components/Page/ListPageCore.js";
+    let pageInfo = {area: "Flow",name: "WorkFlow",direction: "工作流"};
+    import Page from "@/components/Page/FormPageCore.js";
     export default {
         ...Page,
         data() {

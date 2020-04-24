@@ -4,8 +4,7 @@ namespace FastFrame.Entity.Basis
 {
     /// <summary>
     /// 部门成员
-    /// </summary>
-    [Infrastructure.Attrs.Exclude]
+    /// </summary> 
     public class DeptMember : IEntity
     {
         public string Id { get; set; }

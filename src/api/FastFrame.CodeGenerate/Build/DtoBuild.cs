@@ -26,7 +26,10 @@ namespace FastFrame.CodeGenerate.Build
             {
                 if (!string.IsNullOrWhiteSpace(typeName) && type.Name != typeName)
                     continue;
-                if (type.GetCustomAttribute<ExcludeAttribute>() != null)
+
+                var exportAttr = type.GetCustomAttribute<ExportAttribute>();
+
+                if (exportAttr == null || !exportAttr.ExportMarks.Contains(ExportMark.DTO))
                     continue;
 
                 yield return GetTargetInfo(type);

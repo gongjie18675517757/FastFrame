@@ -500,6 +500,81 @@
             修改时间 
              </summary>
         </member>
+        <member name="T:FastFrame.Dto.Basis.NumberOptionDto">
+             <summary>
+            编号设置 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.NumberOptionDto.BeModule">
+             <summary>
+            模块名称 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.NumberOptionDto.Prefix">
+             <summary>
+            前缀 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.NumberOptionDto.TaskDate">
+             <summary>
+            是否取日期 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.NumberOptionDto.SerialLength">
+             <summary>
+            流水号长度 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.NumberOptionDto.Suffix">
+             <summary>
+            后缀 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.NumberOptionDto.DateField">
+             <summary>
+            取日期字段 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.NumberOptionDto.DateFieldText">
+             <summary>
+            日期字段名称 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.NumberOptionDto.FmtDate">
+             <summary>
+            日期格式方法 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.NumberOptionDto.Create_User_Id">
+             <summary>
+            创建人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.NumberOptionDto.Create_User">
+             <summary>
+            创建人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.NumberOptionDto.CreateTime">
+             <summary>
+            创建时间 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.NumberOptionDto.Modify_User_Id">
+             <summary>
+            修改人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.NumberOptionDto.Modify_User">
+             <summary>
+            修改人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.NumberOptionDto.ModifyTime">
+             <summary>
+            修改时间 
+             </summary>
+        </member>
         <member name="T:FastFrame.Dto.Basis.ResourceDto">
              <summary>
             资源 
@@ -573,21 +648,6 @@
         <member name="P:FastFrame.Dto.Basis.TenantDto.HandIcon_Id">
              <summary>
             头像 
-             </summary>
-        </member>
-        <member name="T:FastFrame.Dto.Basis.TenantHostDto">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.TenantHostDto.Host">
-             <summary>
-            域名 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.TenantHostDto.Tenant_Id">
-             <summary>
-            租户 
              </summary>
         </member>
         <member name="T:FastFrame.Dto.Basis.DeptViewModel">
@@ -670,6 +730,56 @@
             主键 
              </summary>
         </member>
+        <member name="T:FastFrame.Dto.Basis.NumberOptionViewModel">
+             <summary>
+            编号设置 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.NumberOptionViewModel.BeModule">
+             <summary>
+            模块名称 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.NumberOptionViewModel.Prefix">
+             <summary>
+            前缀 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.NumberOptionViewModel.TaskDate">
+             <summary>
+            是否取日期 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.NumberOptionViewModel.SerialLength">
+             <summary>
+            流水号长度 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.NumberOptionViewModel.Suffix">
+             <summary>
+            后缀 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.NumberOptionViewModel.DateField">
+             <summary>
+            取日期字段 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.NumberOptionViewModel.DateFieldText">
+             <summary>
+            日期字段名称 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.NumberOptionViewModel.FmtDate">
+             <summary>
+            日期格式方法 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Basis.NumberOptionViewModel.Id">
+             <summary>
+            主键 
+             </summary>
+        </member>
         <member name="T:FastFrame.Dto.Basis.PermissionViewModel">
              <summary>
             权限 
@@ -718,26 +828,6 @@
         <member name="P:FastFrame.Dto.Basis.RoleViewModel.Id">
              <summary>
             主键 
-             </summary>
-        </member>
-        <member name="T:FastFrame.Dto.Basis.TenantHostViewModel">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.TenantHostViewModel.Host">
-             <summary>
-            域名 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.TenantHostViewModel.Id">
-             <summary>
-            主键 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Basis.TenantHostViewModel.Tenant_Id">
-             <summary>
-            租户 
              </summary>
         </member>
         <member name="T:FastFrame.Dto.Basis.TenantViewModel">
@@ -895,6 +985,136 @@
             密码
             </summary>
         </member>
+        <member name="T:FastFrame.Dto.Flow.WorkFlowDto">
+             <summary>
+            工作流 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Flow.WorkFlowDto.Name">
+             <summary>
+            名称 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Flow.WorkFlowDto.BeModule">
+             <summary>
+            适用模块 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Flow.WorkFlowDto.Remarks">
+             <summary>
+            备注 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Flow.WorkFlowDto.Create_User_Id">
+             <summary>
+            创建人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Flow.WorkFlowDto.Create_User">
+             <summary>
+            创建人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Flow.WorkFlowDto.CreateTime">
+             <summary>
+            创建时间 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Flow.WorkFlowDto.Modify_User_Id">
+             <summary>
+            修改人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Flow.WorkFlowDto.Modify_User">
+             <summary>
+            修改人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Flow.WorkFlowDto.ModifyTime">
+             <summary>
+            修改时间 
+             </summary>
+        </member>
+        <member name="T:FastFrame.Dto.Flow.FlowLinkDto">
+             <summary>
+            流程线 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Flow.FlowLinkDto.WorkFlow_Id">
+             <summary>
+            关联:WorkFlow 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Flow.FlowLinkDto.Text">
+             <summary>
+            名称 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Flow.FlowLinkDto.From">
+             <summary>
+            从 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Flow.FlowLinkDto.To">
+             <summary>
+            到 
+             </summary>
+        </member>
+        <member name="T:FastFrame.Dto.Flow.FlowNodeDto">
+             <summary>
+            流程节点 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Flow.FlowNodeDto.WorkFlow_Id">
+             <summary>
+            关联:WorkFlow 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Flow.FlowNodeDto.Name">
+             <summary>
+            名称 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Flow.FlowNodeDto.Key">
+             <summary>
+            节点键 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Flow.FlowNodeDto.DeptCheck">
+             <summary>
+            主管审核 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Flow.FlowNodeDto.TriggerAppNotify">
+             <summary>
+            触发应用通知 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Flow.FlowNodeDto.TriggerWxNotify">
+             <summary>
+            触发微信通知 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Flow.FlowNodeDto.TriggerSmsNotify">
+             <summary>
+            触发短信通知 
+             </summary>
+        </member>
+        <member name="T:FastFrame.Dto.Flow.WorkFlowViewModel">
+             <summary>
+            工作流 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Flow.WorkFlowViewModel.Name">
+             <summary>
+            名称 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Flow.WorkFlowViewModel.Id">
+             <summary>
+            主键 
+             </summary>
+        </member>
         <member name="P:FastFrame.Dto.Module.RuleOutPut.RuleName">
             <summary>
             规则名称
@@ -994,411 +1214,6 @@
             <summary>
             字段列表
             </summary>
-        </member>
-        <member name="T:FastFrame.Dto.Chat.EmailAnnexDto">
-             <summary>
-            邮件附件 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.EmailAnnexDto.Email_Id">
-             <summary>
-            邮件ID 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.EmailAnnexDto.Resource_Id">
-             <summary>
-            文件ID 
-             </summary>
-        </member>
-        <member name="T:FastFrame.Dto.Chat.EmailContentDto">
-             <summary>
-            邮件正文 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.EmailContentDto.Email_Id">
-             <summary>
-            邮件ID 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.EmailContentDto.Content">
-             <summary>
-            内容 
-             </summary>
-        </member>
-        <member name="T:FastFrame.Dto.Chat.EmailDto">
-             <summary>
-            邮件 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.EmailDto.Title">
-             <summary>
-            标题 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.EmailDto.Replay_Email_Id">
-             <summary>
-            回复自 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.EmailDto.FromUser_Id">
-             <summary>
-            发件人 
-             </summary>
-        </member>
-        <member name="T:FastFrame.Dto.Chat.EmailTargetDto">
-             <summary>
-            邮件收件人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.EmailTargetDto.Email_Id">
-             <summary>
-            邮件ID 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.EmailTargetDto.Category">
-             <summary>
-            类型 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.EmailTargetDto.To_Id">
-             <summary>
-            接收人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.EmailTargetDto.HaveRead">
-             <summary>
-            已读 
-             </summary>
-        </member>
-        <member name="T:FastFrame.Dto.Chat.FriendMessageDto">
-             <summary>
-            好友消息 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.FriendMessageDto.Content">
-             <summary>
-            内容 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.FriendMessageDto.Category">
-             <summary>
-            消息类型 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.FriendMessageDto.Resource_Id">
-             <summary>
-            图片?附件ID 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.FriendMessageDto.From_Id">
-             <summary>
-            发送人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.FriendMessageDto.MessageTime">
-             <summary>
-            消息时间 
-             </summary>
-        </member>
-        <member name="T:FastFrame.Dto.Chat.GroupDto">
-             <summary>
-            群组 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.GroupDto.Name">
-             <summary>
-            群组名称 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.GroupDto.LordUser_Id">
-             <summary>
-            群主 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.GroupDto.HandIcon_Id">
-             <summary>
-            图标 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.GroupDto.Summary">
-             <summary>
-            简介 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.GroupDto.Create_User_Id">
-             <summary>
-            创建人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.GroupDto.Create_User">
-             <summary>
-            创建人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.GroupDto.CreateTime">
-             <summary>
-            创建时间 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.GroupDto.Modify_User_Id">
-             <summary>
-            修改人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.GroupDto.Modify_User">
-             <summary>
-            修改人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.GroupDto.ModifyTime">
-             <summary>
-            修改时间 
-             </summary>
-        </member>
-        <member name="T:FastFrame.Dto.Chat.GroupManagerDto">
-             <summary>
-            群组管理员 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.GroupManagerDto.Group_Id">
-             <summary>
-            群组 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.GroupManagerDto.User_Id">
-             <summary>
-            管理员 
-             </summary>
-        </member>
-        <member name="T:FastFrame.Dto.Chat.GroupMessageDto">
-             <summary>
-            群组消息 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.GroupMessageDto.Group_Id">
-             <summary>
-            群组ID 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.GroupMessageDto.Content">
-             <summary>
-            内容 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.GroupMessageDto.Category">
-             <summary>
-            消息类型 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.GroupMessageDto.Resource_Id">
-             <summary>
-            图片?附件ID 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.GroupMessageDto.From_Id">
-             <summary>
-            发送人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.GroupMessageDto.MessageTime">
-             <summary>
-            消息时间 
-             </summary>
-        </member>
-        <member name="T:FastFrame.Dto.Chat.MessageTargetDto">
-             <summary>
-            消息接收人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.MessageTargetDto.Message_Id">
-             <summary>
-            消息ID 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.MessageTargetDto.To_Id">
-             <summary>
-            接收人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.MessageTargetDto.HaveRead">
-             <summary>
-            已读 
-             </summary>
-        </member>
-        <member name="T:FastFrame.Dto.Chat.EmailAnnexViewModel">
-             <summary>
-            邮件附件 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.EmailAnnexViewModel.Email_Id">
-             <summary>
-            邮件ID 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.EmailAnnexViewModel.Resource_Id">
-             <summary>
-            文件ID 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.EmailAnnexViewModel.Id">
-             <summary>
-            主键 
-             </summary>
-        </member>
-        <member name="T:FastFrame.Dto.Chat.EmailContentViewModel">
-             <summary>
-            邮件正文 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.EmailContentViewModel.Email_Id">
-             <summary>
-            邮件ID 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.EmailContentViewModel.Content">
-             <summary>
-            内容 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.EmailContentViewModel.Id">
-             <summary>
-            主键 
-             </summary>
-        </member>
-        <member name="T:FastFrame.Dto.Chat.EmailTargetViewModel">
-             <summary>
-            邮件收件人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.EmailTargetViewModel.Email_Id">
-             <summary>
-            邮件ID 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.EmailTargetViewModel.Category">
-             <summary>
-            类型 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.EmailTargetViewModel.Id">
-             <summary>
-            主键 
-             </summary>
-        </member>
-        <member name="T:FastFrame.Dto.Chat.EmailViewModel">
-             <summary>
-            邮件 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.EmailViewModel.Title">
-             <summary>
-            标题 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.EmailViewModel.Replay_Email_Id">
-             <summary>
-            回复自 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.EmailViewModel.FromUser_Id">
-             <summary>
-            发件人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.EmailViewModel.Id">
-             <summary>
-            主键 
-             </summary>
-        </member>
-        <member name="T:FastFrame.Dto.Chat.FriendMessageViewModel">
-             <summary>
-            好友消息 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.FriendMessageViewModel.Id">
-             <summary>
-            主键 
-             </summary>
-        </member>
-        <member name="T:FastFrame.Dto.Chat.GroupManagerViewModel">
-             <summary>
-            群组管理员 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.GroupManagerViewModel.Group_Id">
-             <summary>
-            群组 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.GroupManagerViewModel.User_Id">
-             <summary>
-            管理员 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.GroupManagerViewModel.Id">
-             <summary>
-            主键 
-             </summary>
-        </member>
-        <member name="T:FastFrame.Dto.Chat.GroupMessageViewModel">
-             <summary>
-            群组消息 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.GroupMessageViewModel.Group_Id">
-             <summary>
-            群组ID 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.GroupMessageViewModel.Id">
-             <summary>
-            主键 
-             </summary>
-        </member>
-        <member name="T:FastFrame.Dto.Chat.GroupViewModel">
-             <summary>
-            群组 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.GroupViewModel.Name">
-             <summary>
-            群组名称 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.GroupViewModel.LordUser_Id">
-             <summary>
-            群主 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.GroupViewModel.HandIcon_Id">
-             <summary>
-            图标 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.GroupViewModel.Summary">
-             <summary>
-            简介 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.GroupViewModel.Id">
-             <summary>
-            主键 
-             </summary>
-        </member>
-        <member name="T:FastFrame.Dto.Chat.MessageTargetViewModel">
-             <summary>
-            消息接收人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.MessageTargetViewModel.Message_Id">
-             <summary>
-            消息ID 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Chat.MessageTargetViewModel.Id">
-             <summary>
-            主键 
-             </summary>
         </member>
         <member name="T:FastFrame.Dto.IDto">
             <summary>

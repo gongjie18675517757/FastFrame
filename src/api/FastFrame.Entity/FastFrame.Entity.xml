@@ -27,7 +27,7 @@
         <member name="T:FastFrame.Entity.Basis.DeptMember">
             <summary>
             部门成员
-            </summary>
+            </summary> 
         </member>
         <member name="P:FastFrame.Entity.Basis.DeptMember.Dept_Id">
             <summary>
@@ -167,7 +167,7 @@
         <member name="T:FastFrame.Entity.Basis.NumberRecord">
             <summary>
             编号记录
-            </summary>
+            </summary> 
         </member>
         <member name="P:FastFrame.Entity.Basis.NumberRecord.BeModule">
             <summary>
@@ -302,7 +302,7 @@
         <member name="T:FastFrame.Entity.Basis.RoleMember">
             <summary>
             角色成员
-            </summary>
+            </summary> 
         </member>
         <member name="P:FastFrame.Entity.Basis.RoleMember.Role_Id">
             <summary>
@@ -317,7 +317,7 @@
         <member name="T:FastFrame.Entity.Basis.RolePermission">
             <summary>
             角色权限
-            </summary>
+            </summary> 
         </member>
         <member name="P:FastFrame.Entity.Basis.RolePermission.Role_Id">
             <summary>
@@ -827,7 +827,7 @@
         <member name="T:FastFrame.Entity.Flow.FlowLinkCond">
             <summary>
             流程线条件
-            </summary>
+            </summary> 
         </member>
         <member name="P:FastFrame.Entity.Flow.FlowLinkCond.FlowLink_Id">
             <summary>
@@ -862,7 +862,7 @@
         <member name="T:FastFrame.Entity.Flow.FlowNodeRole">
             <summary>
             节点审核角色
-            </summary>
+            </summary> 
         </member>
         <member name="P:FastFrame.Entity.Flow.FlowNodeRole.FlowNode_Id">
             <summary>
@@ -877,7 +877,7 @@
         <member name="T:FastFrame.Entity.Flow.FlowNodeUser">
             <summary>
             节点审核人
-            </summary>
+            </summary> 
         </member>
         <member name="P:FastFrame.Entity.Flow.FlowNodeUser.FlowNode_Id">
             <summary>
@@ -892,7 +892,7 @@
         <member name="T:FastFrame.Entity.Flow.FlowNodeField">
             <summary>
             节点动态审核人
-            </summary>
+            </summary> 
         </member>
         <member name="P:FastFrame.Entity.Flow.FlowNodeField.FlowNode_Id">
             <summary>
@@ -927,7 +927,7 @@
         <member name="T:FastFrame.Entity.Flow.FlowExample">
             <summary>
             流程实例
-            </summary>
+            </summary> 
         </member>
         <member name="P:FastFrame.Entity.Flow.FlowExample.BeModuleName">
             <summary>
@@ -1002,7 +1002,7 @@
         <member name="T:FastFrame.Entity.Flow.FlowSnapshot">
             <summary>
             流程快照
-            </summary>
+            </summary> 
         </member>
         <member name="P:FastFrame.Entity.Flow.FlowSnapshot.FlowExample_Id">
             <summary>
@@ -1017,7 +1017,7 @@
         <member name="T:FastFrame.Entity.Flow.FlowStep">
             <summary>
             流程步骤
-            </summary>
+            </summary> 
         </member>
         <member name="P:FastFrame.Entity.Flow.FlowStep.FlowExample_Id">
             <summary>
@@ -1042,7 +1042,7 @@
         <member name="T:FastFrame.Entity.Flow.FlowStepUser">
             <summary>
             流程步骤审核人
-            </summary>
+            </summary> 
         </member>
         <member name="P:FastFrame.Entity.Flow.FlowStepUser.FlowStep_Id">
             <summary>
@@ -1066,8 +1066,8 @@
         </member>
         <member name="T:FastFrame.Entity.Flow.FlowProcess">
             <summary>
-            流程过程
-            </summary>
+            审批过程
+            </summary> 
         </member>
         <member name="P:FastFrame.Entity.Flow.FlowProcess.FlowStep_Id">
             <summary>

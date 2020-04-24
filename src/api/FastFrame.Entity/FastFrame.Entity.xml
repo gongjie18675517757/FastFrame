@@ -119,6 +119,86 @@
             内容
             </summary>
         </member>
+        <member name="T:FastFrame.Entity.Basis.NumberOption">
+            <summary>
+            编号设置
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.NumberOption.BeModule">
+            <summary>
+            模块名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.NumberOption.Prefix">
+            <summary>
+            前缀
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.NumberOption.TaskDate">
+            <summary>
+            是否取日期
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.NumberOption.SerialLength">
+            <summary>
+            流水号长度
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.NumberOption.Suffix">
+            <summary>
+            后缀
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.NumberOption.DateField">
+            <summary>
+            取日期字段
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.NumberOption.DateFieldText">
+            <summary>
+            日期字段名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.NumberOption.FmtDate">
+            <summary>
+            日期格式方法
+            </summary> 
+        </member>
+        <member name="T:FastFrame.Entity.Basis.NumberRecord">
+            <summary>
+            编号记录
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.NumberRecord.BeModule">
+            <summary>
+            模块名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.NumberRecord.Year">
+            <summary>
+            年
+            </summary> 
+        </member>
+        <member name="P:FastFrame.Entity.Basis.NumberRecord.Month">
+            <summary>
+            月
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.NumberRecord.Day">
+            <summary>
+            日
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.NumberRecord.Serial">
+            <summary>
+            流水
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.NumberRecord.PrevSerial">
+            <summary>
+            上一期流水
+            </summary>
+        </member>
         <member name="T:FastFrame.Entity.Basis.Permission">
             <summary>
             权限
@@ -609,6 +689,41 @@
             通知类型
             </summary>
         </member>
+        <member name="T:FastFrame.Entity.Enums.FmtDateEnum">
+            <summary>
+            日期格式方式
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.FmtDateEnum.yyyy">
+            <summary>
+            年编(长)
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.FmtDateEnum.yyyyMM">
+            <summary>
+            月编(长)
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.FmtDateEnum.yyyyMMdd">
+            <summary>
+            日编(长)
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.FmtDateEnum.yy">
+            <summary>
+            年编(短)
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.FmtDateEnum.yyMM">
+            <summary>
+            月编(短)
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.FmtDateEnum.yyMMdd">
+            <summary>
+            日编(短)
+            </summary>
+        </member>
         <member name="T:FastFrame.Entity.Enums.GenderMark">
             <summary>
             性别
@@ -719,7 +834,7 @@
             关联:FlowLink
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Flow.FlowLinkCond.FieldName">
+        <member name="P:FastFrame.Entity.Flow.FlowLinkCond.Name">
             <summary>
             字段名
             </summary>
@@ -789,6 +904,266 @@
             字段名称
             </summary>
         </member>
+        <member name="T:FastFrame.Entity.Flow.IHaveCheck">
+            <summary>
+            标识需要审核
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.IHaveCheck.FlowStatus">
+            <summary>
+            流程状态
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Flow.IHaveDept">
+            <summary>
+            标记有科室
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.IHaveDept.Dept_Id">
+            <summary>
+            关联：Dept
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Flow.FlowExample">
+            <summary>
+            流程实例
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowExample.BeModuleName">
+            <summary>
+            归属模块
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowExample.BeModuleText">
+            <summary>
+            模块名称
+            </summary> 
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowExample.Bill_Id">
+            <summary>
+            单据
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowExample.BillNumber">
+            <summary>
+            单据编号
+            </summary> 
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowExample.Status">
+            <summary>
+            流程状态
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowExample.WorkFlow_Id">
+            <summary>
+            关联流程
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowExample.CurrStep_Id">
+            <summary>
+            当前步骤
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowExample.BeDept_Id">
+            <summary>
+            归属科室
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowExample.Sponsor_Id">
+            <summary>
+            流程发起人
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowExample.StartTime">
+            <summary>
+            发起时间
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowExample.IsComlete">
+            <summary>
+            是否已完结
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowExample.CompleteTime">
+            <summary>
+            完结时间
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowExample.LastOperater_Id">
+            <summary>
+            最后操作人
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowExample.LastOperateTime">
+            <summary>
+            最后操作时间
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Flow.FlowSnapshot">
+            <summary>
+            流程快照
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowSnapshot.FlowExample_Id">
+            <summary>
+            关联：FlowExample
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowSnapshot.SnapshotContent">
+            <summary>
+            快照内容
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Flow.FlowStep">
+            <summary>
+            流程步骤
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowStep.FlowExample_Id">
+            <summary>
+            关联：FlowExample
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowStep.FlowNode_Id">
+            <summary>
+            关联：FlowNode
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowStep.StepOrder">
+            <summary>
+            步骤序号
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowStep.PrevStep_Id">
+            <summary>
+            关联：FlowStep，上一步
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Flow.FlowStepUser">
+            <summary>
+            流程步骤审核人
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowStepUser.FlowStep_Id">
+            <summary>
+            关联：FlowStep
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowStepUser.User_Id">
+            <summary>
+            关联：User
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowStepUser.IsBeDept">
+            <summary>
+            是否科室审核人
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowStepUser.IsBeRole">
+            <summary>
+            是否角色审核人
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Flow.FlowProcess">
+            <summary>
+            流程过程
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowProcess.FlowStep_Id">
+            <summary>
+            关联：FlowStep
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowProcess.Action">
+            <summary>
+            动作
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowProcess.Operater_Id">
+            <summary>
+            操作人
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowProcess.OperateTime">
+            <summary>
+            时间
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowProcess.Direction">
+            <summary>
+            说明
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Flow.FlowStatusEnum">
+            <summary>
+            流程状态
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FlowStatusEnum.unsubmitted">
+            <summary>
+            未提交
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FlowStatusEnum.submitted">
+            <summary>
+            已提交
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FlowStatusEnum.processing">
+            <summary>
+            进行中
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FlowStatusEnum.finished">
+            <summary>
+            已完结
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FlowStatusEnum.returned">
+            <summary>
+            已退回
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FlowStatusEnum.refuse">
+            <summary>
+            已拒绝
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Flow.FlowActionEnum">
+            <summary>
+            流程动作
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FlowActionEnum.submit">
+            <summary>
+            提交
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FlowActionEnum.unsubmit">
+            <summary>
+            撤回
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FlowActionEnum.pass">
+            <summary>
+            通过
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FlowActionEnum.withdraw">
+            <summary>
+            退回
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FlowActionEnum.refuse">
+            <summary>
+            拒绝
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FlowActionEnum.uncheck">
+            <summary>
+            反审核
+            </summary>
+        </member>
         <member name="P:FastFrame.Entity.BaseEntity.Id">
             <summary>
             主键
@@ -823,11 +1198,6 @@
              <summary>
             主键
              </summary>
-        </member>
-        <member name="T:FastFrame.Entity.ITreeEntity">
-            <summary>
-            树结构表
-            </summary>
         </member>
         <member name="T:FastFrame.Entity.IHasManage">
             <summary>
@@ -869,9 +1239,24 @@
             需要并发检查  未实现
             </summary>
         </member>
+        <member name="T:FastFrame.Entity.IHaveNumber">
+            <summary>
+            标识需要编号
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.IHaveNumber.Number">
+            <summary>
+            编号
+            </summary>
+        </member>
         <member name="T:FastFrame.Entity.IQuery">
             <summary>
             标记为视图或表
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.ITreeEntity">
+            <summary>
+            树结构表
             </summary>
         </member>
         <member name="T:FastFrame.Entity.TargetInfo">

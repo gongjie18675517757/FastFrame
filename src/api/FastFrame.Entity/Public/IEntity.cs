@@ -12,12 +12,4 @@ namespace FastFrame.Entity
         /// </summary>
         string Id { get; set; }
     }
-
-    /// <summary>
-    /// 树结构表
-    /// </summary>
-    public interface ITreeEntity : IEntity
-    {
-        string Super_Id { get; }
-    }
 }

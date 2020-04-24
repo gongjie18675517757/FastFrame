@@ -25,6 +25,20 @@ namespace FastFrame.Service
     }
 
     /// <summary>
+    /// 自动编号服务
+    /// </summary>
+    public interface IAutoNumberService
+    {
+        /// <summary>
+        /// 生成编号
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="entitys"></param>
+        /// <returns></returns>
+        Task MakeNumberAsync<T>(params T[] entitys) where T : IHaveNumber;
+    }
+
+    /// <summary>
     /// 服务接口
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>

@@ -291,7 +291,7 @@ namespace FastFrame.Infrastructure
         /// <returns></returns>
         public static object GetValue(this object @in, string propName)
         {
-            return @in.GetType().GetProperty(propName).GetReflector().GetValue(@in);
+            return @in?.GetType().GetProperty(propName)?.GetReflector().GetValue(@in);
         }
 
         /// <summary>

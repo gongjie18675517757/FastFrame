@@ -9,6 +9,14 @@ namespace FastFrame.Infrastructure.EventBus
     public interface IEventHandle<T> where T : IEventData
     {
 
+        int Weights
+        {
+            get
+            {
+                return 1;
+            }
+        }
+
         /// <summary>
         /// 处理方法
         /// </summary>

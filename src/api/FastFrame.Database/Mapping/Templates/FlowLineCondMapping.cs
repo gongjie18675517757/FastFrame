@@ -4,7 +4,7 @@ namespace FastFrame.Database.Mapping.Flow
 	/// <summary>
 	///流程线条件 
 	/// </summary>
-	public partial class FlowLinkCondMapping:BaseEntityMapping<FlowLinkCond>
+	public partial class FlowLineCondMapping:BaseEntityMapping<FlowLineCond>
 	{
 		
 		

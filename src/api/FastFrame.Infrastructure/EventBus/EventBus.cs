@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FastFrame.Infrastructure.EventBus
@@ -14,7 +15,7 @@ namespace FastFrame.Infrastructure.EventBus
         }
         public async Task TriggerEventAsync<T>(T @event) where T : IEventData
         {
-            var servers = serviceProvider.GetServices<IEventHandle<T>>();
+            var servers = serviceProvider.GetServices<IEventHandle<T>>().OrderByDescending(v => v.Weights);
             foreach (var server in servers)
             {
                 await server.HandleEventAsync(@event);

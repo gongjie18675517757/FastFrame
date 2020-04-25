@@ -1,6 +1,9 @@
-﻿using FastFrame.Entity;
+﻿using FastFrame.Dto;
+using FastFrame.Entity;
 using FastFrame.Infrastructure;
+using FastFrame.Infrastructure.EventBus;
 using FastFrame.Repository;
+using FastFrame.Service.Events;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -19,15 +22,25 @@ namespace FastFrame.Service
         where TTargetEntity : class, IEntity
     {
         private readonly IRepository<TTargetEntity> targetEntities;
+        private readonly IEventBus eventBus;
+        private readonly List<(TTargetDto input, TTargetEntity entity)> addedList = new List<(TTargetDto, TTargetEntity)>();
+        private readonly List<(TTargetDto after, TTargetEntity before)> updatedList = new List<(TTargetDto, TTargetEntity)>();
+        private readonly List<TTargetEntity> deletedList = new List<TTargetEntity>();
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="targetEntities">实体仓库服务</param>
-        public HandleOne2ManyService(IRepository<TTargetEntity> targetEntities)
+        public HandleOne2ManyService(IRepository<TTargetEntity> targetEntities, IEventBus eventBus)
         {
             this.targetEntities = targetEntities;
+            this.eventBus = eventBus;
         }
+
+        public IReadOnlyList<(TTargetDto input, TTargetEntity entity)> AddedList { get => addedList; }
+        public IReadOnlyList<(TTargetDto after, TTargetEntity before)> UpdatedList { get => updatedList; }
+        public IReadOnlyList<TTargetEntity> DeletedList { get => deletedList; }
+
 
         /// <summary>
         /// 添加多个
@@ -47,11 +60,19 @@ namespace FastFrame.Service
                 foreach (var item in list)
                 {
                     var itemEntity = makeEntiyFunc(item);
-                    await targetEntities.AddAsync(itemEntity);
+                    await AddItem(itemEntity, item);
                 }
             }
+        }
 
+        private async Task AddItem(TTargetEntity itemEntity, TTargetDto input)
+        {
+            itemEntity = await targetEntities.AddAsync(itemEntity);
 
+            addedList.Add((input, itemEntity));
+
+            if (input is IDto<TTargetEntity>)
+                await eventBus.TriggerEventAsync(new DoMainAdding<TTargetDto>(input));
         }
 
         /// <summary>
@@ -69,7 +90,20 @@ namespace FastFrame.Service
             var befores = await targetEntities.Where(expression).ToListAsync();
             foreach (var item in befores)
             {
-                await targetEntities.DeleteAsync(item);
+                await DeleteItem(item);
+            }
+        }
+
+        private async Task DeleteItem(TTargetEntity item)
+        {
+            await targetEntities.DeleteAsync(item);
+            deletedList.Add(item);
+
+            var type = typeof(TTargetDto);
+
+            if (type.IsClass && typeof(IDto<>).MakeGenericType(typeof(TTargetEntity)).IsAssignableFrom(type))
+            {
+                await eventBus.TriggerEventAsync(new DoMainDeleteing<TTargetDto>(item.Id, item));
             }
         }
 
@@ -110,21 +144,31 @@ namespace FastFrame.Service
             foreach (var item in comparisonCollection.GetCollectionByAdded())
             {
                 var itemEntity = makeEntiyFunc(item);
-                await targetEntities.AddAsync(itemEntity);
+                await AddItem(itemEntity, item);
             }
 
             foreach (var item in comparisonCollection.GetCollectionByDeleted())
             {
-                await targetEntities.DeleteAsync(item);
+                await DeleteItem(item);
             }
             foreach (var (before, after) in comparisonCollection.GetCollectionByModify())
             {
                 if (updateAction != null)
                 {
                     updateAction(before, after);
-                    await targetEntities.UpdateAsync(before);
+                    await UpdateItem(before, after);
                 }
             }
+        }
+
+        private async Task UpdateItem(TTargetEntity before, TTargetDto after)
+        {
+            await targetEntities.UpdateAsync(before);
+
+            updatedList.Add((after, before));
+
+            if (after is IDto<TTargetEntity>)
+                await eventBus.TriggerEventAsync(new DoMainUpdateing<TTargetDto>(after, before));
         }
     }
 }

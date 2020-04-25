@@ -8,9 +8,9 @@ namespace FastFrame.Dto.Flow
 	using FastFrame.Entity.Basis; 
 	using System; 
 	/// <summary>
-	///流程线 
+	///流程链 
 	/// </summary>
-	public partial class FlowLinkDto:BaseDto<FlowLink>
+	public partial class FlowLineDto:BaseDto<FlowLine>
 	{
 		
 		

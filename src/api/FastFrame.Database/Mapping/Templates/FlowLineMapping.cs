@@ -2,9 +2,9 @@ namespace FastFrame.Database.Mapping.Flow
 {
 	using FastFrame.Entity.Flow; 
 	/// <summary>
-	///流程线 
+	///流程链 
 	/// </summary>
-	public partial class FlowLinkMapping:BaseEntityMapping<FlowLink>
+	public partial class FlowLineMapping:BaseEntityMapping<FlowLine>
 	{
 		
 		

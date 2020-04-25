@@ -990,6 +990,16 @@
             工作流 
              </summary>
         </member>
+        <member name="P:FastFrame.Dto.Flow.WorkFlowDto.Nodes">
+            <summary>
+            流程节点
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Flow.WorkFlowDto.Lines">
+            <summary>
+            流程链
+            </summary>
+        </member>
         <member name="P:FastFrame.Dto.Flow.WorkFlowDto.Name">
              <summary>
             名称 
@@ -1035,27 +1045,32 @@
             修改时间 
              </summary>
         </member>
-        <member name="T:FastFrame.Dto.Flow.FlowLinkDto">
+        <member name="T:FastFrame.Dto.Flow.FlowLineDto">
              <summary>
-            流程线 
+            流程链 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Flow.FlowLinkDto.WorkFlow_Id">
+        <member name="P:FastFrame.Dto.Flow.FlowLineDto.Conds">
+            <summary>
+            流程线条件
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Flow.FlowLineDto.WorkFlow_Id">
              <summary>
             关联:WorkFlow 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Flow.FlowLinkDto.Text">
+        <member name="P:FastFrame.Dto.Flow.FlowLineDto.Text">
              <summary>
             名称 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Flow.FlowLinkDto.From">
+        <member name="P:FastFrame.Dto.Flow.FlowLineDto.From">
              <summary>
             从 
              </summary>
         </member>
-        <member name="P:FastFrame.Dto.Flow.FlowLinkDto.To">
+        <member name="P:FastFrame.Dto.Flow.FlowLineDto.To">
              <summary>
             到 
              </summary>
@@ -1064,6 +1079,21 @@
              <summary>
             流程节点 
              </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Flow.FlowNodeDto.Roles">
+            <summary>
+            节点审核角色
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Flow.FlowNodeDto.Users">
+            <summary>
+            节点审核人
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Flow.FlowNodeDto.Fields">
+            <summary>
+            节点动态审核人
+            </summary>
         </member>
         <member name="P:FastFrame.Dto.Flow.FlowNodeDto.WorkFlow_Id">
              <summary>

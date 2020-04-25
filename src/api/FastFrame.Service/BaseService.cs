@@ -85,8 +85,8 @@ namespace FastFrame.Service
         /// <summary>
         /// 删除前
         /// </summary> 
-        protected virtual Task OnDeleteing(TEntity input)
-            => EventBus?.TriggerEventAsync(new DoMainDeleteing<TDto>(input.Id, input));
+        protected virtual Task OnDeleteing(TEntity entity)
+            => EventBus?.TriggerEventAsync(new DoMainDeleteing<TDto>(entity.Id, entity));
 
 
         /// <summary>
@@ -132,7 +132,9 @@ namespace FastFrame.Service
             {
                 throw new ArgumentNullException(nameof(input));
             }
-            var entity = await repository.GetAsync(input.Id);
+            var entity = await repository.GetAsync(input.Id); 
+
+            await OnBeforeUpdate(entity, input);
 
             if (entity is IHasManage hasManage)
             {
@@ -141,7 +143,6 @@ namespace FastFrame.Service
                 hasManage.Modify_User_Id = currUser?.Id;
             }
 
-            await OnBeforeUpdate(entity, input);
             input.MapSet(entity);
             await OnUpdateing(input, entity);
             await repository.UpdateAsync(entity);

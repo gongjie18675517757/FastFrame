@@ -799,62 +799,62 @@
             触发短信通知
             </summary>
         </member>
-        <member name="T:FastFrame.Entity.Flow.FlowLink">
+        <member name="T:FastFrame.Entity.Flow.FlowLine">
             <summary>
-            流程线
+            流程连接线
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Flow.FlowLink.WorkFlow_Id">
+        <member name="P:FastFrame.Entity.Flow.FlowLine.WorkFlow_Id">
             <summary>
             关联:WorkFlow
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Flow.FlowLink.Text">
+        <member name="P:FastFrame.Entity.Flow.FlowLine.Text">
             <summary>
             名称
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Flow.FlowLink.From">
+        <member name="P:FastFrame.Entity.Flow.FlowLine.From">
             <summary>
             从
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Flow.FlowLink.To">
+        <member name="P:FastFrame.Entity.Flow.FlowLine.To">
             <summary>
             到
             </summary>
         </member>
-        <member name="T:FastFrame.Entity.Flow.FlowLinkCond">
+        <member name="T:FastFrame.Entity.Flow.FlowLineCond">
             <summary>
             流程线条件
             </summary> 
         </member>
-        <member name="P:FastFrame.Entity.Flow.FlowLinkCond.FlowLink_Id">
+        <member name="P:FastFrame.Entity.Flow.FlowLineCond.FlowLink_Id">
             <summary>
             关联:FlowLink
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Flow.FlowLinkCond.Name">
+        <member name="P:FastFrame.Entity.Flow.FlowLineCond.Name">
             <summary>
             字段名
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Flow.FlowLinkCond.FieldText">
+        <member name="P:FastFrame.Entity.Flow.FlowLineCond.FieldText">
             <summary>
             字段文本
             </summary> 
         </member>
-        <member name="P:FastFrame.Entity.Flow.FlowLinkCond.Compare">
+        <member name="P:FastFrame.Entity.Flow.FlowLineCond.Compare">
             <summary>
             比较方式
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Flow.FlowLinkCond.Value">
+        <member name="P:FastFrame.Entity.Flow.FlowLineCond.Value">
             <summary>
             值
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Flow.FlowLinkCond.ValueText">
+        <member name="P:FastFrame.Entity.Flow.FlowLineCond.ValueText">
             <summary>
             值文本
             </summary>

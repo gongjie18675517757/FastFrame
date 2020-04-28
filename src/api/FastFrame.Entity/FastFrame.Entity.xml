@@ -64,6 +64,36 @@
             上级
             </summary>
         </member>
+        <member name="T:FastFrame.Entity.Basis.LoginLog">
+            <summary>
+            登陆Log
+            </summary> 
+        </member>
+        <member name="P:FastFrame.Entity.Basis.LoginLog.User_Id">
+            <summary>
+            关联：User
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.LoginLog.LoginTime">
+            <summary>
+            登陆时间
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.LoginLog.LastTime">
+            <summary>
+            最后刷新时间
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.LoginLog.ExpiredTime">
+            <summary>
+            过期时间
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.LoginLog.Enable">
+            <summary>
+            是否有效
+            </summary>
+        </member>
         <member name="T:FastFrame.Entity.Basis.Meidia">
             <summary>
             图片库
@@ -354,14 +384,14 @@
             上级
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Basis.Tenant.CanHaveChildren">
+        <member name="P:FastFrame.Entity.Basis.Tenant.Tenant_Id">
             <summary>
-            是否可发展下级
+            租户标记
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Basis.Tenant.HandIcon_Id">
             <summary>
-            头像
+            Logo头像
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Basis.Tenant.Id">
@@ -429,15 +459,10 @@
             是否管理员
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Basis.User.IsRoot">
+        <member name="P:FastFrame.Entity.Basis.User.Enable">
             <summary>
-            是否超级管理员
+            启用状态
             </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.User.IsDisabled">
-            <summary>
-            是否禁用
-            </summary>      
         </member>
         <member name="M:FastFrame.Entity.Basis.User.GeneratePassword(System.String)">
             <summary>
@@ -679,6 +704,21 @@
             文件
             </summary>
         </member>
+        <member name="T:FastFrame.Entity.Enums.EnabledMark">
+            <summary>
+            启用标记
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.EnabledMark.Enabled">
+            <summary>
+            启用
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.EnabledMark.Disabled">
+            <summary>
+            禁用
+            </summary>
+        </member>
         <member name="T:FastFrame.Entity.Enums.EnumName">
             <summary>
             字典键
@@ -737,66 +777,6 @@
         <member name="F:FastFrame.Entity.Enums.GenderMark.WoMan">
             <summary>
             女
-            </summary>
-        </member>
-        <member name="T:FastFrame.Entity.Flow.WorkFlow">
-            <summary>
-            工作流
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Flow.WorkFlow.Name">
-            <summary>
-            名称
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Flow.WorkFlow.BeModule">
-            <summary>
-            适用模块
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Flow.WorkFlow.Remarks">
-            <summary>
-            备注
-            </summary>
-        </member>
-        <member name="T:FastFrame.Entity.Flow.FlowNode">
-            <summary>
-            流程节点
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Flow.FlowNode.WorkFlow_Id">
-            <summary>
-            关联:WorkFlow
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Flow.FlowNode.Name">
-            <summary>
-            名称
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Flow.FlowNode.Key">
-            <summary>
-            节点键
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Flow.FlowNode.DeptCheck">
-            <summary>
-            主管审核
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Flow.FlowNode.TriggerAppNotify">
-            <summary>
-            触发应用通知
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Flow.FlowNode.TriggerWxNotify">
-            <summary>
-            触发微信通知
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Flow.FlowNode.TriggerSmsNotify">
-            <summary>
-            触发短信通知
             </summary>
         </member>
         <member name="T:FastFrame.Entity.Flow.FlowLine">
@@ -859,6 +839,61 @@
             值文本
             </summary>
         </member>
+        <member name="T:FastFrame.Entity.Flow.FlowNode">
+            <summary>
+            流程节点
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowNode.WorkFlow_Id">
+            <summary>
+            关联:WorkFlow
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowNode.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowNode.Key">
+            <summary>
+            节点键
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowNode.DeptCheck">
+            <summary>
+            主管审核
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowNode.TriggerAppNotify">
+            <summary>
+            触发应用通知
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowNode.TriggerWxNotify">
+            <summary>
+            触发微信通知
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowNode.TriggerSmsNotify">
+            <summary>
+            触发短信通知
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Flow.FlowNodeField">
+            <summary>
+            节点动态审核人
+            </summary> 
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowNodeField.FlowNode_Id">
+            <summary>
+            关联:FlowNode
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowNodeField.FieldName">
+            <summary>
+            字段名称
+            </summary>
+        </member>
         <member name="T:FastFrame.Entity.Flow.FlowNodeRole">
             <summary>
             节点审核角色
@@ -889,19 +924,34 @@
             关联:User
             </summary>
         </member>
-        <member name="T:FastFrame.Entity.Flow.FlowNodeField">
+        <member name="T:FastFrame.Entity.Flow.WorkFlow">
             <summary>
-            节点动态审核人
-            </summary> 
-        </member>
-        <member name="P:FastFrame.Entity.Flow.FlowNodeField.FlowNode_Id">
-            <summary>
-            关联:FlowNode
+            工作流
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Flow.FlowNodeField.FieldName">
+        <member name="P:FastFrame.Entity.Flow.WorkFlow.Name">
             <summary>
-            字段名称
+            名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.WorkFlow.BeModule">
+            <summary>
+            适用模块
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.WorkFlow.BeModuleName">
+            <summary>
+            模块名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.WorkFlow.Version">
+            <summary>
+            版本
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.WorkFlow.Remarks">
+            <summary>
+            备注
             </summary>
         </member>
         <member name="T:FastFrame.Entity.Flow.IHaveCheck">

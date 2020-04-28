@@ -294,6 +294,11 @@
             <param name="context"></param>
             <returns></returns>
         </member>
+        <member name="T:FastFrame.Application.Privder.InitialProvider">
+            <summary>
+            初始化服务
+            </summary>
+        </member>
         <member name="T:FastFrame.Application.Privder.ResourceOption">
             <summary>
             资源配置

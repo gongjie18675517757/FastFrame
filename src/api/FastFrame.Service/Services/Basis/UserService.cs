@@ -22,11 +22,12 @@ namespace FastFrame.Service.Services.Basis
 
         protected override async Task OnDeleteing(User input)
         {
-            await base.OnDeleteing(input);
-            if (input.IsRoot)
-                throw new Exception("该帐号不可以删除!");
+            await base.OnDeleteing(input); 
             if (input.IsAdmin)
-                throw new Exception("管理员帐号不可以删除!");
+                throw new MsgException("管理员帐号不可以删除!请先移除管理员身份");
+
+            /*判断该帐号是否有操作记录，如果有则不允许删除*/
+            /*待实现*/
         }
 
         /// <summary>
@@ -34,11 +35,11 @@ namespace FastFrame.Service.Services.Basis
         /// </summary> 
         public async Task<UserDto> ToogleAdminIdentity(string id)
         {
-            if (!AppSession.GetCurrUser().IsAdmin)
-                throw new Exception("没有权限!");
+            if (!AppSession.CurrUser.IsAdmin)
+                throw new MsgException("管理员才可以做此操作!");
             var user = await userRepository.GetAsync(id);
             if (user == null)
-                throw new Exception("用户不存在");
+                throw new MsgException("用户不存在");
             user.IsAdmin = !user.IsAdmin;
             await userRepository.UpdateAsync(user);
             await userRepository.CommmitAsync();
@@ -57,13 +58,21 @@ namespace FastFrame.Service.Services.Basis
         /// 切换禁用状态
         /// </summary> 
         public async Task<UserDto> ToogleDisabled(string id)
-        {
-            if (!AppSession.GetCurrUser().IsAdmin)
-                throw new Exception("没有权限!");
+        { 
             var user = await userRepository.GetAsync(id);
             if (user == null)
-                throw new Exception("用户不存在");
-            user.IsDisabled = !user.IsDisabled;
+                throw new MsgException("用户不存在");
+            switch (user.Enable)
+            {
+                case Entity.Enums.EnabledMark.Enabled:
+                    user.Enable = Entity.Enums.EnabledMark.Disabled;
+                    break;
+                case Entity.Enums.EnabledMark.Disabled:
+                    user.Enable = Entity.Enums.EnabledMark.Enabled;
+                    break;
+                default:
+                    break;
+            }
             await userRepository.UpdateAsync(user);
             await userRepository.CommmitAsync();
 

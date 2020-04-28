@@ -22,8 +22,7 @@ namespace FastFrame.Database
         public virtual void ModelEntityCreating(EntityTypeBuilder<T> entityTypeBuilder)
         {
             var entityType = typeof(T);
-            var currNameSpace = string.Join(",", entityType.Namespace.Split(new char[] { '.' }).Skip(2));
-
+            var currNameSpace = string.Join(",", entityType.Namespace.Split(new char[] { '.' }).Skip(2)); 
 
             if (typeof(IEntity).IsAssignableFrom(entityType))
             {
@@ -50,7 +49,7 @@ namespace FastFrame.Database
 
             if (typeof(IHasTenant).IsAssignableFrom(entityType))
             {
-                entityTypeBuilder.Property<string>("tenant_id");
+                entityTypeBuilder.Property<string>("tenant_id").HasMaxLength(25);
                 entityTypeBuilder.HasIndex("tenant_id").HasName($"Index_{entityType.Name}_tenant_id");
             }
 

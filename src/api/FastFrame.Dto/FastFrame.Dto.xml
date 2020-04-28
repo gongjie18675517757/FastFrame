@@ -985,66 +985,6 @@
             密码
             </summary>
         </member>
-        <member name="T:FastFrame.Dto.Flow.WorkFlowDto">
-             <summary>
-            工作流 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Flow.WorkFlowDto.Nodes">
-            <summary>
-            流程节点
-            </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Flow.WorkFlowDto.Lines">
-            <summary>
-            流程链
-            </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Flow.WorkFlowDto.Name">
-             <summary>
-            名称 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Flow.WorkFlowDto.BeModule">
-             <summary>
-            适用模块 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Flow.WorkFlowDto.Remarks">
-             <summary>
-            备注 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Flow.WorkFlowDto.Create_User_Id">
-             <summary>
-            创建人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Flow.WorkFlowDto.Create_User">
-             <summary>
-            创建人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Flow.WorkFlowDto.CreateTime">
-             <summary>
-            创建时间 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Flow.WorkFlowDto.Modify_User_Id">
-             <summary>
-            修改人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Flow.WorkFlowDto.Modify_User">
-             <summary>
-            修改人 
-             </summary>
-        </member>
-        <member name="P:FastFrame.Dto.Flow.WorkFlowDto.ModifyTime">
-             <summary>
-            修改时间 
-             </summary>
-        </member>
         <member name="T:FastFrame.Dto.Flow.FlowLineDto">
              <summary>
             流程链 
@@ -1128,6 +1068,66 @@
         <member name="P:FastFrame.Dto.Flow.FlowNodeDto.TriggerSmsNotify">
              <summary>
             触发短信通知 
+             </summary>
+        </member>
+        <member name="T:FastFrame.Dto.Flow.WorkFlowDto">
+             <summary>
+            工作流 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Flow.WorkFlowDto.Nodes">
+            <summary>
+            流程节点
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Flow.WorkFlowDto.Lines">
+            <summary>
+            流程链
+            </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Flow.WorkFlowDto.Name">
+             <summary>
+            名称 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Flow.WorkFlowDto.BeModule">
+             <summary>
+            适用模块 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Flow.WorkFlowDto.Remarks">
+             <summary>
+            备注 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Flow.WorkFlowDto.Create_User_Id">
+             <summary>
+            创建人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Flow.WorkFlowDto.Create_User">
+             <summary>
+            创建人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Flow.WorkFlowDto.CreateTime">
+             <summary>
+            创建时间 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Flow.WorkFlowDto.Modify_User_Id">
+             <summary>
+            修改人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Flow.WorkFlowDto.Modify_User">
+             <summary>
+            修改人 
+             </summary>
+        </member>
+        <member name="P:FastFrame.Dto.Flow.WorkFlowDto.ModifyTime">
+             <summary>
+            修改时间 
              </summary>
         </member>
         <member name="T:FastFrame.Dto.Flow.WorkFlowViewModel">

@@ -5,33 +5,30 @@ using System.Threading.Tasks;
 
 namespace FastFrame.Test
 {
-    public class CurrentUserProvider : ICurrentUserProvider
+    public class CurrentUserProvider : IAppSessionProvider
     {
-        ICurrUser curr = null;
-        public ITenant GetCurrOrganizeId()
-        {
-            return new Tenant() { Id = "test", Super_Id = "" };
-        }
+        public ICurrUser CurrUser => null;
 
-        public ICurrUser GetCurrUser()
-        {
-            return curr;
-        }
+        public string Tenant_Id => "Test";
 
-        public Task Login(ICurrUser currUser)
+        public Task InitAsync()
         {
-            curr = currUser;
             return Task.CompletedTask;
         }
 
-        public Task LogOut()
+        public Task LoginAsync(ICurrUser currUser)
         {
-            curr = null;
             return Task.CompletedTask;
         }
 
-        public void Refresh()
+        public Task LogOutAsync()
         {
+            return Task.CompletedTask;
+        }
+
+        public Task RefreshIdentityAsync()
+        {
+            return Task.CompletedTask;
         }
     }
 }

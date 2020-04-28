@@ -30,6 +30,19 @@ namespace FastFrame.Entity.Flow
         public string BeModule { get; set; }
 
         /// <summary>
+        /// 模块名称
+        /// </summary>
+        [ReadOnly]
+        [StringLength(150)]
+        public string BeModuleName { get; set; }
+
+        /// <summary>
+        /// 版本
+        /// </summary>
+        [ReadOnly]
+        public int Version { get; set; } = 1;
+
+        /// <summary>
         /// 备注
         /// </summary>
         [StringLength(500)]
@@ -56,7 +69,7 @@ namespace FastFrame.Entity.Flow
         /// 关联：Dept
         /// </summary>
         string Dept_Id { get; }
-    } 
+    }
 
     /// <summary>
     /// 流程实例

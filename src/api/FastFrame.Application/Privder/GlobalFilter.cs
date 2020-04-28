@@ -17,19 +17,19 @@ namespace FastFrame.Application.Privder
 {
     public class GlobalFilter : IAsyncExceptionFilter, IAsyncAuthorizationFilter
     {
-        private readonly ICurrentUserProvider operaterProvider;
+        private readonly IAppSessionProvider appSession;
         private readonly PermissionService permissionService;
         private readonly IDescriptionProvider descriptionProvider;
         private readonly ILogger<GlobalFilter> logger;
         private const string StopwatchName = "Stopwatch";
 
         public GlobalFilter(
-            ICurrentUserProvider operaterProvider,
+            IAppSessionProvider appSession,
             PermissionService permissionService,
             IDescriptionProvider descriptionProvider,
             ILogger<GlobalFilter> logger)
         {
-            this.operaterProvider = operaterProvider;
+            this.appSession = appSession;
             this.permissionService = permissionService;
             this.descriptionProvider = descriptionProvider;
             this.logger = logger;
@@ -42,7 +42,7 @@ namespace FastFrame.Application.Privder
         public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
             /*取当前用户*/
-            var curr = operaterProvider.GetCurrUser();
+            var curr = appSession.CurrUser;
 
             /*是否标记为可以匿名访问(EveryoneAccessFilter在.NET CORE 3.*下,不知道怎么获取不到了)*/
             if (curr == null && context.Filters.Any(x => x.GetType() == typeof(EveryoneAccessAttribute)))
@@ -78,9 +78,6 @@ namespace FastFrame.Application.Privder
                     }
                 }
             }
-
-            /*刷新*/
-            operaterProvider.Refresh();
         }
 
         /// <summary>
@@ -96,6 +93,7 @@ namespace FastFrame.Application.Privder
             if (ex is AspectInvocationException aspectInvocationException)
                 ex = ex.InnerException;
 
+            /*模型字段重复异常*/
             if (ex is UniqueException uniqueException)
             {
                 var typeDescription = descriptionProvider.GetClassDescription(uniqueException.Type);
@@ -110,7 +108,7 @@ namespace FastFrame.Application.Privder
                     Code = -2
                 });
             }
-
+            /*预定义异常*/
             else if (ex is MsgException msgException)
             {
                 context.Result = new ObjectResult(new
@@ -119,6 +117,7 @@ namespace FastFrame.Application.Privder
                     msgException.Code
                 });
             }
+            /*未定义异常*/
             else
             {
                 context.Result = new ObjectResult(new
@@ -140,7 +139,5 @@ namespace FastFrame.Application.Privder
             logger.LogError(ex, ex.Message);
             return Task.CompletedTask;
         }
-    }
-
-
+    } 
 }

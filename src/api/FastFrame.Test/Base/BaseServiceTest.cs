@@ -29,7 +29,7 @@ namespace FastFrame.Test
                     o.UseMySql(Configuration.GetConnectionString("Local_Mysql"));
                 })
                 
-                .AddScoped<ICurrentUserProvider, CurrentUserProvider>()
+                .AddScoped<IAppSessionProvider, CurrentUserProvider>()
                 .AddScoped<IEventBus, EventBus>()
                 .AddServices()
                 .AddRepository();

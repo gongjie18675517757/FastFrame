@@ -1,4 +1,5 @@
-﻿using FastFrame.Dto;
+﻿using AspectCore.DependencyInjection;
+using FastFrame.Dto;
 using FastFrame.Entity;
 using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Attrs;
@@ -13,6 +14,8 @@ namespace FastFrame.Application.Controllers
     [Route("api/[controller]/[action]")]
     public abstract class BaseController : ControllerBase
     {
+        [FromServiceContext]
+        protected IAppSessionProvider AppSession { get; set; }
     }
 
     public abstract class BaseController<TEntity, TDto> : BaseController

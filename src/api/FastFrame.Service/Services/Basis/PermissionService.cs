@@ -83,9 +83,8 @@ namespace FastFrame.Service.Services.Basis
         /// </summary>        
         public async Task<IEnumerable<PermissionModel>> Permissions()
         {
-            var currUser = AppSession.GetCurrUser();
-
-            var user = await userRepository.GetAsync(currUser.Id);
+            var currUser = AppSession?.CurrUser; 
+            var user = await userRepository.GetAsync(currUser?.Id);
 
             if (user.IsAdmin)
                 return await permissionRepository.MapTo<Permission, PermissionModel>().ToListAsync();
@@ -120,10 +119,11 @@ namespace FastFrame.Service.Services.Basis
         /// </summary> 
         public async Task<bool> ExistPermission(string moduleName, params string[] methodNames)
         {
-            var currUser = AppSession.GetCurrUser();
+            var currUser = AppSession.CurrUser;
 
             if (currUser.IsAdmin)
                 return true;
+
             /*一级权限*/
             var permissionId = await permissionRepository
                 .Where(r => r.EnCode == moduleName && r.Super_Id == null)

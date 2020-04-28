@@ -15,17 +15,17 @@ namespace FastFrame.Service.Services.Chat
     /// </summary>
     public partial class ChatService : IService
     {
-        private readonly ICurrentUserProvider currentUserProvider;
+        private readonly IAppSessionProvider appSession;
         private readonly IRepository<FriendMessage> friendMsgRepository;
         private readonly IRepository<MessageTarget> msgTgRepository;
         private readonly IMessageBus messageBus;
 
-        public ChatService(ICurrentUserProvider currentUserProvider,
+        public ChatService(IAppSessionProvider appSession,
             IRepository<FriendMessage> friendMsgRepository,
             IRepository<MessageTarget> msgTgRepository,
             IMessageBus messageBus)
         {
-            this.currentUserProvider = currentUserProvider;
+            this.appSession = appSession;
             this.friendMsgRepository = friendMsgRepository;
             this.msgTgRepository = msgTgRepository;
             this.messageBus = messageBus;
@@ -38,7 +38,7 @@ namespace FastFrame.Service.Services.Chat
         {
             /*保存消息*/
             var entity = input.MapTo<FriendMsgInput, FriendMessage>();
-            entity.From_Id = currentUserProvider.GetCurrUser().Id;
+            entity.From_Id = appSession.CurrUser?.Id;
             entity.MessageTime = DateTime.Now;
             entity = await friendMsgRepository.AddAsync(entity);
 
@@ -62,8 +62,6 @@ namespace FastFrame.Service.Services.Chat
             });
 
             return outPut;
-        }
-
-
+        } 
     }
 }

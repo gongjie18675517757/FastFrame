@@ -1,4 +1,5 @@
-﻿using FastFrame.Infrastructure;
+﻿using FastFrame.Entity.Enums;
+using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Attrs;
 using FastFrame.Infrastructure.Interface;
 using System;
@@ -51,7 +52,7 @@ namespace FastFrame.Entity.Basis
         /// 手机号码
         /// </summary>
         [StringLength(20), Unique]
-        public string PhoneNumber { get; set; } 
+        public string PhoneNumber { get; set; }
 
         /// <summary>
         /// 头像
@@ -68,18 +69,10 @@ namespace FastFrame.Entity.Basis
         public bool IsAdmin { get; set; }
 
         /// <summary>
-        /// 是否超级管理员
+        /// 启用状态
         /// </summary>
-        [Hide]
         [ReadOnly]
-        [Exclude]
-        public bool IsRoot { get; set; }
-
-        /// <summary>
-        /// 是否禁用
-        /// </summary>      
-        [ReadOnly]
-        public bool IsDisabled { get; set; }
+        public EnabledMark Enable { get; set; } = EnabledMark.Enabled;
 
         /// <summary>
         /// 生成密码

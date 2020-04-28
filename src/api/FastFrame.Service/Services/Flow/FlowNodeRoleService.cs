@@ -9,6 +9,7 @@ using FastFrame.Service.Events;
 using Microsoft.EntityFrameworkCore;
 using FastFrame.Dto.Basis;
 using FastFrame.Entity.Basis;
+using FastFrame.Infrastructure;
 
 namespace FastFrame.Service.Services.Flow
 {

@@ -21,13 +21,13 @@ namespace FastFrame.Application.Controllers
     public class DefaultController : ControllerBase
     {
         private readonly IMessageBus messageBus;
-        private readonly ICurrentUserProvider currentUserProvider;
+        private readonly IAppSessionProvider appSession;
         private readonly ILogger<DefaultController> logger;
 
-        public DefaultController(IMessageBus messageBus,  ICurrentUserProvider currentUserProvider,ILogger<DefaultController> logger)
+        public DefaultController(IMessageBus messageBus,  IAppSessionProvider appSession,ILogger<DefaultController> logger)
         {
             this.messageBus = messageBus;
-            this.currentUserProvider = currentUserProvider;
+            this.appSession = appSession;
             this.logger = logger;
         }
         // GET: api/Default
@@ -49,7 +49,7 @@ namespace FastFrame.Application.Controllers
         [HttpPost]
         public async Task Post([FromBody] Message<RecMsgOutPut> value)
         {
-            var userid = currentUserProvider.GetCurrUser().Id; 
+            var userid = appSession.CurrUser?.Id; 
             await messageBus.PubLishAsync(value);
         }
 

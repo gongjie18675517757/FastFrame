@@ -19,9 +19,9 @@ namespace FastFrame.Repository
         private IQueryable<T> queryable;
 
         [FromServiceContext]
-        protected ICurrentUserProvider CurrUserProvider { get; set; }
+        protected IAppSessionProvider AppSession { get; set; }
 
-        protected ICurrUser currUser => CurrUserProvider?.GetCurrUser();
+        protected ICurrUser CurrUser => AppSession?.CurrUser;
 
         public BaseQueryable(DataBase context)
         {
@@ -36,17 +36,13 @@ namespace FastFrame.Repository
         {
             get
             {
-                if (queryable != null)
-                    return queryable;
-                else
+                if (queryable == null)
                 {
                     IQueryable<T> query = context.Set<T>().AsNoTracking();
-                    var tenant = CurrUserProvider.GetCurrOrganizeId();
-                    if (tenant != null &&
-                        !tenant.Id.IsNullOrWhiteSpace() &&
-                        typeof(IHasTenant).IsAssignableFrom(typeof(T)))
+                    var tenantId = AppSession?.Tenant_Id;
+                    if (!tenantId.IsNullOrWhiteSpace() && typeof(IHasTenant).IsAssignableFrom(typeof(T)))
                     {
-                        query = query.Where(v => EF.Property<string>(v, "tenant_id") == tenant.Id);
+                        query = query.Where(v => EF.Property<string>(v, "tenant_id") == tenantId);
                     }
 
                     queryable = query;

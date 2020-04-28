@@ -39,7 +39,7 @@ namespace FastFrame.Repository
             /*验证唯一性+关联性*/
             entity.Id = IdGenerate.NetId();
             if (entity is IHasTenant) 
-                context.Entry(entity).Property<string>("tenant_id").CurrentValue = CurrUserProvider.GetCurrOrganizeId().Id;  
+                context.Entry(entity).Property<string>("tenant_id").CurrentValue = AppSession?.Tenant_Id;  
 
             var entityEntry = context.Entry(entity);
             entityEntry.State = EntityState.Added;
@@ -55,7 +55,7 @@ namespace FastFrame.Repository
         {
             if (entity is IHasManage hasManage)
             {
-                hasManage.Modify_User_Id = currUser?.Id;
+                hasManage.Modify_User_Id = CurrUser?.Id;
                 hasManage.ModifyTime = DateTime.Now;
             }
             if (entity is IHasSoftDelete)

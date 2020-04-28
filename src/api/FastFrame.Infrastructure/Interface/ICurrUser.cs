@@ -28,12 +28,7 @@
         /// <summary>
         /// 是否管理员
         /// </summary>
-        bool IsAdmin { get; set; }
-
-        /// <summary>
-        /// 是否超级用户
-        /// </summary>
-        bool IsRoot { get; set; }  
+        bool IsAdmin { get; set; } 
     }
 
     /// <summary>

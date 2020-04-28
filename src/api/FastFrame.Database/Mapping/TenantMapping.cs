@@ -9,14 +9,16 @@
         {
             base.ModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Tenant>().HasData(new
+            modelBuilder.Entity<Tenant>().HasData(new  
             {
                 ShortName = "default",
                 Id = "00fm5yfgzpgp93ylkuxshsc73",
                 FullName = "默认组织",
-                CanHaveChildren = true,
-                Parent_Id = "",
                 isdeleted = false,
+                HandIcon_Id =(string)null,
+                Super_Id = (string)null,
+                Tenant_Id = (string)null,
+                UrlMark = "*"
             });
 
             modelBuilder.Entity<TenantHost>().HasData(new TenantHost()

@@ -16,12 +16,11 @@ namespace FastFrame.Application.Controllers
     public class AccountController : BaseController
     {
         private readonly AccountService service;
-        private readonly ICurrentUserProvider currentUserProvider;
+        
 
-        public AccountController(AccountService service, ICurrentUserProvider currentUserProvider)
+        public AccountController(AccountService service)
         {
-            this.service = service;
-            this.currentUserProvider = currentUserProvider;
+            this.service = service; 
         }
 
         /// <summary>
@@ -56,7 +55,7 @@ namespace FastFrame.Application.Controllers
         [EveryoneAccess]
         public async Task LogOut()
         {
-            await currentUserProvider.LogOut();
+            await AppSession.LogOutAsync();
         }
 
         /// <summary>

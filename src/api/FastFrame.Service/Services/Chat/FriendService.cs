@@ -19,18 +19,18 @@ namespace FastFrame.Service.Services.Chat
         private readonly IRepository<User> repository;
         private readonly IRepository<FriendMessage> messageRepository;
         private readonly IRepository<MessageTarget> targetRepository;
-        private readonly ICurrentUserProvider currentUserProvider;
+        private readonly IAppSessionProvider appSession;
 
         public FriendService(
             IRepository<User> repository,
             IRepository<FriendMessage> messageRepository,
             IRepository<MessageTarget> targetRepository,
-            ICurrentUserProvider currentUserProvider)
+            IAppSessionProvider appSession)
         {
             this.repository = repository;
             this.messageRepository = messageRepository;
             this.targetRepository = targetRepository;
-            this.currentUserProvider = currentUserProvider;
+            this.appSession = appSession;
         }
 
         /// <summary>
@@ -39,17 +39,17 @@ namespace FastFrame.Service.Services.Chat
         /// <returns></returns>
         public async Task<IEnumerable<FriendOutput>> Friends()
         {
-            var userId = currentUserProvider.GetCurrUser().Id;
+            var userId = appSession.CurrUser?.Id;
             var list = await repository.Queryable
-                .Where(x => x.Id != userId && !x.IsDisabled)
+                .Where(x => x.Id != userId && x.Enable == Entity.Enums.EnabledMark.Enabled)
                 .Select(x => new FriendOutput()
                 {
                     Id = x.Id,
                     HeadIcon_Id = x.HandIcon_Id,
                     Name = x.Name
                 })
-                .ToListAsync(); 
+                .ToListAsync();
             return list;
-        } 
+        }
     }
 }

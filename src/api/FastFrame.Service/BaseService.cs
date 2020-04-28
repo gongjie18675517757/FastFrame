@@ -34,7 +34,7 @@ namespace FastFrame.Service
         protected IEventBus EventBus { get; set; }
 
         [FromServiceContext]
-        protected ICurrentUserProvider AppSession { get; set; }
+        protected IAppSessionProvider AppSession { get; set; }
 
         public BaseService(IRepository<TEntity> repository)
         {
@@ -59,12 +59,12 @@ namespace FastFrame.Service
 
             var entity = input.MapTo<TDto, TEntity>();
 
-            /*写审核字段*/
+            /*写审计字段*/
             if (entity is IHasManage hasManage)
             {
                 hasManage.CreateTime = DateTime.Now;
                 hasManage.ModifyTime = DateTime.Now;
-                var currUser = AppSession.GetCurrUser();
+                var currUser = AppSession?.CurrUser;
                 if (currUser != null)
                 {
                     hasManage.Create_User_Id = currUser?.Id;
@@ -138,7 +138,7 @@ namespace FastFrame.Service
 
             if (entity is IHasManage hasManage)
             {
-                var currUser = AppSession.GetCurrUser();
+                var currUser = AppSession.CurrUser;
                 hasManage.ModifyTime = DateTime.Now;
                 hasManage.Modify_User_Id = currUser?.Id;
             }

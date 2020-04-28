@@ -7,32 +7,42 @@ namespace FastFrame.Infrastructure.Interface
     /// <summary>
     /// 当前用户提供者
     /// </summary>
-    public interface ICurrentUserProvider
+    public interface IAppSessionProvider
     {
         /// <summary>
         /// 获取当前用户
         /// </summary>
         /// <returns></returns>
-        ICurrUser GetCurrUser();
+        ICurrUser CurrUser { get; }
 
         /// <summary>
-        /// 获取当前组织ID
+        /// 当前租户(为Null则表示为根租户)
         /// </summary>
         /// <returns></returns>
-        ITenant GetCurrOrganizeId();
+        string Tenant_Id { get; }
 
         /// <summary>
         /// 登陆
         /// </summary>
         /// <param name="currUser"></param>
         /// <returns></returns>
-        Task Login(ICurrUser currUser);
+        Task LoginAsync(ICurrUser currUser);
 
         /// <summary>
         /// 登出
         /// </summary> 
-        Task LogOut();
+        Task LogOutAsync();
 
-        void Refresh();
-    } 
+        /// <summary>
+        /// 刷新身份
+        /// </summary>
+        /// <returns></returns>
+        Task RefreshIdentityAsync();
+
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <returns></returns>
+        Task InitAsync();
+    }
 }

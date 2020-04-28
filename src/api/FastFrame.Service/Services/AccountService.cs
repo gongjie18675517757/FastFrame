@@ -1,6 +1,7 @@
 ﻿using FastFrame.Dto.Basis;
 using FastFrame.Dto.Dtos;
 using FastFrame.Entity.Basis;
+using FastFrame.Entity.Enums;
 using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Interface;
 using FastFrame.Repository;
@@ -14,13 +15,16 @@ namespace FastFrame.Service.Services
     public class AccountService : IService
     {
         private readonly IRepository<User> userRepository;
-        private readonly ICurrentUserProvider currentUserProvider;
+        private readonly IRepository<LoginLog> loginLogs;
+        private readonly IAppSessionProvider appSession;
 
-        public AccountService(IRepository<User> userRepository, ICurrentUserProvider currentUserProvider)
+        public AccountService(IRepository<User> userRepository, IRepository<LoginLog> loginLogs, IAppSessionProvider appSession)
         {
             this.userRepository = userRepository;
-            this.currentUserProvider = currentUserProvider;
-        } 
+            this.loginLogs = loginLogs;
+            this.appSession = appSession;
+        }
+
         /// <summary>
         /// 登陆
         /// </summary>
@@ -31,18 +35,29 @@ namespace FastFrame.Service.Services
             var user = await userRepository.Queryable.Where(x => x.Account == input.Account).FirstOrDefaultAsync();
             if (user?.VerificationPassword(input.Password) == true)
             {
-                if (user.IsDisabled)
+                if (user.Enable == EnabledMark.Disabled)
                     throw new MsgException("帐号已被停用");
+
+                var loginLog = await loginLogs.AddAsync(new LoginLog
+                {
+                    Enable = EnabledMark.Enabled,
+                    ExpiredTime = DateTime.Now.AddDays(1),
+                    Id = null,
+                    LastTime = DateTime.Now,
+                    LoginTime = DateTime.Now,
+                    User_Id = user.Id
+                });
+
                 var curr = new CurrUser()
                 {
                     IsAdmin = user.IsAdmin,
-                    IsRoot = user.IsRoot,
-                    ToKen = IdGenerate.NetId(),
+                    ToKen = loginLog.Id,
                     Id = user.Id,
                     Name = user.Name,
                     Account = user.Account
                 };
-                await currentUserProvider.Login(curr);
+
+                await appSession.LoginAsync(curr);
                 return curr;
             }
             throw new MsgException("登陆失败,帐号或者密码错误!");
@@ -72,7 +87,7 @@ namespace FastFrame.Service.Services
         /// <returns></returns>
         public async Task<UserDto> UpdateUserInfo(UserDto input)
         {
-            var userId = currentUserProvider.GetCurrUser().Id;
+            var userId = appSession.CurrUser?.Id;
             var user = await userRepository.GetAsync(userId);
             new
             {
@@ -98,11 +113,38 @@ namespace FastFrame.Service.Services
         /// <returns></returns>
         public async Task<UserDto> GetCurrentAsync()
         {
-            var curr = currentUserProvider.GetCurrUser();
+            var curr = appSession.CurrUser;
             if (curr == null)
                 throw new MsgException("未登陆吧!");
             var user = await userRepository.GetAsync(curr?.Id);
+            await appSession.RefreshIdentityAsync();
             return user.MapTo<User, UserDto>();
+        }
+
+        /// <summary>
+        /// 刷新Token
+        /// </summary> 
+        public async Task RefreshTokenAsync(string token)
+        {
+            var log = await loginLogs.GetAsync(token);
+            if (log != null)
+            {
+                log.ExpiredTime = DateTime.Now.AddDays(1);
+                log.LastTime = DateTime.Now;
+                await loginLogs.AddAsync(log);
+                await loginLogs.CommmitAsync();
+            }
+        }
+
+        /// <summary>
+        /// 验证Token
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public async Task<bool> ExistsTokenAsync(string token)
+        {
+            var log = await loginLogs.GetAsync(token); 
+            return log != null && log.ExpiredTime > DateTime.Now;
         }
     }
 }

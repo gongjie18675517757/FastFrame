@@ -3,6 +3,7 @@ using FastFrame.Entity.Basis;
 using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Interface;
 using FastFrame.Repository;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,31 +11,32 @@ namespace FastFrame.Service.Services.Basis
 {
     public partial class TenantService
     {
-        private readonly ICurrentUserProvider currentUserProvider;
+        private string Tenant_Id => AppSession?.Tenant_Id;
+        public async Task<TenantDto> GetCurrentAsync()
+        {
+            var id = await tenantRepository.Where(v => v.Tenant_Id == Tenant_Id).Select(v => v.Id).FirstOrDefaultAsync();
+            return await GetAsync(id);
+        }
 
-        public TenantService(
-            ICurrentUserProvider currentUserProvider, 
-            IRepository<User> userRepository,
-            IRepository<Tenant> tenantRepository)
-            : this(userRepository, tenantRepository)
+        public async Task UpdateCurrentAsync(TenantDto tenantDto)
         {
-            this.currentUserProvider = currentUserProvider;
+            var id = await tenantRepository.Where(v => v.Tenant_Id == Tenant_Id).Select(v => v.Id).FirstOrDefaultAsync();
+            tenantDto.Id = id;
+            await UpdateAsync(tenantDto);
         }
-        public Task<TenantDto> GetCurrentAsync()
+
+        protected override async Task OnAdding(TenantDto input, Tenant entity)
         {
-            return GetAsync(currentUserProvider.GetCurrOrganizeId().Id);
-        }
-        public Task UpdateCurrentAsync(TenantDto tenantDto)
-        {
-            tenantDto.Id = currentUserProvider.GetCurrOrganizeId().Id;
-            return UpdateAsync(tenantDto);
+            await base.OnAdding(input, entity);
+            entity.Super_Id = Tenant_Id;
+            entity.Tenant_Id = IdGenerate.NetId();
         }
 
         protected override IQueryable<TenantDto> GetListQueryableing(IQueryable<TenantDto> query)
         {
-            var terantId = currentUserProvider.GetCurrOrganizeId().Id;
             query = base.GetListQueryableing(query);
-            query.Where(x => x.Id != terantId && x.Super_Id == terantId);
+            var isRoot = Tenant_Id.IsNullOrWhiteSpace();
+            query = query.Where(x => x.Super_Id == Tenant_Id || isRoot);
             return query;
         }
     }

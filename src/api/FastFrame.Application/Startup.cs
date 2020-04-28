@@ -3,6 +3,7 @@ using FastFrame.Application.Hubs;
 using FastFrame.Application.Privder;
 using FastFrame.Database;
 using FastFrame.Dto.Dtos.Chat;
+using FastFrame.Entity.Basis;
 using FastFrame.Infrastructure.EventBus;
 using FastFrame.Infrastructure.Interface;
 using FastFrame.Infrastructure.MessageBus;
@@ -13,6 +14,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -43,6 +45,7 @@ namespace FastFrame.Application
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMemoryCache();
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -87,7 +90,8 @@ namespace FastFrame.Application
                     //o.UseInMemoryDatabase("Local_Mysql");
                 })
                 .AddSingleton<ITypeProvider, TypeProvider>()
-                .AddScoped<ICurrentUserProvider, CurrentUserProvider>()
+                .AddScoped<IAppSessionProvider, AppSessionProvider>()
+                .AddScoped<IApplicationInitialProvider, InitialProvider>()
                 .AddScoped<IResourceProvider, ResourceProvider>()
                 .AddScoped<IDescriptionProvider, DescriptionProvider>()
                 .AddSingleton<IClientManage, ClientConMamage>()
@@ -125,19 +129,15 @@ namespace FastFrame.Application
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime applicationLifetime)
         {
-            app.ApplicationServices.GetService<IMessageBus>().SubscribeAsync<RecMsgOutPut>();
-            app.ApplicationServices.GetService<RedisClient>();
-            app.ApplicationServices.GetService<Database.DataBase>().Database.Migrate();
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-
-
             app.Use(async (context, next) =>
             {
+                await context.Request.HttpContext.RequestServices.GetService<IAppSessionProvider>().InitAsync();
+
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
                 context.Response.OnStarting(() =>
@@ -178,7 +178,7 @@ namespace FastFrame.Application
 
             var logger = app.ApplicationServices.GetService<ILogger<Startup>>();
 
-            applicationLifetime.ApplicationStarted.Register(() =>
+            applicationLifetime.ApplicationStarted.Register(async () =>
             {
                 logger.LogInformation("ApplicationStarted");
                 logger.LogWarning("ApplicationStarted");
@@ -186,6 +186,13 @@ namespace FastFrame.Application
                 logger.LogError("ApplicationStarted");
                 logger.LogTrace("ApplicationStarted");
                 logger.LogCritical("ApplicationStarted");
+
+                var applicationInitialProviders = app.ApplicationServices.GetServices<IApplicationInitialProvider>();
+                foreach (var applicationInitialProvider in applicationInitialProviders)
+                {
+                    await applicationInitialProvider.InitialAsync();
+                }
+
             });
             applicationLifetime.ApplicationStopped.Register(() =>
             {

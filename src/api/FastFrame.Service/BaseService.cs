@@ -10,6 +10,7 @@ using FastFrame.Service.Events;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
@@ -72,6 +73,7 @@ namespace FastFrame.Service
                 }
             }
 
+            await repository.BeginTransactionAsync(IsolationLevel.ReadCommitted);
             await repository.AddAsync(entity);
             input.Id = entity.Id;
             await OnAdding(input, entity);
@@ -98,8 +100,9 @@ namespace FastFrame.Service
                         .Where(v => ids.Contains(v.Id))
                         .ToListAsync();
 
+            await repository.BeginTransactionAsync(IsolationLevel.ReadCommitted);
             foreach (var entity in entitys)
-            { 
+            {
                 await repository.DeleteAsync(entity);
                 await OnDeleteing(entity);
             }
@@ -132,8 +135,9 @@ namespace FastFrame.Service
             {
                 throw new ArgumentNullException(nameof(input));
             }
-            var entity = await repository.GetAsync(input.Id); 
+            var entity = await repository.GetAsync(input.Id);
 
+            await repository.BeginTransactionAsync(IsolationLevel.ReadCommitted);
             await OnBeforeUpdate(entity, input);
 
             if (entity is IHasManage hasManage)

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace FastFrame.Repository
 {
-    public interface IRepository<T> : IQueryRepository<T> ,IUnitOfWork where T : class, IEntity
+    public interface IRepository<T> : IQueryRepository<T>, IUnitOfWork where T : class, IEntity
     {
         /// <summary>
         /// 获取单条数据

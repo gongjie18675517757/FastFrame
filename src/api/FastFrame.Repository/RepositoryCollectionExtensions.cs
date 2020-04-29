@@ -14,19 +14,11 @@ namespace FastFrame.Repository
                     x.IsClass &&
                     !x.IsAbstract &&
                     !x.Name.StartsWith("BaseRepository") &&
-                    !x.IsGenericType);
-
-            //foreach (var type in types)
-            //{
-            //    foreach (var interfaceItem in type.GetInterfaces().Where(x => x != interfaceType))
-            //    {
-            //        services.AddScoped(interfaceItem, type); 
-            //    }
-            //    services.AddScoped(type);
-            //}
+                    !x.IsGenericType); 
 
             services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
             services.AddScoped(typeof(IQueryRepository<>), typeof(BaseQueryable<>));
+            services.AddScoped<IUnitOfWork,BaseUnitOfWork>();
 
             foreach (var type in types)
             {

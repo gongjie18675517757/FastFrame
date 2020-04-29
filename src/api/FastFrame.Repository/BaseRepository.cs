@@ -8,9 +8,11 @@ using FastFrame.Infrastructure.EventBus;
 using FastFrame.Infrastructure.Interface;
 using FastFrame.Repository.Events;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
@@ -22,13 +24,17 @@ namespace FastFrame.Repository
     internal class BaseRepository<T> : BaseQueryable<T>, IRepository<T> where T : class, IEntity
     {
         private readonly DataBase context;
+        private readonly IUnitOfWork unitOfWork;
 
         [FromServiceContext]
         public IEventBus EventBus { get; set; }
 
-        public BaseRepository(DataBase context) : base(context)
+        public bool IsTransactionOpening => unitOfWork.IsTransactionOpening;
+
+        public BaseRepository(DataBase context, IUnitOfWork unitOfWork) : base(context)
         {
             this.context = context;
+            this.unitOfWork = unitOfWork;
         }
 
         /// <summary>
@@ -38,15 +44,17 @@ namespace FastFrame.Repository
         {
             /*验证唯一性+关联性*/
             entity.Id = IdGenerate.NetId();
-            if (entity is IHasTenant) 
-                context.Entry(entity).Property<string>("tenant_id").CurrentValue = AppSession?.Tenant_Id;  
+            if (entity is IHasTenant)
+                context.Entry(entity).Property<string>("tenant_id").CurrentValue = AppSession?.Tenant_Id;
 
             var entityEntry = context.Entry(entity);
             entityEntry.State = EntityState.Added;
 
             await EventBus.TriggerEventAsync(new EntityAdding<T>(entityEntry.Entity));
+            if (IsTransactionOpening)
+                await context.SaveChangesAsync();
             return entityEntry.Entity;
-        } 
+        }
 
         /// <summary>
         /// 删除
@@ -78,17 +86,24 @@ namespace FastFrame.Repository
         {
             var entity = await Queryable.FirstOrDefaultAsync(x => x.Id == id);
             await DeleteAsync(entity);
+
+            if (IsTransactionOpening)
+                await context.SaveChangesAsync();
         }
 
         /// <summary>
         /// 更新数据
         /// </summary> 
         public virtual async Task<T> UpdateAsync(T entity)
-        {  
+        {
             var entityEntry = context.Entry(entity);
             entityEntry.State = EntityState.Modified;
 
             await EventBus.TriggerEventAsync(new EntityUpdateing<T>(entityEntry.Entity));
+
+            if (IsTransactionOpening)
+                await context.SaveChangesAsync();
+
             return entityEntry.Entity;
         }
 
@@ -100,9 +115,24 @@ namespace FastFrame.Repository
             return await Queryable.Where(v => v.Id == id).SingleOrDefaultAsync();
         }
 
-        public async Task<int> CommmitAsync()
+        public Task<int> CommmitAsync()
         {
-            return await context.SaveChangesAsync();
+            return unitOfWork.CommmitAsync();
+        }
+
+        public int Commmit()
+        {
+            return unitOfWork.Commmit();
+        }
+
+        public Task BeginTransactionAsync(IsolationLevel level)
+        {
+            return unitOfWork.BeginTransactionAsync(level);
+        }
+
+        public void BeginTransaction(IsolationLevel level)
+        {
+            unitOfWork.BeginTransaction(level);
         }
     }
 }

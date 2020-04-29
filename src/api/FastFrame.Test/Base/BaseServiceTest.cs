@@ -17,8 +17,8 @@ namespace FastFrame.Test
         public BaseServiceTest()
         {
             var builder = new ConfigurationBuilder()
-             .SetBasePath(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName)
-             .AddJsonFile("appsettings.json");
+                             .SetBasePath(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName)
+                             .AddJsonFile("appsettings.json");
             Configuration = builder.Build();
 
 
@@ -27,8 +27,7 @@ namespace FastFrame.Test
                 .AddDbContextPool<DataBase>(o =>
                 {
                     o.UseMySql(Configuration.GetConnectionString("Local_Mysql"));
-                })
-                
+                }) 
                 .AddScoped<IAppSessionProvider, CurrentUserProvider>()
                 .AddScoped<IEventBus, EventBus>()
                 .AddServices()

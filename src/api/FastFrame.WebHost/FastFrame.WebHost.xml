@@ -4,38 +4,38 @@
         <name>FastFrame.WebHost</name>
     </assembly>
     <members>
-        <member name="T:FastFrame.WebHost.Controllers.AccountController">
+        <member name="T:FastFrame.WebHost.Controllers.Account.AccountController">
             <summary>
             登陆
             </summary>
         </member>
-        <member name="M:FastFrame.WebHost.Controllers.AccountController.Login(FastFrame.Dto.Dtos.LoginInput)">
+        <member name="M:FastFrame.WebHost.Controllers.Account.AccountController.Login(FastFrame.Application.Account.LoginInput)">
             <summary>
             登陆
             </summary>
             <param name="input"></param>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.WebHost.Controllers.AccountController.Regist(FastFrame.Dto.Basis.UserDto)">
+        <member name="M:FastFrame.WebHost.Controllers.Account.AccountController.Regist(FastFrame.Application.Basis.UserDto)">
             <summary>
             注册
             </summary>
             <param name="user"></param>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.WebHost.Controllers.AccountController.LogOut">
+        <member name="M:FastFrame.WebHost.Controllers.Account.AccountController.LogOut">
             <summary>
             登出
             </summary>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.WebHost.Controllers.AccountController.GetCurrent">
+        <member name="M:FastFrame.WebHost.Controllers.Account.AccountController.GetCurrent">
             <summary>
             获取当前用户
             </summary>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.WebHost.Controllers.AccountController.UpdateCurrUserInfo(FastFrame.Dto.Basis.UserDto)">
+        <member name="M:FastFrame.WebHost.Controllers.Account.AccountController.UpdateCurrUserInfo(FastFrame.Application.Basis.UserDto)">
             <summary>
             修改当前用户信息
             </summary>
@@ -80,14 +80,14 @@
             <returns></returns>
         </member>
         <member name="T:FastFrame.WebHost.Controllers.Basis.DeptController">
-             <summary>
+            <summary>
             部门 
-             </summary>
+            </summary>
         </member>
         <member name="T:FastFrame.WebHost.Controllers.Basis.EnumItemController">
-             <summary>
+            <summary>
             数字字典 
-             </summary>
+            </summary>
         </member>
         <member name="M:FastFrame.WebHost.Controllers.Basis.MeidiaController.Delete(System.String)">
             <summary>
@@ -104,7 +104,7 @@
             <param name="name"></param>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.WebHost.Controllers.Basis.MeidiaController.Post(FastFrame.Dto.Basis.MeidiaDto)">
+        <member name="M:FastFrame.WebHost.Controllers.Basis.MeidiaController.Post(FastFrame.Application.Basis.MeidiaDto)">
             <summary>
             添加
             </summary>
@@ -112,9 +112,9 @@
             <returns></returns>
         </member>
         <member name="T:FastFrame.WebHost.Controllers.Basis.NotifyController">
-             <summary>
+            <summary>
             通知 
-             </summary>
+            </summary>
         </member>
         <member name="M:FastFrame.WebHost.Controllers.Basis.NotifyController.AllList(FastFrame.Infrastructure.Pagination)">
             <summary>
@@ -127,6 +127,11 @@
             </summary>
             <param name="id"></param>
             <returns></returns>
+        </member>
+        <member name="T:FastFrame.WebHost.Controllers.Basis.NumberOptionController">
+            <summary>
+            编号设置 
+            </summary>
         </member>
         <member name="M:FastFrame.WebHost.Controllers.Basis.PermissionController.InitPermission">
             <summary>
@@ -141,19 +146,19 @@
             <returns></returns>
         </member>
         <member name="T:FastFrame.WebHost.Controllers.Basis.RoleController">
-             <summary>
+            <summary>
             角色 
-             </summary>
+            </summary>
         </member>
         <member name="T:FastFrame.WebHost.Controllers.Basis.TenantController">
-             <summary>
+            <summary>
             组织信息 
-             </summary>
+            </summary>
         </member>
         <member name="T:FastFrame.WebHost.Controllers.Basis.UserController">
-             <summary>
+            <summary>
             用户 
-             </summary>
+            </summary>
         </member>
         <member name="M:FastFrame.WebHost.Controllers.Basis.UserController.ToogleAdminIdentity(System.String)">
             <summary>
@@ -169,17 +174,12 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="T:FastFrame.WebHost.Controllers.Basis.NumberOptionController">
-             <summary>
-            编号设置 
-             </summary>
-        </member>
         <member name="T:FastFrame.WebHost.Controllers.Chat.ChatController">
             <summary>
             聊天
             </summary>
         </member>
-        <member name="M:FastFrame.WebHost.Controllers.Chat.ChatController.SendFriendMsg(FastFrame.Dto.Dtos.Chat.FriendMsgInput)">
+        <member name="M:FastFrame.WebHost.Controllers.Chat.ChatController.SendFriendMsg(FastFrame.Application.Chat.FriendMsgInput)">
             <summary>
             发送消息给好友
             </summary> 
@@ -204,7 +204,7 @@
             生成密码
             </summary> 
         </member>
-        <member name="M:FastFrame.WebHost.Controllers.CommonController.VerififyUnique(FastFrame.Dto.UniqueInput)">
+        <member name="M:FastFrame.WebHost.Controllers.CommonController.VerififyUnique(FastFrame.Application.UniqueInput)">
             <summary>
             验证唯一性
             </summary>      
@@ -249,6 +249,11 @@
             默认表单
             </summary>
         </member>
+        <member name="T:FastFrame.WebHost.Controllers.Flow.WorkFlowController">
+            <summary>
+            工作流 
+            </summary>
+        </member>
         <member name="T:FastFrame.WebHost.Controllers.ResourceController">
             <summary>
             资源
@@ -264,11 +269,6 @@
             <summary>
             下载
             </summary> 
-        </member>
-        <member name="T:FastFrame.WebHost.Controllers.Flow.WorkFlowController">
-             <summary>
-            工作流 
-             </summary>
         </member>
         <member name="T:FastFrame.WebHost.EveryoneAccessAttribute">
             <summary>

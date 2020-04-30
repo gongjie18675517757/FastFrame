@@ -1,8 +1,8 @@
 ﻿using CSRedis;
+using FastFrame.Application.Account;
 using FastFrame.Entity.Basis;
 using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Interface;
-using FastFrame.Application.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
 using System;

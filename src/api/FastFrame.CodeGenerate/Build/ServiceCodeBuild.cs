@@ -22,7 +22,7 @@ namespace FastFrame.CodeGenerate.Build
             dtoBuild = new DtoBuild(solutionDir, baseEntityType);
         }
 
-        public override string TargetPath => $"{SolutionDir}\\FastFrame.Application\\Services\\Templates";
+        public override string TargetPath => $"{SolutionDir}\\FastFrame.Application";
 
 
         public override IEnumerable<Info.TargetInfo> BuildCodeInfo(string typeName)
@@ -58,8 +58,7 @@ namespace FastFrame.CodeGenerate.Build
                  .Select(x => T4Help.GenerateNameSpace(x.RelatedType, null))
                  .Union(new[] { areaName })
                  .SelectMany(x => new string[] { $"FastFrame.Entity.{x}", })
-                 .Union(new string[] {
-                    $"FastFrame.Dto.{areaName}",
+                 .Union(new string[] { 
                     $"FastFrame.Infrastructure.Interface",
                     "FastFrame.Infrastructure",
                     "FastFrame.Repository",
@@ -72,7 +71,7 @@ namespace FastFrame.CodeGenerate.Build
                     .Select(x => x.GetCustomAttribute<RelatedToAttribute>())
                     .Where(x => x != null)
                     .SelectMany(x => new[] { x.RelatedType.Namespace ,
-                        $"FastFrame.Dto.{T4Help.GenerateNameSpace(x.RelatedType,"")}" }))
+                        $"FastFrame.Application.{T4Help.GenerateNameSpace(x.RelatedType,"")}" }))
                  .Distinct();
 
             /*要导入的依赖*/
@@ -85,7 +84,7 @@ namespace FastFrame.CodeGenerate.Build
 
             return new Info.TargetInfo()
             {
-                NamespaceName = $"FastFrame.Application.Services.{areaName}",
+                NamespaceName = $"FastFrame.Application.{areaName}",
                 ImportNames = importNames,
                 Name = $"{type.Name}Service",
                 CategoryName = "class",
@@ -99,7 +98,7 @@ namespace FastFrame.CodeGenerate.Build
                 },
                 MethodInfos = GetMethods(type),
                 Summary = $"{T4Help.GetClassSummary(type, XmlDocDir)} 服务实现",
-                Path = TargetPath
+                Path = $"{TargetPath}\\{areaName}\\{type.Name}\\{type.Name}Service.template.cs"
             };
         }
 
@@ -215,14 +214,14 @@ namespace FastFrame.CodeGenerate.Build
                     fieldNames = fieldNames.Where(v => !baseFieldNames.Any(r => r == v)).ToArray();
                 }
                 string linqTempName = "_" + prop.Prop.Name.ToFirstLower();
-                fieldNames = fieldNames.Concat(new[] { "Id" }).Distinct().Select(v => $"{v}={linqTempName}.{v}").ToArray();
+                fieldNames = fieldNames.Concat(new[] { "Id" }).Distinct().Select(v => $"{v} = {linqTempName}.{v}").ToArray();
                 string fieldCtorStr = string.Join(",", fieldNames);
 
-                yield return $"\t\t\tlet {name}=new {relateType.Name}ViewModel {{{fieldCtorStr}}}";
+                yield return $"\t\t\tlet {name} = new {relateType.Name}ViewModel {{{fieldCtorStr}}}";
             }
 
 
-            yield return $"\t\t\t select new {type.Name}Dto";
+            yield return $"\t\t\tselect new {type.Name}Dto";
             yield return "\t\t\t{";
 
             foreach (PropertyInfo prop in type.GetProperties())
@@ -239,7 +238,7 @@ namespace FastFrame.CodeGenerate.Build
                 //var linqTempName = "_" + prop.Prop.Name.ToFirstLower();
                 yield return $"\t\t\t\t{prop.Prop.Name.Replace("_Id", "")}={prop.Prop.Name.Replace("_Id", "")},";
             }
-            yield return "\t\t};";
+            yield return "\t\t\t};";
             yield return "return query;";
         }
     }

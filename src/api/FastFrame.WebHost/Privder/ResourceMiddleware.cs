@@ -1,9 +1,4 @@
-﻿using FastFrame.Application.Services.Basis;
-using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
+﻿using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 
 namespace FastFrame.WebHost.Privder

@@ -17,26 +17,22 @@ namespace FastFrame.CodeGenerate
             this.typeName = typeName;
         }
         public event EventHandler<string> WriteFileComplete;
+
         public void Run(BaseCodeBuild codeBuild)
         {
-            var targets = codeBuild.BuildCodeInfo(typeName);
-            foreach (var file in Directory.GetFiles(codeBuild.TargetPath))
-            {
-                var fileName = Path.GetFileName(file);
-                var exists = targets.Any(r => $"{r.Name}.cs" == fileName);
-                if (string.IsNullOrWhiteSpace(typeName) && !exists)
-                    File.Delete(file);
-            }
+            var targets = codeBuild.BuildCodeInfo(typeName); 
             foreach (var target in targets)
             {
-                if (!Directory.Exists(target.Path))
-                    Directory.CreateDirectory(target.Path);
-                var path = $"{target.Path}\\{target.Name}.cs";
-                if (File.Exists(path)) File.Delete(path);
-                using (var file = File.Create(path))
-                {
-                    using (var write = new StreamWriter(file))
+                var dirName = Path.GetDirectoryName(target.Path);
+                if (!Directory.Exists(dirName))
+                    Directory.CreateDirectory(dirName); 
+
+                using (var fileSteam = new FileStream(target.Path, FileMode.Create, FileAccess.Write, FileShare.Write))
+                {      
+                    using (var write = new StreamWriter(fileSteam))
                     {
+                         
+
                         /*类型所在命名空间*/
                         write.WriteCodeLine($"namespace {target.NamespaceName}", 0);
 
@@ -49,9 +45,12 @@ namespace FastFrame.CodeGenerate
                             write.WriteCodeLine($"using {item}; ", 1);
                         }
 
+                        /*空行*/
+                        write.WriteCodeLine($"", 2);
+
                         /*类说明*/
                         write.WriteCodeLine($"/// <summary>", 1);
-                        write.WriteCodeLine($"///{target.Summary} ", 1);
+                        write.WriteCodeLine($"/// {target.Summary} ", 1);
                         write.WriteCodeLine($"/// </summary>", 1);
 
                         /*类特性*/
@@ -80,7 +79,7 @@ namespace FastFrame.CodeGenerate
                         {
                             write.WriteCodeLine($"public {target.Name}({string.Join(",", target.Constructor.Parms.Select(x => $"{x.TypeName} {x.DefineName}"))})", 2);
                             if (target.Constructor.Super.Any())
-                                write.WriteCodeLine($":base({string.Join(",", target.Constructor.Super)})", 3);
+                                write.WriteCodeLine($" : base({string.Join(",", target.Constructor.Super)})", 3);
 
                             /*构造函数开始*/
                             write.WriteCodeLine($"{{", 2);
@@ -94,15 +93,18 @@ namespace FastFrame.CodeGenerate
                             /*构造函数结束*/
                             write.WriteCodeLine($"}}", 2);
                         }
-                        write.WriteCodeLine("", 2);
+                        
 
                         /*属性列表*/
                         //write.WriteCodeLine("/*属性*/", 2);
                         foreach (var prop in target.PropInfos)
                         {
+                            /*空行*/
+                            write.WriteCodeLine($"", 2);
+
                             /*属性说明*/
                             write.WriteCodeLine($"/// <summary>", 2);
-                            write.WriteCodeLine($"///{prop.Summary} ", 2);
+                            write.WriteCodeLine($"/// {prop.Summary} ", 2);
                             write.WriteCodeLine($"/// </summary>", 2);
 
                             /*属性特性*/
@@ -112,10 +114,7 @@ namespace FastFrame.CodeGenerate
                             }
 
                             /*属性定义*/
-                            write.WriteCodeLine($"public {prop.TypeName} {prop.Name} {{get;set;}}", 2);
-
-                            /*空行*/
-                            write.WriteCodeLine($"", 2);
+                            write.WriteCodeLine($"public {prop.TypeName} {prop.Name} {{get;set;}}", 2); 
                         }
                         write.WriteCodeLine("", 2);
 
@@ -145,7 +144,7 @@ namespace FastFrame.CodeGenerate
                         /*命名空间结束*/
                         write.WriteCodeLine($"}}", 0);
 
-                        WriteFileComplete?.Invoke(target, path);
+                        WriteFileComplete?.Invoke(target, target.Path);
 
                         write.Flush();
                     }

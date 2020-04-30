@@ -16,7 +16,7 @@ namespace FastFrame.CodeGenerate.Build
         {
         }
 
-        public override string TargetPath => $"{SolutionDir}\\FastFrame.WebHost\\Controllers\\Templates";
+        public override string TargetPath => $"{SolutionDir}\\FastFrame.WebHost\\Controllers";
 
         public override string ProductName => "API控制器";
 
@@ -44,12 +44,11 @@ namespace FastFrame.CodeGenerate.Build
                 yield return new TargetInfo()
                 {
                     Summary = summary,
-                    Path = TargetPath,
+                    Path = $"{TargetPath}\\{spaceName}\\{type.Name}\\{type.Name}Controller.template.cs",
                     NamespaceName = $"FastFrame.WebHost.Controllers.{spaceName}",
-                    ImportNames = new string[] {
-                        $"FastFrame.Dto.{spaceName}",
+                    ImportNames = new string[] { 
                         $"FastFrame.Entity.{spaceName}",
-                        $"FastFrame.Application.Services.{spaceName}",
+                        $"FastFrame.Application.{spaceName}",
                         "FastFrame.Infrastructure.Attrs",
                         "FastFrame.Infrastructure.Interface"
                     },
@@ -57,16 +56,16 @@ namespace FastFrame.CodeGenerate.Build
                     Name = $"{name}Controller",
                     BaseNames = baseNames,
                     FieldInfos = new FieldInfo[] {
-                        new FieldInfo(){ TypeName=$"{name}Service",FieldName="service"} 
+                        new FieldInfo(){ TypeName=$"{name}Service",FieldName="service"}
                     },
                     Constructor = new Info.ConstructorInfo()
                     {
                         Parms = new ParameterInfo[] {
-                            new ParameterInfo() { TypeName = $"{name}Service", DefineName = "service" } 
+                            new ParameterInfo() { TypeName = $"{name}Service", DefineName = "service" }
                         },
-                        Super = new string[] { "service"},
+                        Super = new string[] { "service" },
                         CodeBlock = new string[] {
-                            "this.service = service;" 
+                            "this.service = service;"
                         }
                     },
                     AttrInfos = new[] {

@@ -17,7 +17,7 @@ namespace FastFrame.CodeGenerate.Build
         {
         }
 
-        public override string TargetPath => $"{SolutionDir}\\FastFrame.Dto\\Dtos\\Templates";
+        public override string TargetPath => $"{SolutionDir}\\FastFrame.Application";
 
 
         public override IEnumerable<Info.TargetInfo> BuildCodeInfo(string typeName)
@@ -54,7 +54,7 @@ namespace FastFrame.CodeGenerate.Build
 
             return new Info.TargetInfo()
             {
-                NamespaceName = $"FastFrame.Dto.{areaNameSpace}",
+                NamespaceName = $"FastFrame.Application.{areaNameSpace}",
                 ImportNames = new string[] {
                         $"FastFrame.Entity.{areaNameSpace}",
                         "FastFrame.Infrastructure.Attrs",
@@ -68,15 +68,15 @@ namespace FastFrame.CodeGenerate.Build
                     .Select(x => x.GetCustomAttribute<RelatedToAttribute>())
                     .Where(x => x != null)
                     .SelectMany(x => new[] { x.RelatedType.Namespace ,
-                        $"FastFrame.Dto.{T4Help.GenerateNameSpace(x.RelatedType,"")}" }))
+                        $"FastFrame.Application.{T4Help.GenerateNameSpace(x.RelatedType,"")}" }))
                     .Distinct(),
                 Summary = T4Help.GetClassSummary(type, XmlDocDir),
                 Name = $"{type.Name}Dto",
                 BaseNames = new string[] { $"BaseDto<{type.Name}>" },
-                Path = $"{TargetPath}",
+                Path = $"{TargetPath}\\{areaNameSpace}\\{type.Name}\\Dto\\{type.Name}Dto.template.cs",
                 CategoryName = "class",
                 PropInfos = GetPropInfos(type),
-                AttrInfos = attrs
+                AttrInfos =Array.Empty<AttrInfo>() /*attrs*/
             };
         }
 
@@ -142,26 +142,26 @@ namespace FastFrame.CodeGenerate.Build
                 yield return new AttrInfo() { Name = "Required", };
             }
 
-            if (TryGetAttribute<UniqueAttribute>(propertyInfo, out var uniqueAttribute))
-            {
-                yield return new AttrInfo()
-                {
-                    Name = "Unique",
-                    Parameters = uniqueAttribute.UniqueNames.Select(x => $"\"{x}\"")
-                };
-            }
+            //if (TryGetAttribute<UniqueAttribute>(propertyInfo, out var uniqueAttribute))
+            //{
+            //    yield return new AttrInfo()
+            //    {
+            //        Name = "Unique",
+            //        Parameters = uniqueAttribute.UniqueNames.Select(x => $"\"{x}\"")
+            //    };
+            //}
 
-            if (TryGetAttribute<HideAttribute>(propertyInfo, out var hideAttribute))
-            {
-                yield return new AttrInfo()
-                {
-                    Name = "Hide",
-                    Parameters = new string[]
-                    {
-                        $"HideMark.{hideAttribute.HideMark.ToString()}"
-                    }
-                };
-            }
+            //if (TryGetAttribute<HideAttribute>(propertyInfo, out var hideAttribute))
+            //{
+            //    yield return new AttrInfo()
+            //    {
+            //        Name = "Hide",
+            //        Parameters = new string[]
+            //        {
+            //            $"HideMark.{hideAttribute.HideMark}"
+            //        }
+            //    };
+            //}
 
             if (TryGetAttribute<EmailAddressAttribute>(propertyInfo, out var emailAddressAttribute))
             {
@@ -173,34 +173,34 @@ namespace FastFrame.CodeGenerate.Build
                 yield return new AttrInfo() { Name = "Phone" };
             }
 
-            if (TryGetAttribute<ReadOnlyAttribute>(propertyInfo, out var readOnlyAttribute))
-            {
-                yield return new AttrInfo()
-                {
-                    Name = "ReadOnly",
-                    Parameters = new string[] { $"ReadOnlyMark.{readOnlyAttribute.ReadOnlyMark.ToString()}" }
-                };
-            }
+            //if (TryGetAttribute<ReadOnlyAttribute>(propertyInfo, out var readOnlyAttribute))
+            //{
+            //    yield return new AttrInfo()
+            //    {
+            //        Name = "ReadOnly",
+            //        Parameters = new string[] { $"ReadOnlyMark.{readOnlyAttribute.ReadOnlyMark.ToString()}" }
+            //    };
+            //}
 
-            if (TryGetAttribute<RelatedToAttribute>(propertyInfo, out var relatedToAttribute))
-            {
-                yield return new AttrInfo()
-                {
-                    Name = "RelatedTo",
-                    Parameters = new string[] { $"typeof({relatedToAttribute.RelatedType.Name})" }
-                };
-            }
+            //if (TryGetAttribute<RelatedToAttribute>(propertyInfo, out var relatedToAttribute))
+            //{
+            //    yield return new AttrInfo()
+            //    {
+            //        Name = "RelatedTo",
+            //        Parameters = new string[] { $"typeof({relatedToAttribute.RelatedType.Name})" }
+            //    };
+            //}
 
-            if (TryGetAttribute<RelatedFieldAttribute>(propertyInfo, out var relatedFieldAttribute))
-            {
-                yield return new AttrInfo()
-                {
-                    Name = "RelatedField",
-                    Parameters = new[] { $"\"{relatedFieldAttribute.DefaultName}\"" }
-                    .Union(
-                        relatedFieldAttribute.OtherNames.Select(x => $"\"{x}\""))
-                };
-            }
+            //if (TryGetAttribute<RelatedFieldAttribute>(propertyInfo, out var relatedFieldAttribute))
+            //{
+            //    yield return new AttrInfo()
+            //    {
+            //        Name = "RelatedField",
+            //        Parameters = new[] { $"\"{relatedFieldAttribute.DefaultName}\"" }
+            //        .Union(
+            //            relatedFieldAttribute.OtherNames.Select(x => $"\"{x}\""))
+            //    };
+            //}
         }
 
         public bool TryGetAttribute<T>(PropertyInfo propertyInfo, out T attr) where T : Attribute

@@ -1,9 +1,6 @@
-﻿using FastFrame.Database;
-using FastFrame.Entity.Basis;
+﻿using FastFrame.Application.Account;
+using FastFrame.Application.Basis;
 using FastFrame.Infrastructure;
-using FastFrame.Infrastructure.Interface;
-using FastFrame.Repository;
-using FastFrame.Application.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 
@@ -14,13 +11,13 @@ namespace FastFrame.Test
         public virtual async Task Init()
         {
             var accountService = ServiceProvider.GetService<AccountService>();
-            var user = await accountService.RegistAsync(new FastFrame.Dto.Basis.UserDto()
+            var user = await accountService.RegistAsync(new UserDto()
             {
                 Account = IdGenerate.NetId(),
                 Name = IdGenerate.NetId(),
                 Password = "123456"
             });
-            await accountService.LoginAsync(new FastFrame.Dto.Dtos.LoginInput()
+            await accountService.LoginAsync(new LoginInput()
             {
                 Account = user.Account,
                 Password = "123456"

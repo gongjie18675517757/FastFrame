@@ -1,5 +1,4 @@
-﻿using FastFrame.Dto.Dtos.Chat;
-using FastFrame.Application.Services.Chat;
+﻿using FastFrame.Application.Chat;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;

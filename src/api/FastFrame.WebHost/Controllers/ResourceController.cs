@@ -1,10 +1,7 @@
-﻿using FastFrame.Dto.Basis;
+﻿using FastFrame.Application.Basis;
 using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Interface;
-using FastFrame.Application.Services.Basis;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Net.Http.Headers;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

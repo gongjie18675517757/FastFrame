@@ -1,5 +1,4 @@
-﻿using FastFrame.Dto;
-using FastFrame.Infrastructure.EventBus;
+﻿using FastFrame.Infrastructure.EventBus;
 
 namespace FastFrame.Application.Events
 {

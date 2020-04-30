@@ -1,6 +1,6 @@
-﻿using FastFrame.Entity.Basis;
+﻿using FastFrame.Application.Basis;
+using FastFrame.Entity.Basis;
 using FastFrame.Repository;
-using FastFrame.Application.Services.Basis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -25,7 +25,7 @@ namespace FastFrame.Test.Basis
             try
             {
                 var service = ServiceProvider.GetService<UserService>();
-                var user = new Dto.Basis.UserDto()
+                var user = new UserDto()
                 {
                     Account = name,
                     Name = name,

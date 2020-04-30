@@ -1,16 +1,10 @@
 ﻿using CSRedis;
 using FastFrame.Infrastructure;
-using FastFrame.Infrastructure.Interface;
-using System;
-using System.Threading.Tasks;
-using static CSRedis.CSRedisClient;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using FastFrame.Dto.Dtos.Chat;
-using Microsoft.AspNetCore.SignalR;
-using FastFrame.WebHost.Hubs;
-using System.Collections.Generic;
 using FastFrame.Infrastructure.MessageBus;
+using FastFrame.WebHost.Hubs;
+using Microsoft.AspNetCore.SignalR;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FastFrame.WebHost.Privder
 {

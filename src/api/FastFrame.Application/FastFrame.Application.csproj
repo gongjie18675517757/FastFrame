@@ -7,14 +7,9 @@
  
 
   <ItemGroup>
-    <ProjectReference Include="..\FastFrame.Dto\FastFrame.Dto.csproj" />
     <ProjectReference Include="..\FastFrame.Entity\FastFrame.Entity.csproj" />
     <ProjectReference Include="..\FastFrame.Infrastructure\FastFrame.Infrastructure.csproj" />
     <ProjectReference Include="..\FastFrame.Repository\FastFrame.Repository.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Services\Templates\" />
   </ItemGroup>
 
 </Project>

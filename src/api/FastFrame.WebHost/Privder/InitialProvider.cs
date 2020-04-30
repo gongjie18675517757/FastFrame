@@ -1,17 +1,15 @@
 ﻿using CSRedis;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using FastFrame.Infrastructure.MessageBus;
-using FastFrame.Dto.Dtos.Chat;
+using FastFrame.Application.Chat;
 using FastFrame.Database;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.EntityFrameworkCore;
 using FastFrame.Entity.Basis;
 using FastFrame.Infrastructure.Interface;
+using FastFrame.Infrastructure.MessageBus;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Threading.Tasks;
 
 namespace FastFrame.WebHost.Privder
 {

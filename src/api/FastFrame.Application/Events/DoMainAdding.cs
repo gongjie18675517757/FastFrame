@@ -1,8 +1,4 @@
-﻿using FastFrame.Dto;
-using FastFrame.Infrastructure.EventBus;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using FastFrame.Infrastructure.EventBus;
 
 namespace FastFrame.Application.Events
 {

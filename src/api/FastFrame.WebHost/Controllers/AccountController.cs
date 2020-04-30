@@ -1,14 +1,10 @@
-﻿using System.Collections;
-using System.Threading.Tasks;
-using FastFrame.Dto.Basis;
-using FastFrame.Dto.Dtos;
-using FastFrame.Entity.Basis;
+﻿using FastFrame.Application.Account;
+using FastFrame.Application.Basis;
 using FastFrame.Infrastructure.Interface;
-using FastFrame.Application.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
-namespace FastFrame.WebHost.Controllers
+namespace FastFrame.WebHost.Controllers.Account
 {
     /// <summary>
     /// 登陆

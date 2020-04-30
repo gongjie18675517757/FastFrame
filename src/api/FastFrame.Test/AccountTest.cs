@@ -1,10 +1,8 @@
-using FastFrame.Dto.Basis;
-using FastFrame.Dto.Dtos;
+using FastFrame.Application.Account;
+using FastFrame.Application.Basis;
 using FastFrame.Entity.Basis;
-using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Interface;
 using FastFrame.Repository;
-using FastFrame.Application.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

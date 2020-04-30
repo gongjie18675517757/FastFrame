@@ -15,7 +15,7 @@ namespace FastFrame.CodeGenerate.Build
         }
 
         public override string ProductName => "ViewModel";
-        public override string TargetPath => $"{SolutionDir}\\FastFrame.Dto\\ViewModels\\Templates";
+        public override string TargetPath => $"{SolutionDir}\\FastFrame.Application";
 
         public override IEnumerable<Info.TargetInfo> BuildCodeInfo(string typeName)
         {
@@ -32,13 +32,13 @@ namespace FastFrame.CodeGenerate.Build
                 var areaNameSpace = T4Help.GenerateNameSpace(type, null);
                 yield return new Info.TargetInfo
                 {
-                    NamespaceName = $"FastFrame.Dto.{areaNameSpace}",
+                    NamespaceName = $"FastFrame.Application.{areaNameSpace}",
                     ImportNames = new[] { "System", "FastFrame.Entity.Enums" }
                             .Concat(type.GetProperties().Select(v => v.PropertyType.Namespace))
                             .Distinct(),
                     Summary = T4Help.GetClassSummary(type, XmlDocDir),
                     Name = $"{type.Name}ViewModel",
-                    Path = $"{TargetPath}",
+                    Path = $"{TargetPath}\\{areaNameSpace}\\{type.Name}\\Dto\\{type.Name}ViewModel.template.cs",
                     CategoryName = "class",
                     PropInfos = GetPropInfos(type),
                     BaseNames = new[] { "IViewModel" }

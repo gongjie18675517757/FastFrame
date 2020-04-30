@@ -1,10 +1,9 @@
 ﻿using AspectCore.DependencyInjection;
-using FastFrame.Dto;
+using FastFrame.Application;
 using FastFrame.Entity;
 using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Attrs;
 using FastFrame.Infrastructure.Interface;
-using FastFrame.Application;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 

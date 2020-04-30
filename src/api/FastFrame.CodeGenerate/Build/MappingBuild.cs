@@ -12,7 +12,7 @@ namespace FastFrame.CodeGenerate.Build
         {
         }
 
-        public override string TargetPath => $"{SolutionDir}\\FastFrame.Database\\Mapping\\Templates";
+        public override string TargetPath => $"{SolutionDir}\\FastFrame.Database\\Mapping";
 
         public override IEnumerable<TargetInfo> BuildCodeInfo(string typeName)
         {
@@ -24,11 +24,11 @@ namespace FastFrame.CodeGenerate.Build
                 yield return new TargetInfo()
                 {
                     NamespaceName = $"FastFrame.Database.Mapping.{areaNameSpace}",
-                    ImportNames = new string[] { $"FastFrame.Entity.{areaNameSpace}" },
+                    ImportNames = new string[] { $"FastFrame.Entity.{areaNameSpace}", "Microsoft.EntityFrameworkCore.Metadata.Builders" },
                     Summary = T4Help.GetClassSummary(type, XmlDocDir),
                     Name = $"{type.Name}Mapping",
                     BaseNames = new string[] { $"BaseEntityMapping<{type.Name}>" },
-                    Path = $"{TargetPath}",
+                    Path = $"{TargetPath}\\{areaNameSpace}\\{type.Name}\\{type.Name}Mapping.template.cs",
                     CategoryName = "class"
                 };
             }

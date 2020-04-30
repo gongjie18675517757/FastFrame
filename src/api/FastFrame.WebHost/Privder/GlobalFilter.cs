@@ -1,17 +1,15 @@
-﻿using FastFrame.Infrastructure.Attrs;
+﻿using AspectCore.DynamicProxy;
+using FastFrame.Application.Basis;
+using FastFrame.Infrastructure;
+using FastFrame.Infrastructure.Attrs;
 using FastFrame.Infrastructure.Interface;
-using FastFrame.Application.Services.Basis;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Reflection;
-using AspectCore.DynamicProxy;
 using Microsoft.Extensions.Logging;
-using FastFrame.Infrastructure;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 
 namespace FastFrame.WebHost.Privder
 {
@@ -20,8 +18,7 @@ namespace FastFrame.WebHost.Privder
         private readonly IAppSessionProvider appSession;
         private readonly PermissionService permissionService;
         private readonly IDescriptionProvider descriptionProvider;
-        private readonly ILogger<GlobalFilter> logger;
-        private const string StopwatchName = "Stopwatch";
+        private readonly ILogger<GlobalFilter> logger; 
 
         public GlobalFilter(
             IAppSessionProvider appSession,

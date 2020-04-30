@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using CSRedis;
-using FastFrame.WebHost.Hubs;
+﻿using FastFrame.Application.Chat;
 using FastFrame.Infrastructure.Interface;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
-using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.MessageBus;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using FastFrame.Dto.Dtos.Chat;
-using System.Net.Http;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FastFrame.WebHost.Controllers
 {

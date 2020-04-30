@@ -1,7 +1,7 @@
 ﻿using FastFrame.Dto.Basis;
 using System.Threading.Tasks;
 using FastFrame.Infrastructure.Interface;
-using FastFrame.Service.Services.Basis;
+using FastFrame.Application.Services.Basis;
 using Microsoft.AspNetCore.Mvc;
 using FastFrame.Infrastructure.Attrs;
 using Microsoft.AspNetCore.Authorization;

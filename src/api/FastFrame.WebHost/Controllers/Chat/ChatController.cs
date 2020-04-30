@@ -1,5 +1,5 @@
 ﻿using FastFrame.Dto.Dtos.Chat;
-using FastFrame.Service.Services.Chat;
+using FastFrame.Application.Services.Chat;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 

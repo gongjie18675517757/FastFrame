@@ -1,6 +1,6 @@
 ﻿using FastFrame.Entity.Basis;
 using FastFrame.Repository;
-using FastFrame.Service.Services.Basis;
+using FastFrame.Application.Services.Basis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

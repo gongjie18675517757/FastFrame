@@ -2,7 +2,7 @@
 using FastFrame.Entity.Basis;
 using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Attrs;
-using FastFrame.Service.Services.Basis;
+using FastFrame.Application.Services.Basis;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;

@@ -7,8 +7,8 @@ using System.Reflection;
 using FastFrame.Infrastructure;
 using System.Linq;
 using FastFrame.Entity.Basis;
-using FastFrame.Service;
-using FastFrame.Service.Services.Basis;
+using FastFrame.Application;
+using FastFrame.Application.Services.Basis;
 
 namespace FastFrame.WebHost.Controllers.Basis
 {

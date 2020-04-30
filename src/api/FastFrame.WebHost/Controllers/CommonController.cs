@@ -5,7 +5,7 @@ using FastFrame.Entity.Basis;
 using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Attrs;
 using FastFrame.Infrastructure.Interface;
-using FastFrame.Service;
+using FastFrame.Application;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -60,7 +60,7 @@ namespace FastFrame.WebHost.Controllers
         {
             var entityType = typeProvider.GetTypeByName(uniqueInput.ModuleName);
             var areaName = T4Help.GenerateNameSpace(entityType, "");
-            var serverName = $"FastFrame.Service.Services.{areaName}.{entityType.Name}Service";
+            var serverName = $"FastFrame.Application.Services.{areaName}.{entityType.Name}Service";
             var serviceType = typeof(IService).Assembly.GetType(serverName);
             if (serviceType == null)
                 throw new Exception("模块名称传入不正确!");

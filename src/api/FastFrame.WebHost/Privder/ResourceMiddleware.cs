@@ -1,4 +1,4 @@
-﻿using FastFrame.Service.Services.Basis;
+﻿using FastFrame.Application.Services.Basis;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;

@@ -64,7 +64,7 @@
     <ProjectReference Include="..\FastFrame.Entity\FastFrame.Entity.csproj" />
     <ProjectReference Include="..\FastFrame.Infrastructure\FastFrame.Infrastructure.csproj" />
     <ProjectReference Include="..\FastFrame.Repository\FastFrame.Repository.csproj" />
-    <ProjectReference Include="..\FastFrame.Service\FastFrame.Service.csproj" />
+    <ProjectReference Include="..\FastFrame.Application\FastFrame.Application.csproj" />
   </ItemGroup>
 
   <ItemGroup>

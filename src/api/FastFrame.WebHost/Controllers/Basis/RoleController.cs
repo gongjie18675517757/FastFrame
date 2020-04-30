@@ -1,6 +1,6 @@
 ﻿using FastFrame.Dto.Basis;
 using FastFrame.Infrastructure;
-using FastFrame.Service.Services.Basis;
+using FastFrame.Application.Services.Basis;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Mvc;

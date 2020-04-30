@@ -16,7 +16,7 @@ namespace FastFrame.CodeGenerate.Build
         {
         }
 
-        public override string TargetPath => $"{SolutionDir}\\FastFrame.Application\\Controllers\\Templates";
+        public override string TargetPath => $"{SolutionDir}\\FastFrame.WebHost\\Controllers\\Templates";
 
         public override string ProductName => "API控制器";
 
@@ -45,11 +45,11 @@ namespace FastFrame.CodeGenerate.Build
                 {
                     Summary = summary,
                     Path = TargetPath,
-                    NamespaceName = $"FastFrame.Application.Controllers.{spaceName}",
+                    NamespaceName = $"FastFrame.WebHost.Controllers.{spaceName}",
                     ImportNames = new string[] {
                         $"FastFrame.Dto.{spaceName}",
                         $"FastFrame.Entity.{spaceName}",
-                        $"FastFrame.Service.Services.{spaceName}",
+                        $"FastFrame.Application.Services.{spaceName}",
                         "FastFrame.Infrastructure.Attrs",
                         "FastFrame.Infrastructure.Interface"
                     },

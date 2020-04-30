@@ -4,7 +4,7 @@ using FastFrame.Dto.Basis;
 using FastFrame.Dto.Dtos;
 using FastFrame.Entity.Basis;
 using FastFrame.Infrastructure.Interface;
-using FastFrame.Service.Services;
+using FastFrame.Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

@@ -32,7 +32,7 @@
   <ItemGroup>
     <ProjectReference Include="..\FastFrame.Database\FastFrame.Database.csproj" />
     <ProjectReference Include="..\FastFrame.Infrastructure\FastFrame.Infrastructure.csproj" />
-    <ProjectReference Include="..\FastFrame.Service\FastFrame.Service.csproj" />
+    <ProjectReference Include="..\FastFrame.Application\FastFrame.Application.csproj" />
   </ItemGroup>
 
 </Project>

@@ -22,7 +22,7 @@ namespace FastFrame.CodeGenerate.Build
             dtoBuild = new DtoBuild(solutionDir, baseEntityType);
         }
 
-        public override string TargetPath => $"{SolutionDir}\\FastFrame.Service\\Services\\Templates";
+        public override string TargetPath => $"{SolutionDir}\\FastFrame.Application\\Services\\Templates";
 
 
         public override IEnumerable<Info.TargetInfo> BuildCodeInfo(string typeName)
@@ -85,7 +85,7 @@ namespace FastFrame.CodeGenerate.Build
 
             return new Info.TargetInfo()
             {
-                NamespaceName = $"FastFrame.Service.Services.{areaName}",
+                NamespaceName = $"FastFrame.Application.Services.{areaName}",
                 ImportNames = importNames,
                 Name = $"{type.Name}Service",
                 CategoryName = "class",

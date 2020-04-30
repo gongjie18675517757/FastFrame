@@ -8,7 +8,7 @@ using FastFrame.Infrastructure.EventBus;
 using FastFrame.Infrastructure.Interface;
 using FastFrame.Infrastructure.MessageBus;
 using FastFrame.Repository;
-using FastFrame.Service;
+using FastFrame.Application;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;

@@ -2,7 +2,7 @@
 using FastFrame.Entity;
 using FastFrame.Infrastructure.Attrs;
 using FastFrame.Infrastructure.Interface;
-using FastFrame.Service;
+using FastFrame.Application;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 

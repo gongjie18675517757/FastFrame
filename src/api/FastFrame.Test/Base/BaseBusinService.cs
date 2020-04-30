@@ -3,7 +3,7 @@ using FastFrame.Entity.Basis;
 using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Interface;
 using FastFrame.Repository;
-using FastFrame.Service.Services;
+using FastFrame.Application.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 

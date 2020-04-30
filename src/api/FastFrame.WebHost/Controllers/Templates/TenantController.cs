@@ -2,7 +2,7 @@ namespace FastFrame.WebHost.Controllers.Basis
 {
 	using FastFrame.Dto.Basis; 
 	using FastFrame.Entity.Basis; 
-	using FastFrame.Service.Services.Basis; 
+	using FastFrame.Application.Services.Basis; 
 	using FastFrame.Infrastructure.Attrs; 
 	using FastFrame.Infrastructure.Interface; 
 	/// <summary>

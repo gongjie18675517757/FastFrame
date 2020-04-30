@@ -26,8 +26,8 @@ namespace FastFrame.Application.Basis
 		
 		protected override IQueryable<DeptDto> QueryMain() 
 		{
-			var deptQueryable = deptRepository.Queryable;
-			var userQueryable = userRepository.Queryable;
+			var deptQueryable = deptRepository.Queryable.MapTo<Dept,DeptViewModel>();
+			var userQueryable = userRepository.Queryable.MapTo<User,UserViewModel>();
 			var query = from _dept in deptRepository 
 						join _super_Id in deptQueryable on _dept.Super_Id equals _super_Id.Id into t__super_Id
 						from _super_Id in t__super_Id.DefaultIfEmpty()
@@ -35,33 +35,25 @@ namespace FastFrame.Application.Basis
 						from _create_User_Id in t__create_User_Id.DefaultIfEmpty()
 						join _modify_User_Id in userQueryable on _dept.Modify_User_Id equals _modify_User_Id.Id into t__modify_User_Id
 						from _modify_User_Id in t__modify_User_Id.DefaultIfEmpty()
-						let Super = new DeptViewModel {Name = _super_Id.Name,Id = _super_Id.Id}
-						let Create_User = new UserViewModel {Name = _create_User_Id.Name,Account = _create_User_Id.Account,Id = _create_User_Id.Id}
-						let Modify_User = new UserViewModel {Name = _modify_User_Id.Name,Account = _modify_User_Id.Account,Id = _modify_User_Id.Id}
 						select new DeptDto
 						{
-							EnCode=_dept.EnCode,
-							Name=_dept.Name,
-							Super_Id=_dept.Super_Id,
-							Id=_dept.Id,
-							Create_User_Id=_dept.Create_User_Id,
-							CreateTime=_dept.CreateTime,
-							Modify_User_Id=_dept.Modify_User_Id,
-							ModifyTime=_dept.ModifyTime,
-							Super=Super,
-							Create_User=Create_User,
-							Modify_User=Modify_User,
+							EnCode = _dept.EnCode,
+							Name = _dept.Name,
+							Super_Id = _dept.Super_Id,
+							Id = _dept.Id,
+							Create_User_Id = _dept.Create_User_Id,
+							CreateTime = _dept.CreateTime,
+							Modify_User_Id = _dept.Modify_User_Id,
+							ModifyTime = _dept.ModifyTime,
+							Super = _super_Id,
+							Create_User = _create_User_Id,
+							Modify_User = _modify_User_Id,
 						};
 			return query;
 		}
-		public  Task<PageList<DeptViewModel>> ViewModelListAsync(Pagination page) 
+		public Task<PageList<DeptViewModel>> ViewModelListAsync(Pagination page) 
 		{
-			var query = from _dept in deptRepository 
-						select new DeptViewModel
-						{
-							Name = _dept.Name,
-							Id = _dept.Id,
-						};
+			var query = deptRepository.MapTo<Dept, DeptViewModel>();
 			return query.PageListAsync(page);
 		}
 		

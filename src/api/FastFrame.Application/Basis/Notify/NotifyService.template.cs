@@ -28,8 +28,8 @@ namespace FastFrame.Application.Basis
 		
 		protected override IQueryable<NotifyDto> QueryMain() 
 		{
-			var userQueryable = userRepository.Queryable;
-			var resourceQueryable = resourceRepository.Queryable;
+			var userQueryable = userRepository.Queryable.MapTo<User,UserViewModel>();
+			var resourceQueryable = resourceRepository.Queryable.MapTo<Resource,ResourceViewModel>();
 			var query = from _notify in notifyRepository 
 						join _publush_Id in userQueryable on _notify.Publush_Id equals _publush_Id.Id into t__publush_Id
 						from _publush_Id in t__publush_Id.DefaultIfEmpty()
@@ -39,33 +39,7 @@ namespace FastFrame.Application.Basis
 						from _create_User_Id in t__create_User_Id.DefaultIfEmpty()
 						join _modify_User_Id in userQueryable on _notify.Modify_User_Id equals _modify_User_Id.Id into t__modify_User_Id
 						from _modify_User_Id in t__modify_User_Id.DefaultIfEmpty()
-						let Publush = new UserViewModel {Name = _publush_Id.Name,Account = _publush_Id.Account,Id = _publush_Id.Id}
-						let Resource = new ResourceViewModel {Name = _resource_Id.Name,Id = _resource_Id.Id}
-						let Create_User = new UserViewModel {Name = _create_User_Id.Name,Account = _create_User_Id.Account,Id = _create_User_Id.Id}
-						let Modify_User = new UserViewModel {Name = _modify_User_Id.Name,Account = _modify_User_Id.Account,Id = _modify_User_Id.Id}
 						select new NotifyDto
-						{
-							Title=_notify.Title,
-							Type_Id=_notify.Type_Id,
-							Publush_Id=_notify.Publush_Id,
-							Resource_Id=_notify.Resource_Id,
-							Content=_notify.Content,
-							Id=_notify.Id,
-							Create_User_Id=_notify.Create_User_Id,
-							CreateTime=_notify.CreateTime,
-							Modify_User_Id=_notify.Modify_User_Id,
-							ModifyTime=_notify.ModifyTime,
-							Publush=Publush,
-							Resource=Resource,
-							Create_User=Create_User,
-							Modify_User=Modify_User,
-						};
-			return query;
-		}
-		public  Task<PageList<NotifyViewModel>> ViewModelListAsync(Pagination page) 
-		{
-			var query = from _notify in notifyRepository 
-						select new NotifyViewModel
 						{
 							Title = _notify.Title,
 							Type_Id = _notify.Type_Id,
@@ -73,7 +47,20 @@ namespace FastFrame.Application.Basis
 							Resource_Id = _notify.Resource_Id,
 							Content = _notify.Content,
 							Id = _notify.Id,
+							Create_User_Id = _notify.Create_User_Id,
+							CreateTime = _notify.CreateTime,
+							Modify_User_Id = _notify.Modify_User_Id,
+							ModifyTime = _notify.ModifyTime,
+							Publush = _publush_Id,
+							Resource = _resource_Id,
+							Create_User = _create_User_Id,
+							Modify_User = _modify_User_Id,
 						};
+			return query;
+		}
+		public Task<PageList<NotifyViewModel>> ViewModelListAsync(Pagination page) 
+		{
+			var query = notifyRepository.MapTo<Notify, NotifyViewModel>();
 			return query.PageListAsync(page);
 		}
 		

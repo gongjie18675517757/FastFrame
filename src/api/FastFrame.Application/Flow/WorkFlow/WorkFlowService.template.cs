@@ -27,39 +27,32 @@ namespace FastFrame.Application.Flow
 		
 		protected override IQueryable<WorkFlowDto> QueryMain() 
 		{
-			var userQueryable = userRepository.Queryable;
+			var userQueryable = userRepository.Queryable.MapTo<User,UserViewModel>();
 			var query = from _workFlow in workFlowRepository 
 						join _create_User_Id in userQueryable on _workFlow.Create_User_Id equals _create_User_Id.Id into t__create_User_Id
 						from _create_User_Id in t__create_User_Id.DefaultIfEmpty()
 						join _modify_User_Id in userQueryable on _workFlow.Modify_User_Id equals _modify_User_Id.Id into t__modify_User_Id
 						from _modify_User_Id in t__modify_User_Id.DefaultIfEmpty()
-						let Create_User = new UserViewModel {Name = _create_User_Id.Name,Account = _create_User_Id.Account,Id = _create_User_Id.Id}
-						let Modify_User = new UserViewModel {Name = _modify_User_Id.Name,Account = _modify_User_Id.Account,Id = _modify_User_Id.Id}
 						select new WorkFlowDto
 						{
-							Name=_workFlow.Name,
-							BeModule=_workFlow.BeModule,
-							BeModuleName=_workFlow.BeModuleName,
-							Version=_workFlow.Version,
-							Remarks=_workFlow.Remarks,
-							Id=_workFlow.Id,
-							Create_User_Id=_workFlow.Create_User_Id,
-							CreateTime=_workFlow.CreateTime,
-							Modify_User_Id=_workFlow.Modify_User_Id,
-							ModifyTime=_workFlow.ModifyTime,
-							Create_User=Create_User,
-							Modify_User=Modify_User,
+							Name = _workFlow.Name,
+							BeModule = _workFlow.BeModule,
+							BeModuleName = _workFlow.BeModuleName,
+							Version = _workFlow.Version,
+							Remarks = _workFlow.Remarks,
+							Id = _workFlow.Id,
+							Create_User_Id = _workFlow.Create_User_Id,
+							CreateTime = _workFlow.CreateTime,
+							Modify_User_Id = _workFlow.Modify_User_Id,
+							ModifyTime = _workFlow.ModifyTime,
+							Create_User = _create_User_Id,
+							Modify_User = _modify_User_Id,
 						};
 			return query;
 		}
-		public  Task<PageList<WorkFlowViewModel>> ViewModelListAsync(Pagination page) 
+		public Task<PageList<WorkFlowViewModel>> ViewModelListAsync(Pagination page) 
 		{
-			var query = from _workFlow in workFlowRepository 
-						select new WorkFlowViewModel
-						{
-							Name = _workFlow.Name,
-							Id = _workFlow.Id,
-						};
+			var query = workFlowRepository.MapTo<WorkFlow, WorkFlowViewModel>();
 			return query.PageListAsync(page);
 		}
 		

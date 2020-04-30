@@ -20,18 +20,18 @@ namespace FastFrame.CodeGenerate
 
         public void Run(BaseCodeBuild codeBuild)
         {
-            var targets = codeBuild.BuildCodeInfo(typeName); 
+            var targets = codeBuild.BuildCodeInfo(typeName);
             foreach (var target in targets)
             {
                 var dirName = Path.GetDirectoryName(target.Path);
                 if (!Directory.Exists(dirName))
-                    Directory.CreateDirectory(dirName); 
+                    Directory.CreateDirectory(dirName);
 
                 using (var fileSteam = new FileStream(target.Path, FileMode.Create, FileAccess.Write, FileShare.Write))
-                {      
+                {
                     using (var write = new StreamWriter(fileSteam))
                     {
-                         
+
 
                         /*类型所在命名空间*/
                         write.WriteCodeLine($"namespace {target.NamespaceName}", 0);
@@ -93,7 +93,7 @@ namespace FastFrame.CodeGenerate
                             /*构造函数结束*/
                             write.WriteCodeLine($"}}", 2);
                         }
-                        
+
 
                         /*属性列表*/
                         //write.WriteCodeLine("/*属性*/", 2);
@@ -114,7 +114,7 @@ namespace FastFrame.CodeGenerate
                             }
 
                             /*属性定义*/
-                            write.WriteCodeLine($"public {prop.TypeName} {prop.Name} {{get;set;}}", 2); 
+                            write.WriteCodeLine($"public {prop.TypeName} {prop.Name} {{get;set;}}", 2);
                         }
                         write.WriteCodeLine("", 2);
 
@@ -123,7 +123,7 @@ namespace FastFrame.CodeGenerate
                         //write.WriteCodeLine("/*方法*/", 2);
                         foreach (var method in target.MethodInfos)
                         {
-                            write.WriteCodeLine($"{method.Modifier} { (method.IsOverride ? "override" : "") } {method.ResultTypeName} {method.MethodName}({string.Join(",", method.Parms.Select(x => $"{x.TypeName} {x.DefineName}"))}) ", 2);
+                            write.WriteCodeLine($"{method.Modifier}{(method.IsOverride ? " override " : " ")}{method.ResultTypeName} {method.MethodName}({string.Join(",", method.Parms.Select(x => $"{x.TypeName} {x.DefineName}"))}) ", 2);
                             /*方法开始*/
                             write.WriteCodeLine($"{{", 2);
 

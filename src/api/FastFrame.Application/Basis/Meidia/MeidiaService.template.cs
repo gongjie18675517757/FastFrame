@@ -26,8 +26,8 @@ namespace FastFrame.Application.Basis
 		
 		protected override IQueryable<MeidiaDto> QueryMain() 
 		{
-			var meidiaQueryable = meidiaRepository.Queryable;
-			var userQueryable = userRepository.Queryable;
+			var meidiaQueryable = meidiaRepository.Queryable.MapTo<Meidia,MeidiaViewModel>();
+			var userQueryable = userRepository.Queryable.MapTo<User,UserViewModel>();
 			var query = from _meidia in meidiaRepository 
 						join _super_Id in meidiaQueryable on _meidia.Super_Id equals _super_Id.Id into t__super_Id
 						from _super_Id in t__super_Id.DefaultIfEmpty()
@@ -35,34 +35,26 @@ namespace FastFrame.Application.Basis
 						from _create_User_Id in t__create_User_Id.DefaultIfEmpty()
 						join _modify_User_Id in userQueryable on _meidia.Modify_User_Id equals _modify_User_Id.Id into t__modify_User_Id
 						from _modify_User_Id in t__modify_User_Id.DefaultIfEmpty()
-						let Super = new MeidiaViewModel {Name = _super_Id.Name,Id = _super_Id.Id}
-						let Create_User = new UserViewModel {Name = _create_User_Id.Name,Account = _create_User_Id.Account,Id = _create_User_Id.Id}
-						let Modify_User = new UserViewModel {Name = _modify_User_Id.Name,Account = _modify_User_Id.Account,Id = _modify_User_Id.Id}
 						select new MeidiaDto
 						{
-							Super_Id=_meidia.Super_Id,
-							Name=_meidia.Name,
-							Resource_Id=_meidia.Resource_Id,
-							IsFolder=_meidia.IsFolder,
-							Id=_meidia.Id,
-							Create_User_Id=_meidia.Create_User_Id,
-							CreateTime=_meidia.CreateTime,
-							Modify_User_Id=_meidia.Modify_User_Id,
-							ModifyTime=_meidia.ModifyTime,
-							Super=Super,
-							Create_User=Create_User,
-							Modify_User=Modify_User,
+							Super_Id = _meidia.Super_Id,
+							Name = _meidia.Name,
+							Resource_Id = _meidia.Resource_Id,
+							IsFolder = _meidia.IsFolder,
+							Id = _meidia.Id,
+							Create_User_Id = _meidia.Create_User_Id,
+							CreateTime = _meidia.CreateTime,
+							Modify_User_Id = _meidia.Modify_User_Id,
+							ModifyTime = _meidia.ModifyTime,
+							Super = _super_Id,
+							Create_User = _create_User_Id,
+							Modify_User = _modify_User_Id,
 						};
 			return query;
 		}
-		public  Task<PageList<MeidiaViewModel>> ViewModelListAsync(Pagination page) 
+		public Task<PageList<MeidiaViewModel>> ViewModelListAsync(Pagination page) 
 		{
-			var query = from _meidia in meidiaRepository 
-						select new MeidiaViewModel
-						{
-							Name = _meidia.Name,
-							Id = _meidia.Id,
-						};
+			var query = meidiaRepository.MapTo<Meidia, MeidiaViewModel>();
 			return query.PageListAsync(page);
 		}
 		

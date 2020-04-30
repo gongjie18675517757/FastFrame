@@ -28,24 +28,19 @@ namespace FastFrame.Application.Basis
 			var query = from _tenant in tenantRepository 
 						select new TenantDto
 						{
-							FullName=_tenant.FullName,
-							ShortName=_tenant.ShortName,
-							UrlMark=_tenant.UrlMark,
-							Super_Id=_tenant.Super_Id,
-							Tenant_Id=_tenant.Tenant_Id,
-							HandIcon_Id=_tenant.HandIcon_Id,
-							Id=_tenant.Id,
+							FullName = _tenant.FullName,
+							ShortName = _tenant.ShortName,
+							UrlMark = _tenant.UrlMark,
+							Super_Id = _tenant.Super_Id,
+							Tenant_Id = _tenant.Tenant_Id,
+							HandIcon_Id = _tenant.HandIcon_Id,
+							Id = _tenant.Id,
 						};
 			return query;
 		}
-		public  Task<PageList<TenantViewModel>> ViewModelListAsync(Pagination page) 
+		public Task<PageList<TenantViewModel>> ViewModelListAsync(Pagination page) 
 		{
-			var query = from _tenant in tenantRepository 
-						select new TenantViewModel
-						{
-							FullName = _tenant.FullName,
-							Id = _tenant.Id,
-						};
+			var query = tenantRepository.MapTo<Tenant, TenantViewModel>();
 			return query.PageListAsync(page);
 		}
 		

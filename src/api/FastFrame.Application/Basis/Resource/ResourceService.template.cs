@@ -28,25 +28,20 @@ namespace FastFrame.Application.Basis
 			var query = from _resource in resourceRepository 
 						select new ResourceDto
 						{
-							Name=_resource.Name,
-							Size=_resource.Size,
-							Path=_resource.Path,
-							ContentType=_resource.ContentType,
-							MD5=_resource.MD5,
-							Uploader_Id=_resource.Uploader_Id,
-							UploadTime=_resource.UploadTime,
-							Id=_resource.Id,
+							Name = _resource.Name,
+							Size = _resource.Size,
+							Path = _resource.Path,
+							ContentType = _resource.ContentType,
+							MD5 = _resource.MD5,
+							Uploader_Id = _resource.Uploader_Id,
+							UploadTime = _resource.UploadTime,
+							Id = _resource.Id,
 						};
 			return query;
 		}
-		public  Task<PageList<ResourceViewModel>> ViewModelListAsync(Pagination page) 
+		public Task<PageList<ResourceViewModel>> ViewModelListAsync(Pagination page) 
 		{
-			var query = from _resource in resourceRepository 
-						select new ResourceViewModel
-						{
-							Name = _resource.Name,
-							Id = _resource.Id,
-						};
+			var query = resourceRepository.MapTo<Resource, ResourceViewModel>();
 			return query.PageListAsync(page);
 		}
 		

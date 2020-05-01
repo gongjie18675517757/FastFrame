@@ -22,7 +22,7 @@ namespace FastFrame.Infrastructure.EventBus
             }
         }
 
-        public async Task<TResult> TriggerRequestAsync<TResult, TRequest>(TRequest request)
+        public async Task<TResult> RequestAsync<TResult, TRequest>(TRequest request)
         {
             var requestHandle = serviceProvider.GetService<IRequestHandle<TResult, TRequest>>();
             if (requestHandle != null)

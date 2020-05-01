@@ -44,7 +44,7 @@ namespace FastFrame.Application.Flow
                             {
                                 after.MapSet(before);
                             });
-        }
+        } 
 
 
         public Task HandleEventAsync(DoMainAdding<WorkFlowDto> @event)
@@ -66,7 +66,7 @@ namespace FastFrame.Application.Flow
         {
             var list = await flowLines.Where(v => v.WorkFlow_Id == request.Id).MapTo<FlowLine, FlowLineDto>().ToListAsync();
             var keys = list.Select(v => v.Id).ToArray();
-            var condKvs = await eventBus.TriggerRequestAsync<IEnumerable<KeyValuePair<string, IEnumerable<FlowLineCond>>>, string[]>(keys);
+            var condKvs = await eventBus.RequestAsync<IEnumerable<KeyValuePair<string, IEnumerable<FlowLineCond>>>, string[]>(keys);
             foreach (var item in list)
             {
                 item.Conds = condKvs.Where(v => v.Key == item.Id).SelectMany(v => v.Value);

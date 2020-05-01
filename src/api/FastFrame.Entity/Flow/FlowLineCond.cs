@@ -19,7 +19,7 @@ namespace FastFrame.Entity.Flow
         /// </summary>
         [Required]
         [StringLength(100)]
-        public string Name { get; set; }
+        public string FieldName { get; set; }
 
         /// <summary>
         /// 字段文本
@@ -40,12 +40,12 @@ namespace FastFrame.Entity.Flow
         /// </summary>
         [Required]
         [StringLength(100)]
-        public string Value { get; set; }
+        public string FieldValue { get; set; }
 
         /// <summary>
         /// 值文本
         /// </summary>
         [StringLength(500)]
-        public string ValueText { get; set; }
+        public string FieldValueText { get; set; }
     }
 }

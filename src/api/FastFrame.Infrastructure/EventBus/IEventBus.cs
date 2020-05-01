@@ -19,6 +19,6 @@ namespace FastFrame.Infrastructure.EventBus
         /// <summary>
         /// 触发请求
         /// </summary> 
-        Task<TResult> TriggerRequestAsync<TResult, TRequest>(TRequest request);
+        Task<TResult> RequestAsync<TResult, TRequest>(TRequest request);
     }
 }

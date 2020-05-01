@@ -27,6 +27,11 @@ namespace FastFrame.Application.Flow
 		public string Text {get;set;}
 		
 		/// <summary>
+		/// 权重 
+		/// </summary>
+		public Decimal Weights {get;set;}
+		
+		/// <summary>
 		/// 从 
 		/// </summary>
 		[Required()]

@@ -1,5 +1,6 @@
 ﻿using FastFrame.Application.Events;
 using FastFrame.Entity.Basis;
+using FastFrame.Entity.Flow;
 using FastFrame.Infrastructure.EventBus;
 using FastFrame.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +26,8 @@ namespace FastFrame.Application.Basis
         private readonly IRepository<RoleMember> roleMembers;
         private readonly IRepository<User> users;
         private readonly IRepository<Role> roles;
+        private readonly IRepository<FlowStepUser> flowStepUsers;
+        private readonly IRepository<FlowInstance> flowInstances;
         private readonly HandleOne2ManyService<UserViewModel, RoleMember> handleRoleMemberService;
         private readonly HandleOne2ManyService<RoleViewModel, RoleMember> handleUserRoleService;
 
@@ -32,12 +35,16 @@ namespace FastFrame.Application.Basis
             IRepository<RoleMember> roleMembers,
             IRepository<User> users,
             IRepository<Role> roles,
+            IRepository<FlowStepUser> flowStepUsers,
+            IRepository<FlowInstance> flowInstances,
             HandleOne2ManyService<UserViewModel, RoleMember> handleRoleMemberService,
             HandleOne2ManyService<RoleViewModel, RoleMember> handleUserRoleService)
         {
             this.roleMembers = roleMembers;
             this.users = users;
             this.roles = roles;
+            this.flowStepUsers = flowStepUsers;
+            this.flowInstances = flowInstances;
             this.handleRoleMemberService = handleRoleMemberService;
             this.handleUserRoleService = handleUserRoleService;
         }
@@ -45,6 +52,16 @@ namespace FastFrame.Application.Basis
         public async Task HandleEventAsync(DoMainDeleteing<RoleDto> @event)
         {
             await handleRoleMemberService.DelManyAsync(v => v.Role_Id == @event.Id);
+
+            /*处理流程中此角色的审批人*/
+            var stepUsers = await flowStepUsers
+                    .Where(v => v.BeRole_Id == @event.Id && flowInstances.Any(r => r.Id == v.FlowInstance_Id))
+                    .ToListAsync();
+
+            foreach (var stepUser in stepUsers)
+            {
+                await flowStepUsers.DeleteAsync(stepUser);
+            }
         }
 
         public async Task HandleEventAsync(DoMainUpdateing<RoleDto> @event)
@@ -58,6 +75,9 @@ namespace FastFrame.Application.Basis
                         Role_Id = @event.Data.Id,
                         User_Id = v.Id
                     });
+
+            /*处理流程中此角色的审批人*/
+            
         }
 
         public Task<UserViewModel[]> HandleRequestAsync(string request)
@@ -95,6 +115,8 @@ namespace FastFrame.Application.Basis
         public async Task HandleEventAsync(DoMainDeleteing<UserDto> @event)
         {
             await handleUserRoleService.DelManyAsync(v => v.User_Id == @event.Id);
+
+            /*处理流程中此角色的审批人*/
         }
 
         public async Task HandleEventAsync(DoMainUpdateing<UserDto> @event)
@@ -108,7 +130,10 @@ namespace FastFrame.Application.Basis
                     Role_Id = v.Id,
                     User_Id = @event.Data.Id
                 });
-        } 
+
+            /*处理流程中此角色的审批人*/
+
+        }
 
         Task<RoleViewModel[]> IRequestHandle<RoleViewModel[], string>.HandleRequestAsync(string request)
         {

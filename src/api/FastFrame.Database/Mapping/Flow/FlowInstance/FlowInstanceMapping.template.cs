@@ -6,10 +6,7 @@ namespace FastFrame.Database.Mapping.Flow
 	/// <summary>
 	/// 流程实例 
 	/// </summary>
-	public partial class FlowExampleMapping:BaseEntityMapping<FlowExample>
-	{
-		
-		
-		
+	public partial class FlowFlowInstanceMapping : BaseEntityMapping<FlowInstance>
+	{ 
 	}
 }

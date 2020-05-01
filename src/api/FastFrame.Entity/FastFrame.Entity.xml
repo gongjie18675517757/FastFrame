@@ -729,6 +729,76 @@
             通知类型
             </summary>
         </member>
+        <member name="T:FastFrame.Entity.Enums.FlowActionEnum">
+            <summary>
+            流程动作
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.FlowActionEnum.submit">
+            <summary>
+            提交
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.FlowActionEnum.unsubmit">
+            <summary>
+            撤回
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.FlowActionEnum.pass">
+            <summary>
+            通过
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.FlowActionEnum.withdraw">
+            <summary>
+            退回
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.FlowActionEnum.refuse">
+            <summary>
+            拒绝
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.FlowActionEnum.uncheck">
+            <summary>
+            反审核
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Enums.FlowStatusEnum">
+            <summary>
+            流程状态
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.FlowStatusEnum.unsubmitted">
+            <summary>
+            未提交
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.FlowStatusEnum.submitted">
+            <summary>
+            已提交
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.FlowStatusEnum.processing">
+            <summary>
+            进行中
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.FlowStatusEnum.finished">
+            <summary>
+            已完结
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.FlowStatusEnum.returned">
+            <summary>
+            已退回
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.FlowStatusEnum.refuse">
+            <summary>
+            已拒绝
+            </summary>
+        </member>
         <member name="T:FastFrame.Entity.Enums.FmtDateEnum">
             <summary>
             日期格式方式
@@ -792,6 +862,11 @@
         <member name="P:FastFrame.Entity.Flow.FlowLine.Text">
             <summary>
             名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowLine.Weights">
+            <summary>
+            权重
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Flow.FlowLine.From">
@@ -949,104 +1024,99 @@
             版本
             </summary>
         </member>
+        <member name="P:FastFrame.Entity.Flow.WorkFlow.Enabled">
+            <summary>
+            状态
+            </summary>
+        </member>
         <member name="P:FastFrame.Entity.Flow.WorkFlow.Remarks">
             <summary>
             备注
             </summary>
         </member>
-        <member name="T:FastFrame.Entity.Flow.IHaveCheck">
-            <summary>
-            标识需要审核
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Flow.IHaveCheck.FlowStatus">
-            <summary>
-            流程状态
-            </summary>
-        </member>
-        <member name="T:FastFrame.Entity.Flow.IHaveDept">
-            <summary>
-            标记有科室
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Flow.IHaveDept.Dept_Id">
-            <summary>
-            关联：Dept
-            </summary>
-        </member>
-        <member name="T:FastFrame.Entity.Flow.FlowExample">
+        <member name="T:FastFrame.Entity.Flow.FlowInstance">
             <summary>
             流程实例
             </summary> 
         </member>
-        <member name="P:FastFrame.Entity.Flow.FlowExample.BeModuleName">
+        <member name="P:FastFrame.Entity.Flow.FlowInstance.Version">
+            <summary>
+            版本
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowInstance.Enabled">
+            <summary>
+            状态
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowInstance.BeModuleName">
             <summary>
             归属模块
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Flow.FlowExample.BeModuleText">
+        <member name="P:FastFrame.Entity.Flow.FlowInstance.BeModuleText">
             <summary>
-            模块名称
+            单据名称
             </summary> 
         </member>
-        <member name="P:FastFrame.Entity.Flow.FlowExample.Bill_Id">
+        <member name="P:FastFrame.Entity.Flow.FlowInstance.Bill_Id">
             <summary>
-            单据
+            单据ID
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Flow.FlowExample.BillNumber">
+        <member name="P:FastFrame.Entity.Flow.FlowInstance.BillNumber">
             <summary>
             单据编号
             </summary> 
         </member>
-        <member name="P:FastFrame.Entity.Flow.FlowExample.Status">
+        <member name="P:FastFrame.Entity.Flow.FlowInstance.Status">
             <summary>
             流程状态
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Flow.FlowExample.WorkFlow_Id">
+        <member name="P:FastFrame.Entity.Flow.FlowInstance.WorkFlow_Id">
             <summary>
             关联流程
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Flow.FlowExample.CurrStep_Id">
+        <member name="P:FastFrame.Entity.Flow.FlowInstance.CurrStep_Id">
             <summary>
             当前步骤
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Flow.FlowExample.BeDept_Id">
+        <member name="P:FastFrame.Entity.Flow.FlowInstance.BeDept_Id">
             <summary>
-            归属科室
-            </summary>
+            归属部门
+            </summary> 
         </member>
-        <member name="P:FastFrame.Entity.Flow.FlowExample.Sponsor_Id">
+        <member name="P:FastFrame.Entity.Flow.FlowInstance.Sponsor_Id">
             <summary>
             流程发起人
-            </summary>
+            </summary>    
         </member>
-        <member name="P:FastFrame.Entity.Flow.FlowExample.StartTime">
+        <member name="P:FastFrame.Entity.Flow.FlowInstance.StartTime">
             <summary>
             发起时间
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Flow.FlowExample.IsComlete">
+        <member name="P:FastFrame.Entity.Flow.FlowInstance.IsComlete">
             <summary>
             是否已完结
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Flow.FlowExample.CompleteTime">
+        <member name="P:FastFrame.Entity.Flow.FlowInstance.CompleteTime">
             <summary>
             完结时间
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Flow.FlowExample.LastOperater_Id">
+        <member name="P:FastFrame.Entity.Flow.FlowInstance.LastChecker_Id">
             <summary>
-            最后操作人
+            最后审批人
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Flow.FlowExample.LastOperateTime">
+        <member name="P:FastFrame.Entity.Flow.FlowInstance.LastCheckTime">
             <summary>
-            最后操作时间
+            最后审批时间
             </summary>
         </member>
         <member name="T:FastFrame.Entity.Flow.FlowSnapshot">
@@ -1054,9 +1124,14 @@
             流程快照
             </summary> 
         </member>
-        <member name="P:FastFrame.Entity.Flow.FlowSnapshot.FlowExample_Id">
+        <member name="P:FastFrame.Entity.Flow.FlowSnapshot.FlowInstance_Id">
             <summary>
-            关联：FlowExample
+            关联：FlowInstance
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowSnapshot.FKey_Id">
+            <summary>
+            外键：流程ID，或者单据ID
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Flow.FlowSnapshot.SnapshotContent">
@@ -1069,9 +1144,9 @@
             流程步骤
             </summary> 
         </member>
-        <member name="P:FastFrame.Entity.Flow.FlowStep.FlowExample_Id">
+        <member name="P:FastFrame.Entity.Flow.FlowStep.FlowInstance_Id">
             <summary>
-            关联：FlowExample
+            关联：FlowInstance
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Flow.FlowStep.FlowNode_Id">
@@ -1084,9 +1159,19 @@
             步骤序号
             </summary>
         </member>
+        <member name="P:FastFrame.Entity.Flow.FlowStep.StepName">
+            <summary>
+            步骤名称
+            </summary>
+        </member>
         <member name="P:FastFrame.Entity.Flow.FlowStep.PrevStep_Id">
             <summary>
             关联：FlowStep，上一步
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowStep.NextStep_Id">
+            <summary>
+            关联：FlowStep，下一步
             </summary>
         </member>
         <member name="T:FastFrame.Entity.Flow.FlowStepUser">
@@ -1119,9 +1204,19 @@
             审批过程
             </summary> 
         </member>
+        <member name="P:FastFrame.Entity.Flow.FlowProcess.FlowInstance_Id">
+            <summary>
+            关联：FlowInstance
+            </summary>
+        </member>
         <member name="P:FastFrame.Entity.Flow.FlowProcess.FlowStep_Id">
             <summary>
             关联：FlowStep
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowProcess.FlowStepName">
+            <summary>
+            步骤名称
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Flow.FlowProcess.Action">
@@ -1134,84 +1229,19 @@
             操作人
             </summary>
         </member>
+        <member name="P:FastFrame.Entity.Flow.FlowProcess.OperaterName">
+            <summary>
+            操作人名称
+            </summary>
+        </member>
         <member name="P:FastFrame.Entity.Flow.FlowProcess.OperateTime">
             <summary>
             时间
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Flow.FlowProcess.Direction">
+        <member name="P:FastFrame.Entity.Flow.FlowProcess.Desc">
             <summary>
-            说明
-            </summary>
-        </member>
-        <member name="T:FastFrame.Entity.Flow.FlowStatusEnum">
-            <summary>
-            流程状态
-            </summary>
-        </member>
-        <member name="F:FastFrame.Entity.Flow.FlowStatusEnum.unsubmitted">
-            <summary>
-            未提交
-            </summary>
-        </member>
-        <member name="F:FastFrame.Entity.Flow.FlowStatusEnum.submitted">
-            <summary>
-            已提交
-            </summary>
-        </member>
-        <member name="F:FastFrame.Entity.Flow.FlowStatusEnum.processing">
-            <summary>
-            进行中
-            </summary>
-        </member>
-        <member name="F:FastFrame.Entity.Flow.FlowStatusEnum.finished">
-            <summary>
-            已完结
-            </summary>
-        </member>
-        <member name="F:FastFrame.Entity.Flow.FlowStatusEnum.returned">
-            <summary>
-            已退回
-            </summary>
-        </member>
-        <member name="F:FastFrame.Entity.Flow.FlowStatusEnum.refuse">
-            <summary>
-            已拒绝
-            </summary>
-        </member>
-        <member name="T:FastFrame.Entity.Flow.FlowActionEnum">
-            <summary>
-            流程动作
-            </summary>
-        </member>
-        <member name="F:FastFrame.Entity.Flow.FlowActionEnum.submit">
-            <summary>
-            提交
-            </summary>
-        </member>
-        <member name="F:FastFrame.Entity.Flow.FlowActionEnum.unsubmit">
-            <summary>
-            撤回
-            </summary>
-        </member>
-        <member name="F:FastFrame.Entity.Flow.FlowActionEnum.pass">
-            <summary>
-            通过
-            </summary>
-        </member>
-        <member name="F:FastFrame.Entity.Flow.FlowActionEnum.withdraw">
-            <summary>
-            退回
-            </summary>
-        </member>
-        <member name="F:FastFrame.Entity.Flow.FlowActionEnum.refuse">
-            <summary>
-            拒绝
-            </summary>
-        </member>
-        <member name="F:FastFrame.Entity.Flow.FlowActionEnum.uncheck">
-            <summary>
-            反审核
+            描述
             </summary>
         </member>
         <member name="P:FastFrame.Entity.BaseEntity.Id">
@@ -1284,9 +1314,29 @@
             标记使用多租户
             </summary>
         </member>
+        <member name="T:FastFrame.Entity.IHaveCheck">
+            <summary>
+            标识需要审核
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.IHaveCheck.FlowStatus">
+            <summary>
+            流程状态
+            </summary>
+        </member>
         <member name="T:FastFrame.Entity.IHaveConcurrencyCheck">
             <summary>
             需要并发检查  未实现
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.IHaveDept">
+            <summary>
+            标记为部门单据
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.IHaveDept.Dept_Id">
+            <summary>
+            关联：Dept
             </summary>
         </member>
         <member name="T:FastFrame.Entity.IHaveNumber">

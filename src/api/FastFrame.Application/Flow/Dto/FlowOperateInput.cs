@@ -1,0 +1,28 @@
+﻿using FastFrame.Entity.Enums;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Text;
+
+namespace FastFrame.Application.Flow
+{
+    public class FlowOperateInput
+    {
+        /// <summary>
+        /// 动作
+        /// </summary>
+        [Required]
+        public FlowActionEnum ActionEnum { get; set; }
+
+        /// <summary>
+        /// 描述
+        /// </summary>
+        [StringLength(500)]
+        public string Desc { get; set; }
+
+        /// <summary>
+        /// 附件内容
+        /// </summary>
+        public Dictionary<string, string> Items { get; set; }
+    }
+}

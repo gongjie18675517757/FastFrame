@@ -8,6 +8,6 @@
         /// <summary>
         /// 编号
         /// </summary>
-        string Number { set; }
+        string Number { set; get; }
     }
 }

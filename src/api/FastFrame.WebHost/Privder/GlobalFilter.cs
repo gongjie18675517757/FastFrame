@@ -18,7 +18,7 @@ namespace FastFrame.WebHost.Privder
         private readonly IAppSessionProvider appSession;
         private readonly PermissionService permissionService;
         private readonly IDescriptionProvider descriptionProvider;
-        private readonly ILogger<GlobalFilter> logger; 
+        private readonly ILogger<GlobalFilter> logger;
 
         public GlobalFilter(
             IAppSessionProvider appSession,
@@ -114,6 +114,16 @@ namespace FastFrame.WebHost.Privder
                     msgException.Code
                 });
             }
+            /*未请求到内容*/
+            else if (ex is NotFoundException)
+            {
+                context.HttpContext.Response.StatusCode = 404;
+                context.Result = new ObjectResult(new
+                {
+                    Message = "请求的内容已丢失",
+                    Code = 404
+                });
+            }
             /*未定义异常*/
             else
             {
@@ -136,5 +146,5 @@ namespace FastFrame.WebHost.Privder
             logger.LogError(ex, ex.Message);
             return Task.CompletedTask;
         }
-    } 
+    }
 }

@@ -29,7 +29,10 @@ namespace FastFrame.CodeGenerate.Build
             var listVueContent = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "List.vue"));
             var addVueContent = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "Add.vue"));
             foreach (var type in types)
-            {
+            { 
+                if (targetNames.Length > 0 && !targetNames.Any(v => type.Name.StartsWith(v)))
+                    continue;
+
                 var exportAttr = type.GetCustomAttribute<ExportAttribute>();
 
                 if (exportAttr == null || !exportAttr.ExportMarks.Contains(ExportMark.VuePage))

@@ -229,7 +229,7 @@
             触发事件
             </summary> 
         </member>
-        <member name="M:FastFrame.Infrastructure.EventBus.IEventBus.TriggerRequestAsync``2(``1)">
+        <member name="M:FastFrame.Infrastructure.EventBus.IEventBus.RequestAsync``2(``1)">
             <summary>
             触发请求
             </summary> 

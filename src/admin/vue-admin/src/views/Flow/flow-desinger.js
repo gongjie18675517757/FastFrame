@@ -28,20 +28,21 @@ export default function (props = {}) {
                 nodeTemplateMap: _designer.nodeTemplateMap,
                 model: new go.GraphLinksModel([
                     {
-
-                        text: "开始",
+                        text: "提交",
                         figure: "Circle",
                         fill: "#4fba4f",
-                        stepType: 1
+                        stepType: 1,
+                        key: 0,
                     },
                     _jsonNewStep,
                     // { key: guid(), text: "条件", figure: "Diamond" },
                     {
                         key: guid(),
-                        text: "结束",
+                        text: "完结",
                         figure: "Circle",
                         fill: "#CE0620",
-                        stepType: 4
+                        stepType: 4,
+                        key: -1
                     }
                 ])
             }
@@ -551,7 +552,7 @@ export default function (props = {}) {
      * @param ev
      */
     function onObjectDoubleClicked(ev) {
-         var part = ev.subject.part;
+        var part = ev.subject.part;
         showEditNode(part);
         props.onObjectDoubleClicked(ev);
     }

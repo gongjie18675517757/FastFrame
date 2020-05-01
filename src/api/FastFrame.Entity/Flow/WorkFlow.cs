@@ -1,4 +1,5 @@
-﻿using FastFrame.Infrastructure.Attrs;
+﻿using FastFrame.Entity.Enums;
+using FastFrame.Infrastructure.Attrs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -11,6 +12,7 @@ namespace FastFrame.Entity.Flow
     /// </summary>
     [Export]
     [RelatedField(nameof(Name))]
+    [Unique(nameof(BeModuleName), nameof(Version))]
     public class WorkFlow : BaseEntity
     {
         /// <summary>
@@ -43,6 +45,12 @@ namespace FastFrame.Entity.Flow
         public int Version { get; set; } = 1;
 
         /// <summary>
+        /// 状态
+        /// </summary>
+        [ReadOnly]
+        public EnabledMark Enabled { get; set; }
+
+        /// <summary>
         /// 备注
         /// </summary>
         [StringLength(500)]
@@ -50,33 +58,21 @@ namespace FastFrame.Entity.Flow
     }
 
     /// <summary>
-    /// 标识需要审核
-    /// </summary>
-    public interface IHaveCheck : IEntity
-    {
-        /// <summary>
-        /// 流程状态
-        /// </summary>
-        FlowStatusEnum FlowStatus { get; }
-    }
-
-    /// <summary>
-    /// 标记有科室
-    /// </summary>
-    public interface IHaveDept : IEntity
-    {
-        /// <summary>
-        /// 关联：Dept
-        /// </summary>
-        string Dept_Id { get; }
-    }
-
-    /// <summary>
     /// 流程实例
     /// </summary> 
-    public class FlowExample : IEntity, IHasSoftDelete, IHasTenant
+    public class FlowInstance : IEntity, IHasSoftDelete, IHasTenant
     {
         public string Id { get; set; }
+
+        /// <summary>
+        /// 版本
+        /// </summary>
+        public int Version { get; set; }
+
+        /// <summary>
+        /// 状态
+        /// </summary>
+        public EnabledMark Enabled { get; set; }
 
         /// <summary>
         /// 归属模块
@@ -86,13 +82,13 @@ namespace FastFrame.Entity.Flow
         public string BeModuleName { get; set; }
 
         /// <summary>
-        /// 模块名称
+        /// 单据名称
         /// </summary> 
         [StringLength(50)]
         public string BeModuleText { get; set; }
 
         /// <summary>
-        /// 单据
+        /// 单据ID
         /// </summary>
         [Required]
         public string Bill_Id { get; set; }
@@ -106,7 +102,7 @@ namespace FastFrame.Entity.Flow
         /// <summary>
         /// 流程状态
         /// </summary>
-        public FlowStatusEnum Status { get; set; }
+        public FlowStatusEnum? Status { get; set; }
 
         /// <summary>
         /// 关联流程
@@ -120,15 +116,8 @@ namespace FastFrame.Entity.Flow
         public string CurrStep_Id { get; set; }
 
         /// <summary>
-        /// 归属科室
-        /// </summary>
-        [Required]
-        public string BeDept_Id { get; set; }
-
-        /// <summary>
         /// 流程发起人
-        /// </summary>
-        [Required]
+        /// </summary>    
         public string Sponsor_Id { get; set; }
 
         /// <summary>
@@ -147,14 +136,32 @@ namespace FastFrame.Entity.Flow
         public DateTime? CompleteTime { get; set; }
 
         /// <summary>
-        /// 最后操作人
+        /// 最后审批人
         /// </summary>
-        public string LastOperater_Id { get; set; }
+        public string LastChecker_Id { get; set; }
 
         /// <summary>
-        /// 最后操作时间
+        /// 最后审批时间
         /// </summary>
-        public DateTime? LastOperateTime { get; set; }
+        public DateTime? LastCheckTime { get; set; }
+    }
+
+    /// <summary>
+    /// 流程实例归属科室
+    /// </summary>
+    public class FlowInstanceDept : IEntity, IHasSoftDelete, IHasTenant
+    {
+        public string Id { get; set; }
+
+        /// <summary>
+        /// 关联：FlowInstance
+        /// </summary>
+        public string FlowInstance_Id { get; set; }
+
+        /// <summary>
+        /// 归属部门
+        /// </summary> 
+        public string BeDept_Id { get; set; }
     }
 
     /// <summary>
@@ -165,9 +172,14 @@ namespace FastFrame.Entity.Flow
         public string Id { get; set; }
 
         /// <summary>
-        /// 关联：FlowExample
+        /// 关联：FlowInstance
         /// </summary>
-        public string FlowExample_Id { get; set; }
+        public string FlowInstance_Id { get; set; }
+
+        /// <summary>
+        /// 外键：流程ID，或者单据ID
+        /// </summary>
+        public string FKey_Id { get; set; }
 
         /// <summary>
         /// 快照内容
@@ -183,9 +195,9 @@ namespace FastFrame.Entity.Flow
         public string Id { get; set; }
 
         /// <summary>
-        /// 关联：FlowExample
+        /// 关联：FlowInstance
         /// </summary>
-        public string FlowExample_Id { get; set; }
+        public string FlowInstance_Id { get; set; }
 
         /// <summary>
         /// 关联：FlowNode
@@ -198,9 +210,35 @@ namespace FastFrame.Entity.Flow
         public int StepOrder { get; set; }
 
         /// <summary>
+        /// 步骤名称
+        /// </summary>
+        [StringLength(50)]
+        public string StepName { get; set; }
+
+        /// <summary>
         /// 关联：FlowStep，上一步
         /// </summary>
         public string PrevStep_Id { get; set; }
+
+        /// <summary>
+        /// 上一步节点键
+        /// </summary>
+        public int PrevStepKey { get; set; }
+
+        /// <summary>
+        /// 关联：FlowStep，下一步
+        /// </summary>
+        public string NextStep_Id { get; set; }
+
+        /// <summary>
+        /// 下一步节点键
+        /// </summary>
+        public int NextStepKey { get; set; }
+
+        /// <summary>
+        /// 节点键
+        /// </summary>
+        public int FlowNodeKey { get; set; }
     }
 
     /// <summary>
@@ -209,6 +247,11 @@ namespace FastFrame.Entity.Flow
     public class FlowStepUser : IEntity, IHasSoftDelete, IHasTenant
     {
         public string Id { get; set; }
+
+        /// <summary>
+        /// 关联：FlowInstance
+        /// </summary>
+        public string FlowInstance_Id { get; set; }
 
         /// <summary>
         /// 关联：FlowStep
@@ -221,14 +264,14 @@ namespace FastFrame.Entity.Flow
         public string User_Id { get; set; }
 
         /// <summary>
-        /// 是否科室审核人
+        /// 归属科室
         /// </summary>
-        public string IsBeDept { get; set; }
+        public string BeDept_Id { get; set; }
 
         /// <summary>
-        /// 是否角色审核人
+        /// 归属角色
         /// </summary>
-        public string IsBeRole { get; set; }
+        public string BeRole_Id { get; set; }
     }
 
     /// <summary>
@@ -239,9 +282,20 @@ namespace FastFrame.Entity.Flow
         public string Id { get; set; }
 
         /// <summary>
+        /// 关联：FlowInstance
+        /// </summary>
+        public string FlowInstance_Id { get; set; }
+
+        /// <summary>
         /// 关联：FlowStep
         /// </summary>
         public string FlowStep_Id { get; set; }
+
+        /// <summary>
+        /// 步骤名称
+        /// </summary>
+        [StringLength(50)]
+        public string FlowStepName { get; set; }
 
         /// <summary>
         /// 动作
@@ -254,86 +308,20 @@ namespace FastFrame.Entity.Flow
         public string Operater_Id { get; set; }
 
         /// <summary>
+        /// 操作人名称
+        /// </summary>
+        [StringLength(50)]
+        public string OperaterName { get; set; }
+
+        /// <summary>
         /// 时间
         /// </summary>
         public DateTime OperateTime { get; set; }
 
         /// <summary>
-        /// 说明
+        /// 描述
         /// </summary>
         [StringLength(500)]
-        public string Direction { get; set; }
-    }
-
-    /// <summary>
-    /// 流程状态
-    /// </summary>
-    public enum FlowStatusEnum
-    {
-        /// <summary>
-        /// 未提交
-        /// </summary>
-        unsubmitted,
-
-        /// <summary>
-        /// 已提交
-        /// </summary>
-        submitted,
-
-        /// <summary>
-        /// 进行中
-        /// </summary>
-        processing,
-
-        /// <summary>
-        /// 已完结
-        /// </summary>
-        finished,
-
-        /// <summary>
-        /// 已退回
-        /// </summary>
-        returned,
-
-        /// <summary>
-        /// 已拒绝
-        /// </summary>
-        refuse
-    }
-
-    /// <summary>
-    /// 流程动作
-    /// </summary>
-    public enum FlowActionEnum
-    {
-        /// <summary>
-        /// 提交
-        /// </summary>
-        submit,
-
-        /// <summary>
-        /// 撤回
-        /// </summary>
-        unsubmit,
-
-        /// <summary>
-        /// 通过
-        /// </summary>
-        pass,
-
-        /// <summary>
-        /// 退回
-        /// </summary>
-        withdraw,
-
-        /// <summary>
-        /// 拒绝
-        /// </summary>
-        refuse,
-
-        /// <summary>
-        /// 反审核
-        /// </summary>
-        uncheck
+        public string Desc { get; set; }
     }
 }

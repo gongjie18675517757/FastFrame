@@ -34,7 +34,7 @@ namespace FastFrame.CodeGenerate.Build
             var targets = GetTargetInfoList();
             foreach (var target in targets)
             {
-                if (targetNames.Length > 0 && !targetNames.Contains(target.Name))
+                if (targetNames.Length > 0 && !targetNames.Any(v => target.Name.StartsWith(v)))
                     continue;
 
                 yield return ConvertToBuildTarget(target);

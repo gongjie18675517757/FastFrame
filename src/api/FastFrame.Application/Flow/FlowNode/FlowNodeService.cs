@@ -47,9 +47,9 @@ namespace FastFrame.Application.Flow
         {
             var list = await flowNodes.Where(v => v.WorkFlow_Id == request.Id).MapTo<FlowNode, FlowNodeDto>().ToListAsync();
 
-            var fieldKvs = await eventBus.TriggerRequestAsync<IEnumerable<KeyValuePair<string, IEnumerable<FlowNodeField>>>, WorkFlowDto>(request);
-            var userKvs = await eventBus.TriggerRequestAsync<IEnumerable<KeyValuePair<string, IEnumerable<UserViewModel>>>, WorkFlowDto>(request);
-            var roleKvs = await eventBus.TriggerRequestAsync<IEnumerable<KeyValuePair<string, IEnumerable<RoleViewModel>>>, WorkFlowDto>(request);
+            var fieldKvs = await eventBus.RequestAsync<IEnumerable<KeyValuePair<string, IEnumerable<FlowNodeField>>>, WorkFlowDto>(request);
+            var userKvs = await eventBus.RequestAsync<IEnumerable<KeyValuePair<string, IEnumerable<UserViewModel>>>, WorkFlowDto>(request);
+            var roleKvs = await eventBus.RequestAsync<IEnumerable<KeyValuePair<string, IEnumerable<RoleViewModel>>>, WorkFlowDto>(request);
             foreach (var item in list)
             {
                 item.Fields = fieldKvs.Where(v => v.Key == item.Id).SelectMany(v => v.Value.Select(r => r.FieldName));

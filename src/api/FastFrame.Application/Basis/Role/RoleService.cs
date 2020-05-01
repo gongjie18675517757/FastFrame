@@ -7,8 +7,8 @@ namespace FastFrame.Application.Basis
         protected override async Task OnGeting(RoleDto dto)
         {
             await base.OnGeting(dto);
-            dto.Members = await EventBus.TriggerRequestAsync<UserViewModel[], string>(dto.Id);
-            dto.Permissions = await EventBus.TriggerRequestAsync<RolePermissionModel[], string>(dto.Id);
+            dto.Members = await EventBus.RequestAsync<UserViewModel[], string>(dto.Id);
+            dto.Permissions = await EventBus.RequestAsync<RolePermissionModel[], string>(dto.Id);
         }
     }
 }

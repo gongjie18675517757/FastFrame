@@ -23,7 +23,7 @@ namespace FastFrame.CodeGenerate
                             .GetTypes()
                             .Where(x => baseType.IsAssignableFrom(x) && x.IsClass && !x.IsAbstract)
                             .OrderBy(v => v.Namespace)
-                            .ThenBy(v=>v.Name)
+                            .ThenBy(v => v.Name)
                             .ToArray();
 
             var typeGroups = types
@@ -37,7 +37,7 @@ namespace FastFrame.CodeGenerate
             foreach (var g in typeGroups)
             {
                 Console.WriteLine();
-                Console.WriteLine($"命名空间：{g.Key}"); 
+                Console.WriteLine($"命名空间：{g.Key}");
                 foreach (var item in g)
                 {
                     var str = $"{item.Index}:{item.Type.Name}".PadRight(20, ' ');
@@ -78,7 +78,7 @@ namespace FastFrame.CodeGenerate
                 var obj = constructorInfo.Invoke(new object[] { rootPath, baseType });
                 var builder = (IBaseCodeBuilder)obj;
 
-                RunWrite(builder, new string[] { typeName }, v => Console.WriteLine($"{DateTime.Now}\t生成完成\t{v.TargetPath}"));
+                RunWrite(builder, new string[] { typeName }, v => Console.WriteLine(Path.GetFullPath(v.TargetPath)));
             }
 
             goto START;
@@ -86,15 +86,17 @@ namespace FastFrame.CodeGenerate
 
         static void RunWrite(IBaseCodeBuilder codeBuild, string[] targetTypeNames, Action<Info.BuildTarget> cb = null)
         {
+            targetTypeNames = targetTypeNames.Where(v => !v.IsNullOrWhiteSpace()).ToArray();
             var targets = codeBuild.Build(targetTypeNames);
             foreach (var target in targets)
             {
+                if (!target.Forcibly)
+                    if (File.Exists(target.TargetPath))
+                        continue;
+
                 var dirName = Path.GetDirectoryName(target.TargetPath);
                 if (!Directory.Exists(dirName))
                     Directory.CreateDirectory(dirName);
-
-                if (!target.Forcibly && File.Exists(target.TargetPath))
-                    continue;
 
                 File.WriteAllText(target.TargetPath, target.CodeBlock);
                 cb?.Invoke(target);

@@ -1,8 +1,11 @@
 ﻿using FastFrame.CodeGenerate.Info;
 using FastFrame.Infrastructure;
+using FastFrame.Infrastructure.Attrs;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 
 namespace FastFrame.CodeGenerate.Build
 {
@@ -27,6 +30,11 @@ namespace FastFrame.CodeGenerate.Build
             var addVueContent = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "Add.vue"));
             foreach (var type in types)
             {
+                var exportAttr = type.GetCustomAttribute<ExportAttribute>();
+
+                if (exportAttr == null || !exportAttr.ExportMarks.Contains(ExportMark.VuePage))
+                    continue;
+
                 var areaName = T4Help.GenerateNameSpace(type, null);
                 var path = $"{TargetPath}\\{areaName}\\{type.Name}"; 
                 

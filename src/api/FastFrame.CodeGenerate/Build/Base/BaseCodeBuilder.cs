@@ -2,13 +2,21 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace FastFrame.CodeGenerate.Build
 {
-    public abstract class BaseCodeBuild
+    public abstract class BaseCodeBuilder : IBaseCodeBuilder
     {
-        public abstract string ProductName { get; }
+        /// <summary>
+        /// 生成者名称
+        /// </summary>
+        public abstract string BuildName { get; }
+
+        /// <summary>
+        /// 是否强制覆盖
+        /// </summary>
+        public abstract bool Forcibly { get; }
+
         /// <summary>
         /// 解决方案目录
         /// </summary>
@@ -29,7 +37,8 @@ namespace FastFrame.CodeGenerate.Build
         /// </summary>
         public Type BaseEntityType { get; }
 
-        public BaseCodeBuild(string solutionDir, Type baseEntityType)
+
+        public BaseCodeBuilder(string solutionDir, Type baseEntityType)
         {
             this.SolutionDir = solutionDir;
             this.BaseEntityType = baseEntityType;
@@ -44,10 +53,6 @@ namespace FastFrame.CodeGenerate.Build
             return BaseEntityType.Assembly.GetTypes().Where(x => x.IsClass && !x.IsAbstract && BaseEntityType.IsAssignableFrom(x));
         }
 
-        /// <summary>
-        /// 构造代码信息
-        /// </summary>
-        /// <returns></returns>
-        public abstract IEnumerable<TargetInfo> BuildCodeInfo(string typeName);
+        public abstract IEnumerable<BuildTarget> Build(params string[] targetNames);
     }
 }

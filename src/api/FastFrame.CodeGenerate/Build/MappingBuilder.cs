@@ -5,21 +5,19 @@ using System.Collections.Generic;
 
 namespace FastFrame.CodeGenerate.Build
 {
-    public class MappingBuild : BaseCodeBuild
+    public class MappingBuilder : BaseCShapeCodeBuilder
     {
-        public override string ProductName => "数据映射";
-        public MappingBuild(string solutionDir, Type baseEntityType) : base(solutionDir, baseEntityType)
+        public override string BuildName => "数据映射";
+        public MappingBuilder(string solutionDir, Type baseEntityType) : base(solutionDir, baseEntityType)
         {
         }
 
         public override string TargetPath => $"{SolutionDir}\\FastFrame.Database\\Mapping";
 
-        public override IEnumerable<TargetInfo> BuildCodeInfo(string typeName)
+        public override IEnumerable<TargetInfo> GetTargetInfoList()
         {
             foreach (var type in GetTypes())
-            {
-                if (!string.IsNullOrWhiteSpace(typeName) && type.Name != typeName)
-                    continue;
+            { 
                 var areaNameSpace = T4Help.GenerateNameSpace(type, null);
                 yield return new TargetInfo()
                 {

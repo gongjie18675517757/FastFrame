@@ -2,6 +2,7 @@
 using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Attrs;
 using System;
+using FastFrame.CodeGenerate.Info;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -9,31 +10,27 @@ using System.Reflection;
 using FieldInfo = FastFrame.CodeGenerate.Info.FieldInfo;
 using MethodInfo = FastFrame.CodeGenerate.Info.MethodInfo;
 using ParameterInfo = FastFrame.CodeGenerate.Info.ParameterInfo;
+using TargetInfo = FastFrame.CodeGenerate.Info.TargetInfo;
 
 namespace FastFrame.CodeGenerate.Build
 {
-    public class ServiceCodeBuild : BaseCodeBuild
+    public class ServiceCodeBuilder : BaseCShapeCodeBuilder
     {
-        private readonly DtoBuild dtoBuild;
+        private readonly DtoBuilder dtoBuild;
 
-        public override string ProductName => "服务";
-        public ServiceCodeBuild(string solutionDir, Type baseEntityType) : base(solutionDir, baseEntityType)
+        public override string BuildName => "服务";
+        public ServiceCodeBuilder(string solutionDir, Type baseEntityType) : base(solutionDir, baseEntityType)
         {
-            dtoBuild = new DtoBuild(solutionDir, baseEntityType);
+            dtoBuild = new DtoBuilder(solutionDir, baseEntityType);
         }
 
         public override string TargetPath => $"{SolutionDir}\\FastFrame.Application";
 
 
-        public override IEnumerable<Info.TargetInfo> BuildCodeInfo(string typeName)
+        public override IEnumerable<TargetInfo> GetTargetInfoList()
         {
             foreach (Type type in GetTypes())
-            {
-                if (!string.IsNullOrWhiteSpace(typeName) && type.Name != typeName)
-                {
-                    continue;
-                }
-
+            { 
                 var exportAttr = type.GetCustomAttribute<ExportAttribute>();
 
                 if (exportAttr == null || !exportAttr.ExportMarks.Contains(ExportMark.Service))

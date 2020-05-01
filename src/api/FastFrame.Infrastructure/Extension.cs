@@ -196,6 +196,11 @@ namespace FastFrame.Infrastructure
             writer.WriteLine($"{new string('\t', tagCount)}{line}");
         }
 
+        public static void WriteCodeLine(this StringBuilder writer, string line, int tagCount = 0)
+        {
+            writer.AppendLine($"{new string('\t', tagCount)}{line}");
+        }
+
         public static string ToFirstLower(this string @this)
         {
             var arr = @this.ToArray();

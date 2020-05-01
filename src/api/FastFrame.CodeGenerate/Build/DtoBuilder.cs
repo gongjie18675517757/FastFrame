@@ -7,26 +7,24 @@ using System.Reflection;
 using System.ComponentModel.DataAnnotations;
 using FastFrame.Infrastructure.Attrs;
 using FastFrame.Entity;
+using TargetInfo = FastFrame.CodeGenerate.Info.TargetInfo;
 
 namespace FastFrame.CodeGenerate.Build
 {
-    public class DtoBuild : BaseCodeBuild
+    public class DtoBuilder : BaseCShapeCodeBuilder
     {
-        public override string ProductName => "DTO";
-        public DtoBuild(string solutionDir, Type baseEntityType) : base(solutionDir, baseEntityType)
+        public override string BuildName => "DTO";
+        public DtoBuilder(string solutionDir, Type baseEntityType) : base(solutionDir, baseEntityType)
         {
         }
 
         public override string TargetPath => $"{SolutionDir}\\FastFrame.Application";
 
 
-        public override IEnumerable<Info.TargetInfo> BuildCodeInfo(string typeName)
+        public override IEnumerable<TargetInfo> GetTargetInfoList()
         {
             foreach (var type in GetTypes())
-            {
-                if (!string.IsNullOrWhiteSpace(typeName) && type.Name != typeName)
-                    continue;
-
+            { 
                 var exportAttr = type.GetCustomAttribute<ExportAttribute>();
 
                 if (exportAttr == null || !exportAttr.ExportMarks.Contains(ExportMark.DTO))
@@ -36,7 +34,7 @@ namespace FastFrame.CodeGenerate.Build
             }
         }
 
-        public Info.TargetInfo GetTargetInfo(Type type)
+        public TargetInfo GetTargetInfo(Type type)
         {
             var areaNameSpace = T4Help.GenerateNameSpace(type, null);
 

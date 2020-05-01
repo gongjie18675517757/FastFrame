@@ -18,26 +18,47 @@ namespace FastFrame.CodeGenerate
             string typeName = "";
             string rootPath = new DirectoryInfo("../../../../").FullName;
             var baseType = typeof(IEntity);
-            var types = baseType.Assembly.GetTypes().Where(x => baseType.IsAssignableFrom(x) && x.IsClass && !x.IsAbstract);
-            var typeNames = types.Select((x, index) => (index + 1, x.Name))
-                    .ToDictionary(x => x.Item1, x => x.Name);
+            var types = baseType
+                            .Assembly
+                            .GetTypes()
+                            .Where(x => baseType.IsAssignableFrom(x) && x.IsClass && !x.IsAbstract)
+                            .OrderBy(v => v.Namespace)
+                            .ThenBy(v=>v.Name)
+                            .ToArray();
+
+            var typeGroups = types
+                                .Select((x, index) => new { Index = index + 1, Type = x })
+                                .GroupBy(v => T4Help.GenerateNameSpace(v.Type, null));
+
 
         START:
+
             Console.WriteLine("请输入要生成的类型:");
-            foreach (var (index, Name) in typeNames)
+            foreach (var g in typeGroups)
             {
-                Console.WriteLine($"{index}:{Name}");
+                Console.WriteLine();
+                Console.WriteLine($"命名空间：{g.Key}"); 
+                foreach (var item in g)
+                {
+                    var str = $"{item.Index}:{item.Type.Name}".PadRight(20, ' ');
+                    Console.Write(str);
+
+                    if (item.Index % 5 == 0)
+                        Console.WriteLine();
+                }
+                Console.WriteLine();
             }
+            Console.WriteLine();
             Console.WriteLine("0:全部");
 
         INPUT:
             Console.Write(">:");
             var inputIndex = Console.ReadLine();
-            if (int.TryParse(inputIndex, out var intIndex) && (typeNames.ContainsKey(intIndex) || intIndex == 0))
+            if (int.TryParse(inputIndex, out var intIndex) && intIndex >= 0 && types.Length > intIndex - 1)
             {
-                typeName = intIndex == 0 ? "" : typeNames[intIndex];
+                typeName = intIndex == 0 ? "" : types[intIndex].Name;
             }
-            else if (typeNames.Values.Contains(inputIndex))
+            else if (types.Any(v => v.Name == inputIndex))
             {
                 typeName = inputIndex;
             }
@@ -46,79 +67,37 @@ namespace FastFrame.CodeGenerate
                 goto INPUT;
             }
 
-            var codeBuildType = typeof(BaseCodeBuild);
+            var codeBuildType = typeof(BaseCodeBuilder);
             var builds = codeBuildType.Assembly
                     .GetTypes()
                     .Where(x => codeBuildType.IsAssignableFrom(x) && !x.IsAbstract);
-            var writer = new CodeWriter(typeName);
-            writer.WriteFileComplete += (s, e) => Console.WriteLine($"{DateTime.Now}\t{e}\t");
+
             foreach (var item in builds)
             {
                 var constructorInfo = item.GetConstructors().FirstOrDefault();
                 var obj = constructorInfo.Invoke(new object[] { rootPath, baseType });
-                var codeBuild = (BaseCodeBuild)obj;
-                writer.Run(codeBuild);
-            }
+                var builder = (IBaseCodeBuilder)obj;
 
-            var types2 = types
-                .Where(x => (typeName.IsNullOrWhiteSpace() || x.Name == typeName) && 
-                            x.GetCustomAttribute<ExportAttribute>()?.ExportMarks.Contains(ExportMark.VuePage) == true);
-
-            var basePath = $@"{Directory.GetParent(rootPath).Parent}\admin\vue-admin\src\views";
-            var docPath = Directory.GetCurrentDirectory();
-            var listVueContent = File.ReadAllLines(Path.Combine(Directory.GetCurrentDirectory(), "List.vue"));
-            var addVueContent = File.ReadAllLines(Path.Combine(Directory.GetCurrentDirectory(), "Add.vue"));
-
-            string ReplacePlaceholder(string line, Type type)
-            {
-                return line.Replace("{{AreaName}}", T4Help.GenerateNameSpace(type, ""))
-                    .Replace("{{ModuleName}}", type.Name)
-                    .Replace("{{Description}}", T4Help.GetClassSummary(type, docPath));
-            }
-
-            foreach (var area in types2.GroupBy(x => T4Help.GenerateNameSpace(x, null)))
-            {
-                var path = Path.Combine(basePath, area.Key);
-                if (!Directory.Exists(path)) Directory.CreateDirectory(path);
-                foreach (var type in area)
-                {
-                    var pagePath = Path.Combine(path, type.Name);
-                    if (!Directory.Exists(pagePath)) Directory.CreateDirectory(pagePath);
-
-                    var listPath = Path.Combine(pagePath, "List.vue");
-
-                    if (!File.Exists(listPath))
-                    {
-                        WriteLines(listPath,
-                            listVueContent.Select(r => ReplacePlaceholder(r, type)));
-                    }
-
-                    var addPath = Path.Combine(pagePath, "Add.vue");
-
-
-                    if (!File.Exists(addPath) && typeof(IHasManage).IsAssignableFrom(type))
-                    {
-                        WriteLines(addPath, addVueContent
-                            .Select(r => ReplacePlaceholder(r, type)));
-                    }
-                }
+                RunWrite(builder, new string[] { typeName }, v => Console.WriteLine($"{DateTime.Now}\t生成完成\t{v.TargetPath}"));
             }
 
             goto START;
         }
 
-        static void WriteLines(string path, IEnumerable<string> lines)
+        static void RunWrite(IBaseCodeBuilder codeBuild, string[] targetTypeNames, Action<Info.BuildTarget> cb = null)
         {
-            Console.WriteLine(path);
-            using (var file = File.Create(path))
+            var targets = codeBuild.Build(targetTypeNames);
+            foreach (var target in targets)
             {
-                using (var write = new StreamWriter(file, Encoding.Default))
-                {
-                    foreach (var line in lines)
-                    {
-                        write.WriteLine(line);
-                    }
-                }
+                var dirName = Path.GetDirectoryName(target.TargetPath);
+                if (!Directory.Exists(dirName))
+                    Directory.CreateDirectory(dirName);
+
+                if (!target.Forcibly && File.Exists(target.TargetPath))
+                    continue;
+
+                File.WriteAllText(target.TargetPath, target.CodeBlock);
+                cb?.Invoke(target);
             }
         }
     }

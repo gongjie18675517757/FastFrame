@@ -10,22 +10,21 @@ using ParameterInfo = FastFrame.CodeGenerate.Info.ParameterInfo;
 
 namespace FastFrame.CodeGenerate.Build
 {
-    public class ControllerBuild : BaseCodeBuild
+    public class ControllerBuilder : BaseCShapeCodeBuilder
     {
-        public ControllerBuild(string solutionDir, Type baseEntityType) : base(solutionDir, baseEntityType)
+        public ControllerBuilder(string solutionDir, Type baseEntityType) : base(solutionDir, baseEntityType)
         {
         }
 
         public override string TargetPath => $"{SolutionDir}\\FastFrame.WebHost\\Controllers";
 
-        public override string ProductName => "API控制器";
+        public override string BuildName => "API控制器"; 
+       
 
-        public override IEnumerable<TargetInfo> BuildCodeInfo(string typeName)
+        public override IEnumerable<TargetInfo> GetTargetInfoList()
         {
             foreach (var type in GetTypes())
-            {
-                if (!string.IsNullOrWhiteSpace(typeName) && type.Name != typeName)
-                    continue;
+            { 
                 var exportAttr = type.GetCustomAttribute<ExportAttribute>();
 
                 if (exportAttr == null || !exportAttr.ExportMarks.Contains(ExportMark.Controller))
@@ -78,6 +77,5 @@ namespace FastFrame.CodeGenerate.Build
                 };
             }
         }
-    }
-
+    } 
 }

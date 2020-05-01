@@ -8,22 +8,20 @@ using FastFrame.Infrastructure.Attrs;
 
 namespace FastFrame.CodeGenerate.Build
 {
-    public class ViewModelBuild : BaseCodeBuild
+    public class ViewModelBuilder : BaseCShapeCodeBuilder
     {
-        public ViewModelBuild(string solutionDir, Type baseEntityType) : base(solutionDir, baseEntityType)
+        public ViewModelBuilder(string solutionDir, Type baseEntityType) : base(solutionDir, baseEntityType)
         {
         }
 
-        public override string ProductName => "ViewModel";
+        public override string BuildName => "ViewModel";
+
         public override string TargetPath => $"{SolutionDir}\\FastFrame.Application";
 
-        public override IEnumerable<Info.TargetInfo> BuildCodeInfo(string typeName)
+        public override IEnumerable<Info.TargetInfo> GetTargetInfoList()
         {
             foreach (var type in GetTypes())
-            {
-                if (!string.IsNullOrWhiteSpace(typeName) && type.Name != typeName)
-                    continue;
-
+            { 
                 var exportAttr = type.GetCustomAttribute<ExportAttribute>();
 
                 if (exportAttr == null || !exportAttr.ExportMarks.Contains(ExportMark.ViewModel))

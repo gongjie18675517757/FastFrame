@@ -13,6 +13,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!--<PackageReference Include="Terminal.Gui" Version="0.81.0" />-->
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\FastFrame.Entity\FastFrame.Entity.csproj" />
     <ProjectReference Include="..\FastFrame.Infrastructure\FastFrame.Infrastructure.csproj" />
   </ItemGroup>

@@ -94,7 +94,7 @@ namespace FastFrame.CodeGenerate.Build
             //write.WriteCodeLine("/*构造函数*/", 2);
             if (target.Constructor != null)
             {
-                write.WriteCodeLine($"public {target.Name}({string.Join(",", target.Constructor.Parms.Select(x => $"{x.TypeName} {x.DefineName}"))})", 2);
+                write.WriteCodeLine($"{target.Constructor.Modifier} {target.Name}({string.Join(",", target.Constructor.Parms.Select(x => $"{x.TypeName} {x.DefineName}"))})", 2);
                 if (target.Constructor.Super.Any())
                     write.WriteCodeLine($" : base({string.Join(",", target.Constructor.Super)})", 3);
 

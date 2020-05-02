@@ -39,6 +39,7 @@ namespace FastFrame.Application.Flow
 							BeModule = _workFlow.BeModule,
 							BeModuleName = _workFlow.BeModuleName,
 							Version = _workFlow.Version,
+							Enabled = _workFlow.Enabled,
 							Remarks = _workFlow.Remarks,
 							Id = _workFlow.Id,
 							Create_User_Id = _workFlow.Create_User_Id,

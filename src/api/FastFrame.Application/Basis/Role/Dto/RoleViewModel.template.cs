@@ -9,6 +9,9 @@ namespace FastFrame.Application.Basis
 	public partial class RoleViewModel:IViewModel
 	{
 		
+		protected RoleViewModel()
+		{
+		}
 		
 		/// <summary>
 		/// 名称 

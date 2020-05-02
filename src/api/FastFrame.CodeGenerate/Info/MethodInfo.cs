@@ -4,12 +4,7 @@
     /// 方法信息
     /// </summary>
     public class MethodInfo : BaseMethodInfo
-    {
-        /// <summary>
-        /// 修饰符
-        /// </summary>
-        public string Modifier { get; set; }
-
+    { 
         /// <summary>
         /// 是否重写父类方法
         /// </summary>

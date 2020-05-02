@@ -1,4 +1,5 @@
 ﻿using FastFrame.Entity.Enums;
+using FastFrame.Infrastructure.Interface;
 using System;
 
 namespace FastFrame.Entity.Basis
@@ -6,7 +7,7 @@ namespace FastFrame.Entity.Basis
     /// <summary>
     /// 登陆Log
     /// </summary> 
-    public class LoginLog : IEntity, IHasTenant
+    public class LoginLog : IEntity, IHasTenant, IIdentity
     {
         public string Id { get; set; }
 
@@ -33,6 +34,8 @@ namespace FastFrame.Entity.Basis
         /// <summary>
         /// 是否有效
         /// </summary>
-        public EnabledMark Enable { get; set; }
+        public bool IsEnabled { get; set; }
+
+        public string GetToken() => Id;
     }
 }

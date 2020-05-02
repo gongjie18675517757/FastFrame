@@ -9,6 +9,9 @@ namespace FastFrame.Application.Basis
 	public partial class TenantViewModel:IViewModel
 	{
 		
+		protected TenantViewModel()
+		{
+		}
 		
 		/// <summary>
 		/// 全称 

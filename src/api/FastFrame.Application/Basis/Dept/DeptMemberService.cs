@@ -1,5 +1,6 @@
 ﻿using FastFrame.Application.Events;
 using FastFrame.Entity.Basis;
+using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.EventBus;
 using FastFrame.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -13,14 +14,14 @@ namespace FastFrame.Application.Basis
         IEventHandle<DoMainAdding<DeptDto>>,
         IEventHandle<DoMainDeleteing<DeptDto>>,
         IEventHandle<DoMainUpdateing<DeptDto>>,
-        IRequestHandle<(UserViewModel[], string[]), string>,
-        IRequestHandle<IEnumerable<KeyValuePair<string, (UserViewModel[], string[])>>, string[]>,
+        IRequestHandle<(UserViewModel[], string[]), DeptDto>,
+        IRequestHandle<IEnumerable<KeyValuePair<string, (UserViewModel[], string[])>>, DeptDto[]>,
 
         IEventHandle<DoMainAdding<UserDto>>,
         IEventHandle<DoMainDeleteing<UserDto>>,
         IEventHandle<DoMainUpdateing<UserDto>>,
-        IRequestHandle<DeptViewModel[], string>,
-        IRequestHandle<IEnumerable<KeyValuePair<string, DeptViewModel[]>>, string[]>
+        IRequestHandle<DeptViewModel[], UserDto>,
+        IRequestHandle<IEnumerable<KeyValuePair<string, DeptViewModel[]>>, UserDto[]>
     {
         private readonly IRepository<DeptMember> deptMembers;
         private readonly IRepository<User> users;
@@ -80,36 +81,32 @@ namespace FastFrame.Application.Basis
                 );
         }
 
-        public async Task<(UserViewModel[], string[])> HandleRequestAsync(string request)
+        public async Task<(UserViewModel[], string[])> HandleRequestAsync(DeptDto request)
         {
-            var query = users.Select(v =>
-                    new UserViewModel { Account = v.Account, Id = v.Id, Name = v.Name });
+            var userQuery = users.MapTo<User, UserViewModel>();
 
             return (
-               await query
+               await userQuery
                        .Where(v =>
-                           deptMembers.Any(r => r.User_Id == v.Id && r.Dept_Id == request)
+                           deptMembers.Any(r => r.User_Id == v.Id && r.Dept_Id == request.Id)
                         ).ToArrayAsync(),
-                await query
+                await userQuery
                        .Where(v =>
-                           deptMembers.Any(r => r.User_Id == v.Id && r.Dept_Id == request && r.IsManager)
+                           deptMembers.Any(r => r.User_Id == v.Id && r.Dept_Id == request.Id && r.IsManager)
                         ).Select(v => v.Id).ToArrayAsync()
                );
         }
 
-        public async Task<IEnumerable<KeyValuePair<string, (UserViewModel[], string[])>>> HandleRequestAsync(string[] request)
+        public async Task<IEnumerable<KeyValuePair<string, (UserViewModel[], string[])>>> HandleRequestAsync(DeptDto[] request)
         {
-            var query = from a in users
+            var keys = request.Select(v => v.Id).ToArray();
+            var userQuery = users.MapTo<User, UserViewModel>();
+            var query = from a in userQuery
                         join b in deptMembers on a.Id equals b.User_Id
-                        where request.Contains(b.Dept_Id)
+                        where keys.Contains(b.Dept_Id)
                         select new
                         {
-                            Item = new UserViewModel
-                            {
-                                Id = a.Id,
-                                Name = a.Name,
-                                Account = a.Account
-                            },
+                            Item = a,
                             b.Dept_Id,
                             b.IsManager
                         };
@@ -157,32 +154,26 @@ namespace FastFrame.Application.Basis
                 );
         }
 
-        async Task<DeptViewModel[]> IRequestHandle<DeptViewModel[], string>.HandleRequestAsync(string request)
+        async Task<DeptViewModel[]> IRequestHandle<DeptViewModel[], UserDto>.HandleRequestAsync(UserDto request)
         {
-            return await depts
+            var deptQuery = depts.MapTo<Dept, DeptViewModel>();
+            return await deptQuery
                          .Where(v =>
-                             deptMembers.Any(r => r.Dept_Id == v.Id && r.User_Id == request))
-                         .Select(v => new DeptViewModel
-                         {
-                             Id = v.Id,
-                             Name = v.Name
-                         })
+                             deptMembers.Any(r => r.Dept_Id == v.Id && r.User_Id == request.Id)) 
                          .ToArrayAsync();
         }
 
-        async Task<IEnumerable<KeyValuePair<string, DeptViewModel[]>>> IRequestHandle<IEnumerable<KeyValuePair<string, DeptViewModel[]>>, string[]>.HandleRequestAsync(string[] request)
+        async Task<IEnumerable<KeyValuePair<string, DeptViewModel[]>>> IRequestHandle<IEnumerable<KeyValuePair<string, DeptViewModel[]>>, UserDto[]>.HandleRequestAsync(UserDto[] request)
         {
-            var query = from a in depts
+            var deptQuery = depts.MapTo<Dept, DeptViewModel>();
+            var keys = request.Select(v => v.Id).ToArray();
+            var query = from a in deptQuery
                         join b in deptMembers on a.Id equals b.Dept_Id
-                        where request.Contains(b.User_Id)
+                        where keys.Contains(b.User_Id)
                         select new
                         {
                             b.User_Id,
-                            Dept = new DeptViewModel
-                            {
-                                Id = a.Id,
-                                Name = a.Name
-                            }
+                            Dept = a
                         };
 
             var list = await query.ToListAsync();

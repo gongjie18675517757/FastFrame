@@ -4,9 +4,9 @@ namespace FastFrame.Database.Mapping.Flow
 	using Microsoft.EntityFrameworkCore.Metadata.Builders; 
 		
 	/// <summary>
-	/// 流程快照 
+	/// 流程实例归属科室 
 	/// </summary>
-	public partial class FlowSnapshotMapping:BaseEntityMapping<FlowSnapshot>
+	public partial class FlowInstanceDeptMapping:BaseEntityMapping<FlowInstanceDept>
 	{
 		
 		

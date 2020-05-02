@@ -9,6 +9,9 @@ namespace FastFrame.Application.Basis
 	public partial class EnumItemViewModel:IViewModel
 	{
 		
+		protected EnumItemViewModel()
+		{
+		}
 		
 		/// <summary>
 		/// 值 

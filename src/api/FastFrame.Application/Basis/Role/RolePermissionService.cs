@@ -13,7 +13,7 @@ namespace FastFrame.Application.Basis
         IEventHandle<DoMainAdding<RoleDto>>,
         IEventHandle<DoMainDeleteing<RoleDto>>,
         IEventHandle<DoMainUpdateing<RoleDto>>,
-        IRequestHandle<RolePermissionModel[], string>
+        IRequestHandle<RolePermissionModel[], RoleDto>
     {
         private readonly IRepository<RolePermission> rolePermissions;
         private readonly HandleOne2ManyService<RolePermissionModel, RolePermission> handlePermissionService;
@@ -48,7 +48,7 @@ namespace FastFrame.Application.Basis
                     });
         }
 
-        public async Task<RolePermissionModel[]> HandleRequestAsync(string request)
+        public async Task<RolePermissionModel[]> HandleRequestAsync(RoleDto request)
         {
             var query = from a in permissions
                         select new RolePermissionModel
@@ -58,7 +58,7 @@ namespace FastFrame.Application.Basis
                             Name = a.Name,
                             Super_Id = a.Super_Id,
                             IsAuthorization = rolePermissions
-                                                 .Any(r => r.Role_Id == request &&
+                                                 .Any(r => r.Role_Id == request.Id &&
                                                              (r.Permission_Id == a.Id))
                         };
 

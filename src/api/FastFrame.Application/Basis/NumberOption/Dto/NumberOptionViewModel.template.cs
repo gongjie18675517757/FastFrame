@@ -9,6 +9,9 @@ namespace FastFrame.Application.Basis
 	public partial class NumberOptionViewModel:IViewModel
 	{
 		
+		protected NumberOptionViewModel()
+		{
+		}
 		
 		/// <summary>
 		/// 模块名称 

@@ -77,17 +77,16 @@ namespace FastFrame.Application.Basis
         protected override async Task OnGeting(UserDto dto)
         {
             await base.OnGeting(dto);
-            dto.Roles = await EventBus.RequestAsync<RoleViewModel[], string>(dto.Id);
-            dto.Depts = await EventBus.RequestAsync<DeptViewModel[], string>(dto.Id);
+            dto.Roles = await EventBus.RequestAsync<RoleViewModel[], UserDto>(dto);
+            dto.Depts = await EventBus.RequestAsync<DeptViewModel[], UserDto>(dto);
         }
 
         protected override async Task OnGetListing(IEnumerable<UserDto> dtos)
         {
-            await base.OnGetListing(dtos);
-            var keys = dtos.Select(v => v.Id).ToArray();
+            await base.OnGetListing(dtos); 
 
-            var roleMaps = await EventBus.RequestAsync<IEnumerable<KeyValuePair<string, RoleViewModel[]>>, string[]>(keys);
-            var deptMaps = await EventBus.RequestAsync<IEnumerable<KeyValuePair<string, DeptViewModel[]>>, string[]>(keys);
+            var roleMaps = await EventBus.RequestAsync<IEnumerable<KeyValuePair<string, RoleViewModel[]>>, UserDto[]>(dtos.ToArray());
+            var deptMaps = await EventBus.RequestAsync<IEnumerable<KeyValuePair<string, DeptViewModel[]>>, UserDto[]>(dtos.ToArray());
             foreach (var item in dtos)
             {
                 item.Roles = roleMaps.Where(v => v.Key == item.Id).SelectMany(v => v.Value);

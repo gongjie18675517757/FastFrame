@@ -89,7 +89,7 @@
             过期时间
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Basis.LoginLog.Enable">
+        <member name="P:FastFrame.Entity.Basis.LoginLog.IsEnabled">
             <summary>
             是否有效
             </summary>
@@ -709,12 +709,12 @@
             启用标记
             </summary>
         </member>
-        <member name="F:FastFrame.Entity.Enums.EnabledMark.Enabled">
+        <member name="F:FastFrame.Entity.Enums.EnabledMark.enabled">
             <summary>
             启用
             </summary>
         </member>
-        <member name="F:FastFrame.Entity.Enums.EnabledMark.Disabled">
+        <member name="F:FastFrame.Entity.Enums.EnabledMark.disabled">
             <summary>
             禁用
             </summary>
@@ -889,7 +889,7 @@
             关联:FlowLink
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Flow.FlowLineCond.Name">
+        <member name="P:FastFrame.Entity.Flow.FlowLineCond.FieldName">
             <summary>
             字段名
             </summary>
@@ -904,12 +904,12 @@
             比较方式
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Flow.FlowLineCond.Value">
+        <member name="P:FastFrame.Entity.Flow.FlowLineCond.FieldValue">
             <summary>
             值
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Flow.FlowLineCond.ValueText">
+        <member name="P:FastFrame.Entity.Flow.FlowLineCond.FieldValueText">
             <summary>
             值文本
             </summary>
@@ -1084,11 +1084,6 @@
             当前步骤
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Flow.FlowInstance.BeDept_Id">
-            <summary>
-            归属部门
-            </summary> 
-        </member>
         <member name="P:FastFrame.Entity.Flow.FlowInstance.Sponsor_Id">
             <summary>
             流程发起人
@@ -1118,6 +1113,21 @@
             <summary>
             最后审批时间
             </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Flow.FlowInstanceDept">
+            <summary>
+            流程实例归属科室
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowInstanceDept.FlowInstance_Id">
+            <summary>
+            关联：FlowInstance
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowInstanceDept.BeDept_Id">
+            <summary>
+            归属部门
+            </summary> 
         </member>
         <member name="T:FastFrame.Entity.Flow.FlowSnapshot">
             <summary>
@@ -1169,15 +1179,35 @@
             关联：FlowStep，上一步
             </summary>
         </member>
+        <member name="P:FastFrame.Entity.Flow.FlowStep.PrevStepKey">
+            <summary>
+            上一步节点键
+            </summary>
+        </member>
         <member name="P:FastFrame.Entity.Flow.FlowStep.NextStep_Id">
             <summary>
             关联：FlowStep，下一步
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowStep.NextStepKey">
+            <summary>
+            下一步节点键
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowStep.FlowNodeKey">
+            <summary>
+            节点键
             </summary>
         </member>
         <member name="T:FastFrame.Entity.Flow.FlowStepUser">
             <summary>
             流程步骤审核人
             </summary> 
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowStepUser.FlowInstance_Id">
+            <summary>
+            关联：FlowInstance
+            </summary>
         </member>
         <member name="P:FastFrame.Entity.Flow.FlowStepUser.FlowStep_Id">
             <summary>
@@ -1189,14 +1219,14 @@
             关联：User
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Flow.FlowStepUser.IsBeDept">
+        <member name="P:FastFrame.Entity.Flow.FlowStepUser.BeDept_Id">
             <summary>
-            是否科室审核人
+            归属科室
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Flow.FlowStepUser.IsBeRole">
+        <member name="P:FastFrame.Entity.Flow.FlowStepUser.BeRole_Id">
             <summary>
-            是否角色审核人
+            归属角色
             </summary>
         </member>
         <member name="T:FastFrame.Entity.Flow.FlowProcess">
@@ -1212,6 +1242,11 @@
         <member name="P:FastFrame.Entity.Flow.FlowProcess.FlowStep_Id">
             <summary>
             关联：FlowStep
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowProcess.NodeKey">
+            <summary>
+            节点key
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Flow.FlowProcess.FlowStepName">
@@ -1334,9 +1369,9 @@
             标记为部门单据
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.IHaveDept.Dept_Id">
+        <member name="M:FastFrame.Entity.IHaveDept.GetBeDeptIds">
             <summary>
-            关联：Dept
+            获取归属科室
             </summary>
         </member>
         <member name="T:FastFrame.Entity.IHaveNumber">

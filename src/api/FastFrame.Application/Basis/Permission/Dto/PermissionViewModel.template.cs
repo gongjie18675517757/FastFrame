@@ -9,6 +9,9 @@ namespace FastFrame.Application.Basis
 	public partial class PermissionViewModel:IViewModel
 	{
 		
+		protected PermissionViewModel()
+		{
+		}
 		
 		/// <summary>
 		/// 名称 

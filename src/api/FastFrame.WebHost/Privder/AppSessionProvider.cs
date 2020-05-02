@@ -8,6 +8,7 @@ using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FastFrame.WebHost.Privder
 {
@@ -15,21 +16,18 @@ namespace FastFrame.WebHost.Privder
     {
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly IMemoryCache memoryCache;
-        private readonly AccountService accountService;
         private readonly CSRedisClient cSRedisClient;
-        private readonly string tokenName = "FastFrame:Authorize";
+        private readonly string tokenName = "Authorize";
         private string token;
         private Tenant tenant;
 
         public AppSessionProvider(IHttpContextAccessor httpContextAccessor,
                                    IMemoryCache memoryCache,
-                                   AccountService accountService,
                                    CSRedisClient cSRedisClient)
         {
             this.httpContextAccessor = httpContextAccessor;
 
             this.memoryCache = memoryCache;
-            this.accountService = accountService;
             this.cSRedisClient = cSRedisClient;
         }
 
@@ -51,14 +49,14 @@ namespace FastFrame.WebHost.Privder
                 }
             }
             return false;
-        } 
+        }
 
         private string GetHost()
         {
             if (!TryGetHeaderValue(new string[] { "X-ORIGINAL-HOST", "Origin", "Referer" }, out var host))
                 host = httpContextAccessor.HttpContext.Request.Host.Value;
             return host;
-        } 
+        }
 
         public async Task LoginAsync(ICurrUser currUser)
         {
@@ -86,7 +84,7 @@ namespace FastFrame.WebHost.Privder
         public async Task RefreshIdentityAsync()
         {
             await cSRedisClient.SetAsync(CurrUser.ToKen, CurrUser, 60 * 60 * 24);
-            await accountService.RefreshTokenAsync(CurrUser.ToKen);
+            await httpContextAccessor.HttpContext.RequestServices.GetService<IIdentityManager>().RefreshTokenAsync(CurrUser.ToKen);
         }
 
         private string GetToken()
@@ -109,7 +107,7 @@ namespace FastFrame.WebHost.Privder
             var token = GetToken();
             if (!token.IsNullOrWhiteSpace())
             {
-                if (await accountService.ExistsTokenAsync(token))
+                if (await httpContextAccessor.HttpContext.RequestServices.GetService<IIdentityManager>().ExistsTokenAsync(token))
                 {
                     var user = cSRedisClient.Get<CurrUser>(token);
                     if (user != null)

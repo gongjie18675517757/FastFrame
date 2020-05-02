@@ -107,7 +107,9 @@ namespace FastFrame.WebHost
                 var basePath = AppDomain.CurrentDomain.BaseDirectory;
                 var xmlPath = Path.Combine(basePath, "FastFrame.WebHost.xml");
                 options.IncludeXmlComments(xmlPath);
-                xmlPath = Path.Combine(basePath, "FastFrame.Dto.xml");
+                xmlPath = Path.Combine(basePath, "FastFrame.Application.xml");
+                options.IncludeXmlComments(xmlPath);
+                xmlPath = Path.Combine(basePath, "FastFrame.Entity.xml");
                 options.IncludeXmlComments(xmlPath);
             });
 
@@ -141,6 +143,7 @@ namespace FastFrame.WebHost
                     context.Response.Headers.Add("ElapsedMilliseconds", stopwatch.ElapsedMilliseconds.ToString());
                     return Task.CompletedTask;
                 });
+
                 if (context.Request.Path.HasValue && context.Request.Path.Value == "/")
                     context.Response.Redirect("/index.html");
 

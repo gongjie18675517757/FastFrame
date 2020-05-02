@@ -9,6 +9,9 @@ namespace FastFrame.Application.Basis
 	public partial class DeptViewModel:IViewModel
 	{
 		
+		protected DeptViewModel()
+		{
+		}
 		
 		/// <summary>
 		/// 名称 

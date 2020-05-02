@@ -36,12 +36,14 @@ namespace FastFrame.Application
         Task MakeNumberAsync<T>(params T[] entitys) where T : IHaveNumber;
     }
 
+     
+
     /// <summary>
     /// 服务接口
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TDto"></typeparam>
-    public interface IService<TEntity, TDto> : IVerifyUniqueService, IService
+    public interface IService<TEntity, TDto> : IVerifyUniqueService, IService 
         where TEntity : class, IEntity, new()
         where TDto : class, IDto<TEntity>, new()
     {

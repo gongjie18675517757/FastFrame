@@ -41,6 +41,11 @@ namespace FastFrame.Application.Flow
 		public int Version {get;set;}
 		
 		/// <summary>
+		/// 状态 
+		/// </summary>
+		public EnabledMark Enabled {get;set;}
+		
+		/// <summary>
 		/// 备注 
 		/// </summary>
 		[StringLength(500)]

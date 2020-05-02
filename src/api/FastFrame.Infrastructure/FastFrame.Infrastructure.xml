@@ -569,6 +569,63 @@
             <param name="enumValue"></param>
             <returns></returns>
         </member>
+        <member name="T:FastFrame.Infrastructure.Interface.IIdentity">
+            <summary>
+            身份接口
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.IIdentity.IsEnabled">
+            <summary>
+            是否有效
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.IIdentity.ExpiredTime">
+            <summary>
+            过期时间
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.IIdentity.LastTime">
+            <summary>
+            最后活动时间
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.IIdentity.LoginTime">
+            <summary>
+            登陆时间
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.IIdentity.User_Id">
+            <summary>
+            用户ID
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IIdentity.GetToken">
+            <summary>
+            获取TOKEN
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IIdentityManager.ExistsTokenAsync(System.String)">
+            <summary>
+            验证TOKEN是否有效
+            </summary>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IIdentityManager.GenerateIdentity(System.String)">
+            <summary>
+            生成身份
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IIdentityManager.RefreshTokenAsync(System.String)">
+            <summary>
+            刷新TOKEN
+            </summary>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
         <member name="T:FastFrame.Infrastructure.Interface.IResourceProvider">
             <summary>
             附件资源操作提供者

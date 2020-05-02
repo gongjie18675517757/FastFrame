@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace FastFrame.WebHost.Privder
 {
     /// <summary>
-    /// 初始化服务
+    /// 应用程序初始化服务
     /// </summary>
     public class InitialProvider : IApplicationInitialProvider
     {

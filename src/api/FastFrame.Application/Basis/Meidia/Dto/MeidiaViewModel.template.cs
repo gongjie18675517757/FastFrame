@@ -9,6 +9,9 @@ namespace FastFrame.Application.Basis
 	public partial class MeidiaViewModel:IViewModel
 	{
 		
+		protected MeidiaViewModel()
+		{
+		}
 		
 		/// <summary>
 		/// 名称 

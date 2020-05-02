@@ -21,7 +21,7 @@ namespace FastFrame.CodeGenerate.Build
         public override IEnumerable<Info.TargetInfo> GetTargetInfoList()
         {
             foreach (var type in GetTypes())
-            { 
+            {
                 var exportAttr = type.GetCustomAttribute<ExportAttribute>();
 
                 if (exportAttr == null || !exportAttr.ExportMarks.Contains(ExportMark.ViewModel))
@@ -39,7 +39,11 @@ namespace FastFrame.CodeGenerate.Build
                     Path = $"{TargetPath}\\{areaNameSpace}\\{type.Name}\\Dto\\{type.Name}ViewModel.template.cs",
                     CategoryName = "class",
                     PropInfos = GetPropInfos(type),
-                    BaseNames = new[] { "IViewModel" }
+                    BaseNames = new[] { "IViewModel" },
+                    Constructor = new Info.ConstructorInfo
+                    {
+                        Modifier = "protected",
+                    }
                 };
             }
         }

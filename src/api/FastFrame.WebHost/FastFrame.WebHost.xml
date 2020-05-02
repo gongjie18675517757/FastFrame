@@ -296,7 +296,7 @@
         </member>
         <member name="T:FastFrame.WebHost.Privder.InitialProvider">
             <summary>
-            初始化服务
+            应用程序初始化服务
             </summary>
         </member>
         <member name="T:FastFrame.WebHost.Privder.ResourceOption">

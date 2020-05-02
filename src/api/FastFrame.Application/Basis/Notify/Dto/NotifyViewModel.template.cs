@@ -9,6 +9,9 @@ namespace FastFrame.Application.Basis
 	public partial class NotifyViewModel:IViewModel
 	{
 		
+		protected NotifyViewModel()
+		{
+		}
 		
 		/// <summary>
 		/// 标题 

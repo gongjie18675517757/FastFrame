@@ -5,7 +5,6 @@ using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Interface;
 using FastFrame.Repository;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,13 +13,13 @@ namespace FastFrame.Application.Account
     public class AccountService : IService
     {
         private readonly IRepository<User> userRepository;
-        private readonly IRepository<LoginLog> loginLogs;
+        private readonly IIdentityManager identityManager;
         private readonly IAppSessionProvider appSession;
 
-        public AccountService(IRepository<User> userRepository, IRepository<LoginLog> loginLogs, IAppSessionProvider appSession)
+        public AccountService(IRepository<User> userRepository, IIdentityManager identityManager, IAppSessionProvider appSession)
         {
             this.userRepository = userRepository;
-            this.loginLogs = loginLogs;
+            this.identityManager = identityManager;
             this.appSession = appSession;
         }
 
@@ -37,25 +36,18 @@ namespace FastFrame.Application.Account
                 if (user.Enable == EnabledMark.disabled)
                     throw new MsgException("帐号已被停用");
 
-                var loginLog = await loginLogs.AddAsync(new LoginLog
-                {
-                    Enable = EnabledMark.enabled,
-                    ExpiredTime = DateTime.Now.AddDays(1),
-                    Id = null,
-                    LastTime = DateTime.Now,
-                    LoginTime = DateTime.Now,
-                    User_Id = user.Id
-                });
+                var identity = await identityManager.GenerateIdentity(user.Id);
 
                 var curr = new CurrUser()
                 {
                     IsAdmin = user.IsAdmin,
-                    ToKen = loginLog.Id,
+                    ToKen = identity.GetToken(),
                     Id = user.Id,
                     Name = user.Name,
                     Account = user.Account
                 };
 
+                await userRepository.CommmitAsync();
                 await appSession.LoginAsync(curr);
                 return curr;
             }
@@ -118,32 +110,6 @@ namespace FastFrame.Application.Account
             var user = await userRepository.GetAsync(curr?.Id);
             await appSession.RefreshIdentityAsync();
             return user.MapTo<User, UserDto>();
-        }
-
-        /// <summary>
-        /// 刷新Token
-        /// </summary> 
-        public async Task RefreshTokenAsync(string token)
-        {
-            var log = await loginLogs.GetAsync(token);
-            if (log != null)
-            {
-                log.ExpiredTime = DateTime.Now.AddDays(1);
-                log.LastTime = DateTime.Now;
-                await loginLogs.AddAsync(log);
-                await loginLogs.CommmitAsync();
-            }
-        }
-
-        /// <summary>
-        /// 验证Token
-        /// </summary>
-        /// <param name="token"></param>
-        /// <returns></returns>
-        public async Task<bool> ExistsTokenAsync(string token)
-        {
-            var log = await loginLogs.GetAsync(token); 
-            return log != null && log.ExpiredTime > DateTime.Now;
         }
     }
 }

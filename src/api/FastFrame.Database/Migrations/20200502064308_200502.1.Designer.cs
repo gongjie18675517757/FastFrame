@@ -3,14 +3,16 @@ using System;
 using FastFrame.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FastFrame.Database.Migrations
 {
     [DbContext(typeof(DataBase))]
-    partial class DataBaseModelSnapshot : ModelSnapshot
+    [Migration("20200502064308_200502.1")]
+    partial class _2005021
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -211,13 +213,15 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true);
 
+                    b.Property<string>("Enable")
+                        .IsRequired()
+                        .HasColumnName("enable")
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
+                        .HasMaxLength(50);
+
                     b.Property<DateTime>("ExpiredTime")
                         .HasColumnName("expiredtime")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<bool>("IsEnabled")
-                        .HasColumnName("isenabled")
-                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime>("LastTime")
                         .HasColumnName("lasttime")

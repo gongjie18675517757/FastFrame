@@ -9,6 +9,9 @@ namespace FastFrame.Application.Basis
 	public partial class ResourceViewModel:IViewModel
 	{
 		
+		protected ResourceViewModel()
+		{
+		}
 		
 		/// <summary>
 		/// 资源名称 

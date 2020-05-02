@@ -9,6 +9,9 @@ namespace FastFrame.Application.Basis
 	public partial class UserViewModel:IViewModel
 	{
 		
+		protected UserViewModel()
+		{
+		}
 		
 		/// <summary>
 		/// 姓名 

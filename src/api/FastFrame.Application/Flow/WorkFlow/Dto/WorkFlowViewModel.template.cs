@@ -9,6 +9,9 @@ namespace FastFrame.Application.Flow
 	public partial class WorkFlowViewModel:IViewModel
 	{
 		
+		protected WorkFlowViewModel()
+		{
+		}
 		
 		/// <summary>
 		/// 名称 

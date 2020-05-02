@@ -6,6 +6,9 @@ using System.Text;
 
 namespace FastFrame.Application.Flow
 {
+    /// <summary>
+    /// 审批操作
+    /// </summary>
     public class FlowOperateInput
     {
         /// <summary>

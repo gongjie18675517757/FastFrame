@@ -59,11 +59,11 @@ namespace FastFrame.Application.Basis
                 throw new MsgException("用户不存在");
             switch (user.Enable)
             {
-                case Entity.Enums.EnabledMark.Enabled:
-                    user.Enable = Entity.Enums.EnabledMark.Disabled;
+                case Entity.Enums.EnabledMark.enabled:
+                    user.Enable = Entity.Enums.EnabledMark.disabled;
                     break;
-                case Entity.Enums.EnabledMark.Disabled:
-                    user.Enable = Entity.Enums.EnabledMark.Enabled;
+                case Entity.Enums.EnabledMark.disabled:
+                    user.Enable = Entity.Enums.EnabledMark.enabled;
                     break;
                 default:
                     break;

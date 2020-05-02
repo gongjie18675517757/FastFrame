@@ -8,11 +8,11 @@
         /// <summary>
         /// 启用
         /// </summary>
-        Enabled,
+        enabled,
 
         /// <summary>
         /// 禁用
         /// </summary>
-        Disabled
+        disabled
     }
 }

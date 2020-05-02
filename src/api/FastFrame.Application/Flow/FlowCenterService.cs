@@ -41,7 +41,7 @@ namespace FastFrame.Application.Flow
         /// <param name="id"></param>
         /// <param name="flowOperate"></param>
         /// <returns></returns>
-        public async Task<FlowStatusEnum> FlowOperateAsync<TEntity>(string id, FlowOperateInput flowOperate) where TEntity : class, IHaveCheck
+        public async Task<FlowOperateOutput> HandleFlowOperateAsync<TEntity>(string id, FlowOperateInput flowOperate) where TEntity : class, IHaveCheck
         {
             var entityRepisitory = LoadRepository<TEntity>();
             var entity = await entityRepisitory.GetAsync(id);
@@ -51,7 +51,7 @@ namespace FastFrame.Application.Flow
                 throw new NotFoundException();
             }
 
-            return await FlowOperateAsync(entity, flowOperate);
+            return await HandleFlowOperateAsync(entity, flowOperate);
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace FastFrame.Application.Flow
         /// <param name="entity"></param>
         /// <param name="flowOperate"></param>
         /// <returns></returns>
-        public async Task<FlowStatusEnum> FlowOperateAsync<TEntity>(TEntity entity, FlowOperateInput flowOperate) where TEntity : class, IHaveCheck
+        public async Task<FlowOperateOutput> HandleFlowOperateAsync<TEntity>(TEntity entity, FlowOperateInput flowOperate) where TEntity : class, IHaveCheck
         {
             if (entity is null)
             {
@@ -76,49 +76,53 @@ namespace FastFrame.Application.Flow
             var eventBus = serviceProvider.GetService<IEventBus>();
             var unitOfWork = serviceProvider.GetService<IUnitOfWork>();
             await eventBus.TriggerEventAsync(new FlowOperateBefore<TEntity>(entity, flowOperate));
-
-            FlowProcess flowProcess = null;
-            switch (flowOperate.ActionEnum)
+            FlowOperateOutput handleResult = flowOperate.ActionEnum switch
             {
-                case FlowActionEnum.submit:
-                    entity.FlowStatus = FlowStatusEnum.submitted;
-                    flowProcess = await HandleSubmitAsync(entity, flowOperate);
-                    break;
-                case FlowActionEnum.unsubmit:
-                    entity.FlowStatus = FlowStatusEnum.unsubmitted;
-                    flowProcess = await HandleUnSubmitAsync(entity, flowOperate);
-                    break;
-                case FlowActionEnum.pass:
-                    entity.FlowStatus = FlowStatusEnum.processing;
-                    break;
-                case FlowActionEnum.withdraw:
-                    entity.FlowStatus = FlowStatusEnum.returned;
-                    break;
-                case FlowActionEnum.refuse:
-                    entity.FlowStatus = FlowStatusEnum.refuse;
-                    break;
-                case FlowActionEnum.uncheck:
-                    entity.FlowStatus = FlowStatusEnum.processing;
-                    break;
-                default:
-                    throw new NotImplementedException();
-            }
+                FlowActionEnum.submit => await HandleSubmitActionAsync(entity, flowOperate),
+                FlowActionEnum.unsubmit => await HandleUnSubmitActionAsync(entity, flowOperate),
+                FlowActionEnum.pass => await HandlePassActionAsync(entity, flowOperate),
+                FlowActionEnum.withdraw => await HandleWithdrawActionAsync(entity, flowOperate),
+                FlowActionEnum.refuse => await HandleRefuseActionAsync(entity, flowOperate),
+                FlowActionEnum.uncheck => await HandleUnCheckActionAsync(entity, flowOperate),
+                _ => throw new NotImplementedException(),
+            };
+            entity.FlowStatus = handleResult.FlowStatus;
+            var entityRepisitory = LoadRepository<TEntity>();
+            await entityRepisitory.UpdateAsync(entity);
 
-            await eventBus.TriggerEventAsync(new FlowOperateing<TEntity>(entity, flowOperate, flowProcess));
+            await eventBus.TriggerEventAsync(new FlowOperateing<TEntity>(entity, flowOperate, handleResult.FlowProcesses));
             await unitOfWork.CommmitAsync();
-            await eventBus.TriggerEventAsync(new FlowOperated<TEntity>(entity, flowOperate, flowProcess));
+            await eventBus.TriggerEventAsync(new FlowOperated<TEntity>(entity, flowOperate, handleResult.FlowProcesses));
 
-            return entity.FlowStatus;
+            return handleResult;
         }
 
         /// <summary>
-        /// 处理撤回操作
+        /// 验证当前步骤是否可以操作
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<bool> VerificationCanCheck(string id)
+        {
+            var flowInstances = LoadRepository<FlowInstance>();
+            var flowStepUsers = LoadRepository<FlowStepUser>();
+            var currUser = AppSession.CurrUser;
+
+
+            return currUser.IsAdmin ||
+                        await flowStepUsers.AnyAsync(v =>
+                                flowInstances.Any(r =>
+                                        r.CurrStep_Id == v.FlowStep_Id && r.Bill_Id == id && r.Enabled == EnabledMark.enabled));
+        }
+
+        /// <summary>
+        /// 处理反审核操作
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="entity"></param>
         /// <param name="flowOperate"></param>
         /// <returns></returns>
-        public async Task<FlowProcess> HandleUnSubmitAsync<TEntity>(TEntity entity, FlowOperateInput flowOperate) where TEntity : class, IHaveCheck
+        public async Task<FlowOperateOutput> HandleUnCheckActionAsync<TEntity>(TEntity entity, FlowOperateInput flowOperate) where TEntity : class, IHaveCheck
         {
             var flowInstances = LoadRepository<FlowInstance>();
             var flowProcesses = LoadRepository<FlowProcess>();
@@ -126,18 +130,350 @@ namespace FastFrame.Application.Flow
             var currUser = AppSession.CurrUser;
 
             var flowInstance = await flowInstances
-                .Where(v => v.Bill_Id == entity.Id && v.Enabled == EnabledMark.Enabled)
+                .Where(v => v.Bill_Id == entity.Id)
                 .OrderByDescending(v => v.Version)
                 .FirstOrDefaultAsync();
 
             if (flowInstance == null)
                 throw new MsgException("流程未提交");
 
+            /*最后一次操作*/
+            var lastProcess = await flowProcesses
+                    .Where(v => v.FlowInstance_Id == flowInstance.Id && v.NodeKey != -1 && v.NodeKey != 0)
+                    .OrderByDescending(v => v.Id)
+                    .FirstOrDefaultAsync();
+
+            if (lastProcess == null || lastProcess.Operater_Id != currUser.Id)
+                throw new MsgException("只能反审核流程的最后一步，当前流程的最后一步不是由您审核的");
+
+
+
+            flowInstance.Enabled = EnabledMark.enabled;
+            flowInstance.Status = FlowStatusEnum.processing;
+            flowInstance.IsComlete = false;
+            flowInstance.LastCheckTime = DateTime.Now;
+            flowInstance.LastChecker_Id = currUser.Id;
+            flowInstance.CompleteTime = null;
+            flowInstance.CurrStep_Id = lastProcess.FlowStep_Id;
+
+            await flowInstances.UpdateAsync(flowInstance);
+
+            var flowProcess = await flowProcesses.AddAsync(new FlowProcess
+            {
+                Action = flowOperate.ActionEnum,
+                Desc = flowOperate.Desc,
+                FlowInstance_Id = flowInstance.Id,
+                FlowStepName = lastProcess.FlowStepName,
+                Id = null,
+                FlowStep_Id = lastProcess.FlowStep_Id,
+                NodeKey = lastProcess.NodeKey,
+                OperaterName = currUser.Name,
+                Operater_Id = currUser.Id,
+                OperateTime = DateTime.Now
+            });
+
+            return new FlowOperateOutput
+            {
+                FlowStatus = flowInstance.Status,
+                FlowProcesses = new[] { flowProcess }
+            };
+        }
+
+        /// <summary>
+        /// 处理拒绝动作
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="entity"></param>
+        /// <param name="flowOperate"></param>
+        /// <returns></returns>
+        public async Task<FlowOperateOutput> HandleRefuseActionAsync<TEntity>(TEntity entity, FlowOperateInput flowOperate) where TEntity : class, IHaveCheck
+        {
+            var flowInstances = LoadRepository<FlowInstance>();
+            var flowProcesses = LoadRepository<FlowProcess>();
+            var flowSteps = LoadRepository<FlowStep>();
+            var currUser = AppSession.CurrUser;
+
+            var flowInstance = await flowInstances
+                .Where(v => v.Bill_Id == entity.Id && v.Enabled == EnabledMark.enabled)
+                .OrderByDescending(v => v.Version)
+                .FirstOrDefaultAsync();
+
+            if (flowInstance == null)
+                throw new MsgException("流程未提交");
+
+            if (!await VerificationCanCheck(entity.Id))
+                throw new MsgException("你没有权限处理当前步骤！");
+
             flowInstance.IsComlete = true;
             flowInstance.CompleteTime = DateTime.Now;
             flowInstance.CurrStep_Id = null;
-            flowInstance.Enabled = EnabledMark.Disabled;
-            flowInstance.Status = null;
+            flowInstance.Enabled = EnabledMark.disabled;
+            flowInstance.Status = FlowStatusEnum.refuse;
+            await flowInstances.UpdateAsync(flowInstance);
+
+            var currStep = await flowSteps
+                   .Where(v => v.Id == flowInstance.CurrStep_Id)
+                   .Select(v => new { v.Id, v.StepName, v.FlowNodeKey })
+                   .FirstOrDefaultAsync();
+
+            var lastStep = await flowSteps
+                  .Where(v => v.FlowInstance_Id == flowInstance.Id && v.FlowNodeKey == -1)
+                  .Select(v => new { v.Id, v.StepName, v.FlowNodeKey })
+                  .FirstOrDefaultAsync();
+
+            return new FlowOperateOutput
+            {
+                FlowStatus = FlowStatusEnum.refuse,
+                FlowProcesses = new[] {
+                    await flowProcesses.AddAsync(new FlowProcess
+                        {
+                            Action = flowOperate.ActionEnum,
+                            Desc = flowOperate.Desc,
+                            FlowInstance_Id = flowInstance.Id,
+                            FlowStep_Id = currStep.Id,
+                            FlowStepName = currStep.StepName,
+                            Id = null,
+                            OperaterName = currUser.Name,
+                            Operater_Id = currUser.Id,
+                            OperateTime = DateTime.Now,
+                            NodeKey = currStep.FlowNodeKey
+                        }),
+                    await flowProcesses.AddAsync(new FlowProcess
+                        {
+                            Action = flowOperate.ActionEnum,
+                            Desc = "已完结",
+                            FlowInstance_Id = flowInstance.Id,
+                            FlowStep_Id = lastStep.Id,
+                            FlowStepName = lastStep.StepName,
+                            Id = null,
+                            OperaterName = currUser.Name,
+                            Operater_Id = currUser.Id,
+                            OperateTime = DateTime.Now,
+                            NodeKey = lastStep.FlowNodeKey
+                        }),
+                },
+            };
+        }
+
+        /// <summary>
+        /// 处理退回动作
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="entity"></param>
+        /// <param name="flowOperate"></param>
+        /// <returns></returns>
+        public async Task<FlowOperateOutput> HandleWithdrawActionAsync<TEntity>(TEntity entity, FlowOperateInput flowOperate) where TEntity : class, IHaveCheck
+        {
+            var flowInstances = LoadRepository<FlowInstance>();
+            var flowProcesses = LoadRepository<FlowProcess>();
+            var flowSteps = LoadRepository<FlowStep>();
+            var currUser = AppSession.CurrUser;
+
+            var flowInstance = await flowInstances
+                .Where(v => v.Bill_Id == entity.Id && v.Enabled == EnabledMark.enabled)
+                .OrderByDescending(v => v.Version)
+                .FirstOrDefaultAsync();
+
+            if (flowInstance == null)
+                throw new MsgException("流程未提交");
+
+            if (!await VerificationCanCheck(entity.Id))
+                throw new MsgException("你没有权限处理当前步骤！");
+
+            flowInstance.IsComlete = true;
+            flowInstance.CompleteTime = DateTime.Now;
+            flowInstance.CurrStep_Id = null;
+            flowInstance.Enabled = EnabledMark.disabled;
+            flowInstance.Status = FlowStatusEnum.returned;
+            await flowInstances.UpdateAsync(flowInstance);
+
+            var currStep = await flowSteps
+                   .Where(v => v.Id == flowInstance.CurrStep_Id)
+                   .Select(v => new { v.Id, v.StepName, v.FlowNodeKey })
+                   .FirstOrDefaultAsync();
+
+            var lastStep = await flowSteps
+                  .Where(v => v.FlowInstance_Id == flowInstance.Id && v.FlowNodeKey == -1)
+                  .Select(v => new { v.Id, v.StepName, v.FlowNodeKey })
+                  .FirstOrDefaultAsync();
+
+            return new FlowOperateOutput
+            {
+                FlowStatus = flowInstance.Status,
+                FlowProcesses = new[] {
+                    await flowProcesses.AddAsync(new FlowProcess
+                        {
+                            Action = flowOperate.ActionEnum,
+                            Desc = flowOperate.Desc,
+                            FlowInstance_Id = flowInstance.Id,
+                            FlowStep_Id = currStep.Id,
+                            FlowStepName = currStep.StepName,
+                            Id = null,
+                            OperaterName = currUser.Name,
+                            Operater_Id = currUser.Id,
+                            OperateTime = DateTime.Now,
+                            NodeKey = currStep.FlowNodeKey
+                        }),
+                    await flowProcesses.AddAsync(new FlowProcess
+                        {
+                            Action = flowOperate.ActionEnum,
+                            Desc = "已完结",
+                            FlowInstance_Id = flowInstance.Id,
+                            FlowStep_Id = lastStep.Id,
+                            FlowStepName = lastStep.StepName,
+                            Id = null,
+                            OperaterName = currUser.Name,
+                            Operater_Id = currUser.Id,
+                            OperateTime = DateTime.Now,
+                            NodeKey = lastStep.FlowNodeKey
+                        }),
+                },
+            };
+        }
+
+
+        /// <summary>
+        /// 处理审核通过动作
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="entity"></param>
+        /// <param name="flowOperate"></param>
+        /// <returns></returns>
+        public async Task<FlowOperateOutput> HandlePassActionAsync<TEntity>(TEntity entity, FlowOperateInput flowOperate) where TEntity : class, IHaveCheck
+        {
+            var flowInstances = LoadRepository<FlowInstance>();
+            var flowProcesses = LoadRepository<FlowProcess>();
+            var flowSteps = LoadRepository<FlowStep>();
+            var currUser = AppSession.CurrUser;
+
+            var flowOperateOutput = new FlowOperateOutput();
+
+            var flowInstance = await flowInstances
+                .Where(v => v.Bill_Id == entity.Id && v.Enabled == EnabledMark.enabled)
+                .OrderByDescending(v => v.Version)
+                .FirstOrDefaultAsync();
+
+            if (flowInstance == null)
+                throw new MsgException("流程未提交");
+
+            if (!await VerificationCanCheck(entity.Id))
+                throw new MsgException("你没有权限处理当前步骤！");
+
+            var currStep = await flowSteps
+                        .Where(v => v.Id == flowInstance.CurrStep_Id)
+                        .Select(v => new
+                        {
+                            v.FlowNodeKey,
+                            v.NextStepKey,
+                            v.NextStep_Id,
+                            v.StepName,
+                            v.Id
+                        })
+                        .FirstOrDefaultAsync();
+
+
+            if (currStep == null)
+                throw new MsgException("获取审批步骤失败！");
+
+
+            var flowProcess = await flowProcesses.AddAsync(new FlowProcess
+            {
+                Action = FlowActionEnum.pass,
+                Desc = flowOperate.Desc,
+                FlowInstance_Id = flowInstance.Id,
+                FlowStep_Id = currStep.Id,
+                FlowStepName = currStep.StepName,
+                Id = null,
+                OperaterName = currUser.Name,
+                Operater_Id = currUser.Id,
+                OperateTime = DateTime.Now,
+                NodeKey = currStep.FlowNodeKey
+            });
+
+            flowInstance.LastChecker_Id = currUser.Id;
+            flowInstance.LastCheckTime = DateTime.Now;
+
+            /*当到达最后一步时*/
+            if (currStep.NextStepKey == -1)
+            {
+                flowInstance.CurrStep_Id = null;
+                flowInstance.CompleteTime = DateTime.Now;
+                flowInstance.IsComlete = true;
+                flowInstance.Status = FlowStatusEnum.finished;
+                await flowInstances.UpdateAsync(flowInstance);
+
+                var nextStep = await flowSteps
+                        .Where(v => v.Id == currStep.NextStep_Id)
+                        .Select(v => new
+                        {
+                            v.StepName,
+                            v.Id
+                        })
+                        .FirstOrDefaultAsync();
+
+                var lastFlowProcess = await flowProcesses.AddAsync(new FlowProcess
+                {
+                    Action = FlowActionEnum.pass,
+                    Desc = "审批完结",
+                    FlowInstance_Id = flowInstance.Id,
+                    FlowStep_Id = nextStep.Id,
+                    FlowStepName = nextStep.StepName,
+                    Id = null,
+                    OperaterName = currUser.Name,
+                    Operater_Id = currUser.Id,
+                    OperateTime = DateTime.Now,
+                    NodeKey = currStep.FlowNodeKey
+                });
+
+                return new FlowOperateOutput
+                {
+                    FlowStatus = FlowStatusEnum.returned,
+                    FlowProcesses = new[] { flowProcess, lastFlowProcess }
+                };
+            }
+            else
+            {
+                flowInstance.CurrStep_Id = currStep.NextStep_Id;
+                await flowInstances.UpdateAsync(flowInstance);
+                return new FlowOperateOutput
+                {
+                    FlowStatus = FlowStatusEnum.processing,
+                    FlowProcesses = new[] { flowProcess }
+                };
+            }
+        }
+
+
+        /// <summary>
+        /// 处理撤回动作
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="entity"></param>
+        /// <param name="flowOperate"></param>
+        /// <returns></returns>
+        public async Task<FlowOperateOutput> HandleUnSubmitActionAsync<TEntity>(TEntity entity, FlowOperateInput flowOperate) where TEntity : class, IHaveCheck
+        {
+            var flowInstances = LoadRepository<FlowInstance>();
+            var flowProcesses = LoadRepository<FlowProcess>();
+            var flowSteps = LoadRepository<FlowStep>();
+            var currUser = AppSession.CurrUser;
+
+            var flowInstance = await flowInstances
+                .Where(v => v.Bill_Id == entity.Id && v.Enabled == EnabledMark.enabled)
+                .OrderByDescending(v => v.Version)
+                .FirstOrDefaultAsync();
+
+            if (flowInstance == null)
+                throw new MsgException("流程未提交");
+
+            //if (entity.FlowStatus != FlowStatusEnum.processing)
+            //    throw new MsgException("流程已完结，不可撤回！");
+
+            flowInstance.IsComlete = true;
+            flowInstance.CompleteTime = DateTime.Now;
+            flowInstance.CurrStep_Id = null;
+            flowInstance.Enabled = EnabledMark.disabled;
+            flowInstance.Status = FlowStatusEnum.unsubmitted;
             await flowInstances.UpdateAsync(flowInstance);
 
             var lastStep = await flowSteps
@@ -155,19 +491,24 @@ namespace FastFrame.Application.Flow
                 Id = null,
                 OperaterName = currUser.Name,
                 Operater_Id = currUser.Id,
-                OperateTime = DateTime.Now
+                OperateTime = DateTime.Now,
+                NodeKey = -1
             });
 
-            return flowProcess;
+            return new FlowOperateOutput
+            {
+                FlowProcesses = new[] { flowProcess },
+                FlowStatus = FlowStatusEnum.unsubmitted
+            };
         }
 
         /// <summary>
-        /// 处理提交
+        /// 处理提交动作
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public async Task<FlowProcess> HandleSubmitAsync<TEntity>(TEntity entity, FlowOperateInput flowOperate) where TEntity : class, IHaveCheck
+        public async Task<FlowOperateOutput> HandleSubmitActionAsync<TEntity>(TEntity entity, FlowOperateInput flowOperate) where TEntity : class, IHaveCheck
         {
             var currUser = AppSession.CurrUser;
             var flowInstances = LoadRepository<FlowInstance>();
@@ -189,7 +530,7 @@ namespace FastFrame.Application.Flow
             if (entity.FlowStatus != FlowStatusEnum.unsubmitted || entity.FlowStatus != FlowStatusEnum.returned)
                 throw new MsgException("只有未提交/已退回的单据，才可重新提交！");
 
-            if (beforeInstance != null && beforeInstance.Enabled == EnabledMark.Enabled)
+            if (beforeInstance != null && beforeInstance.Enabled == EnabledMark.enabled)
                 throw new MsgException("流程还没结束，不可重新提交！");
 
 
@@ -198,7 +539,7 @@ namespace FastFrame.Application.Flow
 
             /*2，取模块对应的流程ID*/
             var flowId = await workFlows
-                            .Where(v => v.BeModule == type.Name && v.Enabled == EnabledMark.Enabled)
+                            .Where(v => v.BeModule == type.Name && v.Enabled == EnabledMark.enabled)
                             .OrderByDescending(v => v.Version)
                             .Select(v => v.Id)
                             .FirstOrDefaultAsync();
@@ -223,7 +564,7 @@ namespace FastFrame.Application.Flow
                 StartTime = DateTime.Now,
                 Status = FlowStatusEnum.submitted,
                 WorkFlow_Id = flowId,
-                Enabled = EnabledMark.Enabled,
+                Enabled = EnabledMark.enabled,
                 Version = beforeInstance?.Version ?? 0 + 1
             };
 
@@ -279,7 +620,10 @@ namespace FastFrame.Application.Flow
                 });
                 stepList.Add(flowStep);
 
-                /*匹配可审核的人*/
+                /*匹配可审核的人（起点和终点不需要）*/
+                if (stepNode.Key == 0 || stepNode.Key == -1)
+                    continue;
+
                 var stepUserList = await MatchStepCheckUser(entity, stepNode);
                 foreach (var stepUser in stepUserList)
                 {
@@ -314,12 +658,17 @@ namespace FastFrame.Application.Flow
                 FlowStepName = startStep.StepName,
                 OperateTime = DateTime.Now,
                 Operater_Id = currUser.Id,
-                OperaterName = currUser.Name
+                OperaterName = currUser.Name,
+                NodeKey = 0
             });
 
             flowInstance.CurrStep_Id = stepList[1].Id;
 
-            return flowProcess;
+            return new FlowOperateOutput
+            {
+                FlowStatus = FlowStatusEnum.submitted,
+                FlowProcesses = new[] { flowProcess }
+            };
         }
 
         /// <summary>
@@ -490,5 +839,7 @@ namespace FastFrame.Application.Flow
                         .OrderByDescending(v => v.Weights)
                         .FirstOrDefault();
         }
+
+
     }
 }

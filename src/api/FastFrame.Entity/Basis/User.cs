@@ -72,7 +72,7 @@ namespace FastFrame.Entity.Basis
         /// 启用状态
         /// </summary>
         [ReadOnly]
-        public EnabledMark Enable { get; set; } = EnabledMark.Enabled;
+        public EnabledMark Enable { get; set; } = EnabledMark.enabled;
 
         /// <summary>
         /// 生成密码

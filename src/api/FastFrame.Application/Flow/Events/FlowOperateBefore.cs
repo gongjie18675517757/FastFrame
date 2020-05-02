@@ -1,22 +1,17 @@
 ﻿using FastFrame.Entity;
-using FastFrame.Entity.Flow;
 using FastFrame.Infrastructure.EventBus;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace FastFrame.Application.Flow
 {
     /// <summary>
-    /// 流程操作时
+    /// 流程操作前
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
-    public partial class FlowOperateing<TEntity>:IEventData where TEntity : IHaveCheck
+    public partial class FlowOperateBefore<TEntity> : IEventData where TEntity : IHaveCheck
     {
-        public FlowOperateing(TEntity entity, FlowOperateInput operateInput, IEnumerable<FlowProcess> flowProcess)
+        public FlowOperateBefore(TEntity entity, FlowOperateInput operateInput)
         {
             Entity = entity;
-            FlowProcess = flowProcess;
             OperateInput = operateInput;
         }
 
@@ -24,11 +19,6 @@ namespace FastFrame.Application.Flow
         /// 单据实体
         /// </summary>
         public TEntity Entity { get; }
-
-        /// <summary>
-        /// 审批步骤
-        /// </summary>
-        public IEnumerable<FlowProcess> FlowProcess { get; }
 
         /// <summary>
         /// 操作内容

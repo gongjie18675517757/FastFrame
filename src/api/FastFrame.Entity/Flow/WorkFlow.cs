@@ -102,7 +102,7 @@ namespace FastFrame.Entity.Flow
         /// <summary>
         /// 流程状态
         /// </summary>
-        public FlowStatusEnum? Status { get; set; }
+        public FlowStatusEnum Status { get; set; }
 
         /// <summary>
         /// 关联流程
@@ -292,6 +292,11 @@ namespace FastFrame.Entity.Flow
         public string FlowStep_Id { get; set; }
 
         /// <summary>
+        /// 节点key
+        /// </summary>
+        public int NodeKey { get; set; }
+
+        /// <summary>
         /// 步骤名称
         /// </summary>
         [StringLength(50)]
@@ -300,7 +305,7 @@ namespace FastFrame.Entity.Flow
         /// <summary>
         /// 动作
         /// </summary>
-        public FlowActionEnum Action { get; set; }
+        public FlowActionEnum? Action { get; set; }
 
         /// <summary>
         /// 操作人

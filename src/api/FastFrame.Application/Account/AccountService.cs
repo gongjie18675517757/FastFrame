@@ -34,12 +34,12 @@ namespace FastFrame.Application.Account
             var user = await userRepository.Queryable.Where(x => x.Account == input.Account).FirstOrDefaultAsync();
             if (user?.VerificationPassword(input.Password) == true)
             {
-                if (user.Enable == EnabledMark.Disabled)
+                if (user.Enable == EnabledMark.disabled)
                     throw new MsgException("帐号已被停用");
 
                 var loginLog = await loginLogs.AddAsync(new LoginLog
                 {
-                    Enable = EnabledMark.Enabled,
+                    Enable = EnabledMark.enabled,
                     ExpiredTime = DateTime.Now.AddDays(1),
                     Id = null,
                     LastTime = DateTime.Now,

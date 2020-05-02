@@ -202,7 +202,7 @@ export let pageMethods = {
     let Id = model.Id || ''
     if (
       this.isDialog ||
-      (this.dialogMode  && !this.$vuetify.breakpoint.smAndDown)
+      (this.dialogMode && !this.$vuetify.breakpoint.smAndDown)
     ) {
       let components = this.$router.getMatchedComponents(`/${this.name}/add`);
       if (components.length > 1) {
@@ -256,7 +256,10 @@ export let pageMethods = {
     return `/api/${this.name}/list`
   },
   getRequedtMethod() {
-    return this.$http.post
+    return (url, pageProps) => {
+      let { PageIndex, PageSize, SortName, SortMode, Filters } = pageProps;
+      return this.$http.get(`${url}/${PageIndex}?PageSize=${PageSize}&SortName=${SortName}&SortMode=${SortMode}&filterStr=${JSON.stringify(Filters)}`);
+    }
   },
   async getRequestPars(pager) {
     if (pager) this.pager = pager;
@@ -321,8 +324,8 @@ export let pageMethods = {
   loadMoreList: throttle(function (pager) {
     this.loading = true;
     this.loading = true;
-    if(pager.page){
-      pager.page+=1;
+    if (pager.page) {
+      pager.page += 1;
     }
     Promise.resolve(pager)
       .then(this.getRequestPars)

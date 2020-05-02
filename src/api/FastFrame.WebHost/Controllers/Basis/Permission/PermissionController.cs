@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace FastFrame.WebHost.Controllers.Basis
 {
     [Permission("Permission", "权限管理")]
-    public partial class PermissionController : BaseController<Permission, PermissionDto>
+    public partial class PermissionController : BaseController<PermissionDto>
     {
         private readonly PermissionService service;
 

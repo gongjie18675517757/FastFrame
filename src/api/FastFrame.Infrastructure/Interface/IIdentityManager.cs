@@ -2,6 +2,9 @@
 
 namespace FastFrame.Infrastructure.Interface
 {
+    /// <summary>
+    /// 身份管理
+    /// </summary>
     public interface IIdentityManager
     {
         /// <summary>
@@ -16,7 +19,7 @@ namespace FastFrame.Infrastructure.Interface
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        Task<IIdentity> GenerateIdentity(string userId); 
+        Task<IIdentity> GenerateIdentity(string userId);
 
         /// <summary>
         /// 刷新TOKEN
@@ -24,5 +27,19 @@ namespace FastFrame.Infrastructure.Interface
         /// <param name="token"></param>
         /// <returns></returns>
         Task RefreshTokenAsync(string token);
+
+        /// <summary>
+        /// 强制TOKEN失效
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        Task SetTokenFailureAsync(string token);
+
+        /// <summary>
+        /// 强制用户所有TOKEN失效
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        Task SetUserAllTokenFailureAsync(string userId);
     }
 }

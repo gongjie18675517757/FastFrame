@@ -91,6 +91,8 @@ namespace FastFrame.Application.Account
             {
                 user.Password = input.Password;
                 user.GeneratePassword();
+
+                await identityManager.SetUserAllTokenFailureAsync(user.Id);
             }
             await userRepository.UpdateAsync(user);
             await userRepository.CommmitAsync();

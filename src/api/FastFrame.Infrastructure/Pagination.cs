@@ -35,12 +35,12 @@ namespace FastFrame.Infrastructure
         /// <summary>
         /// 排序列名称
         /// </summary>
-        public string SortName { get; set; }
+        public string SortName { get; set; } = "Id";
 
         /// <summary>
         /// 排序方式
         /// </summary>
-        public string SortMode { get; set; }
+        public string SortMode { get; set; } = "Desc";
     }
 
 

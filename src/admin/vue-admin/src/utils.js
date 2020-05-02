@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import $http from './httpClient'
-import {  throttle as _throttle, debounce as _debounce} from 'lodash'
+import { throttle as _throttle, debounce as _debounce } from 'lodash'
 
 export const throttle = _throttle;
 
@@ -155,7 +155,7 @@ export function upload({
                     var percentage = Math.round((e.loaded * 100) / e.total) || 0;
                     if (percentage < 100) {
                         onProgress(percentage)
-                    } 
+                    }
                 }
             }).then(function (resp) {
                 resolve(resp)
@@ -284,5 +284,18 @@ export function skip(arr = [], skipCount = 0) {
  */
 export function take(arr = [], takeCount = 0) {
     return arr.filter((_val, index) => index < takeCount)
+}
+
+
+/**
+ * 生成GUID
+ * @returns {string}
+ */
+export function guid() {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+        var r = (Math.random() * 16) | 0,
+            v = c == "x" ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+    });
 }
 

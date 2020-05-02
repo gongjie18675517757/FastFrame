@@ -9,7 +9,7 @@ namespace FastFrame.WebHost.Controllers.Basis
 	/// 用户 
 	/// </summary>
 	[Permission(nameof(User),"用户")]
-	public partial class UserController:BaseCURDController<User, UserDto>
+	public partial class UserController:BaseCURDController<UserDto>
 	{
 		private readonly UserService service;
 		

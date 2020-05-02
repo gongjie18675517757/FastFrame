@@ -28,7 +28,8 @@ namespace FastFrame.Application.Basis
 		{
 			var meidiaQueryable = meidiaRepository.Queryable.MapTo<Meidia,MeidiaViewModel>();
 			var userQueryable = userRepository.Queryable.MapTo<User,UserViewModel>();
-			var query = from _meidia in meidiaRepository 
+			var repository = meidiaRepository.Queryable;
+			var query = from _meidia in repository 
 						join _super_Id in meidiaQueryable on _meidia.Super_Id equals _super_Id.Id into t__super_Id
 						from _super_Id in t__super_Id.DefaultIfEmpty()
 						join _create_User_Id in userQueryable on _meidia.Create_User_Id equals _create_User_Id.Id into t__create_User_Id
@@ -49,6 +50,7 @@ namespace FastFrame.Application.Basis
 							Super = _super_Id,
 							Create_User = _create_User_Id,
 							Modify_User = _modify_User_Id,
+							HasTreeChildren = repository.Any(c => c.Super_Id == _meidia.Id)
 						};
 			return query;
 		}

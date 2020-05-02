@@ -9,7 +9,7 @@ namespace FastFrame.WebHost.Controllers.Basis
 	/// 通知 
 	/// </summary>
 	[Permission(nameof(Notify),"通知")]
-	public partial class NotifyController:BaseCURDController<Notify, NotifyDto>
+	public partial class NotifyController:BaseCURDController<NotifyDto>
 	{
 		private readonly NotifyService service;
 		

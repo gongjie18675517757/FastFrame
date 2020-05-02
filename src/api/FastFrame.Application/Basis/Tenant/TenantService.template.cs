@@ -25,7 +25,8 @@ namespace FastFrame.Application.Basis
 		
 		protected override IQueryable<TenantDto> QueryMain() 
 		{
-			var query = from _tenant in tenantRepository 
+			var repository = tenantRepository.Queryable;
+			var query = from _tenant in repository 
 						select new TenantDto
 						{
 							FullName = _tenant.FullName,
@@ -35,6 +36,7 @@ namespace FastFrame.Application.Basis
 							Tenant_Id = _tenant.Tenant_Id,
 							HandIcon_Id = _tenant.HandIcon_Id,
 							Id = _tenant.Id,
+							HasTreeChildren = repository.Any(c => c.Super_Id == _tenant.Id)
 						};
 			return query;
 		}

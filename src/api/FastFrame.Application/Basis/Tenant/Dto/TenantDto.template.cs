@@ -49,6 +49,11 @@ namespace FastFrame.Application.Basis
 		/// </summary>
 		public string HandIcon_Id {get;set;}
 		
+		/// <summary>
+		/// 是否有下级 
+		/// </summary>
+		public bool HasTreeChildren {get;set;}
+		
 		
 	}
 }

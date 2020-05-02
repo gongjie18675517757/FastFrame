@@ -25,7 +25,8 @@ namespace FastFrame.Application.Basis
 		
 		protected override IQueryable<ResourceDto> QueryMain() 
 		{
-			var query = from _resource in resourceRepository 
+			var repository = resourceRepository.Queryable;
+			var query = from _resource in repository 
 						select new ResourceDto
 						{
 							Name = _resource.Name,

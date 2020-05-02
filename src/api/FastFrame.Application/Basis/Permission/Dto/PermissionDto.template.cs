@@ -46,6 +46,11 @@ namespace FastFrame.Application.Basis
 		/// </summary>
 		public PermissionViewModel Super {get;set;}
 		
+		/// <summary>
+		/// 是否有下级 
+		/// </summary>
+		public bool HasTreeChildren {get;set;}
+		
 		
 	}
 }

@@ -27,7 +27,8 @@ namespace FastFrame.Application.Basis
 		protected override IQueryable<PermissionDto> QueryMain() 
 		{
 			var permissionQueryable = permissionRepository.Queryable.MapTo<Permission,PermissionViewModel>();
-			var query = from _permission in permissionRepository 
+			var repository = permissionRepository.Queryable;
+			var query = from _permission in repository 
 						join _super_Id in permissionQueryable on _permission.Super_Id equals _super_Id.Id into t__super_Id
 						from _super_Id in t__super_Id.DefaultIfEmpty()
 						select new PermissionDto
@@ -38,6 +39,7 @@ namespace FastFrame.Application.Basis
 							Super_Id = _permission.Super_Id,
 							Id = _permission.Id,
 							Super = _super_Id,
+							HasTreeChildren = repository.Any(c => c.Super_Id == _permission.Id)
 						};
 			return query;
 		}

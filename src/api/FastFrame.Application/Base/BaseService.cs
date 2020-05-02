@@ -20,7 +20,7 @@ namespace FastFrame.Application
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TDto"></typeparam>
-    public class BaseService<TEntity, TDto> : IService<TEntity, TDto>
+    public class BaseService<TEntity, TDto> : IService<TDto>
         where TEntity : class, IEntity, new()
         where TDto : class, IDto<TEntity>, new()
     {

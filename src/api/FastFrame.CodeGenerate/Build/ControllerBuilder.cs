@@ -36,9 +36,9 @@ namespace FastFrame.CodeGenerate.Build
 
                 var baseNames = new List<string>();
                 if (typeof(Entity.IHasManage).IsAssignableFrom(type))
-                    baseNames.Add($"BaseCURDController<{name}, {name}Dto>");
+                    baseNames.Add($"BaseCURDController<{name}Dto>");
                 else
-                    baseNames.Add($"BaseController<{name}, {name}Dto>");
+                    baseNames.Add($"BaseController<{name}Dto>");
 
                 yield return new TargetInfo()
                 {

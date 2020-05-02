@@ -30,7 +30,7 @@ namespace FastFrame.CodeGenerate.Build
         public override IEnumerable<TargetInfo> GetTargetInfoList()
         {
             foreach (Type type in GetTypes())
-            { 
+            {
                 var exportAttr = type.GetCustomAttribute<ExportAttribute>();
 
                 if (exportAttr == null || !exportAttr.ExportMarks.Contains(ExportMark.Service))
@@ -150,8 +150,8 @@ namespace FastFrame.CodeGenerate.Build
                 yield return $"var {relatedTypeName}Queryable = {relatedTypeName}Repository.Queryable.MapTo<{relateType.Name},{relateType.Name}ViewModel>();";
             }
 
-
-            yield return $"var query = from _{typeName} in {typeName}Repository ";
+            yield return $"var repository = {typeName}Repository.Queryable;";
+            yield return $"var query = from _{typeName} in repository ";
 
             foreach (var prop in relateProps)
             {
@@ -209,6 +209,10 @@ namespace FastFrame.CodeGenerate.Build
                 var linqTempName = "_" + prop.Prop.Name.ToFirstLower();
                 yield return $"\t\t\t\t{prop.Prop.Name.Replace("_Id", "")} = {linqTempName /*prop.Prop.Name.Replace("_Id", "")*/},";
             }
+
+            if (typeof(ITreeEntity).IsAssignableFrom(type))
+                yield return $"\t\t\t\tHasTreeChildren = repository.Any(c => c.Super_Id == _{typeName}.Id)";
+
             yield return "\t\t\t};";
             yield return "return query;";
         }

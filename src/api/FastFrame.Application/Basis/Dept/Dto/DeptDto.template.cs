@@ -70,6 +70,11 @@ namespace FastFrame.Application.Basis
 		/// </summary>
 		public DateTime ModifyTime {get;set;}
 		
+		/// <summary>
+		/// 是否有下级 
+		/// </summary>
+		public bool HasTreeChildren {get;set;}
+		
 		
 	}
 }

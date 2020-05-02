@@ -44,12 +44,11 @@ namespace FastFrame.Infrastructure
             }
 
             var isExistsFilter = !kw.IsNullOrWhiteSpace();
-            isExistsFilter = isExistsFilter || (kvsFilter == null && kvsFilter.Any());
             isExistsFilter = isExistsFilter ||
-                                (kvsFilter == null &&
+                                (kvsFilter != null &&
                                     kvsFilter.Any(v => v.Value != null &&
                                                        v.Key != null &&
-                                                        v.Value.Any())); 
+                                                        v.Value.Any(r => r.Name != null && r.Value != null && r.Compare != null)));
 
             if (!isExistsFilter)
                 return query;
@@ -255,6 +254,23 @@ namespace FastFrame.Infrastructure
         /// <returns></returns>
         public static string ToBase64(this string @in)
             => @in.IsNullOrWhiteSpace() ? string.Empty : Convert.ToBase64String(Encoding.Default.GetBytes(@in));
+
+        /// <summary>
+        /// FromBase64
+        /// </summary>
+        /// <param name="in"></param>
+        /// <returns></returns>
+        public static string FromBase64(this string @in)
+        {
+            try
+            {
+                return @in.IsNullOrWhiteSpace() ? string.Empty : Encoding.Default.GetString(Convert.FromBase64String(@in));
+            }
+            catch (Exception)
+            {
+                return default;
+            }
+        }
 
         /// <summary>
         /// ToMD5

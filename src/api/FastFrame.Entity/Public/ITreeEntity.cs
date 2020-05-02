@@ -3,7 +3,7 @@
     /// <summary>
     /// 树结构表
     /// </summary>
-    public interface ITreeEntity : IEntity
+    public interface ITreeEntity
     {
         string Super_Id { get; }
     }

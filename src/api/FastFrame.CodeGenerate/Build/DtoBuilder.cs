@@ -24,7 +24,7 @@ namespace FastFrame.CodeGenerate.Build
         public override IEnumerable<TargetInfo> GetTargetInfoList()
         {
             foreach (var type in GetTypes())
-            { 
+            {
                 var exportAttr = type.GetCustomAttribute<ExportAttribute>();
 
                 if (exportAttr == null || !exportAttr.ExportMarks.Contains(ExportMark.DTO))
@@ -74,7 +74,7 @@ namespace FastFrame.CodeGenerate.Build
                 Path = $"{TargetPath}\\{areaNameSpace}\\{type.Name}\\Dto\\{type.Name}Dto.template.cs",
                 CategoryName = "class",
                 PropInfos = GetPropInfos(type),
-                AttrInfos =Array.Empty<AttrInfo>() /*attrs*/
+                AttrInfos = Array.Empty<AttrInfo>() /*attrs*/
             };
         }
 
@@ -120,6 +120,15 @@ namespace FastFrame.CodeGenerate.Build
                     };
                 }
             }
+
+            if (typeof(ITreeEntity).IsAssignableFrom(type))
+                yield return new PropInfo
+                {
+                    Name = "HasTreeChildren",
+                    DefaultValue = "false",
+                    Summary = "是否有下级",
+                    TypeName = "bool"
+                };
         }
 
         public IEnumerable<AttrInfo> GetAttrInfos(PropertyInfo propertyInfo)

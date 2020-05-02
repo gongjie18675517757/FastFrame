@@ -9,7 +9,7 @@ namespace FastFrame.WebHost.Controllers.Basis
 	/// 部门 
 	/// </summary>
 	[Permission(nameof(Dept),"部门")]
-	public partial class DeptController:BaseCURDController<Dept, DeptDto>
+	public partial class DeptController:BaseCURDController<DeptDto>
 	{
 		private readonly DeptService service;
 		

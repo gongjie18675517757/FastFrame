@@ -9,7 +9,7 @@ namespace FastFrame.WebHost.Controllers.Basis
 	/// 编号设置 
 	/// </summary>
 	[Permission(nameof(NumberOption),"编号设置")]
-	public partial class NumberOptionController:BaseCURDController<NumberOption, NumberOptionDto>
+	public partial class NumberOptionController:BaseCURDController<NumberOptionDto>
 	{
 		private readonly NumberOptionService service;
 		

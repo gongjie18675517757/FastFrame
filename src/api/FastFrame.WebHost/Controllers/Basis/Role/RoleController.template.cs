@@ -9,7 +9,7 @@ namespace FastFrame.WebHost.Controllers.Basis
 	/// 角色 
 	/// </summary>
 	[Permission(nameof(Role),"角色")]
-	public partial class RoleController:BaseCURDController<Role, RoleDto>
+	public partial class RoleController:BaseCURDController<RoleDto>
 	{
 		private readonly RoleService service;
 		

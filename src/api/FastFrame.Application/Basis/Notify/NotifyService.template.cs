@@ -30,7 +30,8 @@ namespace FastFrame.Application.Basis
 		{
 			var userQueryable = userRepository.Queryable.MapTo<User,UserViewModel>();
 			var resourceQueryable = resourceRepository.Queryable.MapTo<Resource,ResourceViewModel>();
-			var query = from _notify in notifyRepository 
+			var repository = notifyRepository.Queryable;
+			var query = from _notify in repository 
 						join _publush_Id in userQueryable on _notify.Publush_Id equals _publush_Id.Id into t__publush_Id
 						from _publush_Id in t__publush_Id.DefaultIfEmpty()
 						join _resource_Id in resourceQueryable on _notify.Resource_Id equals _resource_Id.Id into t__resource_Id

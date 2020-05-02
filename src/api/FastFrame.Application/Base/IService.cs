@@ -40,12 +40,10 @@ namespace FastFrame.Application
 
     /// <summary>
     /// 服务接口
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
+    /// </summary> 
     /// <typeparam name="TDto"></typeparam>
-    public interface IService<TEntity, TDto> : IVerifyUniqueService, IService 
-        where TEntity : class, IEntity, new()
-        where TDto : class, IDto<TEntity>, new()
+    public interface IService<TDto> : IVerifyUniqueService, IService  
+        where TDto : class, IDto, new()
     {
         /// <summary>
         /// 添加

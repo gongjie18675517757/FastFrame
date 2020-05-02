@@ -27,7 +27,8 @@ namespace FastFrame.Application.Basis
 		protected override IQueryable<NumberOptionDto> QueryMain() 
 		{
 			var userQueryable = userRepository.Queryable.MapTo<User,UserViewModel>();
-			var query = from _numberOption in numberOptionRepository 
+			var repository = numberOptionRepository.Queryable;
+			var query = from _numberOption in repository 
 						join _create_User_Id in userQueryable on _numberOption.Create_User_Id equals _create_User_Id.Id into t__create_User_Id
 						from _create_User_Id in t__create_User_Id.DefaultIfEmpty()
 						join _modify_User_Id in userQueryable on _numberOption.Modify_User_Id equals _modify_User_Id.Id into t__modify_User_Id

@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace FastFrame.WebHost.Controllers
 {
-    public abstract class BaseCURDController<TEntity, TDto> : BaseController<TEntity, TDto>
-         where TEntity : class, IEntity, new()
-         where TDto : class, IDto<TEntity>, new()
+    public abstract class BaseCURDController<TDto> : BaseController<TDto>
+         where TDto : class, IDto, new()
     {
-        private readonly IService<TEntity, TDto> service;
+        private readonly IService<TDto> service;
 
-        public BaseCURDController(IService<TEntity, TDto> service) : base(service)
+        public BaseCURDController(IService<TDto> service) : base(service)
         {
             this.service = service;
         }

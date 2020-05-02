@@ -28,7 +28,8 @@ namespace FastFrame.Application.Flow
 		protected override IQueryable<WorkFlowDto> QueryMain() 
 		{
 			var userQueryable = userRepository.Queryable.MapTo<User,UserViewModel>();
-			var query = from _workFlow in workFlowRepository 
+			var repository = workFlowRepository.Queryable;
+			var query = from _workFlow in repository 
 						join _create_User_Id in userQueryable on _workFlow.Create_User_Id equals _create_User_Id.Id into t__create_User_Id
 						from _create_User_Id in t__create_User_Id.DefaultIfEmpty()
 						join _modify_User_Id in userQueryable on _workFlow.Modify_User_Id equals _modify_User_Id.Id into t__modify_User_Id

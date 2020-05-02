@@ -12,11 +12,12 @@ namespace FastFrame.WebHost.Controllers.Account
     public class AccountController : BaseController
     {
         private readonly AccountService service;
-        
+        private readonly IAppSessionProvider appSession;
 
-        public AccountController(AccountService service)
+        public AccountController(AccountService service, IAppSessionProvider appSession)
         {
-            this.service = service; 
+            this.service = service;
+            this.appSession = appSession;
         }
 
         /// <summary>
@@ -51,7 +52,7 @@ namespace FastFrame.WebHost.Controllers.Account
         [EveryoneAccess]
         public async Task LogOut()
         {
-            await AppSession.LogOutAsync();
+            await appSession.LogOutAsync();
         }
 
         /// <summary>

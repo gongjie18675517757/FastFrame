@@ -5,7 +5,9 @@ using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Attrs;
 using FastFrame.Infrastructure.Interface;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FastFrame.WebHost.Controllers
 {
@@ -13,21 +15,19 @@ namespace FastFrame.WebHost.Controllers
     [Route("api/[controller]/[action]")]
     public abstract class BaseController : ControllerBase
     {
-        [FromServiceContext]
-        protected IAppSessionProvider AppSession { get; set; }
+         
     }
 
-    public abstract class BaseController<TEntity, TDto> : BaseController
-        where TEntity : class, IEntity, new()
-        where TDto : class, IDto<TEntity>, new()
+    public abstract class BaseController<TDto> : BaseController
+        where TDto : class, IDto, new()
     {
-        private readonly IService<TEntity, TDto> service;
+        private readonly IService<TDto> service;
 
-        public BaseController(IService<TEntity, TDto> service)
+        public BaseController(IService<TDto> service)
         {
             this.service = service;
-        } 
-       
+        }
+
 
         /// <summary>
         /// 列表
@@ -44,14 +44,30 @@ namespace FastFrame.WebHost.Controllers
         /// </summary> 
         [HttpGet("{pageIndex}")]
         [Permission(new string[] { "List" })]
-        public virtual async Task<PageList<TDto>> List(int pageIndex, int pageSize = 10, string kw = null)
+        public virtual async Task<PageList<TDto>> List(int pageIndex,
+                                                       int pageSize = 10,
+                                                       string kw = null,
+                                                       string sortName = null,
+                                                       string sortMode = null,
+                                                       string filterStr = null)
         {
-            return await List(new Pagination
+            var pagination = new Pagination()
             {
                 PageIndex = pageIndex,
                 PageSize = pageSize,
                 KeyWord = kw
-            });
-        } 
+            };
+
+            if (!sortName.IsNullOrWhiteSpace())
+                pagination.SortName = sortName;
+
+            if (!sortMode.IsNullOrWhiteSpace())
+                pagination.SortMode = sortMode;
+
+            if (!filterStr.IsNullOrWhiteSpace())
+                pagination.Filters = filterStr.ToObject<List<KeyValuePair<string, List<Filter>>>>();
+
+            return await List(pagination);
+        }
     }
 }

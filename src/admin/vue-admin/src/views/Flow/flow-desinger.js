@@ -36,8 +36,7 @@ export default function (props = {}) {
                     },
                     _jsonNewStep,
                     // { key: guid(), text: "条件", figure: "Diamond" },
-                    {
-                        key: guid(),
+                    { 
                         text: "完结",
                         figure: "Circle",
                         fill: "#CE0620",
@@ -211,17 +210,7 @@ export default function (props = {}) {
         _designer.linkTemplate = makeLinkTemplate();
     }
 
-    /**
-     * 生成GUID
-     * @returns {string}
-     */
-    function guid() {
-        return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
-            var r = (Math.random() * 16) | 0,
-                v = c == "x" ? r : (r & 0x3) | 0x8;
-            return v.toString(16);
-        });
-    }
+
 
     /**
      * 步骤图的样式模板

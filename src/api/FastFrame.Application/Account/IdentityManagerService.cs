@@ -5,6 +5,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace FastFrame.Application.Account
 {
@@ -59,7 +60,37 @@ namespace FastFrame.Application.Account
         public async Task<bool> ExistsTokenAsync(string token)
         {
             var dt = DateTime.Now;
-            return await loginLogRepository.AnyAsync(v => v.Id == token && v.IsEnabled && dt < v.ExpiredTime);
+            return await loginLogRepository.AnyAsync(v => v.Id == token && v.IsEnabled && v.IsEnabled && dt < v.ExpiredTime);
+        }
+
+        public async Task SetTokenFailureAsync(string token)
+        {
+            using var serviceScope = serviceProvider.CreateScope();
+            var loginLogs = serviceScope.ServiceProvider.GetService<IRepository<LoginLog>>();
+            var log = await loginLogs.GetAsync(token);
+            if (log != null)
+            {
+                log.ExpiredTime = DateTime.Now;
+                log.IsEnabled = false;
+                await loginLogRepository.UpdateAsync(log);
+                await loginLogRepository.CommmitAsync();
+            }
+        }
+
+        public async Task SetUserAllTokenFailureAsync(string userId)
+        {
+            var dt = DateTime.Now;
+            var list = await loginLogRepository
+                            .Where(v => v.User_Id == userId && v.IsEnabled && v.IsEnabled && dt < v.ExpiredTime)
+                            .ToListAsync();
+
+            foreach (var item in list)
+            {
+                item.IsEnabled = false;
+                item.ExpiredTime = dt;
+
+                await loginLogRepository.UpdateAsync(item);
+            }
         }
     }
 }

@@ -8,7 +8,7 @@ namespace FastFrame.Application.Basis
         {
             await base.OnGeting(dto);
             dto.Members = await EventBus.RequestAsync<UserViewModel[], RoleDto>(dto);
-            dto.Permissions = await EventBus.RequestAsync<RolePermissionModel[], string>(dto.Id);
+            dto.Permissions = await EventBus.RequestAsync<RolePermissionModel[], RoleDto>(dto);
         }
     }
 }

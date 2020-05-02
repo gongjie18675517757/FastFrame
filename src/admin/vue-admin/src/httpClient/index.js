@@ -9,11 +9,13 @@ import {
 axios.defaults.baseURL = '';
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
-
+/**
+ * 格式化提交表单
+ * @param {*} data 
+ */
 function frmPostData(data) {
     if (Array.isArray(data)) {
         return data.map(frmPostData)
-
     } else if (typeof data == 'object') {
         let keys = Object.keys(data)
         keys = keys.filter(v => /_Id$/.test(v))
@@ -25,34 +27,19 @@ function frmPostData(data) {
 
     return data;
 }
-
-/**
- * 缓存响应
- */
-function cacheResponse() {
-    console.log(...arguments);
-}
-
-/**
- * 从缓存中取出响应
- */
-function getCacheResponse() {
-    console.log(...arguments);
-}
+ 
 
 axios.interceptors.request.use(function (config) {
     if (config && config.data && !(config.data instanceof FormData)) {
         let data = frmPostData(JSON.parse(JSON.stringify(config.data)))
         config.data = data;
     }
-    getCacheResponse(config)
     return config;
 }, function (error) {
     return Promise.reject(error);
 });
 
-axios.interceptors.response.use(function (response) {
-    cacheResponse(response);
+axios.interceptors.response.use(function (response) { 
     return response.data;
 }, function (error) {
     if (error.response && error.response.status) {

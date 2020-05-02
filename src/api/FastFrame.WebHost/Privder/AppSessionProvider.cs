@@ -17,8 +17,7 @@ namespace FastFrame.WebHost.Privder
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly IMemoryCache memoryCache;
         private readonly CSRedisClient cSRedisClient;
-        private readonly string tokenName = "Authorize";
-        private string token;
+        private const string Token_Name = "Authorize";
         private Tenant tenant;
 
         public AppSessionProvider(IHttpContextAccessor httpContextAccessor,
@@ -58,61 +57,65 @@ namespace FastFrame.WebHost.Privder
             return host;
         }
 
-        public async Task LoginAsync(ICurrUser currUser)
+        public Task LoginAsync(ICurrUser currUser)
         {
-            var host = GetHost();
-            host = string.Join(".", host.Split(new char[] { '.' }).Skip(1));
-            await cSRedisClient.SetAsync(currUser.ToKen, currUser, 60 * 60 * 24);
-            httpContextAccessor.HttpContext.Response.Headers.Add(tokenName, currUser.ToKen);
-            httpContextAccessor.HttpContext.Response.Cookies.Delete(tokenName);
-            httpContextAccessor.HttpContext.Response.Cookies.Append(tokenName, currUser.ToKen, new CookieOptions()
+            var base64 = currUser.ToJson().ToBase64();
+
+            httpContextAccessor.HttpContext.Response.Headers.Add(Token_Name, base64);
+            httpContextAccessor.HttpContext.Response.Cookies.Delete(Token_Name);
+            httpContextAccessor.HttpContext.Response.Cookies.Append(Token_Name, base64, new CookieOptions()
             {
-                Expires = new DateTimeOffset(DateTime.Now.AddYears(1)),
+                Expires = new DateTimeOffset(DateTime.Now.AddDays(1)),
                 HttpOnly = true,
                 //Domain = ".localhost",
                 Path = "/",
-
             });
+
+            return Task.CompletedTask;
         }
 
         public async Task LogOutAsync()
         {
             if (CurrUser != null)
+            {
+                httpContextAccessor.HttpContext.Response.Cookies.Delete(Token_Name);
                 await cSRedisClient.DelAsync(CurrUser.ToKen);
+                await httpContextAccessor.HttpContext.RequestServices.GetService<IIdentityManager>().SetTokenFailureAsync(CurrUser.ToKen);
+            }
         }
 
         public async Task RefreshIdentityAsync()
         {
             await cSRedisClient.SetAsync(CurrUser.ToKen, CurrUser, 60 * 60 * 24);
             await httpContextAccessor.HttpContext.RequestServices.GetService<IIdentityManager>().RefreshTokenAsync(CurrUser.ToKen);
+            await LoginAsync(CurrUser);
         }
 
-        private string GetToken()
+        private string GetIdentity()
         {
-            if (!token.IsNullOrWhiteSpace())
-                return token;
+
             var request = httpContextAccessor.HttpContext.Request;
-            token = string.Empty;
-            if (request.Headers.TryGetValue(tokenName, out var headerValue))
-                token = headerValue.First();
-            if (token.IsNullOrWhiteSpace() && request.Cookies.TryGetValue(tokenName, out var cookieValue))
-                token = cookieValue;
-            if (token.IsNullOrWhiteSpace() && request.Query.TryGetValue(tokenName, out var queryValue))
-                token = queryValue.First();
-            return token;
+            var identity = string.Empty;
+            if (request.Headers.TryGetValue(Token_Name, out var headerValue))
+                identity = headerValue.First();
+            if (identity.IsNullOrWhiteSpace() && request.Cookies.TryGetValue(Token_Name, out var cookieValue))
+                identity = cookieValue;
+            if (identity.IsNullOrWhiteSpace() && request.Query.TryGetValue(Token_Name, out var queryValue))
+                identity = queryValue.First();
+            return identity;
         }
 
         public async Task InitAsync()
         {
-            var token = GetToken();
-            if (!token.IsNullOrWhiteSpace())
+            var identity = GetIdentity();
+            if (!identity.IsNullOrWhiteSpace())
             {
-                if (await httpContextAccessor.HttpContext.RequestServices.GetService<IIdentityManager>().ExistsTokenAsync(token))
+                var curr = identity.FromBase64().ToObject<CurrUser>();
+                if (curr != null)
                 {
-                    var user = cSRedisClient.Get<CurrUser>(token);
-                    if (user != null)
+                    if (await httpContextAccessor.HttpContext.RequestServices.GetService<IIdentityManager>().ExistsTokenAsync(curr.ToKen))
                     {
-                        CurrUser = user;
+                        CurrUser = curr;
                     }
                 }
             }

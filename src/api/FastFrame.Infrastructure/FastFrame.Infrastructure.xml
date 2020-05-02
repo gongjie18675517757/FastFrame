@@ -368,6 +368,13 @@
             <param name="in"></param>
             <returns></returns>
         </member>
+        <member name="M:FastFrame.Infrastructure.Extension.FromBase64(System.String)">
+            <summary>
+            FromBase64
+            </summary>
+            <param name="in"></param>
+            <returns></returns>
+        </member>
         <member name="M:FastFrame.Infrastructure.Extension.ToMD5(System.String)">
             <summary>
             ToMD5
@@ -605,6 +612,11 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:FastFrame.Infrastructure.Interface.IIdentityManager">
+            <summary>
+            身份管理
+            </summary>
+        </member>
         <member name="M:FastFrame.Infrastructure.Interface.IIdentityManager.ExistsTokenAsync(System.String)">
             <summary>
             验证TOKEN是否有效
@@ -624,6 +636,20 @@
             刷新TOKEN
             </summary>
             <param name="token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IIdentityManager.SetTokenFailureAsync(System.String)">
+            <summary>
+            强制TOKEN失效
+            </summary>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IIdentityManager.SetUserAllTokenFailureAsync(System.String)">
+            <summary>
+            强制用户所有TOKEN失效
+            </summary>
+            <param name="userId"></param>
             <returns></returns>
         </member>
         <member name="T:FastFrame.Infrastructure.Interface.IResourceProvider">

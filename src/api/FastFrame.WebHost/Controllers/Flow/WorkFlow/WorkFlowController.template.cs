@@ -9,7 +9,7 @@ namespace FastFrame.WebHost.Controllers.Flow
 	/// 工作流 
 	/// </summary>
 	[Permission(nameof(WorkFlow),"工作流")]
-	public partial class WorkFlowController:BaseCURDController<WorkFlow, WorkFlowDto>
+	public partial class WorkFlowController:BaseCURDController<WorkFlowDto>
 	{
 		private readonly WorkFlowService service;
 		

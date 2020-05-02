@@ -41,38 +41,38 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.WebHost.Controllers.BaseController`2.List(FastFrame.Infrastructure.Pagination)">
+        <member name="M:FastFrame.WebHost.Controllers.BaseController`1.List(FastFrame.Infrastructure.Pagination)">
             <summary>
             列表
             </summary> 
         </member>
-        <member name="M:FastFrame.WebHost.Controllers.BaseController`2.List(System.Int32,System.Int32,System.String)">
+        <member name="M:FastFrame.WebHost.Controllers.BaseController`1.List(System.Int32,System.Int32,System.String,System.String,System.String,System.String)">
             <summary>
             列表
             </summary> 
         </member>
-        <member name="M:FastFrame.WebHost.Controllers.BaseCURDController`2.Delete(System.String)">
+        <member name="M:FastFrame.WebHost.Controllers.BaseCURDController`1.Delete(System.String)">
             <summary>
             删除
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.WebHost.Controllers.BaseCURDController`2.Get(System.String)">
+        <member name="M:FastFrame.WebHost.Controllers.BaseCURDController`1.Get(System.String)">
             <summary>
             查看
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.WebHost.Controllers.BaseCURDController`2.Post(`1)">
+        <member name="M:FastFrame.WebHost.Controllers.BaseCURDController`1.Post(`0)">
             <summary>
             添加
             </summary>
             <param name="input"></param>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.WebHost.Controllers.BaseCURDController`2.Put(`1)">
+        <member name="M:FastFrame.WebHost.Controllers.BaseCURDController`1.Put(`0)">
             <summary>
             修改
             </summary>

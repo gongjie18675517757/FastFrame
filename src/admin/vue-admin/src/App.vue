@@ -160,9 +160,8 @@ html {
   display: none;
 }
 
-.v-text-field__slot input,
-.v-select__slot,
-.v-text-field__slot textarea {
+
+.v-input__slot {
   border-bottom: 1px solid #9c7a7a;
 }
 .v-select__selections {

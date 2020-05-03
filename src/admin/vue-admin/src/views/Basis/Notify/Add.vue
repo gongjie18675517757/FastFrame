@@ -5,7 +5,8 @@ let pageInfo = {
   direction: "通知"
 };
 
-import Page from "@/components/Page/FormPageCore.js";
+import Page from "../../../components/Page/FormPageCore.js";
+import RichInput from "../../../components/Inputs/RichInput.vue";
 export default {
   ...Page,
   data() {
@@ -18,7 +19,14 @@ export default {
     ...Page.methods,
     getModelObjectItems() {
       return Page.methods.getModelObjectItems.call(this).then(opts => {
-        return opts;
+        return [
+          ...opts,
+          {
+            Name: "Content",
+            GroupNames: ["通知内容"],
+            template: RichInput
+          }
+        ];
       });
     }
   }

@@ -10,14 +10,14 @@ namespace FastFrame.WebHost.Controllers.Basis
     public partial class DeptController
     {
         [Permission(new string[] { "Add", "Update" })]
-        [HttpPost]
-        public Task<PageList<UserViewModel>> UserList(Pagination Pagination)
+        [HttpGet]
+        public Task<PageList<UserViewModel>> UserList(string qs)
             => Request.HttpContext.RequestServices
-                    .GetService<UserService>().ViewModelListAsync(Pagination);
+                    .GetService<UserService>().ViewModelListAsync(qs.ToObject<Pagination>());
 
         [Permission(new string[] { "Add", "Update" })]
-        [HttpPost]
-        public Task<PageList<DeptViewModel>> DeptList(Pagination Pagination)
-            => service.ViewModelListAsync(Pagination);
+        [HttpGet]
+        public Task<PageList<DeptViewModel>> DeptList(string qs)
+            => service.ViewModelListAsync(qs.ToObject<Pagination>());
     }
 }

@@ -23,8 +23,7 @@ function frmPostData(data) {
             let key = keyName.replace(/_Id$/, '')
             delete data[key]
         }
-    }
-
+    } 
     return data;
 }
  

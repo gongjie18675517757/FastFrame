@@ -1,7 +1,9 @@
 ﻿using FastFrame.Application.Basis;
 using FastFrame.Infrastructure;
+using FastFrame.Infrastructure.Attrs;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FastFrame.WebHost.Controllers.Basis
 {
@@ -10,10 +12,10 @@ namespace FastFrame.WebHost.Controllers.Basis
         /// <summary>
         /// 所有通知
         /// </summary> 
-        [HttpPost]
-        public async Task<PageList<NotifyDto>> AllList([FromBody]Pagination pageInfo)
+        [HttpGet]
+        public async Task<PageList<NotifyDto>> AllList(string qs)
         {
-            return await service.GetListAsync(pageInfo);
+            return await service.PageListAsync(qs.ToObject<Pagination>());
         }
 
         /// <summary>
@@ -26,5 +28,12 @@ namespace FastFrame.WebHost.Controllers.Basis
         {
             return await service.GetAsync(id);
         }
+
+
+        [Permission(new string[] { "Add", "Update" })]
+        [HttpGet]
+        public Task<PageList<UserViewModel>> UserList(string qs)
+            => Request.HttpContext.RequestServices
+                    .GetService<UserService>().ViewModelListAsync(qs.ToObject<Pagination>());
     }
 }

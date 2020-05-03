@@ -12,6 +12,7 @@ namespace FastFrame.Application
     {
         public static async Task<PageList<T>> PageListAsync<T>(this IQueryable<T> query, Pagination pageInfo)
         {
+            pageInfo = pageInfo ?? new Pagination();
             query = query.DynamicQuery(pageInfo.KeyWord, pageInfo.Filters);
 
             var list = await query.DynamicSort(pageInfo.SortName, pageInfo.SortMode)

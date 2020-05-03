@@ -2,30 +2,32 @@
 let pageInfo = {
   area: "Basis",
   name: "Permission",
-  direction: "权限",
-  childToolItems: [
-    {
-      name: "InitPermission",
-      title: "初始化权限",
-      icon: "error_outline",
-      async action() {
-        await this.$http.post(`/api/Permission/InitPermission`);
-        this.$message.toast.success("初始化成功!");
-        this.init();
-      }
-    }
-  ]
+  direction: "权限"
 };
 
-import Page from "@/components/Page/ListPageCore.js";
+import Page from "../../../components/Page/ListPageCore.js";
 
 export default {
   ...Page,
   data() {
+    let data = Page.data.call(this);
     return {
-      ...Page.data.call(this),
+      ...data,
       ...pageInfo,
-      treeChildComponent: () => import("./List.vue")
+      treeChildComponent: () => import("./List.vue"),
+      toolItems: [
+        ...data.toolItems,
+        {
+          name: "InitPermission",
+          title: "初始化权限",
+          icon: "error_outline",
+          async action() {
+            await this.$http.post(`/api/Permission/InitPermission`);
+            this.$message.toast.success("初始化成功!");
+            this.loadList();
+          }
+        }
+      ]
     };
   }
 };

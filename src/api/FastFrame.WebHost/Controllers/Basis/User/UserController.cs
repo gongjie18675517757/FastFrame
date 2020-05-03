@@ -35,13 +35,13 @@ namespace FastFrame.WebHost.Controllers.Basis
         } 
 
         [Permission(new string[] { "Add", "Update" })]
-        [HttpPost]
-        public Task<PageList<RoleViewModel>> RoleList(Pagination Pagination)
-            => HttpContext.RequestServices.GetService<RoleService>().ViewModelListAsync(Pagination);
+        [HttpGet]
+        public Task<PageList<RoleViewModel>> RoleList(string qs)
+            => HttpContext.RequestServices.GetService<RoleService>().ViewModelListAsync(qs.ToObject<Pagination>());
 
         [Permission(new string[] { "Add", "Update" })]
-        [HttpPost]
-        public Task<PageList<DeptViewModel>> DeptList(Pagination Pagination)
-            => HttpContext.RequestServices.GetService<DeptService>().ViewModelListAsync(Pagination);
+        [HttpGet]
+        public Task<PageList<DeptViewModel>> DeptList(string qs)
+            => HttpContext.RequestServices.GetService<DeptService>().ViewModelListAsync(qs.ToObject<Pagination>());
     }
 }

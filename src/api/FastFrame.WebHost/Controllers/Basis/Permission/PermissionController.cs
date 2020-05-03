@@ -18,9 +18,7 @@ namespace FastFrame.WebHost.Controllers.Basis
         public PermissionController(PermissionService service) : base(service)
         {
             this.service = service;
-        }
-
-
+        } 
 
         /// <summary>
         /// 初始化权限

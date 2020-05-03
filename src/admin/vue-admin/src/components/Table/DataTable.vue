@@ -133,7 +133,8 @@ export default {
             text: c.Description,
             value: c.Name,
             sortBy: this.isXs ? false : !!c.sortBy,
-            width: c.width || "150px"
+            width: c.width || "150px",
+            align:c.align || 'center'
           };
         })
       ];

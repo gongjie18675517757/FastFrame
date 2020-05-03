@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using FastFrame.Application;
 
 namespace FastFrame.WebHost.Privder
 {
@@ -20,6 +21,14 @@ namespace FastFrame.WebHost.Privder
                 {
                     var types = typeof(IEntity).Assembly.GetTypes()
                             .Where(x => typeof(IEntity).IsAssignableFrom(x) && x.IsClass && !x.IsAbstract);
+                    foreach (var type in types)
+                    {
+                        typeDic.Add(type.Name.ToLower(), type);
+                    }
+
+                    types = typeof(IDto).Assembly.GetTypes()
+                            .Where(x => typeof(IDto).IsAssignableFrom(x) && x.IsClass && !x.IsAbstract);
+
                     foreach (var type in types)
                     {
                         typeDic.Add(type.Name.ToLower(), type);

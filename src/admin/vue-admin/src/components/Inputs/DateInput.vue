@@ -6,10 +6,9 @@
       v-model="menu2"
       :close-on-content-click="false"
       :nudge-right="0"
-      lazy
+      
       transition="scale-transition"
-      offset-y
-      full-width
+      offset-y 
       max-width="290px"
       min-width="290px"
       :readonly="disabled"

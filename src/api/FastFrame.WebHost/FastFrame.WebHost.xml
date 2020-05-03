@@ -41,12 +41,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.WebHost.Controllers.BaseController`1.List(FastFrame.Infrastructure.Pagination)">
-            <summary>
-            列表
-            </summary> 
-        </member>
-        <member name="M:FastFrame.WebHost.Controllers.BaseController`1.List(System.Int32,System.Int32,System.String,System.String,System.String,System.String)">
+        <member name="M:FastFrame.WebHost.Controllers.BaseController`1.List(System.String)">
             <summary>
             列表
             </summary> 
@@ -89,6 +84,13 @@
             数字字典 
             </summary>
         </member>
+        <member name="M:FastFrame.WebHost.Controllers.Basis.LoginLogController.SetTokenFailure(System.String)">
+            <summary>
+            设置身份失效
+            </summary>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
         <member name="M:FastFrame.WebHost.Controllers.Basis.MeidiaController.Delete(System.String)">
             <summary>
             删除
@@ -116,7 +118,7 @@
             通知 
             </summary>
         </member>
-        <member name="M:FastFrame.WebHost.Controllers.Basis.NotifyController.AllList(FastFrame.Infrastructure.Pagination)">
+        <member name="M:FastFrame.WebHost.Controllers.Basis.NotifyController.AllList(System.String)">
             <summary>
             所有通知
             </summary> 

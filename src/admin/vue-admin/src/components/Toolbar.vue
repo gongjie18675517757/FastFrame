@@ -94,8 +94,7 @@ export default {
           title: "注销",
           click: async () => {
             this.$store.dispatch("logout");
-            this.$router.push("/login");
-            this.$http.post();
+            this.$router.push("/login"); 
           }
         }
       ]

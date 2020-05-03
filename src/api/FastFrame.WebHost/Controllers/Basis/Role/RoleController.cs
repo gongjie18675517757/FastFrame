@@ -10,10 +10,10 @@ namespace FastFrame.WebHost.Controllers.Basis
     public partial class RoleController
     {
         [Permission(new string[] { "Add", "Update" })]
-        [HttpPost]
-        public Task<PageList<UserViewModel>> UserList(Pagination Pagination)
+        [HttpGet]
+        public Task<PageList<UserViewModel>> UserList(string qs)
             => Request.HttpContext.RequestServices
-                    .GetService<UserService>().ViewModelListAsync(Pagination);
+                    .GetService<UserService>().ViewModelListAsync(qs.ToObject<Pagination>());
 
         [HttpGet]
         [Permission(new string[] { "Add" })]

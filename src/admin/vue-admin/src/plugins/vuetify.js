@@ -20,7 +20,8 @@ import Vuetify, {
     VImg,
     VCheckbox,
     VRow,
-    VBtnToggle
+    VBtnToggle,
+     
 } from 'vuetify/lib';
 import zhHans from 'vuetify/es5/locale/zh-Hans'
 
@@ -46,7 +47,8 @@ Vue.use(Vuetify, {
         VImg,
         VCheckbox,
         VRow,
-        VBtnToggle
+        VBtnToggle,
+         
     },
 
 });

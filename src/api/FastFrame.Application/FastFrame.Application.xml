@@ -1,0 +1,1821 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>FastFrame.Application</name>
+    </assembly>
+    <members>
+        <member name="M:FastFrame.Application.Account.AccountService.LoginAsync(FastFrame.Application.Account.LoginInput)">
+            <summary>
+            登陆
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.Account.AccountService.RegistAsync(FastFrame.Application.Basis.UserDto)">
+            <summary>
+            注册
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.Account.AccountService.UpdateUserInfo(FastFrame.Application.Basis.UserDto)">
+            <summary>
+            更新用户信息
+            </summary> 
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.Account.AccountService.GetCurrentAsync">
+            <summary>
+            获取当前用户
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:FastFrame.Application.Account.LoginInput.Account">
+            <summary>
+            帐号
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Account.LoginInput.Password">
+            <summary>
+            密码
+            </summary>
+        </member>
+        <member name="M:FastFrame.Application.Account.IdentityManagerService.RefreshTokenAsync(System.String)">
+            <summary>
+            刷新Token
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Application.Account.IdentityManagerService.ExistsTokenAsync(System.String)">
+            <summary>
+            验证Token
+            </summary>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastFrame.Application.AutoCacheInterceptor">
+            <summary>
+            自动缓存
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.AutoNumberService">
+            <summary>
+            自动编号
+            </summary>
+        </member>
+        <member name="M:FastFrame.Application.AutoNumberService.MakeNumberAsync``1(``0[])">
+            <summary>
+            生成编号
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="entitys"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.AutoNumberService.GetNumberRecordAsync(System.String,FastFrame.Entity.Basis.NumberOption)">
+            <summary>
+            获取编号记录
+            </summary>
+            <param name="typeName"></param>
+            <param name="opt"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.AutoNumberService.GetNumberOptionAsync(System.String)">
+            <summary>
+            获取编码设置
+            </summary>
+            <param name="typeName"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastFrame.Application.BaseDto">
+            <summary>
+            基类DTO
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.BaseDto`1">
+            <summary>
+            基类DTO
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:FastFrame.Application.BaseService`2">
+            <summary>
+            服务层基类
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TDto"></typeparam>
+        </member>
+        <member name="M:FastFrame.Application.BaseService`2.OnAdding(`1,`0)">
+            <summary>
+            新增前
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Application.BaseService`2.AddAsync(`1)">
+            <summary>
+            新增
+            </summary>  
+        </member>
+        <member name="M:FastFrame.Application.BaseService`2.OnDeleteing(`0)">
+            <summary>
+            删除前
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Application.BaseService`2.DeleteAsync(System.String[])">
+            <summary>
+            删除
+            </summary>  
+        </member>
+        <member name="M:FastFrame.Application.BaseService`2.OnUpdateing(`1,`0)">
+            <summary>
+            更新时
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Application.BaseService`2.OnBeforeUpdate(`0,`1)">
+            <summary>
+            更新前
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Application.BaseService`2.UpdateAsync(`1)">
+            <summary>
+            更新
+            </summary>  
+        </member>
+        <member name="M:FastFrame.Application.BaseService`2.OnGeting(`1)">
+            <summary>
+            返回前
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Application.BaseService`2.GetAsync(System.String)">
+            <summary>
+            获取单条数据
+            </summary>  
+        </member>
+        <member name="M:FastFrame.Application.BaseService`2.OnGetListing(System.Collections.Generic.IEnumerable{`1})">
+            <summary>
+            返回列表数据时
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Application.BaseService`2.PageListAsync(FastFrame.Infrastructure.Pagination)">
+            <summary>
+            获取分页列表
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Application.BaseService`2.Query">
+            <summary>
+            拼查询表达式
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.BaseService`2.QueryMain">
+            <summary>
+            主查询表达式
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Application.BaseService`2.VerifyUnique(FastFrame.Application.UniqueInput)">
+            <summary>
+            验证重复属性
+            </summary> 
+        </member>
+        <member name="T:FastFrame.Application.Events.DoMainAdded`1">
+            <summary>
+            添加后
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:FastFrame.Application.Events.DoMainAdding`1">
+            <summary>
+            添加前
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:FastFrame.Application.Events.DoMainDeleted`1">
+            <summary>
+            删除后
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:FastFrame.Application.Events.DoMainDeleteing`1">
+            <summary>
+            删除前
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:FastFrame.Application.Events.DoMainUpdated`1">
+            <summary>
+            更新后
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:FastFrame.Application.Events.DoMainUpdateing`1">
+            <summary>
+            更新前
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:FastFrame.Application.HandleOne2ManyService`2">
+            <summary>
+            处理一对多
+            </summary>
+            <typeparam name="TTargetDto">DTO类型</typeparam>
+            <typeparam name="TTargetEntity">实体类型</typeparam>
+        </member>
+        <member name="M:FastFrame.Application.HandleOne2ManyService`2.#ctor(FastFrame.Repository.IRepository{`1},FastFrame.Infrastructure.EventBus.IEventBus)">
+            <summary>
+            
+            </summary>
+            <param name="targetEntities">实体仓库服务</param>
+        </member>
+        <member name="M:FastFrame.Application.HandleOne2ManyService`2.AddManyAsync(System.Collections.Generic.IEnumerable{`0},System.Func{`0,`1})">
+            <summary>
+            添加多个
+            </summary>
+            <param name="list">列表</param>
+            <param name="makeEntiyFunc">生成实体</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.HandleOne2ManyService`2.DelManyAsync(System.Linq.Expressions.Expression{System.Func{`1,System.Boolean}})">
+            <summary>
+            删除
+            </summary>
+            <param name="expression">表达式</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.HandleOne2ManyService`2.UpdateManyAsync(System.Linq.Expressions.Expression{System.Func{`1,System.Boolean}},System.Collections.Generic.IEnumerable{`0},System.Func{`1,`0,System.Boolean},System.Func{`0,`1},System.Action{`1,`0})">
+            <summary>
+            更新
+            </summary>
+            <param name="expression">表达式</param>
+            <param name="list">列表</param>
+            <param name="compareFunc">比较表达式</param>
+            <param name="makeEntiyFunc">构造实体</param>
+            <param name="updateAction">更新方法</param>
+            <returns></returns>
+        </member>
+        <member name="T:FastFrame.Application.IAutoNumberService">
+            <summary>
+            自动编号服务
+            </summary>
+        </member>
+        <member name="M:FastFrame.Application.IAutoNumberService.MakeNumberAsync``1(``0[])">
+            <summary>
+            生成编号
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="entitys"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastFrame.Application.ICURDService`1">
+            <summary>
+            服务接口
+            </summary> 
+            <typeparam name="TDto"></typeparam>
+        </member>
+        <member name="M:FastFrame.Application.ICURDService`1.AddAsync(`0)">
+            <summary>
+            添加
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.ICURDService`1.DeleteAsync(System.String[])">
+            <summary>
+            删除
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.ICURDService`1.UpdateAsync(`0)">
+            <summary>
+            更新
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.ICURDService`1.GetAsync(System.String)">
+            <summary>
+            获取单条数据
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastFrame.Application.IDto">
+            <summary>
+            DTO接口
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.IDto`1">
+            <summary>
+            DTO接口
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:FastFrame.Application.IPageListService`1.PageListAsync(FastFrame.Infrastructure.Pagination)">
+            <summary>
+            获取列表数据
+            </summary>
+            <param name="pageInfo"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastFrame.Application.IService">
+            <summary>
+             服务接口
+            </summary>
+        </member>
+        <member name="M:FastFrame.Application.IVerifyUniqueService.VerifyUnique(FastFrame.Application.UniqueInput)">
+            <summary>
+            验证唯一性
+            </summary>
+            <param name="propName"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastFrame.Application.Basis.DeptService">
+            <summary>
+            部门 服务实现 
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Basis.DeptDto">
+            <summary>
+            部门 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.DeptDto.EnCode">
+            <summary>
+            编码 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.DeptDto.Name">
+            <summary>
+            名称 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.DeptDto.Super_Id">
+            <summary>
+            上级 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.DeptDto.Super">
+            <summary>
+            上级 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.DeptDto.Create_User_Id">
+            <summary>
+            创建人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.DeptDto.Create_User">
+            <summary>
+            创建人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.DeptDto.CreateTime">
+            <summary>
+            创建时间 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.DeptDto.Modify_User_Id">
+            <summary>
+            修改人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.DeptDto.Modify_User">
+            <summary>
+            修改人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.DeptDto.ModifyTime">
+            <summary>
+            修改时间 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.DeptDto.HasTreeChildren">
+            <summary>
+            是否有下级 
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Basis.DeptViewModel">
+            <summary>
+            部门 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.DeptViewModel.Name">
+            <summary>
+            名称 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.DeptViewModel.Id">
+            <summary>
+            主键 
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Basis.EnumItemDto">
+            <summary>
+            数字字典 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.EnumItemDto.Key">
+            <summary>
+            键 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.EnumItemDto.Value">
+            <summary>
+            值 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.EnumItemDto.Super_Id">
+            <summary>
+            上级 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.EnumItemDto.Super">
+            <summary>
+            上级 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.EnumItemDto.Create_User_Id">
+            <summary>
+            创建人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.EnumItemDto.Create_User">
+            <summary>
+            创建人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.EnumItemDto.CreateTime">
+            <summary>
+            创建时间 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.EnumItemDto.Modify_User_Id">
+            <summary>
+            修改人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.EnumItemDto.Modify_User">
+            <summary>
+            修改人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.EnumItemDto.ModifyTime">
+            <summary>
+            修改时间 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.EnumItemDto.HasTreeChildren">
+            <summary>
+            是否有下级 
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Basis.EnumItemViewModel">
+            <summary>
+            数字字典 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.EnumItemViewModel.Value">
+            <summary>
+            值 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.EnumItemViewModel.Id">
+            <summary>
+            主键 
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Basis.EnumItemService">
+            <summary>
+            数字字典 服务实现 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.LoginLogModel.User_Id">
+            <summary>
+            关联：User
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.LoginLogModel.Account">
+            <summary>
+            登陆名
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.LoginLogModel.Name">
+            <summary>
+            姓名
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.LoginLogModel.LoginTime">
+            <summary>
+            登陆时间
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.LoginLogModel.LastTime">
+            <summary>
+            最后刷新时间
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.LoginLogModel.ExpiredTime">
+            <summary>
+            过期时间
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.LoginLogModel.IsEnabled">
+            <summary>
+            是否有效
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Basis.MeidiaDto">
+            <summary>
+            图片库 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.MeidiaDto.Super_Id">
+            <summary>
+            上级 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.MeidiaDto.Super">
+            <summary>
+            上级 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.MeidiaDto.Name">
+            <summary>
+            名称 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.MeidiaDto.Resource_Id">
+            <summary>
+            资源 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.MeidiaDto.IsFolder">
+            <summary>
+            是否文件夹 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.MeidiaDto.Create_User_Id">
+            <summary>
+            创建人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.MeidiaDto.Create_User">
+            <summary>
+            创建人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.MeidiaDto.CreateTime">
+            <summary>
+            创建时间 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.MeidiaDto.Modify_User_Id">
+            <summary>
+            修改人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.MeidiaDto.Modify_User">
+            <summary>
+            修改人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.MeidiaDto.ModifyTime">
+            <summary>
+            修改时间 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.MeidiaDto.HasTreeChildren">
+            <summary>
+            是否有下级 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.MeidiaModel.Super_Id">
+            <summary>
+            上级
+            </summary> 
+        </member>
+        <member name="P:FastFrame.Application.Basis.MeidiaModel.Name">
+            <summary>
+            名称
+            </summary> 
+        </member>
+        <member name="P:FastFrame.Application.Basis.MeidiaModel.Resource_Id">
+            <summary>
+            资源
+            </summary> 
+        </member>
+        <member name="P:FastFrame.Application.Basis.MeidiaModel.IsFolder">
+            <summary>
+            是否文件夹
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.MeidiaModel.Size">
+            <summary>
+            资源大小
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.MeidiaModel.ContentType">
+            <summary>
+            资源标识
+            </summary> 
+        </member>
+        <member name="P:FastFrame.Application.Basis.MeidiaModel.CreateName">
+            <summary>
+            创建人
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.MeidiaModel.CreateTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Basis.MeidiaViewModel">
+            <summary>
+            图片库 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.MeidiaViewModel.Name">
+            <summary>
+            名称 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.MeidiaViewModel.Id">
+            <summary>
+            主键 
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Basis.MeidiaService">
+            <summary>
+            图片库 服务实现 
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Basis.NotifyDto">
+            <summary>
+            通知 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NotifyDto.Title">
+            <summary>
+            标题 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NotifyDto.Type_Id">
+            <summary>
+            类型 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NotifyDto.Publush_Id">
+            <summary>
+            发布人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NotifyDto.Publush">
+            <summary>
+            发布人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NotifyDto.Resource_Id">
+            <summary>
+            附件 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NotifyDto.Resource">
+            <summary>
+            附件 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NotifyDto.Content">
+            <summary>
+            内容 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NotifyDto.Create_User_Id">
+            <summary>
+            创建人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NotifyDto.Create_User">
+            <summary>
+            创建人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NotifyDto.CreateTime">
+            <summary>
+            创建时间 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NotifyDto.Modify_User_Id">
+            <summary>
+            修改人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NotifyDto.Modify_User">
+            <summary>
+            修改人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NotifyDto.ModifyTime">
+            <summary>
+            修改时间 
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Basis.NotifyViewModel">
+            <summary>
+            通知 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NotifyViewModel.Title">
+            <summary>
+            标题 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NotifyViewModel.Type_Id">
+            <summary>
+            类型 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NotifyViewModel.Publush_Id">
+            <summary>
+            发布人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NotifyViewModel.Resource_Id">
+            <summary>
+            附件 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NotifyViewModel.Content">
+            <summary>
+            内容 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NotifyViewModel.Id">
+            <summary>
+            主键 
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Basis.NotifyService">
+            <summary>
+            通知 服务实现 
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Basis.NumberOptionDto">
+            <summary>
+            编号设置 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NumberOptionDto.BeModule">
+            <summary>
+            模块名称 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NumberOptionDto.Prefix">
+            <summary>
+            前缀 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NumberOptionDto.TaskDate">
+            <summary>
+            是否取日期 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NumberOptionDto.SerialLength">
+            <summary>
+            流水号长度 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NumberOptionDto.Suffix">
+            <summary>
+            后缀 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NumberOptionDto.DateField">
+            <summary>
+            取日期字段 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NumberOptionDto.DateFieldText">
+            <summary>
+            日期字段名称 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NumberOptionDto.FmtDate">
+            <summary>
+            日期格式方法 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NumberOptionDto.Create_User_Id">
+            <summary>
+            创建人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NumberOptionDto.Create_User">
+            <summary>
+            创建人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NumberOptionDto.CreateTime">
+            <summary>
+            创建时间 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NumberOptionDto.Modify_User_Id">
+            <summary>
+            修改人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NumberOptionDto.Modify_User">
+            <summary>
+            修改人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NumberOptionDto.ModifyTime">
+            <summary>
+            修改时间 
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Basis.NumberOptionViewModel">
+            <summary>
+            编号设置 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NumberOptionViewModel.BeModule">
+            <summary>
+            模块名称 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NumberOptionViewModel.Prefix">
+            <summary>
+            前缀 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NumberOptionViewModel.TaskDate">
+            <summary>
+            是否取日期 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NumberOptionViewModel.SerialLength">
+            <summary>
+            流水号长度 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NumberOptionViewModel.Suffix">
+            <summary>
+            后缀 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NumberOptionViewModel.DateField">
+            <summary>
+            取日期字段 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NumberOptionViewModel.DateFieldText">
+            <summary>
+            日期字段名称 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NumberOptionViewModel.FmtDate">
+            <summary>
+            日期格式方法 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.NumberOptionViewModel.Id">
+            <summary>
+            主键 
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Basis.NumberOptionService">
+            <summary>
+            编号设置 服务实现 
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Basis.PermissionDto">
+            <summary>
+            权限 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.PermissionDto.Permissions">
+            <summary>
+            下级权限
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.PermissionDto.Name">
+            <summary>
+            名称 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.PermissionDto.EnCode">
+            <summary>
+            编码 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.PermissionDto.AreaName">
+            <summary>
+            区域 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.PermissionDto.Super_Id">
+            <summary>
+            父级 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.PermissionDto.Super">
+            <summary>
+            父级 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.PermissionDto.HasTreeChildren">
+            <summary>
+            是否有下级 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.PermissionModel.EnCode">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.PermissionModel.Name">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Basis.PermissionViewModel">
+            <summary>
+            权限 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.PermissionViewModel.Name">
+            <summary>
+            名称 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.PermissionViewModel.Id">
+            <summary>
+            主键 
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Basis.PermissionService">
+            <summary>
+            权限 服务实现 
+            </summary>
+        </member>
+        <member name="M:FastFrame.Application.Basis.PermissionService.InitPermission(System.Collections.Generic.IEnumerable{FastFrame.Application.Basis.PermissionDto})">
+            <summary>
+            初始化权限
+            </summary>        
+        </member>
+        <member name="M:FastFrame.Application.Basis.PermissionService.Permissions">
+            <summary>
+            获取用户权限
+            </summary>        
+        </member>
+        <member name="M:FastFrame.Application.Basis.PermissionService.GetPermissions(System.String)">
+            <summary>
+            获取用户权限
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Application.Basis.PermissionService.ExistPermission(System.String,System.String[])">
+            <summary>
+            验证权限
+            </summary> 
+        </member>
+        <member name="T:FastFrame.Application.Basis.ResourceDto">
+            <summary>
+            资源 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.ResourceDto.Name">
+            <summary>
+            资源名称 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.ResourceDto.Size">
+            <summary>
+            资源大小 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.ResourceDto.Path">
+            <summary>
+            相对路径 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.ResourceDto.ContentType">
+            <summary>
+            资源标识 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.ResourceDto.MD5">
+            <summary>
+            MD5摘要 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.ResourceDto.Uploader_Id">
+            <summary>
+            上传人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.ResourceDto.UploadTime">
+            <summary>
+            上传时间 
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Basis.ResourceViewModel">
+            <summary>
+            资源 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.ResourceViewModel.Name">
+            <summary>
+            资源名称 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.ResourceViewModel.Id">
+            <summary>
+             
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Basis.ResourceService">
+            <summary>
+            资源 服务实现 
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Basis.RoleDto">
+            <summary>
+            角色 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.RoleDto.EnCode">
+            <summary>
+            编码 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.RoleDto.Name">
+            <summary>
+            名称 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.RoleDto.IsDefault">
+            <summary>
+            缺省角色 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.RoleDto.IsAdmin">
+            <summary>
+            管理员角色 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.RoleDto.Remarks">
+            <summary>
+            备注 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.RoleDto.Create_User_Id">
+            <summary>
+            创建人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.RoleDto.Create_User">
+            <summary>
+            创建人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.RoleDto.CreateTime">
+            <summary>
+            创建时间 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.RoleDto.Modify_User_Id">
+            <summary>
+            修改人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.RoleDto.Modify_User">
+            <summary>
+            修改人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.RoleDto.ModifyTime">
+            <summary>
+            修改时间 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.RolePermissionModel.EnCode">
+            <summary>
+            标记
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.RolePermissionModel.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.RolePermissionModel.IsAuthorization">
+            <summary>
+            是否有权限
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.RolePermissionModel.Children">
+            <summary>
+            子级权限
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Basis.RoleViewModel">
+            <summary>
+            角色 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.RoleViewModel.Name">
+            <summary>
+            名称 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.RoleViewModel.EnCode">
+            <summary>
+            编码 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.RoleViewModel.Id">
+            <summary>
+            主键 
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Basis.RoleService">
+            <summary>
+            角色 服务实现 
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Basis.TenantDto">
+            <summary>
+            组织信息 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.TenantDto.FullName">
+            <summary>
+            全称 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.TenantDto.ShortName">
+            <summary>
+            简称 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.TenantDto.UrlMark">
+            <summary>
+            URL标识 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.TenantDto.Super_Id">
+            <summary>
+            上级 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.TenantDto.Tenant_Id">
+            <summary>
+            租户标记 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.TenantDto.HandIcon_Id">
+            <summary>
+            Logo头像 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.TenantDto.HasTreeChildren">
+            <summary>
+            是否有下级 
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Basis.TenantViewModel">
+            <summary>
+            组织信息 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.TenantViewModel.FullName">
+            <summary>
+            全称 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.TenantViewModel.Id">
+            <summary>
+            主键 
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Basis.TenantService">
+            <summary>
+            组织信息 服务实现 
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Basis.UserDto">
+            <summary>
+            用户 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.UserDto.Account">
+            <summary>
+            帐号 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.UserDto.Password">
+            <summary>
+            密码 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.UserDto.Name">
+            <summary>
+            姓名 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.UserDto.Email">
+            <summary>
+            邮箱 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.UserDto.PhoneNumber">
+            <summary>
+            手机号码 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.UserDto.HandIcon_Id">
+            <summary>
+            头像 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.UserDto.HandIcon">
+            <summary>
+            头像 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.UserDto.IsAdmin">
+            <summary>
+            是否管理员 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.UserDto.Enable">
+            <summary>
+            启用状态 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.UserDto.Create_User_Id">
+            <summary>
+            创建人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.UserDto.Create_User">
+            <summary>
+            创建人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.UserDto.CreateTime">
+            <summary>
+            创建时间 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.UserDto.Modify_User_Id">
+            <summary>
+            修改人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.UserDto.Modify_User">
+            <summary>
+            修改人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.UserDto.ModifyTime">
+            <summary>
+            修改时间 
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Basis.UserViewModel">
+            <summary>
+            用户 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.UserViewModel.Name">
+            <summary>
+            姓名 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.UserViewModel.Account">
+            <summary>
+            帐号 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.UserViewModel.Id">
+            <summary>
+            主键 
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Basis.UserService">
+            <summary>
+            用户 服务实现 
+            </summary>
+        </member>
+        <member name="M:FastFrame.Application.Basis.UserService.ToogleAdminIdentity(System.String)">
+            <summary>
+            切换管理员身份
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Application.Basis.UserService.ToogleDisabled(System.String)">
+            <summary>
+            切换禁用状态
+            </summary> 
+        </member>
+        <member name="T:FastFrame.Application.Chat.ChatMessageHandle">
+            <summary>
+            处理接收消息
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Chat.ChatService">
+            <summary>
+            好友消息
+            </summary>
+        </member>
+        <member name="M:FastFrame.Application.Chat.ChatService.SendFriendMsg(FastFrame.Application.Chat.FriendMsgInput)">
+            <summary>
+            发送消息
+            </summary> 
+        </member>
+        <member name="T:FastFrame.Application.Chat.FriendMsgInput">
+            <summary>
+            发送新消息
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Chat.FriendMsgInput.Content">
+            <summary>
+            内容
+            </summary>      
+        </member>
+        <member name="P:FastFrame.Application.Chat.FriendMsgInput.Category">
+            <summary>
+            消息类型
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Chat.FriendMsgInput.Resource_Id">
+            <summary>
+            图片?附件ID
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Chat.FriendMsgInput.Target_User_Id">
+            <summary>
+            目标用户
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Chat.FriendOutput">
+            <summary>
+            好友
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Chat.FriendOutput.Id">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Chat.FriendOutput.Name">
+            <summary>
+            姓名
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Chat.FriendOutput.HeadIcon_Id">
+            <summary>
+            头像
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Chat.FriendOutput.Messages">
+            <summary>
+            消息
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Chat.RecMsgOutPut">
+            <summary>
+            接收消息
+            </summary>    
+        </member>
+        <member name="P:FastFrame.Application.Chat.RecMsgOutPut.Id">
+            <summary>
+            消息ID
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Chat.RecMsgOutPut.Content">
+            <summary>
+            内容
+            </summary>            
+        </member>
+        <member name="P:FastFrame.Application.Chat.RecMsgOutPut.Category">
+            <summary>
+            消息类型
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Chat.RecMsgOutPut.Resource_Id">
+            <summary>
+            图片?附件ID
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Chat.RecMsgOutPut.From_User_Id">
+            <summary>
+            发送用户
+            </summary> 
+        </member>
+        <member name="P:FastFrame.Application.Chat.RecMsgOutPut.Target_User_Id">
+            <summary>
+            目标用户
+            </summary>      
+        </member>
+        <member name="T:FastFrame.Application.Chat.FriendService">
+            <summary>
+            好友管理
+            </summary>
+        </member>
+        <member name="M:FastFrame.Application.Chat.FriendService.Friends">
+            <summary>
+            好友列表
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:FastFrame.Application.Flow.FlowOperateInput">
+            <summary>
+            审批操作
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.FlowOperateInput.ActionEnum">
+            <summary>
+            动作
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.FlowOperateInput.Desc">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.FlowOperateInput.Items">
+            <summary>
+            附件内容
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Flow.FlowOperateOutput">
+            <summary>
+            审批操作结果
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.FlowOperateOutput.FlowStatus">
+            <summary>
+            最终状态
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.FlowOperateOutput.FlowProcesses">
+            <summary>
+            审批过程
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Flow.FlowOperateBefore`1">
+            <summary>
+            流程操作前
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+        </member>
+        <member name="P:FastFrame.Application.Flow.FlowOperateBefore`1.Entity">
+            <summary>
+            单据实体
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.FlowOperateBefore`1.OperateInput">
+            <summary>
+            操作内容
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Flow.FlowOperated`1">
+            <summary>
+            流程操作完成
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+        </member>
+        <member name="P:FastFrame.Application.Flow.FlowOperated`1.Entity">
+            <summary>
+            单据实体
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.FlowOperated`1.FlowProcess">
+            <summary>
+            审批过程
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.FlowOperated`1.OperateInput">
+            <summary>
+            操作内容
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Flow.FlowOperateing`1">
+            <summary>
+            流程操作时
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+        </member>
+        <member name="P:FastFrame.Application.Flow.FlowOperateing`1.Entity">
+            <summary>
+            单据实体
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.FlowOperateing`1.FlowProcess">
+            <summary>
+            审批步骤
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.FlowOperateing`1.OperateInput">
+            <summary>
+            操作内容
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Flow.FlowCenterService">
+            <summary>
+            流程中心
+            </summary>
+        </member>
+        <member name="M:FastFrame.Application.Flow.FlowCenterService.HandleFlowOperateAsync``1(System.String,FastFrame.Application.Flow.FlowOperateInput)">
+            <summary>
+            流程操作
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <param name="id"></param>
+            <param name="flowOperate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.Flow.FlowCenterService.HandleFlowOperateAsync``1(``0,FastFrame.Application.Flow.FlowOperateInput)">
+            <summary>
+            流程操作
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <param name="entity"></param>
+            <param name="flowOperate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.Flow.FlowCenterService.VerificationCanCheck(System.String)">
+            <summary>
+            验证当前步骤是否可以操作
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.Flow.FlowCenterService.HandleUnCheckActionAsync``1(``0,FastFrame.Application.Flow.FlowOperateInput)">
+            <summary>
+            处理反审核操作
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <param name="entity"></param>
+            <param name="flowOperate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.Flow.FlowCenterService.HandleRefuseActionAsync``1(``0,FastFrame.Application.Flow.FlowOperateInput)">
+            <summary>
+            处理拒绝动作
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <param name="entity"></param>
+            <param name="flowOperate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.Flow.FlowCenterService.HandleWithdrawActionAsync``1(``0,FastFrame.Application.Flow.FlowOperateInput)">
+            <summary>
+            处理退回动作
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <param name="entity"></param>
+            <param name="flowOperate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.Flow.FlowCenterService.HandlePassActionAsync``1(``0,FastFrame.Application.Flow.FlowOperateInput)">
+            <summary>
+            处理审核通过动作
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <param name="entity"></param>
+            <param name="flowOperate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.Flow.FlowCenterService.HandleUnSubmitActionAsync``1(``0,FastFrame.Application.Flow.FlowOperateInput)">
+            <summary>
+            处理撤回动作
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <param name="entity"></param>
+            <param name="flowOperate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.Flow.FlowCenterService.HandleSubmitActionAsync``1(``0,FastFrame.Application.Flow.FlowOperateInput)">
+            <summary>
+            处理提交动作
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.Flow.FlowCenterService.MatchStepCheckUser``1(``0,FastFrame.Application.Flow.FlowNodeDto)">
+            <summary>
+            匹配流程步骤可审核的人
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <param name="entity"></param>
+            <param name="flowNode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.Flow.FlowCenterService.GenerateFlowSteps``1(``0,System.Collections.Generic.IEnumerable{FastFrame.Application.Flow.FlowNodeDto},System.Collections.Generic.IEnumerable{FastFrame.Application.Flow.FlowLineDto})">
+            <summary>
+            生成流程步骤
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <param name="entity"></param>
+            <param name="flowNodes"></param>
+            <param name="flowLines"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.Flow.FlowCenterService.MatchNodeLines``1(``0,System.Collections.Generic.IEnumerable{FastFrame.Application.Flow.FlowLineDto})">
+            <summary>
+            匹配流程线
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <param name="entity"></param>
+            <param name="flowLines"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastFrame.Application.Flow.FlowLineDto">
+            <summary>
+            流程连接线 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.FlowLineDto.Conds">
+            <summary>
+            流程线条件
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.FlowLineDto.WorkFlow_Id">
+            <summary>
+            关联:WorkFlow 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.FlowLineDto.Text">
+            <summary>
+            名称 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.FlowLineDto.Weights">
+            <summary>
+            权重 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.FlowLineDto.From">
+            <summary>
+            从 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.FlowLineDto.To">
+            <summary>
+            到 
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Flow.FlowNodeDto">
+            <summary>
+            流程节点 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.FlowNodeDto.Roles">
+            <summary>
+            节点审核角色
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.FlowNodeDto.Users">
+            <summary>
+            节点审核人
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.FlowNodeDto.Fields">
+            <summary>
+            节点动态审核人
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.FlowNodeDto.WorkFlow_Id">
+            <summary>
+            关联:WorkFlow 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.FlowNodeDto.Name">
+            <summary>
+            名称 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.FlowNodeDto.Key">
+            <summary>
+            节点键 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.FlowNodeDto.DeptCheck">
+            <summary>
+            主管审核 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.FlowNodeDto.TriggerAppNotify">
+            <summary>
+            触发应用通知 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.FlowNodeDto.TriggerWxNotify">
+            <summary>
+            触发微信通知 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.FlowNodeDto.TriggerSmsNotify">
+            <summary>
+            触发短信通知 
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Flow.WorkFlowDto">
+            <summary>
+            工作流 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.WorkFlowDto.Nodes">
+            <summary>
+            流程节点
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.WorkFlowDto.Lines">
+            <summary>
+            流程链
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.WorkFlowDto.Name">
+            <summary>
+            名称 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.WorkFlowDto.BeModule">
+            <summary>
+            适用模块 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.WorkFlowDto.BeModuleName">
+            <summary>
+            模块名称 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.WorkFlowDto.Version">
+            <summary>
+            版本 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.WorkFlowDto.Enabled">
+            <summary>
+            状态 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.WorkFlowDto.Remarks">
+            <summary>
+            备注 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.WorkFlowDto.Create_User_Id">
+            <summary>
+            创建人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.WorkFlowDto.Create_User">
+            <summary>
+            创建人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.WorkFlowDto.CreateTime">
+            <summary>
+            创建时间 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.WorkFlowDto.Modify_User_Id">
+            <summary>
+            修改人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.WorkFlowDto.Modify_User">
+            <summary>
+            修改人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.WorkFlowDto.ModifyTime">
+            <summary>
+            修改时间 
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Flow.WorkFlowViewModel">
+            <summary>
+            工作流 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.WorkFlowViewModel.Name">
+            <summary>
+            名称 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.WorkFlowViewModel.Id">
+            <summary>
+            主键 
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Flow.WorkFlowService">
+            <summary>
+            工作流 服务实现 
+            </summary>
+        </member>
+    </members>
+</doc>

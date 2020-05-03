@@ -34,7 +34,7 @@
 
 <script>
 import { getModuleStrut } from "../../generate";
-import { distinct, getValue, throttle } from "../../utils";
+import { distinct, getValue, throttle,fmtRequestPars } from "../../utils";
 export default {
   props: {
     model: Object,
@@ -113,29 +113,30 @@ export default {
       if (typeof this.requestUrl == "function")
         url = this.requestUrl.call(this, this.model);
 
+      let qs = {
+        Filters: [
+          {
+            Key: "and",
+            Value: [
+              {
+                Name: this.fields
+                  .filter(v => this.canQueryFields.includes(v))
+                  .join(";"),
+                Compare: "$",
+                Value: v
+              },
+              {
+                Name: "Id",
+                Compare: "!=",
+                Value: this.value.join(",")
+              },
+              ...filter
+            ].filter(v => v.Value)
+          }
+        ].filter(v => v.Value.length > 0)
+      };
       try {
-        let { Data } = await this.$http.post(url, {
-          Filters: [
-            {
-              Key: "and",
-              Value: [
-                {
-                  Name: this.fields
-                    .filter(v => this.canQueryFields.includes(v))
-                    .join(";"),
-                  Compare: "$",
-                  Value: v
-                },
-                {
-                  Name: "Id",
-                  Compare: "!=",
-                  Value: this.value.join(",")
-                },
-                ...filter
-              ]
-            }
-          ]
-        });
+        let { Data } = await this.$http.get(`${url}?qs=${JSON.stringify(qs,fmtRequestPars)}`);
         this.items = Data;
         this.loading = false;
       } catch (error) {

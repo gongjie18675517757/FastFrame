@@ -39,8 +39,7 @@ namespace FastFrame.Entity.Basis
         /// <summary>
         /// 内容
         /// </summary>
-        [Required]
-        [StringLength(8000)]
+        [Required] 
         [FormGroup("内容")]
         public string Content { get; set; }
     }

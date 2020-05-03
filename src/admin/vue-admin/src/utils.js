@@ -115,6 +115,37 @@ export function mapMany(arr, fn) {
 }
 
 /**
+ * 上传文件
+ * @param {*} files 
+ */
+export function postFiles(files = [], pars) {
+    pars = {
+        onProgress: () => { },
+        ...pars || {},
+    }
+    let formData = new FormData()
+    for (let index = 0; index < files.length; index++) {
+        const file = files[index];
+        formData.append('files[]', file);
+    }
+    return $http.post('/api/resource/post', formData, {
+        method: 'post',
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        },
+        transformRequest: [function (data) {
+            return data
+        }],
+        onUploadProgress: function (e) {
+            var percentage = Math.round((e.loaded * 100) / e.total) || 0;
+            if (percentage < 100) {
+                pars.onProgress(percentage)
+            }
+        }
+    })
+}
+
+/**
  * 上传
  * @param {*} param0 
  */
@@ -138,26 +169,7 @@ export function upload({
     return new Promise((resolve, reject) => {
         input.onchange = function (e) {
             let files = e.target.files
-            let formData = new FormData()
-            for (let index = 0; index < files.length; index++) {
-                const file = files[index];
-                formData.append('files[]', file);
-            }
-            $http.post('/api/resource/post', formData, {
-                method: 'post',
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                },
-                transformRequest: [function (data) {
-                    return data
-                }],
-                onUploadProgress: function (e) {
-                    var percentage = Math.round((e.loaded * 100) / e.total) || 0;
-                    if (percentage < 100) {
-                        onProgress(percentage)
-                    }
-                }
-            }).then(function (resp) {
+            postFiles(files, { onProgress }).then(function (resp) {
                 resolve(resp)
             }).catch(reject)
         }
@@ -299,3 +311,17 @@ export function guid() {
     });
 }
 
+/**
+ * 格式化请求数据
+ * @param {*} data 
+ */
+export function fmtRequestPars(key, value) {
+    if (!value) {
+        return undefined;
+    }
+    else if (Array.isArray(value)) {
+        return value.length > 0 ? value : undefined
+    } else {
+        return value
+    }
+}

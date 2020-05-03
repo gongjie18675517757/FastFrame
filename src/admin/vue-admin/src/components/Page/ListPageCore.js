@@ -4,7 +4,7 @@ import {
   getQueryOptions
 } from "../../generate";
 import {
-  distinct, throttle
+  distinct, throttle, fmtRequestPars
 } from '../../utils'
 
 /**
@@ -37,7 +37,7 @@ export let makeToolItems = function () {
     name: "List",
     key: "Search",
     icon: "search",
-    action: this.search
+    action: this.queryDialog
   },
   {
     title: "删除",
@@ -81,11 +81,13 @@ export let pageInjects = []
  * 生成参数
  */
 export let pageProps = {
-  pars: Object,
+  queryFilter: Array,
+  single: Boolean,
   isDialog: Boolean,
   isTab: Boolean,
   superId: String,
-  hideToolitem: Boolean
+  hideToolitem: Boolean,
+  requestUrl: String
 };
 
 
@@ -94,25 +96,68 @@ export let pageProps = {
  */
 export let makePageData = function () {
   return {
+    /**
+     * 操作项
+     */
     toolItems: makeToolItems.call(this),
+    /**
+     * 操作按钮摆放数据
+     */
     toolSpliceCount: 6,
+    /**
+     * 表格列
+     */
     columns: [],
+    /**
+     * 表格行
+     */
     rows: [],
+    /**
+     * 选中行
+     */
     selection: [],
+    /**
+     * 所有行数
+     */
     total: 0,
+    /**
+     * 加载中
+     */
     loading: false,
+    /**
+     * 表格类名
+     */
     tableClassArr: [],
+    /**
+     * 表格样式
+     */
     tableStyleObj: {
 
     },
+    /**
+     * 模块结构
+     */
     ModuleStrut: {},
+    /**
+     * 分页属性
+     */
     pager: null,
+    /**
+     * 隐藏分布
+     */
     hidePager: false,
+    /**
+     * 显示审计字段
+     */
     showMamageField: false,
+    /**
+     * 查询条件
+     */
     query: [],
-    props: {},
-    treeChildComponent: null,
-    listeners: {}
+    /**
+     * 树表格子级组件
+     */
+    treeChildComponent: null
   };
 }
 
@@ -120,6 +165,7 @@ export let makePageData = function () {
  * 计算属性
  */
 export let pageComputed = {
+
   dialogMode() {
     return this.$store.state.dialogMode;
   },
@@ -166,11 +212,16 @@ export let pageComputed = {
  * 页面方法
  */
 export let pageMethods = {
+  /**
+   * 初始化
+   */
   init() {
     Promise.resolve()
       .then(this.getModuleStrut)
+      .then(this.fmtModuleStrut)
       .then(strut => this.ModuleStrut = strut)
       .then(this.getColumns)
+      .then(this.fmtColumns)
       .then(arr => this.columns = distinct(arr, v => v.Name, (a, b) => ({
         ...a,
         ...b
@@ -191,12 +242,60 @@ export let pageMethods = {
         ]
       })
   },
+  /**
+   * 获取当前模块结构
+   */
   getModuleStrut() {
     return getModuleStrut(this.name)
   },
+
+  /**
+   * 格式化模块结构
+   */
+  fmtModuleStrut(v) {
+    return Promise.resolve(v);
+  },
+
+  /**
+   * 获取当前模块列表列
+   */
   getColumns() {
     return getColumns(this.name)
   },
+
+  /**
+   * 格式化列
+   */
+  fmtColumns(arr) {
+    return Promise.resolve(arr).then(arr => {
+      return this.getRowOperateItems().then(items => {
+        return [
+          ...(items.length > 0 ? [
+            {
+              Name: 'Operate',
+              Description: '操作',
+              render: (h, context) => {
+                return h('div', null, items.map(func => func(h, context)))
+              }
+            }
+          ] : []),
+          ...arr
+        ]
+      })
+    })
+  },
+
+  /**
+   * 获取行操作按钮
+   */
+  getRowOperateItems() {
+    return Promise.resolve([])
+  },
+
+  /**
+   * 跳转编辑页
+   * @param {*} model 
+   */
   toEdit(model) {
     model = model || {}
     let Id = model.Id || ''
@@ -220,6 +319,11 @@ export let pageMethods = {
         this.$router.push(`/${this.name}/Add`);
     }
   },
+
+  /**
+   * 删除操作
+   * @param {*} arr 
+   */
   remove(arr = []) {
     this.$message.confirm({
       title: "提示",
@@ -234,10 +338,18 @@ export let pageMethods = {
       }
     });
   },
+
+  /**
+   * 获取查询条件
+   */
   getQueryOptions() {
     return getQueryOptions(this.dynamicColumns)
   },
-  search() {
+
+  /**
+   * 弹窗查询
+   */
+  queryDialog() {
     this.$message
       .dialog(() => import('@/components/Dialog/SearchDialog.vue'), {
         title: `查询${this.direction}列表`,
@@ -252,15 +364,28 @@ export let pageMethods = {
         this.loadList();
       });
   },
+
+  /**
+   * 获取查询地址
+   */
   getRequestUrl() {
-    return `/api/${this.name}/list`
+    return this.requestUrl || `/api/${this.name}/list`
   },
+
+  /**
+   * 获取请求方法
+   */
   getRequedtMethod() {
     return (url, pageProps) => {
-      let { PageIndex, PageSize, SortName, SortMode, Filters } = pageProps;
-      return this.$http.get(`${url}/${PageIndex}?PageSize=${PageSize}&SortName=${SortName}&SortMode=${SortMode}&filterStr=${JSON.stringify(Filters)}`);
+      let qs = JSON.stringify(pageProps, fmtRequestPars)
+      return this.$http.get(`${url}?qs=${qs}`);
     }
   },
+
+  /**
+   * 获取请求参数
+   * @param {*} pager 
+   */
   async getRequestPars(pager) {
     if (pager) this.pager = pager;
     else pager = this.pager;
@@ -274,15 +399,7 @@ export let pageMethods = {
 
 
     /*条件1 */
-    let {
-      queryFilter = []
-    } = this.pars || {};
-    if (typeof queryFilter == "function") {
-      queryFilter = await queryFilter.call(this, {
-        selection: this.selection,
-        rows: this.items
-      });
-    }
+    let queryFilter = this.queryFilter || []
 
     let pageInfo = {
       PageIndex: page,
@@ -321,6 +438,10 @@ export let pageMethods = {
 
     return pageInfo;
   },
+
+  /**
+   * 加载更新数据(移动端无限翻页时)
+   */
   loadMoreList: throttle(function (pager) {
     this.loading = true;
     this.loading = true;
@@ -344,6 +465,10 @@ export let pageMethods = {
         this.loading = false;
       })
   }),
+
+  /**
+   * 加载列表数据
+   */
   loadList: throttle(function (pager) {
     this.loading = true;
     this.rows = [];
@@ -364,12 +489,21 @@ export let pageMethods = {
         this.loading = false;
       })
   }, 500),
-  formatterToolItems(items) {
+
+  /**
+   * 格式化操作按钮
+   * @param {*} items 
+   */
+  fmtToolItems(items) {
     return distinct(items, v => v.key || v.name, (a, b) => ({
       ...a,
       ...b
     }));
   },
+
+  /**
+   * 关闭
+   */
   close() {
     if (this.isTab) {
       this.$emit('close')
@@ -400,13 +534,13 @@ export let makeChildProps = function () {
     loading: this.loading,
     tableClassArr: this.tableClassArr,
     tableStyleObj: this.tableStyleObj,
-    toolItems: this.superId ? [] : this.formatterToolItems(this.toolItems),
+    toolItems: this.superId ? [] : this.fmtToolItems(this.toolItems),
     toolSpliceCount: this.toolSpliceCount,
     ModuleStrut: this.ModuleStrut,
     isDialog: this.isDialog,
     isTab: this.isTab,
     tableHeight: this.tableHeight,
-    singleSelection: this.pars && this.pars.single,
+    singleSelection: this.single,
     expandComponent: this.treeChildComponent ? {
       props: ['model'],
       components: {
@@ -417,16 +551,13 @@ export let makeChildProps = function () {
           props: {
             superId: this.model.Id,
             hideToolitem: true,
-            pars: {
-              single: true,
-            }
+            single: true,
           }
 
         })
       }
     } : null,
     hideToolitem: this.hideToolitem,
-    ...this.props
   };
 };
 
@@ -437,8 +568,8 @@ export let makeChildListeners = function () {
   return {
     close: () => this.close(),
     success: () => {
-      let pars = this.selection;
-      this.$emit("success", pars);
+      if (this.isDialog)
+        this.$emit("success", this.selection);
     },
     selection_update: val => {
       this.selection = val;
@@ -448,7 +579,7 @@ export let makeChildListeners = function () {
     toolItemClick: item => item.action.call(this, { item, selection: this.selection, rows: this.rows }),
     toEdit: (val) => this.toEdit(val),
     changeShowMamageField: () => this.showMamageField = !this.showMamageField,
-    ...this.listeners
+
   };
 };
 

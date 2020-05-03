@@ -20,7 +20,7 @@ namespace FastFrame.Application
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TDto"></typeparam>
-    public class BaseService<TEntity, TDto> : IService<TDto>
+    public class BaseService<TEntity, TDto> : ICURDService<TDto>
         where TEntity : class, IEntity, new()
         where TDto : class, IDto<TEntity>, new()
     {
@@ -187,7 +187,7 @@ namespace FastFrame.Application
         /// <summary>
         /// 获取分页列表
         /// </summary> 
-        public virtual async Task<PageList<TDto>> GetListAsync(Pagination pageInfo)
+        public virtual async Task<PageList<TDto>> PageListAsync(Pagination pageInfo)
         {
             var query = GetListQueryableing(Query());
             var pageList = await query.PageListAsync(pageInfo);

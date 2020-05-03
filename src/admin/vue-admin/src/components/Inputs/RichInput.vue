@@ -1,33 +1,33 @@
 <template>
-  <div>
-    <div v-if="disabled" v-html="content"></div>
-    <quill-editor
-      v-else
-      v-model="content"
-      ref="myQuillEditor"
-      :options="editorOption"
-      :disabled="disabled"
-      @blur="onEditorBlur($event)"
-      @focus="onEditorFocus($event)"
-      @change="onEditorChange($event)"
-      class="rich-input"
-    ></quill-editor>
-    <v-messages color="error" :value="errorMessages"></v-messages>
-  </div>
+  <v-flex xs12 style="padding:0 0 5px 0 ;">
+    <v-card tile>
+      <v-toolbar flat dense color="transparent" height="30px;">
+        <v-toolbar-title>{{title}}:</v-toolbar-title>
+        <v-messages color="error" :value="errorMessages"></v-messages>
+      </v-toolbar>
+      <v-card-text>
+        <RemoteJS src="/libs/wangEditor.min.js" @load="onLoad" />
+        <div v-if="!canEdit" v-html="content" class="w-e-text"></div>
+        <div v-else ref="editor"></div>
+      </v-card-text>
+    </v-card>
+  </v-flex>
 </template>
 
 
 <script>
+import RemoteJS from "../RemoteJS.vue";
 export default {
+  components: { RemoteJS },
   props: {
     value: String,
-    disabled: Boolean,
-    label: String,
+    canEdit: Boolean,
+    title: String,
     errorMessages: Array
   },
   data() {
     return {
-      editorOption: {}
+      isLoad: false
     };
   },
   computed: {
@@ -41,15 +41,31 @@ export default {
       }
     }
   },
+  watch: {
+    canEdit() {
+      this.$nextTick(this.init)
+    }
+  },
+  mounted() {
+    this.init();
+  },
   methods: {
-    onEditorBlur() {
-      //失去焦点事件
+    onLoad() {
+      this.isLoad = true;
+      this.init();
     },
-    onEditorChange({ html }) {
-      //内容改变事件
-      this.content = html;
-    },
-    onEditorFocus() {}
+    init() {
+      if (this.canEdit && this.isLoad) {
+        var E = window.wangEditor;
+        var editor = new E(this.$refs.editor);
+        editor.customConfig.onchange = html => {
+          this.content = html;
+        };
+        editor.customConfig.uploadImgShowBase64 = true; // 使用 base64 保存图片
+        editor.create();
+        editor.txt.html(this.content);
+      }
+    }
   }
 };
 </script>

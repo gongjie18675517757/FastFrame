@@ -65,7 +65,7 @@ namespace FastFrame.Infrastructure
             var lambdaExpr
                = Expression.Lambda<Func<TSource, TTarget>>(bodyExpr, paramExprs);
             return lambdaExpr;
-        } 
+        }
         public static void GenerateExpresstion<TTarget>(Type[] sourceTypes, out ParameterExpression[] paramExprs, out Expression bodyExpr)
         {
             paramExprs = new ParameterExpression[sourceTypes.Length];
@@ -226,22 +226,31 @@ namespace FastFrame.Infrastructure
             var targetType = typeof(TTarget);
             var targetProps = targetType.GetProperties().ToDictionary(x => x.Name.ToLower());
             var parameterExpression = Expression.Parameter(sourceType, nameof(sourceType));
-            var memberBindings = new List<MemberBinding>();
+            var memberBindings = new Dictionary<string, MemberBinding>();
             foreach (var sourceProp in sourceType.GetProperties())
             {
                 var memberExpression = Expression.Property(parameterExpression, sourceProp);
                 var sourcePropTypes = sourceProp.PropertyType.GetProperties();
                 foreach (var propertyInfo in sourcePropTypes)
                 {
-                    if (targetProps.TryGetValue(propertyInfo.Name.ToLower(), out var targetPropertyInfo) && targetPropertyInfo.PropertyType == propertyInfo.PropertyType)
+                    if (targetProps.TryGetValue(propertyInfo.Name.ToLower(), out var targetPropertyInfo) &&
+                            targetPropertyInfo.PropertyType == propertyInfo.PropertyType)
                     {
                         var expression = Expression.Property(memberExpression, propertyInfo);
                         var memberAssignment = Expression.Bind(targetPropertyInfo, expression);
-                        memberBindings.Add(memberAssignment);
+
+                        if (memberBindings.ContainsKey(propertyInfo.Name))
+                        {
+                            memberBindings[propertyInfo.Name] = memberAssignment;
+                        }
+                        else
+                        {
+                            memberBindings.Add(propertyInfo.Name, memberAssignment);
+                        }
                     }
                 }
             }
-            var memberInitExpression = Expression.MemberInit(Expression.New(targetType), memberBindings);
+            var memberInitExpression = Expression.MemberInit(Expression.New(targetType), memberBindings.Values);
             tearPropExpression = Expression.Lambda<Func<TSource, TTarget>>(memberInitExpression, parameterExpression);
             return tearPropExpression;
         }
@@ -260,5 +269,5 @@ namespace FastFrame.Infrastructure
         }
 
         #endregion 
-    } 
+    }
 }

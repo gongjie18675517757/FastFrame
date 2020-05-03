@@ -2,7 +2,7 @@ import {
   getValue,
   setValue,
   upload
-} from '@/utils'
+} from '../../utils'
 export default {
   props: {
     model: Object,
@@ -11,72 +11,44 @@ export default {
     label: String,
     Name: String,
     errorMessages: Array,
+    description:String,
     isXs: Boolean
   },
   render(h) {
     let info = getValue(this.model, this.Name.replace('_Id', ''))
-
-    if (this.disabled) {
-      if (this.value && info)
+    if (this.disabled && !this.isXs) {
+      if (this.value) {
         return h('a', {
           on: {
             click: () => {
-              window.open(`/api/resource/get/${info.Id}`)
+              window.open(`/api/resource/get/${this.value}/${info.Name}`)
             }
           }
         }, info.Name)
-      else {
+      } else {
         return h('span', null, '无')
       }
     }
-
-    let component = null
-    if (this.value && info) {
-      component = h('v-chip', {
-        props: {
-          close: true,
-          color: 'info',
-          label: true,
-          outlined: true,
-          title: info.Name
-        },
-        on: {
-          input: () => {
-            this.$emit('input', null)
-            this.$emit('change', null)
-            setValue(this.model, this.Name.replace('_Id', ""), null)
-          }
+    return h('v-text-field', {
+      props: {
+        ...this.props,
+        'show-size': false,
+        readonly: true,
+        'append-icon':!this.disabled?'clear':'',
+        value: this.value ? info.Name : null,
+        placeholder:this.description
+      },
+      on: {
+        click: () => {
+          if (this.disabled)
+            return;
+          upload().then(([file]) => {
+            this.$emit('input', file.Id);
+            this.$emit('change', file);
+            setValue(this.model, this.Name.replace('_Id', ''), file);
+          })
         }
-      }, `${info.Name}`)
-    } else {
-      component = h('v-input', null, [
-        h('a', {
-          on: {
-            click: () => {
-              upload().then(([result]) => {
-                this.$emit('input', result.Id)
-                this.$emit('change', result)
-                setValue(this.model, this.Name.replace('_Id', ""), result)
-              })
-            }
-          }
-        }, '点击上传')
-      ])
-    }
-
-
-    return h('div', {
-      style: {
-        'display': 'flex'
       }
-    }, [
-      component,
-      h('v-messages', {
-        props: {
-          color: 'error',
-          value: this.errorMessages
-        }
-      })
-    ])
+    })
   }
 }

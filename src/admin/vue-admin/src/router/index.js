@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/views/Home.vue'
-import areas from './areas.js'
+import areas from './areas'
 import store from '../store'
 
 import {
@@ -18,63 +18,33 @@ let props = (route) => ({
 
 function loadAreas() {
   return mapMany(areas, ({
-    name,
+    areaName,
     items
   }) => {
-    return mapMany(Object.entries(items), ([key, val]) => {
-      return [{
-        path: `/${key.toLowerCase()}/list`,
-        name: `${key}_List`.toLowerCase(),
-        meta: {
-          title: `${val}列表`,
-          keepAlive: false,
-          moduleName: key,
-          pageName: 'List'
-        },
-        component: () =>
-          import(`@/views/${name}/${key}/List.vue`)
-      },
-      {
-        path: `/${key.toLowerCase()}/add`,
-        name: `${key}_Add`.toLowerCase(),
-        meta: {
-          title: `添加${val}`,
-          keepAlive: false,
-          moduleName: key,
-          pageName: 'Add'
-        },
-        component: () =>
-          import(`@/views/${name}/${key}/Add.vue`)
-      },
-      {
-        path: `/${key.toLowerCase()}/:id`,
-        name: `${key}`.toLowerCase(),
-        meta: {
-          title: `修改${val}`,
-          keepAlive: false,
-          moduleName: key,
-          pageName: 'Get'
-        },
-        component: () =>
-          import(`@/views/${name}/${key}/Add.vue`)
-      }
-      ]
+    return mapMany(Object.entries(items), ([key, areaPageList = []]) => {
+      return areaPageList.map(page => {
+        return {
+          path: `/${key}/${page.key}`.toLowerCase(),
+          name: `${key}_${page.key}`.toLowerCase(),
+          meta: {
+            title: page.title,
+            keepAlive: false,
+            moduleName: key,
+            pageName: page.permission || page.key,
+            pagePage: `@/views/${areaName}/${key}/${page.path || page.key}.vue`,
+          },
+
+          component: () =>
+            import(`@/views/${areaName}/${key}/${page.path || page.key}.vue`)
+        }
+      })
     })
   })
 }
 
-let childs = loadAreas()
+let childs = loadAreas() 
 
-/**
- * 获取组件
- * @param {*} name 
- */
-export function getComponent(name) {
-  name = name.toLowerCase()
-  let item = childs.find(x => x.name == name)
-  return item == null ? null : item.component
-}
-
+ 
 let routes = [{
   path: '/',
 
@@ -237,8 +207,8 @@ router.beforeEach(async (to, from, nextFunc) => {
     /**
      * 验证登录身份
      */
-    await store.dispatch('existsIdentity') 
-  } catch (error) { 
+    await store.dispatch('existsIdentity')
+  } catch (error) {
     nextFunc({
       path: '/login',
       query: {
@@ -263,14 +233,14 @@ router.beforeEach(async (to, from, nextFunc) => {
         redirect: to.fullPath
       }
     })
-  } 
+  }
 })
 
-router.afterEach((to) => { 
+router.afterEach((to) => {
   if (!to.meta.allowAnonymous) {
     store.state.lastUrl = to.fullPath
   }
-}) 
+})
 
 export default router
 

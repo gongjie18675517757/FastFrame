@@ -52,7 +52,9 @@ export default {
       return this.$store.state.singlePageMode;
     }
   },
-  created() {},
+  created() {
+    window.getMatchedComponents=(v)=>this.$router.getMatchedComponents(v)
+  },
   methods: {
     resufresh() {
       this.resufreshed = false;

@@ -23,6 +23,7 @@ export let formInject = []
 export let formProps = {
   pars: Object,
   isDialog: Boolean,
+  isTab:Boolean,
   id: String
 };
 
@@ -241,6 +242,7 @@ export let formMethods = {
       this.submiting = true;
       let errs = await this.evalRules();
       if (errs.length > 0) {
+        console.log(errs); 
         this.$message.toast.error("表单填写不完整");
         return;
       }

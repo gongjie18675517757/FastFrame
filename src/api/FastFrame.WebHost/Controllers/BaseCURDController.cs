@@ -9,9 +9,9 @@ namespace FastFrame.WebHost.Controllers
     public abstract class BaseCURDController<TDto> : BaseController<TDto>
          where TDto : class, IDto, new()
     {
-        private readonly IService<TDto> service;
+        private readonly ICURDService<TDto> service;
 
-        public BaseCURDController(IService<TDto> service) : base(service)
+        public BaseCURDController(ICURDService<TDto> service) : base(service)
         {
             this.service = service;
         }

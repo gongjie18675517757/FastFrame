@@ -1,0 +1,65 @@
+<script>
+let pageInfo = {
+  area: "Basis",
+  name: "LoginLog",
+  direction: "登录记录"
+};
+
+import Page from "../../../components/Page/ListPageCore.js";
+import { getColumns } from "../../../generate";
+
+export default {
+  ...Page,
+  data() {
+    return {
+      ...Page.data.call(this),
+      ...pageInfo
+    };
+  },
+  methods: {
+    ...Page.methods,
+    getColumns() {
+      return getColumns("LoginLogModel");
+    },
+    getRowOperateItems() {
+      return Page.methods.getRowOperateItems
+        .call(this, ...arguments)
+        .then(arr => {
+          return [
+            ...arr,
+            (h, { model }) =>
+              model.IsEnabled
+                ? h(
+                    "a-btn",
+                    {
+                      props: {
+                        moduleName: pageInfo.name,
+                        name: "SetTokenFailure"
+                      },
+                      attrs: {
+                        text: true,
+                        small: true,
+                        color: "primary"
+                      },
+                      on: {
+                        click: () => {
+                          this.$http
+                            .post(
+                              `/api/${pageInfo.name}/SetTokenFailure/${model.Id}`
+                            )
+                            .then(() => {
+                              model.IsEnabled = false;
+                              return this.$message.toast.success("操作成功");
+                            });
+                        }
+                      }
+                    },
+                    "强制失效"
+                  )
+                : null
+          ];
+        });
+    }
+  }
+};
+</script>

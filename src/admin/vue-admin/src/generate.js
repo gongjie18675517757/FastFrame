@@ -61,7 +61,8 @@ export async function getColumns(name = '') {
   let {
     FieldInfoStruts,
     RelateFields,
-    Name: ModuleName
+    Name: ModuleName,
+    HasManage
   } = await getModuleStrut(name)
   let columns = FieldInfoStruts.filter(f => {
     return f.Hide != 'List' && f.Hide != 'All' && (!f.Name.endsWith('Id') || f.Relate || f.EnumItemInfo)
@@ -73,7 +74,7 @@ export async function getColumns(name = '') {
     }
   })
 
-  if (RelateFields.length > 0) {
+  if (RelateFields.length > 0 && HasManage) {
     let col = columns.find(r => r.Name == RelateFields[0])
     col.IsLink = true
   }

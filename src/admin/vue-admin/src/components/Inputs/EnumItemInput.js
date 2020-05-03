@@ -77,7 +77,9 @@ export default {
           placeholder: this.placeholder,
           'item-text': 'Value',
           'item-value': 'Id',
-          multiple: this.multiple
+          multiple: this.multiple,
+          dense: true,
+          singleLine: !this.isXs,
         },
         on: {
           input: val => {
@@ -106,7 +108,7 @@ export default {
   methods: {
     addItem() {
       this.$message.confirm({
-        title: '提示', 
+        title: '提示',
         content: `确认添加<strong>${this.keyword}</strong>吗?`
       })
         .then(() => {
@@ -123,7 +125,7 @@ export default {
         })
     }
   },
-  render(h) {
+  render(h) { 
     /**
      * 不在小屏下,且只读时,显示一个文本就好了
      */
@@ -158,6 +160,9 @@ export default {
           return h('span', null, text)
         } : null
       }
-    }, [this.hasAddItemPermission && this.keyword ? noData : null])
+    }, [
+      this.hasAddItemPermission && this.keyword ? noData : null,
+      h('template', { slot: 'prepend' }, this.$slots.prepend)
+    ])
   }
 }

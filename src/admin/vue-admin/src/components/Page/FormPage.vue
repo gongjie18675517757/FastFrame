@@ -211,16 +211,19 @@ export default {
 .fullPage {
   height: calc(100vh - 135px);
   overflow: auto;
+  overflow-x:hidden;
 }
 
 .tabPage {
   height: calc(100vh - 170px);
   overflow: auto;
+  overflow-x:hidden;
 }
 
 .dialogPage {
   max-height: calc(100vh - 245px);
   overflow: auto;
+  overflow-x:hidden;
 }
 
 .singleLine .v-card__text {

@@ -16,6 +16,12 @@
       @input="handleChange"
     >
       <template v-slot:selection="props">{{getText(props)}}</template>
+      <template #default>
+        <slot></slot>
+      </template>
+      <template #prepend>
+        <slot name="prepend"></slot>
+      </template>
     </v-combobox>
   </span>
 </template>
@@ -76,14 +82,13 @@ export default {
           .join(",");
         if (this.multiple && this.value.length > index) {
           txt = `${txt},`;
-        } 
+        }
         return txt;
       } else {
         return "";
       }
     },
     handleChange(val) {
-      
       val = val || null;
       this.$emit("input", val);
 

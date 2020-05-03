@@ -74,6 +74,11 @@
             <param name="input"></param>
             <returns></returns>
         </member>
+        <member name="M:FastFrame.WebHost.Controllers.BaseCURDController`1.VerififyUnique(FastFrame.Application.UniqueInput)">
+            <summary>
+            验证唯一性
+            </summary>      
+        </member>
         <member name="T:FastFrame.WebHost.Controllers.Basis.DeptController">
             <summary>
             部门 
@@ -205,11 +210,6 @@
             <summary>
             生成密码
             </summary> 
-        </member>
-        <member name="M:FastFrame.WebHost.Controllers.CommonController.VerififyUnique(FastFrame.Application.UniqueInput)">
-            <summary>
-            验证唯一性
-            </summary>      
         </member>
         <member name="M:FastFrame.WebHost.Controllers.CommonController.ModuleStruts(System.String)">
             <summary>

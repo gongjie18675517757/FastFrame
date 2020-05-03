@@ -243,7 +243,10 @@ export let formMethods = {
       let errs = await this.evalRules();
       if (errs.length > 0) {
         console.log(errs); 
-        this.$message.toast.error("表单填写不完整");
+        this.$message.alert({
+          title:'表单填写不完整',
+          content:errs.map(v=>`<p style="color:red;">${v}</p>`).join('')
+        });
         return;
       }
 

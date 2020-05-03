@@ -62,7 +62,7 @@ function unique(fieldDescription, moduleName, name) {
       }]
     }
     return new Promise((resolve, reject) => {
-      $http.post(`/api/Common/VerififyUnique`, postData).then(data => {
+      $http.post(`/api/${moduleName}/VerififyUnique`, postData).then(data => {
         if (data) {
           resolve(`${fieldDescription}重复!`)
         } else {

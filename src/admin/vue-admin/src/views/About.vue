@@ -36,8 +36,21 @@
         </v-list>
       </v-menu>
     </v-app-bar>
+
+    <v-text-field single-line dense>
+      <template #prepend>xxa</template>
+      <template>123465</template>
+    </v-text-field>
+    <v-input>
+      <template #prepend>xxa</template>
+      <template>123465</template>
+    </v-input>
   </div>
 </template>
 <script>
-export default {};
+export default {
+  // render(h){
+     
+  // }
+};
 </script>

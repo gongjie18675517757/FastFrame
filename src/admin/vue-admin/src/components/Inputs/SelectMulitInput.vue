@@ -28,13 +28,19 @@
           </v-list-item>
         </v-lazy>
       </template>
+      <template #default>
+        <slot></slot>
+      </template>
+      <template #prepend>
+        <slot name="prepend"></slot>
+      </template>
     </v-autocomplete>
   </span>
 </template>
 
 <script>
 import { getModuleStrut } from "../../generate";
-import { distinct, getValue, throttle,fmtRequestPars } from "../../utils";
+import { distinct, getValue, throttle, fmtRequestPars } from "../../utils";
 export default {
   props: {
     model: Object,
@@ -136,7 +142,9 @@ export default {
         ].filter(v => v.Value.length > 0)
       };
       try {
-        let { Data } = await this.$http.get(`${url}?qs=${JSON.stringify(qs,fmtRequestPars)}`);
+        let { Data } = await this.$http.get(
+          `${url}?qs=${JSON.stringify(qs, fmtRequestPars)}`
+        );
         this.items = Data;
         this.loading = false;
       } catch (error) {

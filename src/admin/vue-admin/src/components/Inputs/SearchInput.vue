@@ -27,6 +27,12 @@
           <v-list-item-title v-text="getField(item)"></v-list-item-title>
         </v-list-item-content>
       </template>
+      <template #default>
+        <slot></slot>
+      </template>
+      <template #prepend>
+        <slot name="prepend"></slot>
+      </template>
     </v-autocomplete>
   </span>
 </template>

@@ -38,7 +38,11 @@ export default {
     Readonly: String,
     EnumValues: [Array, Function],
     filter: [Array, Function],
-    singleLine: Boolean
+    singleLine: Boolean,
+    flex: {
+      type: Object,
+      default: () => ({})
+    }
   },
   data() {
     return {
@@ -93,8 +97,25 @@ export default {
       ...this.$attrs
     }
 
+    let fieldLabel = h('span', {
+      slot: 'prepend',
+      style: {
+        width: '150px',
+        textAlign: 'center'
+      }
+    }, [
+      h('span', `${props.description}:`),
+      h('span', {
+        style: {
+          color: 'red'
+        }
+      }, this.IsRequired && this.canEdit ? '*' : '')
+    ]
+    )
+
     if (isXs) {
-      props.label = this.Description
+      props.label = this.Description;
+      fieldLabel = null;
     }
 
     let on = {
@@ -107,10 +128,8 @@ export default {
 
     let flex = {
       xs12: 1,
-      sm8: 1,
-      md6: 1,
-      lg6: 1,
-      xl4: 1
+      sm6: 1,
+      ...this.flex
     }
 
     if (this.singleLine) {
@@ -119,18 +138,19 @@ export default {
       }
     }
 
-    let component = null;
+    let component = this.component;
+
+
 
     //长文本
     if (!component && this.Length && this.Length >= 200 && this.Length < 4000) {
       component = h(TextArea, {
         props,
         on
-      })
-
+      }, [fieldLabel])
       flex = {
         xs12: 1,
-
+        ...this.flex
       }
     }
     /**
@@ -145,7 +165,7 @@ export default {
           model: this.model || {}
         },
         on
-      })
+      }, [fieldLabel])
     }
     /**
      * 单选下拉框
@@ -153,7 +173,8 @@ export default {
     else if (!component && Array.isArray(this.EnumValues) && this.EnumValues.length > 0) {
       if (multiple) {
         flex = {
-          xs12: true
+          xs12: true,
+          ...this.flex
         }
       }
       component = h(SelectInput, {
@@ -163,14 +184,15 @@ export default {
           values: this.EnumValues
         },
         on
-      })
+      }, [fieldLabel])
     }
 
     /* 单选下拉框 */
     else if (!component && typeof this.EnumValues == 'function') {
       if (multiple) {
         flex = {
-          xs12: true
+          xs12: true,
+          ...this.flex
         }
       }
       component = h(SelectInput, {
@@ -180,7 +202,7 @@ export default {
           values: this.EnumValues.call(this, this.model)
         },
         on
-      })
+      }, [fieldLabel])
     }
 
     //富文本
@@ -189,7 +211,6 @@ export default {
         props,
         on
       })
-
       return component
     }
 
@@ -199,6 +220,8 @@ export default {
       if (!props.disabled || isXs) {
         let textProps = {
           ...props,
+          dense: true,
+          singleLine: !isXs,
           readonly: props.disabled,
         }
         delete textProps.disabled
@@ -208,14 +231,16 @@ export default {
           on,
           attrs: {
             type: this.Name == 'Password' ? 'password' : ['Int32', 'Decimal'].includes(this.Type) ? 'number' : 'text'
-          }
-        });
+          },
+        }, [fieldLabel]);
       } else
         component = h('span', null,
           (this.Name || '').toLowerCase().includes('password') ?
             Array((props.value || '******').length).fill('*').join('') :
             props.value)
-    } else if (!component && this.Type == 'Boolean') {
+    }
+
+    else if (!component && this.Type == 'Boolean') {
       component = h(SelectInput, {
         props: {
           ...props,
@@ -232,13 +257,17 @@ export default {
           ]
         },
         on
-      })
-    } else if (!component && this.Type == 'DateTime') {
+      }, [fieldLabel])
+    }
+
+    else if (!component && this.Type == 'DateTime') {
       component = h(DateInput, {
         props,
         on
-      })
-    } else if (!component && this.Relate == 'Resource') {
+      }, [fieldLabel])
+    }
+
+    else if (!component && this.Relate == 'Resource') {
       component = h(FileInput, {
         props: {
           ...props,
@@ -246,13 +275,15 @@ export default {
           Name: this.Name,
         },
         on
-      })
+      }, [fieldLabel])
     }
+
     //远程选择框
     else if (!component && this.Relate) {
       if (this.Type == 'Array') {
         flex = {
-          xs12: true
+          xs12: true,
+          ...this.flex
         }
         component = h(SelectMulitInput, {
           props: {
@@ -264,7 +295,7 @@ export default {
             model: this.model || {}
           },
           on
-        })
+        }, [fieldLabel])
       }
       else {
         component = h(SearchInput, {
@@ -277,59 +308,73 @@ export default {
             model: this.model || {}
           },
           on
-        })
+        }, [fieldLabel])
       }
     }
 
     if (component) {
-      if (this.$vuetify.breakpoint.smAndDown) {
-        return h('v-flex', {
-          attrs: {
-            xs12: true
+      if (props.disabled) {
+        component = h('v-input', {
+          props: {
+            ...props,
+            dense: true,
+            singleLine: !isXs,
+            readonly: props.disabled,
+            disabled: false
           }
-        }, [component]);
+        }, [fieldLabel, component])
       }
       return h('v-flex', {
         attrs: flex,
         class: ['input-container'],
         style: {
-          padding: '10px',
+          padding: '5px',
           color: props.error ? 'red' : null
         }
-      }, [
-        h('v-layout', {
-          class: ['much-input']
-        },
-          [
-            h('div', {
-              style: {
-                width: '150px',
-                'padding': '10px',
-                'text-align': 'center',
-                display: 'table-cell',
-                'line-height': '20px'
-              }
-            }, [
-              h('span', {
-                style: {
+      }, [component])
 
-                }
-              }, `${this.Description}:`),
-              h('span', {
-                style: {
-                  color: 'red'
-                }
-              }, this.IsRequired && this.canEdit ? '*' : '')
-            ]),
-            h('div', {
-              style: {
-                width: this.errorMessages ? 'calc(100% - 150px - 50px)' : 'calc(100% - 150px)',
-                'padding-top': props.disabled ? '10px' : null,
-                'padding-left': '5px'
-              }
-            }, [component])
-          ])
-      ])
+
+      // return h('v-flex', {
+      //   attrs: flex,
+      //   class: ['input-container'],
+      //   style: {
+      //     padding: '10px',
+      //     color: props.error ? 'red' : null
+      //   }
+      // }, [
+      //   h('v-layout', {
+      //     class: ['much-input']
+      //   },
+      //     [
+      //       h('div', {
+      //         style: {
+      //           width: '150px',
+      //           'padding': '10px',
+      //           'text-align': 'center',
+      //           display: 'table-cell',
+      //           'line-height': '20px'
+      //         }
+      //       }, [
+      //         h('span', {
+      //           style: {
+
+      //           }
+      //         }, `${this.Description}:`),
+      //         h('span', {
+      //           style: {
+      //             color: 'red'
+      //           }
+      //         }, this.IsRequired && this.canEdit ? '*' : '')
+      //       ]),
+      //       h('div', {
+      //         style: {
+      //           width: this.errorMessages ? 'calc(100% - 150px - 50px)' : 'calc(100% - 150px)',
+      //           'padding-top': props.disabled ? '10px' : null,
+      //           'padding-left': '5px'
+      //         }
+      //       }, [component])
+      //     ])
+      // ])
     } else if (this.Name && !this.Name.endsWith('Id')) {
       window.console.error(this.$props)
     }

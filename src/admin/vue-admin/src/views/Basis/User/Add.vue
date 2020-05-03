@@ -22,14 +22,16 @@ export default {
           Description: "用户所在部门",
           Relate: "Dept",
           Type: "Array",
-          requestUrl: `/api/user/deptList`
+          requestUrl: `/api/user/deptList`,
+          flex: { xs6: true }
         });
         opts.push({
           Name: "Roles",
           Description: "用户拥有角色",
           Relate: "Role",
           Type: "Array",
-          requestUrl: `/api/user/roleList`
+          requestUrl: `/api/user/roleList`, 
+          flex: { xs6: true }
         });
         return opts;
       });

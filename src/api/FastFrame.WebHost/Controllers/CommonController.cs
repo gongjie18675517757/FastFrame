@@ -48,24 +48,7 @@ namespace FastFrame.WebHost.Controllers
             var user = new User();
             user.GeneratePassword(pwd);
             return new KeyValuePair<string, string>(user.EncryptionKey, user.Password);
-        }
-
-        /// <summary>
-        /// 验证唯一性
-        /// </summary>      
-        [HttpPost]
-        public async Task<bool> VerififyUnique(UniqueInput uniqueInput)
-        {
-            var entityType = typeProvider.GetTypeByName(uniqueInput.ModuleName);
-            var areaName = T4Help.GenerateNameSpace(entityType, "");
-            var serverName = $"FastFrame.Application.Services.{areaName}.{entityType.Name}Service";
-            var serviceType = typeof(IService).Assembly.GetType(serverName);
-            if (serviceType == null)
-                throw new Exception("模块名称传入不正确!");
-            
-            var service = (IVerifyUniqueService)Request.HttpContext.RequestServices.GetService(serviceType);
-            return await service.VerifyUnique(uniqueInput);
-        }
+        } 
 
         /// <summary>
         /// 生成模块结构

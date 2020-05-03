@@ -97,77 +97,10 @@ html {
 .v-card__title {
   padding: 2px;
 }
-
-.input-container {
-  padding: 20px;
-}
-
 .input-container .v-input {
-  padding: 0px;
-}
-.much-input .v-input {
-  font-size: 14px;
+  font-size: 13px;
 }
 
-.much-input .v-input--selection-controls {
-  margin-top: 6px;
-}
-
-.much-input .v-input__control {
-  min-height: 28px;
-}
-
-.much-input .mdi-close::before {
-  margin-bottom: 5px;
-  font-size: 14px;
-}
-
-.much-input .mdi-menu-down::before {
-  margin-bottom: 5px;
-  /* font-size: 14px; */
-}
-
-.much-input
-  .v-text-field.v-input--dense
-  .v-input__prepend-inner
-  .v-input__icon
-  > .v-icon,
-.much-input
-  .v-text-field.v-input--dense
-  .v-input__append-inner
-  .v-input__icon
-  > .v-icon {
-  margin-top: 0px;
-}
-
-.much-input .v-text-field {
-  padding-top: 0px;
-  margin-top: 4px;
-}
-
-.v-text-field__details {
-  align-items: center;
-}
-.much-input .v-input input {
-  font-size: 12px;
-  line-height: 12px;
-}
-.much-input .v-input__slot {
-  margin-bottom: 2px;
-}
-.v-text-field > .v-input__control > .v-input__slot:before,
-.v-text-field > .v-input__control > .v-input__slot:after {
-  display: none;
-}
-
-
-.v-input__slot {
-  border-bottom: 1px solid #9c7a7a;
-}
-.v-select__selections {
-  font-size: 12px;
-  line-height: 12px;
-}
 .v-data-table__wrapper {
   min-height: 100px;
 }

@@ -64,6 +64,17 @@ namespace FastFrame.WebHost.Controllers
         public virtual async Task Put([FromBody]TDto @input)
         {
             await service.UpdateAsync(@input);
-        } 
+        }
+
+
+        /// <summary>
+        /// 验证唯一性
+        /// </summary>      
+        [HttpPost]
+        [Permission(new string[] { "Add", "Update" })]
+        public async Task<bool> VerififyUnique(UniqueInput uniqueInput)
+        {
+            return await service.VerifyUnique(uniqueInput);
+        }
     }
 }

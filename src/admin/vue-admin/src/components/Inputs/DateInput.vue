@@ -6,9 +6,8 @@
       v-model="menu2"
       :close-on-content-click="false"
       :nudge-right="0"
-      
       transition="scale-transition"
-      offset-y 
+      offset-y
       max-width="290px"
       min-width="290px"
       :readonly="disabled"
@@ -21,7 +20,16 @@
           :label="label"
           :errorMessages="errorMessages"
           :placeholder="description"
-        ></v-text-field>
+          dense
+          :singleLine="!isXs"
+        >
+          <template #default>
+            <slot></slot>
+          </template>
+          <template #prepend>
+            <slot name="prepend"></slot>
+          </template>
+        </v-text-field>
       </template>
       <v-date-picker
         :value="value"
@@ -43,7 +51,7 @@ export default {
     label: String,
     description: String,
     errorMessages: Array,
-     isXs: Boolean
+    isXs: Boolean
   },
   data() {
     return {

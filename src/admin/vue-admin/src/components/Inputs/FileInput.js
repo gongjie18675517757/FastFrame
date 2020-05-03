@@ -11,7 +11,7 @@ export default {
     label: String,
     Name: String,
     errorMessages: Array,
-    description:String,
+    description: String,
     isXs: Boolean
   },
   render(h) {
@@ -34,9 +34,11 @@ export default {
         ...this.props,
         'show-size': false,
         readonly: true,
-        'append-icon':!this.disabled?'clear':'',
+        'append-icon': !this.disabled ? 'clear' : '',
         value: this.value ? info.Name : null,
-        placeholder:this.description
+        placeholder: this.description,
+        dense: true,
+        singleLine: !this.isXs,
       },
       on: {
         click: () => {
@@ -49,6 +51,9 @@ export default {
           })
         }
       }
-    })
+    },
+      [
+        h('template', { slot: 'prepend' }, this.$slots.prepend)
+      ])
   }
 }

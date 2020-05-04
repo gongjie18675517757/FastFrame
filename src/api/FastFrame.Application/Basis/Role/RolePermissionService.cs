@@ -18,16 +18,15 @@ namespace FastFrame.Application.Basis
     {
         private readonly IRepository<RolePermission> rolePermissions;
         private readonly HandleOne2ManyService<RolePermissionModel, RolePermission> handlePermissionService;
-        private readonly IRepository<Permission> permissions;
+   
 
         public RolePermissionService(
             IRepository<RolePermission> rolePermissions,
-            HandleOne2ManyService<RolePermissionModel, RolePermission> handlePermissionService,
-            IRepository<Permission> permissions)
+            HandleOne2ManyService<RolePermissionModel, RolePermission> handlePermissionService )
         {
             this.rolePermissions = rolePermissions;
             this.handlePermissionService = handlePermissionService;
-            this.permissions = permissions;
+   
         }
 
         public async Task HandleEventAsync(DoMainDeleteing<RoleDto> @event)

@@ -1,11 +1,7 @@
-﻿using FastFrame.Application;
-using FastFrame.Application.Account;
+﻿using FastFrame.Application.Account;
 using FastFrame.Application.Basis;
-using FastFrame.Infrastructure.Attrs;
+using FastFrame.Infrastructure.Permission;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace FastFrame.WebHost.Controllers.Basis

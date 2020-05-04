@@ -44,5 +44,11 @@ namespace FastFrame.Infrastructure.Interface
         /// </summary>
         /// <returns></returns>
         Task InitAsync();
-    }
+
+
+        /// <summary>
+        /// 运行目录
+        /// </summary>
+        string ApplicationRootPath { get; }
+    } 
 }

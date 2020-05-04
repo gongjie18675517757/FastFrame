@@ -4,6 +4,7 @@ using FastFrame.Infrastructure.Attrs;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using FastFrame.Infrastructure.Permission;
 
 namespace FastFrame.WebHost.Controllers.Basis
 {

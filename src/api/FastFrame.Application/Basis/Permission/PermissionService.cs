@@ -1,5 +1,7 @@
 ﻿using FastFrame.Entity.Basis;
 using FastFrame.Infrastructure;
+using FastFrame.Infrastructure.Interface;
+using FastFrame.Infrastructure.Permission;
 using FastFrame.Repository;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -8,148 +10,79 @@ using System.Threading.Tasks;
 
 namespace FastFrame.Application.Basis
 {
-    public partial class PermissionService :
-        IEqualityComparer<Permission>
+    public partial class PermissionService : IPermissionChecker, IService
     {
+        private readonly IAppSessionProvider appSessionProvider;
+        private readonly IPermissionDefinitionContext permissionDefinitionContext;
+        private readonly IRepository<Role> roleRepository;
         private readonly IRepository<RoleMember> roleMemberRepository;
         private readonly IRepository<RolePermission> rolePermissionRepository;
 
         public PermissionService(
-                IRepository<Permission> permissionRepository,
-                IRepository<User> userRepository,
+                IAppSessionProvider appSessionProvider,
+                IPermissionDefinitionContext permissionDefinitionContext,
+                IRepository<Role> roleRepository,
                 IRepository<RoleMember> roleMemberRepository,
-                IRepository<RolePermission> rolePermissionRepository )
-            : this(permissionRepository, userRepository)
+                IRepository<RolePermission> rolePermissionRepository)
         {
-
+            this.appSessionProvider = appSessionProvider;
+            this.permissionDefinitionContext = permissionDefinitionContext;
+            this.roleRepository = roleRepository;
             this.roleMemberRepository = roleMemberRepository;
             this.rolePermissionRepository = rolePermissionRepository;
-
         }
 
-        /// <summary>
-        /// 初始化权限
-        /// </summary>        
-        public async Task InitPermission(IEnumerable<PermissionDto> permissionDtos)
+        public async Task<bool> CheckIsGrantedAsync(string groupPermissionKey, string[] childPermissionKeys)
         {
-            var beforeEntitys = await permissionRepository.Queryable.ToListAsync();
-            var comparisonCollection = new ComparisonCollection<Permission, PermissionDto>(beforeEntitys, permissionDtos,
-                (a, b) => a.EnCode == b.EnCode && a.Super_Id == b.Super_Id);
-            foreach (var item in comparisonCollection.GetCollectionByAdded().ToList())
+            var permissionDefinitions = permissionDefinitionContext.PermissionDefinitions();
+
+            /*先判断权限是否有定义*/
+            if (!permissionDefinitions.Any(v => v.PermissionKey == groupPermissionKey &&
+                                                v.Child.Any(r => childPermissionKeys.Contains(r.PermissionKey))))
             {
-                var entity = item.MapTo<PermissionDto, Permission>();
-                entity = await permissionRepository.AddAsync(entity);
-                item.Id = entity.Id;
-                foreach (var child in item.Permissions)
-                    child.Super_Id = entity.Id;
+                return false;
             }
 
-            foreach (var (before, after) in comparisonCollection.GetCollectionByModify())
-            {
-                after.Id = before.Id;
-                before.AreaName = after.AreaName;
-                foreach (var child in after.Permissions)
-                    child.Super_Id = before.Id;
-            }
-            beforeEntitys = comparisonCollection.GetCollectionByDeleted().ToList();
-            comparisonCollection = new ComparisonCollection<Permission, PermissionDto>(
-                    beforeEntitys,
-                    permissionDtos.SelectMany(x => x.Permissions),
-                    (a, b) => a.EnCode == b.EnCode && a.Super_Id == b.Super_Id);
-
-            foreach (var item in comparisonCollection.GetCollectionByAdded())
-            {
-                var entity = item.MapTo<PermissionDto, Permission>();
-                entity = await permissionRepository.AddAsync(entity);
-            }
-            foreach (var item in comparisonCollection.GetCollectionByDeleted())
-            {
-                await permissionRepository.DeleteAsync(item);
-            }
-            foreach (var (before, after) in comparisonCollection.GetCollectionByModify())
-            {
-                before.AreaName = after.AreaName;
-                await permissionRepository.UpdateAsync(before);
-            }
-            await permissionRepository.CommmitAsync();
-        }
-
-        /// <summary>
-        /// 获取用户权限
-        /// </summary>        
-        public async Task<IEnumerable<PermissionModel>> Permissions()
-        {
-            var currUser = AppSession?.CurrUser; 
-            var user = await userRepository.GetAsync(currUser?.Id);
-
-            if (user.IsAdmin)
-                return await permissionRepository.MapTo<Permission, PermissionModel>().ToListAsync();
-            else
-                return await GetPermissions(user.Id);
-        }
-
-        /// <summary>
-        /// 获取用户权限
-        /// </summary> 
-        private async Task<IEnumerable<PermissionModel>> GetPermissions(string userId)
-        {
-            var iq = from a in roleMemberRepository.Where(x => x.User_Id == userId)
-                     join b in rolePermissionRepository on a.Role_Id equals b.Role_Id
-                     join c in permissionRepository on b.Permission_Id equals c.Id
-                     where c.Super_Id != null
-                     select c;
-
-
-            var iq2 = from a in iq
-                      join b in permissionRepository on a.Super_Id equals b.Id
-                      select b;
-
-            return (await iq.ToListAsync())
-                        .Concat(await iq2.ToListAsync())
-                        .Distinct(this)
-                        .Select(r => r.MapTo<Permission, PermissionModel>());
-        }
-
-        /// <summary>
-        /// 验证权限
-        /// </summary> 
-        public async Task<bool> ExistPermission(string moduleName, params string[] methodNames)
-        {
-            var currUser = AppSession.CurrUser;
+            var currUser = appSessionProvider.CurrUser;
 
             if (currUser.IsAdmin)
                 return true;
 
-            /*一级权限*/
-            var permissionId = await permissionRepository
-                .Where(r => r.EnCode == moduleName && r.Super_Id == null)
-                .Select(r => r.Id)
-                .FirstOrDefaultAsync();
+            var existsQuery = from a in roleMemberRepository
+                              join b in rolePermissionRepository on a.Role_Id equals b.Role_Id
+                              join c in roleRepository on a.Role_Id equals c.Id
+                              where (a.User_Id == currUser.Id || c.IsDefault) &&
+                                      b.SuperPermissionKey == groupPermissionKey &&
+                                      childPermissionKeys.Contains(b.PermissionKey)
+                              select 1;
 
-            /*二级权限*/
-            var permissionIds = await permissionRepository
-                .Where(r => r.Super_Id == permissionId && methodNames.Contains(r.EnCode))
-                .Select(r => r.Id)
-                .ToListAsync();
-
-            /*是否在所属角色权限中*/
-            var query = from a in roleMemberRepository
-                        join b in rolePermissionRepository on a.Role_Id equals b.Role_Id
-                        where permissionIds.Contains(b.Permission_Id) && a.User_Id == currUser.Id
-                        select 1;
-
-            return await query.AnyAsync();
+            return await existsQuery.AnyAsync();
         }
 
-
-        public bool Equals(Permission x, Permission y)
+        public async Task<IEnumerable<PermissionDefinition>> GetGrantedPermissions()
         {
-            return x.Id == y.Id;
-        }
+            var permissionDefinitions = permissionDefinitionContext.PermissionDefinitions();
 
-        public int GetHashCode(Permission obj)
-        {
-            return obj.GetHashCode();
+            var currUser = appSessionProvider.CurrUser;
+
+            if (currUser.IsAdmin)
+                return permissionDefinitions;
+
+            var existsQuery = from a in roleMemberRepository
+                              join b in rolePermissionRepository on a.Role_Id equals b.Role_Id
+                              join c in roleRepository on a.Role_Id equals c.Id
+                              where (a.User_Id == currUser.Id || c.IsDefault)
+                              select new { b.SuperPermissionKey, b.PermissionKey };
+
+            var list = await existsQuery.ToListAsync();
+
+            return permissionDefinitions
+                .Where(v => list.Any(r => r.SuperPermissionKey == v.PermissionKey))
+                .Select(v => new PermissionDefinition(
+                                    v.PermissionKey,
+                                    v.PermissionText,
+                                    v.Child.Where(r =>
+                                            list.Any(p => p.SuperPermissionKey == v.PermissionKey && p.PermissionKey == r.PermissionKey))));
         }
     }
 }

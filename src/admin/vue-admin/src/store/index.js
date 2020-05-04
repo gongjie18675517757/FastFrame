@@ -17,7 +17,7 @@ export default new Vuex.Store({
     /**
      * 是否在移动端模式下
      */
-    isXs:false,
+    isXs: false,
 
     /**
      * 多页内容
@@ -189,7 +189,7 @@ export default new Vuex.Store({
      */
     existsIdentity({
       dispatch,
-      state 
+      state
     }) {
       if (state.currUser && state.currUser.Id) {
         return;
@@ -235,13 +235,8 @@ export default new Vuex.Store({
           if (typeof permission == "string") permission = [permission, "List"];
           if (Array.isArray(permission)) {
             let [moduleName, pageName] = permission;
-            let parentIds = data.filter(r => r.EnCode == moduleName).map(v => v.Id);
-            let val = parentIds.length > 0 &&
-              !!data.find(
-                v => v.EnCode == pageName && parentIds.includes(v.Super_Id))
-
-
-            return val;
+            let arr = Array.isArray(pageName) ? pageName : [pageName];
+            return !!data.find(v => v.PermissionKey == moduleName && v.Child.find(r => arr.includes(r.PermissionKey)));
           }
         }
 
@@ -282,10 +277,7 @@ export default new Vuex.Store({
     },
     existsPermission: state => (moduleName, actionName = 'List') => {
       let arr = Array.isArray(actionName) ? actionName : [actionName];
-      return !!arr.find(r => {
-        let patentIds = state.permissionList.filter(v => v.EnCode == moduleName).map(v => v.Id) || []
-        return patentIds.length > 0 && !!state.permissionList.find(v => v.EnCode == r && patentIds.includes(v.Super_Id))
-      })
+      return !!state.permissionList.find(v => v.PermissionKey == moduleName && v.Child.find(r => arr.includes(r.PermissionKey)));
     },
     existsPermissionAsync: state => async (moduleName, actionName = 'List') => {
       let count = 0;
@@ -298,9 +290,8 @@ export default new Vuex.Store({
         count++;
       }
 
-      let patentIds = state.permissionList.filter(v => v.EnCode == moduleName).map(v => v.Id);
-      let val = patentIds.length > 0 && !!state.permissionList.find(v => v.EnCode == actionName && patentIds.includes(v.Super_Id));
-      return val;
+      let arr = Array.isArray(actionName) ? actionName : [actionName];
+      return !!state.permissionList.find(v => v.PermissionKey == moduleName && v.Child.find(r => arr.includes(r.PermissionKey)));
     },
     getItemValues: state => (enumKey, superId) => {
       if (state.enumItemValues[enumKey]) {

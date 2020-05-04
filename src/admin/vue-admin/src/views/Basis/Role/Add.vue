@@ -6,7 +6,7 @@ let pageInfo = {
 };
 
 import Page from "@/components/Page/FormPageCore.js";
-import { BasisDetaiTable } from "@/components/Table";
+import { BasisDetaiTable } from "../../../components/Table";
 export default {
   ...Page,
   data() {
@@ -18,17 +18,15 @@ export default {
   methods: {
     ...Page.methods,
     fmtModelObject() {
-      return Page.methods.fmtModelObject.call(this, ...arguments).then(frm => {
-        if (!frm.Id) {
-          return this.$http.get(`/api/Role/PermissionList`).then(v => {
-            frm.Permissions = v;
-            frm.Members = frm.Members || [];
-            return frm;
-          });
-        } else {
-          return frm;
-        }
-      });
+      return Page.methods.fmtModelObject
+        .call(this, ...arguments)
+        .then(model => {
+          return {
+            ...model,
+            Permissions: model.Permissions || [],
+            Members: model.Members || []
+          };
+        });
     },
     getModelObjectItems(opts) {
       return Page.methods.getModelObjectItems.call(this, opts).then(opts => {
@@ -43,40 +41,82 @@ export default {
           Name: "Permissions",
           GroupNames: ["角色权限"],
           template: {
-            props: ["value", "canEdit", "title"],
+            props: ["value", "canEdit", "title", "model"],
             render(h) {
               return h(BasisDetaiTable, {
                 props: {
-                  ...this.$props,
+                  title: this.title,
+                  value: this.$store.state.permissionList,
+                  rowKey: "PermissionKey",
                   columns: [
-                    { Name: "EnCode", Description: "标记", width: "100px" },
-                    { Name: "Name", Description: "名称", width: "100px" },
                     {
-                      Name: "Children",
+                      Name: "PermissionKey",
+                      Description: "标记",
+                      width: "100px"
+                    },
+                    {
+                      Name: "PermissionText",
+                      Description: "名称",
+                      width: "100px"
+                    },
+                    {
+                      Name: "Child",
                       Description: "子级权限",
                       width: "500px",
-                      render: (h, { value }) => {
+                      render: (h, { value, model }) => {
                         return this.canEdit
                           ? h(
                               "v-btn-toggle",
                               {
                                 props: {
                                   multiple: true,
-                                  value: value
-                                    .filter(v => v.IsAuthorization && v.Id)
-                                    .map(v => v.Id)
+                                  value: this.value
+                                    .filter(
+                                      v =>
+                                        v.SuperPermissionKey ==
+                                        model.PermissionKey
+                                    )
+                                    .map(v => v.PermissionKey)
                                 },
                                 on: {
                                   change: arr => {
                                     if (!this.canEdit) {
                                       return;
                                     }
-                                    for (const v of value) {
-                                      if (arr.includes(v.Id)) {
-                                        v.IsAuthorization = true;
+
+                                    //移除点掉的权限
+                                    for (const v of this.value) {
+                                      if (
+                                        !arr.includes(v.PermissionKey) &&
+                                        v.SuperPermissionKey ==
+                                          model.PermissionKey
+                                      ) {
+                                        let index = this.value.findIndex(
+                                          r => r == v
+                                        );
+                                        this.value.splice(index, 1);
                                       }
-                                      this.$emit("change", this.value);
                                     }
+
+                                    //添加勾上的权限
+                                    for (const key of arr) {
+                                      let index = this.value.findIndex(
+                                        v =>
+                                          v.SuperPermissionKey ==
+                                            model.PermissionKey &&
+                                          v.PermissionKey == key
+                                      );
+
+                                      if (index == -1) {
+                                        this.value.push({
+                                          PermissionKey: key,
+                                          SuperPermissionKey:
+                                            model.PermissionKey
+                                        });
+                                      }
+                                    }
+
+                                    this.$emit("change", this.value);
                                   }
                                 }
                               },
@@ -85,20 +125,20 @@ export default {
                                   h(
                                     "v-btn",
                                     {
-                                      key: v.Id,
+                                      key: v.PermissionKey,
                                       props: {
-                                        value: v.Id,
+                                        value: v.PermissionKey,
                                         small: true,
                                         text: true
                                       }
                                     },
-                                    v.Name
+                                    v.PermissionText
                                   )
                                 )
                               ]
                             )
                           : h("span", null, [
-                              ...value.map(v =>
+                              ...value.map(r =>
                                 h(
                                   "span",
                                   {
@@ -106,7 +146,16 @@ export default {
                                       "padding-left": "15px"
                                     }
                                   },
-                                  `${v.Name} ${v.IsAuthorization ? "√" : "×"}`
+                                  `${r.PermissionText} ${
+                                    this.value.find(
+                                      v =>
+                                        v.SuperPermissionKey ==
+                                          model.PermissionKey &&
+                                        v.PermissionKey == r.PermissionKey
+                                    )
+                                      ? "√"
+                                      : "×"
+                                  }`
                                 )
                               )
                             ]);

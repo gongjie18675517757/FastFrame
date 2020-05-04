@@ -85,26 +85,6 @@
             </summary>
             <param name="groupNames">归属分组名称</param>
         </member>
-        <member name="T:FastFrame.Infrastructure.Attrs.PermissionAttribute">
-            <summary>
-            权限描述
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Attrs.PermissionAttribute.EnCode">
-            <summary>
-            权限名称
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Attrs.PermissionAttribute.Name">
-            <summary>
-            权限描述
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Attrs.PermissionAttribute.AnOtherEnCodes">
-            <summary>
-            别名
-            </summary>
-        </member>
         <member name="T:FastFrame.Infrastructure.Attrs.ReadOnlyAttribute">
             <summary>
             标记只读
@@ -491,6 +471,11 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="P:FastFrame.Infrastructure.Interface.IAppSessionProvider.ApplicationRootPath">
+            <summary>
+            运行目录
+            </summary>
+        </member>
         <member name="T:FastFrame.Infrastructure.Interface.ICurrUser">
             <summary>
             当前用户
@@ -540,41 +525,6 @@
             <summary>
             全部
             </summary>
-        </member>
-        <member name="T:FastFrame.Infrastructure.Interface.IDescriptionProvider">
-            <summary>
-            类型/属性 说明提供
-            </summary>
-        </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IDescriptionProvider.GetClassDescription(System.Type)">
-            <summary>
-            获取类说明
-            </summary>
-            <param name="type"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IDescriptionProvider.GetPropertyDescription(System.Reflection.PropertyInfo)">
-            <summary>
-            获取属性说明
-            </summary>
-            <param name="property"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IDescriptionProvider.GetPropertyDescription(System.Type,System.String)">
-            <summary>
-            获取属性说明
-            </summary>
-            <param name="type"></param>
-            <param name="propName"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IDescriptionProvider.GetEnumSummary(System.Type,System.String)">
-            <summary>
-            获取枚举说明
-            </summary>
-            <param name="enumType"></param>
-            <param name="enumValue"></param>
-            <returns></returns>
         </member>
         <member name="T:FastFrame.Infrastructure.Interface.IIdentity">
             <summary>
@@ -777,6 +727,229 @@
             数据删除
             </summary>
         </member>
+        <member name="T:FastFrame.Infrastructure.Module.EnumInfo">
+            <summary>
+            数据字典信息
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Module.EnumInfo.Name">
+            <summary>
+            键名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Module.EnumInfo.SuperPropName">
+            <summary>
+            上级名称
+            </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Module.IModuleDesProvider">
+            <summary>
+            类型/属性 说明提供
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Module.IModuleDesProvider.GetClassDescription(System.Type)">
+            <summary>
+            获取类说明
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Module.IModuleDesProvider.GetPropertyDescription(System.Reflection.PropertyInfo)">
+            <summary>
+            获取属性说明
+            </summary>
+            <param name="property"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Module.IModuleDesProvider.GetPropertyDescription(System.Type,System.String)">
+            <summary>
+            获取属性说明
+            </summary>
+            <param name="type"></param>
+            <param name="propName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Module.IModuleDesProvider.GetEnumSummary(System.Type,System.String)">
+            <summary>
+            获取枚举说明
+            </summary>
+            <param name="enumType"></param>
+            <param name="enumValue"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Module.IModuleExportProvider">
+            <summary>
+            模块结构提供者
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Module.IModuleExportProvider.GetModuleStruts(System.String)">
+            <summary>
+            获取模块结构
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Module.ModuleFieldRule">
+            <summary>
+            模块字段验证规则
+            </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Module.ModuleFieldStrut">
+            <summary>
+            模块字段结构
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Module.ModuleFieldStrut.Name">
+            <summary>
+            字段名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Module.ModuleFieldStrut.Type">
+            <summary>
+            字段类型
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Module.ModuleFieldStrut.Description">
+            <summary>
+            字段说明
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Module.ModuleFieldStrut.Hide">
+            <summary>
+            隐藏标记
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Module.ModuleFieldStrut.Readonly">
+            <summary>
+            只读标记
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Module.ModuleFieldStrut.Rules">
+            <summary>
+            验证规则
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Module.ModuleFieldStrut.Relate">
+            <summary>
+            关联自
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Module.ModuleFieldStrut.EnumValues">
+            <summary>
+            枚举项
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Module.ModuleFieldStrut.IsRequired">
+            <summary>
+            是否必填
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Module.ModuleFieldStrut.Length">
+            <summary>
+            字段长度
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Module.ModuleFieldStrut.GroupNames">
+            <summary>
+            表单分组
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Module.ModuleFieldStrut.EnumItemInfo">
+            <summary>
+            数据字典
+            </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Module.ModuleStruct">
+            <summary>
+            模块结构
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Module.ModuleStruct.Name">
+            <summary>
+            名称
+            </summary> 
+        </member>
+        <member name="P:FastFrame.Infrastructure.Module.ModuleStruct.Description">
+            <summary>
+            说明
+            </summary> 
+        </member>
+        <member name="P:FastFrame.Infrastructure.Module.ModuleStruct.FieldInfoStruts">
+            <summary>
+            字段列表
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Module.ModuleStruct.RelateFields">
+            <summary>
+            被关联时显示的字段列表
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Module.ModuleStruct.IsTree">
+            <summary>
+            树结构
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Module.ModuleStruct.HasManage">
+            <summary>
+            有管理属性
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Module.ModuleStruct.Form">
+            <summary>
+            默认实体
+            </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Module.TypeManger">
+            <summary>
+            类型管理
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Module.TypeManger.RegisterType``1">
+            <summary>
+            注册类型
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Module.TypeManger.RegisterType(System.Type)">
+            <summary>
+            注册类型
+            </summary>
+            <param name="type"></param>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Module.TypeManger.RegisterBaseType``1">
+            <summary>
+            注册根类型
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Module.TypeManger.RegisterBaseType(System.Type)">
+            <summary>
+            注册根类型
+            </summary>
+            <param name="type"></param>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Module.TypeManger.RegisterBaseType``1(System.Reflection.Assembly)">
+            <summary>
+            注册根类型
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="assembly"></param>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Module.TypeManger.RegisterBaseType(System.Type,System.Reflection.Assembly)">
+            <summary>
+            注册根类型
+            </summary>
+            <param name="type"></param>
+            <param name="assembly"></param>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Module.TypeManger.TryGetType(System.String,System.Type@)">
+            <summary>
+            获取类型
+            </summary>
+            <param name="typeName"></param>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
         <member name="T:FastFrame.Infrastructure.PageList`1">
             <summary>
             分页返回内容
@@ -826,6 +999,121 @@
         <member name="P:FastFrame.Infrastructure.Pagination.SortMode">
             <summary>
             排序方式
+            </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Permission.IPermissionChecker">
+            <summary>
+            权限检查者
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Permission.IPermissionChecker.CheckIsGrantedAsync(System.String,System.String[])">
+            <summary>
+            检查是否被授权
+            </summary>
+            <param name="groupPermissionKey"></param>
+            <param name="childPermissionKeys"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Permission.IPermissionChecker.GetGrantedPermissions">
+            <summary>
+            所有被授权的权限
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Permission.IPermissionDefinitionContext">
+            <summary>
+            权限定义上下文接口
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Permission.IPermissionDefinitionContext.RegisterPermission(System.String,System.String)">
+            <summary>
+            注册权限
+            </summary>
+            <param name="permissionKey"></param>
+            <param name="permissionText"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Permission.IPermissionDefinitionContext.PermissionDefinitions">
+            <summary>
+            所有已注册的权限
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Permission.IPermissionProvider">
+            <summary>
+            权限定义提供者
+            </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Permission.PermissionAttribute">
+            <summary>
+            权限描述
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Permission.PermissionAttribute.#ctor(System.String)">
+            <summary>
+            应用权限
+            </summary>
+            <param name="permissionKeys"></param>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Permission.PermissionAttribute.#ctor(System.String,System.String)">
+            <summary>
+            定义权限
+            </summary>
+            <param name="permissionKey"></param>
+            <param name="text"></param>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Permission.PermissionAttribute.#ctor(System.String[])">
+            <summary>
+            应用权限
+            </summary>
+            <param name="permissionKeys"></param>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Permission.PermissionAttribute.IsDefinition">
+            <summary>
+            是否权限定义
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Permission.PermissionAttribute.PermissionKey">
+            <summary>
+            权限标记
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Permission.PermissionAttribute.Text">
+            <summary>
+            权限文本
+            </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Permission.PermissionDefinition">
+            <summary>
+            权限定义模型
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Permission.PermissionDefinition.PermissionKey">
+            <summary>
+            权限键
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Permission.PermissionDefinition.PermissionText">
+            <summary>
+            权限文本
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Permission.PermissionDefinition.Child">
+            <summary>
+            子级权限
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Permission.PermissionDefinition.RegisterChildPermission(System.String,System.String)">
+            <summary>
+            注册子权限
+            </summary>
+            <param name="permissionKey"></param>
+            <param name="permissionText"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Permission.PermissionDefinitionContext">
+            <summary>
+            权限定义上下文实现
             </summary>
         </member>
         <member name="T:FastFrame.Infrastructure.Snowflake">

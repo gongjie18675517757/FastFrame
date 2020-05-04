@@ -9,7 +9,7 @@ export default {
   },
   render(h) {
     if (this.disabled && !this.isXs) {
-      return h('span', null, this.value)
+      return h('span', null, this.value || '无')
     }
     return h('v-textarea', {
       props: {
@@ -21,12 +21,16 @@ export default {
         errorMessages: this.errorMessages,
         rows: 1,
         'auto-grow': true,
+        dense: true,
+        singleLine: !this.isXs,
       },
       on: {
         ...this.$listeners,
         input: (val) => this.$emit('input', val),
         change: val => this.$emit('change', val)
       }
-    })
+    }, [
+      h('template', { slot: 'prepend' }, this.$slots.prepend)
+    ])
   }
 }

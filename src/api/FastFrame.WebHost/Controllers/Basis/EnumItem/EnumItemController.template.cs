@@ -1,10 +1,9 @@
 namespace FastFrame.WebHost.Controllers.Basis
 {
-	using FastFrame.Entity.Basis; 
-	using FastFrame.Application.Basis; 
-	using FastFrame.Infrastructure.Attrs; 
-	using FastFrame.Infrastructure.Interface; 
-		
+	using FastFrame.Application.Basis;
+	using FastFrame.Entity.Basis;
+	using FastFrame.Infrastructure.Permission;
+
 	/// <summary>
 	/// 数字字典 
 	/// </summary>

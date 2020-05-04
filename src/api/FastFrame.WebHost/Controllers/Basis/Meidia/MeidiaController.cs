@@ -1,5 +1,6 @@
 ﻿using FastFrame.Application.Basis;
 using FastFrame.Infrastructure.Attrs;
+using FastFrame.Infrastructure.Permission;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 

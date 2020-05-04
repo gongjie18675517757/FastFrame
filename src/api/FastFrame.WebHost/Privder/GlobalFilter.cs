@@ -3,6 +3,8 @@ using FastFrame.Application.Basis;
 using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Attrs;
 using FastFrame.Infrastructure.Interface;
+using FastFrame.Infrastructure.Module;
+using FastFrame.Infrastructure.Permission;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -16,14 +18,14 @@ namespace FastFrame.WebHost.Privder
     public class GlobalFilter : IAsyncExceptionFilter, IAsyncAuthorizationFilter
     {
         private readonly IAppSessionProvider appSession;
-        private readonly PermissionService permissionService;
-        private readonly IDescriptionProvider descriptionProvider;
+        private readonly IPermissionChecker permissionService;
+        private readonly IModuleDesProvider descriptionProvider;
         private readonly ILogger<GlobalFilter> logger;
 
         public GlobalFilter(
             IAppSessionProvider appSession,
-            PermissionService permissionService,
-            IDescriptionProvider descriptionProvider,
+            IPermissionChecker permissionService,
+            IModuleDesProvider descriptionProvider,
             ILogger<GlobalFilter> logger)
         {
             this.appSession = appSession;
@@ -31,6 +33,8 @@ namespace FastFrame.WebHost.Privder
             this.descriptionProvider = descriptionProvider;
             this.logger = logger;
         }
+
+
         /// <summary>
         /// 权限验证
         /// </summary>
@@ -64,11 +68,11 @@ namespace FastFrame.WebHost.Privder
                 var permissionAttributes = controllerActionDescriptor.MethodInfo.GetCustomAttributes<PermissionAttribute>();
                 if (permissionAttribute != null && permissionAttributes != null && permissionAttributes.Any())
                 {
-                    var moduleName = permissionAttribute.EnCode;
-                    var methodNames = permissionAttributes.SelectMany(v => v.AllEnCodes);
+                    var moduleName = permissionAttribute.PermissionKey;
+                    var methodNames = permissionAttributes.SelectMany(v => v.PermissionKeys);
 
                     /*验证权限*/
-                    if (!await permissionService.ExistPermission(moduleName, methodNames.ToArray()))
+                    if (!await permissionService.CheckIsGrantedAsync(moduleName, methodNames.ToArray()))
                     {
                         context.HttpContext.Response.StatusCode = 403;
                         context.Result = new ObjectResult(new { Message = "权限不足" });

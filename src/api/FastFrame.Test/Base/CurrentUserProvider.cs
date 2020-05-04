@@ -11,6 +11,8 @@ namespace FastFrame.Test
 
         public string Tenant_Id => "Test";
 
+        public string ApplicationRootPath => AppDomain.CurrentDomain.BaseDirectory;
+
         public Task InitAsync()
         {
             return Task.CompletedTask;

@@ -19,7 +19,7 @@ namespace FastFrame.Application
         /// <summary>
         /// 删除
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="ids"></param>
         /// <returns></returns>
         Task DeleteAsync(params string[] ids);
 

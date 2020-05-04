@@ -1,17 +1,16 @@
-﻿using FastFrame.Infrastructure;
-using FastFrame.Infrastructure.Interface;
+﻿using FastFrame.Infrastructure.Interface;
 using System;
 using System.Reflection;
 
-namespace FastFrame.WebHost.Privder
+namespace FastFrame.Infrastructure.Module
 {
-    public class DescriptionProvider : IDescriptionProvider
+    public class XmlModuleDesProvider : IModuleDesProvider
     {
-        private readonly string docPath; 
+        private readonly string docPath;
 
-        public DescriptionProvider( )
+        public XmlModuleDesProvider(IAppSessionProvider appSessionProvider)
         {
-            docPath = AppDomain.CurrentDomain.BaseDirectory; 
+            docPath = appSessionProvider.ApplicationRootPath;
         }
         public string GetClassDescription(Type type)
         {
@@ -29,7 +28,7 @@ namespace FastFrame.WebHost.Privder
         }
 
         public string GetPropertyDescription(Type type, string propName)
-        {          
+        {
             var property = type.GetProperty(propName);
             if (property == null)
                 return propName;

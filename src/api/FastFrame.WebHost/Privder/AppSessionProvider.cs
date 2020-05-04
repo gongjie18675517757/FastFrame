@@ -1,14 +1,14 @@
 ﻿using CSRedis;
-using FastFrame.Application.Account;
 using FastFrame.Entity.Basis;
 using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace FastFrame.WebHost.Privder
 {
@@ -17,23 +17,29 @@ namespace FastFrame.WebHost.Privder
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly IMemoryCache memoryCache;
         private readonly CSRedisClient cSRedisClient;
+        private readonly IHostEnvironment hostEnvironment;
         private const string Token_Name = "Authorize";
         private Tenant tenant;
 
         public AppSessionProvider(IHttpContextAccessor httpContextAccessor,
                                    IMemoryCache memoryCache,
-                                   CSRedisClient cSRedisClient)
+                                   CSRedisClient cSRedisClient,
+                                   IHostEnvironment hostEnvironment)
         {
             this.httpContextAccessor = httpContextAccessor;
 
             this.memoryCache = memoryCache;
             this.cSRedisClient = cSRedisClient;
+            this.hostEnvironment = hostEnvironment;
         }
 
         public ICurrUser CurrUser { get; private set; }
 
         public string Tenant_Id => tenant?.Tenant_Id;
 
+        public string ApplicationRootPath => hostEnvironment.IsProduction() ? 
+                    hostEnvironment?.ContentRootPath ?? AppDomain.CurrentDomain.BaseDirectory : 
+                    AppDomain.CurrentDomain.BaseDirectory;
 
         private bool TryGetHeaderValue(string[] headerNames, out string host)
         {

@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using FastFrame.Infrastructure.Interface;
 using FastFrame.Infrastructure.EventBus;
 using FastFrame.Entity.Basis;
+using FastFrame.Infrastructure.Module;
 
 namespace FastFrame.Application.Flow
 {
@@ -507,6 +508,7 @@ namespace FastFrame.Application.Flow
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="entity"></param>
+        /// <param name="flowOperate"></param>
         /// <returns></returns>
         public async Task<FlowOperateOutput> HandleSubmitActionAsync<TEntity>(TEntity entity, FlowOperateInput flowOperate) where TEntity : class, IHaveCheck
         {
@@ -535,7 +537,7 @@ namespace FastFrame.Application.Flow
 
 
             var type = typeof(TEntity);
-            var beModuleText = serviceProvider.GetService<IDescriptionProvider>().GetClassDescription(type);
+            var beModuleText = serviceProvider.GetService<IModuleDesProvider>().GetClassDescription(type);
 
             /*2，取模块对应的流程ID*/
             var flowId = await workFlows

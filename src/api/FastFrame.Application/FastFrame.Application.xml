@@ -52,6 +52,20 @@
             <param name="token"></param>
             <returns></returns>
         </member>
+        <member name="M:FastFrame.Application.Account.IdentityManagerService.SetTokenFailureAsync(System.String)">
+            <summary>
+            指定身份失效
+            </summary>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.Account.IdentityManagerService.SetUserAllTokenFailureAsync(System.String)">
+            <summary>
+            指定用户全部身份失效
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
+        </member>
         <member name="T:FastFrame.Application.AutoCacheInterceptor">
             <summary>
             自动缓存
@@ -222,6 +236,7 @@
             
             </summary>
             <param name="targetEntities">实体仓库服务</param>
+            <param name="eventBus"></param>
         </member>
         <member name="M:FastFrame.Application.HandleOne2ManyService`2.AddManyAsync(System.Collections.Generic.IEnumerable{`0},System.Func{`0,`1})">
             <summary>
@@ -279,7 +294,7 @@
             <summary>
             删除
             </summary>
-            <param name="id"></param>
+            <param name="ids"></param>
             <returns></returns>
         </member>
         <member name="M:FastFrame.Application.ICURDService`1.UpdateAsync(`0)">
@@ -322,10 +337,7 @@
         <member name="M:FastFrame.Application.IVerifyUniqueService.VerifyUnique(FastFrame.Application.UniqueInput)">
             <summary>
             验证唯一性
-            </summary>
-            <param name="propName"></param>
-            <param name="value"></param>
-            <returns></returns>
+            </summary> 
         </member>
         <member name="T:FastFrame.Application.Basis.DeptService">
             <summary>
@@ -952,31 +964,6 @@
             主键 
             </summary>
         </member>
-        <member name="T:FastFrame.Application.Basis.PermissionService">
-            <summary>
-            权限 服务实现 
-            </summary>
-        </member>
-        <member name="M:FastFrame.Application.Basis.PermissionService.InitPermission(System.Collections.Generic.IEnumerable{FastFrame.Application.Basis.PermissionDto})">
-            <summary>
-            初始化权限
-            </summary>        
-        </member>
-        <member name="M:FastFrame.Application.Basis.PermissionService.Permissions">
-            <summary>
-            获取用户权限
-            </summary>        
-        </member>
-        <member name="M:FastFrame.Application.Basis.PermissionService.GetPermissions(System.String)">
-            <summary>
-            获取用户权限
-            </summary> 
-        </member>
-        <member name="M:FastFrame.Application.Basis.PermissionService.ExistPermission(System.String,System.String[])">
-            <summary>
-            验证权限
-            </summary> 
-        </member>
         <member name="T:FastFrame.Application.Basis.ResourceDto">
             <summary>
             资源 
@@ -1097,25 +1084,15 @@
             修改时间 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Basis.RolePermissionModel.EnCode">
+        <member name="P:FastFrame.Application.Basis.RolePermissionModel.PermissionKey">
             <summary>
-            标记
-            </summary>
+            权限标记
+            </summary> 
         </member>
-        <member name="P:FastFrame.Application.Basis.RolePermissionModel.Name">
+        <member name="P:FastFrame.Application.Basis.RolePermissionModel.SuperPermissionKey">
             <summary>
-            名称
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.RolePermissionModel.IsAuthorization">
-            <summary>
-            是否有权限
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.RolePermissionModel.Children">
-            <summary>
-            子级权限
-            </summary>
+            上级权限标记
+            </summary> 
         </member>
         <member name="T:FastFrame.Application.Basis.RoleViewModel">
             <summary>
@@ -1602,6 +1579,7 @@
             </summary>
             <typeparam name="TEntity"></typeparam>
             <param name="entity"></param>
+            <param name="flowOperate"></param>
             <returns></returns>
         </member>
         <member name="M:FastFrame.Application.Flow.FlowCenterService.MatchStepCheckUser``1(``0,FastFrame.Application.Flow.FlowNodeDto)">

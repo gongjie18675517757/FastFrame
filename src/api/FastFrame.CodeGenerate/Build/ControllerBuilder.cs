@@ -48,7 +48,7 @@ namespace FastFrame.CodeGenerate.Build
                     ImportNames = new string[] { 
                         $"FastFrame.Entity.{spaceName}",
                         $"FastFrame.Application.{spaceName}",
-                        "FastFrame.Infrastructure.Attrs",
+                        "FastFrame.Infrastructure.Permission",
                         "FastFrame.Infrastructure.Interface"
                     },
                     CategoryName = "class",

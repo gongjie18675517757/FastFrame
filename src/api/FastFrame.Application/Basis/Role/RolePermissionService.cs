@@ -1,5 +1,6 @@
 ﻿using FastFrame.Application.Events;
 using FastFrame.Entity.Basis;
+using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.EventBus;
 using FastFrame.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -39,69 +40,34 @@ namespace FastFrame.Application.Basis
         {
             await handlePermissionService.UpdateManyAsync(
                     v => v.Role_Id == @event.Data.Id,
-                    @event.Data.Permissions.SelectMany(v => v.Children.Where(r => r.IsAuthorization)),
-                    (a, b) => a.Role_Id == b.Id,
+                    @event.Data.Permissions,
+                    (a, b) => a.PermissionKey == b.PermissionKey && a.SuperPermissionKey == b.SuperPermissionKey,
                     v => new RolePermission
                     {
                         Role_Id = @event.Data.Id,
-                        Permission_Id = v.Id
+                        PermissionKey = v.PermissionKey,
+                        SuperPermissionKey = v.SuperPermissionKey
                     });
         }
 
         public async Task<RolePermissionModel[]> HandleRequestAsync(RoleDto request)
         {
-            var query = from a in permissions
-                        select new RolePermissionModel
-                        {
-                            Id = a.Id,
-                            EnCode = a.EnCode,
-                            Name = a.Name,
-                            Super_Id = a.Super_Id,
-                            IsAuthorization = rolePermissions
-                                                 .Any(r => r.Role_Id == request.Id &&
-                                                             (r.Permission_Id == a.Id))
-                        };
-
-            var list = await query.ToListAsync();
-
-            return LoadTree(list, null).ToArray();
+            return await rolePermissions
+                .Where(v => v.Role_Id == request.Id)
+                .MapTo<RolePermission, RolePermissionModel>()
+                .ToArrayAsync();
         }
 
-        public async Task<RolePermissionModel[]> GetPermissionModelListAsync()
-        {
-            var query = from a in permissions
-                        select new RolePermissionModel
-                        {
-                            Id = a.Id,
-                            EnCode = a.EnCode,
-                            Name = a.Name,
-                            Super_Id = a.Super_Id,
-                            IsAuthorization = false
-                        };
-
-            var list = await query.ToListAsync();
-
-            return LoadTree(list, null).ToArray();
-        }
-
-        private IEnumerable<RolePermissionModel> LoadTree(IEnumerable<RolePermissionModel> rolePermissionModels, string key)
-        {
-            var children = rolePermissionModels.Where(v => v.Super_Id == key);
-            foreach (var item in children)
-            {
-                item.Children = LoadTree(rolePermissionModels, item.Id);
-                yield return item;
-            }
-        }
 
         public async Task HandleEventAsync(DoMainAdding<RoleDto> @event)
         {
             var input = @event.Data;
             await handlePermissionService
-               .AddManyAsync(input.Permissions.SelectMany(v => v.Children.Where(r => r.IsAuthorization)), v => new RolePermission
+               .AddManyAsync(input.Permissions, v => new RolePermission
                {
                    Role_Id = input.Id,
-                   Permission_Id = v.Id
+                   PermissionKey = v.PermissionKey,
+                   SuperPermissionKey = v.SuperPermissionKey
                });
         }
     }

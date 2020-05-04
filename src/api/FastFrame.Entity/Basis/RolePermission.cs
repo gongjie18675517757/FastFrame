@@ -8,16 +8,23 @@ namespace FastFrame.Entity.Basis
     /// </summary> 
     public class RolePermission : IEntity
     {
+        public string Id { get; set; }
+
         /// <summary>
         /// 角色ID
         /// </summary> 
         public string Role_Id { get; set; }
 
         /// <summary>
-        /// 权限ID
-        /// </summary> 
-        public string Permission_Id { get; set; }
+        /// 权限标记
+        /// </summary>
+        [StringLength(100)]
+        public string PermissionKey { get; set; }
 
-        public string Id { get; set; }
+        /// <summary>
+        /// 上级权限标记
+        /// </summary>
+        [StringLength(100)]
+        public string SuperPermissionKey { get; set; }
     }
 }

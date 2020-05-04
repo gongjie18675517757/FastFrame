@@ -4,6 +4,8 @@ using FastFrame.Database;
 using FastFrame.Infrastructure.EventBus;
 using FastFrame.Infrastructure.Interface;
 using FastFrame.Infrastructure.MessageBus;
+using FastFrame.Infrastructure.Module;
+using FastFrame.Infrastructure.Permission;
 using FastFrame.Repository;
 using FastFrame.WebHost.Hubs;
 using FastFrame.WebHost.Privder;
@@ -82,13 +84,13 @@ namespace FastFrame.WebHost
                     {
                         mySqlOptions.ServerVersion(new Version(5, 6, 40), ServerType.MySql);
                     }).AddInterceptors(new FmtCommandInterceptor());
-                    //o.UseInMemoryDatabase("Local_Mysql");
                 })
-                .AddSingleton<ITypeProvider, TypeProvider>()
+                .AddScoped<IModuleExportProvider, ModuleExportProvider>()
                 .AddScoped<IAppSessionProvider, AppSessionProvider>()
-                .AddScoped<IApplicationInitialProvider, InitialProvider>()
+                .AddScoped<IApplicationInitialProvider, ApplicationInitialProvider>()
                 .AddScoped<IResourceProvider, ResourceProvider>()
-                .AddScoped<IDescriptionProvider, DescriptionProvider>()
+                .AddScoped<IModuleDesProvider, XmlModuleDesProvider>()
+                .AddScoped<IPermissionDefinitionContext, PermissionDefinitionContext>()
                 .AddSingleton<IClientManage, ClientConMamage>()
                 .AddServices()
                 .AddRepository()
@@ -124,7 +126,7 @@ namespace FastFrame.WebHost
 
         /*master*/
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime applicationLifetime)
+        public void Configure(IApplicationBuilder app, IHostEnvironment env, IHostApplicationLifetime applicationLifetime)
         {
             if (env.IsDevelopment())
             {

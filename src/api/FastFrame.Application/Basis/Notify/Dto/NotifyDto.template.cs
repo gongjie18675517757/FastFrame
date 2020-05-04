@@ -50,7 +50,6 @@ namespace FastFrame.Application.Basis
 		/// <summary>
 		/// 内容 
 		/// </summary>
-		[StringLength(8000)]
 		[Required()]
 		public string Content {get;set;}
 		

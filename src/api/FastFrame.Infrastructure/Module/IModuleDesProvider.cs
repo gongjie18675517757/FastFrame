@@ -2,12 +2,12 @@
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace FastFrame.Infrastructure.Interface
+namespace FastFrame.Infrastructure.Module
 {
     /// <summary>
     /// 类型/属性 说明提供
     /// </summary>
-    public interface IDescriptionProvider
+    public interface IModuleDesProvider
     {
         /// <summary>
         /// 获取类说明

@@ -32,7 +32,8 @@ export const BasisDetaiTable = {
     value: defArray,
     title: String,
     columns: defArray,
-    toolItems: defArray
+    toolItems: defArray,
+    rowKey:String
   },
   data() {
     return {
@@ -73,6 +74,7 @@ export const BasisDetaiTable = {
           props: {
             items: this.value,
             columns: this.columns,
+            rowKey:this.rowKey,
             ...this.$attrs
           },
           on: {

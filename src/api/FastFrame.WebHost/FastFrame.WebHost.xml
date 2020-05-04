@@ -140,15 +140,9 @@
             编号设置 
             </summary>
         </member>
-        <member name="M:FastFrame.WebHost.Controllers.Basis.PermissionController.InitPermission">
-            <summary>
-            初始化权限
-            </summary>
-            <returns></returns>
-        </member>
         <member name="M:FastFrame.WebHost.Controllers.Basis.PermissionController.Permissions">
             <summary>
-            权限列表
+            被授予的权限列表
             </summary>
             <returns></returns>
         </member>
@@ -213,43 +207,10 @@
         </member>
         <member name="M:FastFrame.WebHost.Controllers.CommonController.ModuleStruts(System.String)">
             <summary>
-            生成模块结构
-            </summary> 
-        </member>
-        <member name="P:FastFrame.WebHost.Controllers.ModuleStruct.Name">
-            <summary>
-            名称
+            获取模块结构
             </summary>
-        </member>
-        <member name="P:FastFrame.WebHost.Controllers.ModuleStruct.Description">
-            <summary>
-            说明
-            </summary>
-        </member>
-        <member name="P:FastFrame.WebHost.Controllers.ModuleStruct.FieldInfoStruts">
-            <summary>
-            字段列表
-            </summary>
-        </member>
-        <member name="P:FastFrame.WebHost.Controllers.ModuleStruct.RelateFields">
-            <summary>
-            被关联时显示的字段列表
-            </summary>
-        </member>
-        <member name="P:FastFrame.WebHost.Controllers.ModuleStruct.IsTree">
-            <summary>
-            树结构
-            </summary>
-        </member>
-        <member name="P:FastFrame.WebHost.Controllers.ModuleStruct.HasManage">
-            <summary>
-            有管理属性
-            </summary>
-        </member>
-        <member name="P:FastFrame.WebHost.Controllers.ModuleStruct.Form">
-            <summary>
-            默认表单
-            </summary>
+            <param name="typeName"></param>
+            <returns></returns>
         </member>
         <member name="T:FastFrame.WebHost.Controllers.Flow.WorkFlowController">
             <summary>
@@ -277,6 +238,17 @@
             所有人可以访问
             </summary>
         </member>
+        <member name="T:FastFrame.WebHost.Privder.ApplicationInitialProvider">
+            <summary>
+            应用程序初始化服务
+            </summary>
+        </member>
+        <member name="M:FastFrame.WebHost.Privder.ApplicationInitialProvider.InitialAsync">
+            <summary>
+            程序初始化
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:FastFrame.WebHost.Privder.ClientConMamage">
             <summary>
             客户端连接管理
@@ -296,10 +268,10 @@
             <param name="context"></param>
             <returns></returns>
         </member>
-        <member name="T:FastFrame.WebHost.Privder.InitialProvider">
+        <member name="M:FastFrame.WebHost.Privder.ModuleExportProvider.GetModuleStruts(System.String)">
             <summary>
-            应用程序初始化服务
-            </summary>
+            获取模块结构
+            </summary>  
         </member>
         <member name="T:FastFrame.WebHost.Privder.ResourceOption">
             <summary>

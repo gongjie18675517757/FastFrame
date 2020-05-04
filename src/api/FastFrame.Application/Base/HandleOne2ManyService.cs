@@ -30,6 +30,7 @@ namespace FastFrame.Application
         /// 
         /// </summary>
         /// <param name="targetEntities">实体仓库服务</param>
+        /// <param name="eventBus"></param>
         public HandleOne2ManyService(IRepository<TTargetEntity> targetEntities, IEventBus eventBus)
         {
             this.targetEntities = targetEntities;

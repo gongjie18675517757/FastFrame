@@ -158,17 +158,17 @@ namespace FastFrame.CodeGenerate.Build
             //    };
             //}
 
-            //if (TryGetAttribute<HideAttribute>(propertyInfo, out var hideAttribute))
-            //{
-            //    yield return new AttrInfo()
-            //    {
-            //        Name = "Hide",
-            //        Parameters = new string[]
-            //        {
-            //            $"HideMark.{hideAttribute.HideMark}"
-            //        }
-            //    };
-            //}
+            if (TryGetAttribute<HideAttribute>(propertyInfo, out var hideAttribute))
+            {
+                yield return new AttrInfo()
+                {
+                    Name = "Hide",
+                    Parameters = new string[]
+                    {
+                        $"HideMark.{hideAttribute.HideMark}"
+                    }
+                };
+            }
 
             if (TryGetAttribute<EmailAddressAttribute>(propertyInfo, out var emailAddressAttribute))
             {
@@ -189,14 +189,23 @@ namespace FastFrame.CodeGenerate.Build
             //    };
             //}
 
-            //if (TryGetAttribute<RelatedToAttribute>(propertyInfo, out var relatedToAttribute))
-            //{
-            //    yield return new AttrInfo()
-            //    {
-            //        Name = "RelatedTo",
-            //        Parameters = new string[] { $"typeof({relatedToAttribute.RelatedType.Name})" }
-            //    };
-            //}
+            if (TryGetAttribute<RelatedToAttribute>(propertyInfo, out var relatedToAttribute))
+            {
+                yield return new AttrInfo()
+                {
+                    Name = "RelatedTo",
+                    Parameters = new string[] { $"typeof({relatedToAttribute.RelatedType.Name})" }
+                };
+            }
+
+            if (TryGetAttribute<EnumItemAttribute>(propertyInfo, out var enumItemAttribute))
+            {
+                yield return new AttrInfo()
+                {
+                    Name = "EnumItem",
+                    Parameters = new string[] { $"\"{enumItemAttribute.Name}\"" }
+                };
+            }
 
             //if (TryGetAttribute<RelatedFieldAttribute>(propertyInfo, out var relatedFieldAttribute))
             //{

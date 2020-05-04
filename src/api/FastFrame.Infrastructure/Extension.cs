@@ -16,6 +16,22 @@ namespace FastFrame.Infrastructure
 {
     public static class Extension
     {
+        public static async Task<List<T>> ToListAsync<T>(this IAsyncEnumerable<T> enumerable)
+        {
+            if (enumerable is null)
+            {
+                return default;
+            }
+
+            var resultList = new List<T>();
+            await foreach (var item in enumerable)
+            {
+                resultList.Add(item);
+            }
+
+            return resultList;
+        }
+
         public static IQueryable<T> DynamicSort<T>(this IQueryable<T> query, string name, string mode)
         {
             if (query == null)

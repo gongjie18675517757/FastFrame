@@ -46,6 +46,14 @@
             列表
             </summary> 
         </member>
+        <member name="M:FastFrame.WebHost.Controllers.BaseController`1.ExportList(System.String,System.String)">
+            <summary>
+            导出
+            </summary>
+            <param name="qs"></param>
+            <param name="fileName"></param>
+            <returns></returns>
+        </member>
         <member name="M:FastFrame.WebHost.Controllers.BaseCURDController`1.Delete(System.String)">
             <summary>
             删除
@@ -253,6 +261,13 @@
             <summary>
             客户端连接管理
             </summary>
+        </member>
+        <member name="M:FastFrame.WebHost.Privder.ExcelExportProvider.GenerateExcelColumns``1">
+            <summary>
+            生成要导出的列
+            </summary>
+            <typeparam name="TDto"></typeparam>
+            <returns></returns>
         </member>
         <member name="M:FastFrame.WebHost.Privder.GlobalFilter.OnAuthorizationAsync(Microsoft.AspNetCore.Mvc.Filters.AuthorizationFilterContext)">
             <summary>

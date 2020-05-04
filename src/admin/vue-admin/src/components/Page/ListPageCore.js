@@ -4,7 +4,7 @@ import {
   getQueryOptions
 } from "../../generate";
 import {
-  distinct, throttle, fmtRequestPars
+  distinct, throttle, fmtRequestPars, saveFile
 } from '../../utils'
 
 /**
@@ -65,7 +65,7 @@ export let makeToolItems = function () {
     name: "List",
     key: "export",
     icon: "import_export",
-    action: () => alert('未实现')
+    action: this.exportList
   }
   ]
 }
@@ -376,9 +376,10 @@ export let pageMethods = {
    * 获取请求方法
    */
   getRequedtMethod() {
-    return (url, pageProps) => {
+    return (url, pageProps, pars) => {
       let qs = JSON.stringify(pageProps, fmtRequestPars)
-      return this.$http.get(`${url}?qs=${qs}`);
+      let parsQueryString = Object.entries(pars || {}).map((k, v) => `${k}=${v}`).join('&')
+      return this.$http.get(`${url}?qs=${qs}&${parsQueryString}`);
     }
   },
 
@@ -440,6 +441,13 @@ export let pageMethods = {
   },
 
   /**
+   * 导出EXCEL的地址
+   */
+  getExportListUrl() {
+    return `/api/${this.name}/ExportList`
+  },
+
+  /**
    * 加载更新数据(移动端无限翻页时)
    */
   loadMoreList: throttle(function (pager) {
@@ -489,6 +497,26 @@ export let pageMethods = {
         this.loading = false;
       })
   }, 500),
+
+  exportList: throttle(function () {
+    this.loading = true;
+    Promise.resolve(null)
+      .then(this.getRequestPars)
+      .then(pagePars => {
+        let qs = JSON.stringify(pagePars, fmtRequestPars)
+        let url = this.getExportListUrl()
+        let func = () => this.$http({
+          method: "get",
+          url: `${url}?qs=${qs}&fileName=${this.direction}`,
+          responseType: "blob",
+        })
+        saveFile(func, `${this.direction}列表.xlsx`, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      }).then(() => {
+        this.loading = false;
+      }).catch(() => {
+        this.loading = false;
+      })
+  }),
 
   /**
    * 格式化操作按钮

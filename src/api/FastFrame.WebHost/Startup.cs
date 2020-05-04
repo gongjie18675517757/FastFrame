@@ -90,6 +90,7 @@ namespace FastFrame.WebHost
                 .AddScoped<IApplicationInitialProvider, ApplicationInitialProvider>()
                 .AddScoped<IResourceProvider, ResourceProvider>()
                 .AddScoped<IModuleDesProvider, XmlModuleDesProvider>()
+                .AddScoped<IExcelExportProvider, ExcelExportProvider>()
                 .AddScoped<IPermissionDefinitionContext, PermissionDefinitionContext>()
                 .AddSingleton<IClientManage, ClientConMamage>()
                 .AddServices()

@@ -229,36 +229,6 @@
             上一期流水
             </summary>
         </member>
-        <member name="T:FastFrame.Entity.Basis.Permission">
-            <summary>
-            权限
-            </summary> 
-        </member>
-        <member name="P:FastFrame.Entity.Basis.Permission.Name">
-            <summary>
-            名称
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.Permission.EnCode">
-            <summary>
-            编码
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.Permission.AreaName">
-            <summary>
-            区域
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.Permission.Super_Id">
-            <summary>
-            父级
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.Permission.Id">
-            <summary>
-            主键
-            </summary>
-        </member>
         <member name="T:FastFrame.Entity.Basis.Resource">
             <summary>
             资源

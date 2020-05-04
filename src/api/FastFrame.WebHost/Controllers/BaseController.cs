@@ -1,8 +1,12 @@
 ﻿using FastFrame.Application;
 using FastFrame.Infrastructure;
+using FastFrame.Infrastructure.Interface;
 using FastFrame.Infrastructure.Permission;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace FastFrame.WebHost.Controllers
 {
@@ -31,6 +35,29 @@ namespace FastFrame.WebHost.Controllers
         public virtual async Task<PageList<TDto>> List(string qs)
         {
             return await service.PageListAsync(qs.ToObject<Pagination>());
+        }
+
+        /// <summary>
+        /// 导出
+        /// </summary>
+        /// <param name="qs"></param>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        [Permission(new string[] { "List" })]
+        [HttpGet]
+        public virtual async Task<IActionResult> ExportList(string qs, string fileName)
+        {
+            var excelExportProvider = Request.HttpContext.RequestServices.GetService<IExcelExportProvider>();
+            var columns = await excelExportProvider.GenerateExcelColumns<TDto>().ToListAsync();
+            columns = await FmtExportColumns(columns);
+
+            var bytes = await excelExportProvider.GenerateExcelSteam(service.PageListAsync, columns, qs.ToObject<Pagination>());
+            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{fileName}.xlsx");
+        }
+
+        protected Task<List<ExcelColumn<TDto>>> FmtExportColumns(List<ExcelColumn<TDto>> columns)
+        {
+            return Task.FromResult(columns);
         }
     }
 }

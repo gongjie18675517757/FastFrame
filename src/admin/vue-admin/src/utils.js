@@ -178,6 +178,33 @@ export function upload({
 
 }
 
+
+/**
+ * 保存文件
+ * @param {*} res 
+ * @param {*} fileName 
+ */
+export async function saveFile(resFunc, fileName, type = 'application/octet-stream') {
+    let res = await resFunc()
+    const blob = new Blob([res], {
+        type
+    });
+
+    if ("download" in document.createElement("a")) {
+        const elink = document.createElement("a");
+        elink.download = fileName;
+        elink.style.display = "none";
+        elink.href = URL.createObjectURL(blob);
+        document.body.appendChild(elink);
+        elink.click();
+        URL.revokeObjectURL(elink.href); // 释放URL 对象
+        document.body.removeChild(elink);
+    } else {
+        // IE10+下载
+        navigator.msSaveBlob(blob, fileName);
+    }
+}
+
 /**
  * 取数组中随机值
  * @param {*} arr 

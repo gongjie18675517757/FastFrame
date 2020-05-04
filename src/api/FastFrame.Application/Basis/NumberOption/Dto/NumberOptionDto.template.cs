@@ -64,6 +64,8 @@ namespace FastFrame.Application.Basis
 		/// <summary>
 		/// 创建人 
 		/// </summary>
+		[Hide(HideMark.Form)]
+		[RelatedTo(typeof(User))]
 		public string Create_User_Id {get;set;}
 		
 		/// <summary>
@@ -75,11 +77,14 @@ namespace FastFrame.Application.Basis
 		/// 创建时间 
 		/// </summary>
 		[Required()]
+		[Hide(HideMark.Form)]
 		public DateTime CreateTime {get;set;}
 		
 		/// <summary>
 		/// 修改人 
 		/// </summary>
+		[Hide(HideMark.Form)]
+		[RelatedTo(typeof(User))]
 		public string Modify_User_Id {get;set;}
 		
 		/// <summary>
@@ -90,6 +95,7 @@ namespace FastFrame.Application.Basis
 		/// <summary>
 		/// 修改时间 
 		/// </summary>
+		[Hide(HideMark.Form)]
 		public DateTime ModifyTime {get;set;}
 		
 		

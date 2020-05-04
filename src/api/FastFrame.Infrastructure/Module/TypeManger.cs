@@ -84,7 +84,7 @@ namespace FastFrame.Infrastructure.Module
         /// <returns></returns>
         public static bool TryGetType(string typeName, out Type type)
         {
-            return typeDic.TryGetValue(typeName, out type);
+            return typeDic.TryGetValue(typeName.ToLower(), out type);
         }
     }
 }

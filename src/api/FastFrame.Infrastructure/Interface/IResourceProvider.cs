@@ -29,5 +29,5 @@ namespace FastFrame.Infrastructure.Interface
         /// <param name="relativelyPath"></param>
         /// <returns></returns>
         string GetFilePath(string relativelyPath);
-    } 
+    }
 }

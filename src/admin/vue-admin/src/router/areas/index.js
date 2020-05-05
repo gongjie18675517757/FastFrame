@@ -1,6 +1,8 @@
 import basis from './basis' 
+import flow from './flow'
 
 const areas = [
-    basis
+    basis,
+    flow
 ]
 export default areas 

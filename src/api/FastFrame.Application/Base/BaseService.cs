@@ -5,6 +5,7 @@ using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.EventBus;
 using FastFrame.Infrastructure.Interface;
 using FastFrame.Repository;
+using FastFrame.Repository.Events;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -43,8 +44,16 @@ namespace FastFrame.Application
         /// <summary>
         /// 新增前
         /// </summary> 
-        protected virtual Task OnAdding(TDto input, TEntity entity)
-            => EventBus?.TriggerEventAsync(new DoMainAdding<TDto>(input));
+        protected virtual async Task OnAdding(TDto input, TEntity entity)
+        {
+            if (entity is IHaveNumber haveNumber)
+                await EventBus.TriggerEventAsync(new EntityAdding<IHaveNumber>(haveNumber, entity));
+
+            if (input is IHaveMultiFileDto haveMultiFile)
+                await EventBus.TriggerEventAsync(new DoMainAdding<IHaveMultiFileDto>(haveMultiFile, entity));
+
+            await EventBus?.TriggerEventAsync(new DoMainAdding<TDto>(input));
+        }
 
         /// <summary>
         /// 新增
@@ -73,6 +82,7 @@ namespace FastFrame.Application
 
             await repository.BeginTransactionAsync(IsolationLevel.ReadCommitted);
             await repository.AddAsync(entity);
+
             input.Id = entity.Id;
             await OnAdding(input, entity);
             await repository.CommmitAsync();
@@ -85,8 +95,13 @@ namespace FastFrame.Application
         /// <summary>
         /// 删除前
         /// </summary> 
-        protected virtual Task OnDeleteing(TEntity entity)
-            => EventBus?.TriggerEventAsync(new DoMainDeleteing<TDto>(entity.Id, entity));
+        protected virtual async Task OnDeleteing(TEntity entity)
+        {
+            await EventBus?.TriggerEventAsync(new DoMainDeleteing<TDto>(entity.Id, entity));
+
+            if (entity is IHaveMultiFile)
+                await EventBus.TriggerEventAsync(new DoMainDeleteing<IHaveMultiFileDto>(entity.Id, entity));
+        }
 
 
         /// <summary>
@@ -115,8 +130,13 @@ namespace FastFrame.Application
         /// <summary>
         /// 更新时
         /// </summary> 
-        protected virtual Task OnUpdateing(TDto input, TEntity entity)
-            => EventBus?.TriggerEventAsync(new DoMainUpdateing<TDto>(input));
+        protected virtual async Task OnUpdateing(TDto input, TEntity entity)
+        {
+            await EventBus?.TriggerEventAsync(new DoMainUpdateing<TDto>(input, entity));
+
+            if (input is IHaveMultiFileDto haveMultiFile)
+                await EventBus.TriggerEventAsync(new DoMainUpdateing<IHaveMultiFileDto>(haveMultiFile, entity));
+        }
 
         /// <summary>
         /// 更新前
@@ -155,8 +175,11 @@ namespace FastFrame.Application
         /// <summary>
         /// 返回前
         /// </summary> 
-        protected virtual Task OnGeting(TDto dto)
-            => Task.CompletedTask;
+        protected virtual async Task OnGeting(TDto output)
+        {
+            if (output is IHaveMultiFileDto haveMultiFile)
+                haveMultiFile.Files = await EventBus.RequestAsync<IEnumerable<ResourceModel>, IHaveMultiFileDto>(haveMultiFile);
+        }
 
         /// <summary>
         /// 获取单条数据
@@ -181,8 +204,18 @@ namespace FastFrame.Application
         /// <summary>
         /// 返回列表数据时
         /// </summary> 
-        protected virtual Task OnGetListing(IEnumerable<TDto> dtos)
-            => Task.CompletedTask;
+        protected virtual async Task OnGetListing(IEnumerable<TDto> dtos)
+        {
+            if (typeof(IHaveMultiFileDto).IsAssignableFrom(typeof(TDto)))
+            {
+                var haveMultiFiles = dtos.Cast<IHaveMultiFileDto>();
+                var valuePairs = await EventBus.RequestAsync<IEnumerable<KeyValuePair<string, IEnumerable<ResourceModel>>>, IEnumerable<IHaveMultiFileDto>>(haveMultiFiles);
+                foreach (var fileDto in haveMultiFiles)
+                {
+                    fileDto.Files = valuePairs.Where(v => v.Key == fileDto.Id).SelectMany(v => v.Value);
+                }
+            }
+        }
 
         /// <summary>
         /// 获取分页列表

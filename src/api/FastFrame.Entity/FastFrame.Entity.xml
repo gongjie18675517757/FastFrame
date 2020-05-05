@@ -229,6 +229,26 @@
             上一期流水
             </summary>
         </member>
+        <member name="T:FastFrame.Entity.Basis.ReourceMap">
+            <summary>
+            资源映射
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.ReourceMap.File_Id">
+            <summary>
+            关联：Resource
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.ReourceMap.FKey_Id">
+            <summary>
+            外键
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.ReourceMap.Key">
+            <summary>
+            标识
+            </summary>
+        </member>
         <member name="T:FastFrame.Entity.Basis.Resource">
             <summary>
             资源
@@ -704,6 +724,11 @@
             通知类型
             </summary>
         </member>
+        <member name="F:FastFrame.Entity.Enums.EnumName.Job">
+            <summary>
+            岗位
+            </summary>
+        </member>
         <member name="T:FastFrame.Entity.Enums.FlowActionEnum">
             <summary>
             流程动作
@@ -822,6 +847,41 @@
         <member name="F:FastFrame.Entity.Enums.GenderMark.WoMan">
             <summary>
             女
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Enums.LeaveCategoryEnum">
+            <summary>
+            请假类型
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.LeaveCategoryEnum.A">
+            <summary>
+            事假
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.LeaveCategoryEnum.B">
+            <summary>
+            病假
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.LeaveCategoryEnum.C">
+            <summary>
+            年假
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.LeaveCategoryEnum.D">
+            <summary>
+            调休
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.LeaveCategoryEnum.E">
+            <summary>
+            产假
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.LeaveCategoryEnum.Z">
+            <summary>
+            其它
             </summary>
         </member>
         <member name="T:FastFrame.Entity.Flow.FlowLine">
@@ -1254,6 +1314,71 @@
             描述
             </summary>
         </member>
+        <member name="T:FastFrame.Entity.OA.OaLeave">
+            <summary>
+            请假单
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.OA.OaLeave.Number">
+            <summary>
+            请假单号
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.OA.OaLeave.CreateTime">
+            <summary>
+            申请时间
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.OA.OaLeave.Create_User_Id">
+            <summary>
+            申请人
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.OA.OaLeave.Job_Id">
+            <summary>
+            岗位
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.OA.OaLeave.Dept_Id">
+            <summary>
+            部门
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.OA.OaLeave.LeaveCategory">
+            <summary>
+            请假类型
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.OA.OaLeave.Agent_Id">
+            <summary>
+            工作代理人
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.OA.OaLeave.StartTime">
+            <summary>
+            开始时间
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.OA.OaLeave.EndTime">
+            <summary>
+            结束时间
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.OA.OaLeave.Days">
+            <summary>
+            请假天数
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.OA.OaLeave.Reasons">
+            <summary>
+            申请事由
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.OA.OaLeave.FlowStatus">
+            <summary>
+            审批状态
+            </summary>
+        </member>
         <member name="P:FastFrame.Entity.BaseEntity.Id">
             <summary>
             主键
@@ -1347,6 +1472,11 @@
         <member name="M:FastFrame.Entity.IHaveDept.GetBeDeptIds">
             <summary>
             获取归属科室
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.IHaveMultiFile">
+            <summary>
+            标记有多附件
             </summary>
         </member>
         <member name="T:FastFrame.Entity.IHaveNumber">

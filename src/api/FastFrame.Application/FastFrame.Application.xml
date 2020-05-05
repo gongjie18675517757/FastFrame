@@ -76,11 +76,10 @@
             自动编号
             </summary>
         </member>
-        <member name="M:FastFrame.Application.AutoNumberService.MakeNumberAsync``1(``0[])">
+        <member name="M:FastFrame.Application.AutoNumberService.MakeNumberAsync(FastFrame.Entity.IHaveNumber[])">
             <summary>
             生成编号
-            </summary>
-            <typeparam name="T"></typeparam>
+            </summary>   
             <param name="entitys"></param>
             <returns></returns>
         </member>
@@ -97,6 +96,13 @@
             获取编码设置
             </summary>
             <param name="typeName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.AutoNumberService.HandleEventAsync(FastFrame.Repository.Events.EntityAdding{FastFrame.Entity.IHaveNumber})">
+            <summary>
+            新增时自动编号
+            </summary>
+            <param name="event"></param>
             <returns></returns>
         </member>
         <member name="T:FastFrame.Application.BaseDto">
@@ -269,11 +275,10 @@
             自动编号服务
             </summary>
         </member>
-        <member name="M:FastFrame.Application.IAutoNumberService.MakeNumberAsync``1(``0[])">
+        <member name="M:FastFrame.Application.IAutoNumberService.MakeNumberAsync(FastFrame.Entity.IHaveNumber[])">
             <summary>
             生成编号
-            </summary>
-            <typeparam name="T"></typeparam>
+            </summary> 
             <param name="entitys"></param>
             <returns></returns>
         </member>
@@ -321,6 +326,16 @@
             DTO接口
             </summary>
             <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:FastFrame.Application.IHaveMultiFileDto">
+            <summary>
+            标记有附件
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.IHaveMultiFileDto.Files">
+            <summary>
+            附件
+            </summary>
         </member>
         <member name="M:FastFrame.Application.IPageListService`1.PageListAsync(FastFrame.Infrastructure.Pagination)">
             <summary>
@@ -1229,6 +1244,41 @@
             切换禁用状态
             </summary> 
         </member>
+        <member name="T:FastFrame.Application.ResourceModel">
+            <summary>
+            附件
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.ResourceModel.Key">
+            <summary>
+            标记
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.ResourceModel.Name">
+            <summary>
+            名称 
+            </summary> 
+        </member>
+        <member name="P:FastFrame.Application.ResourceModel.Size">
+            <summary>
+            大小 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.ResourceModel.ContentType">
+            <summary>
+            类型 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.ResourceModel.UploaderName">
+            <summary>
+            上传人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.ResourceModel.UploadTime">
+            <summary>
+            上传时间 
+            </summary>
+        </member>
         <member name="T:FastFrame.Application.Chat.ChatMessageHandle">
             <summary>
             处理接收消息
@@ -1728,6 +1778,171 @@
         <member name="T:FastFrame.Application.Flow.WorkFlowService">
             <summary>
             工作流 服务实现 
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.OA.OaLeaveDto">
+            <summary>
+            请假单 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.OA.OaLeaveDto.Number">
+            <summary>
+            请假单号 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.OA.OaLeaveDto.CreateTime">
+            <summary>
+            申请时间 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.OA.OaLeaveDto.Create_User_Id">
+            <summary>
+            申请人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.OA.OaLeaveDto.Create_User">
+            <summary>
+            申请人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.OA.OaLeaveDto.Job_Id">
+            <summary>
+            岗位 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.OA.OaLeaveDto.Dept_Id">
+            <summary>
+            部门 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.OA.OaLeaveDto.Dept">
+            <summary>
+            部门 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.OA.OaLeaveDto.LeaveCategory">
+            <summary>
+            请假类型 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.OA.OaLeaveDto.Agent_Id">
+            <summary>
+            工作代理人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.OA.OaLeaveDto.Agent">
+            <summary>
+            工作代理人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.OA.OaLeaveDto.StartTime">
+            <summary>
+            开始时间 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.OA.OaLeaveDto.EndTime">
+            <summary>
+            结束时间 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.OA.OaLeaveDto.Days">
+            <summary>
+            请假天数 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.OA.OaLeaveDto.Reasons">
+            <summary>
+            申请事由 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.OA.OaLeaveDto.FlowStatus">
+            <summary>
+            审批状态 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.OA.OaLeaveDto.Modify_User_Id">
+            <summary>
+            修改人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.OA.OaLeaveDto.Modify_User">
+            <summary>
+            修改人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.OA.OaLeaveDto.ModifyTime">
+            <summary>
+            修改时间 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.OA.OaLeaveDto.Files">
+            <summary>
+            附件 
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.OA.OaLeaveViewModel">
+            <summary>
+            请假单 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.OA.OaLeaveViewModel.Number">
+            <summary>
+            请假单号 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.OA.OaLeaveViewModel.Job_Id">
+            <summary>
+            岗位 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.OA.OaLeaveViewModel.Dept_Id">
+            <summary>
+            部门 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.OA.OaLeaveViewModel.LeaveCategory">
+            <summary>
+            请假类型 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.OA.OaLeaveViewModel.Agent_Id">
+            <summary>
+            工作代理人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.OA.OaLeaveViewModel.StartTime">
+            <summary>
+            开始时间 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.OA.OaLeaveViewModel.EndTime">
+            <summary>
+            结束时间 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.OA.OaLeaveViewModel.Days">
+            <summary>
+            请假天数 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.OA.OaLeaveViewModel.Reasons">
+            <summary>
+            申请事由 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.OA.OaLeaveViewModel.FlowStatus">
+            <summary>
+            审批状态 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.OA.OaLeaveViewModel.Id">
+            <summary>
+            主键 
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.OA.OaLeaveService">
+            <summary>
+            请假单 服务实现 
             </summary>
         </member>
     </members>

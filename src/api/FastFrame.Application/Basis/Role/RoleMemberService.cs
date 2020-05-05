@@ -120,7 +120,7 @@ namespace FastFrame.Application.Basis
             await handleUserRoleService.UpdateManyAsync(
                 v => v.User_Id == @event.Data.Id,
                 @event.Data.Roles,
-                (a, b) => a.User_Id == b.Id,
+                (a, b) => a.Role_Id == b.Id,
                 v => new RoleMember
                 {
                     Role_Id = v.Id,

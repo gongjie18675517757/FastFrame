@@ -519,6 +519,7 @@ namespace FastFrame.Application.Flow
             var flowSteps = LoadRepository<FlowStep>();
             var flowStepUsers = LoadRepository<FlowStepUser>();
             var flowSnapshots = LoadRepository<FlowSnapshot>();
+            var deptMembers = LoadRepository<DeptMember>();
             var workFlows = LoadRepository<WorkFlow>();
             var eventBuses = serviceProvider.GetService<IEventBus>();
 
@@ -573,9 +574,25 @@ namespace FastFrame.Application.Flow
             if (entity is IHaveNumber numberEntity)
                 flowInstance.BillNumber = numberEntity.Number;
 
+            /*单据有部门，则取单据上的部门*/
             if (entity is IHaveDept haveDept)
+            {
                 foreach (var deptId in haveDept.GetBeDeptIds())
                     await flowInstanceDepts.AddAsync(new FlowInstanceDept { BeDept_Id = deptId, FlowInstance_Id = flowInstance.Id });
+            }
+
+            /*否则则取提交人的部门*/
+            else
+            {
+                var deptIds = await deptMembers
+                        .Where(r => r.IsManager && deptMembers.Any(v => v.User_Id == currUser.Id && v.Dept_Id == r.Dept_Id))
+                        .Select(v => v.Dept_Id)
+                        .Distinct()
+                        .ToListAsync();
+
+                foreach (var deptId in deptIds)
+                    await flowInstanceDepts.AddAsync(new FlowInstanceDept { BeDept_Id = deptId, FlowInstance_Id = flowInstance.Id });
+            }
 
             await flowInstances.AddAsync(flowInstance);
 
@@ -686,6 +703,7 @@ namespace FastFrame.Application.Flow
             var roleMembers = LoadRepository<RoleMember>();
             var deptMembers = LoadRepository<DeptMember>();
             var users = LoadRepository<User>();
+            var currUser = AppSession.CurrUser;
 
             /*直接指定的人*/
             stepUserList.AddRange(flowNode.Users.Select(v => new FlowStepUser
@@ -716,23 +734,50 @@ namespace FastFrame.Application.Flow
             }));
 
             /*部门主管审核*/
-            if (entity is IHaveDept haveDept && flowNode.DeptCheck)
+            if (flowNode.DeptCheck)
             {
-                var deptKeys = haveDept.GetBeDeptIds();
-                var deptUsers = await deptMembers
-                        .Where(v => v.IsManager && deptKeys.Contains(v.Dept_Id))
-                        .Select(v => new { v.Dept_Id, v.User_Id })
-                        .ToListAsync();
-
-                stepUserList.AddRange(deptUsers.Select(v => new FlowStepUser
+                if (entity is IHaveDept haveDept)
                 {
-                    FlowStep_Id = null,
-                    Id = null,
-                    BeDept_Id = v.Dept_Id,
-                    BeRole_Id = null,
-                    User_Id = v.User_Id,
-                    FlowInstance_Id = null
-                }));
+                    var deptKeys = haveDept.GetBeDeptIds();
+                    var deptUsers = await deptMembers
+                            .Where(v => v.IsManager && deptKeys.Contains(v.Dept_Id))
+                            .Select(v => new { v.Dept_Id, v.User_Id })
+                            .Distinct()
+                            .ToListAsync();
+
+                    stepUserList.AddRange(deptUsers.Select(v => new FlowStepUser
+                    {
+                        FlowStep_Id = null,
+                        Id = null,
+                        BeDept_Id = v.Dept_Id,
+                        BeRole_Id = null,
+                        User_Id = v.User_Id,
+                        FlowInstance_Id = null
+                    }));
+                }
+                else
+                {
+                    var deptKeys = await deptMembers
+                            .Where(v => v.User_Id == currUser.Id)
+                            .Select(v => v.Dept_Id)
+                            .Distinct()
+                            .ToListAsync();
+                    var deptUsers = await deptMembers
+                            .Where(v => v.IsManager && deptKeys.Contains(v.Dept_Id))
+                            .Select(v => new { v.Dept_Id, v.User_Id })
+                            .Distinct()
+                            .ToListAsync();
+
+                    stepUserList.AddRange(deptUsers.Select(v => new FlowStepUser
+                    {
+                        FlowStep_Id = null,
+                        Id = null,
+                        BeDept_Id = v.Dept_Id,
+                        BeRole_Id = null,
+                        User_Id = v.User_Id,
+                        FlowInstance_Id = null
+                    }));
+                }
             }
 
             /*动态字段*/

@@ -60,6 +60,7 @@ namespace FastFrame.CodeGenerate.Build
                         "global::System.ComponentModel.DataAnnotations",
                         "FastFrame.Entity.Enums",
                         "FastFrame.Entity.Basis",
+                        "System.Collections.Generic",
                         "System"
                     }
                 .Union(type.GetProperties()
@@ -70,7 +71,8 @@ namespace FastFrame.CodeGenerate.Build
                     .Distinct(),
                 Summary = T4Help.GetClassSummary(type, XmlDocDir),
                 Name = $"{type.Name}Dto",
-                BaseNames = new string[] { $"BaseDto<{type.Name}>" },
+                BaseNames = new string[] { $"BaseDto<{type.Name}>" }
+                                .Concat(typeof(IHaveMultiFile).IsAssignableFrom(type) ? new[] { "IHaveMultiFileDto" } : Array.Empty<string>()),
                 Path = $"{TargetPath}\\{areaNameSpace}\\{type.Name}\\Dto\\{type.Name}Dto.template.cs",
                 CategoryName = "class",
                 PropInfos = GetPropInfos(type),
@@ -128,6 +130,15 @@ namespace FastFrame.CodeGenerate.Build
                     DefaultValue = "false",
                     Summary = "是否有下级",
                     TypeName = "bool"
+                };
+
+            if(typeof(IHaveMultiFile).IsAssignableFrom(type))
+                yield return new PropInfo
+                {
+                    Name = "Files", 
+                    DefaultValue= "Array.Empty<ResourceModel>()",
+                    Summary = "附件",
+                    TypeName = "IEnumerable<ResourceModel>"
                 };
         }
 

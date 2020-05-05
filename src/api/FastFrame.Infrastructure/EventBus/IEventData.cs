@@ -10,5 +10,6 @@
     /// <typeparam name="T"></typeparam>
     public interface IEventData<T>: IEventData
     {  
+
     }
 }

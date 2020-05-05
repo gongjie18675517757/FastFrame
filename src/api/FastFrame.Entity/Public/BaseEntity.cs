@@ -18,7 +18,7 @@ namespace FastFrame.Entity
         [RelatedTo(typeof(User))]
         [ReadOnly]
         [Hide(HideMark.Form)]
-        public string Create_User_Id { get; set; }
+        public virtual string Create_User_Id { get; set; }
 
         /// <summary>
         /// 创建时间
@@ -26,7 +26,7 @@ namespace FastFrame.Entity
         [Required]
         [ReadOnly]
         [Hide(HideMark.Form)]
-        public DateTime CreateTime { get; set; } = DateTime.Now;
+        public virtual DateTime CreateTime { get; set; } = DateTime.Now;
 
         /// <summary>
         /// 修改人
@@ -34,13 +34,13 @@ namespace FastFrame.Entity
         [RelatedTo(typeof(User))]
         [ReadOnly]
         [Hide(HideMark.Form)]
-        public string Modify_User_Id { get; set; }
+        public virtual string Modify_User_Id { get; set; }
 
         /// <summary>
         /// 修改时间
         /// </summary>
         [ReadOnly]
         [Hide(HideMark.Form)]
-        public DateTime ModifyTime { get; set; } = DateTime.Now;
+        public virtual DateTime ModifyTime { get; set; } = DateTime.Now;
     }
 }

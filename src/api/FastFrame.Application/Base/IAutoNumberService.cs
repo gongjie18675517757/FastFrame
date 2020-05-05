@@ -10,10 +10,9 @@ namespace FastFrame.Application
     {
         /// <summary>
         /// 生成编号
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// </summary> 
         /// <param name="entitys"></param>
         /// <returns></returns>
-        Task MakeNumberAsync<T>(params T[] entitys) where T : IHaveNumber;
+        Task MakeNumberAsync(params IHaveNumber[] entitys);
     }
 }

@@ -9,5 +9,10 @@
         /// 通知类型
         /// </summary>
         NotifyType,
+
+        /// <summary>
+        /// 岗位
+        /// </summary>
+        Job,
     }
 }

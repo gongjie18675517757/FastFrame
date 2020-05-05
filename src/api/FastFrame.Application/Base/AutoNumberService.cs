@@ -8,13 +8,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using FastFrame.Infrastructure;
 using FastFrame.Entity.Enums;
+using FastFrame.Infrastructure.EventBus;
+using FastFrame.Repository.Events;
 
 namespace FastFrame.Application
-{ 
+{
     /// <summary>
     /// 自动编号
     /// </summary>
-    public class AutoNumberService : IService, IAutoNumberService
+    public class AutoNumberService : IService, IAutoNumberService, IEventHandle<EntityAdding<IHaveNumber>>
     {
         private readonly IRepository<NumberOption> numberOptions;
         private readonly IRepository<NumberRecord> numberRecords;
@@ -28,13 +30,15 @@ namespace FastFrame.Application
 
         /// <summary>
         /// 生成编号
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// </summary>   
         /// <param name="entitys"></param>
         /// <returns></returns>
-        public async Task MakeNumberAsync<T>(params T[] entitys) where T : IHaveNumber
+        public async Task MakeNumberAsync(params IHaveNumber[] entitys)
         {
-            var typeName = typeof(T).Name;
+            if (entitys.Length == 0)
+                return;
+
+            var typeName = entitys[0].GetType().Name;
             NumberOption opt = await GetNumberOptionAsync(typeName);
             NumberRecord record = await GetNumberRecordAsync(typeName, opt);
 
@@ -53,7 +57,7 @@ namespace FastFrame.Application
 
                     dt ??= DateTime.Now;
                     dtTemp = dt.Value.ToString(opt.FmtDate.ToString());
-                } 
+                }
                 item.Number = $"{opt.Prefix}{dtTemp}{serial}{opt.Suffix}";
             }
         }
@@ -143,6 +147,16 @@ namespace FastFrame.Application
             }
 
             return opt;
+        }
+
+        /// <summary>
+        /// 新增时自动编号
+        /// </summary>
+        /// <param name="event"></param>
+        /// <returns></returns>
+        public async Task HandleEventAsync(EntityAdding<IHaveNumber> @event)
+        {
+            await MakeNumberAsync(@event.Data);
         }
     }
 }

@@ -225,6 +225,11 @@
             工作流 
             </summary>
         </member>
+        <member name="T:FastFrame.WebHost.Controllers.OA.OaLeaveController">
+            <summary>
+            请假单 
+            </summary>
+        </member>
         <member name="T:FastFrame.WebHost.Controllers.ResourceController">
             <summary>
             资源

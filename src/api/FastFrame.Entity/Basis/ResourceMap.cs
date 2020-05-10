@@ -5,7 +5,7 @@ namespace FastFrame.Entity.Basis
     /// <summary>
     /// 资源映射
     /// </summary>
-    public class ReourceMap : IEntity
+    public class ResourceMap : IEntity
     {
         public string Id { get; set; }
 

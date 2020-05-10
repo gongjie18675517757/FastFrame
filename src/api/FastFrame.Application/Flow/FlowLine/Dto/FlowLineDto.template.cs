@@ -6,6 +6,7 @@ namespace FastFrame.Application.Flow
 	using global::System.ComponentModel.DataAnnotations; 
 	using FastFrame.Entity.Enums; 
 	using FastFrame.Entity.Basis; 
+	using System.Collections.Generic; 
 	using System; 
 		
 	/// <summary>

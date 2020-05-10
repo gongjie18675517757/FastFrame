@@ -229,26 +229,6 @@
             上一期流水
             </summary>
         </member>
-        <member name="T:FastFrame.Entity.Basis.ReourceMap">
-            <summary>
-            资源映射
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.ReourceMap.File_Id">
-            <summary>
-            关联：Resource
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.ReourceMap.FKey_Id">
-            <summary>
-            外键
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.ReourceMap.Key">
-            <summary>
-            标识
-            </summary>
-        </member>
         <member name="T:FastFrame.Entity.Basis.Resource">
             <summary>
             资源
@@ -287,6 +267,26 @@
         <member name="P:FastFrame.Entity.Basis.Resource.UploadTime">
             <summary>
             上传时间
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Basis.ResourceMap">
+            <summary>
+            资源映射
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.ResourceMap.File_Id">
+            <summary>
+            关联：Resource
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.ResourceMap.FKey_Id">
+            <summary>
+            外键
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.ResourceMap.Key">
+            <summary>
+            标识
             </summary>
         </member>
         <member name="T:FastFrame.Entity.Basis.Role">

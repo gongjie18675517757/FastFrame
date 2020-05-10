@@ -110,21 +110,23 @@ namespace FastFrame.CodeGenerate.Build
                 CodeBlock = GetQueryMainCodeBlock(type)
             };
 
-            yield return new MethodInfo()
-            {
-                IsOverride = false,
-                MethodName = "ViewModelListAsync",
-                Modifier = "public",
-                ResultTypeName = $"Task<PageList<{type.Name}ViewModel>>",
-                CodeBlock = GetViewModelListCodeBlock(type),
-                Parms = new ParameterInfo[] {
-                    new ParameterInfo
-                    {
-                        DefineName="page",
-                        TypeName="Pagination"
+            var exportAttr = type.GetCustomAttribute<ExportAttribute>();
+            if (exportAttr?.ExportMarks.Contains(ExportMark.ViewModel) == true)
+                yield return new MethodInfo()
+                {
+                    IsOverride = false,
+                    MethodName = "ViewModelListAsync",
+                    Modifier = "public",
+                    ResultTypeName = $"Task<PageList<{type.Name}ViewModel>>",
+                    CodeBlock = GetViewModelListCodeBlock(type),
+                    Parms = new ParameterInfo[] {
+                        new ParameterInfo
+                        {
+                            DefineName="page",
+                            TypeName="Pagination"
+                        }
                     }
-                }
-            };
+                };
         }
 
         public IEnumerable<string> GetViewModelListCodeBlock(Type type)

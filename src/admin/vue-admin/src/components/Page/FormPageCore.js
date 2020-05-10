@@ -193,14 +193,12 @@ export let formMethods = {
       return getDefaultModel(this.name)
     }
   },
-  fmtModelObject(frm) {
-   
-    
+  fmtModelObject(frm) { 
     return Promise.resolve(frm);
   },
   evalRule(name) {
     let rules = this.rules[name] || [];
-    let val = this.model[name];
+    let val = this.model[name]; 
     this.formErrorMessages[name] = [];
 
     let promiseArr = rules.map(v => v.call(this.model, val))
@@ -343,7 +341,9 @@ export let makeChildListeners = function () {
     'toggle:showMamageField': () => (this.showMamageField = !this.showMamageField),
     changed: $event => {
       this.changed = true;
-      this.evalRule($event.item.Name);
+      this.$nextTick(()=>{
+        this.evalRule($event.item.Name);
+      });
     },
     reload: () => this.init(),
     submit: this.submit,

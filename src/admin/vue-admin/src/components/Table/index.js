@@ -33,7 +33,7 @@ export const BasisDetaiTable = {
     title: String,
     columns: defArray,
     toolItems: defArray,
-    rowKey:String
+    rowKey: String
   },
   data() {
     return {
@@ -51,7 +51,7 @@ export const BasisDetaiTable = {
           dense: true,
           flat: true,
           color: 'transparent',
-          height:'30px'
+          height: '30px'
         }
       }, [
         h('v-toolbar-title', null, this.title),
@@ -74,7 +74,7 @@ export const BasisDetaiTable = {
           props: {
             items: this.value,
             columns: this.columns,
-            rowKey:this.rowKey,
+            rowKey: this.rowKey,
             ...this.$attrs
           },
           on: {
@@ -87,11 +87,10 @@ export const BasisDetaiTable = {
   }
 }
 
-
 /**
- * 表单型详情列表
+ * 
  */
-export const FormDetailTable = {
+export const FormDetailObj = {
   props: {
     value: defArray,
     model: Object,
@@ -236,15 +235,24 @@ export const FormDetailTable = {
 }
 
 /**
- * 选择型详情列表
+ * 表单型详情列表
  */
-export const SelectDetailTable = {
+export const FormDetailTable = function () {
+  return {
+    ...FormDetailObj
+  }
+}
+
+/**
+ * 
+ */
+export const SelectDetailObj = {
   ...FormDetailTable,
   props: {
     ...FormDetailTable.props,
     dialogWidth: String,
     dialogComponent: {
-      type: [Object,Function],
+      type: [Object, Function],
       required: true
     }
   },
@@ -292,4 +300,28 @@ export const SelectDetailTable = {
       })
     }
   }
+}
+
+/**
+ * 选择型详情列表
+ */
+export const SelectDetailTable = function () {
+  return {
+    ...SelectDetailObj
+  }
+}
+
+
+/**
+ * 文件列表
+ */
+export const FileTableObj = {
+  props: {
+    value: defArray,
+    model: Object,
+    title: String,
+    canEdit: Boolean,
+    key: String,
+  },
+  
 }

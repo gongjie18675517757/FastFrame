@@ -1,4 +1,5 @@
 ﻿using FastFrame.Application.Basis;
+using FastFrame.Entity.Basis;
 using FastFrame.Infrastructure.Attrs;
 using FastFrame.Infrastructure.Permission;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace FastFrame.WebHost.Controllers.Basis
 {
+    [Permission(nameof(Meidia), "媒体库")]
     public partial class MeidiaController : BaseController
     {
         private readonly MeidiaService service;
@@ -15,6 +17,7 @@ namespace FastFrame.WebHost.Controllers.Basis
             this.service = service;
         }
 
+        [Permission(nameof(List),"列表")]
         [HttpGet("{id?}")]
         public async Task<MeidiaOutput> List(string id, string v = "")
         {
@@ -27,6 +30,7 @@ namespace FastFrame.WebHost.Controllers.Basis
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("{id}")]
+        [Permission(nameof(Delete), "删除")]
         public virtual async Task Delete(string id)
         {
             await service.DeleteAsync(id);
@@ -39,6 +43,7 @@ namespace FastFrame.WebHost.Controllers.Basis
         /// <param name="name"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
+        [Permission("Update", "修改")]
         public async Task Put(string id, string name)
         {
             if (string.IsNullOrWhiteSpace(name))

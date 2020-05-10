@@ -1,5 +1,6 @@
 import basis from "./basis";
 import flow from "./flow";
+import oa from "./oa";
 
 export default [
     {
@@ -7,6 +8,7 @@ export default [
         items: [
             flow,
             basis,
+            oa
         ]
     }
 

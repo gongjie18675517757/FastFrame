@@ -5,6 +5,7 @@ namespace FastFrame.Application.Basis
 	using FastFrame.Infrastructure; 
 	using global::System.ComponentModel.DataAnnotations; 
 	using FastFrame.Entity.Enums; 
+	using System.Collections.Generic; 
 	using System; 
 	using FastFrame.Application.Basis; 
 		

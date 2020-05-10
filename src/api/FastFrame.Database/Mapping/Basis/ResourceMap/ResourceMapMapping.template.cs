@@ -6,10 +6,7 @@ namespace FastFrame.Database.Mapping.Basis
 	/// <summary>
 	/// 资源映射 
 	/// </summary>
-	public partial class ReourceMapMapping:BaseEntityMapping<ReourceMap>
-	{
-		
-		
-		
+	public partial class ResourceMapMapping:BaseEntityMapping<ResourceMap>
+	{ 
 	}
 }

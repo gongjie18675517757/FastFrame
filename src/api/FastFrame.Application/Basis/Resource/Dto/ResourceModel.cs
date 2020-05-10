@@ -17,6 +17,8 @@
 		[Hide]
 		public string Key { get; set; }
 
+		public string FKey_Id { get; set; }
+
 		/// <summary>
 		/// 名称 
 		/// </summary> 

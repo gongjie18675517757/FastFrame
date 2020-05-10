@@ -6,14 +6,14 @@ namespace FastFrame.Application.OA
 	using global::System.ComponentModel.DataAnnotations; 
 	using FastFrame.Entity.Enums; 
 	using FastFrame.Entity.Basis; 
+	using System.Collections.Generic; 
 	using System; 
-	using FastFrame.Application.Basis;
-    using System.Collections.Generic;
-
-    /// <summary>
-    /// 请假单 
-    /// </summary>
-    public partial class OaLeaveDto:BaseDto<OaLeave>,IHaveMultiFileDto
+	using FastFrame.Application.Basis; 
+		
+	/// <summary>
+	/// 请假单 
+	/// </summary>
+	public partial class OaLeaveDto:BaseDto<OaLeave>,IHaveMultiFileDto
 	{
 		
 		

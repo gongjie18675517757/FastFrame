@@ -99,10 +99,22 @@ namespace FastFrame.Infrastructure
                             memberDic.Remove(targetPropName);
                         }
 
-                        if (sourcePropInfo.PropertyType.IsGenericType && sourcePropInfo.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                        var sourcePropIsNullable = sourcePropInfo.PropertyType.IsGenericType
+                                            && sourcePropInfo.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>);
+
+                        var targetPropIsNullable = targetPropInfo.PropertyType.IsGenericType
+                                            && targetPropInfo.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>);
+
+                        if (sourcePropIsNullable && !targetPropIsNullable)
                         {
-                            expression = Expression.Property(expression, "Value");
+                            expression = Expression.IfThenElse(
+                                Expression.Equal(expression, Expression.Constant(null)),
+                                Expression.Constant(null),
+                                Expression.Property(expression, "Value"));
+
+                            //expression = Expression.Property(expression, "Value");
                         }
+
                         var memberAssignment = Expression.Bind(targetPropInfo, expression);
 
                         memberBindings.Add(memberAssignment);

@@ -70,7 +70,7 @@ namespace FastFrame.Application
         /// <returns></returns>
         private async Task<NumberRecord> GetNumberRecordAsync(string typeName, NumberOption opt)
         {
-            if (recordDic.TryGetValue(typeName, out var record))
+            if (!recordDic.TryGetValue(typeName, out var record))
             {
                 var recordQuery = numberRecords.Where(v => v.BeModule == typeName);
                 var dt = DateTime.Now;

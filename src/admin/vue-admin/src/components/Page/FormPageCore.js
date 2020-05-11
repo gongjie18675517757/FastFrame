@@ -1,5 +1,5 @@
 import {
-   
+
   groupBy,
   selectMany,
   distinct
@@ -9,8 +9,9 @@ import {
   getDefaultModel,
   getModelObjectItems,
   getRules,
-  hasManage
+  getModuleStrut
 } from "../../generate";
+import { FileDetailTable } from "../Table";
 
 /**
  * 要注入的方法名
@@ -23,7 +24,7 @@ export let formInject = []
 export let formProps = {
   pars: Object,
   isDialog: Boolean,
-  isTab:Boolean,
+  isTab: Boolean,
   id: String
 };
 
@@ -31,11 +32,35 @@ export let formProps = {
  * 生成数据
  */
 export let formData = {
+
+  /**
+   * 是否可编辑
+   */
   canEdit: false,
+
+  /**
+   * 表单模型实体
+   */
   model: {},
+
+  /**
+   * 表单验证异常信息
+   */
   formErrorMessages: {},
+
+  /**
+   * 页面表彰项
+   */
   options: [],
+
+  /**
+   * 表单验证规则
+   */
   rules: {},
+
+  /**
+   * 审计字段
+   */
   manageOptions: [{
     Name: "Create_User.Name",
     Description: "创建人"
@@ -61,11 +86,36 @@ export let formData = {
       GroupNames: ["管理字段"]
     };
   }),
+
+  /**
+   * 是否提交中
+   */
   submiting: false,
+
+  /**
+   * 是否单选布局
+   */
   singleLine: false,
+
+  /**
+   * 是否显示管理字段
+   */
   showMamageField: false,
+
+  /**
+   * 页面是否有改动过
+   */
   changed: false,
-  hasManage: false
+
+  /**
+   * 是否有审核字段
+   */
+  hasManage: false,
+
+  /**
+   * 是否有附件
+   */
+  hasFiles: false
 };
 
 /**
@@ -124,18 +174,22 @@ export let formComputed = {
  * 页面方法
  */
 export let formMethods = {
+  /**
+   * 页面初始化
+   */
   init() {
     this.canEdit = false;
     let moduleName = this.name;
-    return hasManage(moduleName)
-      .then(val => {
-        this.hasManage = val;
+    return this.getModuleStrut(moduleName)
+      .then(obj => {
+        this.hasManage = obj.HasManage;
+        this.hasFiles = obj.HasFiles;
       })
       .then(this.getRules)
+      .then(this.fmtRules)
       .then(rules => {
         this.rules = rules;
       })
-
       .then(this.getModelObject)
       .then(this.fmtModelObject)
       .then((model) => {
@@ -144,23 +198,53 @@ export let formMethods = {
           formErrs[name] = [];
         }
         this.formErrorMessages = formErrs;
-
-
         this.model = model;
       })
-
       .then(this.getModelObjectItems)
+      .then(this.fmtModelObjectItems)
       .then(options => {
-        this.options = options;
+        this.options = distinct(options, v => v.Name, (a, b) => ({ ...a, ...b }));
       })
       .then(() => {
         this.changed = false;
         this.canEdit = !this.model.Id;
       })
   },
+
+  /**
+   * 加载模块信息
+   * @param {*} name 
+   */
+  getModuleStrut(name) {
+    return getModuleStrut(name);
+  },
+
+  /**
+   * 格式化模块信息
+   * @param {*} obj 
+   */
+  fmtModuleStrut(obj) {
+    return Promise.resolve(obj);
+  },
+
+  /**
+   * 加载表单验证信息
+   */
   getRules() {
     return getRules(this.name)
   },
+
+  /**
+   * 格式化表单验证信息
+   * @param {*} rules 
+   */
+  fmtRules(rules) {
+    return Promise.resolve(rules);
+  },
+
+  /**
+   * 加载表单项
+   */
   getModelObjectItems() {
     return getModelObjectItems(this.name).then(arr => {
       arr.forEach(v => {
@@ -171,9 +255,38 @@ export let formMethods = {
       return arr;
     })
   },
+
+  /**
+   * 格式化表彰项
+   * @param {*} arr 
+   */
+  fmtModelObjectItems(arr) {
+    return Promise.resolve(arr).then(arr => {
+      if (this.hasFiles) {
+        arr.push({
+          Name: 'Files',
+          Description: '附件列表',
+          GroupNames: ['附件列表'],
+          template: FileDetailTable(),
+          fileKey: null,
+        })
+      }
+      return [
+        ...arr
+      ]
+    });
+  },
+
+  /**
+   * 当前内容被更新时
+   */
   DataUpdated() {
 
   },
+
+  /**
+   * 当前内容被删除时
+   */
   DataDeleted() {
     this.$message.alert({
       title: "提示",
@@ -182,9 +295,18 @@ export let formMethods = {
       this.close();
     });
   },
+
+  /**
+   * 获取请求数据的URL
+   * @param {*} id 
+   */
   getRequestUrl(id) {
     return `/api/${this.name}/get/${id}`
   },
+
+  /**
+   * 获取页面模型
+   */
   getModelObject() {
     let id = this.id
     if (id) {
@@ -193,12 +315,27 @@ export let formMethods = {
       return getDefaultModel(this.name)
     }
   },
-  fmtModelObject(frm) { 
-    return Promise.resolve(frm);
+
+  /**
+   * 格式化页面模型
+   * @param {*} model 
+   */
+  fmtModelObject(model) {
+    return Promise.resolve(model).then(model => {
+      if (this.hasFiles) {
+        model.Files = model.Files || []
+      }
+      return model;
+    })
   },
+
+  /**
+   * 验证规则
+   * @param {*} name 
+   */
   evalRule(name) {
     let rules = this.rules[name] || [];
-    let val = this.model[name]; 
+    let val = this.model[name];
     this.formErrorMessages[name] = [];
 
     let promiseArr = rules.map(v => v.call(this.model, val))
@@ -209,12 +346,21 @@ export let formMethods = {
       return errs;
     })
   },
+
+  /**
+   * 验证全部规则
+   */
   evalRules() {
     let promiseArr = Object.keys(this.rules).map(v => this.evalRule(v));
     return Promise.all(promiseArr).then(arr => {
       return arr.filter(v => v.length > 0)
     })
   },
+
+  /**
+   * 获取提交方法
+   * @param {*} id 
+   */
   getPostMethod(id) {
     if (!id) {
       return this.$http.post;
@@ -222,6 +368,11 @@ export let formMethods = {
       return this.$http.put;
     }
   },
+
+  /**
+   * 获取提交地址
+   * @param {*} id 
+   */
   getPostUrl(id) {
     if (!id) {
       return `/api/${this.name}/post`;
@@ -229,21 +380,29 @@ export let formMethods = {
       return `/api/${this.name}/put`
     }
   },
+
+  /**
+   * 获取提交数据
+   */
   getPostData() {
     let postData = JSON.parse(JSON.stringify(this.model))
     delete postData.Create_User;
     delete postData.Modify_User;
     return postData
   },
+
+  /**
+   * 提交数据
+   */
   async submit() {
     try {
       this.submiting = true;
       let errs = await this.evalRules();
       if (errs.length > 0) {
-        console.log(errs); 
+        console.log(errs);
         this.$message.alert({
-          title:'表单填写不完整',
-          content:errs.map(v=>`<p style="color:red;">${v}</p>`).join('')
+          title: '表单填写不完整',
+          content: errs.map(v => `<p style="color:red;">${v}</p>`).join('')
         });
         return;
       }
@@ -262,9 +421,9 @@ export let formMethods = {
             this.$router.replace(`/${this.name}/${data}`);
           })
         }
-      }else{
-        this.canEdit=false;
-        this.changed=false;
+      } else {
+        this.canEdit = false;
+        this.changed = false;
       }
     } catch (error) {
       this.$message.toast.error(error.message);
@@ -272,6 +431,11 @@ export let formMethods = {
       this.submiting = false;
     }
   },
+
+  /**
+   * 返回列表
+   * @param {*} data 
+   */
   goList(data) {
     if (this.isTab) {
       this.$router.push(`/${this.name}/list`);
@@ -281,6 +445,10 @@ export let formMethods = {
       this.$router.push(`/${this.name}/list`);
     }
   },
+
+  /**
+   * 关闭页面
+   */
   close() {
     if (this.isTab) {
       this.$emit("close");
@@ -297,6 +465,10 @@ export let formMethods = {
  * 页面观察属性
  */
 export let formWatch = {
+  /**
+   * ID参数变化时更新加载页面
+   * @param {*} val 
+   */
   id(val) {
     if (val != this.model.Id) {
       this.init()
@@ -341,13 +513,13 @@ export let makeChildListeners = function () {
     'toggle:showMamageField': () => (this.showMamageField = !this.showMamageField),
     changed: $event => {
       this.changed = true;
-      this.$nextTick(()=>{
+      this.$nextTick(() => {
         this.evalRule($event.item.Name);
       });
     },
     reload: () => this.init(),
     submit: this.submit,
-    close:this.close
+    close: this.close
   };
 };
 

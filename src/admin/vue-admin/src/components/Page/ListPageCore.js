@@ -4,7 +4,7 @@ import {
   getQueryOptions
 } from "../../generate";
 import {
-  distinct, throttle, fmtRequestPars, saveFile
+  distinct, throttle, fmtRequestPars, saveFile, getIconFunc
 } from '../../utils'
 
 /**
@@ -279,7 +279,49 @@ export let pageMethods = {
               }
             }
           ] : []),
-          ...arr
+          ...arr,
+          ...(this.ModuleStrut.HasFiles ? [
+            {
+              Name: 'Files',
+              Description: '附件',
+              render: (h, { value }) => {
+                return value && value.length > 0 ? h('v-menu', {
+                  scopedSlots: {
+                    activator: props => h('v-btn', {
+                      on: props.on,
+                      props: {
+                        small: true,
+                        text: true,
+                        color: 'primary'
+                      }
+                    }, '查看')
+                  }
+                }, [
+                  h('v-list', {
+                    props: {
+                      dense: true
+                    }
+                  }, value.map(v => h('v-list-item', {
+                    key: v.Id,
+                    on: {
+                      click: () => {
+                        window.open(`/api/resource/get/${v.Id}/${v.Name}`)
+                      }
+                    }
+                  }, [
+                    h('v-list-item-avatar', null, [
+                      h('img', {
+                        attrs: {
+                          src: getIconFunc(v)
+                        }
+                      })
+                    ]),
+                    h('v-list-item-content', null, v.Name)
+                  ])))
+                ]) : null
+              }
+            }
+          ] : [])
         ]
       })
     })
@@ -498,6 +540,9 @@ export let pageMethods = {
       })
   }, 500),
 
+  /**
+   * 导出
+   */
   exportList: throttle(function () {
     this.loading = true;
     Promise.resolve(null)

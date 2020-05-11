@@ -21,7 +21,11 @@ import Vuetify, {
     VCheckbox,
     VRow,
     VBtnToggle,
-    VInput
+    VInput,
+    VAvatar,
+    VMenu,
+    VListItemAvatar,
+    VListItemContent
 } from 'vuetify/lib';
 import zhHans from 'vuetify/es5/locale/zh-Hans'
 
@@ -48,7 +52,11 @@ Vue.use(Vuetify, {
         VCheckbox,
         VRow,
         VBtnToggle,
-        VInput
+        VInput,
+        VAvatar,
+        VMenu,
+        VListItemAvatar,
+        VListItemContent
     },
 
 });
@@ -56,7 +64,7 @@ Vue.use(Vuetify, {
 
 export default new Vuetify({
     icons: {
-        iconfont: 'mdi' 
+        iconfont: 'mdi'
     },
     lang: {
         locales: { zhHans, },

@@ -8,7 +8,7 @@ import {
 import {
   distinct
 } from '@/utils'
-
+import { upload, getIconFunc } from "../../utils";
 
 let defArray = {
   type: Array,
@@ -33,7 +33,11 @@ export const BasisDetaiTable = {
     title: String,
     columns: defArray,
     toolItems: defArray,
-    rowKey: String
+    rowKey: {
+      type: String,
+      default: 'Id'
+    },
+    loading: Boolean
   },
   data() {
     return {
@@ -55,8 +59,7 @@ export const BasisDetaiTable = {
         }
       }, [
         h('v-toolbar-title', null, this.title),
-        // h('v-spacer'),
-        ...this.toolItems.map(v => h('v-btn', {
+        ...this.toolItems.map(v => v.render ? v.render(h) : h('v-btn', {
           key: v.name,
           props: {
             ...v,
@@ -75,6 +78,7 @@ export const BasisDetaiTable = {
             items: this.value,
             columns: this.columns,
             rowKey: this.rowKey,
+            loading: this.loading,
             ...this.$attrs
           },
           on: {
@@ -315,13 +319,158 @@ export const SelectDetailTable = function () {
 /**
  * 文件列表
  */
-export const FileTableObj = {
+export const FileDetailObj = {
   props: {
     value: defArray,
     model: Object,
     title: String,
     canEdit: Boolean,
-    key: String,
+    fileKey: String,
+    accept: {
+      type: String,
+      default: '*/*'
+    }
   },
-  
+  data() {
+    return {
+      columns: [],
+      loading: false,
+    }
+  },
+  created() {
+    getColumns('ResourceModel').then(arr => this.columns = distinct([
+
+      ...arr,
+      {
+        Name: 'Name',
+        render: (h, { value, model }) => {
+          let src = getIconFunc(model);
+          return h('div', null, [
+            h('v-avatar', {
+              props: {
+                size: '24px'
+              }
+            }, [
+              h('img', {
+                attrs: {
+                  src
+                }
+              })
+            ]),
+            h('a', {
+              style:{
+                'padding-left':'5px'
+              },
+              on: {
+                click: () => {
+                  window.open(`/api/resource/get/${model.Id}/${model.Name}`)
+                }
+              }
+            }, value)
+          ])
+        }
+      },
+      {
+        Name: 'Size',
+        getValueFunc: ({ value }) => value > 1024 * 1024 ? `${(value / 1024 / 1024).toFixed(2)}mb` : `${(value / 1024).toFixed(2)}kb`
+      }
+    ], v => v.Name, (a, b) => ({ ...a, ...b })))
+  },
+  computed: {
+    rows() {
+      return this.value.map(v => v.Key == this.fileKey)
+    }
+  },
+  methods: {
+    onProgress(v) {
+      this.loading = true;
+
+      if (v >= 100) {
+        this.loading = false;
+      }
+    }
+  },
+  render(h) {
+    return h(BasisDetaiTable, {
+      props: {
+        title: this.title,
+        value: this.value,
+        loading: this.loading,
+        columns: [
+          ...(this.canEdit ? [
+            {
+              Name: 'Operate',
+              Description: '操作',
+              render: (h, { model }) => {
+                return h('v-btn', {
+                  props: {
+                    icon: true,
+                    small: true,
+                    color: 'primary'
+                  },
+                  on: {
+                    click: () => {
+                      this.$message.confirm({
+                        title: '提示',
+                        content: '确认要移除这一项吗?'
+                      }).then(() => {
+
+                        let index = this.value.findIndex(v => v == model);
+                        this.value.splice(index, 1)
+                      })
+                    }
+                  }
+                }, [
+                  h('v-icon', null, 'delete')
+                ])
+              }
+            }
+          ] : []),
+          ...this.columns
+        ],
+        toolItems: [
+          {
+            render: (h) => {
+              return this.canEdit ? h('v-btn', {
+                props: {
+                  small: true,
+                  text: true,
+                  color: 'primary'
+                },
+                on: {
+                  click: () => {
+                    upload({
+                      accept: this.accept,
+                      onProgress: this.onProgress
+                    }).then(([file]) => {
+                      this.value.push({
+                        Id: file.Id,
+                        ContentType: file.ContentType,
+                        Key: this.fileKey,
+                        Name: file.Name,
+                        Size: file.Size,
+                        UploaderName: this.$store.state.currUser.Name,
+                        UploadTime: file.UploadTime
+                      });
+                      this.$emit('input', this.value)
+                      this.$emit('change', this.value)
+                    })
+                  }
+                }
+              }, '上传') : null
+            }
+          }
+        ]
+      }
+    })
+  }
+}
+
+/**
+ * 文件列表
+ */
+export const FileDetailTable = function () {
+  return {
+    ...FileDetailObj
+  }
 }

@@ -112,7 +112,8 @@ namespace FastFrame.WebHost.Privder
                 FieldInfoStruts = fieldInfoStructs,
                 RelateFields = relatedFieldAttribute?.FieldNames ?? new[] { type.GetProperties().FirstOrDefault().Name },
                 IsTree = typeof(ITreeEntity).IsAssignableFrom(type),
-                HasManage = typeof(IHasManage).IsAssignableFrom(type)
+                HasManage = typeof(IHasManage).IsAssignableFrom(type),
+                HasFiles= typeof(IHaveMultiFile).IsAssignableFrom(type)
             };
 
             memoryCache.Set(type, @struct);

@@ -44,5 +44,10 @@ namespace FastFrame.Infrastructure.Module
         /// 默认实体
         /// </summary>
         public object Form { get;  set; }
+
+        /// <summary>
+        /// 有附件
+        /// </summary>
+        public bool HasFiles { get; set; }
     }
 }

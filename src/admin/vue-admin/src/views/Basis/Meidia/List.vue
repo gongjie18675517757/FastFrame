@@ -132,7 +132,7 @@ import VuePerfectScrollbar from "vue-perfect-scrollbar";
 import GridItem from "./GridItem.vue";
 import ListItem from "./ListItem.vue";
 import { upload } from "../../../utils";
-import fileIcons from "./fileIcons";
+import { getIcon } from "../../../utils/fileIcons";
 import rules from "@/rules";
 export default {
   components: {
@@ -287,38 +287,8 @@ export default {
     fmtItem(v) {
       let isImage = v.ContentType && v.ContentType.startsWith("image/");
       v.isImage = isImage;
-      v.icon = this.getIcon(v);
+      v.icon = getIcon(v);
       return v;
-    },
-    getIcon({ ContentType, Resource_Id, isImage, IsFolder }) {
-      let { folder, file, xlsx, pptx, js, txt, pdf } = fileIcons;
-      if (isImage) {
-        return `/api/resource/get/${Resource_Id}`;
-      } else if (IsFolder) {
-        return folder;
-      } else if (!ContentType) {
-        return file;
-      } else {
-        switch (ContentType) {
-          case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
-            return xlsx;
-          case "application/vnd.ms-excel":
-            return xlsx;
-          case "application/vnd.ms-powerpoint":
-            return pptx;
-
-          case "text/javascript":
-            return js;
-
-          case "text/plain":
-            return txt;
-
-          case "application/pdf":
-            return pdf;
-          default:
-            return file;
-        }
-      }
     },
     async upload() {
       // let accept = "image/gif, image/jpeg";

@@ -937,6 +937,11 @@
             默认实体
             </summary>
         </member>
+        <member name="P:FastFrame.Infrastructure.Module.ModuleStruct.HasFiles">
+            <summary>
+            有附件
+            </summary>
+        </member>
         <member name="T:FastFrame.Infrastructure.Module.TypeManger">
             <summary>
             类型管理

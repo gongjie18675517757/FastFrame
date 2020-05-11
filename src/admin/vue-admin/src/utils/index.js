@@ -1,6 +1,9 @@
 import Vue from 'vue'
-import $http from './httpClient'
+import $http from '../httpClient'
 import { throttle as _throttle, debounce as _debounce } from 'lodash'
+import { getIcon } from './fileIcons'
+
+export const getIconFunc=getIcon;
 
 export const throttle = _throttle;
 
@@ -138,7 +141,7 @@ export function postFiles(files = [], pars) {
         }],
         onUploadProgress: function (e) {
             var percentage = Math.round((e.loaded * 100) / e.total) || 0;
-            if (percentage < 100) {
+            if (percentage <= 100) {
                 pars.onProgress(percentage)
             }
         }
@@ -230,6 +233,7 @@ export function getValue(obj = {}, prop = "") {
     }
     return temp[paths[paths.length - 1]]
 }
+
 
 /**
  * 根据路径设置值

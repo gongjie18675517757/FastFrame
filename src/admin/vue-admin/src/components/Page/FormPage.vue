@@ -41,7 +41,7 @@
                     <v-icon>more_vert</v-icon>
                   </v-btn>
                 </template>
-                <v-list>
+                <v-list dense="">
                   <v-list-item @click="$emit('toggle:singleLine')">
                     <v-list-item-action>
                       <v-checkbox :value="singleLine"></v-checkbox>

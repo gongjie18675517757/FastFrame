@@ -26,7 +26,6 @@
         v-if="col.component"
         :is="col.component"
         :info="col"
-        :model="props.item"
         :props="props"
         v-on="listeners"
       />
@@ -102,9 +101,7 @@ export default {
       page: 1,
       pager: {
         showFirstLastPage: true,
-        "items-per-page-options": [10, 15, 20, 30, 50],
-        firstIcon: "mdi-arrow-collapse-left",
-        lastIcon: "mdi-arrow-collapse-right"
+        "items-per-page-options": [10, 15, 20, 30, 50]
       }
     };
   },
@@ -133,8 +130,8 @@ export default {
             text: c.Description,
             value: c.Name,
             sortBy: this.isXs ? false : !!c.sortBy,
-            width: c.width || "150px",
-            align:c.align || 'center'
+            width: c.width || "100px",
+            align: c.align || "center"
           };
         })
       ];
@@ -195,5 +192,14 @@ export default {
 
 .v-data-table-header-mobile {
   display: none;
+}
+
+.v-data-table th {
+  font-size: 12px;
+  padding: 0 5px;
+}
+.v-data-table td {
+  font-size: 12px;
+  padding: 0 5px;
 }
 </style>

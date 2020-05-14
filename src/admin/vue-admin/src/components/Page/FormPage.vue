@@ -41,7 +41,7 @@
                     <v-icon>more_vert</v-icon>
                   </v-btn>
                 </template>
-                <v-list dense="">
+                <v-list dense>
                   <v-list-item @click="$emit('toggle:singleLine')">
                     <v-list-item-action>
                       <v-checkbox :value="singleLine"></v-checkbox>
@@ -70,9 +70,9 @@
           </v-toolbar>
           <v-divider></v-divider>
           <v-card-text class="form-content" v-if="model">
-            <div :class="[isDialog?'dialogPage':isTab?'tabPage':'fullPage','form-page']">
+            <v-layout :class="[isDialog?'dialogPage':isTab?'tabPage':'fullPage','form-page']" wrap style="padding:0px;margin:0px">
               <template v-for="group in formGroups">
-                <v-flex :key="group.key.title" xs12 style="padding:0 0 5px 0 ;">
+                <v-flex :key="group.key.title" xs12 xl10 style="padding:0 0 5px 0 ;">
                   <v-card v-if="group.values.length>1" tile>
                     <v-toolbar flat dense color="transparent" height="30px;">
                       <v-toolbar-title>{{group.key.title}}:</v-toolbar-title>
@@ -117,7 +117,7 @@
                   />
                 </v-flex>
               </template>
-            </div>
+            </v-layout>
           </v-card-text>
         </v-card>
       </v-flex>
@@ -211,19 +211,19 @@ export default {
 .fullPage {
   height: calc(100vh - 135px);
   overflow: auto;
-  overflow-x:hidden;
+  overflow-x: hidden;
 }
 
 .tabPage {
   height: calc(100vh - 170px);
   overflow: auto;
-  overflow-x:hidden;
+  overflow-x: hidden;
 }
 
 .dialogPage {
   max-height: calc(100vh - 245px);
   overflow: auto;
-  overflow-x:hidden;
+  overflow-x: hidden;
 }
 
 .singleLine .v-card__text {

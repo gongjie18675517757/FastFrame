@@ -343,7 +343,7 @@ export const FileDetailObj = {
       ...arr,
       {
         Name: 'Name',
-        render: (h, { value, model }) => {
+        renderFunc: (h, { value, model }) => {
           let src = getIconFunc(model);
           return h('div', null, [
             h('v-avatar', {
@@ -358,8 +358,8 @@ export const FileDetailObj = {
               })
             ]),
             h('a', {
-              style:{
-                'padding-left':'5px'
+              style: {
+                'padding-left': '5px'
               },
               on: {
                 click: () => {
@@ -401,13 +401,8 @@ export const FileDetailObj = {
             {
               Name: 'Operate',
               Description: '操作',
-              render: (h, { model }) => {
-                return h('v-btn', {
-                  props: {
-                    icon: true,
-                    small: true,
-                    color: 'primary'
-                  },
+              renderFunc: (h, { model }) => {
+                return h('a', {
                   on: {
                     click: () => {
                       this.$message.confirm({
@@ -420,9 +415,7 @@ export const FileDetailObj = {
                       })
                     }
                   }
-                }, [
-                  h('v-icon', null, 'delete')
-                ])
+                }, '移除')
               }
             }
           ] : []),

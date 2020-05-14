@@ -129,12 +129,14 @@ export default {
     let flex = {
       xs12: 1,
       sm6: 1,
+       
       ...this.flex
     }
 
     if (this.singleLine) {
       flex = {
         xs12: 1,
+         
       }
     }
 
@@ -150,6 +152,7 @@ export default {
       }, [fieldLabel])
       flex = {
         xs12: 1,
+        
         ...this.flex
       }
     }
@@ -174,6 +177,7 @@ export default {
       if (multiple) {
         flex = {
           xs12: true,
+           
           ...this.flex
         }
       }
@@ -192,6 +196,7 @@ export default {
       if (multiple) {
         flex = {
           xs12: true,
+          
           ...this.flex
         }
       }
@@ -262,7 +267,10 @@ export default {
 
     else if (!component && this.Type == 'DateTime') {
       component = h(DateInput, {
-        props,
+        props: {
+          ...props,
+          type: this.Name && this.Name.toLowerCase().includes('time') ? 'datetime' : 'date'
+        },
         on
       }, [fieldLabel])
     }
@@ -283,6 +291,7 @@ export default {
       if (this.Type == 'Array') {
         flex = {
           xs12: true,
+           
           ...this.flex
         }
         component = h(SelectMulitInput, {
@@ -313,7 +322,7 @@ export default {
     }
 
     if (component) {
-      if (props.disabled) {
+      if (props.disabled && !isXs) {
         component = h('v-input', {
           props: {
             ...props,
@@ -321,11 +330,12 @@ export default {
             singleLine: !isXs,
             readonly: props.disabled,
             disabled: false
-          }
+          },
+          class: [this.canEdit ? 'v-text-field' : null]
         }, [fieldLabel, component])
       }
       return h('v-flex', {
-        attrs: flex,
+        attrs: isXs ? { xs12: true } : flex,
         class: ['input-container'],
         style: {
           padding: '5px',
@@ -334,47 +344,7 @@ export default {
       }, [component])
 
 
-      // return h('v-flex', {
-      //   attrs: flex,
-      //   class: ['input-container'],
-      //   style: {
-      //     padding: '10px',
-      //     color: props.error ? 'red' : null
-      //   }
-      // }, [
-      //   h('v-layout', {
-      //     class: ['much-input']
-      //   },
-      //     [
-      //       h('div', {
-      //         style: {
-      //           width: '150px',
-      //           'padding': '10px',
-      //           'text-align': 'center',
-      //           display: 'table-cell',
-      //           'line-height': '20px'
-      //         }
-      //       }, [
-      //         h('span', {
-      //           style: {
 
-      //           }
-      //         }, `${this.Description}:`),
-      //         h('span', {
-      //           style: {
-      //             color: 'red'
-      //           }
-      //         }, this.IsRequired && this.canEdit ? '*' : '')
-      //       ]),
-      //       h('div', {
-      //         style: {
-      //           width: this.errorMessages ? 'calc(100% - 150px - 50px)' : 'calc(100% - 150px)',
-      //           'padding-top': props.disabled ? '10px' : null,
-      //           'padding-left': '5px'
-      //         }
-      //       }, [component])
-      //     ])
-      // ])
     } else if (this.Name && !this.Name.endsWith('Id')) {
       window.console.error(this.$props)
     }

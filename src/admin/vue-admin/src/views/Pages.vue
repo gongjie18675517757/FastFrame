@@ -25,7 +25,7 @@
       :is="page.component"
       v-bind="page.pars"
       isTab
-      style="height:calc(100vh - 125px);overflow: auto;padding: 12px;"
+      style="height:calc(100vh - 125px);overflow: hide;padding: 12px;"
       @success="closePage(page)"
       @close="closePage(page)"
     />

@@ -13,8 +13,11 @@
       :readonly="disabled"
       :errorMessages="errorMessages"
       :placeholder="description"
+      :item-text="getField"
       @change="change"
+      return-object
       dense
+      flat
     >
       <template slot="no-data">
         <v-list-item>
@@ -22,11 +25,7 @@
         </v-list-item>
       </template>
       <template slot="selection" slot-scope="{ item }">{{getField(item)}}</template>
-      <template slot="item" slot-scope="{ item }">
-        <v-list-item-content>
-          <v-list-item-title v-text="getField(item)"></v-list-item-title>
-        </v-list-item-content>
-      </template>
+
       <template #default>
         <slot></slot>
       </template>
@@ -84,7 +83,7 @@ export default {
       this.select = this.relateModel;
     }
 
-    this.querySelections("");
+    if (!this.disabled) this.querySelections("");
   },
   watch: {
     search(v) {

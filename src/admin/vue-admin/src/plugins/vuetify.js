@@ -25,7 +25,7 @@ import Vuetify, {
     VAvatar,
     VMenu,
     VListItemAvatar,
-    VListItemContent
+    VListItemContent 
 } from 'vuetify/lib';
 import zhHans from 'vuetify/es5/locale/zh-Hans'
 

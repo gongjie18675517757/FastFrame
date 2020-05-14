@@ -274,7 +274,7 @@ export let pageMethods = {
             {
               Name: 'Operate',
               Description: '操作',
-              render: (h, context) => {
+              renderFunc: (h, context) => {
                 return h('div', null, items.map(func => func(h, context)))
               }
             }
@@ -284,16 +284,12 @@ export let pageMethods = {
             {
               Name: 'Files',
               Description: '附件',
-              render: (h, { value }) => {
+              renderFunc: (h, { value }) => {
                 return value && value.length > 0 ? h('v-menu', {
                   scopedSlots: {
-                    activator: props => h('v-btn', {
+                    activator: props => h('a', {
                       on: props.on,
-                      props: {
-                        small: true,
-                        text: true,
-                        color: 'primary'
-                      }
+
                     }, '查看')
                   }
                 }, [

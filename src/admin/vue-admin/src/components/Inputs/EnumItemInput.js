@@ -74,7 +74,7 @@ export default {
           label: this.label,
           readonly: this.disabled,
           errorMessages: this.errorMessages,
-          placeholder: this.placeholder,
+          placeholder: this.description,
           'item-text': 'Value',
           'item-value': 'Id',
           multiple: this.multiple,

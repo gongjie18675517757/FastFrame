@@ -34,7 +34,7 @@ namespace FastFrame.WebHost.Controllers
         [Permission("List", "列表")]
         public virtual async Task<PageList<TDto>> List(string qs)
         {
-            return await service.PageListAsync(qs.ToObject<Pagination>());
+            return await service.PageListAsync(qs.ToObject<Pagination>(true));
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace FastFrame.WebHost.Controllers
             var columns = await excelExportProvider.GenerateExcelColumns<TDto>().ToListAsync();
             columns = await FmtExportColumns(columns);
 
-            var bytes = await excelExportProvider.GenerateExcelSteam(service.PageListAsync, columns, qs.ToObject<Pagination>());
+            var bytes = await excelExportProvider.GenerateExcelSteam(service.PageListAsync, columns, qs.ToObject<Pagination>(true));
             return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{fileName}.xlsx");
         }
 

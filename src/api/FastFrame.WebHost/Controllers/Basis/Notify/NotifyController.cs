@@ -16,7 +16,7 @@ namespace FastFrame.WebHost.Controllers.Basis
         [HttpGet]
         public async Task<PageList<NotifyDto>> AllList(string qs)
         {
-            return await service.PageListAsync(qs.ToObject<Pagination>());
+            return await service.PageListAsync(qs.ToObject<Pagination>(true));
         }
 
         /// <summary>
@@ -35,6 +35,6 @@ namespace FastFrame.WebHost.Controllers.Basis
         [HttpGet]
         public Task<PageList<UserViewModel>> UserList(string qs)
             => Request.HttpContext.RequestServices
-                    .GetService<UserService>().ViewModelListAsync(qs.ToObject<Pagination>());
+                    .GetService<UserService>().ViewModelListAsync(qs.ToObject<Pagination>(true));
     }
 }

@@ -70,13 +70,18 @@
           </v-toolbar>
           <v-divider></v-divider>
           <v-card-text class="form-content" v-if="model">
-            <v-layout :class="[isDialog?'dialogPage':isTab?'tabPage':'fullPage','form-page']" wrap style="padding:0px;margin:0px">
+            <v-layout
+              :class="[isDialog?'dialogPage':isTab?'tabPage':'fullPage','form-page']"
+              wrap
+              style="padding:0px;margin:0px"
+            >
               <template v-for="group in formGroups">
                 <v-flex :key="group.key.title" xs12 xl10 style="padding:0 0 5px 0 ;">
                   <v-card v-if="group.values.length>1" tile>
                     <v-toolbar flat dense color="transparent" height="30px;">
                       <v-toolbar-title>{{group.key.title}}:</v-toolbar-title>
                     </v-toolbar>
+                    <!-- <v-divider></v-divider> -->
                     <v-card-text>
                       <component
                         :is="singleLine?'div':'v-layout'"

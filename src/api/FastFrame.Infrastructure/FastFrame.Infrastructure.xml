@@ -411,12 +411,13 @@
             <param name="in"></param>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.Infrastructure.Extension.ToObject``1(System.String)">
+        <member name="M:FastFrame.Infrastructure.Extension.ToObject``1(System.String,System.Boolean)">
             <summary>
             反序列化
             </summary>
             <typeparam name="T"></typeparam>
             <param name="in"></param>
+            <param name="haveBase64Dencode"></param>
             <returns></returns>
         </member>
         <member name="T:FastFrame.Infrastructure.Interface.IApplicationInitialProvider">
@@ -780,6 +781,17 @@
             上级名称
             </summary>
         </member>
+        <member name="T:FastFrame.Infrastructure.Module.IModuleDefinitionProvider">
+            <summary>
+            模块定义提供者
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Module.IModuleDefinitionProvider.DefinitionModuleAsync">
+            <summary>
+            定义模块
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:FastFrame.Infrastructure.Module.IModuleDesProvider">
             <summary>
             类型/属性 说明提供
@@ -820,11 +832,23 @@
             模块结构提供者
             </summary>
         </member>
+        <member name="M:FastFrame.Infrastructure.Module.IModuleExportProvider.RegisterModule(FastFrame.Infrastructure.Module.ModuleStruct[])">
+            <summary>
+            注册模块
+            </summary>
+            <param name="moduleStructs"></param>
+        </member>
         <member name="M:FastFrame.Infrastructure.Module.IModuleExportProvider.GetModuleStruts(System.String)">
             <summary>
             获取模块结构
             </summary>
             <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Module.IModuleExportProvider.HaveCheckModuleList">
+            <summary>
+            需要审核的模块
+            </summary>
             <returns></returns>
         </member>
         <member name="T:FastFrame.Infrastructure.Module.ModuleFieldRule">
@@ -942,9 +966,19 @@
             有附件
             </summary>
         </member>
+        <member name="P:FastFrame.Infrastructure.Module.ModuleStruct.HaveCheck">
+            <summary>
+            需要流程审核
+            </summary>
+        </member>
         <member name="T:FastFrame.Infrastructure.Module.TypeManger">
             <summary>
             类型管理
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Module.TypeManger.RegisterdTypes">
+            <summary>
+            所有已注册的类型
             </summary>
         </member>
         <member name="M:FastFrame.Infrastructure.Module.TypeManger.RegisterType``1">
@@ -1082,7 +1116,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="T:FastFrame.Infrastructure.Permission.IPermissionProvider">
+        <member name="T:FastFrame.Infrastructure.Permission.IPermissionDefinitionProvider">
             <summary>
             权限定义提供者
             </summary>
@@ -1096,7 +1130,7 @@
             <summary>
             应用权限
             </summary>
-            <param name="permissionKeys"></param>
+            <param name="permissionKey"></param>
         </member>
         <member name="M:FastFrame.Infrastructure.Permission.PermissionAttribute.#ctor(System.String,System.String)">
             <summary>

@@ -1,10 +1,10 @@
 namespace FastFrame.WebHost.Controllers.Flow
 {
-	using FastFrame.Entity.Flow; 
-	using FastFrame.Application.Flow; 
-	using FastFrame.Infrastructure.Permission; 
-	using FastFrame.Infrastructure.Interface; 
-		
+	using FastFrame.Entity.Flow;
+	using FastFrame.Application.Flow;
+	using FastFrame.Infrastructure.Permission;
+	using FastFrame.Infrastructure.Interface;
+
 	/// <summary>
 	/// 工作流 
 	/// </summary>
@@ -17,8 +17,6 @@ namespace FastFrame.WebHost.Controllers.Flow
 			 : base(service)
 		{
 			this.service = service;
-		}
-		
-		
+		} 
 	}
 }

@@ -14,11 +14,11 @@ namespace FastFrame.WebHost.Controllers.Basis
         [HttpGet]
         public Task<PageList<UserViewModel>> UserList(string qs)
             => Request.HttpContext.RequestServices
-                    .GetService<UserService>().ViewModelListAsync(qs.ToObject<Pagination>());
+                    .GetService<UserService>().ViewModelListAsync(qs.ToObject<Pagination>(true));
 
         [Permission(new string[] { "Add", "Update" })]
         [HttpGet]
         public Task<PageList<DeptViewModel>> DeptList(string qs)
-            => service.ViewModelListAsync(qs.ToObject<Pagination>());
+            => service.ViewModelListAsync(qs.ToObject<Pagination>(true));
     }
 }

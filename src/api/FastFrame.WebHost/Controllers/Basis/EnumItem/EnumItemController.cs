@@ -20,6 +20,6 @@ namespace FastFrame.WebHost.Controllers.Basis
         [HttpGet]
         [Permission(new string[] { "Add", "Update" })]
         public Task<PageList<EnumItemViewModel>> EnumItemList(string qs)
-            => service.ViewModelListAsync(qs.ToObject<Pagination>());
+            => service.ViewModelListAsync(qs.ToObject<Pagination>(true));
     }
 }

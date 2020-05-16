@@ -271,6 +271,13 @@ namespace FastFrame.Infrastructure
         public static string ToBase64(this string @in)
             => @in.IsNullOrWhiteSpace() ? string.Empty : Convert.ToBase64String(Encoding.Default.GetBytes(@in));
 
+        private static readonly char[] base64CodeArray = new char[]
+           {
+                'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+                'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+                '0', '1', '2', '3', '4',  '5', '6', '7', '8', '9', '+', '/', '='
+           };
+
         /// <summary>
         /// FromBase64
         /// </summary>
@@ -280,6 +287,10 @@ namespace FastFrame.Infrastructure
         {
             try
             {
+                if (@in.Length % 4 != 0)
+                    return @in;
+                if (@in.Any(c => !base64CodeArray.Contains(c)))
+                    return @in;
                 return @in.IsNullOrWhiteSpace() ? string.Empty : Encoding.Default.GetString(Convert.FromBase64String(@in));
             }
             catch (Exception)
@@ -397,8 +408,9 @@ namespace FastFrame.Infrastructure
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="in"></param>
+        /// <param name="haveBase64Dencode"></param>
         /// <returns></returns>
-        public static T ToObject<T>(this string @in)
+        public static T ToObject<T>(this string @in, bool haveBase64Dencode = false)
         {
             if (@in.IsNullOrWhiteSpace())
             {
@@ -406,6 +418,8 @@ namespace FastFrame.Infrastructure
             }
             try
             {
+                if (haveBase64Dencode)
+                    @in = @in.FromBase64();
                 return JsonConvert.DeserializeObject<T>(@in);
             }
             catch (Exception)

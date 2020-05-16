@@ -14,6 +14,6 @@ namespace FastFrame.WebHost.Controllers.Basis
         [HttpGet]
         public Task<PageList<UserViewModel>> UserList(string qs)
             => Request.HttpContext.RequestServices
-                    .GetService<UserService>().ViewModelListAsync(qs.ToObject<Pagination>()); 
+                    .GetService<UserService>().ViewModelListAsync(qs.ToObject<Pagination>(true)); 
     }
 }

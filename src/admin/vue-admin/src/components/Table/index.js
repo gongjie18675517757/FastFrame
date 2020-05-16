@@ -70,6 +70,7 @@ export const BasisDetaiTable = {
           }
         }, [v.icon ? h('v-icon', null, v.icon) : null, h('span', null, v.caption)]))
       ]),
+      // h('v-divider'),
       h('v-card-text', {
         class: ['form-content']
       }, [

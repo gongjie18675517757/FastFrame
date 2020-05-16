@@ -15,13 +15,13 @@ namespace FastFrame.WebHost.Privder
     public class ModuleExportProvider : IModuleExportProvider
     {
         private readonly IModuleDesProvider descriptionProvider;
-        private readonly IMemoryCache memoryCache;
         private readonly IAppSessionProvider appSessionProvider;
+        private static readonly Dictionary<string, ModuleStruct> cacheModuleKvs = new Dictionary<string, ModuleStruct>();
+        private static IEnumerable<KeyValuePair<string, string>> haveCheckModuleList = null;
 
-        public ModuleExportProvider(IModuleDesProvider descriptionProvider, IMemoryCache memoryCache,IAppSessionProvider appSessionProvider)
+        public ModuleExportProvider(IModuleDesProvider descriptionProvider, IAppSessionProvider appSessionProvider)
         {
             this.descriptionProvider = descriptionProvider;
-            this.memoryCache = memoryCache;
             this.appSessionProvider = appSessionProvider;
         }
 
@@ -30,16 +30,20 @@ namespace FastFrame.WebHost.Privder
         /// </summary>  
         public ModuleStruct GetModuleStruts(string name)
         {
-            if (!TypeManger.TryGetType(name, out var type))
+            if (string.IsNullOrWhiteSpace(name))
             {
                 return null;
             }
 
-            if (memoryCache.TryGetValue<ModuleStruct>(type, out var @struct))
+            if (cacheModuleKvs.TryGetValue(name, out var @struct))
             {
                 return @struct;
             }
 
+            if (!TypeManger.TryGetType(name, out var type))
+            {
+                return null;
+            }
 
             var fieldInfoStructs = new List<ModuleFieldStrut>();
 
@@ -113,12 +117,44 @@ namespace FastFrame.WebHost.Privder
                 RelateFields = relatedFieldAttribute?.FieldNames ?? new[] { type.GetProperties().FirstOrDefault().Name },
                 IsTree = typeof(ITreeEntity).IsAssignableFrom(type),
                 HasManage = typeof(IHasManage).IsAssignableFrom(type),
-                HasFiles= typeof(IHaveMultiFile).IsAssignableFrom(type)
+                HasFiles = typeof(IHaveMultiFile).IsAssignableFrom(type),
+                HaveCheck = typeof(IHaveCheck).IsAssignableFrom(type),
             };
 
-            memoryCache.Set(type, @struct);
+            cacheModuleKvs.Add(name.ToLower(), @struct);
 
             return @struct;
+        }
+
+        /// <summary>
+        /// 需要审核的模块
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<KeyValuePair<string, string>> HaveCheckModuleList()
+        {
+            lock (this)
+            {
+                var haveCheckType = typeof(IHaveCheck);
+                haveCheckModuleList = TypeManger.RegisterdTypes
+                  .Where(v => haveCheckType.IsAssignableFrom(v) && v.IsClass && !v.IsAbstract)
+                  .Select(v => new KeyValuePair<string, string>(v.Name, descriptionProvider.GetClassDescription(v)))
+                  .Concat(cacheModuleKvs.Values.Where(v => v.HaveCheck).Select(v => new KeyValuePair<string, string>(v.Name, v.Description)))
+                  .Distinct()
+                  .ToList();
+            }
+            return haveCheckModuleList;
+        }
+
+        /// <summary>
+        /// 注册模块
+        /// </summary>
+        /// <param name="moduleStructs"></param>
+        public void RegisterModule(params ModuleStruct[] moduleStructs)
+        {
+            foreach (var item in moduleStructs)
+            {
+                cacheModuleKvs.Add(item.Name.ToLower(), item);
+            }
         }
 
         private IEnumerable<KeyValuePair<string, string>> GetEnumValues(Type type)

@@ -2,9 +2,9 @@ import Vue from 'vue'
 import axios from 'axios'
 import router from '../router'
 import store from '../store'
-import {
-    alert
-} from '../utils';
+// import {
+//     alert
+// } from '../utils';
 
 axios.defaults.baseURL = '';
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
@@ -58,9 +58,8 @@ axios.interceptors.response.use(function (response) {
 
                 break;
             case 400:
-            case 403:
-                if (error.response.data.Message)
-                    alert.error(error.response.data.Message)
+            case 403: 
+                error=new Error(error.response.data.Message);
                 break;
             default:
                 break;

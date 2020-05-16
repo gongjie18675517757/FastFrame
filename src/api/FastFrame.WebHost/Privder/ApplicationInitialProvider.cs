@@ -81,13 +81,14 @@ namespace FastFrame.WebHost.Privder
                 logger.LogError(ex, "缓存多租户信息失败！");
             }
 
+            /*注册权限*/
             try
             {
                 var permissionDefinitionContext = serviceProvider.GetService<IPermissionDefinitionContext>();
-                var permissionProviders = serviceProvider.GetServices<IPermissionProvider>();
+                var permissionProviders = serviceProvider.GetServices<IPermissionDefinitionProvider>();
                 foreach (var permissionProvider in permissionProviders)
                 {
-                    permissionProvider.RegisterPermission(permissionDefinitionContext);
+                    await permissionProvider.RegisterPermission(permissionDefinitionContext);
                 }
 
                 var baseType = typeof(BaseController);
@@ -128,6 +129,21 @@ namespace FastFrame.WebHost.Privder
             catch (Exception ex)
             {
                 logger.LogError(ex, "注册权限失败！");
+            }
+
+            /*注册模块*/
+            try
+            {
+                var moduleDefinitionProviders = serviceProvider.GetServices<IModuleDefinitionProvider>();
+                var moduleExportProvider = serviceProvider.GetService<IModuleExportProvider>();
+                foreach (var item in moduleDefinitionProviders)
+                {
+                    moduleExportProvider.RegisterModule(await item.DefinitionModuleAsync());
+                }
+            }
+            catch (Exception ex)
+            { 
+                logger.LogError(ex, "注册模块失败！");
             }
         }
     }

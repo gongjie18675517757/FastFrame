@@ -220,10 +220,23 @@
             <param name="typeName"></param>
             <returns></returns>
         </member>
+        <member name="M:FastFrame.WebHost.Controllers.CommonController.HaveCheckModuleList">
+            <summary>
+            需要审核的模块
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:FastFrame.WebHost.Controllers.Flow.WorkFlowController">
             <summary>
             工作流 
             </summary>
+        </member>
+        <member name="M:FastFrame.WebHost.Controllers.Flow.WorkFlowController.GetLastVersion(System.String)">
+            <summary>
+            获取最大版本
+            </summary>
+            <param name="moduleName"></param>
+            <returns></returns>
         </member>
         <member name="T:FastFrame.WebHost.Controllers.OA.OaLeaveController">
             <summary>
@@ -292,6 +305,18 @@
             <summary>
             获取模块结构
             </summary>  
+        </member>
+        <member name="M:FastFrame.WebHost.Privder.ModuleExportProvider.HaveCheckModuleList">
+            <summary>
+            需要审核的模块
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.WebHost.Privder.ModuleExportProvider.RegisterModule(FastFrame.Infrastructure.Module.ModuleStruct[])">
+            <summary>
+            注册模块
+            </summary>
+            <param name="moduleStructs"></param>
         </member>
         <member name="T:FastFrame.WebHost.Privder.ResourceOption">
             <summary>

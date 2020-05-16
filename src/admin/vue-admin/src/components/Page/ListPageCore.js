@@ -415,7 +415,8 @@ export let pageMethods = {
    */
   getRequedtMethod() {
     return (url, pageProps, pars) => {
-      let qs = JSON.stringify(pageProps, fmtRequestPars)
+      const btoa = process.env.NODE_ENV == 'development' ? v => v : window.btoa;
+      let qs = btoa(JSON.stringify(pageProps, fmtRequestPars))
       let parsQueryString = Object.entries(pars || {}).map((k, v) => `${k}=${v}`).join('&')
       return this.$http.get(`${url}?qs=${qs}&${parsQueryString}`);
     }

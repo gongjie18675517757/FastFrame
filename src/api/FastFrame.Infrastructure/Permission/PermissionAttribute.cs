@@ -14,10 +14,10 @@ namespace FastFrame.Infrastructure.Permission
         /// <summary>
         /// 应用权限
         /// </summary>
-        /// <param name="permissionKeys"></param>
-        public PermissionAttribute(string permissionKeys)
+        /// <param name="permissionKey"></param>
+        public PermissionAttribute(string permissionKey)
         {
-            PermissionKey = permissionKeys;
+            permissionKeys = new string[] { permissionKey };
         }
 
         /// <summary>

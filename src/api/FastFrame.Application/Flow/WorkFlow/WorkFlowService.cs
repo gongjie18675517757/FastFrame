@@ -12,6 +12,11 @@ namespace FastFrame.Application.Flow
 {
     public partial class WorkFlowService : IRequestHandle<WorkFlowDto, string>
     {
+        public async Task<int> GetLastVersion(string moduleName)
+        {
+            return await workFlowRepository.Where(v => v.BeModule == moduleName).Select(v => v.Version).OrderByDescending(v => v).FirstOrDefaultAsync() + 1;
+        }
+
         public Task<WorkFlowDto> HandleRequestAsync(string request)
         {
             return GetAsync(request);

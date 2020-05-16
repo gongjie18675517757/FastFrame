@@ -11,6 +11,13 @@ namespace FastFrame.Infrastructure.Module
     {
         private static readonly Dictionary<string, Type> typeDic = new Dictionary<string, Type>();
 
+
+        /// <summary>
+        /// 所有已注册的类型
+        /// </summary>
+        public static IEnumerable<Type> RegisterdTypes=> typeDic.Values;
+
+
         /// <summary>
         /// 注册类型
         /// </summary>

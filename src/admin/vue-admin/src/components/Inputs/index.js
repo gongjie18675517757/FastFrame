@@ -26,6 +26,7 @@ export default {
     canEdit: Boolean,
     IsRequired: Boolean,
     Length: Number,
+    Hide: String,
     ModuleName: String,
     Relate: String,
     EnumItemInfo: Object,
@@ -50,19 +51,12 @@ export default {
     }
   },
   computed: {
-    // val: {
-    //   get() {
-    //     if (this.Name && this.model)
-    //       return getValue(this.model, this.Name)
-    //     else
-    //       return this.value
-    //   },
-    //   set(val) {
-    //     if (this.Name && this.model)
-    //       setValue(this.model, this.Name, val)
-    //     this.$emit('input', val)
-    //   }
-    // },
+    evalVisible() {
+      if (!this.Hide) return true;
+      if (this.Hide == "All") return false;
+      if (this.Hide == "Form") return false;
+      return true;
+    },
     evalDisabled() {
       if (!this.canEdit) return true;
       if (typeof this.Readonly == 'function') return this.Readonly.call(this, this.model)
@@ -75,7 +69,7 @@ export default {
     change(val) {
       this.$emit('change', val)
       if (typeof this.callback == 'function') {
-        this.callback(this, this.model, val)
+        this.callback.call(this, { model: this.model, value: val })
       }
     },
   },
@@ -95,6 +89,10 @@ export default {
       required: this.IsRequired,
       isXs,
       ...this.$attrs
+    }
+
+    if (!this.evalVisible) {
+      return null;
     }
 
     let fieldLabel = h('span', {
@@ -129,14 +127,14 @@ export default {
     let flex = {
       xs12: 1,
       sm6: 1,
-       
+
       ...this.flex
     }
 
     if (this.singleLine) {
       flex = {
         xs12: 1,
-         
+
       }
     }
 
@@ -152,7 +150,7 @@ export default {
       }, [fieldLabel])
       flex = {
         xs12: 1,
-        
+
         ...this.flex
       }
     }
@@ -177,7 +175,7 @@ export default {
       if (multiple) {
         flex = {
           xs12: true,
-           
+
           ...this.flex
         }
       }
@@ -196,7 +194,7 @@ export default {
       if (multiple) {
         flex = {
           xs12: true,
-          
+
           ...this.flex
         }
       }
@@ -242,7 +240,7 @@ export default {
         component = h('span', null,
           (this.Name || '').toLowerCase().includes('password') ?
             Array((props.value || '******').length).fill('*').join('') :
-            props.value)
+            props.value || '无')
     }
 
     else if (!component && this.Type == 'Boolean') {
@@ -291,7 +289,7 @@ export default {
       if (this.Type == 'Array') {
         flex = {
           xs12: true,
-           
+
           ...this.flex
         }
         component = h(SelectMulitInput, {

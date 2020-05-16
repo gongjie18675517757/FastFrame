@@ -48,5 +48,15 @@ namespace FastFrame.WebHost.Controllers
         {
             return moduleExportProvider.GetModuleStruts(typeName);
         }
+
+        /// <summary>
+        /// 需要审核的模块
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public IEnumerable<KeyValuePair<string, string>> HaveCheckModuleList()
+        {
+            return moduleExportProvider.HaveCheckModuleList();
+        }
     }
 }

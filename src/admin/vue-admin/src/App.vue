@@ -97,8 +97,13 @@ html {
 .v-card__title {
   padding: 2px;
 }
+
 .input-container .v-input {
   font-size: 13px;
+}
+
+.input-container .theme--light.v-input.v-input--is-readonly {
+  color: #8e5656;
 }
 
 .v-data-table__wrapper {

@@ -25,7 +25,8 @@ import Vuetify, {
     VAvatar,
     VMenu,
     VListItemAvatar,
-    VListItemContent 
+    VListItemContent ,
+    VDivider
 } from 'vuetify/lib';
 import zhHans from 'vuetify/es5/locale/zh-Hans'
 
@@ -56,7 +57,8 @@ Vue.use(Vuetify, {
         VAvatar,
         VMenu,
         VListItemAvatar,
-        VListItemContent
+        VListItemContent,
+        VDivider
     },
 
 });

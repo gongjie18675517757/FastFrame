@@ -30,6 +30,7 @@ namespace FastFrame.WebHost.Privder
         /// </summary>  
         public ModuleStruct GetModuleStruts(string name)
         {
+            name = name.ToLower();
             if (string.IsNullOrWhiteSpace(name))
             {
                 return null;
@@ -121,7 +122,7 @@ namespace FastFrame.WebHost.Privder
                 HaveCheck = typeof(IHaveCheck).IsAssignableFrom(type),
             };
 
-            cacheModuleKvs.Add(name.ToLower(), @struct);
+            cacheModuleKvs.Add(name, @struct);
 
             return @struct;
         }

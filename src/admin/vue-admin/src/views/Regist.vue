@@ -4,7 +4,7 @@
       <v-toolbar-title v-text="title"></v-toolbar-title>
       <v-spacer></v-spacer>
     </v-toolbar>
-    <v-content>
+    <v-main>
       <!-- <router-view/> -->
       <v-layout justify-center app class="form">
         <v-flex xs12 sm10 md8 lg6>
@@ -54,7 +54,7 @@
           </v-card>
         </v-flex>
       </v-layout>
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 

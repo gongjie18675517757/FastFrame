@@ -102,7 +102,7 @@ namespace FastFrame.WebHost.Privder
                     {
                         Title = item.Description,
                         ValueFunc = model => string.Join(",",
-                                        item.EnumValues.Where(v => model.GetValue(item.Name)?.ToString().Contains(v.Key) == true).Select(v => v.Value))
+                                        item.EnumValues.Where(v => model.GetValue(item.Name)?.ToString() == v.Key).Select(v => v.Value))
                     };
                 }
 
@@ -112,7 +112,7 @@ namespace FastFrame.WebHost.Privder
                     continue;
                 }
 
-               
+
 
 
                 /*值类型*/
@@ -134,7 +134,7 @@ namespace FastFrame.WebHost.Privder
                             {
                                 Title = item.Description,
                                 ValueFunc = model => model == null ?
-                                                        null : ((DateTime)model.GetValue(item.Name)).ToString("yyyy-MM-dd")
+                                                        null : ((DateTime)model.GetValue(item.Name)).ToString(item.Name.EndsWith("Time") ? "yyyy-MM-dd HH:mm" : "yyyy-MM-dd")
                             };
                             break;
                         case "Int32":

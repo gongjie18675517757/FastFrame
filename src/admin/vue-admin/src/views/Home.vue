@@ -2,7 +2,7 @@
   <v-app color="primary" fixed :dark="$vuetify.dark" app>
     <Menus />
     <Toolbar :title="title" />
-    <v-content>
+    <v-main>
       <v-fade-transition mode="out-in">
         <div v-if="$store.state.singlePageMode">
           <keep-alive>
@@ -12,7 +12,7 @@
         </div>
         <Pages v-else />
       </v-fade-transition>
-    </v-content>
+    </v-main>
     <Setting />
     <v-footer :fixed="fixed" app inset>
       <span>&copy; 2017</span>

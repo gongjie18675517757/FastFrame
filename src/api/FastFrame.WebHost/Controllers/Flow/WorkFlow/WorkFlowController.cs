@@ -1,5 +1,6 @@
 ﻿using FastFrame.Infrastructure.Permission;
 using Microsoft.AspNetCore.Mvc;
+using System.Drawing;
 using System.Threading.Tasks;
 
 namespace FastFrame.WebHost.Controllers.Flow
@@ -15,6 +16,8 @@ namespace FastFrame.WebHost.Controllers.Flow
         [HttpGet("{GetLastVersion}")]
         public async Task<int> GetLastVersion(string moduleName)
         {
+             
+
             return await service.GetLastVersion(moduleName);
         }
     }

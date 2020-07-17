@@ -11,6 +11,8 @@ export default function (props = {}) {
         onObjectDoubleClicked: defFunc,
         onSelectionDeleting: defFunc,
         onEditNode: defFunc,
+        onNodeInserted: defFunc,
+        onNodeRemoved: defFunc,
         ...props
     };
 
@@ -36,7 +38,7 @@ export default function (props = {}) {
                     },
                     _jsonNewStep,
                     // { key: guid(), text: "条件", figure: "Diamond" },
-                    { 
+                    {
                         text: "完结",
                         figure: "Circle",
                         fill: "#CE0620",
@@ -106,6 +108,8 @@ export default function (props = {}) {
         _designer.model.setDataProperty(node.data, "text", text);
         _designer.commitTransaction("vacate");
     };
+
+
 
     /** --------public method-------------end---------------------------**/
 
@@ -184,11 +188,6 @@ export default function (props = {}) {
             //如果取消删除，则 e.cancel = true;
             e.cancel = false;
             props.onSelectionDeleting(e);
-            return new Promise(r => {
-                setTimeout(() => {
-                    r();
-                }, 2000);
-            });
         });
 
         // 双击事件
@@ -197,10 +196,24 @@ export default function (props = {}) {
         //单击事件
         _designer.addDiagramListener("ObjectSingleClicked", onObjectSingleClicked);
 
-        //
-        _designer.addDiagramListener("PartCreated", function () {
-            console.log(...arguments);
+        _designer.addModelChangedListener(function (evt) {
+ 
 
+            // ignore unimportant Transaction events
+            if (!evt.isTransactionFinished) return;
+            var txn = evt.object;  // a Transaction
+            if (txn === null) return;
+            // iterate over all of the actual ChangedEvents of the Transaction
+            txn.changes.each(function (e) {
+                // ignore any kind of change other than adding/removing a node
+                if (e.modelChange !== "nodeDataArray") return;
+                // record node insertions and removals
+                if (e.change === go.ChangedEvent.Insert) {
+                    console.log(evt.propertyName + " added node with key: " + e.newValue.key); 
+                } else if (e.change === go.ChangedEvent.Remove) {
+                    console.log(evt.propertyName + " removed node with key: " + e.oldValue.key);
+                }
+            });
         });
 
         // 流程步骤的样式模板
@@ -527,13 +540,16 @@ export default function (props = {}) {
         );
     }
 
+    function updateTextFunc(node) {
+        return text => updateNodeData(node, text)
+    }
+
     /**
      * 单击事件
      */
     function onObjectSingleClicked(ev) {
-        // var part = ev.subject.part;
-        // showEditNode(part);
-        props.onObjectSingleClicked(ev);
+        var part = ev.subject.part;
+        props.onObjectSingleClicked(ev, updateTextFunc(part));
     }
 
     /**

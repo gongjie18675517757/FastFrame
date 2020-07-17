@@ -19,7 +19,7 @@ export default {
         label: this.label,
         placeholder: this.description,
         errorMessages: this.errorMessages,
-        rows: 1,
+        rows: 2,
         'auto-grow': true,
         dense: true,
         singleLine: !this.isXs,

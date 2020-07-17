@@ -1,6 +1,7 @@
 <script>
 let pageInfo = { area: "Flow", name: "WorkFlow", direction: "工作流" };
 import Page from "../../../components/Page/FormPageCore.js";
+import FlowDesignVue from "./FlowDesign.vue";
 export default {
   ...Page,
   data() {
@@ -51,6 +52,11 @@ export default {
               {
                 Name: "BeModuleName",
                 Hide: "All"
+              },
+              {
+                Name: "Nodes",
+                template: FlowDesignVue,
+                GroupNames:['流程设计']
               }
             ];
           });

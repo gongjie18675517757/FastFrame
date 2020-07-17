@@ -192,16 +192,23 @@ namespace FastFrame.WebHost
                 foreach (var applicationInitialProvider in applicationInitialProviders)
                 {
                     await applicationInitialProvider.InitialAsync();
-                }
-
+                } 
             });
+
             applicationLifetime.ApplicationStopped.Register(() =>
             {
                 logger.LogInformation("ApplicationStopped");
             });
-            applicationLifetime.ApplicationStopping.Register(() =>
+
+            applicationLifetime.ApplicationStopping.Register(async () =>
             {
                 logger.LogInformation("ApplicationStopping");
+
+                var applicationInitialProviders = app.ApplicationServices.GetServices<IApplicationUnInitialProvider>();
+                foreach (var applicationInitialProvider in applicationInitialProviders)
+                {
+                    await applicationInitialProvider.UnInitialAsync();
+                }
             });
         }
     }

@@ -54,6 +54,8 @@ const NodeTypeEnum = {
   Template: "Template"
 };
 
+const  
+
 const Node = {
   props: {
     id: Number,

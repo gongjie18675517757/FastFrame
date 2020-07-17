@@ -428,6 +428,19 @@
         <member name="M:FastFrame.Infrastructure.Interface.IApplicationInitialProvider.InitialAsync">
             <summary>
             执行初始化
+            注意：要自己处理异常
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Interface.IApplicationUnInitialProvider">
+            <summary>
+            应用程序关闭时
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IApplicationUnInitialProvider.UnInitialAsync">
+            <summary>
+            执行关闭操作
+            注意：要自己处理异常
             </summary>
             <returns></returns>
         </member>

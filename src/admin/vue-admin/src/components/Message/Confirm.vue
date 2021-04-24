@@ -1,12 +1,14 @@
 <template>
   <v-card>
     <v-toolbar flat dense color="transparent">
-      <v-toolbar-title>{{title}}</v-toolbar-title>
+      <v-toolbar-title>{{ title }}</v-toolbar-title>
       <v-spacer></v-spacer>
     </v-toolbar>
-    <v-divider></v-divider>
+
     <v-card-text>
+      <v-divider class="mb-5"></v-divider>
       <div v-html="content"></div>
+      <br>
       <v-divider class="mt-5"></v-divider>
     </v-card-text>
     <v-card-actions>
@@ -21,7 +23,7 @@
 export default {
   props: {
     title: String,
-    content: String
+    content: String,
   },
   methods: {
     cancel() {
@@ -29,8 +31,8 @@ export default {
     },
     success() {
       this.$emit("success");
-    }
-  }
+    },
+  },
 };
 </script>
 

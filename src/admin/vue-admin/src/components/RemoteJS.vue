@@ -1,23 +1,26 @@
 <script>
 export default {
   props: {
+    tag: {
+      type: String,
+      default: "script",
+    },
     src: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   render(h) {
-    return h("script", {
+    return h(this.tag, {
       attrs: {
-        type: "text/javascript",
-        src: this.src // "/libs/js/go.js"
+        src: this.src,
       },
       on: {
         load: () => {
           this.$emit("load");
-        }
-      }
+        },
+      },
     });
-  }
+  },
 };
 </script>

@@ -1,110 +1,83 @@
-﻿using FastFrame.Application.Events;
-using FastFrame.Entity.Basis;
-using FastFrame.Infrastructure.EventBus;
+﻿using FastFrame.Entity.Basis;
+using FastFrame.Infrastructure;
+using FastFrame.Infrastructure.Interface;
 using FastFrame.Repository;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace FastFrame.Application.Basis
 {
-    public partial class ResourceService
+    public partial class ResourceService : IService, IResourceStoreProvider
     {
+        private readonly IRepository<Resource> resourceRepository;
+        private readonly IResourceProvider resourceProvider;
+        private readonly IAppSessionProvider sessionProvider;
+
+        public ResourceService(IRepository<Resource> resourceRepository,
+                               IResourceProvider resourceProvider,
+                               IAppSessionProvider sessionProvider)
+        {
+            this.resourceRepository = resourceRepository;
+            this.resourceProvider = resourceProvider;
+            this.sessionProvider = sessionProvider;
+        }
         public Task<string> GetPathByMd5Async(string md5)
             => resourceRepository
                         .Where(r => r.MD5 == md5)
                         .Select(r => r.Path)
                         .FirstOrDefaultAsync();
 
-        protected override async Task OnAdding(ResourceDto input, Resource entity)
+        public async Task<IResourceStreamInfo> TryGetResource(string resourceId)
         {
-            entity.Uploader_Id = AppSession?.CurrUser?.Id;
-            entity.UploadTime = DateTime.Now;
+            var info = await resourceRepository.Where(v => v.Id == resourceId).Select(v => new { v.Name, v.Path }).FirstOrDefaultAsync();
 
-            await base.OnAdding(input, entity);
-        }
-    }
+            if (info == null)
+                return null;
 
-    public partial class ResourceMapService : IService,
-        IEventHandle<DoMainAdding<IHaveMultiFileDto>>,
-        IEventHandle<DoMainDeleteing<IHaveMultiFileDto>>,
-        IEventHandle<DoMainUpdateing<IHaveMultiFileDto>>,
-        IRequestHandle<IEnumerable<ResourceModel>, IHaveMultiFileDto>,
-        IRequestHandle<IEnumerable<KeyValuePair<string, IEnumerable<ResourceModel>>>, IEnumerable<IHaveMultiFileDto>>
-    {
-        private readonly IRepository<User> users;
-        private readonly IRepository<Resource> resources;
-        private readonly IRepository<ResourceMap> maps;
-        private readonly HandleOne2ManyService<ResourceModel, ResourceMap> manyService;
+            if (!await resourceProvider.ExistsAsync(info.Path))
+                return null;
 
-        public ResourceMapService(IRepository<User> users, IRepository<Resource> resources, IRepository<ResourceMap> maps, HandleOne2ManyService<ResourceModel, ResourceMap> manyService)
-        {
-            this.users = users;
-            this.resources = resources;
-            this.maps = maps;
-            this.manyService = manyService;
-        }
-        private async Task HandleItems(string id, IEnumerable<ResourceModel> items)
-        {
-            await manyService.UpdateManyAsync(
-                        v => v.FKey_Id == id,
-                        items,
-                        (a, b) => a.File_Id == b.ContentType && a.Key == b.Key,
-                        v => new ResourceMap
-                        {
-                            Id = null,
-                            Key = v.Key,
-                            File_Id = v.Id,
-                            FKey_Id = id
-                        });
+            var stream = await resourceProvider.ReadAsync(info.Path);
+            if (stream == null)
+                return null;
+
+            return new ResourceStreamModel(info.Name, stream); 
         }
 
-        public Task HandleEventAsync(DoMainAdding<IHaveMultiFileDto> @event)
+        public async Task<IResourceInfo> TrySaveResource(string name, string contentType, Stream stream)
         {
-            return HandleItems(@event.Data.Id, @event.Data.Files);
-        }
+            if (stream is null)
+                throw new ArgumentNullException(nameof(stream));
 
-        public Task HandleEventAsync(DoMainDeleteing<IHaveMultiFileDto> @event)
-        {
-            return HandleItems(@event.Id, null);
-        }
+            var md5 = stream.ToMD5();
+            var path = await GetPathByMd5Async(md5);
 
-        public Task HandleEventAsync(DoMainUpdateing<IHaveMultiFileDto> @event)
-        {
-            return HandleItems(@event.Data.Id, @event.Data.Files);
-        }
+            if (path.IsNullOrWhiteSpace())
+                path = await resourceProvider.WriteAsync(stream);
 
-        private IQueryable<ResourceModel> Query()
-        {
-            return from a in maps
-                   join b in resources on a.File_Id equals b.Id
-                   join c in users on b.Uploader_Id equals c.Id into t_c
-                   from c in t_c.DefaultIfEmpty()
-                   select new ResourceModel
-                   {
-                       Id = b.Id,
-                       ContentType = b.ContentType,
-                       Key = a.Key,
-                       Name = b.Name,
-                       Size = b.Size,
-                       UploaderName = c.Name,
-                       UploadTime = b.UploadTime,
-                       FKey_Id = a.FKey_Id
-                   };
-        }
+            var curr = sessionProvider.CurrUser;
+            var resource = await resourceRepository.AddAsync(new Resource
+            {
+                ContentType = contentType,
+                Name = name,
+                Path = path,
+                Size = stream.Length,
+                MD5 = md5,
+                UploadTime = DateTime.Now,
+                Uploader_Id = curr?.Id,
+                Id = null
+            });
 
-        public async Task<IEnumerable<ResourceModel>> HandleRequestAsync(IHaveMultiFileDto request)
-        {
-            return await Query().Where(v => v.FKey_Id == request.Id).ToListAsync();
-        }
+            await resourceRepository.CommmitAsync();
 
-        public async Task<IEnumerable<KeyValuePair<string, IEnumerable<ResourceModel>>>> HandleRequestAsync(IEnumerable<IHaveMultiFileDto> request)
-        {
-            var keys = request.Select(v => v.Id).ToList();
-            var list = await Query().Where(v => keys.Contains(v.FKey_Id)).ToListAsync();
-            return list.GroupBy(v => v.FKey_Id).Select(v => new KeyValuePair<string, IEnumerable<ResourceModel>>(v.Key, v));
+            var model = resource.MapTo<Resource, ResourceModel>();
+
+            if (curr != null)
+                model.UploaderName = curr.Name;
+            return model;
         }
     }
 }

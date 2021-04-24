@@ -25,7 +25,7 @@ import Vuetify, {
     VAvatar,
     VMenu,
     VListItemAvatar,
-    VListItemContent ,
+    VListItemContent,
     VDivider
 } from 'vuetify/lib';
 import zhHans from 'vuetify/es5/locale/zh-Hans'
@@ -73,6 +73,12 @@ export default new Vuetify({
         current: 'zhHans',
     },
     theme: {
+        // options: {
+        //     themeCache: {
+        //         get: key => localStorage.getItem(key),
+        //         set: (key, value) => localStorage.setItem(key, value),
+        //     },
+        // },
         themes: {
             light: {
                 primary: '#1976D2',

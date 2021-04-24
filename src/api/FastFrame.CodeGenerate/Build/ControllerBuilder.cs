@@ -46,10 +46,10 @@ namespace FastFrame.CodeGenerate.Build
                     Path = $"{TargetPath}\\{spaceName}\\{type.Name}\\{type.Name}Controller.template.cs",
                     NamespaceName = $"FastFrame.WebHost.Controllers.{spaceName}",
                     ImportNames = new string[] { 
-                        $"FastFrame.Entity.{spaceName}",
+                        //$"FastFrame.Entity.{spaceName}",
                         $"FastFrame.Application.{spaceName}",
-                        "FastFrame.Infrastructure.Permission",
-                        "FastFrame.Infrastructure.Interface"
+                        //"FastFrame.Infrastructure.Permission",
+                        //"FastFrame.Infrastructure.Interface"
                     },
                     CategoryName = "class",
                     Name = $"{name}Controller",
@@ -67,13 +67,13 @@ namespace FastFrame.CodeGenerate.Build
                             "this.service = service;"
                         }
                     },
-                    AttrInfos = new[] {
-                        new AttrInfo()
-                        {
-                            Name="Permission",
-                            Parameters=new string[]{ $"nameof({name})" , $"\"{summary}\"" }
-                        }
-                    }
+                    //AttrInfos = new[] {
+                    //    new AttrInfo()
+                    //    {
+                    //        Name="PermissionGroup",
+                    //        Parameters=new string[]{ $"nameof({name})" , $"\"{summary}\"" }
+                    //    }
+                    //}
                 };
             }
         }

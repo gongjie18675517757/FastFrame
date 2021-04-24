@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-app>
     <v-fade-transition mode="out-in">
       <router-view v-if="resufreshed" />
     </v-fade-transition>
@@ -9,7 +9,7 @@
       :key="i"
       :value="true"
       :width="dialog.pars.width"
-      style="box-shadow:none;"
+      colored-border 
     >
       <component
         :is="dialog.component"
@@ -18,7 +18,7 @@
         @close="handleDialogClose(dialog,$event)"
       />
     </v-dialog>
-  </div>
+  </v-app>
 </template>
 
 <script>

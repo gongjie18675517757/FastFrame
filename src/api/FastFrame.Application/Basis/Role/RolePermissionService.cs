@@ -40,12 +40,11 @@ namespace FastFrame.Application.Basis
             await handlePermissionService.UpdateManyAsync(
                     v => v.Role_Id == @event.Data.Id,
                     @event.Data.Permissions,
-                    (a, b) => a.PermissionKey == b.PermissionKey && a.SuperPermissionKey == b.SuperPermissionKey,
+                    (a, b) => a.PermissionKey == b.PermissionKey,
                     v => new RolePermission
                     {
                         Role_Id = @event.Data.Id,
-                        PermissionKey = v.PermissionKey,
-                        SuperPermissionKey = v.SuperPermissionKey
+                        PermissionKey = v.PermissionKey, 
                     });
         }
 
@@ -65,8 +64,7 @@ namespace FastFrame.Application.Basis
                .AddManyAsync(input.Permissions, v => new RolePermission
                {
                    Role_Id = input.Id,
-                   PermissionKey = v.PermissionKey,
-                   SuperPermissionKey = v.SuperPermissionKey
+                   PermissionKey = v.PermissionKey, 
                });
         }
     }

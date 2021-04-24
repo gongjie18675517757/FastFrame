@@ -4,9 +4,9 @@ using System.Linq;
 namespace FastFrame.Infrastructure.Permission
 {
     /// <summary>
-    /// 权限描述
+    /// 权限标记
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, Inherited = false, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Method, Inherited = false, AllowMultiple = true)]
     public sealed class PermissionAttribute : Attribute
     {
         private readonly string[] permissionKeys;
@@ -30,6 +30,7 @@ namespace FastFrame.Infrastructure.Permission
             PermissionKey = permissionKey;
             Text = text;
             IsDefinition = true;
+            permissionKeys = Array.Empty<string>();
         }
 
         /// <summary>

@@ -22,6 +22,7 @@ namespace FastFrame.WebHost.Privder
             this.client = client;
             this.hubContext = hubContext;
         }
+
         public async Task SendAsync<T>(Message<T> message)
         {
             if (message.Target_Ids.Length > 0)

@@ -10,11 +10,10 @@ namespace FastFrame.Infrastructure.Permission
     {
         /// <summary>
         /// 检查是否被授权
-        /// </summary>
-        /// <param name="groupPermissionKey"></param>
-        /// <param name="childPermissionKeys"></param>
+        /// </summary> 
+        /// <param name="permissions"></param>
         /// <returns></returns>
-        Task<bool> CheckIsGrantedAsync(string groupPermissionKey, string[] childPermissionKeys);
+        Task<bool> CheckIsGrantedAsync(params string[] permissions);
 
         /// <summary>
         /// 所有被授权的权限

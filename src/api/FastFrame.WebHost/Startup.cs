@@ -8,10 +8,12 @@ using FastFrame.Infrastructure.Module;
 using FastFrame.Infrastructure.Permission;
 using FastFrame.Repository;
 using FastFrame.WebHost.Hubs;
+using FastFrame.WebHost.Middleware;
 using FastFrame.WebHost.Privder;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -49,14 +51,17 @@ namespace FastFrame.WebHost
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+
             services.Configure<IISServerOptions>(config =>
             {
                 config.AutomaticAuthentication = false;
             });
+
             services.AddMvc(opts =>
-            {
-                opts.Filters.Add<GlobalFilter>();
-            }).AddNewtonsoftJson(options =>
+                {
+                    //opts.Filters.Add<GlobalFilter>();
+                })
+                .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                     options.SerializerSettings.ContractResolver = new DefaultContractResolver();
@@ -64,6 +69,7 @@ namespace FastFrame.WebHost
                     options.SerializerSettings.NullValueHandling = NullValueHandling.Include;
                     options.SerializerSettings.Converters.Add(new StringEnumConverter());
                 });
+
             services
                 .AddSignalR()
                 .AddJsonProtocol(config =>
@@ -72,13 +78,16 @@ namespace FastFrame.WebHost
                     config.PayloadSerializerOptions.IgnoreNullValues = false;
                     config.PayloadSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
                 });
+
             services.AddLogging(r => r.AddLog4Net());
             services.AddOptions();
             services.Configure<ResourceOption>(Configuration.GetSection("ResourceOption"));
+            services.AddMemoryCache();
+            services.AddSession();
 
             services
                 .AddHttpContextAccessor()
-                .AddDbContextPool<Database.DataBase>(o =>
+                .AddDbContextPool<DataBase>(o =>
                 {
                     o.UseMySql(Configuration.GetConnectionString("MyDbConnection"), mySqlOptions =>
                     {
@@ -134,31 +143,39 @@ namespace FastFrame.WebHost
                 app.UseDeveloperExceptionPage();
             }
 
-            app.Use(async (context, next) =>
-            {
-                await context.Request.HttpContext.RequestServices.GetService<IAppSessionProvider>().InitAsync();
-
-                var stopwatch = new Stopwatch();
-                stopwatch.Start();
-                context.Response.OnStarting(() =>
-                {
-                    stopwatch.Stop();
-                    context.Response.Headers.Add("ElapsedMilliseconds", stopwatch.ElapsedMilliseconds.ToString());
-                    return Task.CompletedTask;
-                });
-
-                if (context.Request.Path.HasValue && context.Request.Path.Value == "/")
-                    context.Response.Redirect("/index.html");
-
-                await next.Invoke();
-            });
             //app.UseRewriter(new RewriteOptions().AddRewrite()) 
 
+            /*使用静态文件*/
+            var defaultFilesOptions = new DefaultFilesOptions();
+            defaultFilesOptions.DefaultFileNames.Add("index.html");
+            app.UseDefaultFiles(defaultFilesOptions);
             app.UseStaticFiles();
-            app.UseDefaultFiles();
-            app.UseRouting();
-            app.UseAuthorization();
+
+            /*记录接口请求时间*/
+            app.UseMiddleware<InvodeTimeMiddleware>();
+
+            /*使用Session*/
+            app.UseSession();
+
+            /*初始化应用会话状态*/
+            app.UseMiddleware<AppSessionInitMiddleware>();
+
+            /*异步处理中间件*/
+            app.UseMiddleware<ExceptionMiddleware>();
+
+            /*处理资源文件*/
             app.UseMiddleware<ResourceMiddleware>();
+
+            /*注册路由*/
+            app.UseRouting();
+
+            /*授权验证中间件*/
+            app.UseMiddleware<AuthorizationMiddleware>();
+
+            /*权限验证中间件*/
+            app.UseMiddleware<PermissionMiddleware>();
+
+            /*注册终结点*/
             app.UseEndpoints(endpoints =>
             {
                 //endpoints.MapHub<ChatHub>("/hub/chat");
@@ -170,6 +187,7 @@ namespace FastFrame.WebHost
                 //    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
 
+            /*注册swagger*/
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
@@ -188,27 +206,27 @@ namespace FastFrame.WebHost
                 logger.LogTrace("ApplicationStarted");
                 logger.LogCritical("ApplicationStarted");
 
+                /*初始化应用*/
                 var applicationInitialProviders = app.ApplicationServices.GetServices<IApplicationInitialProvider>();
                 foreach (var applicationInitialProvider in applicationInitialProviders)
-                {
                     await applicationInitialProvider.InitialAsync();
-                } 
-            });
-
-            applicationLifetime.ApplicationStopped.Register(() =>
-            {
-                logger.LogInformation("ApplicationStopped");
             });
 
             applicationLifetime.ApplicationStopping.Register(async () =>
             {
                 logger.LogInformation("ApplicationStopping");
 
+                /*处理应用关闭时事件*/
                 var applicationInitialProviders = app.ApplicationServices.GetServices<IApplicationUnInitialProvider>();
                 foreach (var applicationInitialProvider in applicationInitialProviders)
                 {
                     await applicationInitialProvider.UnInitialAsync();
                 }
+            });
+
+            applicationLifetime.ApplicationStopped.Register(() =>
+            {
+                logger.LogInformation("ApplicationStopped");
             });
         }
     }

@@ -349,11 +349,6 @@
             权限标记
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Basis.RolePermission.SuperPermissionKey">
-            <summary>
-            上级权限标记
-            </summary>
-        </member>
         <member name="T:FastFrame.Entity.Basis.Tenant">
             <summary>
             组织信息

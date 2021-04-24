@@ -263,6 +263,39 @@ namespace FastFrame.Infrastructure
             return string.Join(separator, @in);
         }
 
+        public static string ToHexString(this string @in, Encoding encoding = null)
+        {
+            if (string.IsNullOrWhiteSpace(@in))
+                return default;
+
+            if (encoding == null)
+                encoding = Encoding.UTF8;
+
+            return BitConverter.ToString(encoding.GetBytes(@in)).Replace("-", "").ToLower();
+        }
+
+        public static string FromHexString(this string @in, Encoding encoding = null)
+        {
+            if (string.IsNullOrWhiteSpace(@in))
+                return default;
+
+            if (encoding == null)
+                encoding = Encoding.UTF8;
+
+            var bytes = new byte[@in.Length / 2];
+
+            for (int i = 0; i < bytes.Length; i++)
+            {
+                var s = new string(new char[] { @in[i * 2], @in[i * 2 + 1] });
+                var b = byte.Parse(s, System.Globalization.NumberStyles.HexNumber);
+
+                bytes[i] = b;
+            }
+
+            return encoding.GetString(bytes);
+        }
+
+
         /// <summary>
         /// ToBase64
         /// </summary>

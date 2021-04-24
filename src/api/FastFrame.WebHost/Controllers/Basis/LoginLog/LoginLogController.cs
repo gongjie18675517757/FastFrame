@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace FastFrame.WebHost.Controllers.Basis
 {
-    [Permission("LoginLog", "登录身份")]
+    /// <summary>
+    /// 登录身份
+    /// </summary>
     public class LoginLogController : BaseController<LoginLogModel>
     {
         private readonly LoginLogServcie service;

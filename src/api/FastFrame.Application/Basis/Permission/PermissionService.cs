@@ -32,16 +32,13 @@ namespace FastFrame.Application.Basis
             this.rolePermissionRepository = rolePermissionRepository;
         }
 
-        public async Task<bool> CheckIsGrantedAsync(string groupPermissionKey, string[] childPermissionKeys)
+        public async Task<bool> CheckIsGrantedAsync(params string[] permissions)
         {
             var permissionDefinitions = permissionDefinitionContext.PermissionDefinitions();
 
             /*先判断权限是否有定义*/
-            if (!permissionDefinitions.Any(v => v.PermissionKey == groupPermissionKey &&
-                                                v.Child.Any(r => childPermissionKeys.Contains(r.PermissionKey))))
-            {
+            if (!permissionDefinitions.Any(v => v.Child.Any(r => permissions.Contains(r.PermissionKey))))
                 return false;
-            }
 
             var currUser = appSessionProvider.CurrUser;
 
@@ -52,8 +49,7 @@ namespace FastFrame.Application.Basis
                               join b in rolePermissionRepository on a.Role_Id equals b.Role_Id
                               join c in roleRepository on a.Role_Id equals c.Id
                               where (a.User_Id == currUser.Id || c.IsDefault) &&
-                                      b.SuperPermissionKey == groupPermissionKey &&
-                                      childPermissionKeys.Contains(b.PermissionKey)
+                                    permissions.Contains(b.PermissionKey)
                               select 1;
 
             return await existsQuery.AnyAsync();
@@ -72,17 +68,17 @@ namespace FastFrame.Application.Basis
                               join b in rolePermissionRepository on a.Role_Id equals b.Role_Id
                               join c in roleRepository on a.Role_Id equals c.Id
                               where (a.User_Id == currUser.Id || c.IsDefault)
-                              select new { b.SuperPermissionKey, b.PermissionKey };
+                              select b.PermissionKey;
 
-            var list = await existsQuery.ToListAsync();
+            var permissionArr = await existsQuery.Distinct().ToArrayAsync();
 
             return permissionDefinitions
-                .Where(v => list.Any(r => r.SuperPermissionKey == v.PermissionKey))
+                .Where(v => v.Child.Any(r => permissionArr.Contains(r.PermissionKey)))
                 .Select(v => new PermissionDefinition(
                                     v.PermissionKey,
                                     v.PermissionText,
                                     v.Child.Where(r =>
-                                            list.Any(p => p.SuperPermissionKey == v.PermissionKey && p.PermissionKey == r.PermissionKey))));
+                                            permissionArr.Contains(r.PermissionKey))));
         }
     }
 }

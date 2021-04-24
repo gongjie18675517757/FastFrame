@@ -3,13 +3,18 @@
     <v-main>
       <v-container fluid fill-height>
         <v-layout align-center justify-center>
-          <v-flex xs12 sm8 md4 lg4>
+          <v-flex xs12 sm8 md4 lg4 xl3>
             <v-card class="elevation-1 pa-3">
               <v-card-text>
                 <div class="layout column align-center">
-                  <img src="@/assets/logo.png" alt="Vue Material Admin" width="120" height="120" />
+                  <img
+                    src="@/assets/logo.png"
+                    alt="Vue Material Admin"
+                    width="120"
+                    height="120"
+                  />
                   <h1 class="flex my-4 primary--text">XXX管理平台</h1>
-                </div>
+                </div> 
                 <v-form v-model="valid" lazy-validation ref="form">
                   <v-text-field
                     append-icon="person"
@@ -34,7 +39,9 @@
                 </v-form>
               </v-card-text>
               <v-card-actions>
-                <v-btn block color="primary" @click="login" :loading="loading">登陆</v-btn>
+                <v-btn block color="primary" @click="login" :loading="loading"
+                  >登陆</v-btn
+                >
               </v-card-actions>
               <v-card-actions>
                 <v-spacer></v-spacer>
@@ -56,18 +63,18 @@ export default {
   data: () => ({
     loading: false,
     model: {
-      account: "",
-      password: ""
+      account: "admin",
+      password: "000000",
     },
     valid: true,
     accountRules: [
-      v => !!v || "请填写帐号",
-      v => (v && v.length >= 4 && v.length < 20) || "长度不正确"
+      (v) => !!v || "请填写帐号",
+      (v) => (v && v.length >= 4 && v.length < 20) || "长度不正确",
     ],
     passwordRules: [
-      v => !!v || "请填写密码",
-      v => (v && v.length >= 4 && v.length < 20) || "长度不正确"
-    ]
+      (v) => !!v || "请填写密码",
+      (v) => (v && v.length >= 4 && v.length < 20) || "长度不正确",
+    ],
   }),
   created() {},
   methods: {
@@ -96,8 +103,8 @@ export default {
       } finally {
         this.loading = false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped lang="css">

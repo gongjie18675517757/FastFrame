@@ -8,7 +8,6 @@ namespace FastFrame.WebHost.Controllers.Basis
 	/// <summary>
 	/// 组织信息 
 	/// </summary>
-	[Permission(nameof(Tenant),"组织信息")]
 	public partial class TenantController:BaseController<TenantDto>
 	{
 		private readonly TenantService service;

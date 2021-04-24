@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace FastFrame.Infrastructure.Permission
 {
@@ -11,10 +12,10 @@ namespace FastFrame.Infrastructure.Permission
 
         public IEnumerable<PermissionDefinition> PermissionDefinitions()
         {
-            return defDic.Values;
+            return defDic.Values.Where(v => v.Child.Any());
         }
 
-        public PermissionDefinition RegisterPermission(string permissionKey, string permissionText)
+        public PermissionDefinition TryRegisterPermission(string permissionKey, string permissionText)
         {
             if (!defDic.TryGetValue(permissionKey, out var permissionDefinition))
             {

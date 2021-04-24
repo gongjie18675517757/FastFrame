@@ -1,7 +1,16 @@
-module.exports = {
+module.exports = { 
   "transpileDependencies": [
     "vuetify"
   ],
+  pages: {
+    index: { 
+      entry: 'src/main.js', 
+      template: 'public/index.html', 
+      filename: 'index.html', 
+      title: 'xxx企业模块化开发模板', 
+    }, 
+    //subpage: 'src/subpage/main.js'
+  },
   devServer: {
     // 设置主机地址
     host: '0.0.0.0',

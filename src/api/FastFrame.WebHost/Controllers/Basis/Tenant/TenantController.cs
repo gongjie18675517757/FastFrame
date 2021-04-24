@@ -1,6 +1,7 @@
 ﻿using FastFrame.Application.Basis;
 using FastFrame.Infrastructure.Attrs;
 using FastFrame.Infrastructure.Permission;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -8,7 +9,7 @@ namespace FastFrame.WebHost.Controllers.Basis
 {
     public partial class TenantController
     {
-        [EveryoneAccess]
+        [AllowAnonymous]
         [HttpGet]
         public async Task<TenantDto> GetCurrent()
         {

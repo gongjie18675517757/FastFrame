@@ -1,6 +1,7 @@
 ﻿using FastFrame.Application.Account;
 using FastFrame.Application.Basis;
 using FastFrame.Infrastructure.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -26,7 +27,7 @@ namespace FastFrame.WebHost.Controllers.Account
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPost] 
-        [EveryoneAccess]
+        [AllowAnonymous]
         public async Task<CurrUser> Login([FromBody]LoginInput input)
         { 
             return await service.LoginAsync(input);
@@ -38,7 +39,7 @@ namespace FastFrame.WebHost.Controllers.Account
         /// <param name="user"></param>
         /// <returns></returns>
         [HttpPost]
-        [EveryoneAccess]
+        [AllowAnonymous]
         public async Task<UserDto> Regist([FromBody]UserDto user)
         {
             return await service.RegistAsync(user);
@@ -49,7 +50,7 @@ namespace FastFrame.WebHost.Controllers.Account
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        [EveryoneAccess]
+        [AllowAnonymous]
         public async Task LogOut()
         {
             await appSession.LogOutAsync();

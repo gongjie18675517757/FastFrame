@@ -21,15 +21,11 @@
     <DocumentationFile>.\FastFrame.WebHost.xml</DocumentationFile>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Controllers\CMS\**" />
-    <Compile Remove="Logs\**" />
-    <Content Remove="Controllers\CMS\**" />
-    <Content Remove="Logs\**" />
-    <EmbeddedResource Remove="Controllers\CMS\**" />
-    <EmbeddedResource Remove="Logs\**" />
-    <None Remove="Controllers\CMS\**" />
-    <None Remove="Logs\**" />
+  <ItemGroup> 
+    <Compile Remove="Logs\**" /> 
+    <Content Remove="Logs\**" /> 
+    <EmbeddedResource Remove="Logs\**" /> 
+    <None Remove="Logs\**" /> 
   </ItemGroup>
 
   <ItemGroup>

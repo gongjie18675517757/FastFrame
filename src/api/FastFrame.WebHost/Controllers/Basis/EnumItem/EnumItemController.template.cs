@@ -8,7 +8,6 @@ namespace FastFrame.WebHost.Controllers.Basis
 	/// <summary>
 	/// 数字字典 
 	/// </summary>
-	[Permission(nameof(EnumItem),"数字字典")]
 	public partial class EnumItemController:BaseCURDController<EnumItemDto>
 	{
 		private readonly EnumItemService service;

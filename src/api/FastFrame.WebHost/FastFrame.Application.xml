@@ -270,7 +270,7 @@
             工作流 
              </summary>
         </member>
-        <member name="T:FastFrame.WebHost.EveryoneAccessAttribute">
+        <member name="T:FastFrame.WebHost.AllowAnonymousAttribute">
             <summary>
             所有人可以访问
             </summary>

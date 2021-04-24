@@ -681,6 +681,72 @@
             <param name="relativelyPath"></param>
             <returns></returns>
         </member>
+        <member name="T:FastFrame.Infrastructure.Interface.IResourceInfo">
+            <summary>
+            资源信息
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.IResourceInfo.Name">
+            <summary>
+            名称 
+            </summary> 
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.IResourceInfo.Size">
+            <summary>
+            大小 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.IResourceInfo.ContentType">
+            <summary>
+            类型 
+            </summary> 
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.IResourceInfo.UploaderName">
+            <summary>
+            上传人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.IResourceInfo.UploadTime">
+            <summary>
+            上传时间 
+            </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Interface.IResourceStreamInfo">
+            <summary>
+            资源流
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.IResourceStreamInfo.Name">
+            <summary>
+            名称 
+            </summary> 
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.IResourceStreamInfo.ResourceBlobStream">
+            <summary>
+            资源流
+            </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Interface.IResourceStoreProvider">
+            <summary>
+            资源存储
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IResourceStoreProvider.TrySaveResource(System.String,System.String,System.IO.Stream)">
+            <summary>
+            尝试保存资源
+            </summary>
+            <param name="name"></param>
+            <param name="contentType"></param>
+            <param name="stream"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IResourceStoreProvider.TryGetResource(System.String)">
+            <summary>
+            尝试获取资源
+            </summary>
+            <param name="resourceId"></param>
+            <returns></returns>
+        </member>
         <member name="T:FastFrame.Infrastructure.MessageBus.IAsyncMessageHandle`1">
             <summary>
             处理异步消息
@@ -1096,12 +1162,11 @@
             权限检查者
             </summary>
         </member>
-        <member name="M:FastFrame.Infrastructure.Permission.IPermissionChecker.CheckIsGrantedAsync(System.String,System.String[])">
+        <member name="M:FastFrame.Infrastructure.Permission.IPermissionChecker.CheckIsGrantedAsync(System.String[])">
             <summary>
             检查是否被授权
-            </summary>
-            <param name="groupPermissionKey"></param>
-            <param name="childPermissionKeys"></param>
+            </summary> 
+            <param name="permissions"></param>
             <returns></returns>
         </member>
         <member name="M:FastFrame.Infrastructure.Permission.IPermissionChecker.GetGrantedPermissions">
@@ -1115,9 +1180,10 @@
             权限定义上下文接口
             </summary>
         </member>
-        <member name="M:FastFrame.Infrastructure.Permission.IPermissionDefinitionContext.RegisterPermission(System.String,System.String)">
+        <member name="M:FastFrame.Infrastructure.Permission.IPermissionDefinitionContext.TryRegisterPermission(System.String,System.String)">
             <summary>
-            注册权限
+            尝试注册权限
+            如果注册过，则返回之前的
             </summary>
             <param name="permissionKey"></param>
             <param name="permissionText"></param>
@@ -1136,7 +1202,7 @@
         </member>
         <member name="T:FastFrame.Infrastructure.Permission.PermissionAttribute">
             <summary>
-            权限描述
+            权限标记
             </summary>
         </member>
         <member name="M:FastFrame.Infrastructure.Permission.PermissionAttribute.#ctor(System.String)">
@@ -1204,6 +1270,21 @@
         <member name="T:FastFrame.Infrastructure.Permission.PermissionDefinitionContext">
             <summary>
             权限定义上下文实现
+            </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Permission.PermissionGroupAttribute">
+            <summary>
+            权限组标记
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Permission.PermissionGroupAttribute.Name">
+            <summary>
+            权限组名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Permission.PermissionGroupAttribute.Text">
+            <summary>
+            权限组文本
             </summary>
         </member>
         <member name="T:FastFrame.Infrastructure.Snowflake">

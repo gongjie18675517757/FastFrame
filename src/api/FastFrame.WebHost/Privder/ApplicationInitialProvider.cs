@@ -42,6 +42,7 @@ namespace FastFrame.WebHost.Privder
         /// <returns></returns>
         public async Task InitialAsync()
         {
+            /*注册类型*/
             try
             {
                 TypeManger.RegisterBaseType<IEntity>();
@@ -52,6 +53,7 @@ namespace FastFrame.WebHost.Privder
                 logger.LogError(ex, "注册类型管理失败！");
             }
 
+            /*注册Redis*/
             try
             {
                 serviceProvider.GetService<RedisClient>();
@@ -62,6 +64,7 @@ namespace FastFrame.WebHost.Privder
                 logger.LogError(ex, "注册Redis失败！");
             }
 
+            /*数据库迁移*/
             try
             {
                 await serviceProvider.GetService<DataBase>().Database.MigrateAsync();
@@ -71,6 +74,7 @@ namespace FastFrame.WebHost.Privder
                 logger.LogError(ex, "数据库迁移失败！");
             }
 
+            /*缓存多租户信息*/
             try
             {
                 memoryCache.Set("Cache:Multi-TenantHost-List", await serviceProvider.GetService<DataBase>().Set<TenantHost>().ToArrayAsync());
@@ -86,6 +90,7 @@ namespace FastFrame.WebHost.Privder
             {
                 var permissionDefinitionContext = serviceProvider.GetService<IPermissionDefinitionContext>();
                 var permissionProviders = serviceProvider.GetServices<IPermissionDefinitionProvider>();
+                var moduleDesProvider = serviceProvider.GetService<IModuleDesProvider>();
                 foreach (var permissionProvider in permissionProviders)
                 {
                     await permissionProvider.RegisterPermission(permissionDefinitionContext);
@@ -100,29 +105,33 @@ namespace FastFrame.WebHost.Privder
                         continue;
 
                     /*权限组*/
-                    var groupPermissions = controllerType.GetCustomAttributes<PermissionAttribute>();
+                    var permissionGroupAttribute = controllerType.GetCustomAttribute<PermissionGroupAttribute>();
+                    var groupName = permissionGroupAttribute?.Name;
+                    var groupText = permissionGroupAttribute?.Text;
 
-                    foreach (var groupPermission in groupPermissions)
+                    if (permissionGroupAttribute == null)
                     {
-                        if (!groupPermission.IsDefinition)
-                            continue;
+                        groupName = controllerType.Name.Replace("Controller", "");
+                        groupText = moduleDesProvider.GetClassDescription(controllerType);
+                    }
 
-                        var permissionDefinition = permissionDefinitionContext.RegisterPermission(groupPermission.PermissionKey, groupPermission.Text);
-                        var methodInfos = controllerType.GetMethods();
-                        foreach (var methodInfo in methodInfos)
+                    var permissionDefinition = permissionDefinitionContext.TryRegisterPermission(groupName, groupText);
+                    var methodInfos = controllerType.GetMethods();
+                    foreach (var methodInfo in methodInfos)
+                    {
+                        /*权限标记*/
+                        var permissions = methodInfo.GetCustomAttributes<PermissionAttribute>();
+                        foreach (var permission in permissions)
                         {
-                            /*子权限*/
-                            var permissions = methodInfo.GetCustomAttributes<PermissionAttribute>();
-                            foreach (var permission in permissions)
+                            if (permission.IsDefinition)
                             {
-                                if (permission.IsDefinition)
-                                {
-                                    permissionDefinition.RegisterChildPermission(permission.PermissionKey, permission.Text);
-                                }
+                                var permissionName = permission.PermissionKey;
+                                if (!permissionName.Contains("."))
+                                    permissionName = $"{groupName}.{permissionName}";
+
+                                permissionDefinition.RegisterChildPermission(permissionName, permission.Text);
                             }
                         }
-
-
                     }
                 }
             }
@@ -142,7 +151,7 @@ namespace FastFrame.WebHost.Privder
                 }
             }
             catch (Exception ex)
-            { 
+            {
                 logger.LogError(ex, "注册模块失败！");
             }
         }

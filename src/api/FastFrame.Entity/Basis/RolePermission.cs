@@ -19,12 +19,6 @@ namespace FastFrame.Entity.Basis
         /// 权限标记
         /// </summary>
         [StringLength(100)]
-        public string PermissionKey { get; set; }
-
-        /// <summary>
-        /// 上级权限标记
-        /// </summary>
-        [StringLength(100)]
-        public string SuperPermissionKey { get; set; }
+        public string PermissionKey { get; set; } 
     }
 }

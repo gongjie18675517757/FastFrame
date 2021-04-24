@@ -9,8 +9,7 @@
         {
             base.ModelEntityCreating(entityTypeBuilder);
 
-            entityTypeBuilder.HasIndex(v => v.PermissionKey);
-            entityTypeBuilder.HasIndex(v => v.SuperPermissionKey);
+            entityTypeBuilder.HasIndex(v => v.PermissionKey); 
         } 
     }
 }

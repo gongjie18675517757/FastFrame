@@ -1,9 +1,9 @@
 ﻿using FastFrame.Infrastructure.Interface;
-using FastFrame.Infrastructure;
-using System;
-using System.Threading.Tasks;
-using System.IO;
+using FastFrame.WebHost.Middleware;
 using Microsoft.Extensions.Options;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace FastFrame.WebHost.Privder
 {
@@ -16,6 +16,7 @@ namespace FastFrame.WebHost.Privder
 
         public ResourceProvider(IOptions<ResourceOption> option)
         {
+            
             this.option = option;
         }
         public async Task<Stream> ReadAsync(string path)
@@ -28,7 +29,7 @@ namespace FastFrame.WebHost.Privder
         }
 
         public async Task<string> WriteAsync(Stream stream)
-        {
+        { 
             var relativelyPath = Path.Combine(
                     $"{DateTime.Now.Year}",
                     $"{DateTime.Now.Month}",
@@ -44,7 +45,10 @@ namespace FastFrame.WebHost.Privder
             {
                 stream.Position = 0;
                 await stream.CopyToAsync(fileStream);
+
+                await fileStream.FlushAsync();
             }
+
             return relativelyPath;
         }
 

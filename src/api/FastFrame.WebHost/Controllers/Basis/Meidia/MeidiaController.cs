@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 
 namespace FastFrame.WebHost.Controllers.Basis
 {
-    [Permission(nameof(Meidia), "媒体库")]
+    /// <summary>
+    /// 媒体库
+    /// </summary>
     public partial class MeidiaController : BaseController
     {
         private readonly MeidiaService service;
@@ -17,7 +19,7 @@ namespace FastFrame.WebHost.Controllers.Basis
             this.service = service;
         }
 
-        [Permission(nameof(List),"列表")]
+        [Permission(nameof(List), "列表")]
         [HttpGet("{id?}")]
         public async Task<MeidiaOutput> List(string id, string v = "")
         {

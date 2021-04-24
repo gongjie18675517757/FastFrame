@@ -914,46 +914,6 @@
             编号设置 服务实现 
             </summary>
         </member>
-        <member name="T:FastFrame.Application.Basis.ResourceDto">
-            <summary>
-            资源 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.ResourceDto.Name">
-            <summary>
-            资源名称 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.ResourceDto.Size">
-            <summary>
-            资源大小 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.ResourceDto.Path">
-            <summary>
-            相对路径 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.ResourceDto.ContentType">
-            <summary>
-            资源标识 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.ResourceDto.MD5">
-            <summary>
-            MD5摘要 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.ResourceDto.Uploader_Id">
-            <summary>
-            上传人 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.ResourceDto.UploadTime">
-            <summary>
-            上传时间 
-            </summary>
-        </member>
         <member name="T:FastFrame.Application.Basis.ResourceViewModel">
             <summary>
             资源 
@@ -967,11 +927,6 @@
         <member name="P:FastFrame.Application.Basis.ResourceViewModel.Id">
             <summary>
              
-            </summary>
-        </member>
-        <member name="T:FastFrame.Application.Basis.ResourceService">
-            <summary>
-            资源 服务实现 
             </summary>
         </member>
         <member name="T:FastFrame.Application.Basis.RoleDto">
@@ -1277,6 +1232,11 @@
         <member name="P:FastFrame.Application.ResourceModel.UploadTime">
             <summary>
             上传时间 
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.ResourceStreamModel">
+            <summary>
+            文件流信息
             </summary>
         </member>
         <member name="T:FastFrame.Application.Chat.ChatMessageHandle">

@@ -1,14 +1,13 @@
 namespace FastFrame.WebHost.Controllers.Flow
 {
-	using FastFrame.Entity.Flow;
-	using FastFrame.Application.Flow;
-	using FastFrame.Infrastructure.Permission;
-	using FastFrame.Infrastructure.Interface;
-
+	using FastFrame.Entity.Flow; 
+	using FastFrame.Application.Flow; 
+	using FastFrame.Infrastructure.Permission; 
+	using FastFrame.Infrastructure.Interface; 
+		
 	/// <summary>
 	/// 工作流 
 	/// </summary>
-	[Permission(nameof(WorkFlow),"工作流")]
 	public partial class WorkFlowController:BaseCURDController<WorkFlowDto>
 	{
 		private readonly WorkFlowService service;
@@ -17,6 +16,8 @@ namespace FastFrame.WebHost.Controllers.Flow
 			 : base(service)
 		{
 			this.service = service;
-		} 
+		}
+		
+		
 	}
 }

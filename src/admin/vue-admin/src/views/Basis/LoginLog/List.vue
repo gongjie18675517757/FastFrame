@@ -2,7 +2,7 @@
 let pageInfo = {
   area: "Basis",
   name: "LoginLog",
-  direction: "登录记录"
+  direction: "登录记录",
 };
 
 import Page from "../../../components/Page/ListPageCore.js";
@@ -13,7 +13,7 @@ export default {
   data() {
     return {
       ...Page.data.call(this),
-      ...pageInfo
+      ...pageInfo,
     };
   },
   methods: {
@@ -24,7 +24,7 @@ export default {
     getRowOperateItems() {
       return Page.methods.getRowOperateItems
         .call(this, ...arguments)
-        .then(arr => {
+        .then((arr) => {
           return [
             ...arr,
             (h, { model }) =>
@@ -34,32 +34,42 @@ export default {
                     {
                       props: {
                         moduleName: pageInfo.name,
-                        name: "SetTokenFailure"
+                        name: "SetTokenFailure",
                       },
                       attrs: {
                         text: true,
                         small: true,
-                        color: "primary"
+                        color: "primary",
                       },
                       on: {
                         click: () => {
-                          this.$http
-                            .post(
-                              `/api/${pageInfo.name}/SetTokenFailure/${model.Id}`
-                            )
+                          event.stopPropagation();
+                          this.$message
+                            .confirm({
+                              title:"提示", 
+                              content:"确认要强制失效这个token吗?"
+                            })
                             .then(() => {
-                              model.IsEnabled = false;
-                              return this.$message.toast.success("操作成功");
+                              this.$http
+                                .post(
+                                  `/api/${pageInfo.name}/SetTokenFailure/${model.Id}`
+                                )
+                                .then(() => {
+                                  model.IsEnabled = false;
+                                  return this.$message.toast.success(
+                                    "操作成功"
+                                  );
+                                });
                             });
-                        }
-                      }
+                        },
+                      },
                     },
                     "强制失效"
                   )
-                : null
+                : null,
           ];
         });
-    }
-  }
+    },
+  },
 };
 </script>

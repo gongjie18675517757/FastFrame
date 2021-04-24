@@ -97,12 +97,22 @@
             数字字典 
             </summary>
         </member>
+        <member name="T:FastFrame.WebHost.Controllers.Basis.LoginLogController">
+            <summary>
+            登录身份
+            </summary>
+        </member>
         <member name="M:FastFrame.WebHost.Controllers.Basis.LoginLogController.SetTokenFailure(System.String)">
             <summary>
             设置身份失效
             </summary>
             <param name="token"></param>
             <returns></returns>
+        </member>
+        <member name="T:FastFrame.WebHost.Controllers.Basis.MeidiaController">
+            <summary>
+            媒体库
+            </summary>
         </member>
         <member name="M:FastFrame.WebHost.Controllers.Basis.MeidiaController.Delete(System.String)">
             <summary>
@@ -243,25 +253,46 @@
             请假单 
             </summary>
         </member>
-        <member name="T:FastFrame.WebHost.Controllers.ResourceController">
+        <member name="T:FastFrame.WebHost.Middleware.AuthorizationMiddleware">
             <summary>
-            资源
+            身份授权验证中间件
             </summary>
         </member>
-        <member name="M:FastFrame.WebHost.Controllers.ResourceController.Post">
+        <member name="T:FastFrame.WebHost.Middleware.ExceptionMiddleware">
             <summary>
-            上传
+            异常处理中间件
             </summary>
-            <returns></returns>
         </member>
-        <member name="M:FastFrame.WebHost.Controllers.ResourceController.Get(System.String,System.String)">
+        <member name="T:FastFrame.WebHost.Middleware.InvodeTimeMiddleware">
             <summary>
-            下载
-            </summary> 
+            写入接口执行时间
+            </summary>
         </member>
-        <member name="T:FastFrame.WebHost.EveryoneAccessAttribute">
+        <member name="T:FastFrame.WebHost.Middleware.PermissionMiddleware">
             <summary>
-            所有人可以访问
+            权限处理中间件
+            </summary>
+        </member>
+        <member name="T:FastFrame.WebHost.Middleware.ResourceOption">
+            <summary>
+            资源配置
+            </summary>
+        </member>
+        <member name="P:FastFrame.WebHost.Middleware.ResourceOption.BasePath">
+            <summary>
+            父路径
+            </summary>
+        </member>
+        <member name="P:FastFrame.WebHost.Middleware.ResourceOption.DownLoadPathRegexText">
+            <summary>
+            响应下载的正则
+            例：/api/resource/download/([^/]+)
+            </summary>
+        </member>
+        <member name="P:FastFrame.WebHost.Middleware.ResourceOption.UploadPathRegexText">
+            <summary>
+            响应上传的正则
+            如：/api/resource/upload
             </summary>
         </member>
         <member name="T:FastFrame.WebHost.Privder.ApplicationInitialProvider">
@@ -287,20 +318,6 @@
             <typeparam name="TDto"></typeparam>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.WebHost.Privder.GlobalFilter.OnAuthorizationAsync(Microsoft.AspNetCore.Mvc.Filters.AuthorizationFilterContext)">
-            <summary>
-            权限验证
-            </summary>
-            <param name="context"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.WebHost.Privder.GlobalFilter.OnExceptionAsync(Microsoft.AspNetCore.Mvc.Filters.ExceptionContext)">
-            <summary>
-            异常验证
-            </summary>
-            <param name="context"></param>
-            <returns></returns>
-        </member>
         <member name="M:FastFrame.WebHost.Privder.ModuleExportProvider.GetModuleStruts(System.String)">
             <summary>
             获取模块结构
@@ -317,16 +334,6 @@
             注册模块
             </summary>
             <param name="moduleStructs"></param>
-        </member>
-        <member name="T:FastFrame.WebHost.Privder.ResourceOption">
-            <summary>
-            资源配置
-            </summary>
-        </member>
-        <member name="P:FastFrame.WebHost.Privder.ResourceOption.BasePath">
-            <summary>
-            父路径
-            </summary>
         </member>
         <member name="T:FastFrame.WebHost.Privder.ResourceProvider">
             <summary>

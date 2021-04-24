@@ -17,7 +17,7 @@
                     v-for="(option,index) in themeColorOptions"
                     :key="index"
                   >
-                    <input type="radio" name="color" v-bind:value="option.key" v-model="themeColor">
+                    <input type="radio" name="color" v-bind:value="option.key" v-model="themeColor" />
                     <span class="color-option--item bg">
                       <span class="overlay">
                         <span class="material-icons">check</span>
@@ -180,12 +180,14 @@ export default {
   },
   watch: {
     themeColor(val) {
-      this.$vuetify.theme.primary = this.colors[val].base;
+      this.$vuetify.theme.themes.light.primary = this.colors[val].base;
+      this.$vuetify.theme.themes.dark.primary = this.colors[val].base;
     },
     sideBarOption(val) {
-      this.$vuetify.dark = val === "dark";
+      this.$vuetify.theme.dark = val === "dark";
     }
-  }
+  },
+ 
 };
 </script>
 

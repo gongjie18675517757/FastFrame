@@ -15,6 +15,7 @@ import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import {
   eventBus,
 } from './utils';
+ 
 
 Vue.prototype.$eventBus = eventBus
 Vue.config.productionTip = false

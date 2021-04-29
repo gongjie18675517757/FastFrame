@@ -159,6 +159,7 @@ namespace FastFrame.WebHost
 
             /*初始化应用会话状态*/
             app.UseMiddleware<AppSessionInitMiddleware>();
+            
 
             /*异步处理中间件*/
             app.UseMiddleware<ExceptionMiddleware>();

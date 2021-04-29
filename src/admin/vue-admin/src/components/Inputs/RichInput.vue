@@ -16,7 +16,7 @@
 
 
 <script>
-import { postFiles, upload } from "../../utils";
+import { postFiles } from "../../utils";
 import RemoteJS from "../RemoteJS.vue";
 export default {
   components: { RemoteJS },

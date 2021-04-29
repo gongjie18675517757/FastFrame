@@ -14,7 +14,7 @@
                     height="120"
                   />
                   <h1 class="flex my-4 primary--text">XXX管理平台</h1>
-                </div> 
+                </div>
                 <v-form v-model="valid" lazy-validation ref="form">
                   <v-text-field
                     append-icon="person"
@@ -39,9 +39,19 @@
                 </v-form>
               </v-card-text>
               <v-card-actions>
-                <v-btn block color="primary" @click="login" :loading="loading"
-                  >登陆</v-btn
-                >
+                <v-menu v-model="verifying" top offset-y :close-on-content-click="false">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      block
+                      color="primary"
+                      v-bind="attrs"
+                      v-on="on"
+                      :loading="loading"
+                      >登陆</v-btn
+                    >
+                  </template>
+                  <SlideVerififyVue @success="login" v-if="verifying" />
+                </v-menu>
               </v-card-actions>
               <v-card-actions>
                 <v-spacer></v-spacer>
@@ -56,10 +66,12 @@
 </template>
 
 <script>
-// import { validationMixin } from 'vuelidate'
-// import { required, maxLength, email } from 'vuelidate/lib/validators'
+import SlideVerififyVue from "../components/SlideVerifify.vue";
 
 export default {
+  components: {
+    SlideVerififyVue,
+  },
   data: () => ({
     loading: false,
     model: {
@@ -75,6 +87,7 @@ export default {
       (v) => !!v || "请填写密码",
       (v) => (v && v.length >= 4 && v.length < 20) || "长度不正确",
     ],
+    verifying: false,
   }),
   created() {},
   methods: {

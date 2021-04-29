@@ -1,8 +1,11 @@
 ﻿using FastFrame.Application.Account;
 using FastFrame.Application.Basis;
+using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Interface;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace FastFrame.WebHost.Controllers.Account
@@ -15,6 +18,16 @@ namespace FastFrame.WebHost.Controllers.Account
         private readonly AccountService service;
         private readonly IAppSessionProvider appSession;
 
+        /// <summary>
+        /// 保存滑动验证的值
+        /// </summary>
+        private static readonly string SlideVerififySessionKey = $"SlideVerifify_{Guid.NewGuid():N}";
+
+        /// <summary>
+        /// 保存滑动验证的结果
+        /// </summary>
+        private static readonly string ExistsSlideVerififySessionKey = $"IsExistsSlideVerififySlideVerifify_{Guid.NewGuid():N}";
+
         public AccountController(AccountService service, IAppSessionProvider appSession)
         {
             this.service = service;
@@ -26,10 +39,13 @@ namespace FastFrame.WebHost.Controllers.Account
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        [HttpPost] 
+        [HttpPost]
         [AllowAnonymous]
         public async Task<CurrUser> Login([FromBody]LoginInput input)
-        { 
+        {
+            //if (!ExistsIsVerify())
+            //    throw new MsgException("行为验证失败！");
+
             return await service.LoginAsync(input);
         }
 
@@ -42,6 +58,9 @@ namespace FastFrame.WebHost.Controllers.Account
         [AllowAnonymous]
         public async Task<UserDto> Regist([FromBody]UserDto user)
         {
+            //if (!ExistsIsVerify())
+            //    throw new MsgException("行为验证失败！");
+
             return await service.RegistAsync(user);
         }
 
@@ -75,8 +94,80 @@ namespace FastFrame.WebHost.Controllers.Account
         {
             return await service.UpdateUserInfo(input);
         }
-    } 
-    
+
+        /// <summary>
+        /// 滑动验证码
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [AllowAnonymous]
+        public SlideVerificationOutput SlideVerifify(int width = 400, int height = 150)
+        {
+            var side_path = @"C:\Users\Administrator\Desktop\EasySlideVerification-master\EasySlideVerification-master\EasySlideVerification\App_Data\Images\Slide\slide-02.png";
+            var bg_path = @"C:\Users\Administrator\Desktop\EasySlideVerification-master\EasySlideVerification-master\EasySlideVerification\App_Data\Images\Slide\bg-s.jpg";
+
+            using var bgStream = System.IO.File.OpenRead(bg_path);
+            using var sideStream = System.IO.File.OpenRead(side_path);
+            var pars = new SlideVerificationInput(bgStream, sideStream)
+            {
+                SlideSize = new System.DrawingCore.Size(50, 50),
+                BackgroundSize = new System.DrawingCore.Size(width, height)
+            };
+            var output = SlideVerificationCreater.Instance.Value.Create(pars, out var positionX);
+
+            /*缓存偏移量*/
+            HttpContext.Session.SetInt32(SlideVerififySessionKey, positionX);
+
+            /*清除缓存结果*/
+            HttpContext.Session.Remove(ExistsSlideVerififySessionKey);
+            return output;
+        }
+
+        /// <summary>
+        /// 校验滑动偏移是否正确
+        /// </summary>
+        /// <param name="positionX"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [AllowAnonymous]
+        public bool IsVerify([FromForm]int positionX)
+        {
+            /*清除缓存结果*/
+            HttpContext.Session.Remove(ExistsSlideVerififySessionKey);
+
+            /*正确的偏移值*/
+            var verifyPositionX = HttpContext.Session.GetInt32(SlideVerififySessionKey);
+            HttpContext.Session.Remove(SlideVerififySessionKey);
+
+            if (verifyPositionX == null)
+                return false;
+
+            /*误差*/
+            int accept = 5;
+
+            var isVerify = Math.Abs(verifyPositionX.Value - positionX) < accept;
+
+            if (isVerify)
+                HttpContext.Session.SetInt32(ExistsSlideVerififySessionKey, 1);
+
+            return isVerify;
+        }
+
+        /// <summary>
+        /// 检查是否验证过了
+        /// </summary>
+        /// <returns></returns>
+        private bool ExistsIsVerify()
+        {
+            /*是否验证过*/
+            var isVerify = HttpContext.Session.GetInt32(ExistsSlideVerififySessionKey) != null;
+
+            /*清除缓存结果*/
+            HttpContext.Session.Remove(ExistsSlideVerififySessionKey);
+
+            return isVerify;
+        }
+    }
 }
 
- 
+

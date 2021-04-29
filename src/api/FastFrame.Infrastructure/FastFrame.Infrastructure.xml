@@ -1287,6 +1287,96 @@
             权限组文本
             </summary>
         </member>
+        <member name="T:FastFrame.Infrastructure.SlideVerificationCreater">
+            <summary>
+            滑动解锁生成器
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.SlideVerificationCreater.Create(FastFrame.Infrastructure.SlideVerificationInput,System.Int32@)">
+            <summary>
+            创建图片滑动数据
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.SlideVerificationCreater.ResizeImage(System.DrawingCore.Image,System.Nullable{System.DrawingCore.Size})">
+            <summary>
+            调整图片大小
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Infrastructure.SlideVerificationCreater.DrawBackground(System.DrawingCore.Bitmap,System.DrawingCore.Bitmap,System.Int32,System.Int32)">
+            <summary>
+            画背景图并将滑块画上去
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Infrastructure.SlideVerificationCreater.CaptureImage(System.DrawingCore.Bitmap,System.DrawingCore.Bitmap,System.Int32,System.Int32)">
+            <summary>
+            从大图中根据像素点，生成图片，作为拼图块
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Infrastructure.SlideVerificationCreater.ImageToByteArr(System.DrawingCore.Image,System.DrawingCore.Imaging.ImageFormat)">
+            <summary>
+            Image转Byte数组
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Infrastructure.SlideVerificationCreater.ImageToBase64(System.Byte[],System.DrawingCore.Imaging.ImageFormat)">
+            <summary>
+            Image转base64
+            </summary>  
+        </member>
+        <member name="P:FastFrame.Infrastructure.SlideVerificationInput.BackgroundSize">
+            <summary>
+            背景大小
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.SlideVerificationInput.SlideSize">
+            <summary>
+            滑块大小
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.SlideVerificationInput.BackgroundStream">
+            <summary>
+            背景内容
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.SlideVerificationInput.SlideStream">
+            <summary>
+            滑块内容
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.SlideVerificationOutput.BackgroundImg">
+            <summary>
+            背景图片base64
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.SlideVerificationOutput.SlideImg">
+            <summary>
+            滑块图片base64
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.SlideVerificationOutput.PositionY">
+            <summary>
+            Y轴
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.SlideVerificationOutput.BgHeight">
+            <summary>
+            背景高
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.SlideVerificationOutput.BgWidth">
+            <summary>
+            背景宽
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.SlideVerificationOutput.SlideHeight">
+            <summary>
+            滑块高
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.SlideVerificationOutput.SlideWidth">
+            <summary>
+            滑块宽
+            </summary>
+        </member>
         <member name="T:FastFrame.Infrastructure.Snowflake">
             <summary>
             动态生产有规律的ID

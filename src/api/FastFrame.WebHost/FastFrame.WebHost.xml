@@ -9,6 +9,16 @@
             登陆
             </summary>
         </member>
+        <member name="F:FastFrame.WebHost.Controllers.Account.AccountController.SlideVerififySessionKey">
+            <summary>
+            保存滑动验证的值
+            </summary>
+        </member>
+        <member name="F:FastFrame.WebHost.Controllers.Account.AccountController.ExistsSlideVerififySessionKey">
+            <summary>
+            保存滑动验证的结果
+            </summary>
+        </member>
         <member name="M:FastFrame.WebHost.Controllers.Account.AccountController.Login(FastFrame.Application.Account.LoginInput)">
             <summary>
             登陆
@@ -38,6 +48,25 @@
         <member name="M:FastFrame.WebHost.Controllers.Account.AccountController.UpdateCurrUserInfo(FastFrame.Application.Basis.UserDto)">
             <summary>
             修改当前用户信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.WebHost.Controllers.Account.AccountController.SlideVerifify(System.Int32,System.Int32)">
+            <summary>
+            滑动验证码
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.WebHost.Controllers.Account.AccountController.IsVerify(System.Int32)">
+            <summary>
+            校验滑动偏移是否正确
+            </summary>
+            <param name="positionX"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.WebHost.Controllers.Account.AccountController.ExistsIsVerify">
+            <summary>
+            检查是否验证过了
             </summary>
             <returns></returns>
         </member>

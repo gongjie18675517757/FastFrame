@@ -36,7 +36,10 @@ axios.interceptors.request.use(function (config) {
      * 自动对GET请求增加版本号
      */
     if (config.method == 'get') {
-        console.log(config);
+        let pars = `v=${new Date().getTime()}`;
+        if (!config.url.includes('?'))
+            pars = `?${pars}`
+        config.url = `${config.url}${pars}`
     }
 
     /**

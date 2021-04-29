@@ -49,7 +49,7 @@ namespace FastFrame.WebHost.Middleware
             }
             catch (MsgException ex)
             {
-                context.Response.StatusCode = 401;
+                context.Response.StatusCode = 400;
                 context.Response.ContentType = "application/json";
                 await context.Response.WriteAsync(new
                 {

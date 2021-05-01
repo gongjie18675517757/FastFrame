@@ -30,8 +30,8 @@ function loadAreas() {
             title: page.title,
             keepAlive: false,
             moduleName: key,
-            pageName: page.permission || page.key,
-            pagePage: `@/views/${areaName}/${key}/${page.path || page.key}.vue`,
+            permission: `${key}.${page.permission || page.key}`,
+            pagePath: `@/views/${areaName}/${key}/${page.path || page.key}.vue`,
           },
 
           component: () =>
@@ -42,100 +42,100 @@ function loadAreas() {
   })
 }
 
-let childs = loadAreas() 
+let childs = loadAreas()
 
- 
+export const pages = [{
+  path: '/',
+  name: 'home',
+  meta: {
+    title: '首页',
+    keepAlive: true
+  },
+  component: () =>
+    import(`@/views/Index/Index.vue`)
+},
+{
+  path: '/about',
+  name: 'about',
+  meta: {
+    title: '关于页',
+    keepAlive: true
+  },
+  props: true,
+  component: () =>
+    import(`@/views/About.vue`)
+},
+{
+  path: '/icons',
+  name: 'icons',
+  meta: {
+    title: '所有图标',
+    keepAlive: true
+  },
+  props: true,
+  component: () =>
+    import(`@/views/Icons.vue`)
+},
+{
+  path: '/map',
+  name: 'map',
+  meta: {
+    title: '地图演示',
+    keepAlive: true
+  },
+  component: () =>
+    import(`@/views/Map.vue`)
+},
+{
+  path: '/tenantCenter',
+  name: 'tenantCenter',
+  meta: {
+    title: '企业中心',
+    keepAlive: false
+  },
+  component: () =>
+    import(`@/views/TenantCenter.vue`)
+},
+{
+  path: '/userCenter',
+  name: 'userCenter',
+  meta: {
+    title: '个人中心',
+    keepAlive: false
+  },
+  component: () =>
+    import(`@/views/UserCenter.vue`)
+},
+{
+  path: '/notifyCenter',
+  name: 'notifyCenter',
+  meta: {
+    title: '通知中心',
+    keepAlive: false
+  },
+  component: () =>
+    import(`@/views/Index/NotifyCenter`)
+},
+{
+  path: '/flowDesign',
+  name: 'flowDesign',
+  meta: {
+    title: '流程设计',
+    keepAlive: false
+  },
+  component: () =>
+    import(`@/views/Flow/Design/Add.vue`)
+},
+...childs
+].map(v => ({
+  ...v,
+  props
+}))
+
 let routes = [{
   path: '/',
-
   component: Home,
-  children: [{
-    path: '/',
-    name: 'home',
-    meta: {
-      title: '首页',
-      keepAlive: true
-    },
-    component: () =>
-      import(`@/views/Index/Index.vue`)
-  },
-  {
-    path: '/about',
-    name: 'about',
-    meta: {
-      title: '关于页',
-      keepAlive: true
-    },
-    props: true,
-    component: () =>
-      import(`@/views/About.vue`)
-  },
-  {
-    path: '/icons',
-    name: 'icons',
-    meta: {
-      title: '所有图标',
-      keepAlive: true
-    },
-    props: true,
-    component: () =>
-      import(`@/views/Icons.vue`)
-  },
-  {
-    path: '/map',
-    name: 'map',
-    meta: {
-      title: '地图演示',
-      keepAlive: true
-    },
-    component: () =>
-      import(`@/views/Map.vue`)
-  },
-  {
-    path: '/tenantCenter',
-    name: 'tenantCenter',
-    meta: {
-      title: '企业中心',
-      keepAlive: false
-    },
-    component: () =>
-      import(`@/views/TenantCenter.vue`)
-  },
-  {
-    path: '/userCenter',
-    name: 'userCenter',
-    meta: {
-      title: '个人中心',
-      keepAlive: false
-    },
-    component: () =>
-      import(`@/views/UserCenter.vue`)
-  },
-  {
-    path: '/notifyCenter',
-    name: 'notifyCenter',
-    meta: {
-      title: '通知中心',
-      keepAlive: false
-    },
-    component: () =>
-      import(`@/views/Index/NotifyCenter`)
-  },
-  {
-    path: '/flowDesign',
-    name: 'flowDesign',
-    meta: {
-      title: '流程设计',
-      keepAlive: false
-    },
-    component: () =>
-      import(`@/views/Flow/Design/Add.vue`)
-  },
-  ...childs
-  ].map(v => ({
-    ...v,
-    props
-  }))
+  children: pages
 },
 {
   path: '/login',
@@ -177,7 +177,7 @@ let router = new Router({
 
 router.beforeEach(async (to, from, nextFunc) => {
   let next = store.state.singlePageMode ? nextFunc : () => {
-    let route = routes[0].children.find(v => v.name == to.name)
+    let route = pages.find(v => v.name == to.name)
     if (route) {
       let page = {
         fullPath: to.fullPath,
@@ -223,11 +223,12 @@ router.beforeEach(async (to, from, nextFunc) => {
     return
   }
 
-  let exists = await store.getters.existsPermissionAsync(to.meta.moduleName, to.meta.pageName)
+  let exists = await store.dispatch('existsPermissionAsync', to.meta.permission);
+
   if (exists) {
     next()
   } else {
-    next({
+    nextFunc({
       path: '/405',
       query: {
         redirect: to.fullPath

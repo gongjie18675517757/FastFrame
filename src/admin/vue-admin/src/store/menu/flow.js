@@ -6,7 +6,7 @@ export default {
         {
             title: '流程设计',
             path: '/WorkFlow/list',
-            permission: 'WorkFlow'
+            permission: 'WorkFlow.List'
         }
     ]
 }

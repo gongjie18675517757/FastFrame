@@ -43,8 +43,8 @@ namespace FastFrame.WebHost.Controllers.Account
         [AllowAnonymous]
         public async Task<CurrUser> Login([FromBody]LoginInput input)
         {
-            //if (!ExistsIsVerify())
-            //    throw new MsgException("行为验证失败！");
+            if (!ExistsIsVerify())
+                throw new MsgException("行为验证失败！");
 
             return await service.LoginAsync(input);
         }
@@ -58,8 +58,8 @@ namespace FastFrame.WebHost.Controllers.Account
         [AllowAnonymous]
         public async Task<UserDto> Regist([FromBody]UserDto user)
         {
-            //if (!ExistsIsVerify())
-            //    throw new MsgException("行为验证失败！");
+            if (!ExistsIsVerify())
+                throw new MsgException("行为验证失败！");
 
             return await service.RegistAsync(user);
         }
@@ -101,7 +101,7 @@ namespace FastFrame.WebHost.Controllers.Account
         /// <returns></returns>
         [HttpGet]
         [AllowAnonymous]
-        public SlideVerificationOutput SlideVerifify(int width = 400, int height = 150)
+        public SlideVerificationOutput SlideVerifify(int width = 400, int height = 200)
         {
             var side_path = @"C:\Users\Administrator\Desktop\EasySlideVerification-master\EasySlideVerification-master\EasySlideVerification\App_Data\Images\Slide\slide-02.png";
             var bg_path = @"C:\Users\Administrator\Desktop\EasySlideVerification-master\EasySlideVerification-master\EasySlideVerification\App_Data\Images\Slide\bg-s.jpg";

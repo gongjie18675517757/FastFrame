@@ -37,7 +37,7 @@ namespace FastFrame.Application.Basis
             var permissionDefinitions = permissionDefinitionContext.PermissionDefinitions();
 
             /*先判断权限是否有定义*/
-            if (!permissionDefinitions.Any(v => v.Child.Any(r => permissions.Contains(r.PermissionKey))))
+            if (!permissionDefinitions.Any(v => v.Child.Any(r => permissions.Contains(r.Name))))
                 return false;
 
             var currUser = appSessionProvider.CurrUser;
@@ -73,12 +73,12 @@ namespace FastFrame.Application.Basis
             var permissionArr = await existsQuery.Distinct().ToArrayAsync();
 
             return permissionDefinitions
-                .Where(v => v.Child.Any(r => permissionArr.Contains(r.PermissionKey)))
+                .Where(v => v.Child.Any(r => permissionArr.Contains(r.Name)))
                 .Select(v => new PermissionDefinition(
-                                    v.PermissionKey,
-                                    v.PermissionText,
+                                    v.Name,
+                                    v.Text,
                                     v.Child.Where(r =>
-                                            permissionArr.Contains(r.PermissionKey))));
+                                            permissionArr.Contains(r.Name))));
         }
     }
 }

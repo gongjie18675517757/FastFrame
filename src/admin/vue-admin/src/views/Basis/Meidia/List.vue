@@ -7,20 +7,24 @@
             <v-toolbar-title>资源列表</v-toolbar-title>
             <v-spacer></v-spacer>
             <span class="hidden-sm-and-down">
-              <a-btn
+              <permission-facatory
                 v-for="btn in basisBtns"
                 :key="`${btn.title}_${btn.name}`"
-                :title="btn.title"
-                :color="btn.color"
-                :moduleName="moduleInfo.name"
-                :disabled="evalDisabled(btn)"
-                @click="evalAction(btn)"
-                small
-                text
+                :permission="btn.permission"
               >
-                <v-icon>{{btn.icon}}</v-icon>
-                <span>{{btn.title}}</span>
-              </a-btn>
+                <v-btn
+                  small
+                  text
+                  :disabled="evalDisabled(btn)"
+                  @click="evalAction(btn)"
+                  v-bind="btn"
+                >
+                  <v-icon v-if="btn.iconName">
+                    {{ btn.iconName }}
+                  </v-icon>
+                  {{ btn.title }}
+                </v-btn>
+              </permission-facatory>
             </span>
             <v-menu offset-y>
               <template v-slot:activator="{ on }">
@@ -29,28 +33,30 @@
                 </v-btn>
               </template>
               <v-list dense>
-                <v-list-item
-                  v-for="item in [...($vuetify.breakpoint.smAndDown?basisBtns:[])].filter(r=>evalShow(r))"
-                  :key="`${item.title}_${item.name}`"
-                  :title="item.title"
-                  :moduleName="moduleInfo.name"
-                  :name="item.name"
-                  :disabled="evalDisabled(item)"
-                  @click="evalAction(item)"
+                <permission-facatory
+                  v-for="btn in $vuetify.breakpoint.smAndDown ? basisBtns : []"
+                  :key="`${btn.title}_${btn.name}`"
+                  :permission="btn.permission"
                 >
-                  <v-list-item-action>
-                    <v-icon>{{item.icon}}</v-icon>
-                  </v-list-item-action>
-                  <v-list-item-content>{{item.title}}</v-list-item-content>
-                </v-list-item>
+                  <v-btn
+                    :disabled="evalDisabled(btn)"
+                    @click="evalAction(btn)"
+                    v-bind="btn"
+                  >
+                    <v-list-item-action>
+                      <v-icon>{{ btn.iconName }}</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>{{ btn.title }}</v-list-item-content>
+                  </v-btn>
+                </permission-facatory>
 
-                <v-list-item @click="view='grid'">
+                <v-list-item @click="view = 'grid'">
                   <v-list-item-action>
                     <v-icon>view_headline</v-icon>
                   </v-list-item-action>
                   <v-list-item-content>详细模式</v-list-item-content>
                 </v-list-item>
-                <v-list-item @click="view='list'">
+                <v-list-item @click="view = 'list'">
                   <v-list-item-action>
                     <v-icon>view_list</v-icon>
                   </v-list-item-action>
@@ -62,19 +68,33 @@
               <v-icon>close</v-icon>
             </v-btn>
           </v-toolbar>
-          <v-progress-linear color="secondary" v-if="uploading" height="2" :value="uploadValue"></v-progress-linear>
+          <v-progress-linear
+            color="secondary"
+            v-if="uploading"
+            height="2"
+            :value="uploadValue"
+          ></v-progress-linear>
           <v-divider></v-divider>
           <v-card-text class="pa-0">
             <vue-perfect-scrollbar
               class="media-content--warp"
-              :class="[isTab?'tab-page':isDialog?'dialog-page':'full-page']"
+              :class="[
+                isTab ? 'tab-page' : isDialog ? 'dialog-page' : 'full-page',
+              ]"
             >
               <v-container fluid v-if="items.length">
-                <v-row v-if="view ==='grid'">
-                  <v-col v-for="item in orderItems" :key="item.name" cols="12" sm="4" md="3" lg="2">
+                <v-row v-if="view === 'grid'">
+                  <v-col
+                    v-for="item in orderItems"
+                    :key="item.name"
+                    cols="12"
+                    sm="4"
+                    md="3"
+                    lg="2"
+                  >
                     <GridItem
                       :item="item"
-                      :selected="currItem==item"
+                      :selected="currItem == item"
                       :mode="view"
                       @click="handleClick(item)"
                       @dblclick="handleDbClick(item)"
@@ -96,7 +116,7 @@
                         :key="item.Id"
                         :item="item"
                         :mode="view"
-                        :selected="currItem==item"
+                        :selected="currItem == item"
                         @click="handleClick(item)"
                         @dblclick="handleDbClick(item)"
                         @remove="handleRemove"
@@ -108,10 +128,10 @@
                   </v-list>
                 </v-layout>
               </v-container>
-              <v-container fluid v-else style="height: 100%;">
-                <v-row align="center" justify="center" style="height: 100%;">
+              <v-container fluid v-else style="height: 100%">
+                <v-row align="center" justify="center" style="height: 100%">
                   <a @click="addFolder">创建文件夹</a>
-                  <a @click="upload" style="padding-left:15px;">上传文件</a>
+                  <a @click="upload" style="padding-left: 15px">上传文件</a>
                 </v-row>
               </v-container>
             </vue-perfect-scrollbar>
@@ -119,7 +139,13 @@
           <v-card-actions v-if="isDialog">
             <v-btn text @click="$emit('close')">取消</v-btn>
             <v-spacer></v-spacer>
-            <v-btn color="primary" text @click="handleSuccess" :disabled="!currItem">确认</v-btn>
+            <v-btn
+              color="primary"
+              text
+              @click="handleSuccess"
+              :disabled="!currItem"
+              >确认</v-btn
+            >
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -138,19 +164,16 @@ export default {
   components: {
     VuePerfectScrollbar,
     ListItem,
-    GridItem
+    GridItem,
   },
   props: {
     isDialog: Boolean,
     isTab: Boolean,
     p: String, //上级
-    s: String //搜索
+    s: String, //搜索
   },
   data() {
     return {
-      moduleInfo: {
-        name: "Meidia"
-      },
       items: [],
       view: "grid",
       currItem: null,
@@ -164,62 +187,66 @@ export default {
           title: "返回上一级",
           color: "info",
           name: "List",
-          icon: "arrow_upward",
+          permission: "Meidia.List",
+          iconName: "arrow_upward",
           action() {
             this.current_Id = this.Super_Id;
             this.loadList();
           },
           disabled() {
             return !this.current_Id;
-          }
+          },
         },
         {
           title: "上传文件",
           color: "success",
           name: "Add",
+          permission: "Meidia.Add",
           text: true,
-          icon: "cloud_upload",
+          iconName: "cloud_upload",
           action() {
             this.upload();
           },
           disabled() {
             return this.uploading || this.kw || this.isDialog;
-          }
+          },
         },
         {
           title: "搜索",
           color: "info",
           name: "List",
-          icon: "search",
+          permission: "Meidia.List",
+          iconName: "search",
           action() {
             this.search();
           },
           disabled() {
             return this.uploading;
-          }
+          },
         },
         {
           title: "创建文件夹",
           color: "success",
           name: "Add",
-          icon: "folder",
+          permission: "Meidia.Add",
+          iconName: "folder",
           action() {
             this.addFolder();
           },
           disabled() {
             return this.uploading || this.kw || this.isDialog;
-          }
+          },
         },
         {
           title: "重置",
           color: "info",
           name: "List",
-          icon: "refresh",
+          iconName: "refresh",
           action() {
             this.refrsh();
-          }
-        }
-      ]
+          },
+        },
+      ],
     };
   },
   computed: {
@@ -229,22 +256,14 @@ export default {
     context() {
       return {
         selection: this.currItem ? [this.currItem] : [],
-        items: this.items
+        items: this.items,
       };
-    }
+    },
   },
   created() {
     this.loadList();
   },
   methods: {
-    evalShow({ show }) {
-      let val = true;
-      if (typeof show == "function") val = show.call(this, this.context);
-      if (typeof show == "boolean") val = show;
-      if (typeof show == "string") val = !!show;
-
-      return val;
-    },
     evalDisabled({ disabled }) {
       let val = false;
       if (typeof disabled == "function")
@@ -299,22 +318,22 @@ export default {
             this.uploading = true;
             this.uploadValue = 0;
           },
-          onProgress: e => {
+          onProgress: (e) => {
             this.uploading = true;
             this.uploadValue = e;
-          }
+          },
         });
 
         let postData = {
           Name: resource.Name,
           Super_Id: this.current_Id,
           Resource_Id: resource.Id,
-          IsFolder: false
+          IsFolder: false,
         };
         let res = await this.$http.post("/api/Meidia/post", postData);
         this.items.push(
           this.fmtItem({
-            ...res
+            ...res,
           })
         );
       } finally {
@@ -326,27 +345,27 @@ export default {
         title: "文件夹名称",
         width: "500px",
         model: {
-          name: null
+          name: null,
         },
         options: [
           {
             Name: "name",
             Type: "String",
             Description: "文件夹名称",
-            rules: [rules.required("文件夹名称")]
-          }
-        ]
+            rules: [rules.required("文件夹名称")],
+          },
+        ],
       });
       let postData = {
         Name: name,
         IsFolder: true,
-        Super_Id: this.current_Id
+        Super_Id: this.current_Id,
       };
       let Id = await this.$http.post("/api/Meidia/post", postData);
       this.items.push(
         this.fmtItem({
           ...postData,
-          Id
+          Id,
         })
       );
     },
@@ -355,16 +374,16 @@ export default {
         title: "名称",
         width: "500px",
         model: {
-          name: item.Name
+          name: item.Name,
         },
         options: [
           {
             Name: "name",
             Type: "String",
             Description: "名称",
-            rules: [rules.required("文件夹名称")]
-          }
-        ]
+            rules: [rules.required("文件夹名称")],
+          },
+        ],
       });
       dialog.then(({ name }) => {
         if (name == item.Name) return;
@@ -389,13 +408,13 @@ export default {
             props: {
               "lazy-src": src,
               src: src,
-              "max-height": "80vh"
+              "max-height": "80vh",
             },
             on: {
               click: () => {
                 this.$emit("success");
-              }
-            }
+              },
+            },
           });
 
           return h(
@@ -406,20 +425,20 @@ export default {
                 fluid: true,
                 app: true,
                 "align-center": true,
-                "justify-center": true
-              }
+                "justify-center": true,
+              },
             },
             [
               h(
                 "v-flex",
                 {
-                  xs12: true
+                  xs12: true,
                 },
                 [img]
-              )
+              ),
             ]
           );
-        }
+        },
       });
     },
     search() {
@@ -428,7 +447,7 @@ export default {
           title: "文件/文件夹名称",
           width: "500px",
           model: {
-            name: null
+            name: null,
           },
           options: [
             {
@@ -436,9 +455,9 @@ export default {
               Type: "String",
               IsRequired: true,
               Description: "搜索关键字",
-              rules: [rules.required("搜索关键字")]
-            }
-          ]
+              rules: [rules.required("搜索关键字")],
+            },
+          ],
         })
         .then(({ name }) => {
           this.kw = name;
@@ -449,21 +468,21 @@ export default {
       this.$message
         .confirm({
           title: "提示",
-          content: "确认要删除吗?"
+          content: "确认要删除吗?",
         })
         .then(() => {
           let confirmPromise = Promise.resolve();
           if (item.IsFolder) {
             confirmPromise = this.$message.confirm({
               title: "提示",
-              content: "是否删除文件夹下的所有文件?"
+              content: "是否删除文件夹下的所有文件?",
             });
           }
           return confirmPromise;
         })
         .then(() => {
           let { Id } = item;
-          let index = this.items.findIndex(r => r == item);
+          let index = this.items.findIndex((r) => r == item);
           this.$http.delete(`/api/meidia/delete/${Id}`).then(() => {
             if (item.IsFolder) {
               this.refrsh();
@@ -475,8 +494,8 @@ export default {
     },
     handleSuccess() {
       this.$emit("success", [this.currItem]);
-    }
-  }
+    },
+  },
 };
 </script>
 

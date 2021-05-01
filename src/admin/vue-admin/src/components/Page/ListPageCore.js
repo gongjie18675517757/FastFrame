@@ -15,7 +15,7 @@ export let makeToolItems = function () {
     title: "新增",
     color: "success",
     name: "Add",
-    icon: "add",
+    iconName: "add",
     action: this.toEdit,
     visible: () => this.ModuleStrut.HasManage
   },
@@ -23,7 +23,7 @@ export let makeToolItems = function () {
     title: "修改",
     color: "warning",
     name: "Update",
-    icon: "edit",
+    iconName: "edit",
     visible: () => this.ModuleStrut.HasManage,
     disabled: () => {
       let val = this.selection.length != 1;
@@ -36,14 +36,14 @@ export let makeToolItems = function () {
     color: "info",
     name: "List",
     key: "Search",
-    icon: "search",
+    iconName: "search",
     action: this.queryDialog
   },
   {
     title: "删除",
     color: "warning",
     name: "Delete",
-    icon: "delete",
+    iconName: "delete",
     visible: () => this.ModuleStrut.HasManage,
     disabled: () => this.selection.length != 1,
     action: () => this.remove(this.selection)
@@ -53,7 +53,7 @@ export let makeToolItems = function () {
     color: "success",
     name: "List",
     key: "Refresh",
-    icon: "refresh",
+    iconName: "refresh",
     action: () => {
       this.query = []
       this.loadList()
@@ -64,7 +64,7 @@ export let makeToolItems = function () {
     color: "basis",
     name: "List",
     key: "export",
-    icon: "import_export",
+    iconName: "import_export",
     action: this.exportList
   }
   ]
@@ -97,13 +97,30 @@ export let pageProps = {
 export let makePageData = function () {
   return {
     /**
-     * 操作项
+     * 模块名称，影响：请求地址
      */
-    toolItems: makeToolItems.call(this),
+    name: null,
+
+    /**
+     * 页面结构名：影响：获取列，获取查询方式
+     */
+    strutName: null,
+
+    /**
+     * 权限名称：影响页面权限定义
+     */
+    permissionName: null,
+
+    /**
+     * 操作按钮
+     */
+    toolItems: [],
+
     /**
      * 操作按钮摆放数据
      */
     toolSpliceCount: 6,
+
     /**
      * 表格列
      */
@@ -157,7 +174,12 @@ export let makePageData = function () {
     /**
      * 树表格子级组件
      */
-    treeChildComponent: null
+    treeChildComponent: null,
+
+    /**
+     * 是否初始化完成
+     */
+    isInited: false
   };
 }
 
@@ -165,7 +187,6 @@ export let makePageData = function () {
  * 计算属性
  */
 export let pageComputed = {
-
   dialogMode() {
     return this.$store.state.dialogMode;
   },
@@ -216,10 +237,24 @@ export let pageMethods = {
    * 初始化
    */
   init() {
-    Promise.resolve()
+    /**
+     * 未单独定义结构名时
+     */
+    this.strutName = this.strutName || this.name;
+
+    /**
+     * 未单独定义权限名时
+     */
+    this.permissionName = this.permissionName || this.name;
+
+    this.isInited = false;
+
+    return Promise.resolve()
       .then(this.getModuleStrut)
       .then(this.fmtModuleStrut)
       .then(strut => this.ModuleStrut = strut)
+      .then(() => this.getToolItems())
+      .then(toolItems => this.toolItems = toolItems)
       .then(this.getColumns)
       .then(this.fmtColumns)
       .then(arr => this.columns = distinct(arr, v => v.Name, (a, b) => ({
@@ -240,13 +275,15 @@ export let pageMethods = {
             Value: arr
           }
         ]
+      }).then(() => {
+        this.isInited = true;
       })
   },
   /**
    * 获取当前模块结构
    */
   getModuleStrut() {
-    return getModuleStrut(this.name)
+    return getModuleStrut(this.strutName)
   },
 
   /**
@@ -260,7 +297,7 @@ export let pageMethods = {
    * 获取当前模块列表列
    */
   getColumns() {
-    return getColumns(this.name)
+    return getColumns(this.strutName)
   },
 
   /**
@@ -320,6 +357,31 @@ export let pageMethods = {
           ] : [])
         ]
       })
+    })
+  },
+
+  /**
+   * 获取操作按钮
+   */
+  getToolItems() {
+    return Promise.resolve(makeToolItems.call(this)).then(arr => {
+      return arr.map(v => {
+        /**
+         * 未定义权限，但有定义name值时
+         */
+        let { permission, name } = v;
+        if (!permission && name) {
+          permission = `${this.permissionName}.${name}`
+        }
+        if (permission && !Array.isArray(permission)) {
+          permission = [permission]
+        }
+        return {
+          ...v,
+          permission
+        };
+      }
+      );
     })
   },
 
@@ -560,16 +622,7 @@ export let pageMethods = {
       })
   }),
 
-  /**
-   * 格式化操作按钮
-   * @param {*} items 
-   */
-  fmtToolItems(items) {
-    return distinct(items, v => v.key || v.name, (a, b) => ({
-      ...a,
-      ...b
-    }));
-  },
+
 
   /**
    * 关闭
@@ -593,7 +646,6 @@ export let makeChildProps = function () {
 
   return {
     ...this.$props,
-    area: this.area,
     moduleName: this.name,
     direction: this.direction + '列表',
     columns: this.dynamicColumns,
@@ -604,7 +656,7 @@ export let makeChildProps = function () {
     loading: this.loading,
     tableClassArr: this.tableClassArr,
     tableStyleObj: this.tableStyleObj,
-    toolItems: this.superId ? [] : this.fmtToolItems(this.toolItems),
+    toolItems: this.superId ? [] : this.toolItems,
     toolSpliceCount: this.toolSpliceCount,
     ModuleStrut: this.ModuleStrut,
     isDialog: this.isDialog,
@@ -689,9 +741,9 @@ export default {
   render(h) {
     let props = makeChildProps.call(this),
       listeners = makeChildListeners.call(this);
-    return h("v-list-page", {
+    return this.isInited ? h("v-list-page", {
       props,
       on: listeners
-    });
+    }) : null;
   }
 }

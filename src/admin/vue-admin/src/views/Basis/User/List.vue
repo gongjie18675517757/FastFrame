@@ -3,46 +3,8 @@ let pageInfo = {
   area: "Basis",
   name: "User",
   direction: "用户",
-  toolItems: [
-    {
-      name: "ToogleAdminIdentity",
-      title: "切换身份[管理员<>普通用户]",
-      icon: "perm_identity",
-      disabled({ selection }) {
-        return selection.length != 1;
-      },
-      async action({ selection, rows }) {
-        let { Id } = selection[0];
-        let result = await this.$http.put(
-          `/api/user/ToogleAdminIdentity/${Id}`
-        );
-        this.$message.toast.success("切换成功!");
-        let index = rows.findIndex(r => r.Id == Id);
-        if (index > -1) {
-          rows.splice(index, 1, result);
-        }
-      }
-    },
-    {
-      name: "ToogleDisabled",
-      title: "切换状态[禁用<>启用]",
-      icon: "sync_disabled",
-      disabled({ selection }) {
-        return selection.length != 1;
-      },
-      async action({ selection, rows }) {
-        let { Id } = selection[0];
-        let result = await this.$http.put(`/api/user/ToogleDisabled/${Id}`);
-        this.$message.toast.success("切换成功!");
-        let index = rows.findIndex(r => r.Id == Id);
-        if (index > -1) {
-          rows.splice(index, 1, result);
-        }
-      }
-    }
-  ]
 };
-import Page from "@/components/Page/ListPageCore.js";
+import Page from "../../../components/Page/ListPageCore.js";
 
 export default {
   ...Page,
@@ -51,29 +13,76 @@ export default {
     return {
       ...data,
       ...pageInfo,
-      toolItems: data.toolItems.concat(pageInfo.toolItems)
+      toolItems: data.toolItems.concat(pageInfo.toolItems),
     };
   },
   methods: {
     ...Page.methods,
+    getToolItems() {
+      return Page.methods.getToolItems.call(this, ...arguments).then((arr) => {
+        return [
+          ...arr,
+          {
+            name: "ToogleAdminIdentity",
+            permission: "User.ToogleAdminIdentity",
+            title: "切换身份[管理员<>普通用户]",
+            iconName: "perm_identity",
+            disabled({ selection }) {
+              return selection.length != 1;
+            },
+            async action({ selection, rows }) {
+              let { Id } = selection[0];
+              let result = await this.$http.put(
+                `/api/user/ToogleAdminIdentity/${Id}`
+              );
+              this.$message.toast.success("切换成功!");
+              let index = rows.findIndex((r) => r.Id == Id);
+              if (index > -1) {
+                rows.splice(index, 1, result);
+              }
+            },
+          },
+          {
+            name: "ToogleDisabled",
+            permission: "User.ToogleDisabled",
+            title: "切换状态[禁用<>启用]",
+            iconName: "sync_disabled",
+            disabled({ selection }) {
+              return selection.length != 1;
+            },
+            async action({ selection, rows }) {
+              let { Id } = selection[0];
+              let result = await this.$http.put(
+                `/api/user/ToogleDisabled/${Id}`
+              );
+              this.$message.toast.success("切换成功!");
+              let index = rows.findIndex((r) => r.Id == Id);
+              if (index > -1) {
+                rows.splice(index, 1, result);
+              }
+            },
+          },
+        ];
+      });
+    },
     getColumns() {
-      return Page.methods.getColumns.call(this, ...arguments).then(arr => {
+      return Page.methods.getColumns.call(this, ...arguments).then((arr) => {
         return [
           ...arr,
           {
             Name: "Depts",
             Description: "所属科室",
-            getValueFunc: ({ value }) => value.map(v => v.Name).join(",")
+            getValueFunc: ({ value }) => value.map((v) => v.Name).join(","),
           },
           {
             Name: "Roles",
             Description: "拥有角色",
-            getValueFunc: ({ value }) => value.map(v => v.Name).join(",")
-          }
+            getValueFunc: ({ value }) => value.map((v) => v.Name).join(","),
+          },
         ];
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

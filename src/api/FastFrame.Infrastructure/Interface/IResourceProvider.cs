@@ -37,6 +37,8 @@ namespace FastFrame.Infrastructure.Interface
     /// </summary>
     public interface IResourceInfo
     {
+        public string Id { get; set; }
+
         /// <summary>
 		/// 名称 
 		/// </summary> 

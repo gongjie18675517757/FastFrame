@@ -1,28 +1,36 @@
 <template>
   <v-container grid-list-xl fluid app>
     <v-layout row wrap>
-      <v-flex xs12 :style="{padding:isTab?'0px':null}">
+      <v-flex xs12 :style="{ padding: isTab ? '0px' : null }">
         <v-card>
           <v-toolbar flat dense height="30px" color="transparent">
-            <v-toolbar-title>{{direction}}</v-toolbar-title>
+            <v-toolbar-title>{{ direction }}</v-toolbar-title>
             <v-spacer></v-spacer>
             <span class="hidden-sm-and-down btn-group" v-if="!hideToolitem">
-              <a-btn
+              <permission-facatory
                 v-for="btn in items1"
                 :key="btn.key || btn.name"
-                :title="btn.title"
-                :moduleName="moduleName"
-                :disabled="evalDisabled(btn)"
-                @click="evalAction(btn)"
-                color="primary"
-                text
-                small
+                :permission="btn.permission"
               >
-                <span>{{btn.title}}</span>
-              </a-btn>
+                <v-btn
+                  @click="evalAction(btn)"
+                  text
+                  small
+                  color="primary"
+                  :disabled="evalDisabled(btn)"
+                  v-bind="btn"
+                >
+                  <v-icon v-if="btn.iconName">{{btn.iconName}}</v-icon>
+                  {{ btn.title }}
+                </v-btn>
+              </permission-facatory>
             </span>
             <!-- <span> -->
-            <v-menu offset-y :close-on-content-click="false" v-if="!hideToolitem">
+            <v-menu
+              offset-y
+              :close-on-content-click="false"
+              v-if="!hideToolitem"
+            >
               <template v-slot:activator="{ on }">
                 <v-btn
                   slot="activator"
@@ -30,7 +38,7 @@
                   small
                   text
                   v-on="on"
-                  :color="$vuetify.breakpoint.smAndDown?'':'success'"
+                  :color="$vuetify.breakpoint.smAndDown ? '' : 'success'"
                   :icon="$vuetify.breakpoint.smAndDown"
                 >
                   <v-icon>more_vert</v-icon>
@@ -38,31 +46,40 @@
                 </v-btn>
               </template>
               <v-list dense>
-                <v-list-item
-                  v-for="item in [...($vuetify.breakpoint.smAndDown?items:items2)]"
+                <permission-facatory
+                  v-for="item in [
+                    ...($vuetify.breakpoint.smAndDown ? items : items2),
+                  ]"
                   :key="item.key || item.name"
-                  :title="item.title"
-                  :disabled="evalDisabled(item)"
-                  @click="evalAction(item)"
+                  :permission="item.permission"
                 >
-                  <v-list-item-action>
-                    <v-icon>{{item.icon}}</v-icon>
-                  </v-list-item-action>
+                  <v-list-item
+                    :title="item.title"
+                    :disabled="evalDisabled(item)"
+                    @click="evalAction(item)"
+                  >
+                    <v-list-item-action>
+                      <v-icon>{{ item.iconName }}</v-icon>
+                    </v-list-item-action>
 
-                  <v-list-item-content>
-                    <v-list-item-title>{{item.title}}</v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
+                    <v-list-item-content>
+                      <v-list-item-title>{{ item.title }}</v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </permission-facatory>
+
                 <v-list-item
                   v-if="!$vuetify.breakpoint.smAndDown && !isDialog"
-                  @click="dialogMode=!dialogMode"
+                  @click="dialogMode = !dialogMode"
                 >
                   <v-list-item-action>
                     <v-checkbox :value="dialogMode"></v-checkbox>
                   </v-list-item-action>
                   <v-list-item-content>
                     <v-list-item-title>弹出模式</v-list-item-title>
-                    <v-list-item-subtitle>是否使用表单窗口</v-list-item-subtitle>
+                    <v-list-item-subtitle
+                      >是否使用表单窗口</v-list-item-subtitle
+                    >
                   </v-list-item-content>
                 </v-list-item>
                 <v-list-item
@@ -74,7 +91,9 @@
                   </v-list-item-action>
                   <v-list-item-content>
                     <v-list-item-title>显示管理字段</v-list-item-title>
-                    <v-list-item-subtitle>录入人,修改人,录入时间,修改时间</v-list-item-subtitle>
+                    <v-list-item-subtitle
+                      >录入人,修改人,录入时间,修改时间</v-list-item-subtitle
+                    >
                   </v-list-item-content>
                 </v-list-item>
               </v-list>
@@ -118,15 +137,14 @@ import { skip, take } from "../../utils";
 
 export default {
   components: {
-    Table
+    Table,
   },
   props: {
     toolItems: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     toolSpliceCount: Number,
-    moduleName: String,
     direction: String,
     isDialog: Boolean,
     isTab: Boolean,
@@ -134,15 +152,15 @@ export default {
     hideToolitem: Boolean,
     columns: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     rows: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     selection: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     loading: Boolean,
     tableClassArr: Array,
@@ -153,18 +171,18 @@ export default {
     showMamageField: Boolean,
     ModuleStrut: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
-    expandComponent: [Object, Function]
+    expandComponent: [Object, Function],
   },
   computed: {
     context() {
       return {
         selection: this.selection,
-        rows: this.rows
+        rows: this.rows,
       };
     },
-    items() {
+    items() { 
       return this.toolItems.filter(this.evalVisible);
     },
     items1() {
@@ -176,7 +194,7 @@ export default {
     tableListenter() {
       return {
         ...this.$listeners,
-        input: val => this.$emit("selection_update", val)
+        input: (val) => this.$emit("selection_update", val),
       };
     },
     dialogMode: {
@@ -185,8 +203,8 @@ export default {
       },
       set(val) {
         this.$store.state.dialogMode = val;
-      }
-    }
+      },
+    },
   },
   methods: {
     evalVisible({ visible }) {
@@ -200,22 +218,20 @@ export default {
 
       return val;
     },
-    evalDisabled({ disabled, name }) {
+    evalDisabled({ disabled }) {
       let val = false;
       if (typeof disabled == "function")
         val = disabled.call(this, this.context);
       if (typeof disabled == "boolean") val = disabled;
       if (typeof disabled == "string") val = !!disabled;
 
-      return (
-        val || !this.$store.getters.existsPermission(this.moduleName, name)
-      );
+      return val;
     },
     evalAction(item) {
       this.$emit(`toolItemClick`, item);
-    }
+    },
   },
-  watch: {}
+  watch: {},
 };
 </script>
 

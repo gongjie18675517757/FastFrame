@@ -1244,12 +1244,12 @@
             权限定义模型
             </summary>
         </member>
-        <member name="P:FastFrame.Infrastructure.Permission.PermissionDefinition.PermissionKey">
+        <member name="P:FastFrame.Infrastructure.Permission.PermissionDefinition.Name">
             <summary>
             权限键
             </summary>
         </member>
-        <member name="P:FastFrame.Infrastructure.Permission.PermissionDefinition.PermissionText">
+        <member name="P:FastFrame.Infrastructure.Permission.PermissionDefinition.Text">
             <summary>
             权限文本
             </summary>

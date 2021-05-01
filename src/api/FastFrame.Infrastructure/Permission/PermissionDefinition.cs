@@ -13,27 +13,27 @@ namespace FastFrame.Infrastructure.Permission
 
         public PermissionDefinition(string permissionKey, string permissionText)
         {
-            PermissionKey = permissionKey;
-            PermissionText = permissionText;
+            Name = permissionKey;
+            Text = permissionText;
             child = new HashSet<PermissionDefinition>(20, this);
         }
 
         public PermissionDefinition(string permissionKey, string permissionText, IEnumerable<PermissionDefinition> child)
         {
             this.child = new HashSet<PermissionDefinition>(child, this);
-            PermissionKey = permissionKey;
-            PermissionText = permissionText;
+            Name = permissionKey;
+            Text = permissionText;
         }
 
         /// <summary>
         /// 权限键
         /// </summary>
-        public string PermissionKey { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// 权限文本
         /// </summary>
-        public string PermissionText { get; set; }
+        public string Text { get; set; }
 
         /// <summary>
         /// 子级权限
@@ -55,12 +55,12 @@ namespace FastFrame.Infrastructure.Permission
 
         public bool Equals(PermissionDefinition x, PermissionDefinition y)
         {
-            return x?.PermissionKey == y?.PermissionKey;
+            return x?.Name == y?.Name;
         }
 
         public int GetHashCode(PermissionDefinition obj)
         {
-            return obj.PermissionKey.GetHashCode();
+            return obj.Name.GetHashCode();
         }
     }
 }

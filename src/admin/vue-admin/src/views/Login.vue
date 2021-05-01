@@ -39,19 +39,18 @@
                 </v-form>
               </v-card-text>
               <v-card-actions>
-                <v-menu v-model="verifying" top offset-y :close-on-content-click="false">
-                  <template v-slot:activator="{ on, attrs }">
+                <SlideVerififyVue @success="login">
+                  <template v-slot:activator="{ attrs, on }">
                     <v-btn
                       block
                       color="primary"
                       v-bind="attrs"
-                      v-on="on"
+                      @click.stop="handleClick(on, $event)"
                       :loading="loading"
                       >登陆</v-btn
                     >
                   </template>
-                  <SlideVerififyVue @success="login" v-if="verifying" />
-                </v-menu>
+                </SlideVerififyVue>
               </v-card-actions>
               <v-card-actions>
                 <v-spacer></v-spacer>
@@ -89,13 +88,15 @@ export default {
     ],
     verifying: false,
   }),
-  created() {},
   methods: {
-    async login() {
+    handleClick(on, e) {
       if (!this.$refs.form.validate()) {
         this.$message.toast.warning("请填写完整信息!");
         return;
       }
+      on.click(e);
+    },
+    async login() {
       this.loading = true;
       try {
         /**

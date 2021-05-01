@@ -9,13 +9,7 @@ export default {
         ],
         Dept: [
             ...makeStandardRouteItems('部门')
-        ],
-        Permission: [
-            {
-                key: 'List',
-                title: `权限列表`,
-            }
-        ],
+        ], 
         Role: [
             ...makeStandardRouteItems('角色')
         ],

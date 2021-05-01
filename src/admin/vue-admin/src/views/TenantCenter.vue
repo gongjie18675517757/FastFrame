@@ -5,22 +5,30 @@
         <v-toolbar flat dense color="transparent">
           <v-toolbar-title>后台信息</v-toolbar-title>
           <v-spacer></v-spacer>
-          <a-btn
-            icon
-            moduleName="Tenant"
-            name="UpdateTenantInfo"
-            v-if="!canEdit"
-            @click="canEdit=!canEdit"
-            title="修改"
-          >
-            <v-icon>edit</v-icon>
-          </a-btn>
+          <permission-facatory permission="Tenant.UpdateTenantInfo">
+            <v-btn
+              icon
+              v-if="!canEdit"
+              @click="canEdit = !canEdit"
+              title="修改"
+            >
+              <v-icon>edit</v-icon>
+            </v-btn>
+          </permission-facatory>
         </v-toolbar>
         <v-divider></v-divider>
         <v-form ref="form">
           <v-card-text>
             <v-subheader class="subheader">头像</v-subheader>
-            <v-flex xs12 sm6 md8 align-center justify-center layout text-xs-center>
+            <v-flex
+              xs12
+              sm6
+              md8
+              align-center
+              justify-center
+              layout
+              text-xs-center
+            >
               <v-avatar
                 size="100"
                 color="grey lighten-4"
@@ -35,10 +43,10 @@
               v-model="form.FullName"
               label="后台名称"
               :readonly="!canEdit"
-              :rules="[rules.required(),rules.stringLength('',3,50)]"
+              :rules="[rules.required(), rules.stringLength('', 3, 50)]"
             ></v-text-field>
             <v-text-field
-              :rules="[rules.required(),rules.stringLength('',3,50)]"
+              :rules="[rules.required(), rules.stringLength('', 3, 50)]"
               v-model="form.ShortName"
               label="公司简称"
               :readonly="!canEdit"
@@ -56,7 +64,8 @@
                 :disabled="!canEdit"
                 @click="submit"
                 :loading="submiting"
-              >保存</v-btn>
+                >保存</v-btn
+              >
             </v-card-actions>
           </v-card-text>
         </v-form>
@@ -73,20 +82,20 @@ export default {
   data() {
     return {
       rules: {
-        ...rules
+        ...rules,
       },
       errMsgs: {},
       initform: null,
       form: {},
       submiting: false,
-      canEdit: false
+      canEdit: false,
     };
   },
   computed: {
     handIcon() {
       let id = this.form.HandIcon_Id;
       return id ? `/api/resource/get/${id}` : timg;
-    }
+    },
   },
   async created() {
     let request = await this.$http.get("/api/Tenant/GetCurrent");
@@ -116,7 +125,7 @@ export default {
         this.canEdit = false;
         this.$store.commit({
           type: "setTenant",
-          info: JSON.parse(JSON.stringify(request))
+          info: JSON.parse(JSON.stringify(request)),
         });
         this.$message.toast.success("更新成功");
       } catch (error) {
@@ -124,8 +133,8 @@ export default {
       } finally {
         this.submiting = false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

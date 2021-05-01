@@ -232,15 +232,13 @@ export default new Vuex.Store({
 
         function existsPermission(permission) {
           if (!permission) return true;
-          if (typeof permission == "string") permission = [permission, "List"];
-          if (Array.isArray(permission)) {
-            let [moduleName, pageName] = permission;
-            let arr = Array.isArray(pageName) ? pageName : [pageName];
-            return !!data.find(v => v.PermissionKey == moduleName && v.Child.find(r => arr.includes(r.PermissionKey)));
-          }
-        }
+          if (!Array.isArray(permission))
+            permission = [permission];
 
+          return !!data.some(v => v.Child.some(r => permission.includes(r.Name)));
+        }
         state.menuList = JSON.parse(JSON.stringify(menuList)).filter(existsMenuPermission)
+
       })
     },
 
@@ -263,6 +261,24 @@ export default new Vuex.Store({
           state.enumItemValues[name] = data
         })
       }
+    },
+
+    /**
+     * 验证是否有权限
+     * @param {*} param0 
+     */
+    async existsPermissionAsync({ state, getters },permission) {
+      let count = 0;
+      while (count < 20) {
+        if (!state.isLoadPermission) {
+          await sleep(100)
+        } else {
+          break;
+        }
+        count++;
+      }
+
+      return getters.existsPermission(permission);
     }
   },
   getters: {
@@ -275,24 +291,10 @@ export default new Vuex.Store({
       }
       return state.tenant || {};
     },
-    existsPermission: state => (moduleName, actionName = 'List') => {
-      let arr = Array.isArray(actionName) ? actionName : [actionName];
-      return !!state.permissionList.find(v => v.PermissionKey == moduleName && v.Child.find(r => arr.includes(r.PermissionKey)));
-    },
-    existsPermissionAsync: state => async (moduleName, actionName = 'List') => {
-      let count = 0;
-      while (count < 20) {
-        if (!state.isLoadPermission) {
-          await sleep(100)
-        } else {
-          break;
-        }
-        count++;
-      }
-
-      let arr = Array.isArray(actionName) ? actionName : [actionName];
-      return !!state.permissionList.find(v => v.PermissionKey == moduleName && v.Child.find(r => arr.includes(r.PermissionKey)));
-    },
+    existsPermission: state => (permission) => {
+      let arr = Array.isArray(permission) ? permission : [permission];
+      return !!state.permissionList.some(v => v.Child.some(r => arr.includes(r.Name)));
+    }, 
     getItemValues: state => (enumKey, superId) => {
       if (state.enumItemValues[enumKey]) {
         let items = state.enumItemValues[enumKey]

@@ -6,7 +6,7 @@ export default {
         {
             title: '请假单',
             path: '/OaLeave/list',
-            permission: 'OaLeave'
+            permission: 'OaLeave.List'
         }
     ]
 }

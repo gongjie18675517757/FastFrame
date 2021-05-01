@@ -10,7 +10,7 @@
       <v-layout justify-center app class="form">
         <v-flex xs12 sm10 md8 lg6>
           <v-card>
-            <v-toolbar flat dense color="transparent" height="30px">
+            <v-toolbar flat   color="transparent"  >
               <v-toolbar-title>注册帐号</v-toolbar-title>
               <v-spacer></v-spacer>
             </v-toolbar>
@@ -48,16 +48,20 @@
                     label="手机号码"
                     required
                   ></v-text-field>
-                  <v-divider class="mt-5"></v-divider>
+                   
                   <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn
-                      color="primary"
-                      text
-                      @click="submit"
-                      :loading="submiting"
-                      >注册</v-btn
-                    >
+                    <SlideVerififyVue @success="submiting">
+                      <template v-slot:activator="{ attrs, on }">
+                        <v-btn
+                          color="primary"
+                          text 
+                          :loading="submiting"
+                          @click.stop="handleClick(on, $event)"
+                          >注册</v-btn
+                        >
+                      </template>
+                    </SlideVerififyVue>
                   </v-card-actions>
                   <v-footer :fixed="fixed" app inset>
                     <span>&copy; 2017</span>
@@ -74,9 +78,9 @@
 
 <script>
 import rules from "@/rules";
-
+import SlideVerififyVue from "../components/SlideVerifify.vue";
 export default {
-  components: {},
+  components: { SlideVerififyVue },
   data() {
     return {
       title: "XXX管理后台",
@@ -101,12 +105,16 @@ export default {
   computed: {},
   async created() {},
   methods: {
+    handleClick(on,e) {
+      if (!this.$refs.form.validate()) {
+        this.$message.toast.warning("请填写完整信息!");
+        return;
+      }
+      on.click(e);
+    },
     async submit() {
       this.submiting = true;
       try {
-        if (!this.$refs.form.validate()) {
-          throw new Error("请填写完整信息");
-        }
         let request = await this.$http.post("/api/Account/Regist", this.form);
         this.form = request;
         this.$message.toast.success("注册成功");

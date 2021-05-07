@@ -17,15 +17,15 @@
     <v-card-actions class="grid-item">
       <slot name="action" v-bind="item">
         <v-spacer></v-spacer>
-        <v-btn icon v-if="!item.IsFolder" title="下载" @click="download" color="primary">
+        <v-btn icon v-if="!item.IsFolder" title="下载" @click="download" color="primary" :dark="selected">
           <v-icon>mdi-download</v-icon>
         </v-btn>
 
-        <v-btn icon title="重命名" @click="reName" color="primary">
+        <v-btn icon title="重命名" @click="reName" color="primary" :dark="selected">
           <v-icon>mdi-file-edit</v-icon>
         </v-btn>
 
-        <v-btn icon title="删除" @click="remove" color="primary">
+        <v-btn icon title="删除" @click="remove" color="primary" :dark="selected">
           <v-icon>mdi-delete</v-icon>
         </v-btn>
       </slot>

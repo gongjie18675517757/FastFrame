@@ -160,6 +160,7 @@ import ListItem from "./ListItem.vue";
 import { upload } from "../../../utils";
 import { getIcon } from "../../../utils/fileIcons";
 import rules from "@/rules";
+import { getDownLoadPath } from "../../../config";
 export default {
   components: {
     VuePerfectScrollbar,
@@ -298,7 +299,7 @@ export default {
       }
     },
     async loadList() {
-      let url = `/api/Meidia/List/${this.current_Id || ""}?v=${this.kw || ""}`;
+      let url = `/api/Meidia/List/${this.current_Id || ""}?kw=${this.kw || ""}`;
       let { Super_Id, Children } = await this.$http.get(url);
       this.Super_Id = Super_Id;
       this.items = Children.map(this.fmtItem);
@@ -397,7 +398,7 @@ export default {
     },
     handleDownload({ IsFolder, Resource_Id, Name }) {
       if (IsFolder) return;
-      window.open(`/api/resource/get/${Resource_Id}/${Name}`);
+      window.open(getDownLoadPath(Resource_Id, Name));
     },
     handlePreview({ isImage, icon }) {
       if (!isImage) return;

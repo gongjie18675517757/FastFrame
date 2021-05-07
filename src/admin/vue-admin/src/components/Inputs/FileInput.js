@@ -1,3 +1,4 @@
+import { getDownLoadPath } from '../../config'
 import {
   getValue,
   setValue,
@@ -21,7 +22,7 @@ export default {
         return h('a', {
           on: {
             click: () => {
-              window.open(`/api/resource/get/${this.value}/${info.Name}`)
+              window.open(getDownLoadPath(this.value, info.Name));
             }
           }
         }, info.Name)

@@ -10,7 +10,15 @@
         <v-form ref="form">
           <v-card-text>
             <v-subheader class="subheader">头像</v-subheader>
-            <v-flex xs12 sm6 md8 align-center justify-center layout text-xs-center>
+            <v-flex
+              xs12
+              sm6
+              md8
+              align-center
+              justify-center
+              layout
+              text-xs-center
+            >
               <v-avatar
                 size="100"
                 color="grey lighten-4"
@@ -21,22 +29,37 @@
                 <img :src="handIcon" alt="avatar" />
               </v-avatar>
             </v-flex>
-            <v-text-field v-model="form.Account" label="帐号" readonly required></v-text-field>
             <v-text-field
-              :rules="[rules.required(),rules.stringLength('',3,50)]"
+              v-model="form.Account"
+              label="帐号"
+              readonly
+              required
+            ></v-text-field>
+            <v-text-field
+              :rules="[rules.required(), rules.stringLength('', 3, 50)]"
               v-model="form.Name"
               label="名称"
               required
             ></v-text-field>
             <v-text-field
-              :rules="[rules.required(),rules.stringLength('',3,50)]"
+              :rules="[rules.required(), rules.stringLength('', 3, 50)]"
               v-model="form.Password"
               label="密码"
               type="password"
               required
             ></v-text-field>
-            <v-text-field v-model="form.Email" :rules="[rules.email()]" label="邮箱" required></v-text-field>
-            <v-text-field v-model="form.PhoneNumber" :rules="[rules.phone()]" label="手机号码" required></v-text-field>
+            <v-text-field
+              v-model="form.Email"
+              :rules="[rules.email()]"
+              label="邮箱"
+              required
+            ></v-text-field>
+            <v-text-field
+              v-model="form.PhoneNumber"
+              :rules="[rules.phone()]"
+              label="手机号码"
+              required
+            ></v-text-field>
             <v-divider class="mt-5"></v-divider>
             <v-card-actions>
               <!-- <v-btn text>取消</v-btn> -->
@@ -49,7 +72,9 @@
               <span>Refresh form</span>
             </v-tooltip>
               </v-slide-x-reverse-transition>-->
-              <v-btn color="primary" text @click="submit" :loading="submiting">保存</v-btn>
+              <v-btn color="primary" text @click="submit" :loading="submiting"
+                >保存</v-btn
+              >
             </v-card-actions>
           </v-card-text>
         </v-form>
@@ -62,23 +87,24 @@
 import rules from "@/rules";
 import timg from "@/assets/timg.jpg";
 import { upload } from "@/utils";
+import { getDownLoadPath } from "../config";
 export default {
   data() {
     return {
       rules: {
-        ...rules
+        ...rules,
       },
       errMsgs: {},
       initform: null,
       form: {},
-      submiting: false
+      submiting: false,
     };
   },
   computed: {
     handIcon() {
       let id = this.form.HandIcon_Id;
-      return id ? `/api/resource/get/${id}` : timg;
-    }
+      return id ? getDownLoadPath(id) : timg;
+    },
   },
   async created() {
     let request = await this.$http.get("/api/account/GetCurrent");
@@ -109,8 +135,8 @@ export default {
       } finally {
         this.submiting = false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

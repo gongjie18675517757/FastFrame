@@ -21,9 +21,9 @@ namespace FastFrame.WebHost.Controllers.Basis
 
         [Permission(nameof(List), "列表")]
         [HttpGet("{id?}")]
-        public async Task<MeidiaOutput> List(string id, string v = "")
+        public async Task<MeidiaOutput> List(string id, string kw = "")
         {
-            return await service.Meidias(id, v);
+            return await service.Meidias(id, kw);
         }
 
         /// <summary>

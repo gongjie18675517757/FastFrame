@@ -78,6 +78,7 @@
 import rules from "@/rules";
 import timg from "@/assets/logo.png";
 import { upload } from "@/utils";
+import { getDownLoadPath } from "../config";
 export default {
   data() {
     return {
@@ -94,7 +95,7 @@ export default {
   computed: {
     handIcon() {
       let id = this.form.HandIcon_Id;
-      return id ? `/api/resource/get/${id}` : timg;
+      return id ? getDownLoadPath(id) : timg;
     },
   },
   async created() {

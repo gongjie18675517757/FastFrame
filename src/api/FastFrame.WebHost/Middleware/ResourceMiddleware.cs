@@ -14,6 +14,8 @@ using FastFrame.Infrastructure;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using System;
+using System.Net;
+using Microsoft.AspNetCore.Components.Routing;
 
 namespace FastFrame.WebHost.Middleware
 {
@@ -46,6 +48,8 @@ namespace FastFrame.WebHost.Middleware
                 }
 
                 var resourceId = resPathRegex.Match(path.Value).Groups[1].Value;
+                var resourceName = resPathRegex.Match(path.Value).Groups[2].Value; 
+
                 var resourceStreamInfo = await context.RequestServices.GetService<IResourceStoreProvider>().TryGetResource(resourceId);
                 if (resourceStreamInfo == null)
                 {
@@ -62,11 +66,13 @@ namespace FastFrame.WebHost.Middleware
                 provider.TryGetContentType(Path.GetExtension(resourceStreamInfo.Name), out var contentType);
                 context.Response.StatusCode = 200;
                 context.Response.ContentType = contentType ?? "application/octet-stream";
-                context.Response.Headers.Add("Content-Disposition", $"attachment;filename={resourceStreamInfo.Name}");
-                context.Response.Headers.Add("cache-control", new[] { "public,max-age=31536000" });
-                context.Response.Headers.Add("Expires", new[] { DateTime.UtcNow.AddYears(1).ToString("R") });
-                context.Response.Headers.Add("Last-Modified", DateTime.Now.ToString());
-                context.Response.Headers.Add("ETag", resourceId);
+
+                //context.Response.Headers.TryAdd("Content-Disposition", $"attachment;filename={WebUtility.UrlEncode(resourceStreamInfo.Name)}");
+                context.Response.Headers.TryAdd("cache-control", new[] { "public,max-age=31536000" });
+                context.Response.Headers.TryAdd("Expires", new[] { DateTime.UtcNow.AddYears(1).ToString("R") });
+                context.Response.Headers.TryAdd("Last-Modified", DateTime.Now.ToString());
+                context.Response.Headers.TryAdd("ETag", resourceId);
+
                 context.Response.ContentLength = resourceStreamInfo.ResourceBlobStream.Length;
                 resourceStreamInfo.ResourceBlobStream.Position = 0;
                 await resourceStreamInfo.ResourceBlobStream.CopyToAsync(context.Response.Body);

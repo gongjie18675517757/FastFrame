@@ -2,16 +2,17 @@
 import { getValue } from "@/utils";
 import EnumItemInput from "@/components/Inputs/EnumItemInput";
 import SelectInput from "@/components/Inputs/SelectInput.vue";
+import { getDownLoadPath } from "../../config";
 export default {
   props: {
     info: {
       type: Object,
-      required: true
+      required: true,
     },
     props: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {};
@@ -35,11 +36,7 @@ export default {
      * 外键对象
      */
     fkObject() {
-      if (
-        this.info.Relate &&
-        this.info.Relate.ModuleName &&
-        this.value  
-      ) {
+      if (this.info.Relate && this.info.Relate.ModuleName && this.value) {
         let tempName = this.info.Name.replace(/_Id$/, "");
         return getValue(this.props.item, tempName);
       } else {
@@ -62,7 +59,7 @@ export default {
         return getValueFunc({
           value: this.value,
           model: this.props.item,
-          info: this.info
+          info: this.info,
         });
       } else if (length >= 4000) {
         /**
@@ -82,7 +79,7 @@ export default {
          */
         let obj = this.fkObject;
         if (obj) {
-          return this.info.Relate.RelateFields.map(v => obj[v])
+          return this.info.Relate.RelateFields.map((v) => obj[v])
             .map((v, i) => (i > 0 ? `[${v}]` : v))
             .join("");
         } else {
@@ -103,7 +100,7 @@ export default {
       } else {
         return text;
       }
-    }
+    },
   },
 
   render(h) {
@@ -116,15 +113,15 @@ export default {
       return renderFunc(h, {
         value: this.value,
         model: this.props.item,
-        info: this.info
+        info: this.info,
       });
     } else if (IsLink) {
       return h(
         "a",
         {
           on: {
-            click: () => this.$emit("toEdit", this.props.item)
-          }
+            click: () => this.$emit("toEdit", this.props.item),
+          },
         },
         this.text
       );
@@ -137,12 +134,13 @@ export default {
         {
           on: {
             click: () => {
-              let url = `/api/resource/get/${this.value}/${
+              let url = getDownLoadPath(
+                this.value,
                 this.fkObject ? this.fkObject.Name : ""
-              }`;
+              );
               window.open(url);
-            }
-          }
+            },
+          },
         },
         this.text
       );
@@ -155,8 +153,8 @@ export default {
           value: this.value,
           EnumItemInfo,
           disabled: true,
-          multiple: this.info.Type == "Array"
-        }
+          multiple: this.info.Type == "Array",
+        },
       });
     } else if (
       /**
@@ -173,13 +171,13 @@ export default {
           value: this.value,
           values: EnumValues,
           disabled: true,
-          multiple: this.info.Type == "Array"
-        }
+          multiple: this.info.Type == "Array",
+        },
       });
     } else {
       return h("span", null, this.text);
     }
-  }
+  },
 };
 </script>
 

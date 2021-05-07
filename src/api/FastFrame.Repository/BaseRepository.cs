@@ -24,17 +24,16 @@ namespace FastFrame.Repository
     internal class BaseRepository<T> : BaseQueryable<T>, IRepository<T> where T : class, IEntity
     {
         private readonly DataBase context;
-        private readonly IUnitOfWork unitOfWork;
+         
 
         [FromServiceContext]
         public IEventBus EventBus { get; set; }
 
-        public bool IsTransactionOpening => unitOfWork.IsTransactionOpening;
+    
 
-        public BaseRepository(DataBase context, IUnitOfWork unitOfWork) : base(context)
+        public BaseRepository(DataBase context) : base(context)
         {
-            this.context = context;
-            this.unitOfWork = unitOfWork;
+            this.context = context; 
         }
 
         /// <summary>
@@ -51,8 +50,8 @@ namespace FastFrame.Repository
             entityEntry.State = EntityState.Added;
 
             await EventBus.TriggerEventAsync(new EntityAdding<T>(entityEntry.Entity));
-            if (IsTransactionOpening)
-                await context.SaveChangesAsync();
+            //if (IsTransactionOpening)
+            //    await context.SaveChangesAsync();
             return entityEntry.Entity;
         }
 
@@ -87,8 +86,8 @@ namespace FastFrame.Repository
             var entity = await Queryable.FirstOrDefaultAsync(x => x.Id == id);
             await DeleteAsync(entity);
 
-            if (IsTransactionOpening)
-                await context.SaveChangesAsync();
+            //if (IsTransactionOpening)
+            //    await context.SaveChangesAsync();
         }
 
         /// <summary>
@@ -101,8 +100,8 @@ namespace FastFrame.Repository
 
             await EventBus.TriggerEventAsync(new EntityUpdateing<T>(entityEntry.Entity));
 
-            if (IsTransactionOpening)
-                await context.SaveChangesAsync();
+            //if (IsTransactionOpening)
+            //    await context.SaveChangesAsync();
 
             return entityEntry.Entity;
         }
@@ -117,22 +116,7 @@ namespace FastFrame.Repository
 
         public Task<int> CommmitAsync()
         {
-            return unitOfWork.CommmitAsync();
-        }
-
-        public int Commmit()
-        {
-            return unitOfWork.Commmit();
-        }
-
-        public Task BeginTransactionAsync(IsolationLevel level)
-        {
-            return unitOfWork.BeginTransactionAsync(level);
-        }
-
-        public void BeginTransaction(IsolationLevel level)
-        {
-            unitOfWork.BeginTransaction(level);
-        }
+            return context.SaveChangesAsync();
+        } 
     }
 }

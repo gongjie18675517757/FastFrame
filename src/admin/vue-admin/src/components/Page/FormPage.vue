@@ -1,106 +1,127 @@
 <template>
   <v-container grid-list-xl fluid app>
-    <v-layout align-center justify-center :class="{singleLine:singleLine}">
-      <v-flex v-bind="flex" :style="{padding:isTab?'1px':null}">
+    <v-layout align-center justify-center :class="{ singleLine: singleLine }">
+      <v-flex v-bind="flex" :style="{ padding: isTab ? '1px' : null }">
         <v-card>
           <v-toolbar flat dense color="transparent" height="30px">
-            <v-toolbar-title>{{title}}</v-toolbar-title>
+            <v-toolbar-title>{{ title }}</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items>
-              
-              <a-btn
-                v-if="hasManage && id && !changed"
-                :moduleName="name"
-                name="Update"
-                @click="handleEdit"
-                title="编辑"
-                color="info"
-                small
-                text
+              <permission-facatory
+                v-for="btn in visibleToolItems.filter(
+                  () => !$vuetify.breakpoint.smAndDown
+                )"
+                :key="btn.key || btn.name"
+                :permission="btn.permission"
               >
-                <v-icon small>edit</v-icon>编辑
-              </a-btn>
-              <v-btn v-if="!isDialog" small text @click="$emit('close')" title="关闭">
-                <v-icon small>close</v-icon>关闭
-              </v-btn>
-
-              <a-btn
-                v-if="hasManage && canEdit && changed"
-                :module-name="name"
-                :name="model.Id?'Update':'Add'"
-                color="primary"
-                @click="$emit('submit')"
-                :loading="submiting"
-                small
-                text
-              >
-                <v-icon small>mdi-content-save-edit-outline</v-icon>保存
-              </a-btn>
+                <v-btn
+                  @click="evalAction(btn)"
+                  text
+                  small
+                  color="primary"
+                  :disabled="evalDisabled(btn)"
+                  v-bind="btn"
+                >
+                  <v-icon v-if="btn.iconName">{{ btn.iconName }}</v-icon>
+                  {{ btn.title }}
+                </v-btn>
+              </permission-facatory>
               <v-menu offset-y>
                 <template v-slot:activator="{ on }">
                   <v-btn icon v-on="on" title="更多">
                     <v-icon>more_vert</v-icon>
                   </v-btn>
                 </template>
+
                 <v-list dense>
+                  <permission-facatory
+                    v-for="item in [
+                      ...($vuetify.breakpoint.smAndDown ? visibleToolItems : []),
+                    ]"
+                    :key="item.key || item.name"
+                    :permission="item.permission"
+                  >
+                    <v-list-item
+                      :title="item.title"
+                      :disabled="evalDisabled(item)"
+                      @click="evalAction(item)"
+                    >
+                      <v-list-item-action>
+                        <v-icon>{{ item.iconName }}</v-icon>
+                      </v-list-item-action>
+
+                      <v-list-item-content>
+                        <v-list-item-title>{{ item.title }}</v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </permission-facatory>
+
                   <v-list-item @click="$emit('toggle:singleLine')">
                     <v-list-item-action>
                       <v-checkbox :value="singleLine"></v-checkbox>
                     </v-list-item-action>
                     <v-list-item-content>
-                      <v-list-item-title>{{'单行布局'}}</v-list-item-title>
+                      <v-list-item-title>{{ "单行布局" }}</v-list-item-title>
                     </v-list-item-content>
                   </v-list-item>
                   <v-list-item
-                    v-if="hasManage &&  model.Id"
+                    v-if="hasManage && model.Id"
                     @click="$emit('toggle:showMamageField')"
                   >
                     <v-list-item-action>
                       <v-checkbox :value="showMamageField"></v-checkbox>
                     </v-list-item-action>
                     <v-list-item-content>
-                      <v-list-item-title>{{ '显示管理字段'}}</v-list-item-title>
+                      <v-list-item-title>{{
+                        "显示管理字段"
+                      }}</v-list-item-title>
                     </v-list-item-content>
                   </v-list-item>
                 </v-list>
               </v-menu>
-              <v-btn icon @click="$emit('close')" title="关闭" v-if="isDialog">
-                <v-icon>close</v-icon>
-              </v-btn>
             </v-toolbar-items>
           </v-toolbar>
           <v-divider></v-divider>
           <v-card-text class="form-content" v-if="model">
             <v-layout
-              :class="[isDialog?'dialogPage':isTab?'tabPage':'fullPage','form-page']"
+              :class="[
+                isDialog ? 'dialogPage' : isTab ? 'tabPage' : 'fullPage',
+                'form-page',
+              ]"
               wrap
-              style="padding:0px;margin:0px"
+              style="padding: 0px; margin: 0px"
             >
               <template v-for="group in formGroups">
-                <v-flex :key="group.key.title" xs12 xl10 style="padding:5px;margin: 0 auto;">
-                  <v-card v-if="group.values.length>1" tile>
+                <v-flex
+                  :key="group.key.title"
+                  xs12
+                  xl10
+                  style="padding: 5px; margin: 0 auto"
+                >
+                  <v-card v-if="group.values.length > 1" tile>
                     <v-toolbar flat dense color="transparent" height="30px;">
-                      <v-toolbar-title>{{group.key.title}}:</v-toolbar-title>
+                      <v-toolbar-title>{{ group.key.title }}:</v-toolbar-title>
                     </v-toolbar>
                     <!-- <v-divider></v-divider> -->
                     <v-card-text>
                       <component
-                        :is="singleLine?'div':'v-layout'"
+                        :is="singleLine ? 'div' : 'v-layout'"
                         wrap
-                        style="padding-bottom:15px;"
+                        style="padding-bottom: 15px"
                       >
                         <Input
                           v-for="item in group.values"
                           v-bind="item"
                           :key="item.Name"
                           :model="model"
-                          :rules="getRules(item)"
                           :canEdit="canEdit"
                           :singleLine="singleLine"
                           :errorMessages="formErrorMessages[item.Name]"
                           :value="model[item.Name]"
-                          @change="$emit('changed',{item:item,value:$event})"
-                          @input="handleInput(item,$event)"
+                          @change="
+                            $emit('changed', { item: item, value: $event })
+                          "
+                          @input="handleInput(item, $event)"
                           :ref="item.Name"
                         />
                       </component>
@@ -117,14 +138,33 @@
                     :singleLine="singleLine"
                     :errorMessages="formErrorMessages[item.Name]"
                     :value="model[item.Name]"
-                    @change="$emit('changed',{item:item,value:$event})"
-                    @input="handleInput(item,$event)"
+                    @change="$emit('changed', { item: item, value: $event })"
+                    @input="handleInput(item, $event)"
                     :ref="item.Name"
                   />
                 </v-flex>
               </template>
             </v-layout>
           </v-card-text>
+          <v-card-actions v-if="!hideToolitem && $vuetify.breakpoint.smAndDown">
+            <permission-facatory
+              v-for="btn in visibleToolItems.filter(evalVisible)"
+              :key="btn.key || btn.name"
+              :permission="btn.permission"
+            >
+              <v-btn
+                @click="evalAction(btn)"
+                text
+                small
+                color="primary"
+                :disabled="evalDisabled(btn)"
+                v-bind="btn"
+              >
+                <v-icon v-if="btn.iconName">{{ btn.iconName }}</v-icon>
+                {{ btn.title }}
+              </v-btn>
+            </permission-facatory>
+          </v-card-actions>
         </v-card>
       </v-flex>
     </v-layout>
@@ -138,26 +178,24 @@ import Input from "@/components/Inputs";
 export default {
   components: {
     Input,
-    VuePerfectScrollbar
+    VuePerfectScrollbar,
   },
 
   props: {
     isDialog: Boolean,
     isTab: Boolean,
+    hideToolitem: Boolean,
     title: String,
     id: String,
-    name: String,
     model: Object,
     formErrorMessages: Object,
     options: Array,
-    rules: Object,
-    submiting: Boolean,
     singleLine: Boolean,
     showMamageField: Boolean,
     canEdit: Boolean,
-    changed: Boolean,
     hasManage: Boolean,
-    formGroups: Array
+    formGroups: Array,
+    toolItems: Array,
   },
   data() {
     return {};
@@ -166,42 +204,59 @@ export default {
     flex() {
       if (!this.singleLine) {
         return {
-          xs12: true
+          xs12: true,
         };
       } else {
         return {
-          xs12: true
+          xs12: true,
         };
       }
     },
     formGroupExpandValue: {
       get() {
-        return this.formGroups.map(r => r.key.value);
+        return this.formGroups.map((r) => r.key.value);
       },
       set(val) {
         for (let index = 0; index < val.length; index++) {
           const value = val[index];
           this.formGroups[index].value = value;
         }
-      }
-    }
+      },
+    },
+    visibleToolItems() {
+      if (this.hideToolitem) return [];
+      return this.toolItems.filter(this.evalVisible);
+    },
   },
 
   methods: {
-    handleEdit() {
-      this.$emit("tooggle:canEdit");
-    },
-    refresh() {
-      this.$emit("reload");
-    },
-    getRules(item) {
-      return item.rules || this.rules[item.Name];
-    },
     handleInput(item, v) {
       this.model[item.Name] = v;
       this.$emit("tooggle:changed");
-    }
-  }
+    },
+    evalVisible({ visible }) {
+      if (!visible) {
+        return true;
+      }
+      let val = true;
+      if (typeof visible == "function") val = visible.call(this, this.model);
+      if (typeof visible == "boolean") val = visible;
+      if (typeof visible == "string") val = !!visible;
+
+      return val;
+    },
+    evalDisabled({ disabled }) {
+      let val = false;
+      if (typeof disabled == "function") val = disabled.call(this, this.model);
+      if (typeof disabled == "boolean") val = disabled;
+      if (typeof disabled == "string") val = !!disabled;
+
+      return val;
+    },
+    evalAction(item) {
+      this.$emit(`toolItemClick`, item);
+    },
+  },
 };
 </script>
 

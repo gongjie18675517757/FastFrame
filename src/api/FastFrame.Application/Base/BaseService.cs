@@ -80,7 +80,7 @@ namespace FastFrame.Application
                 }
             }
 
-            await repository.BeginTransactionAsync(IsolationLevel.ReadCommitted);
+            //await repository.BeginTransactionAsync(IsolationLevel.ReadCommitted);
             await repository.AddAsync(entity);
 
             input.Id = entity.Id;
@@ -113,7 +113,7 @@ namespace FastFrame.Application
                         .Where(v => ids.Contains(v.Id))
                         .ToListAsync();
 
-            await repository.BeginTransactionAsync(IsolationLevel.ReadCommitted);
+            //await repository.BeginTransactionAsync(IsolationLevel.ReadCommitted);
             foreach (var entity in entitys)
             {
                 await repository.DeleteAsync(entity);
@@ -155,7 +155,7 @@ namespace FastFrame.Application
             }
             var entity = await repository.GetAsync(input.Id);
 
-            await repository.BeginTransactionAsync(IsolationLevel.ReadCommitted);
+            //await repository.BeginTransactionAsync(IsolationLevel.ReadCommitted);
             await OnBeforeUpdate(entity, input);
 
             if (entity is IHasManage hasManage)

@@ -5,6 +5,7 @@ import pptx from "../assets/pptx.svg";
 import js from "../assets/js.svg";
 import txt from "../assets/TXT.svg";
 import pdf from "../assets/Pdf.svg";
+import { getDownLoadPath } from "../config";
 export default {
     folder,
     file,
@@ -19,9 +20,9 @@ export default {
  * 获取图标类型
  * @param {*} param0 
  */
-export function getIcon({ ContentType, Resource_Id, isImage, IsFolder }) { 
+export function getIcon({ ContentType, Resource_Id, isImage, IsFolder }) {
     if (isImage) {
-        return `/api/resource/get/${Resource_Id}`;
+        return getDownLoadPath(Resource_Id)
     } else if (IsFolder) {
         return folder;
     } else if (!ContentType) {

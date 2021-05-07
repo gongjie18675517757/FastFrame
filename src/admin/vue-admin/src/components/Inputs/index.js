@@ -15,13 +15,7 @@ export default {
     callback: {
       type: Function,
       default: function () { }
-    },
-    rules: {
-      type: Array,
-      default: function () {
-        return [];
-      }
-    },
+    }, 
     errorMessages: Array,
     canEdit: Boolean,
     IsRequired: Boolean,

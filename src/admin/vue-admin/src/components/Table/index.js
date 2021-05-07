@@ -9,6 +9,7 @@ import {
   distinct
 } from '@/utils'
 import { upload, getIconFunc } from "../../utils";
+import { getDownLoadPath } from "../../config";
 
 let defArray = {
   type: Array,
@@ -364,7 +365,7 @@ export const FileDetailObj = {
               },
               on: {
                 click: () => {
-                  window.open(`/api/resource/get/${model.Id}/${model.Name}`)
+                  window.open(getDownLoadPath(model.Id, model.Name))
                 }
               }
             }, value)

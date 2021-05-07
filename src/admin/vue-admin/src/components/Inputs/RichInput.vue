@@ -16,6 +16,7 @@
 
 
 <script>
+import { getDownLoadPath } from "../../config";
 import { postFiles } from "../../utils";
 import RemoteJS from "../RemoteJS.vue";
 export default {
@@ -81,7 +82,7 @@ export default {
     handleFileUpload(resultFiles, insertImgFn) {
       postFiles(resultFiles).then((arr) => {
         for (const f of arr) {
-          insertImgFn(`/api/resource/get/${f.Id}/${f.Name}`);
+          insertImgFn(getDownLoadPath(f.Id, f.Name));
         }
       });
     },

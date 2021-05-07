@@ -1,3 +1,4 @@
+import { getDownLoadPath } from "../../config";
 import {
   getColumns,
   getModuleStrut,
@@ -338,7 +339,7 @@ export let pageMethods = {
                     key: v.Id,
                     on: {
                       click: () => {
-                        window.open(`/api/resource/get/${v.Id}/${v.Name}`)
+                        window.open(getDownLoadPath(v.Id,v.Name))
                       }
                     }
                   }, [

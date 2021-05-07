@@ -15,7 +15,7 @@
       <template v-slot:activator="{ on }">
         <v-btn icon text v-on="on">
           <v-badge color="red" overlap>
-            <span slot="badge">{{notifyCount}}</span>
+            <span slot="badge">{{ notifyCount }}</span>
             <v-icon medium>notifications</v-icon>
           </v-badge>
         </v-btn>
@@ -29,7 +29,12 @@
     <v-btn icon @click="handleFullScreen()">
       <v-icon>fullscreen</v-icon>
     </v-btn>
-    <v-menu offset-y origin="center center" :nudge-bottom="10" transition="scale-transition">
+    <v-menu
+      offset-y
+      origin="center center"
+      :nudge-bottom="10"
+      transition="scale-transition"
+    >
       <template v-slot:activator="{ on }">
         <v-btn icon large text v-on="on">
           <v-avatar size="30px">
@@ -40,7 +45,7 @@
 
       <v-list class="pa-0">
         <v-list-item
-          v-for="(item,index) in items"
+          v-for="(item, index) in items"
           :to="item.href"
           @click="item.click"
           ripple="ripple"
@@ -64,12 +69,13 @@
 <script>
 import Notification from "@/components/Notification.vue";
 import timg from "@/assets/timg.jpg";
+import { getDownLoadPath } from "../config";
 export default {
   components: {
-    Notification
+    Notification,
   },
   props: {
-    title: String
+    title: String,
   },
   data() {
     return {
@@ -80,30 +86,30 @@ export default {
           title: "个人中心",
           click: () => {
             this.$router.push("/userCenter");
-          }
+          },
         },
         {
           icon: "settings",
           title: "更换头像",
           click: () => {
             this.rightDrawer = true;
-          }
+          },
         },
         {
           icon: "fullscreen_exit",
           title: "注销",
           click: async () => {
             this.$store.dispatch("logout");
-            this.$router.push("/login"); 
-          }
-        }
-      ]
+            this.$router.push("/login");
+          },
+        },
+      ],
     };
   },
   computed: {
     handIcon() {
       let iconId = (this.$store.state.currUser || {}).HandIcon_Id;
-      return iconId ? `/api/resource/get/${iconId}` : timg;
+      return iconId ? getDownLoadPath(iconId) : timg;
     },
     notifyCount() {
       return this.$store.state.notifys.length;
@@ -115,9 +121,9 @@ export default {
       set(val) {
         this.$store.commit({
           type: "toggleLeftDrawer",
-          value: val
+          value: val,
         });
-      }
+      },
     },
     rightDrawer: {
       get() {
@@ -126,10 +132,10 @@ export default {
       set(val) {
         this.$store.commit({
           type: "toggleRightDrawer",
-          value: val
+          value: val,
         });
-      }
-    }
+      },
+    },
   },
   methods: {
     handleFullScreen() {
@@ -157,8 +163,8 @@ export default {
       } else {
         cancelFullScreen.call(doc);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

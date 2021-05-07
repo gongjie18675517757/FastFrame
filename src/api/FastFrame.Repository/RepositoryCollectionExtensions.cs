@@ -18,7 +18,7 @@ namespace FastFrame.Repository
 
             services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
             services.AddScoped(typeof(IQueryRepository<>), typeof(BaseQueryable<>));
-            services.AddScoped<IUnitOfWork,BaseUnitOfWork>();
+            //services.AddScoped<IUnitOfWork,BaseUnitOfWork>();
 
             foreach (var type in types)
             {

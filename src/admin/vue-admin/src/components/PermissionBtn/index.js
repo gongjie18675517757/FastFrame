@@ -8,7 +8,9 @@ Vue.component('permission-facatory', {
         permission: [Array, String]
     },
     render(_, context) {
-        if (store.getters.existsPermission(context.props.permission)) {
+        if (!context.props.permission || 
+            (Array.isArray(context.props.permission) && context.props.permission.length == 0) || 
+            store.getters.existsPermission(context.props.permission)) {
             return context.children;
         }
         return null;

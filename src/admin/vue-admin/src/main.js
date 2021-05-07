@@ -26,6 +26,7 @@ new Vue({
   router,
   render: h => h(App),
   created() {
+     
     this.$http('/api/Tenant/GetCurrent').then(v => {
       this.$store.commit({
         type: 'setTenant',
@@ -50,4 +51,5 @@ new Vue({
  * 10,增加第三方应用管理，增加单点登陆
  * 11,修改审计，增加审计日志
  * 12,页面加载增加加载条
+ * 13,多租户功能优化：顶级租户无ID，租户ID取消阴影属性
  */

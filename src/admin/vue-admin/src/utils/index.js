@@ -2,8 +2,9 @@ import Vue from 'vue'
 import $http from '../httpClient'
 import { throttle as _throttle, debounce as _debounce } from 'lodash'
 import { getIcon } from './fileIcons'
+import { getUploadPath } from '../config';
 
-export const getIconFunc=getIcon;
+export const getIconFunc = getIcon;
 
 export const throttle = _throttle;
 
@@ -129,9 +130,9 @@ export function postFiles(files = [], pars) {
     let formData = new FormData()
     for (let index = 0; index < files.length; index++) {
         const file = files[index];
-        formData.append('files[]', file);
+        formData.append(file.name, file);
     }
-    return $http.post('/api/resource/post', formData, {
+    return $http.post(getUploadPath(), formData, {
         method: 'post',
         headers: {
             'Content-Type': 'multipart/form-data'

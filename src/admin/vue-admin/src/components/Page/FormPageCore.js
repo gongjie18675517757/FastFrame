@@ -19,6 +19,49 @@ import { FileDetailTable } from "../Table";
 export let formInject = []
 
 /**
+ * 生成工具按钮
+ * @returns 
+ */
+export function makeToolItems() {
+  return [
+    {
+      title: "编辑",
+      color: "primary",
+      name: "Update",
+      key: 'edit',
+      iconName: "edit",
+      small: true,
+      text: true,
+      action: this.handleEdit,
+      visible: () => this.hasManage && this.id && !this.changed && !this.canEdit
+    },
+    {
+      title: "保存",
+      color: "primary",
+      name: "Update,Add",
+      key: 'save',
+      iconName: "mdi-content-save-edit-outline",
+      small: true,
+      text: true,
+      action: this.submit,
+      loading: this.submiting,
+      visible: () => this.hasManage && this.canEdit
+    },
+    {
+      title: "关闭",
+      color: "success",
+      name: "close",
+      iconName: "close",
+      small: true,
+      text: true,
+      permission: [],
+      action: this.close,
+      visible: () => !this.isDialog
+    },
+  ]
+}
+
+/**
  * 生成参数
  */
 export let formProps = {
@@ -32,6 +75,20 @@ export let formProps = {
  * 生成数据
  */
 export let formData = {
+  /**
+ * 模块名称，影响：请求地址
+ */
+  name: null,
+
+  /**
+   * 页面结构名：影响：获取表单相关
+   */
+  strutName: null,
+
+  /**
+   * 权限名称：影响页面权限定义
+   */
+  permissionName: null,
 
   /**
    * 是否可编辑
@@ -115,7 +172,12 @@ export let formData = {
   /**
    * 是否有附件
    */
-  hasFiles: false
+  hasFiles: false,
+
+  /**
+   * 工具按钮
+   */
+  toolItems: []
 };
 
 /**
@@ -179,8 +241,17 @@ export let formMethods = {
    */
   init() {
     this.canEdit = false;
-    let moduleName = this.name;
-    return this.getModuleStrut(moduleName)
+    /**
+   * 未单独定义结构名时
+   */
+    this.strutName = this.strutName || this.name;
+
+    /**
+     * 未单独定义权限名时
+     */
+    this.permissionName = this.permissionName || this.name;
+
+    return this.getModuleStrut(this.strutName)
       .then(obj => {
         this.hasManage = obj.HasManage;
         this.hasFiles = obj.HasFiles;
@@ -204,6 +275,10 @@ export let formMethods = {
       .then(this.fmtModelObjectItems)
       .then(options => {
         this.options = distinct(options, v => v.Name, (a, b) => ({ ...a, ...b }));
+      })
+      .then(this.getToolItems)
+      .then(arr => {
+        this.toolItems = arr;
       })
       .then(() => {
         this.changed = false;
@@ -231,7 +306,7 @@ export let formMethods = {
    * 加载表单验证信息
    */
   getRules() {
-    return getRules(this.name)
+    return getRules(this.strutName)
   },
 
   /**
@@ -246,7 +321,7 @@ export let formMethods = {
    * 加载表单项
    */
   getModelObjectItems() {
-    return getModelObjectItems(this.name).then(arr => {
+    return getModelObjectItems(this.strutName).then(arr => {
       arr.forEach(v => {
         if (v.Relate) {
           v.requestUrl = `/api/${this.name}/${v.Relate}List`
@@ -254,6 +329,31 @@ export let formMethods = {
       })
       return arr;
     })
+  },
+
+  /**
+   * 加载工具条
+   */
+  getToolItems() {
+    let arr = makeToolItems.call(this);
+    arr = arr.map(v => {
+      /**
+       * 未定义权限，但有定义name值时
+       */
+      let { permission, name } = v;
+      if (!permission && name) {
+        permission = name.split(',').map(v => `${this.permissionName}.${v}`)
+      }
+
+      if (permission && !Array.isArray(permission)) {
+        permission = [permission]
+      }
+      return {
+        ...v,
+        permission
+      };
+    });
+    return Promise.resolve(arr)
   },
 
   /**
@@ -275,6 +375,13 @@ export let formMethods = {
         ...arr
       ]
     });
+  },
+
+  /**
+   * 点击编辑按钮时
+   */
+  handleEdit() {
+    this.canEdit = !this.canEdit
   },
 
   /**
@@ -485,19 +592,16 @@ export let makeChildProps = function () {
     ...this.$attrs,
     title: this.title,
     id: this.id,
-    model: this.model,
-    name: this.name,
+    model: this.model, 
     formErrorMessages: this.formErrorMessages,
-    options: this.options,
-    rules: this.rules,
-    submiting: this.submiting,
+    options: this.options, 
     singleLine: this.singleLine,
     showMamageField: this.showMamageField,
-    canEdit: this.canEdit,
-    changed: this.changed,
+    canEdit: this.canEdit, 
     formGroups: this.formGroups,
     isDialog: this.isDialog,
-    hasManage: this.hasManage
+    hasManage: this.hasManage,
+    toolItems: this.toolItems
   };
 };
 
@@ -507,7 +611,6 @@ export let makeChildProps = function () {
 export let makeChildListeners = function () {
   return {
     ...this.$listeners,
-    'tooggle:canEdit': () => this.canEdit = !this.canEdit,
     'tooggle:changed': () => this.changed = true,
     'toggle:singleLine': () => (this.singleLine = !this.singleLine),
     'toggle:showMamageField': () => (this.showMamageField = !this.showMamageField),
@@ -518,8 +621,8 @@ export let makeChildListeners = function () {
       });
     },
     reload: () => this.init(),
-    submit: this.submit,
-    close: this.close
+    close: this.close,
+    toolItemClick: item => item.action.call(this, this.model),
   };
 };
 

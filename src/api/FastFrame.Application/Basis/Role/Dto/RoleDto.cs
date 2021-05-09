@@ -6,6 +6,6 @@ namespace FastFrame.Application.Basis
     {
         public IEnumerable<UserViewModel> Members { get; set; }
 
-        public IEnumerable<RolePermissionModel> Permissions { get; set; }
+        public IEnumerable<string> Permissions { get; set; }
     }  
 }

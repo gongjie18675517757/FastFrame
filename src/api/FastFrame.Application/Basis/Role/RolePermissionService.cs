@@ -14,15 +14,15 @@ namespace FastFrame.Application.Basis
         IEventHandle<DoMainAdding<RoleDto>>,
         IEventHandle<DoMainDeleteing<RoleDto>>,
         IEventHandle<DoMainUpdateing<RoleDto>>,
-        IRequestHandle<RolePermissionModel[], RoleDto>
+        IRequestHandle<RolePermission[], RoleDto>
     {
         private readonly IRepository<RolePermission> rolePermissions;
-        private readonly HandleOne2ManyService<RolePermissionModel, RolePermission> handlePermissionService;
+        private readonly HandleOne2ManyService<string, RolePermission> handlePermissionService;
    
 
         public RolePermissionService(
             IRepository<RolePermission> rolePermissions,
-            HandleOne2ManyService<RolePermissionModel, RolePermission> handlePermissionService )
+            HandleOne2ManyService<string, RolePermission> handlePermissionService )
         {
             this.rolePermissions = rolePermissions;
             this.handlePermissionService = handlePermissionService;
@@ -40,19 +40,18 @@ namespace FastFrame.Application.Basis
             await handlePermissionService.UpdateManyAsync(
                     v => v.Role_Id == @event.Data.Id,
                     @event.Data.Permissions,
-                    (a, b) => a.PermissionKey == b.PermissionKey,
+                    (a, b) => a.PermissionKey == b,
                     v => new RolePermission
                     {
                         Role_Id = @event.Data.Id,
-                        PermissionKey = v.PermissionKey, 
+                        PermissionKey = v, 
                     });
         }
 
-        public async Task<RolePermissionModel[]> HandleRequestAsync(RoleDto request)
+        public async Task<RolePermission[]> HandleRequestAsync(RoleDto request)
         {
             return await rolePermissions
-                .Where(v => v.Role_Id == request.Id)
-                .MapTo<RolePermission, RolePermissionModel>()
+                .Where(v => v.Role_Id == request.Id) 
                 .ToArrayAsync();
         }
 
@@ -64,7 +63,7 @@ namespace FastFrame.Application.Basis
                .AddManyAsync(input.Permissions, v => new RolePermission
                {
                    Role_Id = input.Id,
-                   PermissionKey = v.PermissionKey, 
+                   PermissionKey = v, 
                });
         }
     }

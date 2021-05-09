@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using FastFrame.Entity.Basis;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace FastFrame.Application.Basis
 {
@@ -8,7 +10,7 @@ namespace FastFrame.Application.Basis
         {
             await base.OnGeting(dto);
             dto.Members = await EventBus.RequestAsync<UserViewModel[], RoleDto>(dto);
-            dto.Permissions = await EventBus.RequestAsync<RolePermissionModel[], RoleDto>(dto);
+            dto.Permissions = (await EventBus.RequestAsync<RolePermission[], RoleDto>(dto)).Select(v => v.PermissionKey);
         }
     }
 }

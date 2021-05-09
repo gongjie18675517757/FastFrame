@@ -1,4 +1,4 @@
- 
+import {makeMangePermission} from './comm'
 export default {
     title: 'OA',
     icon:  'mdi-format-text-wrapping-overflow',
@@ -6,7 +6,8 @@ export default {
         {
             title: '请假单',
             path: '/OaLeave/list',
-            permission: 'OaLeave.List'
+            permission: 'OaLeave.List',
+            childPermission: [...makeMangePermission('OaLeave')]
         }
     ]
 }

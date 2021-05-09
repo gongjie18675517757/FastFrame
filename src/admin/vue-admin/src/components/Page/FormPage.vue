@@ -115,6 +115,7 @@
                           :key="item.Name"
                           :model="model"
                           :canEdit="canEdit"
+                          :disabled="!canEdit"
                           :singleLine="singleLine"
                           :errorMessages="formErrorMessages[item.Name]"
                           :value="model[item.Name]"
@@ -135,6 +136,7 @@
                     v-bind="item"
                     :model="model"
                     :canEdit="canEdit"
+                    :disabled="!canEdit"
                     :singleLine="singleLine"
                     :errorMessages="formErrorMessages[item.Name]"
                     :value="model[item.Name]"
@@ -231,7 +233,7 @@ export default {
 
   methods: {
     handleInput(item, v) {
-      this.model[item.Name] = v;
+      this.model[item.Name] = v; 
       this.$emit("tooggle:changed");
     },
     evalVisible({ visible }) {

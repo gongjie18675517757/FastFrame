@@ -1,46 +1,49 @@
-export default  {
+import {makeMangePermission} from './comm'
+export default {
     title: '基础资料',
     icon: 'settings',
     items: [
         {
             title: '用户管理',
             path: '/user/list',
-            permission: 'User.List'
+            permission: 'User.List',
+            childPermission: [...makeMangePermission('User', ['ToogleAdminIdentity', 'ToogleDisabled'])]
         },
         {
             title: '登录记录',
             path: '/LoginLog/list',
-            permission: 'LoginLog.List'
+            permission: 'LoginLog.List',
+            childPermission: ['LoginLog.SetTokenFailure']
         },
         {
             title: '部门管理',
             path: '/dept/list',
-            permission: 'Dept.List'
-        },
-        {
-            title: '权限管理',
-            path: '/permission/list',
-            permission: 'Permission.List'
+            permission: 'Dept.List',
+            childPermission: [...makeMangePermission('Dept')]
         },
         {
             title: '数据字典',
             path: '/enumItem/list',
-            permission: 'EnumItem.List'
-        }, 
+            permission: 'EnumItem.List',
+            childPermission: [...makeMangePermission('EnumItem')]
+        },
         {
             title: '单据编号规则',
             path: '/NumberOption/list',
-            permission: 'NumberOption.List'
+            permission: 'NumberOption.List',
+            childPermission: [...makeMangePermission('NumberOption')]
         },
         {
             title: '角色管理',
             path: '/role/list',
-            permission: 'Role.List'
+            permission: 'Role.List',
+            childPermission: [...makeMangePermission('Role')]
         },
         {
             title: '通知管理',
             path: '/notify/list',
-            permission: 'Notify.List'
+            permission: 'Notify.List',
+            childPermission: [...makeMangePermission('Notify')]
         },
         {
             title: '企业管理',
@@ -50,7 +53,8 @@ export default  {
         {
             title: '资源库',
             path: '/meidia/list',
-            permission: 'Meidia.List'
+            permission: 'Meidia.List',
+            childPermission: [...makeMangePermission('Meidia')]
         },
         {
             title: '图标库',

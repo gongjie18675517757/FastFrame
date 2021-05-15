@@ -92,6 +92,19 @@ namespace FastFrame.Application.Basis
                 item.Roles = roleMaps.Where(v => v.Key == item.Id).SelectMany(v => v.Value);
                 item.Depts = deptMaps.Where(v => v.Key == item.Id).SelectMany(v => v.Value);
             }
-        } 
+        }
+
+        protected override Task OnBeforeUpdate(User before, UserDto after)
+        {
+            if(before.Password!=after.Password)
+            {
+                before.Password = after.Password;
+                before.GeneratePassword();
+
+                after.Password = before.Password;
+            }
+
+            return base.OnBeforeUpdate(before, after);
+        }
     }
 }

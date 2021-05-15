@@ -15,8 +15,11 @@ export default {
     callback: {
       type: Function,
       default: function () { }
-    }, 
-    errorMessages: Array,
+    },
+    errorMessages: {
+      type: Array,
+      default: () => []
+    },
     canEdit: Boolean,
     IsRequired: Boolean,
     Length: Number,
@@ -30,7 +33,7 @@ export default {
     },
     Description: String,
     Name: String,
-    Readonly: String,
+    Readonly: [String, Function, Boolean],
     EnumValues: [Array, Function],
     filter: [Array, Function],
     singleLine: Boolean,
@@ -54,10 +57,26 @@ export default {
     evalDisabled() {
       if (!this.canEdit) return true;
       if (typeof this.Readonly == 'function') return this.Readonly.call(this, this.model)
+      if (typeof this.Readonly == 'boolean') return this.Readonly;
       if (this.Readonly == "All") return true;
-      if (this.Readonly == "Edit") return !!(this.model || {}).Id;
+      if (this.Readonly == "Edit") return this.model && !!this.model.Id;
       return false;
     },
+    childProps() {
+      return {
+        ...this.$attrs,
+        value: this.value,
+        disabled: this.evalDisabled,
+        label: null,//this.Description,
+        description: this.Description,
+        placeholder: this.Description,
+        errorMessages: this.errorMessages,
+        errorCount: this.errorMessages.length,
+        error: !!this.errorMessages.find(r => r),
+        required: this.IsRequired,
+        isXs: this.$vuetify.breakpoint.smAndDown,
+      }
+    }
   },
   methods: {
     change(val) {
@@ -68,22 +87,9 @@ export default {
     },
   },
   render(h) {
-    let errs = this.errorMessages || []
-    let isXs = this.$vuetify.breakpoint.smAndDown
+    
     let multiple = this.Type == 'Array'
-    let props = {
-      value: this.value,
-      disabled: this.evalDisabled,
-      // label: this.Description,
-      description: this.Description,
-      placeholder: this.Description,
-      errorMessages: this.errorMessages,
-      errorCount: errs.length,
-      error: !!errs.find(r => r),
-      required: this.IsRequired,
-      isXs,
-      ...this.$attrs
-    }
+    let props = this.childProps
 
     if (!this.evalVisible) {
       return null;
@@ -105,7 +111,7 @@ export default {
     ]
     )
 
-    if (isXs) {
+    if (props.isXs) {
       props.label = this.Description;
       fieldLabel = null;
     }
@@ -212,13 +218,14 @@ export default {
     }
 
     //文本,数字,密码
-    else if (!component && !this.Name.endsWith("Id") && (this.Name == "Password" || this.Type == "String" ||
-      this.Type == "Int32" || this.Type == "Decimal")) {
-      if (!props.disabled || isXs) {
+    else if (!component && !this.Name.endsWith("Id") &&
+      ["Password", "String", "Int32", "Decimal"].includes(this.Type)) {
+      
+      if (!props.disabled || props.isXs) {
         let textProps = {
           ...props,
           dense: true,
-          singleLine: !isXs,
+          singleLine: !props.isXs,
           readonly: props.disabled,
         }
         delete textProps.disabled
@@ -230,11 +237,12 @@ export default {
             type: this.Name == 'Password' ? 'password' : ['Int32', 'Decimal'].includes(this.Type) ? 'number' : 'text'
           },
         }, [fieldLabel]);
-      } else
+      } else {
         component = h('span', null,
           (this.Name || '').toLowerCase().includes('password') ?
             Array((props.value || '******').length).fill('*').join('') :
             props.value || '无')
+      }
     }
 
     else if (!component && this.Type == 'Boolean') {
@@ -314,12 +322,12 @@ export default {
     }
 
     if (component) {
-      if (props.disabled && !isXs) {
+      if (props.disabled && !props.isXs) {
         component = h('v-input', {
           props: {
             ...props,
             dense: true,
-            singleLine: !isXs,
+            singleLine: !props.isXs,
             readonly: props.disabled,
             disabled: false
           },
@@ -327,7 +335,7 @@ export default {
         }, [fieldLabel, component])
       }
       return h('v-flex', {
-        attrs: isXs ? { xs12: true } : flex,
+        attrs: props.isXs ? { xs12: true } : flex,
         class: ['input-container'],
         style: {
           padding: '5px',

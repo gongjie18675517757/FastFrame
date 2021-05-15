@@ -39,7 +39,7 @@
                 </v-form>
               </v-card-text>
               <v-card-actions>
-                <SlideVerififyVue @success="login">
+                <SlideVerififyVue :v="v" @success="login">
                   <template v-slot:activator="{ attrs, on }">
                     <v-btn
                       block
@@ -72,6 +72,7 @@ export default {
     SlideVerififyVue,
   },
   data: () => ({
+    v: new Date().getTime(),
     loading: false,
     model: {
       account: "admin",
@@ -114,6 +115,8 @@ export default {
          */
         let redirect = this.$route.query.redirect || "/";
         this.$router.push(redirect);
+      } catch {
+        this.v = new Date().getTime();
       } finally {
         this.loading = false;
       }

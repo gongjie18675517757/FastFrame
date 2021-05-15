@@ -1,9 +1,13 @@
 <template>
   <v-menu top offset-y :close-on-content-click="false" v-model="verifying">
-    <template v-slot:activator="props"> 
+    <template v-slot:activator="props">
       <slot name="activator" v-bind="props"></slot>
     </template>
-    <v-card tile v-if="model && verifying" :style="{ width: `${model.BgWidth + 30}px` }">
+    <v-card
+      tile
+      v-if="model && verifying"
+      :style="{ width: `${model.BgWidth + 30}px` }"
+    >
       <v-toolbar flat dense>
         <v-toolbar-title>滑动验证</v-toolbar-title>
         <v-spacer></v-spacer>
@@ -75,6 +79,9 @@
 
 <script>
 export default {
+  props:{
+    v:[String,Number]
+  },
   data() {
     return {
       verifying:false,
@@ -85,8 +92,14 @@ export default {
       verifyResult: null, //null:未验证 1:成功 -1:失败
     };
   },
+  watch:{
+    v:{
+      handler:'refresh',
+      immediate:true
+    }
+  },
   mounted() {
-    this.refresh();
+    // this.refresh();
   },
   methods: {
     refresh() {
@@ -121,6 +134,7 @@ export default {
         if (res) {
           this.verifyResult = 1;
           this.$emit("success");
+          this.verifying=false;
         } else {
           this.verifyResult = -1;
           setTimeout(() => {

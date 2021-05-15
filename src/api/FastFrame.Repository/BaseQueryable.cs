@@ -1,31 +1,29 @@
 ﻿using FastFrame.Database;
 using FastFrame.Entity;
-using FastFrame.Infrastructure.Interface;
 using FastFrame.Infrastructure;
+using FastFrame.Infrastructure.Interface;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
-using AspectCore.DependencyInjection;
 
 namespace FastFrame.Repository
 {
     public class BaseQueryable<T> : IQueryRepository<T> where T : class, IQuery
     {
-        private readonly DataBase context;
-        private IQueryable<T> queryable;
-
-        [FromServiceContext]
+        protected readonly DataBase context;
+        private IQueryable<T> queryable; 
+        
         protected IAppSessionProvider AppSession { get; set; }
 
         protected ICurrUser CurrUser => AppSession?.CurrUser;
 
-        public BaseQueryable(DataBase context)
+        public BaseQueryable(DataBase context, IAppSessionProvider appSession)
         {
             this.context = context;
+            AppSession = appSession;
         }
 
         /// <summary>

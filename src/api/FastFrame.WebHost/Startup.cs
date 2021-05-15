@@ -13,21 +13,17 @@ using FastFrame.WebHost.Privder;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
+using Microsoft.Extensions.Logging; 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using System;
-using System.Diagnostics;
 using System.IO;
-using System.Threading.Tasks;
 
 
 namespace FastFrame.WebHost
@@ -89,10 +85,12 @@ namespace FastFrame.WebHost
                 .AddHttpContextAccessor()
                 .AddDbContextPool<DataBase>(o =>
                 {
-                    o.UseMySql(Configuration.GetConnectionString("MyDbConnection"), mySqlOptions =>
+                    var conn_str = Configuration.GetConnectionString("Local_Mysql");
+                    o.UseMySql(conn_str, ServerVersion.Parse("5.6.40"), opt =>
                     {
-                        mySqlOptions.ServerVersion(new Version(5, 6, 40), ServerType.MySql);
-                    }).AddInterceptors(new FmtCommandInterceptor());
+                        opt.CommandTimeout(60);
+                    })
+                    .AddInterceptors(new FmtCommandInterceptor());
                 })
                 .AddScoped<IModuleExportProvider, ModuleExportProvider>()
                 .AddScoped<IAppSessionProvider, AppSessionProvider>()
@@ -107,9 +105,10 @@ namespace FastFrame.WebHost
                 .AddSingleton<IMessageBus, MessageBus>()
                 .AddScoped<IEventBus, EventBus>();
 
+#if DEBUG
             services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("v1", new OpenApiInfo()
+                options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo()
                 {
                     Version = "v1",
                     Title = "API文档",
@@ -124,6 +123,7 @@ namespace FastFrame.WebHost
                 xmlPath = Path.Combine(basePath, "FastFrame.Entity.xml");
                 options.IncludeXmlComments(xmlPath);
             });
+#endif
 
             services.AddSingleton(x =>
             {
@@ -141,6 +141,16 @@ namespace FastFrame.WebHost
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
+#if DEBUG
+                /*注册swagger*/
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "MsSystem API V1");
+                    c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
+                });
+#endif
             }
 
             //app.UseRewriter(new RewriteOptions().AddRewrite()) 
@@ -186,15 +196,7 @@ namespace FastFrame.WebHost
                 //endpoints.MapControllerRoute(
                 //    name: "default",
                 //    pattern: "{controller=Home}/{action=Index}/{id?}");
-            });
-
-            /*注册swagger*/
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "MsSystem API V1");
-                c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
-            });
+            }); 
 
             var logger = app.ApplicationServices.GetService<ILogger<Startup>>();
 

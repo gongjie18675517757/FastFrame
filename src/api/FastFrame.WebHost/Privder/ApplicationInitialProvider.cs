@@ -57,7 +57,8 @@ namespace FastFrame.WebHost.Privder
             try
             {
                 serviceProvider.GetService<RedisClient>();
-                serviceProvider.GetService<IMessageBus>().SubscribeAsync<RecMsgOutPut>();
+                //serviceProvider.GetService<IMessageBus>().SubscribeAsync<RecMsgOutPut>();
+                serviceProvider.GetService<IMessageBus>().SubscribeAsync(typeof(RecMsgOutPut));
             }
             catch (Exception ex)
             {

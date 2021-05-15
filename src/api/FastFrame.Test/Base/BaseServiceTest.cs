@@ -26,8 +26,12 @@ namespace FastFrame.Test
             services
                 .AddDbContextPool<DataBase>(o =>
                 {
-                    o.UseMySql(Configuration.GetConnectionString("Local_Mysql"));
-                }) 
+                    var conn_str = Configuration.GetConnectionString("Local_Mysql");
+                    o.UseMySql(conn_str,ServerVersion.Parse("5.6.40"), opt =>
+                    {
+                        opt.CommandTimeout(60); 
+                    }); 
+                })
                 .AddScoped<IAppSessionProvider, CurrentUserProvider>()
                 .AddScoped<IEventBus, EventBus>()
                 .AddServices()

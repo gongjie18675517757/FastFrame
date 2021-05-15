@@ -1,40 +1,23 @@
-﻿using AspectCore.DependencyInjection;
-using FastFrame.Database;
+﻿using FastFrame.Database;
 using FastFrame.Entity;
-using FastFrame.Entity.Basis;
 using FastFrame.Infrastructure;
-using FastFrame.Infrastructure.Attrs;
 using FastFrame.Infrastructure.EventBus;
 using FastFrame.Infrastructure.Interface;
 using FastFrame.Repository.Events;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Linq.Dynamic.Core;
-using System.Linq.Expressions;
-using System.Reflection;
 using System.Threading.Tasks;
 
 namespace FastFrame.Repository
 {
     internal class BaseRepository<T> : BaseQueryable<T>, IRepository<T> where T : class, IEntity
     {
-        private readonly DataBase context;
-         
-
-        [FromServiceContext]
-        public IEventBus EventBus { get; set; }
-
-    
-
-        public BaseRepository(DataBase context) : base(context)
+        public BaseRepository(DataBase context, IAppSessionProvider appSession) : base(context, appSession)
         {
-            this.context = context; 
         }
+
 
         /// <summary>
         /// 添加
@@ -49,9 +32,8 @@ namespace FastFrame.Repository
             var entityEntry = context.Entry(entity);
             entityEntry.State = EntityState.Added;
 
-            await EventBus.TriggerEventAsync(new EntityAdding<T>(entityEntry.Entity));
-            //if (IsTransactionOpening)
-            //    await context.SaveChangesAsync();
+            await Task.CompletedTask;
+
             return entityEntry.Entity;
         }
 
@@ -75,7 +57,7 @@ namespace FastFrame.Repository
                 context.Entry(entity).State = EntityState.Deleted;
             }
 
-            await EventBus.TriggerEventAsync(new EntityDeleteing<T>(entity));
+            await Task.CompletedTask;
         }
 
         /// <summary>
@@ -95,10 +77,12 @@ namespace FastFrame.Repository
         /// </summary> 
         public virtual async Task<T> UpdateAsync(T entity)
         {
+            await Task.CompletedTask;
+
             var entityEntry = context.Entry(entity);
             entityEntry.State = EntityState.Modified;
 
-            await EventBus.TriggerEventAsync(new EntityUpdateing<T>(entityEntry.Entity));
+            //await EventBus.TriggerEventAsync(new EntityUpdateing<T>(entityEntry.Entity));
 
             //if (IsTransactionOpening)
             //    await context.SaveChangesAsync();
@@ -117,6 +101,6 @@ namespace FastFrame.Repository
         public Task<int> CommmitAsync()
         {
             return context.SaveChangesAsync();
-        } 
+        }
     }
 }

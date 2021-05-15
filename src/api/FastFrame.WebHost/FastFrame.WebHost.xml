@@ -369,5 +369,10 @@
             资源提供者
             </summary>
         </member>
+        <member name="T:FastFrame.WebHost.MessageBus">
+            <summary>
+            消息总线
+            </summary>
+        </member>
     </members>
 </doc>

@@ -42,9 +42,9 @@ namespace FastFrame.Test.Basis
                 var exists = await repository.Queryable.AnyAsync(x => x.Name == name);
                 Assert.AreEqual(exists, false);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
             finally
             {

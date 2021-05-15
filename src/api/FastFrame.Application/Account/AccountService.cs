@@ -96,7 +96,7 @@ namespace FastFrame.Application.Account
             }
             await userRepository.UpdateAsync(user);
             await userRepository.CommmitAsync();
-            await RedisHelper.DelAsync(userId);
+             
             return await GetCurrentAsync();
         }
 

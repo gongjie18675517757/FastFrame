@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -21,8 +22,10 @@ namespace FastFrame.Database
 
         public virtual void ModelEntityCreating(EntityTypeBuilder<T> entityTypeBuilder)
         {
+            //Debugger.Launch();
+
             var entityType = typeof(T);
-            var currNameSpace = string.Join(",", entityType.Namespace.Split(new char[] { '.' }).Skip(2)); 
+            var currNameSpace = string.Join(",", entityType.Namespace.Split(new char[] { '.' }).Skip(2));
 
             if (typeof(IEntity).IsAssignableFrom(entityType))
             {
@@ -30,6 +33,7 @@ namespace FastFrame.Database
                 entityTypeBuilder.HasKey("Id");
                 entityTypeBuilder.Property("Id").ValueGeneratedNever();
                 entityTypeBuilder.ToTable($"{currNameSpace}_{entityType.Name}".ToLower());
+                entityTypeBuilder.HasComment(T4Help.GetClassSummary(entityType, AppDomain.CurrentDomain.BaseDirectory));
             }
             else
             {
@@ -44,13 +48,13 @@ namespace FastFrame.Database
             {
                 entityTypeBuilder.Property<bool>("isdeleted");
                 entityTypeBuilder.HasQueryFilter(v => !EF.Property<bool>(v, "isdeleted"));
-                entityTypeBuilder.HasIndex("isdeleted").HasName($"Index_{entityType.Name}_isdeleted");
+                entityTypeBuilder.HasIndex("isdeleted").HasDatabaseName($"Index_{entityType.Name}_isdeleted");
             }
 
             if (typeof(IHasTenant).IsAssignableFrom(entityType))
             {
                 entityTypeBuilder.Property<string>("tenant_id").HasMaxLength(25);
-                entityTypeBuilder.HasIndex("tenant_id").HasName($"Index_{entityType.Name}_tenant_id");
+                entityTypeBuilder.HasIndex("tenant_id").HasDatabaseName($"Index_{entityType.Name}_tenant_id");
             }
 
             foreach (var item in typeof(T).GetProperties())
@@ -60,36 +64,38 @@ namespace FastFrame.Database
 
                 var propType = T4Help.GetNullableType(item.PropertyType);
 
-                var prop = entityTypeBuilder
+                var propertyBuilder = entityTypeBuilder
                               .Property(item.Name)
                               .HasColumnName(item.Name.ToLower());
+
+                propertyBuilder.HasComment(T4Help.GetPropertySummary(item, AppDomain.CurrentDomain.BaseDirectory));
 
                 /*索引ID*/
                 if (typeof(IEntity).IsAssignableFrom(entityType))
                 {
                     if (item.Name.EndsWith("Id") && item.Name != "Id")
-                        entityTypeBuilder.HasIndex(item.Name).HasName($"Index_{entityType.Name}_{item.Name}");
+                        entityTypeBuilder.HasIndex(item.Name).HasDatabaseName($"Index_{entityType.Name}_{item.Name}");
 
                     if (propType == typeof(string))
                     {
                         /*所有字符串,指定为unicode*/
-                        prop.IsUnicode();
+                        propertyBuilder.IsUnicode();
 
                         /*所有ID,指定长度为25*/
                         if (item.Name.EndsWith("Id"))
                         {
-                            prop.HasMaxLength(25);
+                            propertyBuilder.HasMaxLength(25);
                         }
                     }
                 }
                 if (propType == typeof(decimal))
                 {
-                    prop.HasColumnType("decimal(10,2)");
+                    propertyBuilder.HasPrecision(10, 2);
                 }
 
                 else if (propType.IsEnum)
                 {
-                    prop.HasConversion<string>().HasMaxLength(50);
+                    propertyBuilder.HasConversion<string>().HasMaxLength(50);
                 }
             }
         }

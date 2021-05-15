@@ -805,11 +805,6 @@
             内容
             </summary>
         </member>
-        <member name="T:FastFrame.Infrastructure.MessageBus.MessageBus">
-            <summary>
-            消息总线
-            </summary>
-        </member>
         <member name="T:FastFrame.Infrastructure.MessageBus.MsgType">
             <summary>
             消息类型

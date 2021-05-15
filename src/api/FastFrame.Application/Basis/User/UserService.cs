@@ -37,14 +37,7 @@ namespace FastFrame.Application.Basis
                 throw new MsgException("用户不存在");
             user.IsAdmin = !user.IsAdmin;
             await userRepository.UpdateAsync(user);
-            await userRepository.CommmitAsync();
-
-            var cache = await RedisHelper.GetAsync<CurrUser>(id);
-            if (cache != null)
-            {
-                cache.IsAdmin = user.IsAdmin;
-                await RedisHelper.SetAsync(id, cache, 60 * 60 * 24);
-            }
+            await userRepository.CommmitAsync(); 
 
             return await GetAsync(id);
         }

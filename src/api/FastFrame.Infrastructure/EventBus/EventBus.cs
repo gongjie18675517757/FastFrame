@@ -13,6 +13,7 @@ namespace FastFrame.Infrastructure.EventBus
         {
             this.serviceProvider = serviceProvider;
         }
+
         public async Task TriggerEventAsync<T>(T @event) where T : IEventData
         {
             var servers = serviceProvider.GetServices<IEventHandle<T>>().OrderByDescending(v => v.Weights);

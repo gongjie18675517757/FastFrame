@@ -31,7 +31,7 @@ namespace FastFrame.Database
             return base.ReaderExecuting(command, eventData, result);
         }
 
-        public override Task<InterceptionResult<DbDataReader>> ReaderExecutingAsync(DbCommand command, CommandEventData eventData, InterceptionResult<DbDataReader> result, CancellationToken cancellationToken = default)
+        public override ValueTask<InterceptionResult<DbDataReader>> ReaderExecutingAsync(DbCommand command, CommandEventData eventData, InterceptionResult<DbDataReader> result, CancellationToken cancellationToken = default)
         {
             /*优化ＥＦ生成的查询语句*/
             command.CommandText = formatterSql(command.CommandText);

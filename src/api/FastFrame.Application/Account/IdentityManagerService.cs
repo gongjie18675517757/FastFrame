@@ -1,12 +1,11 @@
 ﻿using FastFrame.Entity.Basis;
 using FastFrame.Infrastructure.Interface;
 using FastFrame.Repository;
-using System;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Linq;
-using CSRedis;
+using System.Threading.Tasks;
 
 namespace FastFrame.Application.Account
 {
@@ -14,13 +13,12 @@ namespace FastFrame.Application.Account
     {
         private readonly IRepository<LoginLog> loginLogRepository;
         private readonly IServiceProvider serviceProvider;
-        private readonly CSRedisClient redisClient;
 
-        public IdentityManagerService(IRepository<LoginLog> loginLogRepository, IServiceProvider serviceProvider, CSRedis.CSRedisClient redisClient)
+
+        public IdentityManagerService(IRepository<LoginLog> loginLogRepository, IServiceProvider serviceProvider)
         {
             this.loginLogRepository = loginLogRepository;
             this.serviceProvider = serviceProvider;
-            this.redisClient = redisClient;
         }
 
         public async Task<IIdentity> GenerateIdentity(string userId)
@@ -35,7 +33,6 @@ namespace FastFrame.Application.Account
                 User_Id = userId
             });
 
-            await redisClient.SetAsync(loginLog.Id, loginLog, 60 * 60 * 24);
 
             return loginLog;
         }
@@ -54,8 +51,6 @@ namespace FastFrame.Application.Account
                 loginLog.LastTime = DateTime.Now;
                 await loginLogRepository.UpdateAsync(loginLog);
                 await loginLogRepository.CommmitAsync();
-
-                await redisClient.SetAsync(loginLog.Id, loginLog, 60 * 60 * 24);
             }
         }
 
@@ -67,8 +62,7 @@ namespace FastFrame.Application.Account
         public async Task<bool> ExistsTokenAsync(string token)
         {
             var dt = DateTime.Now;
-
-            return await redisClient.ExistsAsync(token) ||
+            return
                    await loginLogRepository.AnyAsync(v => v.Id == token && v.IsEnabled && v.IsEnabled && dt < v.ExpiredTime);
         }
 
@@ -87,9 +81,7 @@ namespace FastFrame.Application.Account
                 log.ExpiredTime = DateTime.Now;
                 log.IsEnabled = false;
                 await loginLogRepository.UpdateAsync(log);
-                await loginLogRepository.CommmitAsync();
-
-                await redisClient.DelAsync(token);
+                await loginLogRepository.CommmitAsync(); 
             }
         }
 
@@ -110,8 +102,7 @@ namespace FastFrame.Application.Account
                 item.IsEnabled = false;
                 item.ExpiredTime = dt;
 
-                await loginLogRepository.UpdateAsync(item);
-                await redisClient.DelAsync(item.Id);
+                await loginLogRepository.UpdateAsync(item); 
             }
         }
     }

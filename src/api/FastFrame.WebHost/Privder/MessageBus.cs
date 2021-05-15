@@ -4,8 +4,11 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
 using static CSRedis.CSRedisClient;
+using FastFrame.Infrastructure.MessageBus;
+using FastFrame.Infrastructure;
+using System.Reflection;
 
-namespace FastFrame.Infrastructure.MessageBus
+namespace FastFrame.WebHost
 {
     /// <summary>
     /// 消息总线
@@ -32,33 +35,33 @@ namespace FastFrame.Infrastructure.MessageBus
         }
 
         public void SubscribeAsync(Type msgType)
-        { 
-            //var method = this.GetType().GetMethod(nameof(ExecHandle), System.Reflection.BindingFlags.NonPublic);
-            //var action = (Action<SubscribeMessageEventArgs>)method.MakeGenericMethod(msgType)
-            //    .CreateDelegate(typeof(Action<SubscribeMessageEventArgs>));
-            //redisClient.Subscribe(($"Message:{msgType.Name}", action));
+        {
+            var method = GetType().GetMethod(nameof(ExecHandle), BindingFlags.NonPublic | BindingFlags.Instance);
+
+            var action = method.MakeGenericMethod(msgType);
+
+
+            redisClient.Subscribe(($"Message:{msgType.Name}", new Action<SubscribeMessageEventArgs>(msgType => action.Invoke(this, new object[] { msgType }))));
         }
 
-        
+
 
         private async void ExecHandle<T>(SubscribeMessageEventArgs msg) where T : class, new()
         {
             var message = msg.Body.ToObject<Message<T>>();
-            using (var serviceScope = serviceProvider.CreateScope())
+            using var serviceScope = serviceProvider.CreateScope();
+            var loader = serviceScope.ServiceProvider;
+            var services = loader.GetServices<IAsyncMessageHandle<T>>();
+            var loggerFactory = loader.GetService<ILoggerFactory>();
+            foreach (var item in services)
             {
-                var serviceProvider = serviceScope.ServiceProvider;
-                var services = serviceProvider.GetServices<IAsyncMessageHandle<T>>();
-                var loggerFactory = serviceProvider.GetService<ILoggerFactory>();
-                foreach (var item in services)
+                try
                 {
-                    try
-                    {
-                        await item.Handle(message);
-                    }
-                    catch (Exception ex)
-                    {
-                        loggerFactory.CreateLogger<MessageBus>().LogError(ex, "发生异常!");
-                    }
+                    await item.Handle(message);
+                }
+                catch (Exception ex)
+                {
+                    loggerFactory.CreateLogger<MessageBus>().LogError(ex, "发生异常!");
                 }
             }
         }

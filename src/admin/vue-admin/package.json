@@ -11,7 +11,7 @@
     "@babel/polyfill": "^7.12.1",
     "@mdi/font": "^5.9.55",
     "@microsoft/signalr": "^3.1.15",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "core-js": "^3.12.1",
     "jsplumb": "^2.15.5",
     "lodash": "^4.17.21",

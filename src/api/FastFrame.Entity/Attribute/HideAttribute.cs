@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FastFrame.Infrastructure.Attrs
+namespace FastFrame.Entity
 {
     [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
     public sealed class HideAttribute : Attribute

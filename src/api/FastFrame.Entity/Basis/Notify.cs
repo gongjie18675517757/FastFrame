@@ -1,6 +1,4 @@
-﻿using FastFrame.Entity.Basis;
-using FastFrame.Entity.Enums;
-using FastFrame.Infrastructure.Attrs;
+﻿using FastFrame.Entity.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace FastFrame.Entity.Basis

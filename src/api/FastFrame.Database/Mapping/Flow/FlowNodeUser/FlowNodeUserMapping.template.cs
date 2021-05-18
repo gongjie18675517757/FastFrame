@@ -1,7 +1,7 @@
-namespace FastFrame.Database.Mapping.Flow
-{
 	using FastFrame.Entity.Flow; 
 	using Microsoft.EntityFrameworkCore.Metadata.Builders; 
+namespace FastFrame.Database.Mapping.Flow
+{
 		
 	/// <summary>
 	/// 节点审核人 

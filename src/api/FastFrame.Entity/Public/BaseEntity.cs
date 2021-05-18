@@ -1,5 +1,4 @@
 ﻿using FastFrame.Entity.Basis;
-using FastFrame.Infrastructure.Attrs;
 using System;
 using System.ComponentModel.DataAnnotations;
 

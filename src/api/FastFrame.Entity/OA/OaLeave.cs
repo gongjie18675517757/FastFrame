@@ -1,10 +1,7 @@
 ﻿using FastFrame.Entity.Basis;
 using FastFrame.Entity.Enums;
-using FastFrame.Infrastructure.Attrs;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace FastFrame.Entity.OA
 {

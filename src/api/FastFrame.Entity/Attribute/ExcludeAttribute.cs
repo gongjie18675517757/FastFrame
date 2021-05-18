@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FastFrame.Infrastructure.Attrs
+namespace FastFrame.Entity
 {
     /// <summary>
     /// 排除标识[不生成DTO]

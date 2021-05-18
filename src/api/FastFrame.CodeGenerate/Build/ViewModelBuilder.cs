@@ -1,10 +1,10 @@
 ﻿using FastFrame.CodeGenerate.Info;
+using FastFrame.Entity;
 using FastFrame.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using FastFrame.Infrastructure.Attrs;
 
 namespace FastFrame.CodeGenerate.Build
 {

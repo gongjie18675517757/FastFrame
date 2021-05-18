@@ -4,6 +4,143 @@
         <name>FastFrame.Entity</name>
     </assembly>
     <members>
+        <member name="T:FastFrame.Entity.EnumItemAttribute">
+            <summary>
+            数据字典
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.EnumItemAttribute.Name">
+            <summary>
+            字典值
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.EnumItemAttribute.SuperPropName">
+            <summary>
+            上级
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.ExcludeAttribute">
+            <summary>
+            排除标识[不生成DTO]
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.ExportAttribute">
+            <summary>
+            标记导出
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.ExportAttribute.ExportMarks">
+            <summary>
+            导出标记
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.ExportMark">
+            <summary>
+            导出标记
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.ExportMark.All">
+            <summary>
+            全部
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.ExportMark.ViewModel">
+            <summary>
+            视图模型
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.ExportMark.DTO">
+            <summary>
+            DTO实体
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.ExportMark.Service">
+            <summary>
+            服务层
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.ExportMark.Controller">
+            <summary>
+            控制器
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.ExportMark.VuePage">
+            <summary>
+            VUE页面
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.ExportMark.ReactPage">
+            <summary>
+            React页面
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.FormGroupAttribute">
+            <summary>
+            表单分组
+            </summary>
+        </member>
+        <member name="M:FastFrame.Entity.FormGroupAttribute.#ctor(System.String[])">
+            <summary>
+            
+            </summary>
+            <param name="groupNames">归属分组名称</param>
+        </member>
+        <member name="T:FastFrame.Entity.ReadOnlyAttribute">
+            <summary>
+            标记只读
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.ReadOnlyAttribute.ReadOnlyMark">
+            <summary>
+            只读类型
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.ReadOnlyMark">
+            <summary>
+            只读标识 
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.RelatedFromAttribute">
+            <summary>
+            关联自
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.RelatedFromAttribute.FromPropName">
+            <summary>
+            来源属性名
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.RelatedFromAttribute.RelatedFromPropName">
+            <summary>
+            关联属性名
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.RelatedFromAttribute.IsDefault">
+            <summary>
+            是否默认字段
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.RelatedToAttribute">
+            <summary>
+            关联标记
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.RelatedToAttribute.RelatedType">
+            <summary>
+            被关联的类型
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.UniqueAttribute">
+            <summary>
+            唯一标识
+            </summary>
+        </member>
+        <member name="M:FastFrame.Entity.UniqueAttribute.#ctor(System.String[])">
+            <summary>
+            
+            </summary>
+            <param name="uniqueNames">需要验证唯一的属性</param>
+        </member>
         <member name="T:FastFrame.Entity.Basis.Dept">
             <summary>
             部门

@@ -1,10 +1,9 @@
 ﻿using FastFrame.Application.Basis;
+using FastFrame.Entity;
 using FastFrame.Entity.Enums;
 using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Interface;
 using FastFrame.Infrastructure.Module;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.DependencyInjection;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using System;
@@ -37,7 +36,7 @@ namespace FastFrame.WebHost.Privder
 
             foreach (var item in moduleStruct.FieldInfoStruts)
             {
-                if (item.Hide == Infrastructure.Attrs.HideMark.List || item.Hide == Infrastructure.Attrs.HideMark.All)
+                if (item.Hide == nameof(HideMark.List) || item.Hide == nameof(HideMark.All))
                     continue;
 
                 if (item.Name == "Id")

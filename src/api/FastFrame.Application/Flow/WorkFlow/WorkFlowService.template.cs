@@ -1,5 +1,3 @@
-namespace FastFrame.Application.Flow
-{
 	using FastFrame.Entity.Basis; 
 	using FastFrame.Entity.Flow; 
 	using FastFrame.Infrastructure.Interface; 
@@ -9,6 +7,8 @@ namespace FastFrame.Application.Flow
 	using Microsoft.EntityFrameworkCore; 
 	using System.Threading.Tasks; 
 	using FastFrame.Application.Basis; 
+namespace FastFrame.Application.Flow
+{
 		
 	/// <summary>
 	/// 工作流 服务实现 

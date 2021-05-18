@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace FastFrame.Infrastructure.Attrs
+namespace FastFrame.Entity
 {
     /// <summary>
     /// 唯一标识

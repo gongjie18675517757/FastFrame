@@ -1,7 +1,7 @@
-namespace FastFrame.Application.OA
-{
 	using System; 
 	using FastFrame.Entity.Enums; 
+namespace FastFrame.Application.OA
+{
 		
 	/// <summary>
 	/// 请假单 

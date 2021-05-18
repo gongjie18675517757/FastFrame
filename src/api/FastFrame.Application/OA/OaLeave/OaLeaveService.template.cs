@@ -1,5 +1,3 @@
-namespace FastFrame.Application.OA
-{
 	using FastFrame.Entity.Basis; 
 	using FastFrame.Entity.OA; 
 	using FastFrame.Infrastructure.Interface; 
@@ -9,6 +7,8 @@ namespace FastFrame.Application.OA
 	using Microsoft.EntityFrameworkCore; 
 	using System.Threading.Tasks; 
 	using FastFrame.Application.Basis; 
+namespace FastFrame.Application.OA
+{
 		
 	/// <summary>
 	/// 请假单 服务实现 

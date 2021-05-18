@@ -1,5 +1,4 @@
-﻿using FastFrame.Infrastructure.Attrs;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace FastFrame.Entity.Flow
 {

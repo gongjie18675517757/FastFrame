@@ -1,5 +1,3 @@
-namespace FastFrame.Application.Basis
-{
 	using FastFrame.Entity.Basis; 
 	using FastFrame.Infrastructure.Interface; 
 	using FastFrame.Infrastructure; 
@@ -8,6 +6,8 @@ namespace FastFrame.Application.Basis
 	using Microsoft.EntityFrameworkCore; 
 	using System.Threading.Tasks; 
 	using FastFrame.Application.Basis; 
+namespace FastFrame.Application.Basis
+{
 		
 	/// <summary>
 	/// 编号设置 服务实现 

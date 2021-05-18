@@ -50,17 +50,19 @@ namespace FastFrame.CodeGenerate.Build
         {
             var write = new StringBuilder();
 
+            /*引用命名空间*/
+            foreach (var item in target.ImportNames)
+            {
+                write.WriteCodeLine($"using {item}; ", 1);
+            }
+
             /*类型所在命名空间*/
             write.WriteCodeLine($"namespace {target.NamespaceName}", 0);
 
             /*命名空间开始*/
             write.WriteCodeLine($"{{", 0);
 
-            /*引用命名空间*/
-            foreach (var item in target.ImportNames)
-            {
-                write.WriteCodeLine($"using {item}; ", 1);
-            }
+           
 
             /*空行*/
             write.WriteCodeLine($"", 2);

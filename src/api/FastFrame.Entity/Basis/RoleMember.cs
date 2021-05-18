@@ -1,7 +1,4 @@
-﻿using FastFrame.Infrastructure.Attrs;
-using System.ComponentModel.DataAnnotations;
-
-namespace FastFrame.Entity.Basis
+﻿namespace FastFrame.Entity.Basis
 {
     /// <summary>
     /// 角色成员

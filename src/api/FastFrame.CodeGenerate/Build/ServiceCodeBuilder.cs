@@ -1,8 +1,6 @@
 ﻿using FastFrame.Entity;
 using FastFrame.Infrastructure;
-using FastFrame.Infrastructure.Attrs;
 using System;
-using FastFrame.CodeGenerate.Info;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;

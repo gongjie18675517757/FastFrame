@@ -1,9 +1,7 @@
 ﻿using FastFrame.Entity;
 using FastFrame.Infrastructure;
-using FastFrame.Infrastructure.Attrs;
 using FastFrame.Infrastructure.Interface;
 using FastFrame.Infrastructure.Module;
-using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -94,8 +92,8 @@ namespace FastFrame.WebHost.Privder
                     Name = x.Name,
                     Type = nullableType.IsArray ? "Array" : nullableType.Name,
                     Description = descriptionProvider.GetPropertyDescription(x),
-                    Hide = hideAttribute?.HideMark,
-                    Readonly = readOnlyAttribute?.ReadOnlyMark,
+                    Hide = hideAttribute?.HideMark.ToString(),
+                    Readonly = readOnlyAttribute?.ReadOnlyMark.ToString(),
                     Rules = GetRules(x),
                     Relate = relatedToAttribute?.RelatedType.Name,
                     Length = stringLengthAttribute?.MaximumLength,

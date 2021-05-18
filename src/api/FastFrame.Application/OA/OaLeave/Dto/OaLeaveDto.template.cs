@@ -1,14 +1,14 @@
-namespace FastFrame.Application.OA
-{
 	using FastFrame.Entity.OA; 
-	using FastFrame.Infrastructure.Attrs; 
 	using FastFrame.Infrastructure; 
-	using global::System.ComponentModel.DataAnnotations; 
+	using System.ComponentModel.DataAnnotations; 
 	using FastFrame.Entity.Enums; 
 	using FastFrame.Entity.Basis; 
+	using FastFrame.Entity; 
 	using System.Collections.Generic; 
 	using System; 
 	using FastFrame.Application.Basis; 
+namespace FastFrame.Application.OA
+{
 		
 	/// <summary>
 	/// 请假单 

@@ -1,13 +1,11 @@
-﻿using FastFrame.Entity.Enums;
-using FastFrame.Infrastructure.Interface;
-using System;
+﻿using System;
 
 namespace FastFrame.Entity.Basis
 {
     /// <summary>
     /// 登陆Log
     /// </summary> 
-    public class LoginLog : IEntity, IHasTenant, IIdentity
+    public class LoginLog : IEntity, IHasTenant 
     {
         public string Id { get; set; }
 

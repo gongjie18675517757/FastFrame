@@ -1,9 +1,8 @@
 ﻿using FastFrame.Entity.Enums;
-using FastFrame.Infrastructure;
-using FastFrame.Infrastructure.Attrs;
-using FastFrame.Infrastructure.Interface;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace FastFrame.Entity.Basis
 {
@@ -79,10 +78,11 @@ namespace FastFrame.Entity.Basis
         /// </summary> 
         public void GeneratePassword(string password = "")
         {
-            if (password.IsNullOrWhiteSpace())
+            if (string.IsNullOrEmpty(password))
                 password = Password;
-            EncryptionKey = Guid.NewGuid().ToString().ToMD5();
-            Password = $"{EncryptionKey}{password}".ToMD5();
+
+            EncryptionKey = ToMD5(Guid.NewGuid().ToString());
+            Password = ToMD5($"{EncryptionKey}{password}");
         }
 
         /// <summary>
@@ -90,7 +90,19 @@ namespace FastFrame.Entity.Basis
         /// </summary> 
         public bool VerificationPassword(string password = "")
         {
-            return $"{EncryptionKey}{password}".ToMD5() == Password;
+            return ToMD5($"{EncryptionKey}{password}") == Password;
+        }
+
+
+        private static string ToMD5(string @in)
+        {
+            if (@in == null)
+                return null;
+
+            using var md5 = MD5.Create();
+            var result = md5.ComputeHash(Encoding.Default.GetBytes(@in));
+            var strResult = BitConverter.ToString(result);
+            return strResult.Replace("-", "").ToLower();
         }
     }
 }

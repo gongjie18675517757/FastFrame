@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace FastFrame.Infrastructure.Attrs
+namespace FastFrame.Entity
 {
     /// <summary>
     /// 标记导出

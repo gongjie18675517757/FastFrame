@@ -1,6 +1,5 @@
 ﻿using FastFrame.CodeGenerate.Info;
 using FastFrame.Infrastructure;
-using FastFrame.Infrastructure.Attrs;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -33,9 +32,9 @@ namespace FastFrame.CodeGenerate.Build
                 if (targetNames.Length > 0 && !targetNames.Any(v => type.Name.StartsWith(v)))
                     continue;
 
-                var exportAttr = type.GetCustomAttribute<ExportAttribute>();
+                var exportAttr = type.GetCustomAttribute<Entity.ExportAttribute>();
 
-                if (exportAttr == null || !exportAttr.ExportMarks.Contains(ExportMark.VuePage))
+                if (exportAttr == null || !exportAttr.ExportMarks.Contains(Entity.ExportMark.VuePage))
                     continue;
 
                 var areaName = T4Help.GenerateNameSpace(type, null);

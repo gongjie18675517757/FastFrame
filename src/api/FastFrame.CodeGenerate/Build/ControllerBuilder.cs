@@ -1,12 +1,13 @@
 ﻿using FastFrame.CodeGenerate.Info;
+using FastFrame.Entity;
 using FastFrame.Infrastructure;
-using FastFrame.Infrastructure.Attrs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using FieldInfo = FastFrame.CodeGenerate.Info.FieldInfo;
 using ParameterInfo = FastFrame.CodeGenerate.Info.ParameterInfo;
+using TargetInfo = FastFrame.CodeGenerate.Info.TargetInfo;
 
 namespace FastFrame.CodeGenerate.Build
 {

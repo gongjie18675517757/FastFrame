@@ -1,12 +1,11 @@
 ﻿using FastFrame.CodeGenerate.Info;
+using FastFrame.Entity;
 using FastFrame.Infrastructure;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
-using System.ComponentModel.DataAnnotations;
-using FastFrame.Infrastructure.Attrs;
-using FastFrame.Entity;
 using TargetInfo = FastFrame.CodeGenerate.Info.TargetInfo;
 
 namespace FastFrame.CodeGenerate.Build
@@ -54,12 +53,12 @@ namespace FastFrame.CodeGenerate.Build
             {
                 NamespaceName = $"FastFrame.Application.{areaNameSpace}",
                 ImportNames = new string[] {
-                        $"FastFrame.Entity.{areaNameSpace}",
-                        "FastFrame.Infrastructure.Attrs",
+                        $"FastFrame.Entity.{areaNameSpace}", 
                         "FastFrame.Infrastructure",
-                        "global::System.ComponentModel.DataAnnotations",
+                        "System.ComponentModel.DataAnnotations",
                         "FastFrame.Entity.Enums",
                         "FastFrame.Entity.Basis",
+                        "FastFrame.Entity",
                         "System.Collections.Generic",
                         "System"
                     }

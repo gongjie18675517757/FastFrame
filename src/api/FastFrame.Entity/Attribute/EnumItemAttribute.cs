@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FastFrame.Infrastructure.Attrs
+namespace FastFrame.Entity
 {
     /// <summary>
     /// 数据字典

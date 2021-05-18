@@ -1,10 +1,9 @@
 ﻿using FastFrame.Application.Basis;
 using FastFrame.Infrastructure;
-using FastFrame.Infrastructure.Attrs;
-using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using FastFrame.Infrastructure.Permission;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
 
 namespace FastFrame.WebHost.Controllers.Basis
 {

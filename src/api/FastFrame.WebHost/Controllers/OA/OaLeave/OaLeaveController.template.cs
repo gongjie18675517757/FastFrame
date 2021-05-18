@@ -1,9 +1,6 @@
+	using FastFrame.Application.OA; 
 namespace FastFrame.WebHost.Controllers.OA
 {
-	using FastFrame.Entity.OA; 
-	using FastFrame.Application.OA; 
-	using FastFrame.Infrastructure.Permission; 
-	using FastFrame.Infrastructure.Interface; 
 		
 	/// <summary>
 	/// 请假单 

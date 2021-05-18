@@ -1,7 +1,7 @@
-﻿using FastFrame.Infrastructure.Attrs;
+﻿using FastFrame.Entity;
 using FastFrame.Infrastructure.Interface;
-using System.ComponentModel.DataAnnotations;
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace FastFrame.Application
 {

@@ -1,13 +1,9 @@
 ﻿using FastFrame.CodeGenerate.Build;
 using FastFrame.Entity;
 using FastFrame.Infrastructure;
-using FastFrame.Infrastructure.Attrs;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 
 namespace FastFrame.CodeGenerate
 {

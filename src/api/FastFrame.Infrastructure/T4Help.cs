@@ -20,15 +20,7 @@ namespace FastFrame.Infrastructure
             return baseType.Assembly.GetTypes().Where(x => baseType.IsAssignableFrom(x) && x.IsClass && !x.IsAbstract);
         }
 
-        /// <summary>
-        /// 返回有标记导出的实体
-        /// </summary>
-        /// <param name="baseType"></param>
-        /// <returns></returns>
-        public static IEnumerable<Type> GetExportTypes(Type baseType)
-        {
-            return GetClassTypes(baseType).Where(x => x.GetCustomAttribute<Attrs.ExportAttribute>() != null);
-        }
+ 
 
         public static Type GetNullableType(Type type)
         {

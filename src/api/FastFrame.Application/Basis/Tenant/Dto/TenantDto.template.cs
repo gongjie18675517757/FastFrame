@@ -1,12 +1,12 @@
-namespace FastFrame.Application.Basis
-{
 	using FastFrame.Entity.Basis; 
-	using FastFrame.Infrastructure.Attrs; 
 	using FastFrame.Infrastructure; 
-	using global::System.ComponentModel.DataAnnotations; 
+	using System.ComponentModel.DataAnnotations; 
 	using FastFrame.Entity.Enums; 
+	using FastFrame.Entity; 
 	using System.Collections.Generic; 
 	using System; 
+namespace FastFrame.Application.Basis
+{
 		
 	/// <summary>
 	/// 组织信息 

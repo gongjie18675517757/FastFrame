@@ -1,7 +1,7 @@
-namespace FastFrame.Application.Basis
-{
 	using System; 
 	using FastFrame.Entity.Enums; 
+namespace FastFrame.Application.Basis
+{
 		
 	/// <summary>
 	/// 编号设置 

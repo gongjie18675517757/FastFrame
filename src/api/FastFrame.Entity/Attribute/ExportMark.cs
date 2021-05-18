@@ -1,4 +1,4 @@
-﻿namespace FastFrame.Infrastructure.Attrs
+﻿namespace FastFrame.Entity
 {
     /// <summary>
     /// 导出标记

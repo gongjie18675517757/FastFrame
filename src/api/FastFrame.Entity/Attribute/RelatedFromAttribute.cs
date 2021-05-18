@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FastFrame.Infrastructure.Attrs
+namespace FastFrame.Entity
 {
     /// <summary>
     /// 关联自

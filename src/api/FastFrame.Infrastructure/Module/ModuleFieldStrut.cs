@@ -1,5 +1,4 @@
-﻿using FastFrame.Infrastructure.Attrs;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace FastFrame.Infrastructure.Module
 {
@@ -26,12 +25,12 @@ namespace FastFrame.Infrastructure.Module
         /// <summary>
         /// 隐藏标记
         /// </summary>
-        public HideMark? Hide { get; set; }
+        public string Hide { get; set; }
 
         /// <summary>
         /// 只读标记
         /// </summary>
-        public ReadOnlyMark? Readonly { get; set; }
+        public string Readonly { get; set; }
 
         /// <summary>
         /// 验证规则
@@ -67,7 +66,7 @@ namespace FastFrame.Infrastructure.Module
         /// 数据字典
         /// </summary>
         public EnumInfo EnumItemInfo { get; set; }
-    }
+    } 
 
 
 }

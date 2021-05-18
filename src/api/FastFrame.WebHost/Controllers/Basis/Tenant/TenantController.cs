@@ -1,5 +1,4 @@
 ﻿using FastFrame.Application.Basis;
-using FastFrame.Infrastructure.Attrs;
 using FastFrame.Infrastructure.Permission;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

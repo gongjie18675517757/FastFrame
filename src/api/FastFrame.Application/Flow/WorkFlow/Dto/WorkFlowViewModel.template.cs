@@ -1,7 +1,7 @@
-namespace FastFrame.Application.Flow
-{
 	using System; 
 	using FastFrame.Entity.Enums; 
+namespace FastFrame.Application.Flow
+{
 		
 	/// <summary>
 	/// 工作流 

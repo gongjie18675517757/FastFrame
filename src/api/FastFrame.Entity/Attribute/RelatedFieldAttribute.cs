@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace FastFrame.Infrastructure.Attrs
+namespace FastFrame.Entity
 {
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
     public sealed class RelatedFieldAttribute : Attribute

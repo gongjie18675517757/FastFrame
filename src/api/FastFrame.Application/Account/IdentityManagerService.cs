@@ -14,6 +14,10 @@ namespace FastFrame.Application.Account
         private readonly IRepository<LoginLog> loginLogRepository;
         private readonly IServiceProvider serviceProvider;
 
+        class Identity : LoginLog, IIdentity
+        {
+
+        }
 
         public IdentityManagerService(IRepository<LoginLog> loginLogRepository, IServiceProvider serviceProvider)
         {
@@ -23,7 +27,7 @@ namespace FastFrame.Application.Account
 
         public async Task<IIdentity> GenerateIdentity(string userId)
         {
-            var loginLog = await loginLogRepository.AddAsync(new LoginLog
+            var identity = new Identity
             {
                 IsEnabled = true,
                 ExpiredTime = DateTime.Now.AddDays(1),
@@ -31,10 +35,11 @@ namespace FastFrame.Application.Account
                 LastTime = DateTime.Now,
                 LoginTime = DateTime.Now,
                 User_Id = userId
-            });
+            };
+            await loginLogRepository.AddAsync(identity);
+            await loginLogRepository.CommmitAsync();
 
-
-            return loginLog;
+            return identity;
         }
 
         /// <summary>
@@ -81,7 +86,7 @@ namespace FastFrame.Application.Account
                 log.ExpiredTime = DateTime.Now;
                 log.IsEnabled = false;
                 await loginLogRepository.UpdateAsync(log);
-                await loginLogRepository.CommmitAsync(); 
+                await loginLogRepository.CommmitAsync();
             }
         }
 
@@ -102,8 +107,10 @@ namespace FastFrame.Application.Account
                 item.IsEnabled = false;
                 item.ExpiredTime = dt;
 
-                await loginLogRepository.UpdateAsync(item); 
+                await loginLogRepository.UpdateAsync(item);
             }
+
+            await loginLogRepository.CommmitAsync();
         }
     }
 }

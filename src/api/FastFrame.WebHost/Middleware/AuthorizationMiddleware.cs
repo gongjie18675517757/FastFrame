@@ -34,15 +34,9 @@ namespace FastFrame.WebHost.Middleware
                     var curr = context.RequestServices.GetService<IAppSessionProvider>().CurrUser;
                     if (curr == null)
                     {
-                        //if (!context.Response.HasStarted)
-                        //    await context.Response.StartAsync();
-
                         context.Response.StatusCode = 401;
-                        context.Response.ContentType = "application/json";
-                        await context.Response.WriteAsync(new
-                        {
-                            Message = "未登陆"
-                        }.ToJson(), Encoding.UTF8);
+                        //context.Response.ContentType = "application/json";
+                        await context.Response.WriteJsonAsync(new { Message = "未登陆" });
                         return;
                     }
                 }

@@ -54,7 +54,7 @@ namespace FastFrame.WebHost
             });
 
             services.AddMvc(opts =>
-                {
+                { 
                     //opts.Filters.Add<GlobalFilter>();
                 })
                 .AddNewtonsoftJson(options =>

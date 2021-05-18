@@ -48,7 +48,7 @@ namespace FastFrame.WebHost.Middleware
                             if (groupName.IsNullOrWhiteSpace())
                             {
                                 var controllerActionDescriptor = endpoint.Metadata.GetMetadata<ControllerActionDescriptor>();
-                                groupName = controllerActionDescriptor.ControllerTypeInfo.Name.Replace("Controller","");
+                                groupName = controllerActionDescriptor.ControllerTypeInfo.Name.Replace("Controller", "");
                             }
 
                             /*应用权限*/
@@ -64,8 +64,7 @@ namespace FastFrame.WebHost.Middleware
                             if (!isGranted)
                             {
                                 context.Response.StatusCode = 403;
-                                context.Response.ContentType = "application/json";
-                                await context.Response.WriteAsync(new { Message = "未分配此应用的权限" }.ToJson(), Encoding.UTF8);
+                                await context.Response.WriteJsonAsync(new { Message = "未分配此应用的权限" });
                                 return;
                             }
                         }

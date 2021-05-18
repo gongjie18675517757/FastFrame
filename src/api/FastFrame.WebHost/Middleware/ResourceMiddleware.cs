@@ -48,18 +48,18 @@ namespace FastFrame.WebHost.Middleware
                 }
 
                 var resourceId = resPathRegex.Match(path.Value).Groups[1].Value;
-                var resourceName = resPathRegex.Match(path.Value).Groups[2].Value; 
+                var resourceName = resPathRegex.Match(path.Value).Groups[2].Value;
 
                 var resourceStreamInfo = await context.RequestServices.GetService<IResourceStoreProvider>().TryGetResource(resourceId);
                 if (resourceStreamInfo == null)
                 {
                     context.Response.StatusCode = 404;
                     context.Response.ContentType = "application/json";
-                    await context.Response.WriteAsync(new
+                    await context.Response.WriteJsonAsync(new
                     {
                         Code = 404,
                         Message = "资源过期"
-                    }.ToJson(), Encoding.UTF8);
+                    });
                     return;
                 }
 
@@ -93,7 +93,7 @@ namespace FastFrame.WebHost.Middleware
                 }
                 context.Response.StatusCode = 200;
                 context.Response.ContentType = "application/json";
-                await context.Response.WriteAsync(resultList.ToJson(), Encoding.UTF8);
+                await context.Response.WriteJsonAsync(resultList.ToJson());
                 return;
             }
 

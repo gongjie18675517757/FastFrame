@@ -30,7 +30,7 @@ namespace FastFrame.WebHost.Middleware
             {
                 await next(context);
             }
-            catch(UniqueException uniqueException)
+            catch (UniqueException uniqueException)
             {
                 var typeDescription = moduleDesProvider.GetClassDescription(uniqueException.Type);
                 var propDescriptions = new string[uniqueException.PropNames.Length];
@@ -40,51 +40,49 @@ namespace FastFrame.WebHost.Middleware
                 }
 
                 context.Response.StatusCode = 400;
-                context.Response.ContentType = "application/json";
-                await context.Response.WriteAsync(new
+                await context.Response.WriteJsonAsync(new
                 {
                     Message = $"{typeDescription}:{string.Join("+", propDescriptions)} 重复!",
                     Code = -2
-                }.ToJson(), Encoding.UTF8); 
+                });
             }
             catch (MsgException ex)
             {
                 context.Response.StatusCode = 400;
-                context.Response.ContentType = "application/json";
-                await context.Response.WriteAsync(new
+                await context.Response.WriteJsonAsync(new
                 {
                     ex.Message,
                     ex.Code
-                }.ToJson(), Encoding.UTF8);
+                });
             }
             catch (NotFoundException)
             {
                 context.Response.StatusCode = 404;
                 context.Response.ContentType = "application/json";
-                await context.Response.WriteAsync(new
+                await context.Response.WriteJsonAsync(new
                 {
                     Message = "未匹配到内容",
                     Code = 404
-                }.ToJson(), Encoding.UTF8);
+                });
             }
             catch (Exception ex)
             {
                 context.Response.StatusCode = 500;
-                context.Response.ContentType = "application/json";
+                 
 #if DEBUG
-                await context.Response.WriteAsync(new
+                await context.Response.WriteJsonAsync(new
                 {
                     Message = "出现了点小问题啦。。请联系管理员。。",
                     Code = -1
-                }.ToJson(), Encoding.UTF8);
+                });
 
 #else
-                await context.Response.WriteAsync(new
+                await context.Response.WriteJsonAsync(new
                 {
                     ex.Message,
                     ex.StackTrace,
                     Code = -1
-                }.ToJson(), Encoding.UTF8);
+                });
 #endif
                 logger.LogError(ex, ex.Message);
             }

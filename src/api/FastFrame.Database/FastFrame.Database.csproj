@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
+
+   
   </PropertyGroup> 
   
   <ItemGroup>
@@ -12,10 +14,10 @@
   <ItemGroup>
     <ProjectReference Include="..\FastFrame.Entity\FastFrame.Entity.csproj" />
     <ProjectReference Include="..\FastFrame.Infrastructure\FastFrame.Infrastructure.csproj" />
+    <ProjectReference Include="..\FastFrame.SourceGenerator\FastFrame.SourceGenerator.csproj" OutputItemType="Analyzer"/>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Migrations\" />
-  </ItemGroup>  
+
+
  
 </Project>

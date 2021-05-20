@@ -25,5 +25,5 @@ namespace FastFrame.Entity.Basis
         /// 是否管理员
         /// </summary>
         public bool IsManager { get; set; }
-    }
+    } 
 }

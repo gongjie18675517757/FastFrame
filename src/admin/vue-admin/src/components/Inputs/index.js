@@ -131,6 +131,7 @@ export default {
       ...this.flex
     }
 
+
     if (this.singleLine) {
       flex = {
         xs12: 1,
@@ -149,9 +150,7 @@ export default {
         on
       }, [fieldLabel])
       flex = {
-        xs12: 1,
-
-        ...this.flex
+        xs12: 1, 
       }
     }
     /**
@@ -174,9 +173,7 @@ export default {
     else if (!component && Array.isArray(this.EnumValues) && this.EnumValues.length > 0) {
       if (multiple) {
         flex = {
-          xs12: true,
-
-          ...this.flex
+          xs12: true, 
         }
       }
       component = h(SelectInput, {
@@ -193,9 +190,7 @@ export default {
     else if (!component && typeof this.EnumValues == 'function') {
       if (multiple) {
         flex = {
-          xs12: true,
-
-          ...this.flex
+          xs12: true, 
         }
       }
       component = h(SelectInput, {
@@ -290,9 +285,7 @@ export default {
     else if (!component && this.Relate) {
       if (this.Type == 'Array') {
         flex = {
-          xs12: true,
-
-          ...this.flex
+          xs12: true, 
         }
         component = h(SelectMulitInput, {
           props: {

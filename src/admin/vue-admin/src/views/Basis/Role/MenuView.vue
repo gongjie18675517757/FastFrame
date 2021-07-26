@@ -1,10 +1,10 @@
 <template>
   <v-row class="pa-4" justify="space-between">
-    <v-col cols="5">
+    <v-col cols="5" v-if="menuList">
+
+      <!-- activatable -->
       <v-treeview
-        :items="menuList"
-        :active.sync="active"
-        activatable
+        :items="menuList"         
         open-on-click
         open-all
         dense

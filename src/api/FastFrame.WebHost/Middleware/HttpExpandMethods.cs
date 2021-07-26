@@ -5,12 +5,19 @@ namespace FastFrame.WebHost.Middleware
 {
     public static class HttpExpandMethods
     {
-        public static async Task WriteJsonAsync<T>(this HttpResponse httpResponse, T obj)
+        public static async Task WriteJsonAsync<T>(this HttpResponse httpResponse, T obj) where T : class
         {
-            await httpResponse.WriteAsJsonAsync(obj, options: new System.Text.Json.JsonSerializerOptions
+            if (obj is string str)
             {
-                PropertyNameCaseInsensitive = false
-            });
+                await httpResponse.WriteAsync(str, System.Text.Encoding.UTF8);
+            }
+            else
+            {
+                await httpResponse.WriteAsJsonAsync(obj, options: new System.Text.Json.JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = false
+                });
+            }
         }
     }
 }

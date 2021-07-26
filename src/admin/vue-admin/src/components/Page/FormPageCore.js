@@ -357,7 +357,7 @@ export let formMethods = {
   },
 
   /**
-   * 格式化表彰项
+   * 格式化表单
    * @param {*} arr 
    */
   fmtModelObjectItems(arr) {
@@ -518,24 +518,31 @@ export let formMethods = {
       let postData = this.getPostData();
       let method = this.getPostMethod(id);
       let url = this.getPostUrl(id)
-      let data = await method(url, postData)
+      let res = await method(url, postData)
       this.$message.toast.success('保存成功');
       this.$eventBus.$emit(`${this.name}_update`)
-      if (data) {
-        this.$emit('close');
-        if (!this.isDialog) {
-          this.$nextTick(() => {
-            this.$router.replace(`/${this.name}/${data}`);
-          })
-        }
-      } else {
-        this.canEdit = false;
-        this.changed = false;
-      }
+      this.onSaveAfter(res);
     } catch (error) {
       this.$message.toast.error(error.message);
     } finally {
       this.submiting = false;
+    }
+  },
+
+  /**
+   * 保存完成之后
+   * @param {*} res 
+   */
+  onSaveAfter(res) {
+    if (res) {
+      this.$emit('close');
+      if (!this.isDialog) {
+        this.$nextTick(() => {
+          this.$router.replace(`/${this.name}/${res}`);
+        })
+      }
+    } else {
+      this.init();
     }
   },
 
@@ -592,12 +599,12 @@ export let makeChildProps = function () {
     ...this.$attrs,
     title: this.title,
     id: this.id,
-    model: this.model, 
+    model: this.model,
     formErrorMessages: this.formErrorMessages,
-    options: this.options, 
+    options: this.options,
     singleLine: this.singleLine,
     showMamageField: this.showMamageField,
-    canEdit: this.canEdit, 
+    canEdit: this.canEdit,
     formGroups: this.formGroups,
     isDialog: this.isDialog,
     hasManage: this.hasManage,

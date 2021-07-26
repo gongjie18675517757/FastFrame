@@ -16,13 +16,18 @@ export default {
     pdf
 }
 
+
+
 /**
  * 获取图标类型
  * @param {*} param0 
  */
-export function getIcon({ ContentType, Resource_Id, isImage, IsFolder }) {
+export function getIcon({ ContentType, Resource_Id, isImage, IsFolder,Id }) {
+    if (isImage == undefined) {
+        isImage = ContentType && ContentType.startsWith("image/")
+    }
     if (isImage) {
-        return getDownLoadPath(Resource_Id)
+        return getDownLoadPath(Resource_Id || Id)
     } else if (IsFolder) {
         return folder;
     } else if (!ContentType) {
@@ -44,6 +49,7 @@ export function getIcon({ ContentType, Resource_Id, isImage, IsFolder }) {
 
             case "application/pdf":
                 return pdf;
+
             default:
                 return file;
         }

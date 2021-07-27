@@ -411,21 +411,6 @@
             资源映射
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Basis.ResourceMap.File_Id">
-            <summary>
-            关联：Resource
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.ResourceMap.FKey_Id">
-            <summary>
-            外键
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.ResourceMap.Key">
-            <summary>
-            标识
-            </summary>
-        </member>
         <member name="T:FastFrame.Entity.Basis.Role">
             <summary>
             角色
@@ -484,6 +469,31 @@
         <member name="P:FastFrame.Entity.Basis.RolePermission.PermissionKey">
             <summary>
             权限标记
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Basis.Setting">
+            <summary>
+            系统设置
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Basis.TableMap">
+            <summary>
+            表映射
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.TableMap.FKey_Id">
+            <summary>
+            外键
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.TableMap.KeyName">
+            <summary>
+            键名
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.TableMap.Value_Id">
+            <summary>
+            键值
             </summary>
         </member>
         <member name="T:FastFrame.Entity.Basis.Tenant">

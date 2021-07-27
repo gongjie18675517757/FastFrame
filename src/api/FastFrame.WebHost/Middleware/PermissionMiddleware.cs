@@ -31,7 +31,7 @@ namespace FastFrame.WebHost.Middleware
                 var appSessionProvider = context.Request.HttpContext.RequestServices.GetService<IAppSessionProvider>();
                 var currUser = appSessionProvider.CurrUser;
 #if RELEASE
-                if (!currUser.IsAdmin)
+                if (currUser==null || !currUser.IsAdmin)
 #endif
                 {
                     /*是否允许匿名访问*/

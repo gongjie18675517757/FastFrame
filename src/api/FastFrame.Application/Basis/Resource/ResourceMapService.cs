@@ -14,7 +14,7 @@ namespace FastFrame.Application.Basis
         IEventHandle<DoMainAdding<IHaveMultiFileDto>>,
         IEventHandle<DoMainDeleteing<IHaveMultiFileDto>>,
         IEventHandle<DoMainUpdateing<IHaveMultiFileDto>>,
-        IRequestHandle<IEnumerable<ResourceModel>, IHaveMultiFileDto>,
+        IRequestHandle<IEnumerable<ResourceModel>, IHaveMultiFileDto>, 
         IRequestHandle<IEnumerable<KeyValuePair<string, IEnumerable<ResourceModel>>>, IEnumerable<IHaveMultiFileDto>>
     {
         private readonly IRepository<User> users;
@@ -34,13 +34,13 @@ namespace FastFrame.Application.Basis
             await manyService.UpdateManyAsync(
                         v => v.FKey_Id == id,
                         items,
-                        (a, b) => a.File_Id == b.ContentType && a.Key == b.Key,
+                        (a, b) => a.Value_Id == b.Id && a.KeyName == b.Key,
                         v => new ResourceMap
                         {
                             Id = null,
-                            Key = v.Key,
-                            File_Id = v.Id,
-                            FKey_Id = id
+                            FKey_Id = id,
+                            KeyName = v.Key,
+                            Value_Id = v.Id
                         });
         }
 
@@ -59,17 +59,17 @@ namespace FastFrame.Application.Basis
             return HandleItems(@event.Data.Id, @event.Data.Files);
         }
 
-        private IQueryable<ResourceModel> Query()
+        public IQueryable<ResourceModel> Query()
         {
             return from a in maps
-                   join b in resources on a.File_Id equals b.Id
+                   join b in resources on a.Value_Id equals b.Id
                    join c in users on b.Uploader_Id equals c.Id into t_c
                    from c in t_c.DefaultIfEmpty()
                    select new ResourceModel
                    {
                        Id = b.Id,
                        ContentType = b.ContentType,
-                       Key = a.Key,
+                       Key = a.KeyName,
                        Name = b.Name,
                        Size = b.Size,
                        UploaderName = c.Name,

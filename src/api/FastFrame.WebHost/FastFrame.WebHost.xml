@@ -198,6 +198,11 @@
             角色 
             </summary>
         </member>
+        <member name="T:FastFrame.WebHost.Controllers.Basis.SettingController">
+            <summary>
+            系统设置
+            </summary>
+        </member>
         <member name="T:FastFrame.WebHost.Controllers.Basis.TenantController">
             <summary>
             组织信息 

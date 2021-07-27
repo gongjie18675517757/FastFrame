@@ -105,4 +105,5 @@ namespace FastFrame.Entity.Basis
             return strResult.Replace("-", "").ToLower();
         }
     }
+     
 }

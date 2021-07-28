@@ -28,15 +28,18 @@
               </permission-facatory>
               <v-menu offset-y>
                 <template v-slot:activator="{ on }">
-                  <v-btn icon v-on="on" title="更多">
+                  <v-btn v-on="on" color="primary" text small title="更多">
                     <v-icon>more_vert</v-icon>
+                    设置
                   </v-btn>
                 </template>
 
                 <v-list dense>
                   <permission-facatory
                     v-for="item in [
-                      ...($vuetify.breakpoint.smAndDown ? visibleToolItems : []),
+                      ...($vuetify.breakpoint.smAndDown
+                        ? visibleToolItems
+                        : []),
                     ]"
                     :key="item.key || item.name"
                     :permission="item.permission"
@@ -82,15 +85,15 @@
             </v-toolbar-items>
           </v-toolbar>
           <v-divider></v-divider>
-          <v-card-text class="form-content" v-if="model">
-            <v-layout
-              :class="[
-                isDialog ? 'dialogPage' : isTab ? 'tabPage' : 'fullPage',
-                'form-page',
-              ]"
-              wrap
-              style="padding: 0px; margin: 0px"
-            >
+          <v-card-text
+            class="form-content"
+            v-if="model"
+            :class="[
+              isDialog ? 'dialogPage' : isTab ? 'tabPage' : 'fullPage',
+              'form-page',
+            ]"
+          >
+            <v-layout wrap style="padding: 0px; margin: 0px">
               <template v-for="group in formGroups">
                 <v-flex
                   :key="group.key.title"
@@ -233,7 +236,7 @@ export default {
 
   methods: {
     handleInput(item, v) {
-      this.model[item.Name] = v; 
+      this.model[item.Name] = v;
       this.$emit("tooggle:changed");
     },
     evalVisible({ visible }) {
@@ -284,7 +287,7 @@ export default {
 }
 
 .dialogPage {
-  max-height: calc(100vh - 245px);
+  height: calc(100vh - 245px);
   overflow: auto;
   overflow-x: hidden;
 }

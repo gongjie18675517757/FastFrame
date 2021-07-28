@@ -331,7 +331,8 @@ export const FileDetailObj = {
     accept: {
       type: String,
       default: '*/*'
-    }
+    },
+    verifyFileFunc: Function
   },
   data() {
     return {
@@ -390,6 +391,13 @@ export const FileDetailObj = {
       if (v >= 100) {
         this.loading = false;
       }
+    },
+    verifyFile(arr) {
+      if (typeof this.verifyFileFunc == 'function') {
+        return this.verifyFileFunc(arr)
+      }
+
+      return true;
     }
   },
   render(h) {
@@ -436,7 +444,8 @@ export const FileDetailObj = {
                   click: () => {
                     upload({
                       accept: this.accept,
-                      onProgress: this.onProgress
+                      onProgress: this.onProgress,
+                      verifyFileFunc: this.verifyFile
                     }).then(([file]) => {
                       this.value.push({
                         Id: file.Id,

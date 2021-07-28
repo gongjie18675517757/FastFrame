@@ -126,7 +126,19 @@ export const pages = [{
   component: () =>
     import(`@/views/Flow/Design/Add.vue`)
 },
-...childs
+{
+  path: '/Setting',
+  name: 'Setting',
+  meta: {
+    title: '系统设置',
+    keepAlive: false,
+    moduleName: 'Setting',
+    permission: `Setting.Get`,
+  },
+  component: () =>
+    import(`@/views/Basis/Setting.vue`)
+},
+...childs,
 ].map(v => ({
   ...v,
   props

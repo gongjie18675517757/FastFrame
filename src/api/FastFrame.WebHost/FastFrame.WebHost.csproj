@@ -67,6 +67,12 @@
     <None Update="publish.ps1">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
+    <None Update="verify_img\bg.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="verify_img\side.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>

@@ -4,6 +4,12 @@ export default {
     icon: 'settings',
     items: [
         {
+            title: '系统设置',
+            path: '/Setting',
+            permission: 'Setting.Get',
+            childPermission: ['Setting.Update']
+        },
+        {
             title: '用户管理',
             path: '/user/list',
             permission: 'User.List',

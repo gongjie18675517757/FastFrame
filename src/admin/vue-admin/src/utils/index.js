@@ -153,10 +153,12 @@ export function postFiles(files = [], pars) {
  * 上传
  * @param {*} param0 
  */
-export function upload({
-    accept = "",
-    onProgress = () => { }
-} = {}) {
+export function upload(pars) {
+    let {
+        accept = "",
+        onProgress = () => { },
+        verifyFileFunc = () => true,
+    } = (pars || {})
     let el = document.getElementById('uploadInput')
     if (el) {
         el.parentElement.removeChild(el)
@@ -173,6 +175,9 @@ export function upload({
     return new Promise((resolve, reject) => {
         input.onchange = function (e) {
             let files = e.target.files
+            if (!verifyFileFunc(files)) {
+                reject()
+            }
             postFiles(files, { onProgress }).then(function (resp) {
                 resolve(resp)
             }).catch(reject)

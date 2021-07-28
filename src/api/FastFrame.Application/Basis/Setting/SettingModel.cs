@@ -9,8 +9,13 @@ namespace FastFrame.Application.Basis
     public class SettingModel : Setting, IDto, IDto<Setting>
     {
         /// <summary>
-        /// 验证码图片
+        /// 验证码背景图片
         /// </summary>
         public IEnumerable<ResourceModel> VerifyImageList { get; set; }
+
+        /// <summary>
+        /// 验证码滑块图片
+        /// </summary>
+        public IEnumerable<ResourceModel> VerifyImageList2 { get; set; }
     }
 }

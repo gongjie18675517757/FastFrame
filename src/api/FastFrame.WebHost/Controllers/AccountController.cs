@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using System.IO;
 
 namespace FastFrame.WebHost.Controllers.Account
 {
@@ -41,7 +43,7 @@ namespace FastFrame.WebHost.Controllers.Account
         /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
-        public async Task<CurrUser> Login([FromBody]LoginInput input)
+        public async Task<CurrUser> Login([FromBody] LoginInput input)
         {
             if (!ExistsIsVerify())
                 throw new MsgException("行为验证失败！");
@@ -56,7 +58,7 @@ namespace FastFrame.WebHost.Controllers.Account
         /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
-        public async Task<UserDto> Regist([FromBody]UserDto user)
+        public async Task<UserDto> Regist([FromBody] UserDto user)
         {
             if (!ExistsIsVerify())
                 throw new MsgException("行为验证失败！");
@@ -90,7 +92,7 @@ namespace FastFrame.WebHost.Controllers.Account
         /// </summary>
         /// <returns></returns>
         [HttpPut]
-        public async Task<UserDto> UpdateCurrUserInfo([FromBody]UserDto input)
+        public async Task<UserDto> UpdateCurrUserInfo([FromBody] UserDto input)
         {
             return await service.UpdateUserInfo(input);
         }
@@ -101,10 +103,32 @@ namespace FastFrame.WebHost.Controllers.Account
         /// <returns></returns>
         [HttpGet]
         [AllowAnonymous]
-        public SlideVerificationOutput SlideVerifify(int width = 400, int height = 200)
+        public async Task<SlideVerificationOutput> SlideVerifify(int width = 400, int height = 200)
         {
-            var side_path = @"C:\Users\Administrator\Desktop\EasySlideVerification-master\EasySlideVerification-master\EasySlideVerification\App_Data\Images\Slide\slide-02.png";
-            var bg_path = @"C:\Users\Administrator\Desktop\EasySlideVerification-master\EasySlideVerification-master\EasySlideVerification\App_Data\Images\Slide\bg-s.jpg";
+            var settingService = Request.HttpContext.RequestServices.GetService<SettingService>();
+            var resourceProvider = Request.HttpContext.RequestServices.GetService<IResourceProvider>();
+            var side_path = await settingService.GetRandomVerifySliderImage();
+            var bg_path = await settingService.GetRandomVerifyBgImage();
+
+            if (!side_path.IsNullOrWhiteSpace())
+            {
+                side_path = resourceProvider.GetFilePath(side_path);
+            }
+            else
+            {
+                side_path = Path.Combine(AppContext.BaseDirectory, "verify_img");
+                side_path = Path.Combine(side_path, "side.png");
+            }
+
+            if (!bg_path.IsNullOrWhiteSpace())
+            {
+                bg_path = resourceProvider.GetFilePath(bg_path);
+            }
+            else
+            {
+                bg_path = Path.Combine(AppContext.BaseDirectory, "verify_img");
+                bg_path = Path.Combine(bg_path, "bg.jpg"); 
+            }
 
             using var bgStream = System.IO.File.OpenRead(bg_path);
             using var sideStream = System.IO.File.OpenRead(side_path);
@@ -130,7 +154,7 @@ namespace FastFrame.WebHost.Controllers.Account
         /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
-        public bool IsVerify([FromForm]int positionX)
+        public bool IsVerify([FromForm] int positionX)
         {
             /*清除缓存结果*/
             HttpContext.Session.Remove(ExistsSlideVerififySessionKey);

@@ -33,7 +33,7 @@ export default {
                 key: 'List',
                 title: `登录身份列表`,
             }
-        ],
+        ], 
         NumberOption: [
             ...makeStandardRouteItems('单据编号规则')
         ]

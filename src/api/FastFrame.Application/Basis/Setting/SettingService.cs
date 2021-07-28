@@ -22,7 +22,43 @@ namespace FastFrame.Application.Basis
         }
 
         /// <summary>
-        /// 获取验证码图片设置
+        /// 获取随机验证码背景图
+        /// </summary>
+        /// <returns></returns>
+        public async Task<string> GetRandomVerifyBgImage()
+        {
+            var resourceMaps = loader
+                .GetService<IRepository<ResourceMap>>()
+                .Where(v => v.FKey_Id == nameof(SettingModel.VerifyImageList) && v.FKey_Id == nameof(SettingModel.VerifyImageList));
+
+            return await loader
+                 .GetService<IRepository<Resource>>()
+                 .Where(v => resourceMaps.Any(x => x.Value_Id == v.Id))
+                 .OrderBy(v => Guid.NewGuid())
+                 .Select(v => v.Path)
+                 .FirstOrDefaultAsync();
+        }     
+        
+        /// <summary>
+        /// 获取随机验证码滑块图
+        /// </summary>
+        /// <returns></returns>
+        public async Task<string> GetRandomVerifySliderImage()
+        {
+            var resourceMaps = loader
+                .GetService<IRepository<ResourceMap>>()
+                .Where(v => v.FKey_Id == nameof(SettingModel.VerifyImageList2) && v.FKey_Id == nameof(SettingModel.VerifyImageList2));
+
+            return await loader
+                 .GetService<IRepository<Resource>>()
+                 .Where(v => resourceMaps.Any(x => x.Value_Id == v.Id))
+                 .OrderBy(v => Guid.NewGuid())
+                 .Select(v => v.Path)
+                 .FirstOrDefaultAsync();
+        }
+
+        /// <summary>
+        /// 获取验证码背景图片设置
         /// </summary>
         /// <returns></returns>
         public async Task<IEnumerable<ResourceModel>> GetVerifyImageListAsync()
@@ -35,7 +71,7 @@ namespace FastFrame.Application.Basis
         }
 
         /// <summary>
-        /// 设置验证码图片
+        /// 设置验证码背景图片
         /// </summary>
         /// <param name="list"></param>
         /// <returns></returns>
@@ -58,6 +94,42 @@ namespace FastFrame.Application.Basis
         }
 
         /// <summary>
+        /// 获取验证码背景图片设置
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IEnumerable<ResourceModel>> GetVerifyImageList2Async()
+        {
+            return await loader
+                .GetService<ResourceMapService>()
+                .Query()
+                .Where(v => v.FKey_Id == nameof(SettingModel.VerifyImageList2) && v.Key == nameof(SettingModel.VerifyImageList2))
+                .ToListAsync();
+        }
+
+        /// <summary>
+        /// 设置验证码背景图片
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        public async Task SetVerifyImageList2Async(IEnumerable<ResourceModel> list)
+        {
+            await loader
+                .GetService<HandleOne2ManyService<ResourceModel, ResourceMap>>()
+                .UpdateManyAsync(
+                    v => v.FKey_Id == nameof(SettingModel.VerifyImageList2) && v.KeyName == nameof(SettingModel.VerifyImageList2),
+                    list,
+                    (a, b) => a.Value_Id == b.Id,
+                    v => new ResourceMap
+                    {
+                        FKey_Id = nameof(SettingModel.VerifyImageList2),
+                        Id = null,
+                        Value_Id = v.Id,
+                        KeyName = nameof(SettingModel.VerifyImageList2)
+                    }
+                 );
+        }
+
+        /// <summary>
         /// 获取设置
         /// </summary>
         /// <returns></returns>
@@ -68,6 +140,7 @@ namespace FastFrame.Application.Basis
                 model = new SettingModel();
 
             model.VerifyImageList = await GetVerifyImageListAsync();
+            model.VerifyImageList2 = await GetVerifyImageList2Async();
 
             return model;
         }
@@ -93,6 +166,8 @@ namespace FastFrame.Application.Basis
             }
 
             await SetVerifyImageListAsync(input.VerifyImageList);
+            await SetVerifyImageList2Async(input.VerifyImageList2);
+
             await loader.GetService<IEventBus>().TriggerEventAsync(new Events.DoMainUpdateing<SettingModel>(input, entity));
             await settings.CommmitAsync();
             await loader.GetService<IEventBus>().TriggerEventAsync(new Events.DoMainUpdated<SettingModel>(input, entity));

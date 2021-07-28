@@ -33,7 +33,18 @@ export function makeToolItems() {
       small: true,
       text: true,
       action: this.handleEdit,
-      visible: () => this.hasManage && this.id && !this.changed && !this.canEdit
+      visible: () => this.updateBtnVisible
+    },
+    {
+      title: "取消编辑",
+      color: "primary", 
+      key: 'cancelEdit',
+      iconName: "mdi-cancel",
+      permission: [],
+      small: true,
+      text: true,
+      action: this.init,
+      visible: () => this.canEdit
     },
     {
       title: "保存",
@@ -229,6 +240,9 @@ export let formComputed = {
       (a, b) => a.title == b.title
     );
     return arr.filter(v => v.values.length > 0);
+  },
+  updateBtnVisible() {
+    return this.hasManage && this.id && !this.changed && !this.canEdit
   }
 }
 

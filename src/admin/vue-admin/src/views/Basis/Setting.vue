@@ -5,7 +5,7 @@ let pageInfo = {
   direction: "系统设置",
 };
 import Page from "../../components/Page/FormPageCore.js";
-import { FileDetailTable } from "../../components/Table/index.js";
+import { ImageDetailTable } from "../../components/Table/index.js";
 export default {
   ...Page,
   data() {
@@ -48,7 +48,7 @@ export default {
             {
               Name: "VerifyImageList",
               GroupNames: ["验证码背景图片"],
-              template: FileDetailTable(),
+              template: ImageDetailTable,
               accept: "image/*",
               verifyFileFunc: (arr) => {
                 if ([...arr].some((x) => !x.type.startsWith("image/"))) {
@@ -62,16 +62,8 @@ export default {
             {
               Name: "VerifyImageList2",
               GroupNames: ["验证码滑块图片"],
-              template: FileDetailTable(),
-              accept: "image/*",
-              verifyFileFunc: (arr) => {
-                if ([...arr].some((x) => !x.type.startsWith("image/"))) {
-                  this.$message.toast.error("只允许上传图片类型!");
-                  return false;
-                }
-
-                return true;
-              },
+              template: ImageDetailTable,
+              accept: "image/*", 
             },
           ];
         });

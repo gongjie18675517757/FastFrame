@@ -39,6 +39,8 @@ axios.interceptors.request.use(function (config) {
         let pars = `v=${new Date().getTime()}`;
         if (!config.url.includes('?'))
             pars = `?${pars}`
+        else
+            pars = `&${pars}`
         config.url = `${config.url}${pars}`
     }
 

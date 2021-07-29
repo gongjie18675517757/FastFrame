@@ -1,8 +1,8 @@
 <template>
-  <v-card @dblclick="$emit('dblclick')" :dark="selected">
+  <v-card @dblclick="$emit('dblclick')" :style="{'background-color':selected?'#ababab73':null}">
     <v-img
-      :src="item.icon"
-      :lazy-src="item.icon"
+      :src="icon || item.icon"
+      :lazy-src="icon || item.icon"
       class="white--text align-end"
       gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
       height="150px"
@@ -17,15 +17,15 @@
     <v-card-actions class="grid-item">
       <slot name="action" v-bind="item">
         <v-spacer></v-spacer>
-        <v-btn icon v-if="!item.IsFolder" title="下载" @click="download" color="primary" :dark="selected">
+        <v-btn icon v-if="!item.IsFolder" title="下载" @click="download" color="primary">
           <v-icon>mdi-download</v-icon>
         </v-btn>
 
-        <v-btn icon title="重命名" @click="reName" color="primary" :dark="selected">
+        <v-btn icon title="重命名" v-if="reNameable" @click="reName" color="primary">
           <v-icon>mdi-file-edit</v-icon>
         </v-btn>
 
-        <v-btn icon title="删除" @click="remove" color="primary" :dark="selected">
+        <v-btn icon title="删除" v-if="!readonly" @click="remove" color="primary">
           <v-icon>mdi-delete</v-icon>
         </v-btn>
       </slot>
@@ -42,7 +42,10 @@ export default {
         return {};
       }
     },
-    selected: Boolean
+    selected: Boolean,
+    reNameable:Boolean,
+    readonly:Boolean,
+    icon:String
   },
   computed: {},
   methods: {

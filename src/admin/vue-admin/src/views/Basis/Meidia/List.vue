@@ -96,6 +96,7 @@
                       :item="item"
                       :selected="currItem == item"
                       :mode="view"
+                      reNameable
                       @click="handleClick(item)"
                       @dblclick="handleDbClick(item)"
                       @remove="handleRemove"
@@ -117,6 +118,7 @@
                         :item="item"
                         :mode="view"
                         :selected="currItem == item"
+                        reNameable
                         @click="handleClick(item)"
                         @dblclick="handleDbClick(item)"
                         @remove="handleRemove"
@@ -155,8 +157,8 @@
 
 <script>
 import VuePerfectScrollbar from "vue-perfect-scrollbar";
-import GridItem from "./GridItem.vue";
-import ListItem from "./ListItem.vue";
+import GridItem from "../../../components/Table/GridItem.vue";
+import ListItem from "../../../components/Table/ListItem.vue";
 import { upload } from "../../../utils";
 import { getIcon } from "../../../utils/fileIcons";
 import rules from "@/rules";

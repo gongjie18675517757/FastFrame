@@ -1,4 +1,5 @@
 import Table from "./DataTable.vue";
+import ImageTable from "./ImageTable.vue";
 import {
   getDefaultModel,
   getModelObjectItems,
@@ -24,6 +25,11 @@ let defFunc = {
  *  表格
  */
 export default Table;
+
+/**
+ * 图片列表
+ */
+export const ImageDetailTable = ImageTable;
 
 /**
  * 基础详情列表
@@ -381,7 +387,7 @@ export const FileDetailObj = {
   },
   computed: {
     rows() {
-      return this.value.map(v => v.Key == this.fileKey)
+      return this.value.filter(v =>!this.fileKey ||  v.Key == this.fileKey)
     }
   },
   methods: {
@@ -398,13 +404,32 @@ export const FileDetailObj = {
       }
 
       return true;
+    },
+    upload() {
+      upload({
+        accept: this.accept,
+        onProgress: this.onProgress,
+        verifyFileFunc: this.verifyFile
+      }).then(([file]) => {
+        this.value.push({
+          Id: file.Id,
+          ContentType: file.ContentType,
+          Key: this.fileKey,
+          Name: file.Name,
+          Size: file.Size,
+          UploaderName: this.$store.state.currUser.Name,
+          UploadTime: file.UploadTime
+        });
+        this.$emit('input', this.value)
+        this.$emit('change', this.value)
+      })
     }
   },
   render(h) {
     return h(BasisDetaiTable, {
       props: {
         title: this.title,
-        value: this.value,
+        value: this.rows,
         loading: this.loading,
         columns: [
           ...(this.canEdit ? [
@@ -441,25 +466,7 @@ export const FileDetailObj = {
                   color: 'primary'
                 },
                 on: {
-                  click: () => {
-                    upload({
-                      accept: this.accept,
-                      onProgress: this.onProgress,
-                      verifyFileFunc: this.verifyFile
-                    }).then(([file]) => {
-                      this.value.push({
-                        Id: file.Id,
-                        ContentType: file.ContentType,
-                        Key: this.fileKey,
-                        Name: file.Name,
-                        Size: file.Size,
-                        UploaderName: this.$store.state.currUser.Name,
-                        UploadTime: file.UploadTime
-                      });
-                      this.$emit('input', this.value)
-                      this.$emit('change', this.value)
-                    })
-                  }
+                  click: this.upload
                 }
               }, '上传') : null
             }

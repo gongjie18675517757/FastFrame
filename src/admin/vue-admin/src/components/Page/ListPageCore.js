@@ -407,7 +407,8 @@ export let pageMethods = {
       let components = this.$router.getMatchedComponents(`/${this.name}/add`);
       if (components.length > 1) {
         this.$message.dialog(components[1], {
-          id: Id
+          id: Id,
+          width:'1024px'
         });
       } else {
         this.$message.toast.error('未匹配到页面！')

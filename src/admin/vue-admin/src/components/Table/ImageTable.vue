@@ -1,8 +1,8 @@
 <template>
-  <v-card tile>
+  <v-card tile :loading="loading">
     <v-toolbar dense flat color="transparent" height="30px">
       <v-toolbar-title>{{ title }}</v-toolbar-title>
-      <v-btn small text color="primary" v-if="canEdit"> 上传 </v-btn>
+      <v-btn small text color="primary" v-if="canEdit" @click="upload"> 上传 </v-btn>
       <v-spacer></v-spacer>
       <v-menu offset-y>
         <template v-slot:activator="{ on }">

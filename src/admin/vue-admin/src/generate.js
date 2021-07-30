@@ -104,7 +104,7 @@ export async function getModelObjectItems(name = '') {
     Name: ModuleName
   } = await getModuleStrut(name)
   return FieldInfoStruts.filter(f => {
-    return f.Hide != 'Form' && f.Hide != 'All' && !f.Name=='Id'
+    return f.Hide != 'Form' && f.Hide != 'All' && f.Name!='Id'
   }).map(f => {
     return {
       ...f,

@@ -5,17 +5,17 @@
     </v-fade-transition>
     <Alert />
     <v-dialog
-      v-for="(dialog,i) in dialogs"
+      v-for="(dialog, i) in dialogs"
       :key="i"
       :value="true"
       :width="dialog.pars.width"
-      colored-border 
+      colored-border
     >
       <component
         :is="dialog.component"
         v-bind="dialog.pars"
-        @success="handleDialogSuccess(dialog,$event)"
-        @close="handleDialogClose(dialog,$event)"
+        @success="handleDialogSuccess(dialog, $event)"
+        @close="handleDialogClose(dialog, $event)"
       />
     </v-dialog>
   </v-app>
@@ -26,11 +26,11 @@ import Alert from "@/components/Alert.vue";
 
 export default {
   components: {
-    Alert
+    Alert,
   },
   data() {
     return {
-      resufreshed: true
+      resufreshed: true,
     };
   },
   computed: {
@@ -39,37 +39,42 @@ export default {
     },
     isXs() {
       return this.$vuetify.breakpoint.xs;
-    }
+    },
   },
   watch: {
     isXs(val) {
-      this.$store.state.singlePageMode = val;
       this.$store.state.isXs = val;
-    }
+
+      if (val && this.$store.state.singlePageMode) {
+        this.$store.state.singlePageMode = true;
+      }
+    },
   },
   beforeCreate() {
     let isXs = this.$vuetify.breakpoint.xs;
-    this.$store.state.singlePageMode = isXs;
     this.$store.state.isXs = isXs;
+    if (isXs && this.$store.state.singlePageMode) {
+      this.$store.state.singlePageMode = true;
+    } 
   },
   methods: {
     resufresh() {
       this.resufreshed = false;
-      this.$nextTick(function() {
+      this.$nextTick(function () {
         this.resufreshed = true;
       });
     },
     handleDialogSuccess(dialog, ...arges) {
       dialog.resolve(...arges);
-      let index = this.dialogs.findIndex(v => v == dialog);
+      let index = this.dialogs.findIndex((v) => v == dialog);
       this.dialogs.splice(index, 1);
     },
     handleDialogClose(dialog, ...arges) {
       dialog.reject(...arges);
-      let index = this.dialogs.findIndex(v => v == dialog);
+      let index = this.dialogs.findIndex((v) => v == dialog);
       this.dialogs.splice(index, 1);
-    }
-  }
+    },
+  },
 };
 </script>
  
@@ -104,6 +109,10 @@ html {
 
 .input-container .theme--light.v-input.v-input--is-readonly {
   color: #8e5656;
+}
+
+.v-input__prepend-outer{
+  height: 100%;
 }
 
 .v-data-table__wrapper {

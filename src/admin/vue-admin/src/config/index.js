@@ -4,7 +4,7 @@
 export const isDev = process.env.NODE_ENV == 'development'
 
 /**
- * 上传路径
+ * 下载路径
  */
 export function getDownLoadPath(fileId, fileName) {
     fileName = fileName || ''
@@ -13,8 +13,19 @@ export function getDownLoadPath(fileId, fileName) {
 }
 
 /**
- * 下载路径
+ * 缩略图路径
+ */
+export function getThumbnailPath(fileId, fileName) {
+    fileName = fileName || ''
+    fileName = encodeURI(fileName)
+    return `${isDev ? '/api' : ''}/resources/thumbnail/${fileId}/${fileName}`
+}
+
+/**
+ * 上传路径
  */
 export function getUploadPath() {
     return `${isDev ? '/api' : ''}/resources/upload` 
 }
+
+ 

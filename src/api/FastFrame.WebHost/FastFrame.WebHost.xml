@@ -323,6 +323,11 @@
             例：/api/resource/download/([^/]+)
             </summary>
         </member>
+        <member name="P:FastFrame.WebHost.Middleware.ResourceOption.ThumbnailPathRegexText">
+            <summary>
+            响应获取缩略图的正则
+            </summary>
+        </member>
         <member name="P:FastFrame.WebHost.Middleware.ResourceOption.UploadPathRegexText">
             <summary>
             响应上传的正则

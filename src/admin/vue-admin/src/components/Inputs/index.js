@@ -87,7 +87,7 @@ export default {
     },
   },
   render(h) {
-    
+
     let multiple = this.Type == 'Array'
     let props = this.childProps
 
@@ -99,7 +99,8 @@ export default {
       slot: 'prepend',
       style: {
         width: '150px',
-        textAlign: 'center'
+        textAlign: 'center',
+        'margin-top': props.disabled ? null : '4px'
       }
     }, [
       h('span', `${props.description}:`),
@@ -150,7 +151,7 @@ export default {
         on
       }, [fieldLabel])
       flex = {
-        xs12: 1, 
+        xs12: 1,
       }
     }
     /**
@@ -173,7 +174,7 @@ export default {
     else if (!component && Array.isArray(this.EnumValues) && this.EnumValues.length > 0) {
       if (multiple) {
         flex = {
-          xs12: true, 
+          xs12: true,
         }
       }
       component = h(SelectInput, {
@@ -190,7 +191,7 @@ export default {
     else if (!component && typeof this.EnumValues == 'function') {
       if (multiple) {
         flex = {
-          xs12: true, 
+          xs12: true,
         }
       }
       component = h(SelectInput, {
@@ -215,7 +216,7 @@ export default {
     //文本,数字,密码
     else if (!component && !this.Name.endsWith("Id") &&
       ["Password", "String", "Int32", "Decimal"].includes(this.Type)) {
-      
+
       if (!props.disabled || props.isXs) {
         let textProps = {
           ...props,
@@ -285,7 +286,7 @@ export default {
     else if (!component && this.Relate) {
       if (this.Type == 'Array') {
         flex = {
-          xs12: true, 
+          xs12: true,
         }
         component = h(SelectMulitInput, {
           props: {

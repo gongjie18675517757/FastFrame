@@ -6,7 +6,7 @@
           <v-toolbar flat dense color="transparent" height="30px">
             <v-toolbar-title>{{ title }}</v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-toolbar-items>
+            <v-toolbar-items v-if="!isDialog">
               <permission-facatory
                 v-for="btn in visibleToolItems.filter(
                   () => !$vuetify.breakpoint.smAndDown
@@ -23,66 +23,65 @@
                   v-bind="btn"
                 >
                   <v-icon v-if="btn.iconName">{{ btn.iconName }}</v-icon>
-                  {{ btn.title }}
+                  &emsp; {{ btn.title }}
                 </v-btn>
               </permission-facatory>
-              <v-menu offset-y>
-                <template v-slot:activator="{ on }">
-                  <v-btn v-on="on" color="primary" text small title="更多">
-                    <v-icon>more_vert</v-icon>
-                    设置
-                  </v-btn>
-                </template>
-
-                <v-list dense>
-                  <permission-facatory
-                    v-for="item in [
-                      ...($vuetify.breakpoint.smAndDown
-                        ? visibleToolItems
-                        : []),
-                    ]"
-                    :key="item.key || item.name"
-                    :permission="item.permission"
-                  >
-                    <v-list-item
-                      :title="item.title"
-                      :disabled="evalDisabled(item)"
-                      @click="evalAction(item)"
-                    >
-                      <v-list-item-action>
-                        <v-icon>{{ item.iconName }}</v-icon>
-                      </v-list-item-action>
-
-                      <v-list-item-content>
-                        <v-list-item-title>{{ item.title }}</v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
-                  </permission-facatory>
-
-                  <v-list-item @click="$emit('toggle:singleLine')">
-                    <v-list-item-action>
-                      <v-checkbox :value="singleLine"></v-checkbox>
-                    </v-list-item-action>
-                    <v-list-item-content>
-                      <v-list-item-title>{{ "单行布局" }}</v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-                  <v-list-item
-                    v-if="hasManage && model.Id"
-                    @click="$emit('toggle:showMamageField')"
-                  >
-                    <v-list-item-action>
-                      <v-checkbox :value="showMamageField"></v-checkbox>
-                    </v-list-item-action>
-                    <v-list-item-content>
-                      <v-list-item-title>{{
-                        "显示管理字段"
-                      }}</v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
             </v-toolbar-items>
+            <v-menu offset-y>
+              <template v-slot:activator="{ on }">
+                <v-btn v-on="on" color="primary" text small title="更多">
+                  <v-icon>more_vert</v-icon>
+                  设置
+                </v-btn>
+              </template>
+
+              <v-list dense>
+                <permission-facatory
+                  v-for="item in [
+                    ...($vuetify.breakpoint.smAndDown ? visibleToolItems : []),
+                  ]"
+                  :key="item.key || item.name"
+                  :permission="item.permission"
+                >
+                  <v-list-item
+                    :title="item.title"
+                    :disabled="evalDisabled(item)"
+                    @click="evalAction(item)"
+                  >
+                    <v-list-item-action>
+                      <v-icon>{{ item.iconName }}</v-icon>
+                    </v-list-item-action>
+
+                    <v-list-item-content>
+                      <v-list-item-title>{{ item.title }}</v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </permission-facatory>
+
+                <v-list-item @click="$emit('toggle:singleLine')">
+                  <v-list-item-action>
+                    <v-checkbox :value="singleLine"></v-checkbox>
+                  </v-list-item-action>
+                  <v-list-item-content>
+                    <v-list-item-title>{{ "单行布局" }}</v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-list-item
+                  v-if="hasManage && model.Id"
+                  @click="$emit('toggle:showMamageField')"
+                >
+                  <v-list-item-action>
+                    <v-checkbox :value="showMamageField"></v-checkbox>
+                  </v-list-item-action>
+                  <v-list-item-content>
+                    <v-list-item-title>{{ "显示管理字段" }}</v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+            <v-btn icon @click="$emit('close')" title="关闭" v-if="isDialog">
+              <v-icon>close</v-icon>
+            </v-btn>
           </v-toolbar>
           <v-divider></v-divider>
           <v-card-text
@@ -98,8 +97,8 @@
                 <v-flex
                   :key="group.key.title"
                   xs12
-                  xl10
-                  style="padding: 5px; margin: 0 auto"
+                  :xl10="!isDialog || singleLine"
+                  style="padding: 0px; margin: 0 auto"
                 >
                   <v-card v-if="group.values.length > 1" tile>
                     <v-toolbar flat dense color="transparent" height="30px;">
@@ -151,24 +150,29 @@
               </template>
             </v-layout>
           </v-card-text>
-          <v-card-actions v-if="!hideToolitem && $vuetify.breakpoint.smAndDown">
+          <v-card-actions
+            v-if="!hideToolitem && ($vuetify.breakpoint.smAndDown || isDialog)"
+          >
+            <v-spacer></v-spacer>
             <permission-facatory
               v-for="btn in visibleToolItems.filter(evalVisible)"
               :key="btn.key || btn.name"
               :permission="btn.permission"
             >
               <v-btn
-                @click="evalAction(btn)"
-                text
+                @click="evalAction(btn)" 
                 small
                 color="primary"
                 :disabled="evalDisabled(btn)"
                 v-bind="btn"
+                block
+                :text="false"
               >
                 <v-icon v-if="btn.iconName">{{ btn.iconName }}</v-icon>
                 {{ btn.title }}
               </v-btn>
             </permission-facatory>
+            <v-spacer></v-spacer>
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -287,7 +291,7 @@ export default {
 }
 
 .dialogPage {
-  height: calc(100vh - 245px);
+  max-height: calc(100vh - 255px);
   overflow: auto;
   overflow-x: hidden;
 }
@@ -302,7 +306,7 @@ export default {
 </style>
 <style lang="stylus">
 .form-content.v-card__text {
-  padding: 5px;
+  padding: 0px;
 }
 
 .form-content .v-toolbar__title {

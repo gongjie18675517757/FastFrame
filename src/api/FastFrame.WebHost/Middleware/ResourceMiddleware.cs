@@ -22,14 +22,16 @@ namespace FastFrame.WebHost.Middleware
     public class ResourceMiddleware
     {
         private readonly RequestDelegate next;
-        private readonly Regex resPathRegex;
+        private readonly Regex downloadPathRegex;
+        private readonly Regex thumbnailPathRegex;
         private readonly Regex reqPathRegex;
         private readonly FileExtensionContentTypeProvider provider;
 
         public ResourceMiddleware(RequestDelegate next, IOptions<ResourceOption> options)
         {
             this.next = next;
-            resPathRegex = new Regex(options.Value.DownLoadPathRegexText, RegexOptions.IgnoreCase | RegexOptions.Compiled);
+            downloadPathRegex = new Regex(options.Value.DownLoadPathRegexText, RegexOptions.IgnoreCase | RegexOptions.Compiled);
+            thumbnailPathRegex = new Regex(options.Value.ThumbnailPathRegexText, RegexOptions.IgnoreCase | RegexOptions.Compiled);
             reqPathRegex = new Regex(options.Value.UploadPathRegexText, RegexOptions.IgnoreCase | RegexOptions.Compiled);
             provider = new FileExtensionContentTypeProvider();
         }
@@ -39,7 +41,7 @@ namespace FastFrame.WebHost.Middleware
             var path = context.Request.Path;
 
             /*响应下载*/
-            if (path.HasValue && resPathRegex.IsMatch(path.Value))
+            if (path.HasValue && (downloadPathRegex.IsMatch(path.Value) || thumbnailPathRegex.IsMatch(path.Value)))
             {
                 if (context.Request.Headers.ContainsKey("If-Modified-Since"))
                 {
@@ -47,8 +49,13 @@ namespace FastFrame.WebHost.Middleware
                     return;
                 }
 
-                var resourceId = resPathRegex.Match(path.Value).Groups[1].Value;
-                var resourceName = resPathRegex.Match(path.Value).Groups[2].Value;
+                var resourceId = string.Empty;
+                if (downloadPathRegex.IsMatch(path.Value))
+                    resourceId = downloadPathRegex.Match(path.Value).Groups[1].Value;
+                else if (thumbnailPathRegex.IsMatch(path.Value))
+                    resourceId = thumbnailPathRegex.Match(path.Value).Groups[1].Value;
+
+                //var resourceName = downloadPathRegex.Match(path.Value).Groups[2].Value;
 
                 var resourceStreamInfo = await context.RequestServices.GetService<IResourceStoreProvider>().TryGetResource(resourceId);
                 if (resourceStreamInfo == null)
@@ -64,6 +71,13 @@ namespace FastFrame.WebHost.Middleware
                 }
 
                 provider.TryGetContentType(Path.GetExtension(resourceStreamInfo.Name), out var contentType);
+
+                /*响应缩略图*/
+                if(contentType.StartsWith("image") && thumbnailPathRegex.IsMatch(path.Value))
+                {
+
+                }
+
                 context.Response.StatusCode = 200;
                 context.Response.ContentType = contentType ?? "application/octet-stream";
 
@@ -119,6 +133,11 @@ namespace FastFrame.WebHost.Middleware
         /// 例：/api/resource/download/([^/]+)
         /// </summary>
         public string DownLoadPathRegexText { get; set; }
+
+        /// <summary>
+        /// 响应获取缩略图的正则
+        /// </summary>
+        public string ThumbnailPathRegexText { get; set; }
 
         /// <summary>
         /// 响应上传的正则

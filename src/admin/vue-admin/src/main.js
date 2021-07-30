@@ -7,15 +7,17 @@ import '@babel/polyfill'
 import './hubs'
 import './httpClient'
 import './components/Message'
-import './components/common' 
+import './components/common'
 import '@mdi/font/css/materialdesignicons.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
+import colors from "vuetify/es5/util/colors";
+
 // import 'roboto-fontface/css/roboto/roboto-fontface.css'
 
 import {
   eventBus,
 } from './utils';
- 
+
 
 Vue.prototype.$eventBus = eventBus
 Vue.config.productionTip = false
@@ -26,13 +28,17 @@ new Vue({
   router,
   render: h => h(App),
   created() {
-     
     this.$http('/api/Tenant/GetCurrent').then(v => {
       this.$store.commit({
         type: 'setTenant',
         info: v
       })
     })
+  }, 
+  mounted() {
+    let val = this.$store.state.themeColor
+    this.$vuetify.theme.themes.light.primary = colors[val].base;
+    this.$vuetify.theme.themes.dark.primary = colors[val].base; 
   }
 }).$mount('#app')
 
@@ -52,14 +58,19 @@ new Vue({
  * 11,修改审计，增加审计日志
  * 12,页面加载增加加载条
  * 13,多租户功能优化：顶级租户无ID，租户ID取消阴影属性
- * 14，升级到.net5/6
- * 15，缓存CacheUserMapKey优化，实时消息推送优化（如增加CHROME的消息弹窗），增加响应用户操作：如确认，选择
+ * 14,升级到.net5/6
+ * 15,缓存CacheUserMapKey优化，实时消息推送优化（如增加CHROME的消息弹窗），增加响应用户操作：如确认，选择
  * 16,增加业务流程模板,配合动态表单,审批流程也支持关联动态表单/固定表单
  * 17,枚举增加名称配置
  * 18,导出时可选列
- * 19,列表可以设置列宽
- * 20,表单页增加多TAB
+ * 19,列表可以设置列宽(在右侧面板中)
+ * 20,表单页增加多TAB，加折叠
  * 21,资料库增加文件权限设置（右侧弹窗）
  * 22,增加后台异步任务功能
  * 23,资源表增加权限、区分个人资源、公共资源
+ * 24,增加缩略图
+ * 25,优化表单结构，取消viewmodel模式
+ * 26,增加暂存功能
+ * 27,集成邮箱发送，增加将当前表单给管理员功能
+ * 28,列表页优化，增加搜索条，按钮下移一行
  */

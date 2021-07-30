@@ -6,7 +6,10 @@
           <v-toolbar flat dense height="30px" color="transparent">
             <v-toolbar-title>{{ direction }}</v-toolbar-title>
             <v-spacer></v-spacer>
-            <span class="hidden-sm-and-down btn-group" v-if="!hideToolitem">
+            <v-toolbar-items
+              class="hidden-sm-and-down btn-group"
+              v-if="!hideToolitem"
+            >
               <permission-facatory
                 v-for="btn in items1"
                 :key="btn.key || btn.name"
@@ -20,11 +23,11 @@
                   :disabled="evalDisabled(btn)"
                   v-bind="btn"
                 >
-                  <v-icon v-if="btn.iconName">{{btn.iconName}}</v-icon>
+                  <v-icon v-if="btn.iconName">{{ btn.iconName }}</v-icon>
                   {{ btn.title }}
                 </v-btn>
               </permission-facatory>
-            </span>
+            </v-toolbar-items>
             <!-- <span> -->
             <v-menu
               offset-y
@@ -68,20 +71,7 @@
                   </v-list-item>
                 </permission-facatory>
 
-                <v-list-item
-                  v-if="!$vuetify.breakpoint.smAndDown && !isDialog"
-                  @click="dialogMode = !dialogMode"
-                >
-                  <v-list-item-action>
-                    <v-checkbox :value="dialogMode"></v-checkbox>
-                  </v-list-item-action>
-                  <v-list-item-content>
-                    <v-list-item-title>弹出模式</v-list-item-title>
-                    <v-list-item-subtitle
-                      >是否使用表单窗口</v-list-item-subtitle
-                    >
-                  </v-list-item-content>
-                </v-list-item>
+    
                 <v-list-item
                   v-if="this.ModuleStrut.HasManage"
                   @click="$emit('changeShowMamageField')"
@@ -182,7 +172,7 @@ export default {
         rows: this.rows,
       };
     },
-    items() { 
+    items() {
       return this.toolItems.filter(this.evalVisible);
     },
     items1() {
@@ -196,15 +186,7 @@ export default {
         ...this.$listeners,
         input: (val) => this.$emit("selection_update", val),
       };
-    },
-    dialogMode: {
-      get() {
-        return this.$store.state.dialogMode;
-      },
-      set(val) {
-        this.$store.state.dialogMode = val;
-      },
-    },
+    }, 
   },
   methods: {
     evalVisible({ visible }) {

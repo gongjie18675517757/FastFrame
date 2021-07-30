@@ -7,12 +7,38 @@ import { sleep } from '@/utils'
 import { start, stop } from '../hubs'
 Vue.use(Vuex)
 
+/**
+ * 缓存单面模式
+ */
+const key_singlePageMode = 'singlePageMode'
+
+/**
+ * 缓存表单页显示方式
+ */
+const key_dialogMode = "dialogMode"
+
+/**
+ * 缓存主题颜色
+ */
+const key_themeColor = 'themeColor'
+
+
 export default new Vuex.Store({
   state: {
     /**
      * 是否使用单页签模式
      */
-    singlePageMode: false,
+    singlePageMode: localStorage.getItem(key_singlePageMode) == "1",
+
+    /**
+    * 使用弹窗模式
+    */
+    dialogMode: localStorage.getItem(key_dialogMode) == "1",
+
+    /**
+     * 主题颜色
+     */
+    themeColor: localStorage.getItem(key_themeColor) || 'indigo',
 
     /**
      * 是否在移动端模式下
@@ -71,10 +97,8 @@ export default new Vuex.Store({
      * 右边菜单栏是否显示
      */
     rightDrawer: false,
-    /**
-     * 使用弹窗模式
-     */
-    dialogMode: false,
+
+
 
     /**
      * 地图模式[百度/谷歌]
@@ -107,6 +131,18 @@ export default new Vuex.Store({
     },
     setPermission(state, payload) {
       state.permissionList = payload
+    },
+    setThemeColor(state, payload) { 
+      state.themeColor = payload.value
+      localStorage.setItem(key_themeColor, payload.value)
+    },
+    toggleDialogMode(state) {
+      state.dialogMode = !state.dialogMode;
+      localStorage.setItem(key_dialogMode, state.dialogMode ? 1 : 0)
+    },
+    togglePageMode(state) {
+      state.singlePageMode = !state.singlePageMode;
+      localStorage.setItem(key_singlePageMode, state.singlePageMode ? 1 : 0)
     },
     toggleLeftDrawer(state, payload) {
       state.leftDrawer = payload.value
@@ -267,7 +303,7 @@ export default new Vuex.Store({
      * 验证是否有权限
      * @param {*} param0 
      */
-    async existsPermissionAsync({ state, getters },permission) {
+    async existsPermissionAsync({ state, getters }, permission) {
       let count = 0;
       while (count < 20) {
         if (!state.isLoadPermission) {
@@ -294,7 +330,7 @@ export default new Vuex.Store({
     existsPermission: state => (permission) => {
       let arr = Array.isArray(permission) ? permission : [permission];
       return !!state.permissionList.some(v => v.Child.some(r => arr.includes(r.Name)));
-    }, 
+    },
     getItemValues: state => (enumKey, superId) => {
       if (state.enumItemValues[enumKey]) {
         let items = state.enumItemValues[enumKey]

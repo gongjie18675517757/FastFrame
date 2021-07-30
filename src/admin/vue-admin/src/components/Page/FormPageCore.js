@@ -37,14 +37,14 @@ export function makeToolItems() {
     },
     {
       title: "取消编辑",
-      color: "primary", 
+      color: "primary",
       key: 'cancelEdit',
       iconName: "mdi-cancel",
       permission: [],
       small: true,
       text: true,
       action: this.init,
-      visible: () => this.canEdit
+      visible: () => this.canEdit && this.form && this.form.Id
     },
     {
       title: "保存",
@@ -56,7 +56,8 @@ export function makeToolItems() {
       text: true,
       action: this.submit,
       loading: this.submiting,
-      visible: () => this.hasManage && this.canEdit
+      visible: () => this.hasManage && this.canEdit,
+      disabled: () => !this.changed
     },
     {
       title: "关闭",
@@ -336,6 +337,7 @@ export let formMethods = {
    */
   getModelObjectItems() {
     return getModelObjectItems(this.strutName).then(arr => {
+
       arr.forEach(v => {
         if (v.Relate) {
           v.requestUrl = `/api/${this.name}/${v.Relate}List`

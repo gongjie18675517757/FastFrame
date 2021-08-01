@@ -5,7 +5,7 @@ import pptx from "../assets/pptx.svg";
 import js from "../assets/js.svg";
 import txt from "../assets/TXT.svg";
 import pdf from "../assets/Pdf.svg";
-import { getDownLoadPath } from "../config";
+import { getThumbnailPath } from "../config";
 export default {
     folder,
     file,
@@ -22,12 +22,15 @@ export default {
  * 获取图标类型
  * @param {*} param0 
  */
-export function getIcon({ ContentType, Resource_Id, isImage, IsFolder,Id }) {
+export function getIcon(pars) {
+
+    let { ContentType, Resource_Id, isImage, IsFolder, Id, Name } = pars
     if (isImage == undefined) {
         isImage = ContentType && ContentType.startsWith("image/")
     }
+
     if (isImage) {
-        return getDownLoadPath(Resource_Id || Id)
+        return getThumbnailPath(Resource_Id || Id, Name)
     } else if (IsFolder) {
         return folder;
     } else if (!ContentType) {

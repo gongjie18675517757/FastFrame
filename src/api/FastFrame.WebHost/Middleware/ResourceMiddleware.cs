@@ -73,9 +73,15 @@ namespace FastFrame.WebHost.Middleware
                 provider.TryGetContentType(Path.GetExtension(resourceStreamInfo.Name), out var contentType);
 
                 /*响应缩略图*/
-                if(contentType.StartsWith("image") && thumbnailPathRegex.IsMatch(path.Value))
+                if (contentType.StartsWith("image") && thumbnailPathRegex.IsMatch(path.Value))
                 {
+                    int width = 300, height = 300;
+                    _ = context.Request.Query.TryGetValue("width", out var widthText) && int.TryParse(widthText, out width);
+                    _ = context.Request.Query.TryGetValue("height", out var heightText) && int.TryParse(heightText, out height);
+                    var newStream = ImageExtended.GetPicThumbnail(resourceStreamInfo.ResourceBlobStream, height, width, 50);
 
+                    if (newStream != null)
+                        resourceStreamInfo.ReplaceBlobStream(newStream);
                 }
 
                 context.Response.StatusCode = 200;

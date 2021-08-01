@@ -10,7 +10,7 @@ namespace FastFrame.Infrastructure
     /// <summary>
     /// 滑动解锁生成器
     /// </summary>
-    public class SlideVerificationCreater
+    public sealed class SlideVerificationCreater
     {
         private readonly Random random = new Random();
         private SlideVerificationCreater() { }

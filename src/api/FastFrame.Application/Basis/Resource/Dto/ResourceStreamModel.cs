@@ -8,14 +8,20 @@ namespace FastFrame.Application
     /// </summary>
     public partial class ResourceStreamModel : IResourceStreamInfo
     {
-        public ResourceStreamModel(string name,   Stream resourceBlobStream)
+        public ResourceStreamModel(string name, Stream resourceBlobStream)
         {
-            Name = name; 
+            Name = name;
             ResourceBlobStream = resourceBlobStream;
         }
 
-        public string Name { get; } 
+        public string Name { get; }
 
-        public Stream ResourceBlobStream { get; }
+        public Stream ResourceBlobStream { get; private set; }
+
+        public void ReplaceBlobStream(Stream input)
+        {
+            input.Position = 0;
+            ResourceBlobStream = input;
+        }
     }
 }

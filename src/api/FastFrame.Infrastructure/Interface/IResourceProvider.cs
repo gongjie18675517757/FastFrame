@@ -73,17 +73,18 @@ namespace FastFrame.Infrastructure.Interface
         /// <summary>
         /// 名称 
         /// </summary> 
-        public string Name { get; } 
+        string Name { get; }
 
         /// <summary>
         /// 资源流
         /// </summary>
-        public Stream ResourceBlobStream { get; }
+        Stream ResourceBlobStream { get; }
 
-        ///// <summary>
-        ///// 内容类型
-        ///// </summary>
-        //public string ContentType { get; set; }
+        /// <summary>
+        /// 替换资源
+        /// </summary>
+        /// <param name="input"></param>
+        void ReplaceBlobStream(Stream input);
     }
 
     /// <summary>

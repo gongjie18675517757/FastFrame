@@ -41,7 +41,7 @@
               :item="item"
               :selected="currItem == item"
               :mode="view"
-              :icon="getDownLoadPath(item)"
+              :icon="getThumbnailPath(item)"
               @click="handleClick(item)"
               @remove="handleRemove"
               @download="handleDownload"
@@ -62,7 +62,7 @@
                 :item="item"
                 :mode="view"
                 :selected="currItem == item"
-                :icon="getDownLoadPath(item)"
+                :icon="getThumbnailPath(item)"
                 @click="handleClick(item)"
                 @remove="handleRemove"
                 @download="handleDownload"
@@ -83,7 +83,7 @@
 </template>
 
 <script>
-import { getDownLoadPath } from "../../config";
+import {  getDownLoadPath, getThumbnailPath } from "../../config";
 import { upload } from "../../utils";
 import GridItem from "./GridItem.vue";
 import ListItem from "./ListItem.vue";
@@ -112,14 +112,14 @@ export default {
     },
   },
   methods: {
-    getDownLoadPath({ Id, Name }) {
-      return getDownLoadPath(Id, Name);
+    getThumbnailPath({ Id, Name }) {
+      return getThumbnailPath(Id, Name);
     },
     handleClick(item) {
       this.currItem = item;
     },
     handleDownload({ Id, Name }) {
-      window.open(getDownLoadPath(Id, Name));
+      window.open(getThumbnailPath(Id, Name));
     },
     handleRemove(item) {
       this.$message

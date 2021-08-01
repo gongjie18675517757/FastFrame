@@ -402,9 +402,9 @@ export default {
       if (IsFolder) return;
       window.open(getDownLoadPath(Resource_Id, Name));
     },
-    handlePreview({ isImage, icon }) {
+    handlePreview({ isImage, Resource_Id }) {
       if (!isImage) return;
-      let src = icon;
+      let src = getDownLoadPath(Resource_Id);
       this.$message.dialog({
         render(h) {
           let img = h("v-img", {

@@ -283,6 +283,28 @@
             <param name="haveBase64Dencode"></param>
             <returns></returns>
         </member>
+        <member name="T:FastFrame.Infrastructure.ImageExtended">
+            <summary>
+            图片处理扩展
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.ImageExtended.GetPicThumbnail(System.IO.Stream,System.Func{System.DrawingCore.Image,System.ValueTuple{System.Int32,System.Int32}},System.Int32)">
+            <summary>
+            压缩图片
+            </summary>
+            <param name="sFile"></param>
+            <param name="getWidthHeightFunc"></param>
+            <param name="flag"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.ImageExtended.GetPicThumbnail(System.IO.Stream,System.Int32,System.Int32,System.Int32)">
+            无损压缩图片  
+            <param name="sFile">原图片</param>   
+            <param name="dHeight">高度</param>  
+            <param name="dWidth"></param>  
+            <param name="flag">压缩质量(数字越小压缩率越高) 1-100</param>  
+            <returns></returns>  
+        </member>
         <member name="T:FastFrame.Infrastructure.Interface.IApplicationInitialProvider">
             <summary>
             应用程序初始化时
@@ -588,6 +610,12 @@
             <summary>
             资源流
             </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IResourceStreamInfo.ReplaceBlobStream(System.IO.Stream)">
+            <summary>
+            替换资源
+            </summary>
+            <param name="input"></param>
         </member>
         <member name="T:FastFrame.Infrastructure.Interface.IResourceStoreProvider">
             <summary>

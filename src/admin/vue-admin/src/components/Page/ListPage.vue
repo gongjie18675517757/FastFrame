@@ -2,7 +2,7 @@
   <v-container grid-list-xl fluid app>
     <v-layout row wrap>
       <v-flex xs12 :style="{ padding: isTab ? '0px' : null }">
-        <v-card>
+        <v-card tile>
           <v-toolbar flat dense height="30px" color="transparent">
             <v-toolbar-title>{{ direction }}</v-toolbar-title>
             <v-spacer></v-spacer>
@@ -237,22 +237,7 @@ export default {
 
 .selection {
   background: #eee;
-}
-
-.full-page {
-  height: calc(100vh - 140px);
-  overflow: auto;
-}
-
-.tab-page {
-  height: calc(100vh - 200px);
-  overflow: auto;
-}
-
-.dialog-page {
-  height: calc(100vh - 255px);
-  overflow: auto;
-}
+} 
 
 .theme--dark.v-table thead th {
   background-color: #424242;

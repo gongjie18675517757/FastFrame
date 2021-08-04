@@ -227,6 +227,12 @@ export let pageComputed = {
     } else {
       return `calc(100vh - 160px)`
     }
+  },
+  childProps() {
+    return makeChildProps.call(this)
+  },
+  childListeners() {
+    return makeChildListeners.call(this)
   }
 }
 
@@ -234,6 +240,13 @@ export let pageComputed = {
  * 页面方法
  */
 export let pageMethods = {
+  /**
+   * 获取列表的标题
+   * @returns 
+   */
+  getPageTitle() {
+    return this.direction + '列表'
+  },
   /**
    * 初始化
    */
@@ -339,7 +352,7 @@ export let pageMethods = {
                     key: v.Id,
                     on: {
                       click: () => {
-                        window.open(getDownLoadPath(v.Id,v.Name))
+                        window.open(getDownLoadPath(v.Id, v.Name))
                       }
                     }
                   }, [
@@ -408,7 +421,7 @@ export let pageMethods = {
       if (components.length > 1) {
         this.$message.dialog(components[1], {
           id: Id,
-          width:'1024px'
+          width: '1024px'
         });
       } else {
         this.$message.toast.error('未匹配到页面！')
@@ -624,8 +637,6 @@ export let pageMethods = {
       })
   }),
 
-
-
   /**
    * 关闭
    */
@@ -638,7 +649,7 @@ export let pageMethods = {
     } else {
       this.$router.got(-1)
     }
-  }
+  },
 }
 
 /**
@@ -649,7 +660,7 @@ export let makeChildProps = function () {
   return {
     ...this.$props,
     moduleName: this.name,
-    direction: this.direction + '列表',
+    direction: this.getPageTitle(),
     columns: this.dynamicColumns,
     rows: this.rows,
     showMamageField: this.showMamageField,
@@ -740,6 +751,7 @@ export default {
   },
   computed: pageComputed,
   methods: pageMethods,
+  watch:{},
   render(h) {
     let props = makeChildProps.call(this),
       listeners = makeChildListeners.call(this);

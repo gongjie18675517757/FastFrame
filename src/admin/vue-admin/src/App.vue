@@ -55,7 +55,7 @@ export default {
     this.$store.state.isXs = isXs;
     if (isXs && this.$store.state.singlePageMode) {
       this.$store.state.singlePageMode = true;
-    } 
+    }
   },
   methods: {
     resufresh() {
@@ -79,7 +79,7 @@ export default {
 </script>
  
 
-<style >
+<style lang="stylus">
 html {
   overflow-y: hidden;
 }
@@ -111,11 +111,26 @@ html {
   color: #8e5656;
 }
 
-.v-input__prepend-outer{
+.v-input__prepend-outer {
   height: 100%;
 }
 
 .v-data-table__wrapper {
   min-height: 100px;
+}
+
+.full-page {
+  height: calc(100vh - 140px);
+  overflow: auto;
+}
+
+.tab-page {
+  height: calc(100vh - 200px);
+  overflow: auto;
+}
+
+.dialog-page {
+  height: calc(100vh - 255px);
+  overflow: auto;
 }
 </style>

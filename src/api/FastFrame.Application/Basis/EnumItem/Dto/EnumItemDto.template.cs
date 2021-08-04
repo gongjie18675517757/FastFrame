@@ -23,11 +23,22 @@ namespace FastFrame.Application.Basis
 		public EnumName Key {get;set;}
 		
 		/// <summary>
+		/// 编码 
+		/// </summary>
+		[StringLength(20)]
+		public string Code {get;set;}
+		
+		/// <summary>
 		/// 值 
 		/// </summary>
 		[StringLength(150)]
 		[Required()]
 		public string Value {get;set;}
+		
+		/// <summary>
+		/// 排序 
+		/// </summary>
+		public int Order {get;set;}
 		
 		/// <summary>
 		/// 上级 
@@ -84,4 +95,6 @@ namespace FastFrame.Application.Basis
 		
 		
 	}
+
+	 
 }

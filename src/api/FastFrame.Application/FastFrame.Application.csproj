@@ -16,7 +16,7 @@
 
   <ItemGroup>
     <PackageReference Include="EPPlus" Version="5.7.2" />
-    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.11" />
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.12" />
     <PackageReference Include="AspectCore.Core" Version="2.2.0" />
     <!--<PackageReference Include="Microsoft.EntityFrameworkCore.DynamicLinq" Version="1.0.23" />-->
   </ItemGroup>

@@ -95,6 +95,19 @@ export async function getColumns(name = '') {
 }
 
 /**
+ * 获取枚举列表
+ * @param {*} tbName 
+ * @param {*} filedName 
+ */
+export async function getEnumValues(tbName, filedName) {
+  let {
+    FieldInfoStruts
+  } = await getModuleStrut(tbName)
+
+  return FieldInfoStruts.filter(v => v.Name == filedName).map(v => v.EnumValues).find(v => v) || []
+}
+
+/**
  * 获取表单列表
  * @param {*} name
  */
@@ -104,7 +117,7 @@ export async function getModelObjectItems(name = '') {
     Name: ModuleName
   } = await getModuleStrut(name)
   return FieldInfoStruts.filter(f => {
-    return f.Hide != 'Form' && f.Hide != 'All' && f.Name!='Id'
+    return f.Hide != 'Form' && f.Hide != 'All' && f.Name != 'Id'
   }).map(f => {
     return {
       ...f,

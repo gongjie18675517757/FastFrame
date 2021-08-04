@@ -1,4 +1,4 @@
-import {makeStandardRouteItems} from './utils'
+import { makeStandardRouteItems } from './utils'
 
 export default {
     areaName: 'Basis',
@@ -9,7 +9,7 @@ export default {
         ],
         Dept: [
             ...makeStandardRouteItems('部门')
-        ], 
+        ],
         Role: [
             ...makeStandardRouteItems('角色')
         ],
@@ -26,14 +26,19 @@ export default {
             ...makeStandardRouteItems('通知')
         ],
         EnumItem: [
-            ...makeStandardRouteItems('数据字典')
+            {
+                key: 'TeeView',
+                title: `数据字典`,
+                permission: 'List'
+            },
+            ...makeStandardRouteItems('数据字典'),
         ],
         LoginLog: [
             {
                 key: 'List',
                 title: `登录身份列表`,
             }
-        ], 
+        ],
         NumberOption: [
             ...makeStandardRouteItems('单据编号规则')
         ]

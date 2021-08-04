@@ -15,7 +15,7 @@ namespace FastFrame.Infrastructure.Permission
         {
             Name = permissionKey;
             Text = permissionText;
-            child = new HashSet<PermissionDefinition>(20, this);
+            child = new HashSet<PermissionDefinition>(200, this);
         }
 
         public PermissionDefinition(string permissionKey, string permissionText, IEnumerable<PermissionDefinition> child)

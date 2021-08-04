@@ -16,9 +16,26 @@ namespace FastFrame.WebHost.Controllers.Basis
             return await service.GetValues(name);
         }
 
+        [Permission("Get","查看")]
+        [HttpGet("{name}")]
+        public async Task<IEnumerable<EnumItemDto>> GetChildrenByName(EnumName name)
+        {
+            return await service.GetChildren(name);
+        }
+
+        [Permission("Get", "查看")]
+        [HttpGet("{id}")]
+        public async Task<IEnumerable<EnumItemDto>> GetChildrenBySuperId(string id)
+        {
+            return await service.GetChildren(id);
+        }
+
+        [Permission("Get", "查看")]
         [HttpGet]
-        [Permission(new string[] { "Add", "Update" })]
-        public Task<PageList<EnumItemViewModel>> EnumItemList(string qs)
-            => service.ViewModelListAsync(qs.ToObject<Pagination>(true));
+        public async Task<IEnumerable<EnumName>> GetHasChildrenNames()
+        {
+            return await service.GetHasChildrenNames();
+
+        }
     }
 }

@@ -39,5 +39,5 @@
         /// React页面
         /// </summary>
         ReactPage,
-    }
+    } 
 }

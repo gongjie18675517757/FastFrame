@@ -282,8 +282,9 @@ namespace FastFrame.Infrastructure
                     @in = @in.FromBase64();
                 return JsonConvert.DeserializeObject<T>(@in);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return default;
             }
         }

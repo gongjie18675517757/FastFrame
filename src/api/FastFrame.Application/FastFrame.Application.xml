@@ -444,9 +444,19 @@
             键 
             </summary>
         </member>
+        <member name="P:FastFrame.Application.Basis.EnumItemDto.Code">
+            <summary>
+            编码 
+            </summary>
+        </member>
         <member name="P:FastFrame.Application.Basis.EnumItemDto.Value">
             <summary>
             值 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.EnumItemDto.Order">
+            <summary>
+            排序 
             </summary>
         </member>
         <member name="P:FastFrame.Application.Basis.EnumItemDto.Super_Id">

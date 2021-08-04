@@ -191,9 +191,19 @@
             键
             </summary>
         </member>
+        <member name="P:FastFrame.Entity.Basis.EnumItem.Code">
+            <summary>
+            编码
+            </summary>
+        </member>
         <member name="P:FastFrame.Entity.Basis.EnumItem.Value">
             <summary>
             值
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.EnumItem.Order">
+            <summary>
+            排序
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Basis.EnumItem.Super_Id">

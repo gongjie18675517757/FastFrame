@@ -19,7 +19,8 @@
                 HandIcon_Id = (string)null,
                 Super_Id = (string)null,
                 Tenant_Id = (string)null,
-                UrlMark = "*"
+                UrlMark = "*",
+                ChildCount=0
             });
 
         } 

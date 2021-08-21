@@ -28,7 +28,7 @@ namespace FastFrame.WebHost.Middleware
             var endpoint = context.GetEndpoint();
             if (endpoint != null)
             {
-                var appSessionProvider = context.Request.HttpContext.RequestServices.GetService<IAppSessionProvider>();
+                var appSessionProvider = context.Request.HttpContext.RequestServices.GetService<IApplicationSession>();
                 var currUser = appSessionProvider.CurrUser;
 #if RELEASE
                 if (currUser==null || !currUser.IsAdmin)

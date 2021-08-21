@@ -53,5 +53,11 @@ namespace FastFrame.Entity.Basis
         /// 主键
         /// </summary>
         public string Id { get; set; }
+
+        /// <summary>
+        /// 子节点数量
+        /// </summary>
+        [ReadOnly]
+        public int ChildCount { get; set; }
     }
 }

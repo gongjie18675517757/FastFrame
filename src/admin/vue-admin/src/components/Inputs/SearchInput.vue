@@ -1,12 +1,12 @@
 <template>
   <span>
-    <span v-if="this.disabled && !isXs">{{getField(select) || '无'}}</span>
+    <span v-if="this.disabled && !isXs">{{ getField(select) || "无" }}</span>
     <v-autocomplete
       v-else
       :loading="loading"
       :items="items"
       :search-input.sync="search"
-      :filter="()=>true"
+      :filter="() => true"
       v-model="select"
       :clearable="!disabled"
       :label="label"
@@ -24,7 +24,9 @@
           <v-list-item-title>请输入关键字搜索</v-list-item-title>
         </v-list-item>
       </template>
-      <template slot="selection" slot-scope="{ item }">{{getField(item)}}</template>
+      <template slot="selection" slot-scope="{ item }">{{
+        getField(item)
+      }}</template>
 
       <template #default>
         <slot></slot>
@@ -50,11 +52,11 @@ export default {
     errorMessages: Array,
     Relate: {
       type: String,
-      required: true
+      required: true,
     },
     isXs: Boolean,
     description: String,
-    requestUrl: [String, Function]
+    requestUrl: [String, Function],
   },
   data() {
     return {
@@ -63,21 +65,26 @@ export default {
       search: null,
       select: null,
       fields: [],
-      canQueryFields: []
+      canQueryFields: [],
     };
   },
   computed: {
     relateModel() {
       let name = this.Name.replace("_Id", "");
       return getValue(this.model || {}, name);
-    }
+    },
+    url() {
+      return typeof this.requestUrl == "function"
+        ? this.requestUrl.call(this, this.model)
+        : this.requestUrl;
+    },
   },
   async mounted() {
     let { RelateFields, FieldInfoStruts } = await getModuleStrut(this.Relate);
     this.fields = RelateFields;
-    this.canQueryFields = FieldInfoStruts.filter(v => v.Type != "EnumName").map(
-      v => v.Name
-    );
+    this.canQueryFields = FieldInfoStruts.filter(
+      (v) => v.Type != "EnumName"
+    ).map((v) => v.Name);
     if (this.value) {
       this.items = [this.relateModel];
       this.select = this.relateModel;
@@ -88,7 +95,11 @@ export default {
   watch: {
     search(v) {
       v && this.querySelections(v);
-    }
+    },
+    url() {
+      this.change();
+      this.querySelections("");
+    },
   },
   methods: {
     getField(item) {
@@ -113,9 +124,7 @@ export default {
       if (typeof filter == "function")
         filter = await filter.call(this, this.model);
 
-      let url = this.requestUrl;
-      if (typeof this.requestUrl == "function")
-        url = this.requestUrl.call(this, this.model);
+      let url = this.url;
 
       let qs = {
         Filters: [
@@ -124,20 +133,20 @@ export default {
             Value: [
               {
                 Name: this.fields
-                  .filter(v => this.canQueryFields.includes(v))
+                  .filter((v) => this.canQueryFields.includes(v))
                   .join(";"),
                 Compare: "$",
-                Value: v
+                Value: v,
               },
               {
                 Name: "Id",
                 Compare: "!=",
-                Value: this.value || ""
+                Value: this.value || "",
               },
-              ...filter
-            ].filter(v => v.Value)
-          }
-        ].filter(v => v.Value.length > 0)
+              ...filter,
+            ].filter((v) => v.Value),
+          },
+        ].filter((v) => v.Value.length > 0),
       };
 
       try {
@@ -163,8 +172,8 @@ export default {
         let name = this.Name.replace("_Id", "");
         setValue(this.model, name, $event);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

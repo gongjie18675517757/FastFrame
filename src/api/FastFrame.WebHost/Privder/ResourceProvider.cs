@@ -16,7 +16,7 @@ namespace FastFrame.WebHost.Privder
 
         public ResourceProvider(IOptions<ResourceOption> option)
         {
-            
+
             this.option = option;
         }
         public async Task<Stream> ReadAsync(string path)
@@ -29,7 +29,7 @@ namespace FastFrame.WebHost.Privder
         }
 
         public async Task<string> WriteAsync(Stream stream)
-        { 
+        {
             var relativelyPath = Path.Combine(
                     $"{DateTime.Now.Year}",
                     $"{DateTime.Now.Month}",
@@ -62,4 +62,6 @@ namespace FastFrame.WebHost.Privder
             return File.Exists(path);
         }
     }
+
+
 }

@@ -180,7 +180,12 @@ export let makePageData = function () {
     /**
      * 是否初始化完成
      */
-    isInited: false
+    isInited: false,
+
+    /**
+     * 选中的树结点
+     */
+    treeSelectedItem: null,
   };
 }
 
@@ -407,11 +412,33 @@ export let pageMethods = {
   },
 
   /**
+   * 传递给表单页的参数
+   * @returns 
+   */
+  getFormPageParsBySelectedTreeItem() {
+    return Promise.resolve({})
+  },
+
+  /**
+   * 传递给表单页的参数
+   * @returns 
+   */
+  getFormPagePars() {
+    if (this.treeSelectedItem) {
+      return this.getFormPageParsBySelectedTreeItem(this.treeSelectedItem);
+    }
+    else {
+      return Promise.resolve({})
+    }
+  },
+
+  /**
    * 跳转编辑页
    * @param {*} model 
    */
-  toEdit(model) {
-    model = model || {}
+  async toEdit(model) {
+    let pars = await this.getFormPagePars() || {};
+    model = model || {};
     let Id = model.Id || ''
     if (
       this.isDialog ||
@@ -419,19 +446,23 @@ export let pageMethods = {
     ) {
       let components = this.$router.getMatchedComponents(`/${this.name}/add`);
       if (components.length > 1) {
-        this.$message.dialog(components[1], {
+        await this.$message.dialog(components[1], {
           id: Id,
-          width: '1024px'
+          width: '1024px',
+          ...pars,
+          pars
         });
+        this.loadList();
       } else {
         this.$message.toast.error('未匹配到页面！')
       }
 
     } else {
+      let urlPars = Object.entries(pars).map(([k, v]) => `${k}=${v}`).join('&')
       if (Id)
-        this.$router.push(`/${this.name}/${Id}`);
+        this.$router.push(`/${this.name}/${Id}?${urlPars}`);
       else
-        this.$router.push(`/${this.name}/Add`);
+        this.$router.push(`/${this.name}/Add?${urlPars}`);
     }
   },
 
@@ -500,6 +531,14 @@ export let pageMethods = {
   },
 
   /**
+   * 根据选中的树结点，生成查询参数
+   * @returns 
+   */
+  getRequestParsBySelectedTreeItem() {
+    return Promise.resolve([])
+  },
+
+  /**
    * 获取请求参数
    * @param {*} pager 
    */
@@ -552,6 +591,17 @@ export let pageMethods = {
       }).filter(v => v.Value.length > 0)
 
     };
+
+    if (this.treeSelectedItem) {
+      let arr = await this.getRequestParsByTreeItem(this.treeSelectedItem);
+      if (arr.length > 0) {
+        pageInfo.Filters.push({
+          key: "and",
+          value: arr
+        })
+      }
+    }
+
 
     return pageInfo;
   },
@@ -650,6 +700,15 @@ export let pageMethods = {
       this.$router.got(-1)
     }
   },
+
+  /**
+   * 树节点被选中
+   * @param {*} val 
+   */
+  handleTreeItemActived(val) {
+    this.treeSelectedItem = val;
+    this.$nextTick(this.loadList)
+  }
 }
 
 /**
@@ -660,7 +719,7 @@ export let makeChildProps = function () {
   return {
     ...this.$props,
     moduleName: this.name,
-    direction: this.getPageTitle(),
+    direction: this.getPageTitle(this.treeSelectedItem),
     columns: this.dynamicColumns,
     rows: this.rows,
     showMamageField: this.showMamageField,
@@ -689,6 +748,19 @@ export let makeChildProps = function () {
             single: true,
           }
 
+        })
+      }
+    } : null,
+    treeComponent: this.treeComponent ? {
+      functional: true,
+      render: (h) => {
+        return h(this.treeComponent, {
+          props: {
+            height: this.tableHeight
+          },
+          on: {
+            input: this.handleTreeItemActived
+          }
         })
       }
     } : null,
@@ -751,7 +823,7 @@ export default {
   },
   computed: pageComputed,
   methods: pageMethods,
-  watch:{},
+  watch: {},
   render(h) {
     let props = makeChildProps.call(this),
       listeners = makeChildListeners.call(this);

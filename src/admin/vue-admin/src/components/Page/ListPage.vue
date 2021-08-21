@@ -71,7 +71,6 @@
                   </v-list-item>
                 </permission-facatory>
 
-    
                 <v-list-item
                   v-if="this.ModuleStrut.HasManage"
                   @click="$emit('changeShowMamageField')"
@@ -94,21 +93,32 @@
           </v-toolbar>
           <v-divider></v-divider>
           <v-card-text class="pa-0">
-            <Table
-              :items="rows"
-              :totalItems="total"
-              :loading="loading"
-              :columns="columns"
-              rowKey="Id"
-              :value="selection"
-              :hidePager="hidePager"
-              :multiple="!singleSelection"
-              :classArr="tableClassArr"
-              :styleObj="tableStyleObj"
-              :height="tableHeight"
-              :expandComponent="expandComponent"
-              v-on="tableListenter"
-            />
+            <v-row class="pa-4" justify="space-between">
+              <v-col cols="3" style="padding: 0px" v-if="treeComponent">
+                <component :is="treeComponent" :height="tableHeight"/>
+              </v-col>
+              <v-divider vertical v-if="treeComponent"></v-divider>
+              <v-col class="d-flex text-center" style="padding: 0px;padding-left:5px;">
+                <v-scroll-y-transition mode="out-in">
+                  <Table
+                    :items="rows"
+                    :totalItems="total"
+                    :loading="loading"
+                    :columns="columns"
+                    rowKey="Id"
+                    :value="selection"
+                    :hidePager="hidePager"
+                    :multiple="!singleSelection"
+                    :classArr="tableClassArr"
+                    :styleObj="tableStyleObj"
+                    :height="tableHeight"
+                    :expandComponent="expandComponent"
+                    v-on="tableListenter"
+                    style="width:100%;"
+                  />
+                </v-scroll-y-transition>
+              </v-col>
+            </v-row>
           </v-card-text>
           <v-card-actions v-if="isDialog">
             <v-btn text @click="$emit('close')">取消</v-btn>
@@ -164,6 +174,7 @@ export default {
       default: () => ({}),
     },
     expandComponent: [Object, Function],
+    treeComponent: [Object, Function],
   },
   computed: {
     context() {
@@ -186,7 +197,7 @@ export default {
         ...this.$listeners,
         input: (val) => this.$emit("selection_update", val),
       };
-    }, 
+    },
   },
   methods: {
     evalVisible({ visible }) {
@@ -237,7 +248,7 @@ export default {
 
 .selection {
   background: #eee;
-} 
+}
 
 .theme--dark.v-table thead th {
   background-color: #424242;

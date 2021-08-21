@@ -13,11 +13,11 @@ namespace FastFrame.WebHost.Privder
     public class ModuleExportProvider : IModuleExportProvider
     {
         private readonly IModuleDesProvider descriptionProvider;
-        private readonly IAppSessionProvider appSessionProvider;
+        private readonly IApplicationSession appSessionProvider;
         private static readonly Dictionary<string, ModuleStruct> cacheModuleKvs = new Dictionary<string, ModuleStruct>();
         private static IEnumerable<KeyValuePair<string, string>> haveCheckModuleList = null;
 
-        public ModuleExportProvider(IModuleDesProvider descriptionProvider, IAppSessionProvider appSessionProvider)
+        public ModuleExportProvider(IModuleDesProvider descriptionProvider, IApplicationSession appSessionProvider)
         {
             this.descriptionProvider = descriptionProvider;
             this.appSessionProvider = appSessionProvider;

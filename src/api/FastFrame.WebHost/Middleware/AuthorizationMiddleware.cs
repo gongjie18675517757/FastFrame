@@ -31,7 +31,7 @@ namespace FastFrame.WebHost.Middleware
 
                 if (!isAnonymous)
                 {
-                    var curr = context.RequestServices.GetService<IAppSessionProvider>().CurrUser;
+                    var curr = context.RequestServices.GetService<IApplicationSession>().CurrUser;
                     if (curr == null)
                     {
                         context.Response.StatusCode = 401;

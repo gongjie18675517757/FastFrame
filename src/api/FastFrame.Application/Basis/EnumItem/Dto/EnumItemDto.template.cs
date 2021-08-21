@@ -12,7 +12,7 @@ namespace FastFrame.Application.Basis
 	/// <summary>
 	/// 数字字典 
 	/// </summary>
-	public partial class EnumItemDto:BaseDto<EnumItem>
+	public partial class EnumItemDto:BaseDto<EnumItem>,ITreeModel
 	{
 		
 		
@@ -20,7 +20,7 @@ namespace FastFrame.Application.Basis
 		/// 键 
 		/// </summary>
 		[Required()]
-		public EnumName Key {get;set;}
+		public EnumName? Key {get;set;}
 		
 		/// <summary>
 		/// 编码 
@@ -50,6 +50,11 @@ namespace FastFrame.Application.Basis
 		/// 上级 
 		/// </summary>
 		public EnumItemViewModel Super {get;set;}
+		
+		/// <summary>
+		/// 子节点数量 
+		/// </summary>
+		public int ChildCount {get;set;}
 		
 		/// <summary>
 		/// 创建人 
@@ -95,6 +100,4 @@ namespace FastFrame.Application.Basis
 		
 		
 	}
-
-	 
 }

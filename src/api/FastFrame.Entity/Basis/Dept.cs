@@ -25,6 +25,12 @@ namespace FastFrame.Entity.Basis
         /// 上级
         /// </summary>
         [RelatedTo(typeof(Dept))]
-        public string Super_Id { get; set; } 
+        public string Super_Id { get; set; }
+
+        /// <summary>
+        /// 子节点数量
+        /// </summary>
+        [ReadOnly]
+        public int ChildCount { get; set; }
     } 
 }

@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 namespace FastFrame.Infrastructure.Interface
 {
     /// <summary>
-    /// 当前用户提供者
+    /// 当前会话信息
     /// </summary>
-    public interface IAppSessionProvider
+    public interface IApplicationSession
     {
         /// <summary>
         /// 获取当前用户
@@ -43,8 +43,7 @@ namespace FastFrame.Infrastructure.Interface
         /// 初始化
         /// </summary>
         /// <returns></returns>
-        Task InitAsync();
-
+        Task InitAsync(); 
 
         /// <summary>
         /// 运行目录

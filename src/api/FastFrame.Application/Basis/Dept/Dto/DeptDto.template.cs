@@ -12,7 +12,7 @@ namespace FastFrame.Application.Basis
 	/// <summary>
 	/// 部门 
 	/// </summary>
-	public partial class DeptDto:BaseDto<Dept>
+	public partial class DeptDto:BaseDto<Dept>,ITreeModel
 	{
 		
 		
@@ -40,6 +40,11 @@ namespace FastFrame.Application.Basis
 		/// 上级 
 		/// </summary>
 		public DeptViewModel Super {get;set;}
+		
+		/// <summary>
+		/// 子节点数量 
+		/// </summary>
+		public int ChildCount {get;set;}
 		
 		/// <summary>
 		/// 创建人 

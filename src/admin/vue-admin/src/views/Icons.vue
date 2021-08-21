@@ -1,5 +1,5 @@
 <template>
-  <v-data-iterator :items="items" item-key="icon" :items-per-page="50" :footer-props="footerProps">
+  <v-data-iterator :items="items" item-key="icon" :items-per-page="36" :footer-props="footerProps">
     <template v-slot:header>
       <v-toolbar flat dense>
         <v-toolbar-title>所有图标</v-toolbar-title>
@@ -30,7 +30,7 @@
     </template>
 
     <template v-slot:default="props">
-      <v-row>
+      <v-row style="height:calc(100vh - 200px);overflow:auto;">
         <v-col v-for="item in props.items" :key="item.name" cols="12" sm="6" md="4" lg="2">
           <div style="text-align:center">
             <v-icon :color="color">{{item.icon}}</v-icon>
@@ -71,7 +71,7 @@ export default {
       ],
       color: "#000",
       footerProps: {
-        "items-per-page-options": [50, 100, 200, 300, 400, 500]
+        "items-per-page-options": [36,48, 96, 200, 300, 400, 500]
       },
       ligth: ligth.map(v => ({
         icon: `mdi-${v}`,

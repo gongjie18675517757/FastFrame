@@ -1,11 +1,9 @@
-﻿using CSRedis;
-using FastFrame.Application;
-using FastFrame.Application.Chat;
+﻿using FastFrame.Application;
 using FastFrame.Database;
 using FastFrame.Entity;
 using FastFrame.Entity.Basis;
+using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Interface;
-using FastFrame.Infrastructure.MessageBus;
 using FastFrame.Infrastructure.Module;
 using FastFrame.Infrastructure.Permission;
 using FastFrame.WebHost.Controllers;
@@ -14,7 +12,6 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
-using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -23,7 +20,7 @@ namespace FastFrame.WebHost.Privder
     /// <summary>
     /// 应用程序初始化服务
     /// </summary>
-    public class ApplicationInitialProvider : IApplicationInitialProvider
+    public class ApplicationInitialProvider : IApplicationInitialLifetime
     {
         private readonly IServiceProvider serviceProvider;
         private readonly ILogger<ApplicationInitialProvider> logger;
@@ -53,18 +50,6 @@ namespace FastFrame.WebHost.Privder
                 logger.LogError(ex, "注册类型管理失败！");
             }
 
-            /*注册Redis*/
-            try
-            {
-                serviceProvider.GetService<RedisClient>();
-                //serviceProvider.GetService<IMessageBus>().SubscribeAsync<RecMsgOutPut>();
-                serviceProvider.GetService<IMessageBus>().SubscribeAsync(typeof(RecMsgOutPut));
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "注册Redis失败！");
-            }
-
             /*数据库迁移*/
             try
             {
@@ -78,8 +63,8 @@ namespace FastFrame.WebHost.Privder
             /*缓存多租户信息*/
             try
             {
-                memoryCache.Set("Cache:Multi-TenantHost-List", await serviceProvider.GetService<DataBase>().Set<TenantHost>().ToArrayAsync());
-                memoryCache.Set("Cache:Multi-Tenant-List", await serviceProvider.GetService<DataBase>().Set<Tenant>().ToArrayAsync());
+                memoryCache.Set(ConstValuePool.CacheTenantHost, await serviceProvider.GetService<DataBase>().Set<TenantHost>().ToArrayAsync());
+                memoryCache.Set(ConstValuePool.CacheTenant, await serviceProvider.GetService<DataBase>().Set<Tenant>().ToArrayAsync());
             }
             catch (Exception ex)
             {

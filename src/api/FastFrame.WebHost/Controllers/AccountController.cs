@@ -18,7 +18,7 @@ namespace FastFrame.WebHost.Controllers.Account
     public class AccountController : BaseController
     {
         private readonly AccountService service;
-        private readonly IAppSessionProvider appSession;
+        private readonly IApplicationSession appSession;
 
         /// <summary>
         /// 保存滑动验证的值
@@ -30,7 +30,7 @@ namespace FastFrame.WebHost.Controllers.Account
         /// </summary>
         private static readonly string ExistsSlideVerififySessionKey = $"IsExistsSlideVerififySlideVerifify_{Guid.NewGuid():N}";
 
-        public AccountController(AccountService service, IAppSessionProvider appSession)
+        public AccountController(AccountService service, IApplicationSession appSession)
         {
             this.service = service;
             this.appSession = appSession;

@@ -16,11 +16,11 @@ namespace FastFrame.Repository
         protected readonly DataBase context;
         private IQueryable<T> queryable; 
         
-        protected IAppSessionProvider AppSession { get; set; }
+        protected IApplicationSession AppSession { get; set; }
 
         protected ICurrUser CurrUser => AppSession?.CurrUser;
 
-        public BaseQueryable(DataBase context, IAppSessionProvider appSession)
+        public BaseQueryable(DataBase context, IApplicationSession appSession)
         {
             this.context = context;
             AppSession = appSession;

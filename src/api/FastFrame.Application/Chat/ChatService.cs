@@ -1,11 +1,9 @@
 ﻿using FastFrame.Entity.Chat;
 using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Interface;
-using FastFrame.Infrastructure.MessageBus;
 using FastFrame.Repository;
 using System;
 using System.Threading.Tasks;
-using MsgType = FastFrame.Infrastructure.MessageBus.MsgType;
 
 namespace FastFrame.Application.Chat
 {
@@ -14,20 +12,20 @@ namespace FastFrame.Application.Chat
     /// </summary>
     public partial class ChatService : IService
     {
-        private readonly IAppSessionProvider appSession;
+        private readonly IApplicationSession appSession;
         private readonly IRepository<FriendMessage> friendMsgRepository;
         private readonly IRepository<MessageTarget> msgTgRepository;
-        private readonly IMessageBus messageBus;
 
-        public ChatService(IAppSessionProvider appSession,
+
+        public ChatService(IApplicationSession appSession,
             IRepository<FriendMessage> friendMsgRepository,
-            IRepository<MessageTarget> msgTgRepository,
-            IMessageBus messageBus)
+            IRepository<MessageTarget> msgTgRepository
+             )
         {
             this.appSession = appSession;
             this.friendMsgRepository = friendMsgRepository;
             this.msgTgRepository = msgTgRepository;
-            this.messageBus = messageBus;
+
         }
 
         /// <summary>
@@ -53,14 +51,9 @@ namespace FastFrame.Application.Chat
             /*通知接收人*/
             var outPut = input.MapTo<FriendMsgInput, RecMsgOutPut>();
             outPut.Id = entity.Id;
-            outPut.From_User_Id = entity.From_Id;
-
-            await messageBus.PubLishAsync(new Message<RecMsgOutPut>(MsgType.FriendMsg, outPut)
-            {
-                Target_Ids = new string[] { input.Target_User_Id }
-            });
+            outPut.From_User_Id = entity.From_Id; 
 
             return outPut;
-        } 
+        }
     }
 }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace FastFrame.Test
 {
-    public class CurrentUserProvider : IAppSessionProvider
+    public class CurrentUserProvider : IApplicationSession
     {
         public ICurrUser CurrUser => null;
 

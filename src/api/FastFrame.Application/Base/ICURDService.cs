@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FastFrame.Application
 {
@@ -36,5 +37,5 @@ namespace FastFrame.Application
         /// <param name="id"></param>
         /// <returns></returns>
         Task<TDto> GetAsync(string id);
-    }
+    } 
 }

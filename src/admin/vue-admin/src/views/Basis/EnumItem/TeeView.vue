@@ -145,7 +145,7 @@ export default {
         });
       });
     },
-    async requestChild({ id, type, children }) {
+    async requestChild({ id, type }) {
       let arr = [];
       switch (type) {
         case "root":
@@ -164,12 +164,13 @@ export default {
         name: [v.Value, v.Code]
           .filter((v) => v)
           .map((v, i) => (i > 0 ? `(${v})` : v))
-          .join(),
+          .join(""),
         ...(v.HasTreeChildren ? { children: [] } : {}),
         type: "node",
       }));
 
-      children.push(...arr);
+      // children.push(...arr);
+      return arr;
     },
     getPageTitle() {
       let v = this.treeSelected;
@@ -217,8 +218,23 @@ export default {
                 break;
             }
           }
-          console.log(page);
+          // console.log(page);
           return page;
+        });
+    },
+    getFormPagePars() {
+      return Page.methods.getFormPagePars
+        .call(this, ...arguments)
+        .then((obj) => {
+          return {
+            ...obj,
+            ...(this.treeSelected
+              ? {
+                  keyname: this.treeSelected.Key,
+                  superid: this.treeSelected.Id || "",
+                }
+              : {}),
+          };
         });
     },
   },

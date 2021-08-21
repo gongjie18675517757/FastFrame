@@ -41,6 +41,7 @@ namespace FastFrame.Application.Basis
 							EnCode = _dept.EnCode,
 							Name = _dept.Name,
 							Super_Id = _dept.Super_Id,
+							ChildCount = _dept.ChildCount,
 							Id = _dept.Id,
 							Create_User_Id = _dept.Create_User_Id,
 							CreateTime = _dept.CreateTime,

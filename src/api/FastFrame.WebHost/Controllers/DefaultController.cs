@@ -1,6 +1,5 @@
 ﻿using FastFrame.Application.Chat;
 using FastFrame.Infrastructure.Interface;
-using FastFrame.Infrastructure.MessageBus;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
@@ -12,13 +11,11 @@ namespace FastFrame.WebHost.Controllers
     [ApiController]
     public class DefaultController : ControllerBase
     {
-        private readonly IMessageBus messageBus;
-        private readonly IAppSessionProvider appSession;
+        private readonly IApplicationSession appSession;
         private readonly ILogger<DefaultController> logger;
 
-        public DefaultController(IMessageBus messageBus,  IAppSessionProvider appSession,ILogger<DefaultController> logger)
-        {
-            this.messageBus = messageBus;
+        public DefaultController(IApplicationSession appSession, ILogger<DefaultController> logger)
+        { 
             this.appSession = appSession;
             this.logger = logger;
         }
@@ -37,13 +34,13 @@ namespace FastFrame.WebHost.Controllers
             return "value";
         }
 
-        // POST: api/Default
-        [HttpPost]
-        public async Task Post([FromBody] Message<RecMsgOutPut> value)
-        {
-            var userid = appSession.CurrUser?.Id; 
-            await messageBus.PubLishAsync(value);
-        }
+        //// POST: api/Default
+        //[HttpPost]
+        //public async Task Post([FromBody] value)
+        //{
+        //    var userid = appSession.CurrUser?.Id;
+        //    await messageBus.PubLishAsync(value);
+        //}
 
         // PUT: api/Default/5
         [HttpPut("{id}")]

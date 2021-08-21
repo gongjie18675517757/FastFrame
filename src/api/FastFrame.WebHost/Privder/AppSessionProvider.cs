@@ -1,5 +1,4 @@
-﻿using CSRedis;
-using FastFrame.Entity.Basis;
+﻿using FastFrame.Entity.Basis;
 using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Interface;
 using Microsoft.AspNetCore.Http;
@@ -12,24 +11,21 @@ using System.Threading.Tasks;
 
 namespace FastFrame.WebHost.Privder
 {
-    public class AppSessionProvider : IAppSessionProvider
+    public class AppSessionProvider : IApplicationSession
     {
         private readonly IHttpContextAccessor httpContextAccessor;
-        private readonly IMemoryCache memoryCache;
-        private readonly CSRedisClient cSRedisClient;
+        private readonly IMemoryCache memoryCache; 
         private readonly IHostEnvironment hostEnvironment;
-        private const string Token_Name = "Authorize";
+         
         private Tenant tenant;
 
         public AppSessionProvider(IHttpContextAccessor httpContextAccessor,
-                                   IMemoryCache memoryCache,
-                                   CSRedisClient cSRedisClient,
-                                   IHostEnvironment hostEnvironment)
+                                  IMemoryCache memoryCache,
+                                  IHostEnvironment hostEnvironment)
         {
             this.httpContextAccessor = httpContextAccessor;
 
-            this.memoryCache = memoryCache;
-            this.cSRedisClient = cSRedisClient;
+            this.memoryCache = memoryCache; 
             this.hostEnvironment = hostEnvironment;
         }
 
@@ -67,9 +63,9 @@ namespace FastFrame.WebHost.Privder
         {
             var base64 = currUser.ToJson().ToBase64();
 
-            httpContextAccessor.HttpContext.Response.Headers.Add(Token_Name, base64);
-            httpContextAccessor.HttpContext.Response.Cookies.Delete(Token_Name);
-            httpContextAccessor.HttpContext.Response.Cookies.Append(Token_Name, base64, new CookieOptions()
+            httpContextAccessor.HttpContext.Response.Headers.Add(ConstValuePool.Token_Name, base64);
+            httpContextAccessor.HttpContext.Response.Cookies.Delete(ConstValuePool.Token_Name);
+            httpContextAccessor.HttpContext.Response.Cookies.Append(ConstValuePool.Token_Name, base64, new CookieOptions()
             {
                 Expires = new DateTimeOffset(DateTime.Now.AddDays(1)),
                 HttpOnly = true,
@@ -84,15 +80,13 @@ namespace FastFrame.WebHost.Privder
         {
             if (CurrUser != null)
             {
-                httpContextAccessor.HttpContext.Response.Cookies.Delete(Token_Name);
-                await cSRedisClient.DelAsync(CurrUser.ToKen);
+                httpContextAccessor.HttpContext.Response.Cookies.Delete(ConstValuePool.Token_Name); 
                 await httpContextAccessor.HttpContext.RequestServices.GetService<IIdentityManager>().SetTokenFailureAsync(CurrUser.ToKen);
             }
         }
 
         public async Task RefreshIdentityAsync()
-        {
-            await cSRedisClient.SetAsync(CurrUser.ToKen, CurrUser, 60 * 60 * 24);
+        { 
             await httpContextAccessor.HttpContext.RequestServices.GetService<IIdentityManager>().RefreshTokenAsync(CurrUser.ToKen);
             await LoginAsync(CurrUser);
         }
@@ -102,11 +96,11 @@ namespace FastFrame.WebHost.Privder
 
             var request = httpContextAccessor.HttpContext.Request;
             var identity = string.Empty;
-            if (request.Headers.TryGetValue(Token_Name, out var headerValue))
+            if (request.Headers.TryGetValue(ConstValuePool.Token_Name, out var headerValue))
                 identity = headerValue.First();
-            if (identity.IsNullOrWhiteSpace() && request.Cookies.TryGetValue(Token_Name, out var cookieValue))
+            if (identity.IsNullOrWhiteSpace() && request.Cookies.TryGetValue(ConstValuePool.Token_Name, out var cookieValue))
                 identity = cookieValue;
-            if (identity.IsNullOrWhiteSpace() && request.Query.TryGetValue(Token_Name, out var queryValue))
+            if (identity.IsNullOrWhiteSpace() && request.Query.TryGetValue(ConstValuePool.Token_Name, out var queryValue))
                 identity = queryValue.First();
             return identity;
         }
@@ -128,8 +122,8 @@ namespace FastFrame.WebHost.Privder
 
             var host = GetHost();
 
-            if (memoryCache.TryGetValue<Tenant[]>("Cache:Multi-Tenant-List", out var tenants) &&
-               memoryCache.TryGetValue<TenantHost[]>("Cache:Multi-TenantHost-List", out var tenantHosts))
+            if (memoryCache.TryGetValue<Tenant[]>(ConstValuePool.CacheTenant, out var tenants) &&
+               memoryCache.TryGetValue<TenantHost[]>(ConstValuePool.CacheTenantHost, out var tenantHosts))
             {
                 var tenantHost = tenantHosts.FirstOrDefault(v => v.Host == host);
                 tenantHost ??= tenantHosts.FirstOrDefault(v => v.Host == "*");

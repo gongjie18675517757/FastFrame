@@ -14,11 +14,11 @@ namespace FastFrame.Application.Basis
     {
         private readonly IRepository<Resource> resourceRepository;
         private readonly IResourceProvider resourceProvider;
-        private readonly IAppSessionProvider sessionProvider;
+        private readonly IApplicationSession sessionProvider;
 
         public ResourceService(IRepository<Resource> resourceRepository,
                                IResourceProvider resourceProvider,
-                               IAppSessionProvider sessionProvider)
+                               IApplicationSession sessionProvider)
         {
             this.resourceRepository = resourceRepository;
             this.resourceProvider = resourceProvider;

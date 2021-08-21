@@ -17,13 +17,13 @@ namespace FastFrame.Application.Chat
         private readonly IRepository<User> repository;
         private readonly IRepository<FriendMessage> messageRepository;
         private readonly IRepository<MessageTarget> targetRepository;
-        private readonly IAppSessionProvider appSession;
+        private readonly IApplicationSession appSession;
 
         public FriendService(
             IRepository<User> repository,
             IRepository<FriendMessage> messageRepository,
             IRepository<MessageTarget> targetRepository,
-            IAppSessionProvider appSession)
+            IApplicationSession appSession)
         {
             this.repository = repository;
             this.messageRepository = messageRepository;

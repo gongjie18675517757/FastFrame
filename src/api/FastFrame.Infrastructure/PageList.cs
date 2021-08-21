@@ -16,6 +16,6 @@ namespace FastFrame.Infrastructure
         /// <summary>
         /// 数据
         /// </summary>
-        public List<T> Data { get; set; }
+        public List<T> Data { get; set; } = new List<T>();
     }
 }

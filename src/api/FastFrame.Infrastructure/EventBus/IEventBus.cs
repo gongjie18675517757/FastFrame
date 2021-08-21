@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace FastFrame.Infrastructure.EventBus
 {
     /// <summary>
-    /// 事件总线
+    /// 进程内事件总线
     /// </summary>
     public interface IEventBus
     {

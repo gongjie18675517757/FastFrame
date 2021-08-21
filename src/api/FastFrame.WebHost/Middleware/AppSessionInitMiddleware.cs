@@ -16,7 +16,7 @@ namespace FastFrame.WebHost.Middleware
 
         public async Task Invoke(HttpContext context)
         {
-            await context.Request.HttpContext.RequestServices.GetService<IAppSessionProvider>().InitAsync();
+            await context.Request.HttpContext.RequestServices.GetService<IApplicationSession>().InitAsync();
             await next(context);
         }
     }

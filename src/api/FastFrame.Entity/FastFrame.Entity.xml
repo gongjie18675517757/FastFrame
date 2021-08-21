@@ -161,6 +161,11 @@
             上级
             </summary>
         </member>
+        <member name="P:FastFrame.Entity.Basis.Dept.ChildCount">
+            <summary>
+            子节点数量
+            </summary>
+        </member>
         <member name="T:FastFrame.Entity.Basis.DeptMember">
             <summary>
             部门成员
@@ -178,7 +183,7 @@
         </member>
         <member name="P:FastFrame.Entity.Basis.DeptMember.IsManager">
             <summary>
-            是否管理员
+            是否管理
             </summary>
         </member>
         <member name="T:FastFrame.Entity.Basis.EnumItem">
@@ -209,6 +214,11 @@
         <member name="P:FastFrame.Entity.Basis.EnumItem.Super_Id">
             <summary>
             上级
+            </summary>  
+        </member>
+        <member name="P:FastFrame.Entity.Basis.EnumItem.ChildCount">
+            <summary>
+            子节点数量
             </summary>
         </member>
         <member name="T:FastFrame.Entity.Basis.LoginLog">
@@ -264,6 +274,11 @@
         <member name="P:FastFrame.Entity.Basis.Meidia.IsFolder">
             <summary>
             是否文件夹
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.Meidia.ChildCount">
+            <summary>
+            子节点数量
             </summary>
         </member>
         <member name="T:FastFrame.Entity.Basis.Notify">
@@ -456,12 +471,12 @@
             角色成员
             </summary> 
         </member>
-        <member name="P:FastFrame.Entity.Basis.RoleMember.Role_Id">
+        <member name="P:FastFrame.Entity.Basis.RoleMember.FKey_Id">
             <summary>
             角色
             </summary> 
         </member>
-        <member name="P:FastFrame.Entity.Basis.RoleMember.User_Id">
+        <member name="P:FastFrame.Entity.Basis.RoleMember.Value_Id">
             <summary>
             用户
             </summary> 
@@ -544,6 +559,11 @@
         <member name="P:FastFrame.Entity.Basis.Tenant.Id">
             <summary>
             主键
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.Tenant.ChildCount">
+            <summary>
+            子节点数量
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Basis.TenantHost.Host">
@@ -1649,6 +1669,16 @@
         <member name="T:FastFrame.Entity.ITreeEntity">
             <summary>
             树结构表
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.ITreeEntity.Super_Id">
+            <summary>
+            上级ID
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.ITreeEntity.ChildCount">
+            <summary>
+            下级数量
             </summary>
         </member>
         <member name="T:FastFrame.Entity.TargetInfo">

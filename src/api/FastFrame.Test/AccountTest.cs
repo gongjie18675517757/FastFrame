@@ -35,7 +35,7 @@ namespace FastFrame.Test
                 var currUser = await accountService.LoginAsync(new LoginInput() { Account = name, Password = password });
                 Assert.AreEqual(currUser.Name, name);
 
-                var curr = ServiceProvider.GetService<IAppSessionProvider>().CurrUser;
+                var curr = ServiceProvider.GetService<IApplicationSession>().CurrUser;
 
                 Assert.AreEqual(curr.Name, name);
                 Assert.AreEqual(curr.Id, user.Id);

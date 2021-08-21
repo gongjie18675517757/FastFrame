@@ -12,7 +12,7 @@ namespace FastFrame.Application.Basis
 	/// <summary>
 	/// 图片库 
 	/// </summary>
-	public partial class MeidiaDto:BaseDto<Meidia>
+	public partial class MeidiaDto:BaseDto<Meidia>,ITreeModel
 	{
 		
 		
@@ -43,6 +43,11 @@ namespace FastFrame.Application.Basis
 		/// 是否文件夹 
 		/// </summary>
 		public bool IsFolder {get;set;}
+		
+		/// <summary>
+		/// 子节点数量 
+		/// </summary>
+		public int ChildCount {get;set;}
 		
 		/// <summary>
 		/// 创建人 

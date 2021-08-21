@@ -22,7 +22,7 @@ namespace FastFrame.Entity.Basis
         public string User_Id { get; set; }
 
         /// <summary>
-        /// 是否管理员
+        /// 是否管理
         /// </summary>
         public bool IsManager { get; set; }
     } 

@@ -12,14 +12,14 @@ namespace FastFrame.Application.Basis
 {
     public partial class PermissionService : IPermissionChecker, IService
     {
-        private readonly IAppSessionProvider appSessionProvider;
+        private readonly IApplicationSession appSessionProvider;
         private readonly IPermissionDefinitionContext permissionDefinitionContext;
         private readonly IRepository<Role> roleRepository;
         private readonly IRepository<RoleMember> roleMemberRepository;
         private readonly IRepository<RolePermission> rolePermissionRepository;
 
         public PermissionService(
-                IAppSessionProvider appSessionProvider,
+                IApplicationSession appSessionProvider,
                 IPermissionDefinitionContext permissionDefinitionContext,
                 IRepository<Role> roleRepository,
                 IRepository<RoleMember> roleMemberRepository,
@@ -46,9 +46,9 @@ namespace FastFrame.Application.Basis
                 return true;
 
             var existsQuery = from a in roleMemberRepository
-                              join b in rolePermissionRepository on a.Role_Id equals b.Role_Id
-                              join c in roleRepository on a.Role_Id equals c.Id
-                              where (a.User_Id == currUser.Id || c.IsDefault) &&
+                              join b in rolePermissionRepository on a.FKey_Id equals b.Role_Id
+                              join c in roleRepository on a.FKey_Id equals c.Id
+                              where (a.Value_Id == currUser.Id || c.IsDefault) &&
                                     permissions.Contains(b.PermissionKey)
                               select 1;
 
@@ -65,9 +65,9 @@ namespace FastFrame.Application.Basis
                 return permissionDefinitions;
 
             var existsQuery = from a in roleMemberRepository
-                              join b in rolePermissionRepository on a.Role_Id equals b.Role_Id
-                              join c in roleRepository on a.Role_Id equals c.Id
-                              where (a.User_Id == currUser.Id || c.IsDefault)
+                              join b in rolePermissionRepository on a.FKey_Id equals b.Role_Id
+                              join c in roleRepository on a.FKey_Id equals c.Id
+                              where (a.Value_Id == currUser.Id || c.IsDefault)
                               select b.PermissionKey;
 
             var permissionArr = await existsQuery.Distinct().ToArrayAsync();

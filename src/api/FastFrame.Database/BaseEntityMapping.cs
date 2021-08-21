@@ -131,6 +131,16 @@ namespace FastFrame.Database
                     propertyBuilder.HasConversion<string>().HasMaxLength(50);
                 }
             }
+
+            /*处理继续承的关键字*/
+            if (!isInheritTable && entityTypeBuilder.Metadata.GetProperties().Any(v => v.Name == "Discriminator"))
+            {
+                entityTypeBuilder
+                   .Property("Discriminator")
+                   .HasMaxLength(50);
+
+                entityTypeBuilder.HasIndex("Discriminator").HasDatabaseName($"Index_{entityType.Name}_Discriminator");
+            }
         }
 
         public void ConvertEnumArray<TEnum>(EntityTypeBuilder<T> typeBuilder, string name)

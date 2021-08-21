@@ -1,15 +1,16 @@
-﻿using CSRedis;
+﻿using AspectCore.DynamicProxy;
+using CSRedis;
 using FastFrame.Application;
 using FastFrame.Database;
 using FastFrame.Infrastructure.EventBus;
 using FastFrame.Infrastructure.Interface;
-using FastFrame.Infrastructure.MessageBus;
 using FastFrame.Infrastructure.Module;
 using FastFrame.Infrastructure.Permission;
 using FastFrame.Repository;
 using FastFrame.WebHost.Hubs;
 using FastFrame.WebHost.Middleware;
 using FastFrame.WebHost.Privder;
+using Hangfire;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -17,14 +18,17 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging; 
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using System;
+using System.Collections.Generic;
 using System.IO;
-
+using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
+using System.Threading.Tasks;
 
 namespace FastFrame.WebHost
 {
@@ -36,12 +40,10 @@ namespace FastFrame.WebHost
         }
 
         public IConfiguration Configuration { get; }
-
+        private const string ConnectionName = "Local_Mysql";
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMemoryCache();
-
             services.Configure<CookiePolicyOptions>(options =>
             {
                 options.CheckConsentNeeded = context => true;
@@ -54,7 +56,7 @@ namespace FastFrame.WebHost
             });
 
             services.AddMvc(opts =>
-                { 
+                {
                     //opts.Filters.Add<GlobalFilter>();
                 })
                 .AddNewtonsoftJson(options =>
@@ -81,11 +83,20 @@ namespace FastFrame.WebHost
             services.AddMemoryCache();
             services.AddSession();
 
+
+
+            services.AddHangfire(configuration => configuration
+                  .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                  .UseSimpleAssemblyNameTypeSerializer()
+                  .UseRecommendedSerializerSettings()
+                  .UseStorage(new Hangfire.MemoryStorage.MemoryStorage()));
+            services.AddHangfireServer();
+
             services
                 .AddHttpContextAccessor()
                 .AddDbContextPool<DataBase>(o =>
                 {
-                    var conn_str = Configuration.GetConnectionString("Local_Mysql");
+                    var conn_str = Configuration.GetConnectionString(ConnectionName);
                     o.UseMySql(conn_str, ServerVersion.Parse("5.6.40"), opt =>
                     {
                         opt.CommandTimeout(60);
@@ -93,17 +104,26 @@ namespace FastFrame.WebHost
                     .AddInterceptors(new FmtCommandInterceptor());
                 })
                 .AddScoped<IModuleExportProvider, ModuleExportProvider>()
-                .AddScoped<IAppSessionProvider, AppSessionProvider>()
-                .AddScoped<IApplicationInitialProvider, ApplicationInitialProvider>()
+                .AddScoped<IApplicationSession, AppSessionProvider>()
+                .AddTransient<IApplicationInitialLifetime, ApplicationInitialProvider>()
                 .AddScoped<IResourceProvider, ResourceProvider>()
                 .AddScoped<IModuleDesProvider, XmlModuleDesProvider>()
                 .AddScoped<IExcelExportProvider, ExcelExportProvider>()
                 .AddScoped<IPermissionDefinitionContext, PermissionDefinitionContext>()
-                .AddSingleton<IClientManage, ClientConMamage>()
+                .AddSingleton<IClientManage, ClientMamager>()
+                .AddSingleton<ICacheProvider, CacheProvider>()
+                .AddSingleton<IBackgroundJob, HangfireBackgroundJob>()
                 .AddServices()
                 .AddRepository()
-                .AddSingleton<IMessageBus, MessageBus>()
+                .AddIntervalWork()
                 .AddScoped<IEventBus, EventBus>();
+
+            services.AddSingleton(x =>
+            {
+                var redisClient = new CSRedisClient(Configuration.GetConnectionString("RedisConnection"));
+                RedisHelper.Initialization(redisClient);
+                return redisClient;
+            });
 
 #if DEBUG
             services.AddSwaggerGen(options =>
@@ -123,15 +143,7 @@ namespace FastFrame.WebHost
                 xmlPath = Path.Combine(basePath, "FastFrame.Entity.xml");
                 options.IncludeXmlComments(xmlPath);
             });
-#endif
-
-            services.AddSingleton(x =>
-            {
-                var redisClient = new CSRedisClient(Configuration.GetConnectionString("RedisConnection"));
-                RedisHelper.Initialization(redisClient);
-                redisClient.Del("CacheUserMapKey");
-                return redisClient;
-            });
+#endif  
         }
 
         /*master*/
@@ -169,7 +181,7 @@ namespace FastFrame.WebHost
 
             /*初始化应用会话状态*/
             app.UseMiddleware<AppSessionInitMiddleware>();
-            
+
 
             /*异步处理中间件*/
             app.UseMiddleware<ExceptionMiddleware>();
@@ -189,14 +201,13 @@ namespace FastFrame.WebHost
             /*注册终结点*/
             app.UseEndpoints(endpoints =>
             {
-                //endpoints.MapHub<ChatHub>("/hub/chat");
                 endpoints.MapHub<MessageHub>("/hub/message");
                 endpoints.MapControllers();
 
                 //endpoints.MapControllerRoute(
                 //    name: "default",
                 //    pattern: "{controller=Home}/{action=Index}/{id?}");
-            }); 
+            });
 
             var logger = app.ApplicationServices.GetService<ILogger<Startup>>();
 
@@ -210,9 +221,13 @@ namespace FastFrame.WebHost
                 logger.LogCritical("ApplicationStarted");
 
                 /*初始化应用*/
-                var applicationInitialProviders = app.ApplicationServices.GetServices<IApplicationInitialProvider>();
+                var applicationInitialProviders = app.ApplicationServices.GetServices<IApplicationInitialLifetime>();
                 foreach (var applicationInitialProvider in applicationInitialProviders)
                     await applicationInitialProvider.InitialAsync();
+
+                //BackgroundJob.Enqueue(() => Console.WriteLine(DateTime.Now));
+                RecurringJob.AddOrUpdate(() => Console.WriteLine(DateTime.Now), Cron.Minutely);
+
             });
 
             applicationLifetime.ApplicationStopping.Register(async () =>
@@ -220,7 +235,7 @@ namespace FastFrame.WebHost
                 logger.LogInformation("ApplicationStopping");
 
                 /*处理应用关闭时事件*/
-                var applicationInitialProviders = app.ApplicationServices.GetServices<IApplicationUnInitialProvider>();
+                var applicationInitialProviders = app.ApplicationServices.GetServices<IApplicationUnInitialLifetime>();
                 foreach (var applicationInitialProvider in applicationInitialProviders)
                 {
                     await applicationInitialProvider.UnInitialAsync();

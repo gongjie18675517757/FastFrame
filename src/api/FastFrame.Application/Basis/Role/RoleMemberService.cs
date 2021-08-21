@@ -52,7 +52,7 @@ namespace FastFrame.Application.Basis
 
         public async Task HandleEventAsync(DoMainDeleteing<RoleDto> @event)
         {
-            await handleRoleMemberService.DelManyAsync(v => v.Role_Id == @event.Id);
+            await handleRoleMemberService.DelManyAsync(v => v.FKey_Id == @event.Id);
 
             /*处理流程中此角色的审批人*/
             var stepUsers = await flowStepUsers
@@ -68,13 +68,13 @@ namespace FastFrame.Application.Basis
         public async Task HandleEventAsync(DoMainUpdateing<RoleDto> @event)
         {
             await handleRoleMemberService.UpdateManyAsync(
-                    v => v.Role_Id == @event.Data.Id,
+                    v => v.FKey_Id == @event.Data.Id,
                     @event.Data.Members,
-                    (a, b) => a.Role_Id == b.Id,
+                    (a, b) => a.FKey_Id == b.Id,
                     v => new RoleMember
                     {
-                        Role_Id = @event.Data.Id,
-                        User_Id = v.Id
+                        FKey_Id = @event.Data.Id,
+                        Value_Id = v.Id
                     });
 
             /*处理流程中此角色的审批人*/
@@ -84,7 +84,7 @@ namespace FastFrame.Application.Basis
         public Task<UserViewModel[]> HandleRequestAsync(RoleDto request)
         {
             var userQuery = users.MapTo<User, UserViewModel>();
-            return userQuery.Where(v => roleMembers.Any(r => r.User_Id == v.Id && r.Role_Id == request.Id))
+            return userQuery.Where(v => roleMembers.Any(r => r.Value_Id == v.Id && r.FKey_Id == request.Id))
                           .ToArrayAsync();
         }
 
@@ -94,8 +94,8 @@ namespace FastFrame.Application.Basis
             await handleRoleMemberService
                 .AddManyAsync(input.Members, v => new RoleMember
                 {
-                    Role_Id = input.Id,
-                    User_Id = v.Id
+                    FKey_Id = input.Id,
+                    Value_Id = v.Id
                 });
         }
 
@@ -103,14 +103,14 @@ namespace FastFrame.Application.Basis
         {
             await handleUserRoleService.AddManyAsync(@event.Data.Roles, v => new RoleMember
             {
-                Role_Id = v.Id,
-                User_Id = @event.Data.Id
+                FKey_Id = v.Id,
+                Value_Id = @event.Data.Id
             });
         }
 
         public async Task HandleEventAsync(DoMainDeleteing<UserDto> @event)
         {
-            await handleUserRoleService.DelManyAsync(v => v.User_Id == @event.Id);
+            await handleUserRoleService.DelManyAsync(v => v.Value_Id == @event.Id);
 
             /*处理流程中此角色的审批人*/
         }
@@ -118,13 +118,13 @@ namespace FastFrame.Application.Basis
         public async Task HandleEventAsync(DoMainUpdateing<UserDto> @event)
         {
             await handleUserRoleService.UpdateManyAsync(
-                v => v.User_Id == @event.Data.Id,
+                v => v.Value_Id == @event.Data.Id,
                 @event.Data.Roles,
-                (a, b) => a.Role_Id == b.Id,
+                (a, b) => a.FKey_Id == b.Id,
                 v => new RoleMember
                 {
-                    Role_Id = v.Id,
-                    User_Id = @event.Data.Id
+                    FKey_Id = v.Id,
+                    Value_Id = @event.Data.Id
                 });
 
             /*处理流程中此角色的审批人*/
@@ -134,7 +134,7 @@ namespace FastFrame.Application.Basis
         Task<RoleViewModel[]> IRequestHandle<RoleViewModel[], UserDto>.HandleRequestAsync(UserDto request)
         {
             return roles
-                     .Where(v => roleMembers.Any(r => r.Role_Id == v.Id && r.User_Id == request.Id))
+                     .Where(v => roleMembers.Any(r => r.FKey_Id == v.Id && r.Value_Id == request.Id))
                      .MapTo<Role, RoleViewModel>()
                      .ToArrayAsync();
         }
@@ -144,15 +144,15 @@ namespace FastFrame.Application.Basis
             var roleQuery = roles.MapTo<Role, RoleViewModel>();
             var keys = request.Select(v => v.Id).ToArray();
             var query = from a in roleQuery
-                        join b in roleMembers on a.Id equals b.Role_Id
-                        where keys.Contains(b.User_Id)
+                        join b in roleMembers on a.Id equals b.FKey_Id
+                        where keys.Contains(b.Value_Id)
                         select new
                         {
-                            b.User_Id,
+                            b.Value_Id,
                             Role = a
                         };
 
-            return (await query.ToListAsync()).GroupBy(v => v.User_Id)
+            return (await query.ToListAsync()).GroupBy(v => v.Value_Id)
                         .Select(v => new KeyValuePair<string, RoleViewModel[]>(v.Key, v.Select(r => r.Role).ToArray()));
         }
     }

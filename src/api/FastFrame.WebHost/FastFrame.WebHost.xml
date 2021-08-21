@@ -345,7 +345,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="T:FastFrame.WebHost.Privder.ClientConMamage">
+        <member name="T:FastFrame.WebHost.Privder.ClientMamager">
             <summary>
             客户端连接管理
             </summary>
@@ -377,11 +377,6 @@
         <member name="T:FastFrame.WebHost.Privder.ResourceProvider">
             <summary>
             资源提供者
-            </summary>
-        </member>
-        <member name="T:FastFrame.WebHost.MessageBus">
-            <summary>
-            消息总线
             </summary>
         </member>
     </members>

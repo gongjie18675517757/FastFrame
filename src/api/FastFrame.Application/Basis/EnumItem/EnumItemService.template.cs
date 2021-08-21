@@ -43,6 +43,7 @@ namespace FastFrame.Application.Basis
 							Value = _enumItem.Value,
 							Order = _enumItem.Order,
 							Super_Id = _enumItem.Super_Id,
+							ChildCount = _enumItem.ChildCount,
 							Id = _enumItem.Id,
 							Create_User_Id = _enumItem.Create_User_Id,
 							CreateTime = _enumItem.CreateTime,

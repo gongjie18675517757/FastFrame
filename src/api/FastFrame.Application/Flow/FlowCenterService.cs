@@ -32,8 +32,8 @@ namespace FastFrame.Application.Flow
         private IRepository<TEntity> LoadRepository<TEntity>() where TEntity : class, IEntity
                 => serviceProvider.GetService<IRepository<TEntity>>();
 
-        private IAppSessionProvider AppSession
-            => serviceProvider.GetService<IAppSessionProvider>();
+        private IApplicationSession AppSession
+            => serviceProvider.GetService<IApplicationSession>();
 
         /// <summary>
         /// 流程操作
@@ -720,7 +720,7 @@ namespace FastFrame.Application.Flow
             var roleKeys = flowNode.Roles.Select(v => v.Id).ToArray();
             var roleUsers = await roleMembers
                     .Where(v => roleKeys.Contains(v.Id))
-                    .Select(v => new { v.User_Id, v.Role_Id })
+                    .Select(v => new { v.Value_Id, v.FKey_Id })
                     .ToListAsync();
 
             stepUserList.AddRange(roleUsers.Select(v => new FlowStepUser
@@ -728,8 +728,8 @@ namespace FastFrame.Application.Flow
                 FlowStep_Id = null,
                 Id = null,
                 BeDept_Id = null,
-                BeRole_Id = v.Role_Id,
-                User_Id = v.User_Id,
+                BeRole_Id = v.FKey_Id,
+                User_Id = v.Value_Id,
                 FlowInstance_Id = null
             }));
 

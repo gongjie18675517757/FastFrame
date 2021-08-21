@@ -8,6 +8,7 @@
   <PropertyGroup>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <LangVersion>default</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -40,16 +41,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Condition="'$(Configuration)'=='DEBUG'" Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.8">
+    <PackageReference Include="Hangfire.AspNetCore" Version="1.7.24" />
+    <PackageReference Include="Hangfire.Core" Version="1.7.24" />
+    <PackageReference Include="Hangfire.MemoryStorage" Version="1.7.0" />
+    <!--<PackageReference Include="Hangfire.MySqlStorage" Version="2.0.3" />-->
+    <PackageReference Condition="'$(Configuration)'=='DEBUG'" Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.9">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="AspectCore.Extensions.DependencyInjection" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.9" />
     <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="5.0.3" /> 
     <PackageReference Include="AspectCore.Core" Version="2.2.0" />
     <PackageReference Include="CSRedisCore" Version="3.6.6" />    
-    <PackageReference Condition="'$(Configuration)'=='DEBUG'" Include="Swashbuckle.AspNetCore" Version="6.1.4" /> 
+    <PackageReference Condition="'$(Configuration)'=='DEBUG'" Include="Swashbuckle.AspNetCore" Version="6.1.5" /> 
   </ItemGroup>
 
   <ItemGroup>
@@ -61,9 +66,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Init.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="publish.ps1">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
@@ -79,6 +81,6 @@
     <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
 
-  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="https://json.schemastore.org/appsscript.json" /></VisualStudio></ProjectExtensions>
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 
 </Project>

@@ -32,7 +32,7 @@ namespace FastFrame.Test
                         opt.CommandTimeout(60); 
                     }); 
                 })
-                .AddScoped<IAppSessionProvider, CurrentUserProvider>()
+                .AddScoped<IApplicationSession, CurrentUserProvider>()
                 .AddScoped<IEventBus, EventBus>()
                 .AddServices()
                 .AddRepository();

@@ -64,7 +64,7 @@
         </member>
         <member name="T:FastFrame.Infrastructure.EventBus.IEventBus">
             <summary>
-            事件总线
+            进程内事件总线
             </summary>
         </member>
         <member name="M:FastFrame.Infrastructure.EventBus.IEventBus.TriggerEventAsync``1(``0)">
@@ -317,6 +317,52 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:FastFrame.Infrastructure.Interface.IApplicationSession">
+            <summary>
+            当前会话信息
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.IApplicationSession.CurrUser">
+            <summary>
+            获取当前用户
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.IApplicationSession.Tenant_Id">
+            <summary>
+            当前租户(为Null则表示为根租户)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IApplicationSession.LoginAsync(FastFrame.Infrastructure.Interface.ICurrUser)">
+            <summary>
+            登陆
+            </summary>
+            <param name="currUser"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IApplicationSession.LogOutAsync">
+            <summary>
+            登出
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IApplicationSession.RefreshIdentityAsync">
+            <summary>
+            刷新身份
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IApplicationSession.InitAsync">
+            <summary>
+            初始化
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.IApplicationSession.ApplicationRootPath">
+            <summary>
+            运行目录
+            </summary>
+        </member>
         <member name="T:FastFrame.Infrastructure.Interface.IApplicationUnInitialProvider">
             <summary>
             应用程序关闭时
@@ -329,51 +375,229 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="T:FastFrame.Infrastructure.Interface.IAppSessionProvider">
+        <member name="T:FastFrame.Infrastructure.Interface.IBackgroundJob">
             <summary>
-            当前用户提供者
+            后台执行任务
             </summary>
         </member>
-        <member name="P:FastFrame.Infrastructure.Interface.IAppSessionProvider.CurrUser">
+        <member name="M:FastFrame.Infrastructure.Interface.IBackgroundJob.SetInterval``1(System.Linq.Expressions.Expression{System.Func{``0,System.Threading.Tasks.Task}},System.String)">
             <summary>
-            获取当前用户
-            </summary>
-            <returns></returns>
+            定时执行 
+            <para>* * * * * *</para>
+            <para>- - - - - -</para>
+            <para>| | | | | |</para>
+            <para>| | | | | +--- day of week (0 - 6) (Sunday=0)</para>
+            <para>| | | | +----- month (1 - 12)</para>
+            <para>| | | +------- day of month (1 - 31)</para>
+            <para>| | +--------- hour (0 - 23)</para>
+            <para>| +----------- min (0 - 59)</para>
+            <para>+------------- sec (0 - 59)</para>
+            </summary> 
+            <typeparam name="TService"></typeparam>
+            <param name="methodCall"></param>
+            <param name="cronExperssion"></param>
         </member>
-        <member name="P:FastFrame.Infrastructure.Interface.IAppSessionProvider.Tenant_Id">
+        <member name="M:FastFrame.Infrastructure.Interface.IBackgroundJob.SetTimeout``1(System.Linq.Expressions.Expression{System.Func{``0,System.Threading.Tasks.Task}},System.Nullable{System.TimeSpan})">
             <summary>
-            当前租户(为Null则表示为根租户)
+            延时执行
             </summary>
-            <returns></returns>
+            <typeparam name="TService"></typeparam>
+            <param name="methodCall"></param>
+            <param name="timeSpan"></param>
         </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IAppSessionProvider.LoginAsync(FastFrame.Infrastructure.Interface.ICurrUser)">
+        <member name="M:FastFrame.Infrastructure.Interface.IBackgroundJob.Secondly">
             <summary>
-            登陆
+            每秒
             </summary>
-            <param name="currUser"></param>
-            <returns></returns>
         </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IAppSessionProvider.LogOutAsync">
+        <member name="M:FastFrame.Infrastructure.Interface.IBackgroundJob.Minutely">
             <summary>
-            登出
+            每分钟
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IBackgroundJob.Minutely(System.Int32)">
+            <summary>
+            每分钟
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IBackgroundJob.Hourly">
+            <summary>
+            每小时
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IBackgroundJob.Hourly(System.Int32)">
+            <summary>
+            每小时
             </summary> 
         </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IAppSessionProvider.RefreshIdentityAsync">
+        <member name="M:FastFrame.Infrastructure.Interface.IBackgroundJob.Daily">
             <summary>
-            刷新身份
+            每天
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IBackgroundJob.Daily(System.Int32)">
+            <summary>
+            每天
+            </summary>
+            <param name="hour"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IBackgroundJob.Daily(System.Int32,System.Int32)">
+            <summary>
+            每天
+            </summary>
+            <param name="hour"></param>
+            <param name="minute"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IBackgroundJob.Weekly">
+            <summary>
+            每周
             </summary>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IAppSessionProvider.InitAsync">
+        <member name="M:FastFrame.Infrastructure.Interface.IBackgroundJob.Weekly(System.DayOfWeek)">
             <summary>
-            初始化
+            每周
+            </summary>
+            <param name="dayOfWeek"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IBackgroundJob.Weekly(System.DayOfWeek,System.Int32)">
+            <summary>
+            每周
+            </summary>
+            <param name="dayOfWeek"></param>
+            <param name="hour"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IBackgroundJob.Weekly(System.DayOfWeek,System.Int32,System.Int32)">
+            <summary>
+            每周
+            </summary>
+            <param name="dayOfWeek"></param>
+            <param name="hour"></param>
+            <param name="minute"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IBackgroundJob.Monthly">
+            <summary>
+            每月
             </summary>
             <returns></returns>
         </member>
-        <member name="P:FastFrame.Infrastructure.Interface.IAppSessionProvider.ApplicationRootPath">
+        <member name="M:FastFrame.Infrastructure.Interface.IBackgroundJob.Monthly(System.Int32)">
             <summary>
-            运行目录
+            每月
             </summary>
+            <param name="day"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IBackgroundJob.Monthly(System.Int32,System.Int32)">
+            <summary>
+            每月
+            </summary>
+            <param name="day"></param>
+            <param name="hour"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IBackgroundJob.Monthly(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            每月
+            </summary>
+            <param name="day"></param>
+            <param name="hour"></param>
+            <param name="minute"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IBackgroundJob.Yearly">
+            <summary>
+            每年
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IBackgroundJob.Yearly(System.Int32)">
+            <summary>
+            每年
+            </summary>
+            <param name="month"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IBackgroundJob.Yearly(System.Int32,System.Int32)">
+            <summary>
+            每年
+            </summary>
+            <param name="month"></param>
+            <param name="day"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IBackgroundJob.Yearly(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            每年
+            </summary>
+            <param name="month"></param>
+            <param name="day"></param>
+            <param name="hour"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IBackgroundJob.Yearly(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            每年
+            </summary>
+            <param name="month"></param>
+            <param name="day"></param>
+            <param name="hour"></param>
+            <param name="minute"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IBackgroundJob.Never">
+            <summary>
+            从不执行
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Interface.IClientManage">
+            <summary>
+            客户端连接管理
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IClientManage.SendAsync(System.String,System.String,System.String[])">
+            <summary>
+            给指定用户发送消息
+            </summary>
+            <param name="msgType"></param>
+            <param name="msgContent"></param>
+            <param name="userIds"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IClientManage.SendAllAsync(System.String,System.String)">
+            <summary>
+            给全部用户发送消息
+            </summary>
+            <param name="msgType"></param>
+            <param name="msgContent"></param> 
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IClientManage.ConfirmAsync(System.String,System.String,System.String,System.Int32)">
+            <summary>
+            提示用户确认
+            </summary>
+            <param name="userId"></param>
+            <param name="title"></param>
+            <param name="content"></param>
+            <param name="timeout"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IClientManage.ChooseAsync(System.String,System.String,System.String,System.Collections.Generic.KeyValuePair{System.String,System.String},System.Int32)">
+            <summary>
+            提示用户选择
+            </summary>
+            <param name="userId"></param>
+            <param name="title"></param>
+            <param name="text"></param>
+            <param name="values"></param>
+            <param name="timeout"></param>
+            <returns></returns>
         </member>
         <member name="T:FastFrame.Infrastructure.Interface.ICurrUser">
             <summary>
@@ -539,6 +763,11 @@
             <param name="userId"></param>
             <returns></returns>
         </member>
+        <member name="T:FastFrame.Infrastructure.Interface.IMessageQueue">
+            <summary>
+            消息队列
+            </summary>
+        </member>
         <member name="T:FastFrame.Infrastructure.Interface.IResourceProvider">
             <summary>
             附件资源操作提供者
@@ -637,99 +866,6 @@
             </summary>
             <param name="resourceId"></param>
             <returns></returns>
-        </member>
-        <member name="T:FastFrame.Infrastructure.MessageBus.IAsyncMessageHandle`1">
-            <summary>
-            处理异步消息
-            </summary>
-            <typeparam name="T"></typeparam>
-        </member>
-        <member name="T:FastFrame.Infrastructure.MessageBus.IAsyncMessageHandle">
-            <summary>
-            处理异步消息
-            </summary>
-        </member>
-        <member name="T:FastFrame.Infrastructure.MessageBus.IClientManage">
-            <summary>
-            客户端连接管理
-            </summary>
-        </member>
-        <member name="T:FastFrame.Infrastructure.MessageBus.IMessageBus">
-            <summary>
-            消息总线
-            </summary>
-        </member>
-        <member name="M:FastFrame.Infrastructure.MessageBus.IMessageBus.PubLishAsync``1(FastFrame.Infrastructure.MessageBus.Message{``0})">
-            <summary>
-             发布消息
-            </summary>      
-        </member>
-        <member name="M:FastFrame.Infrastructure.MessageBus.IMessageBus.SubscribeAsync``1">
-            <summary>
-            订阅消息
-            </summary>
-            <typeparam name="T"></typeparam>
-        </member>
-        <member name="M:FastFrame.Infrastructure.MessageBus.IMessageBus.SubscribeAsync(System.Type)">
-            <summary>
-             订阅消息
-            </summary>
-            <param name="msgType"></param>
-        </member>
-        <member name="T:FastFrame.Infrastructure.MessageBus.Message`1">
-            <summary>
-            消息体
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.MessageBus.Message`1.Category">
-            <summary>
-            类型
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.MessageBus.Message`1.Target_Ids">
-            <summary>
-            目标用户
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.MessageBus.Message`1.Content">
-            <summary>
-            内容
-            </summary>
-        </member>
-        <member name="T:FastFrame.Infrastructure.MessageBus.MsgType">
-            <summary>
-            消息类型
-            </summary>
-        </member>
-        <member name="F:FastFrame.Infrastructure.MessageBus.MsgType.Notify">
-            <summary>
-            通知
-            </summary>
-        </member>
-        <member name="F:FastFrame.Infrastructure.MessageBus.MsgType.FriendMsg">
-            <summary>
-            好友消息
-            </summary>       
-        </member>
-        <member name="F:FastFrame.Infrastructure.MessageBus.MsgType.GroupMsg">
-            <summary>
-            群组消息
-            </summary>
-        </member>
-        <member name="F:FastFrame.Infrastructure.MessageBus.MsgType.DataAdded">
-            <summary>
-            数据新增
-            </summary>
-        </member>
-        <member name="F:FastFrame.Infrastructure.MessageBus.MsgType.DataUpdated">
-            <summary>
-            数据更新
-            </summary>
-        </member>
-        <member name="F:FastFrame.Infrastructure.MessageBus.MsgType.DataDeleted">
-            <summary>
-            数据删除
-            </summary>
         </member>
         <member name="T:FastFrame.Infrastructure.Module.EnumInfo">
             <summary>

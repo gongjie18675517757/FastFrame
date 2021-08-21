@@ -71,6 +71,22 @@
             自动缓存
             </summary>
         </member>
+        <member name="T:FastFrame.Application.IntervalWorkAttribute">
+            <summary>
+            后台定时任务
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.IntervalWorkAttribute.CronExperssion">
+            <summary>
+            Cron表达式
+            </summary>
+        </member>
+        <member name="M:FastFrame.Application.IntervalWorkServiceCollectionExtensions.AddAssembly(System.Reflection.Assembly)">
+            <summary>
+            添加程序集
+            </summary>
+            <param name="assembly"></param>
+        </member>
         <member name="T:FastFrame.Application.AutoNumberService">
             <summary>
             自动编号
@@ -349,6 +365,11 @@
              服务接口
             </summary>
         </member>
+        <member name="T:FastFrame.Application.ITreeModel">
+            <summary>
+            树模型
+            </summary>
+        </member>
         <member name="M:FastFrame.Application.IVerifyUniqueService.VerifyUnique(FastFrame.Application.UniqueInput)">
             <summary>
             验证唯一性
@@ -382,6 +403,11 @@
         <member name="P:FastFrame.Application.Basis.DeptDto.Super">
             <summary>
             上级 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.DeptDto.ChildCount">
+            <summary>
+            子节点数量 
             </summary>
         </member>
         <member name="P:FastFrame.Application.Basis.DeptDto.Create_User_Id">
@@ -467,6 +493,11 @@
         <member name="P:FastFrame.Application.Basis.EnumItemDto.Super">
             <summary>
             上级 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.EnumItemDto.ChildCount">
+            <summary>
+            子节点数量 
             </summary>
         </member>
         <member name="P:FastFrame.Application.Basis.EnumItemDto.Create_User_Id">
@@ -587,6 +618,11 @@
         <member name="P:FastFrame.Application.Basis.MeidiaDto.IsFolder">
             <summary>
             是否文件夹 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.MeidiaDto.ChildCount">
+            <summary>
+            子节点数量 
             </summary>
         </member>
         <member name="P:FastFrame.Application.Basis.MeidiaDto.Create_User_Id">
@@ -1133,6 +1169,11 @@
         <member name="P:FastFrame.Application.Basis.TenantDto.HandIcon_Id">
             <summary>
             Logo头像 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.TenantDto.ChildCount">
+            <summary>
+            子节点数量 
             </summary>
         </member>
         <member name="P:FastFrame.Application.Basis.TenantDto.HasTreeChildren">

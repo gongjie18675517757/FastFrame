@@ -42,6 +42,8 @@ export async function stop() {
 
 const onError = async (err) => {
     window.console.error(err) 
+    window.console.error(err.message) 
+    window.console.error('5秒后重新连接') 
     await sleep(5000)
     if (store.state.currUser && store.state.currUser.Id) { 
         start()
@@ -56,7 +58,15 @@ connection.on("Notify", function () {
     window.console.log(...arguments)
 })
 
-connection.on('welcom', function () {
+connection.on("Confirm", function () {
+    window.console.log(...arguments)
+})
+
+connection.on("Choose", function () {
+    window.console.log(...arguments)
+})
+
+connection.on('inited', function () {
     window.console.log(...arguments)
 })
 

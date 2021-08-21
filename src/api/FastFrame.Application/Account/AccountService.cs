@@ -14,9 +14,9 @@ namespace FastFrame.Application.Account
     {
         private readonly IRepository<User> userRepository;
         private readonly IIdentityManager identityManager;
-        private readonly IAppSessionProvider appSession;
+        private readonly IApplicationSession appSession;
 
-        public AccountService(IRepository<User> userRepository, IIdentityManager identityManager, IAppSessionProvider appSession)
+        public AccountService(IRepository<User> userRepository, IIdentityManager identityManager, IApplicationSession appSession)
         {
             this.userRepository = userRepository;
             this.identityManager = identityManager;

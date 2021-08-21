@@ -36,6 +36,7 @@ namespace FastFrame.Application.Basis
 							Tenant_Id = _tenant.Tenant_Id,
 							HandIcon_Id = _tenant.HandIcon_Id,
 							Id = _tenant.Id,
+							ChildCount = _tenant.ChildCount,
 							HasTreeChildren = repository.Any(c => c.Super_Id == _tenant.Id)
 						};
 			return query;

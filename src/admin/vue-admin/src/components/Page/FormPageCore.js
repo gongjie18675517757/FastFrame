@@ -550,16 +550,18 @@ export let formMethods = {
    * @param {*} res 
    */
   onSaveAfter(res) {
-    if (res) {
-      this.$emit('close');
-      if (!this.isDialog) {
-        this.$nextTick(() => {
-          this.$router.replace(`/${this.name}/${res}`);
-        })
+    setTimeout(() => {
+      if (res) {
+        this.$emit('close');
+        if (!this.isDialog) {
+          this.$nextTick(() => {
+            this.$router.replace(`/${this.name}/${res}`);
+          })
+        }
+      } else {
+        this.init();
       }
-    } else {
-      this.init();
-    }
+    }, 150);
   },
 
   /**

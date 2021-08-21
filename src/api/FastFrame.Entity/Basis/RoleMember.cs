@@ -3,18 +3,16 @@
     /// <summary>
     /// 角色成员
     /// </summary> 
-    public class RoleMember : IEntity
+    public class RoleMember : TableMap
     {
         /// <summary>
         /// 角色
         /// </summary> 
-        public string Role_Id { get; set; }
+        public override string FKey_Id { get; set; }
 
         /// <summary>
         /// 用户
         /// </summary> 
-        public string User_Id { get; set; }
-
-        public string Id { get; set; }
+        public override string Value_Id { get; set; } 
     }
 }

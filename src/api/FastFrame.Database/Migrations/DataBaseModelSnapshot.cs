@@ -15,7 +15,7 @@ namespace FastFrame.Database.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 64)
-                .HasAnnotation("ProductVersion", "5.0.8");
+                .HasAnnotation("ProductVersion", "5.0.9");
 
             modelBuilder.Entity("FastFrame.Entity.Basis.Dept", b =>
                 {
@@ -25,6 +25,11 @@ namespace FastFrame.Database.Migrations
                         .HasColumnType("varchar(25)")
                         .HasColumnName("id")
                         .HasComment("主键");
+
+                    b.Property<int>("ChildCount")
+                        .HasColumnType("int")
+                        .HasColumnName("childcount")
+                        .HasComment("子节点数量");
 
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime(6)")
@@ -123,7 +128,7 @@ namespace FastFrame.Database.Migrations
                     b.Property<bool>("IsManager")
                         .HasColumnType("tinyint(1)")
                         .HasColumnName("ismanager")
-                        .HasComment("是否管理员");
+                        .HasComment("是否管理");
 
                     b.Property<string>("User_Id")
                         .IsRequired()
@@ -155,6 +160,11 @@ namespace FastFrame.Database.Migrations
                         .HasColumnType("varchar(25)")
                         .HasColumnName("id")
                         .HasComment("主键");
+
+                    b.Property<int>("ChildCount")
+                        .HasColumnType("int")
+                        .HasColumnName("childcount")
+                        .HasComment("子节点数量");
 
                     b.Property<string>("Code")
                         .HasMaxLength(20)
@@ -306,6 +316,11 @@ namespace FastFrame.Database.Migrations
                         .HasColumnType("varchar(25)")
                         .HasColumnName("id")
                         .HasComment("主键");
+
+                    b.Property<int>("ChildCount")
+                        .HasColumnType("int")
+                        .HasColumnName("childcount")
+                        .HasComment("子节点数量");
 
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime(6)")
@@ -836,43 +851,6 @@ namespace FastFrame.Database.Migrations
                         .HasComment("角色");
                 });
 
-            modelBuilder.Entity("FastFrame.Entity.Basis.RoleMember", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(25)
-                        .IsUnicode(true)
-                        .HasColumnType("varchar(25)")
-                        .HasColumnName("id")
-                        .HasComment("");
-
-                    b.Property<string>("Role_Id")
-                        .HasMaxLength(25)
-                        .IsUnicode(true)
-                        .HasColumnType("varchar(25)")
-                        .HasColumnName("role_id")
-                        .HasComment("角色");
-
-                    b.Property<string>("User_Id")
-                        .HasMaxLength(25)
-                        .IsUnicode(true)
-                        .HasColumnType("varchar(25)")
-                        .HasColumnName("user_id")
-                        .HasComment("用户");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Role_Id")
-                        .HasDatabaseName("Index_RoleMember_Role_Id");
-
-                    b.HasIndex("User_Id")
-                        .HasDatabaseName("Index_RoleMember_User_Id");
-
-                    b.ToTable("basis_rolemember");
-
-                    b
-                        .HasComment("角色成员");
-                });
-
             modelBuilder.Entity("FastFrame.Entity.Basis.RolePermission", b =>
                 {
                     b.Property<string>("Id")
@@ -937,8 +915,8 @@ namespace FastFrame.Database.Migrations
 
                     b.Property<string>("Discriminator")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("FKey_Id")
                         .HasMaxLength(25)
@@ -963,6 +941,9 @@ namespace FastFrame.Database.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Discriminator")
+                        .HasDatabaseName("Index_TableMap_Discriminator");
+
                     b.HasIndex("FKey_Id")
                         .HasDatabaseName("Index_TableMap_FKey_Id");
 
@@ -985,6 +966,11 @@ namespace FastFrame.Database.Migrations
                         .HasColumnType("varchar(25)")
                         .HasColumnName("id")
                         .HasComment("主键");
+
+                    b.Property<int>("ChildCount")
+                        .HasColumnType("int")
+                        .HasColumnName("childcount")
+                        .HasComment("子节点数量");
 
                     b.Property<string>("FullName")
                         .IsRequired()
@@ -1056,6 +1042,7 @@ namespace FastFrame.Database.Migrations
                         new
                         {
                             Id = "00fm5yfgzpgp93ylkuxshsc73",
+                            ChildCount = 0,
                             FullName = "默认组织",
                             ShortName = "default",
                             UrlMark = "*",
@@ -2845,6 +2832,13 @@ namespace FastFrame.Database.Migrations
                     b.HasBaseType("FastFrame.Entity.Basis.TableMap");
 
                     b.HasDiscriminator().HasValue("ResourceMap");
+                });
+
+            modelBuilder.Entity("FastFrame.Entity.Basis.RoleMember", b =>
+                {
+                    b.HasBaseType("FastFrame.Entity.Basis.TableMap");
+
+                    b.HasDiscriminator().HasValue("RoleMember");
                 });
 #pragma warning restore 612, 618
         }

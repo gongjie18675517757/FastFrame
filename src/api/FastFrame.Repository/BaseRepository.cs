@@ -14,7 +14,7 @@ namespace FastFrame.Repository
 {
     internal class BaseRepository<T> : BaseQueryable<T>, IRepository<T> where T : class, IEntity
     {
-        public BaseRepository(DataBase context, IAppSessionProvider appSession) : base(context, appSession)
+        public BaseRepository(DataBase context, IApplicationSession appSession) : base(context, appSession)
         {
         }
 

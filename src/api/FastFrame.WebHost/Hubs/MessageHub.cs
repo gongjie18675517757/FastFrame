@@ -12,10 +12,12 @@ namespace FastFrame.WebHost.Hubs
     public class MessageHub : Hub
     {
         private readonly ICacheProvider cacheProvider;
+        private readonly IBackgroundJob backgroundJob;
 
-        public MessageHub(ICacheProvider cacheProvider)
+        public MessageHub(ICacheProvider cacheProvider, IBackgroundJob backgroundJob)
         {
             this.cacheProvider = cacheProvider;
+            this.backgroundJob = backgroundJob;
         }
 
         public async Task SendMessage(string msgType, string user, string message)
@@ -30,14 +32,29 @@ namespace FastFrame.WebHost.Hubs
             var connectionId = Context.ConnectionId;
             var request = Context.GetHttpContext().Request;
             var token = request.Cookies[ConstValuePool.Token_Name];
+            if (token.IsNullOrWhiteSpace())
+                return;
 
-            var user = await cacheProvider.GetAsync<CurrUser>(token);
+            var user = token.FromBase64().ToObject<CurrUser>();
+
             if (user == null)
                 return;
 
             Context.GetHttpContext().Items.Add(ConstValuePool.Token_Name, user);
-            await Clients.Caller.SendAsync("inited", user);
             await UpdateUserState(user.Id, values => values.Add(connectionId));
+            await Clients.Caller.SendAsync("client.onConnected", "signalR身份认证成功!");
+
+            var uid = user.Id;
+            backgroundJob.SetTimeout<IClientManage>(v => v.PublishNotifyAsync(new ClientNotify
+            {
+                Content = "Content",
+                Id = IdGenerate.NetId(),
+                ModuleName = "ModuleName",
+                Title = "Title",
+                ToUrl = "ToUrl"
+            }, new string[] {
+                uid
+            }), TimeSpan.FromSeconds(5));
         }
 
         private async Task UpdateUserState(string userId, Action<List<string>> action)

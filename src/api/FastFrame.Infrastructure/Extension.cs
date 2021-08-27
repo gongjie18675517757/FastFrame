@@ -16,6 +16,48 @@ namespace FastFrame.Infrastructure
 {
     public static class Extension
     {
+        /// <summary>
+        /// 获取字典值，如果没有，就返回默认值
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TVal"></typeparam>
+        /// <param name="dic"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public static TVal TryGetValueOrDefault<TKey, TVal>(this IDictionary<TKey, TVal> dic, TKey key)
+        {
+            if (dic is null)
+                throw new ArgumentNullException(nameof(dic));
+
+            if (dic.TryGetValue(key, out var val))
+                return val;
+
+            return default;
+        }
+
+        /// <summary>
+        /// 获取字典值，如果没有，就根据指定委托创建一个
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TVal"></typeparam>
+        /// <param name="dic"></param>
+        /// <param name="key"></param>
+        /// <param name="func"></param>
+        /// <returns></returns>
+        public static TVal TryGetValueOrCreate<TKey, TVal>(this IDictionary<TKey, TVal> dic, TKey key, Func<TVal> func)
+        {
+            if (dic is null)
+                throw new ArgumentNullException(nameof(dic));
+
+            if (dic.TryGetValue(key, out var val))
+                return val;
+
+            val = func();
+            dic.Add(key, val);
+            return val;
+        }
+
+
         public static async Task<List<T>> ToListAsync<T>(this IAsyncEnumerable<T> enumerable)
         {
             if (enumerable is null)
@@ -286,6 +328,25 @@ namespace FastFrame.Infrastructure
             {
                 Console.WriteLine(ex.Message);
                 return default;
+            }
+        }
+
+        public static bool TryToObject(this string @in, Type type, out object result)
+        {
+            result = null;
+
+            if (@in.IsNullOrWhiteSpace())
+                return false; 
+
+            try
+            {
+                result = JsonConvert.DeserializeObject(@in, type);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
             }
         }
     }

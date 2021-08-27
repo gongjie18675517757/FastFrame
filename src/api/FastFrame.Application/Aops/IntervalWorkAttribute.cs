@@ -20,12 +20,12 @@ namespace FastFrame.Application
         /// </summary>
         public string CronExperssion { get; }
 
+
+
         public override async Task Invoke(AspectContext context, AspectDelegate next)
         {
-            /*此处判断方法是否在执行中*/
-
-
+            /*此处判断方法是否在执行中*/ 
             await next(context);
         }
-    }
+    } 
 }

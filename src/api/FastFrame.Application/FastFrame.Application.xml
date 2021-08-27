@@ -81,11 +81,54 @@
             Cron表达式
             </summary>
         </member>
+        <member name="P:FastFrame.Application.IntervalWorkServiceCollectionExtensions.IntervalMethodList">
+            <summary>
+            定时任务列表
+            </summary>
+        </member>
+        <member name="M:FastFrame.Application.IntervalWorkServiceCollectionExtensions.AddIntervalWork(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Reflection.Assembly[])">
+            <summary>
+            添加定时任务
+            </summary>
+            <param name="services"></param>
+            <param name="assemblies"></param>
+            <returns></returns>
+        </member>
         <member name="M:FastFrame.Application.IntervalWorkServiceCollectionExtensions.AddAssembly(System.Reflection.Assembly)">
             <summary>
             添加程序集
             </summary>
             <param name="assembly"></param>
+        </member>
+        <member name="P:FastFrame.Application.MessageQueueServiceCollectionExtensions.SubscribeMethodList">
+            <summary>
+            订阅列表
+            </summary>
+        </member>
+        <member name="M:FastFrame.Application.MessageQueueServiceCollectionExtensions.AddMessageQueue(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Reflection.Assembly[])">
+            <summary>
+            添加消息队列
+            </summary>
+            <param name="services"></param>
+            <param name="assemblies"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.MessageQueueServiceCollectionExtensions.AddAssembly(System.Reflection.Assembly)">
+            <summary>
+            添加程序集
+            </summary>
+            <param name="assembly"></param>
+        </member>
+        <member name="T:FastFrame.Application.MessageSubscribeAttribute">
+            <summary>
+            认阅消息
+            方法签名:(string msg_id,T msg),第一个参数为消息ID,订阅方自行判断重复消息的处理
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.MessageSubscribeAttribute.Channel">
+            <summary>
+            消息管道
+            </summary>
         </member>
         <member name="T:FastFrame.Application.AutoNumberService">
             <summary>

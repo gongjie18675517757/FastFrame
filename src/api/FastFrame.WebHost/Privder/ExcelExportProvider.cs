@@ -192,7 +192,7 @@ namespace FastFrame.WebHost.Privder
             return package.GetAsByteArray();
         }
 
-        private void SetUsedRangeStyles(ExcelWorksheet sh, int rowEnd, int colEnd)
+        private static void SetUsedRangeStyles(ExcelWorksheet sh, int rowEnd, int colEnd)
         {
             var usedRng = sh.Cells[1, 1, rowEnd, colEnd];
             usedRng.AutoFitColumns(10, 50);

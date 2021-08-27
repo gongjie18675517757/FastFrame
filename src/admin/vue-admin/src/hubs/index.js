@@ -41,11 +41,11 @@ export async function stop() {
 
 
 const onError = async (err) => {
-    window.console.error(err) 
-    window.console.error(err.message) 
-    window.console.error('5秒后重新连接') 
+    if (err) {
+        window.console.error(err)
+    }
     await sleep(5000)
-    if (store.state.currUser && store.state.currUser.Id) { 
+    if (store.state.currUser && store.state.currUser.Id) {
         start()
     }
 }
@@ -54,19 +54,24 @@ async function onConnectioned() {
     window.console.log('signalR连接成功');
 }
 
-connection.on("Notify", function () {
+connection.on("client.notify", function ([msg]) {
+    msg = JSON.parse(msg);
+
+    store.state.newNotifys.push(msg);
+    store.state.notifys.push(msg);
+})
+
+connection.on("client.confirm", function () {
     window.console.log(...arguments)
 })
 
-connection.on("Confirm", function () {
+connection.on("client.choose", function () {
     window.console.log(...arguments)
 })
 
-connection.on("Choose", function () {
+connection.on("client.onConnected", function () {
     window.console.log(...arguments)
 })
 
-connection.on('inited', function () {
-    window.console.log(...arguments)
-})
+
 

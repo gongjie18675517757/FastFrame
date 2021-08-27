@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using FastFrame.Infrastructure.Interface;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -9,7 +10,7 @@ namespace FastFrame.Application
     public static class IntervalWorkServiceCollectionExtensions
     {
         private static readonly List<(Type type, MethodInfo method, string cron)> list = new List<(Type type, MethodInfo method, string cron)>();
-        
+
         /// <summary>
         /// 定时任务列表
         /// </summary>
@@ -27,7 +28,7 @@ namespace FastFrame.Application
                 AddAssembly(assembly);
 
             return services;
-        } 
+        }
 
         /// <summary>
         /// 添加程序集
@@ -36,9 +37,10 @@ namespace FastFrame.Application
         private static void AddAssembly(Assembly assembly)
         {
             foreach (var type in assembly.GetTypes())
-                foreach (var method in type.GetMethods())
-                    if (method.GetCustomAttribute<IntervalWorkAttribute>() is IntervalWorkAttribute attribute)
-                        list.Add((type, method, attribute.CronExperssion));
+                if (typeof(IIntervalWorkHost).IsAssignableFrom(type))
+                    foreach (var method in type.GetMethods())
+                        if (method.GetCustomAttribute<IntervalWorkAttribute>() is IntervalWorkAttribute attribute)
+                            list.Add((type, method, attribute.CronExperssion));
         }
     }
 }

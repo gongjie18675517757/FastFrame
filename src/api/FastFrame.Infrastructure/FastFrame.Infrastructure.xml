@@ -37,6 +37,31 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:FastFrame.Infrastructure.ConstValuePool">
+            <summary>
+            常量池
+            </summary>
+        </member>
+        <member name="F:FastFrame.Infrastructure.ConstValuePool.CacheUserMapKey">
+            <summary>
+            缓存用户连接信息
+            </summary>
+        </member>
+        <member name="F:FastFrame.Infrastructure.ConstValuePool.Token_Name">
+            <summary>
+            存用户身份的cookie键
+            </summary>
+        </member>
+        <member name="F:FastFrame.Infrastructure.ConstValuePool.CacheTenant">
+            <summary>
+            缓存租户信息键
+            </summary>
+        </member>
+        <member name="F:FastFrame.Infrastructure.ConstValuePool.CacheTenantHost">
+            <summary>
+            缓存租户HOST信息键
+            </summary>
+        </member>
         <member name="M:FastFrame.Infrastructure.DescriptionHelp.GetDescription(System.Type,System.String)">
             <summary>
             返回类型的注释说明
@@ -64,7 +89,7 @@
         </member>
         <member name="T:FastFrame.Infrastructure.EventBus.IEventBus">
             <summary>
-            进程内事件总线
+            进程内事件总线(同步)
             </summary>
         </member>
         <member name="M:FastFrame.Infrastructure.EventBus.IEventBus.TriggerEventAsync``1(``0)">
@@ -179,6 +204,27 @@
              生成target类型的target对象,并将source对象的属性填充到target对象上
             </summary>
             <param name="source"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Extension.TryGetValueOrDefault``2(System.Collections.Generic.IDictionary{``0,``1},``0)">
+            <summary>
+            获取字典值，如果没有，就返回默认值
+            </summary>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TVal"></typeparam>
+            <param name="dic"></param>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Extension.TryGetValueOrCreate``2(System.Collections.Generic.IDictionary{``0,``1},``0,System.Func{``1})">
+            <summary>
+            获取字典值，如果没有，就根据指定委托创建一个
+            </summary>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TVal"></typeparam>
+            <param name="dic"></param>
+            <param name="key"></param>
+            <param name="func"></param>
             <returns></returns>
         </member>
         <member name="M:FastFrame.Infrastructure.Extension.IsNullOrWhiteSpace(System.String)">
@@ -305,14 +351,14 @@
             <param name="flag">压缩质量(数字越小压缩率越高) 1-100</param>  
             <returns></returns>  
         </member>
-        <member name="T:FastFrame.Infrastructure.Interface.IApplicationInitialProvider">
+        <member name="T:FastFrame.Infrastructure.Interface.IApplicationInitialLifetime">
             <summary>
             应用程序初始化时
             </summary>
         </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IApplicationInitialProvider.InitialAsync">
+        <member name="M:FastFrame.Infrastructure.Interface.IApplicationInitialLifetime.InitialAsync">
             <summary>
-            执行初始化
+            执行初始化(只会执行一次)
             注意：要自己处理异常
             </summary>
             <returns></returns>
@@ -363,14 +409,14 @@
             运行目录
             </summary>
         </member>
-        <member name="T:FastFrame.Infrastructure.Interface.IApplicationUnInitialProvider">
+        <member name="T:FastFrame.Infrastructure.Interface.IApplicationUnInitialLifetime">
             <summary>
             应用程序关闭时
             </summary>
         </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IApplicationUnInitialProvider.UnInitialAsync">
+        <member name="M:FastFrame.Infrastructure.Interface.IApplicationUnInitialLifetime.UnInitialAsync">
             <summary>
-            执行关闭操作
+            执行关闭操作(只会执行一次)
             注意：要自己处理异常
             </summary>
             <returns></returns>
@@ -397,12 +443,29 @@
             <param name="methodCall"></param>
             <param name="cronExperssion"></param>
         </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IBackgroundJob.SetIntervalByMethod``1(System.Reflection.MethodInfo,System.String)">
+            <summary>
+            定时执行
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="method"></param>
+            <param name="cron"></param>
+        </member>
         <member name="M:FastFrame.Infrastructure.Interface.IBackgroundJob.SetTimeout``1(System.Linq.Expressions.Expression{System.Func{``0,System.Threading.Tasks.Task}},System.Nullable{System.TimeSpan})">
             <summary>
             延时执行
             </summary>
             <typeparam name="TService"></typeparam>
             <param name="methodCall"></param>
+            <param name="timeSpan"></param>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IBackgroundJob.SetTimeoutByMethod``1(System.Reflection.MethodInfo,System.Object[],System.Nullable{System.TimeSpan})">
+            <summary>
+            延时执行
+            </summary>
+            <typeparam name="TService"></typeparam> 
+            <param name="method"></param>
+            <param name="parms"></param>
             <param name="timeSpan"></param>
         </member>
         <member name="M:FastFrame.Infrastructure.Interface.IBackgroundJob.Secondly">
@@ -556,48 +619,100 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:FastFrame.Infrastructure.Interface.ICacheProvider">
+            <summary>
+            缓存
+            </summary>
+        </member>
         <member name="T:FastFrame.Infrastructure.Interface.IClientManage">
             <summary>
             客户端连接管理
             </summary>
         </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IClientManage.SendAsync(System.String,System.String,System.String[])">
+        <member name="M:FastFrame.Infrastructure.Interface.IClientManage.PublishSendAsync(System.String,System.String,System.String[])">
             <summary>
             给指定用户发送消息
-            </summary>
-            <param name="msgType"></param>
-            <param name="msgContent"></param>
-            <param name="userIds"></param>
-            <returns></returns>
+            </summary> 
         </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IClientManage.SendAllAsync(System.String,System.String)">
+        <member name="M:FastFrame.Infrastructure.Interface.IClientManage.PublishNotifyAsync(FastFrame.Infrastructure.Interface.ClientNotify,System.String[])">
             <summary>
-            给全部用户发送消息
-            </summary>
-            <param name="msgType"></param>
-            <param name="msgContent"></param> 
-            <returns></returns>
+            通知用户
+            </summary> 
         </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IClientManage.ConfirmAsync(System.String,System.String,System.String,System.Int32)">
+        <member name="M:FastFrame.Infrastructure.Interface.IClientManage.PublishConfirmAsync(System.String,System.String,System.String,System.Int32)">
             <summary>
             提示用户确认
-            </summary>
-            <param name="userId"></param>
-            <param name="title"></param>
-            <param name="content"></param>
-            <param name="timeout"></param>
-            <returns></returns>
+            </summary> 
         </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IClientManage.ChooseAsync(System.String,System.String,System.String,System.Collections.Generic.KeyValuePair{System.String,System.String},System.Int32)">
+        <member name="M:FastFrame.Infrastructure.Interface.IClientManage.PublishChooseAsync(System.String,System.String,System.String,System.Collections.Generic.KeyValuePair{System.String,System.String},System.Int32)">
             <summary>
             提示用户选择
+            </summary> 
+        </member>
+        <member name="F:FastFrame.Infrastructure.Interface.IClientManage.ClientNotify">
+            <summary>
+            通知客户端
             </summary>
-            <param name="userId"></param>
-            <param name="title"></param>
-            <param name="text"></param>
-            <param name="values"></param>
-            <param name="timeout"></param>
-            <returns></returns>
+        </member>
+        <member name="F:FastFrame.Infrastructure.Interface.IClientManage.ClientConfirm">
+            <summary>
+            要求客户端确认
+            </summary>
+        </member>
+        <member name="F:FastFrame.Infrastructure.Interface.IClientManage.ClientChoose">
+            <summary>
+            要求客户端选择
+            </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Interface.ClientMessage">
+            <summary>
+            客户端消息
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.ClientMessage.MsgType">
+            <summary>
+            消息类型
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.ClientMessage.MsgContent">
+            <summary>
+            消息体
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.ClientMessage.ToUser">
+            <summary>
+            要通知的人
+            </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Interface.ClientNotify">
+            <summary>
+            客户端通知
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.ClientNotify.Id">
+            <summary>
+            通知ID
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.ClientNotify.Title">
+            <summary>
+            通知标题
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.ClientNotify.Content">
+            <summary>
+            通知内容
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.ClientNotify.ModuleName">
+            <summary>
+            模块名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.ClientNotify.ToUrl">
+            <summary>
+            跳转地址
+            </summary>
         </member>
         <member name="T:FastFrame.Infrastructure.Interface.ICurrUser">
             <summary>
@@ -763,9 +878,32 @@
             <param name="userId"></param>
             <returns></returns>
         </member>
+        <member name="T:FastFrame.Infrastructure.Interface.IIntervalWorkHost">
+            <summary>
+            标记此类有需要执行定时任务
+            </summary>
+        </member>
         <member name="T:FastFrame.Infrastructure.Interface.IMessageQueue">
             <summary>
             消息队列
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IMessageQueue.PublishAsync(System.String,System.String)">
+            <summary>
+            发布消息
+            </summary>
+            <param name="qname">消息名</param>
+            <param name="msg">消息体</param>
+            <returns>消息ID</returns>
+        </member>
+        <member name="F:FastFrame.Infrastructure.Interface.IMessageQueue.ClientMessage">
+            <summary>
+            通知客户端
+            </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Interface.IMessageSubscribeHost">
+            <summary>
+            标记此类有需要消费消息
             </summary>
         </member>
         <member name="T:FastFrame.Infrastructure.Interface.IResourceProvider">

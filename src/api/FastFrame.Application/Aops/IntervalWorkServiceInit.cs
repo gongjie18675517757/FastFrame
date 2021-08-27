@@ -19,7 +19,7 @@ namespace FastFrame.Application
             if (methodList.Count > 0)
             {
                 var method = typeof(IBackgroundJob)
-                    .GetMethod(nameof(IBackgroundJob.SetInterval), BindingFlags.Instance | BindingFlags.Public);
+                    .GetMethod(nameof(IBackgroundJob.SetIntervalByMethod), BindingFlags.Instance | BindingFlags.Public);
 
                 foreach (var item in methodList)
                 {

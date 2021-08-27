@@ -2,9 +2,7 @@ import Vue from 'vue'
 import axios from 'axios'
 import router from '../router'
 import store from '../store'
-import {
-    alert
-} from '../utils';
+import $message from '../components/Message'
 
 axios.defaults.baseURL = '';
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
@@ -79,7 +77,7 @@ axios.interceptors.response.use(function (response) {
             case 400:
             case 403:
             case 404:
-                alert.error(error.response.data.Message)
+                $message.toast.error(error.response.data.Message)
                 error = new Error(error.response.data.Message);
                 break;
             case 500:

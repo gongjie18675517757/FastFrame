@@ -3,7 +3,8 @@
     <v-fade-transition mode="out-in">
       <router-view v-if="resufreshed" />
     </v-fade-transition>
-    <Alert />
+    <ToastVue />
+    <NotifyVue />
     <v-dialog
       v-for="(dialog, i) in dialogs"
       :key="i"
@@ -22,11 +23,14 @@
 </template>
 
 <script>
-import Alert from "@/components/Alert.vue";
+import ToastVue from './components/Message/Toast.vue';
+import NotifyVue from './components/Message/Notify.vue';
+
 
 export default {
   components: {
-    Alert,
+    ToastVue,
+    NotifyVue,
   },
   data() {
     return {

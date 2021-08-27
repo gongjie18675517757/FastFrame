@@ -12,12 +12,14 @@
           <v-divider :key="index"></v-divider>
           <v-list-item avatar :key="item.index" @click="handleClick">
             <v-list-item-avatar :color="item.color">
-              <v-icon dark>{{item.icon}}</v-icon>
+              <v-icon dark>{{ item.icon }}</v-icon>
             </v-list-item-avatar>
             <v-list-item-content>
               <v-list-item-subtitle v-text="item.title"></v-list-item-subtitle>
             </v-list-item-content>
-            <v-list-item-action class="caption">{{item.timeLabel}}</v-list-item-action>
+            <v-list-item-action class="caption">{{
+              item.timeLabel
+            }}</v-list-item-action>
           </v-list-item>
         </template>
       </v-list>
@@ -31,11 +33,11 @@
 <script>
 export default {
   data() {
-    return {}
+    return {};
   },
   computed: {
     items() {
-      return this.$store.state.notifys
+      return this.$store.state.notifys;
     }
   },
   methods: {
@@ -43,7 +45,7 @@ export default {
       // console.log(e)
     }
   }
-}
+};
 </script>
  
 

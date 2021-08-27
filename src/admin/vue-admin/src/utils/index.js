@@ -13,37 +13,8 @@ export const debounce = _debounce;
 /**
  * 事件总线
  */
-export const eventBus = new Vue()
-
-/**
- * 提示框
- */
-export const alert = {
-    error(msg) {
-        eventBus.$emit('alert', {
-            type: 'error',
-            msg
-        })
-    },
-    success(msg) {
-        eventBus.$emit('alert', {
-            type: 'success',
-            msg
-        })
-    },
-    warning(msg) {
-        eventBus.$emit('alert', {
-            type: 'warning',
-            msg
-        })
-    },
-    info(msg) {
-        eventBus.$emit('alert', {
-            type: 'info',
-            msg
-        })
-    }
-}
+export const eventBus = new Vue() 
+ 
 
 /**
  * 改变首字母大小写

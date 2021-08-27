@@ -111,9 +111,19 @@ export default new Vuex.Store({
     notifys: [],
 
     /**
+     * 新通知
+     */
+    newNotifys: [],
+
+    /**
      * 弹窗列表
      */
     dialogs: [],
+
+    /**
+     * 提示列表
+     */
+    toasts: [],
 
     /**
      * 好友消息

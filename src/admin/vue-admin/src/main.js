@@ -28,6 +28,7 @@ new Vue({
   router,
   render: h => h(App),
   created() {
+    window.$message=this.$message;
     this.$http('/api/Tenant/GetCurrent').then(v => {
       this.$store.commit({
         type: 'setTenant',
@@ -80,4 +81,9 @@ new Vue({
  * 33,缓存管理界面化
  * 34,所有字符串常量化
  * 35,前端身份优化
+ * 36,限制同时只能有一个POST/PUT请求
+ * 37,集成邮件模板
+ * 38，批量删除（删除后联动页面更新）
+ * 39，待办事项
+ * 40,弹出的表单框复用formCore.js
  */

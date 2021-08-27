@@ -79,9 +79,7 @@ export default {
     tenant() {
       return this.$store.state.tenant;
     },
-    notifyCount() {
-      return this.$store.state.notifys.length;
-    },
+     
     leftDrawer: {
       get() {
         return this.$store.state.leftDrawer;

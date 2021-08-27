@@ -350,12 +350,28 @@
             客户端连接管理
             </summary>
         </member>
+        <member name="M:FastFrame.WebHost.Privder.ClientMamager.HandleSubscribe(System.String,FastFrame.Infrastructure.Interface.ClientMessage)">
+            <summary>
+            订阅通知
+            </summary> 
+        </member>
         <member name="M:FastFrame.WebHost.Privder.ExcelExportProvider.GenerateExcelColumns``1">
             <summary>
             生成要导出的列
             </summary>
             <typeparam name="TDto"></typeparam>
             <returns></returns>
+        </member>
+        <member name="T:FastFrame.WebHost.Privder.MessageQueue">
+            <summary>
+            消息队列
+            </summary>
+        </member>
+        <member name="M:FastFrame.WebHost.Privder.MessageQueue.OnSubscribe(CSRedis.CSRedisClient.SubscribeMessageEventArgs)">
+            <summary>
+            触发订阅事件
+            </summary>
+            <param name="e"></param>
         </member>
         <member name="M:FastFrame.WebHost.Privder.ModuleExportProvider.GetModuleStruts(System.String)">
             <summary>

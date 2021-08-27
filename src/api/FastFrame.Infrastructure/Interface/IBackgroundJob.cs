@@ -2,6 +2,7 @@
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace FastFrame.Infrastructure.Interface
 {
@@ -33,7 +34,7 @@ namespace FastFrame.Infrastructure.Interface
         /// <typeparam name="T"></typeparam>
         /// <param name="method"></param>
         /// <param name="cron"></param>
-        void SetInterval<T>(MethodInfo method, string cron)
+        void SetIntervalByMethod<T>(MethodInfo method, string cron)
         {
             var type = typeof(T);
             var parameterExpression = Expression.Parameter(type, "x");
@@ -43,6 +44,9 @@ namespace FastFrame.Infrastructure.Interface
             SetInterval(expression, cron);
         }
 
+
+
+
         /// <summary>
         /// 延时执行
         /// </summary>
@@ -50,6 +54,22 @@ namespace FastFrame.Infrastructure.Interface
         /// <param name="methodCall"></param>
         /// <param name="timeSpan"></param>
         void SetTimeout<TService>(Expression<Func<TService, Task>> methodCall, TimeSpan? timeSpan);
+
+        /// <summary>
+        /// 延时执行
+        /// </summary>
+        /// <typeparam name="TService"></typeparam> 
+        /// <param name="method"></param>
+        /// <param name="parms"></param>
+        /// <param name="timeSpan"></param>
+        void SetTimeoutByMethod<TService>(MethodInfo method, object[] parms, TimeSpan? timeSpan)
+        {
+            var parameterExpression = Expression.Parameter(typeof(TService), "x");
+            var arguments = method.GetParameters().Zip(parms, (a, b) => Expression.Constant(b, a.ParameterType)).ToArray();
+            var methodCallExpression = Expression.Call(parameterExpression, method, arguments);
+            var expression = Expression.Lambda<Func<TService, Task>>(methodCallExpression, parameterExpression);
+            SetTimeout(expression, timeSpan);
+        }
 
         /// <summary>
         /// 每秒

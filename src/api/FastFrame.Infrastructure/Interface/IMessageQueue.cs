@@ -12,7 +12,12 @@ namespace FastFrame.Infrastructure.Interface
         /// </summary>
         /// <param name="qname">消息名</param>
         /// <param name="msg">消息体</param>
-        /// <returns></returns>
-        Task PublishAsync(string qname, string msg); 
+        /// <returns>消息ID</returns>
+        Task<string> PublishAsync(string qname, string msg);
+
+        /// <summary>
+        /// 通知客户端
+        /// </summary>
+        const string ClientMessage = "client.message"; 
     }
 }

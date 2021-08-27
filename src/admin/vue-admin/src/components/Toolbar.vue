@@ -3,7 +3,7 @@
     <v-app-bar-nav-icon @click.stop="leftDrawer = !leftDrawer">
       <v-icon>menu</v-icon>
     </v-app-bar-nav-icon>
-    <v-toolbar-title v-text="title"></v-toolbar-title>
+    <v-toolbar-title>{{ title }}</v-toolbar-title>
     <v-spacer></v-spacer>
     <v-menu
       offset-y
@@ -26,7 +26,7 @@
     <v-btn icon @click.stop="rightDrawer = !rightDrawer">
       <v-icon>settings</v-icon>
     </v-btn>
-    <v-btn icon @click="handleFullScreen()">
+    <v-btn icon @click="handleFullScreen">
       <v-icon>fullscreen</v-icon>
     </v-btn>
     <v-menu
@@ -72,10 +72,10 @@ import timg from "@/assets/timg.jpg";
 import { getDownLoadPath } from "../config";
 export default {
   components: {
-    Notification,
+    Notification
   },
   props: {
-    title: String,
+    title: String
   },
   data() {
     return {
@@ -86,14 +86,14 @@ export default {
           title: "个人中心",
           click: () => {
             this.$router.push("/userCenter");
-          },
+          }
         },
         {
           icon: "settings",
           title: "更换头像",
           click: () => {
             this.rightDrawer = true;
-          },
+          }
         },
         {
           icon: "fullscreen_exit",
@@ -101,9 +101,9 @@ export default {
           click: async () => {
             this.$store.dispatch("logout");
             this.$router.push("/login");
-          },
-        },
-      ],
+          }
+        }
+      ]
     };
   },
   computed: {
@@ -121,9 +121,9 @@ export default {
       set(val) {
         this.$store.commit({
           type: "toggleLeftDrawer",
-          value: val,
+          value: val
         });
-      },
+      }
     },
     rightDrawer: {
       get() {
@@ -132,10 +132,10 @@ export default {
       set(val) {
         this.$store.commit({
           type: "toggleRightDrawer",
-          value: val,
+          value: val
         });
-      },
-    },
+      }
+    }
   },
   methods: {
     handleFullScreen() {
@@ -163,8 +163,8 @@ export default {
       } else {
         cancelFullScreen.call(doc);
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

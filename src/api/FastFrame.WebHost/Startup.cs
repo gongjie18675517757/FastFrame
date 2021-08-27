@@ -110,13 +110,17 @@ namespace FastFrame.WebHost
                 .AddScoped<IModuleDesProvider, XmlModuleDesProvider>()
                 .AddScoped<IExcelExportProvider, ExcelExportProvider>()
                 .AddScoped<IPermissionDefinitionContext, PermissionDefinitionContext>()
+                .AddScoped<IEventBus, EventBus>()
                 .AddSingleton<IClientManage, ClientMamager>()
                 .AddSingleton<ICacheProvider, CacheProvider>()
                 .AddSingleton<IBackgroundJob, HangfireBackgroundJob>()
+                .AddSingleton<IMessageQueue, MessageQueue>()
+                .AddSingleton<IApplicationInitialLifetime, MessageQueue>()
                 .AddServices()
                 .AddRepository()
-                .AddIntervalWork()
-                .AddScoped<IEventBus, EventBus>();
+                .AddIntervalWork(typeof(IService).Assembly)
+                .AddMessageQueue(typeof(IService).Assembly, typeof(Startup).Assembly)
+                ;
 
             services.AddSingleton(x =>
             {

@@ -89,4 +89,14 @@ namespace FastFrame.UnitTest
         //    Assert.AreEqual(dic.Count(), list.Count);
         //}
     }
+
+    [TestClass]
+    public class Test_InterfaceS
+    {
+        [TestMethod]
+        public void Test_NewId()
+        {
+            
+        }
+    }
 }

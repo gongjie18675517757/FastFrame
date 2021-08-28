@@ -13,12 +13,15 @@ namespace FastFrame.WebHost.Controllers
     {
         private readonly IApplicationSession appSession;
         private readonly ILogger<DefaultController> logger;
+        private readonly IClientManage clientManage;
 
-        public DefaultController(IApplicationSession appSession, ILogger<DefaultController> logger)
-        { 
+        public DefaultController(IApplicationSession appSession, ILogger<DefaultController> logger, IClientManage clientManage)
+        {
             this.appSession = appSession;
             this.logger = logger;
+            this.clientManage = clientManage;
         }
+
         // GET: api/Default
         [HttpGet]
         public IEnumerable<string> Get()
@@ -34,13 +37,12 @@ namespace FastFrame.WebHost.Controllers
             return "value";
         }
 
-        //// POST: api/Default
-        //[HttpPost]
-        //public async Task Post([FromBody] value)
-        //{
-        //    var userid = appSession.CurrUser?.Id;
-        //    await messageBus.PubLishAsync(value);
-        //}
+        // POST: api/Default
+        [HttpPost]
+        public async Task<bool> Post([FromForm] string title, [FromForm] string content)
+        {
+            return await clientManage.PublishConfirmAsync(new ClientConfirm { Content = content, Title = title }, appSession.CurrUser?.Id);
+        }
 
         // PUT: api/Default/5
         [HttpPut("{id}")]

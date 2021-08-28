@@ -10,16 +10,11 @@
       <v-list two-line class="pa-0">
         <template v-for="(item, index) in items">
           <v-divider :key="index"></v-divider>
-          <v-list-item avatar :key="item.index" @click="handleClick">
-            <v-list-item-avatar :color="item.color">
-              <v-icon dark>{{ item.icon }}</v-icon>
-            </v-list-item-avatar>
+          <v-list-item :key="item.Id" @click="handleClick(item)">
             <v-list-item-content>
-              <v-list-item-subtitle v-text="item.title"></v-list-item-subtitle>
+              <v-list-item-title>{{ item.Title }}</v-list-item-title>
+              <v-list-item-subtitle>{{ item.Content }}</v-list-item-subtitle>
             </v-list-item-content>
-            <v-list-item-action class="caption">{{
-              item.timeLabel
-            }}</v-list-item-action>
           </v-list-item>
         </template>
       </v-list>
@@ -41,8 +36,10 @@ export default {
     }
   },
   methods: {
-    handleClick: () => {
-      // console.log(e)
+    handleClick(item) {
+      if(item.ToUrl){
+        this.$router.push(item.ToUrl)
+      }
     }
   }
 };

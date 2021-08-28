@@ -3,6 +3,7 @@ import * as signalR from "@microsoft/signalr";
 import { sleep } from "../utils"
 
 import store from '../store'
+import message from "../components/Message";
 
 const connection = new signalR.HubConnectionBuilder()
     .withUrl("/hub/message")
@@ -61,8 +62,27 @@ connection.on("client.notify", function ([msg]) {
     store.state.notifys.push(msg);
 })
 
-connection.on("client.confirm", function () {
-    window.console.log(...arguments)
+connection.on("client.confirm", async function ([msg]) {
+    msg = JSON.parse(msg);
+    window.console.log(msg);
+    let result = false;
+    try {
+        await message.confirm({
+            title: msg.Title,
+            content: msg.Content,
+            timeoute: msg.Timeout
+        })
+        result = true;
+    } finally {
+        connection.invoke('ClientResponse', JSON.stringify({
+            MsgType: 'client.confirm',
+            MsgContent: JSON.stringify({
+                Id: msg.Id,
+                Result: result
+            })
+        }))
+    }
+
 })
 
 connection.on("client.choose", function () {

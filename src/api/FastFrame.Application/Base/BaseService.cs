@@ -42,10 +42,23 @@ namespace FastFrame.Application
         }
 
         /// <summary>
-        /// 新增前
+        /// 新增时/修改时/删除时
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        protected virtual async Task OnChangeing(TDto input, TEntity entity)
+        {
+            await Task.CompletedTask;
+        }
+
+        /// <summary>
+        /// 新增时
         /// </summary> 
         protected virtual async Task OnAdding(TDto input, TEntity entity)
         {
+            await OnChangeing(input, entity);
+
             if (entity is IHaveNumber haveNumber)
                 await EventBus.TriggerEventAsync(new EntityAdding<IHaveNumber>(haveNumber, entity));
 
@@ -97,6 +110,8 @@ namespace FastFrame.Application
         /// </summary> 
         protected virtual async Task OnDeleteing(TEntity entity)
         {
+            await OnChangeing(null, entity);
+
             await EventBus?.TriggerEventAsync(new DoMainDeleteing<TDto>(entity.Id, entity));
 
             if (entity is IHaveMultiFile)
@@ -132,6 +147,8 @@ namespace FastFrame.Application
         /// </summary> 
         protected virtual async Task OnUpdateing(TDto input, TEntity entity)
         {
+            await OnChangeing(input, entity);
+
             await EventBus?.TriggerEventAsync(new DoMainUpdateing<TDto>(input, entity));
 
             if (input is IHaveMultiFileDto haveMultiFile)

@@ -11,6 +11,7 @@
       class="elelvation-1"
       :nudge-bottom="14"
       transition="scale-transition"
+      min-width="300px"
     >
       <template v-slot:activator="{ on }">
         <v-btn icon text v-on="on">

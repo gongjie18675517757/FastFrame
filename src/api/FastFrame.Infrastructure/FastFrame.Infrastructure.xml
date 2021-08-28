@@ -636,10 +636,10 @@
         </member>
         <member name="M:FastFrame.Infrastructure.Interface.IClientManage.PublishNotifyAsync(FastFrame.Infrastructure.Interface.ClientNotify,System.String[])">
             <summary>
-            通知用户
+            通知用户 
             </summary> 
         </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IClientManage.PublishConfirmAsync(System.String,System.String,System.String,System.Int32)">
+        <member name="M:FastFrame.Infrastructure.Interface.IClientManage.PublishConfirmAsync(FastFrame.Infrastructure.Interface.ClientConfirm,System.String)">
             <summary>
             提示用户确认
             </summary> 
@@ -664,22 +664,22 @@
             要求客户端选择
             </summary>
         </member>
-        <member name="T:FastFrame.Infrastructure.Interface.ClientMessage">
-            <summary>
-            客户端消息
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.ClientMessage.MsgType">
+        <member name="P:FastFrame.Infrastructure.Interface.Client2ServiceMessage.MsgType">
             <summary>
             消息类型
             </summary>
         </member>
-        <member name="P:FastFrame.Infrastructure.Interface.ClientMessage.MsgContent">
+        <member name="P:FastFrame.Infrastructure.Interface.Client2ServiceMessage.MsgContent">
             <summary>
             消息体
             </summary>
         </member>
-        <member name="P:FastFrame.Infrastructure.Interface.ClientMessage.ToUser">
+        <member name="T:FastFrame.Infrastructure.Interface.Service2ClientMessage">
+            <summary>
+            客户端消息
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.Service2ClientMessage.ToUser">
             <summary>
             要通知的人
             </summary>
@@ -712,6 +712,46 @@
         <member name="P:FastFrame.Infrastructure.Interface.ClientNotify.ToUrl">
             <summary>
             跳转地址
+            </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Interface.ClientConfirm">
+            <summary>
+            客户端确认
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.ClientConfirm.Id">
+            <summary>
+            确认会话ID
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.ClientConfirm.Title">
+            <summary>
+            标题
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.ClientConfirm.Content">
+            <summary>
+            内容
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.ClientConfirm.Timeout">
+            <summary>
+            超时(秒)
+            </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Interface.ClientConfirmResult">
+            <summary>
+            客户端确认结果
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.ClientConfirmResult.Id">
+            <summary>
+            确认会话ID
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.ClientConfirmResult.Result">
+            <summary>
+            确认结果
             </summary>
         </member>
         <member name="T:FastFrame.Infrastructure.Interface.ICurrUser">
@@ -896,9 +936,14 @@
             <param name="msg">消息体</param>
             <returns>消息ID</returns>
         </member>
-        <member name="F:FastFrame.Infrastructure.Interface.IMessageQueue.ClientMessage">
+        <member name="F:FastFrame.Infrastructure.Interface.IMessageQueue.Service2ClientMessage">
             <summary>
-            通知客户端
+            服务端发送给客户端
+            </summary>
+        </member>
+        <member name="F:FastFrame.Infrastructure.Interface.IMessageQueue.Client2ServiceMessage">
+            <summary>
+            客户端发送给服务端
             </summary>
         </member>
         <member name="T:FastFrame.Infrastructure.Interface.IMessageSubscribeHost">

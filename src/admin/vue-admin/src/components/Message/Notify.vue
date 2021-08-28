@@ -14,7 +14,7 @@
         <v-toolbar flat dense tile>
           <v-toolbar-title>{{ item.Title }}</v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-btn icon @click.stop="item.onClose(item.Id)">
+          <v-btn icon @click.stop="handleCose(item)">
             <v-icon>close</v-icon>
           </v-btn>
         </v-toolbar>
@@ -54,7 +54,11 @@ export default {
   methods: {
     hanldeClickMore(item) {
       this.$router.push(item.ToUrl);
-      item.onClose(item.Id);
+      this.handleCose(item);
+    },
+    handleCose(item) {
+      let index = this.newNotifys.findIndex(v => v == item);
+      this.newNotifys.splice(index, 1);
     }
   }
 };
@@ -85,6 +89,7 @@ export default {
       min-width: 350px;
       margin-top: -50px;
       cursor: default;
+      
     }
   }
 

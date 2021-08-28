@@ -16,8 +16,13 @@ namespace FastFrame.Infrastructure.Interface
         Task<string> PublishAsync(string qname, string msg);
 
         /// <summary>
-        /// 通知客户端
+        /// 服务端发送给客户端
         /// </summary>
-        const string ClientMessage = "client.message"; 
+        const string Service2ClientMessage = "service.message.to.client";
+
+        /// <summary>
+        /// 客户端发送给服务端
+        /// </summary>
+        const string Client2ServiceMessage = "client.message.to.service";
     }
 }

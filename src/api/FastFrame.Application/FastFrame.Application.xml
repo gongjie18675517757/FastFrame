@@ -182,9 +182,17 @@
             <typeparam name="TEntity"></typeparam>
             <typeparam name="TDto"></typeparam>
         </member>
+        <member name="M:FastFrame.Application.BaseService`2.OnChangeing(`1,`0)">
+            <summary>
+            新增时/修改时/删除时
+            </summary>
+            <param name="input"></param>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
         <member name="M:FastFrame.Application.BaseService`2.OnAdding(`1,`0)">
             <summary>
-            新增前
+            新增时
             </summary> 
         </member>
         <member name="M:FastFrame.Application.BaseService`2.AddAsync(`1)">

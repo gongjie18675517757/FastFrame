@@ -11,17 +11,17 @@ namespace FastFrame.Infrastructure.Interface
         /// <summary>
         /// 给指定用户发送消息
         /// </summary> 
-        Task<string> PublishSendAsync(string msgType, string msgContent, string[] userIds); 
+        Task<string> PublishSendAsync(string msgType, string msgContent, string[] userIds);
 
         /// <summary>
-        /// 通知用户
+        /// 通知用户 
         /// </summary> 
-        Task PublishNotifyAsync(ClientNotify notify, string[] userIds);  
+        Task PublishNotifyAsync(ClientNotify notify, string[] userIds);
 
         /// <summary>
         /// 提示用户确认
         /// </summary> 
-        Task<bool> PublishConfirmAsync(string userId, string title, string content, int timeout);
+        Task<bool> PublishConfirmAsync(ClientConfirm clientConfirm, string userId);
 
         /// <summary>
         /// 提示用户选择
@@ -44,10 +44,7 @@ namespace FastFrame.Infrastructure.Interface
         const string ClientChoose = "client.choose";
     }
 
-    /// <summary>
-    /// 客户端消息
-    /// </summary>
-    public class ClientMessage
+    public class Client2ServiceMessage
     {
         /// <summary>
         /// 消息类型
@@ -58,7 +55,13 @@ namespace FastFrame.Infrastructure.Interface
         /// 消息体
         /// </summary>
         public string MsgContent { get; set; }
+    }
 
+    /// <summary>
+    /// 客户端消息
+    /// </summary>
+    public class Service2ClientMessage : Client2ServiceMessage
+    {
         /// <summary>
         /// 要通知的人
         /// </summary>
@@ -94,5 +97,52 @@ namespace FastFrame.Infrastructure.Interface
         /// 跳转地址
         /// </summary>
         public virtual string ToUrl { get; set; }
+    }
+
+    /// <summary>
+    /// 客户端确认
+    /// </summary>
+    public class ClientConfirm
+    {
+        public ClientConfirm()
+        {
+            Id = IdGenerate.NetId();
+        }
+
+        /// <summary>
+        /// 确认会话ID
+        /// </summary>
+        public virtual string Id { get; }
+
+        /// <summary>
+        /// 标题
+        /// </summary>
+        public virtual string Title { get; set; }
+
+        /// <summary>
+        /// 内容
+        /// </summary>
+        public virtual string Content { get; set; }
+
+        /// <summary>
+        /// 超时(秒)
+        /// </summary>
+        public int Timeout { get; set; } = 10;
+    }
+
+    /// <summary>
+    /// 客户端确认结果
+    /// </summary>
+    public class ClientConfirmResult
+    {
+        /// <summary>
+        /// 确认会话ID
+        /// </summary>
+        public string Id { get; set; }
+
+        /// <summary>
+        /// 确认结果
+        /// </summary>
+        public bool Result { get; set; }
     }
 }

@@ -13,16 +13,23 @@ namespace FastFrame.WebHost.Hubs
     {
         private readonly ICacheProvider cacheProvider;
         private readonly IBackgroundJob backgroundJob;
+        private readonly IMessageQueue messageQueue;
 
-        public MessageHub(ICacheProvider cacheProvider, IBackgroundJob backgroundJob)
+        public MessageHub(ICacheProvider cacheProvider, IBackgroundJob backgroundJob, IMessageQueue messageQueue)
         {
             this.cacheProvider = cacheProvider;
             this.backgroundJob = backgroundJob;
+            this.messageQueue = messageQueue;
         }
 
-        public async Task SendMessage(string msgType, string user, string message)
+        /// <summary>
+        /// 客户端发送给服务端的消息
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <returns></returns>
+        public async Task ClientResponse(string msg)
         {
-            await Clients.All.SendAsync(msgType, user, message);
+            await messageQueue.PublishAsync(IMessageQueue.Client2ServiceMessage, msg);
         }
 
 
@@ -47,7 +54,7 @@ namespace FastFrame.WebHost.Hubs
             var uid = user.Id;
             backgroundJob.SetTimeout<IClientManage>(v => v.PublishNotifyAsync(new ClientNotify
             {
-                Content = "Content",
+                Content = "模拟测试消息",
                 Id = IdGenerate.NetId(),
                 ModuleName = "ModuleName",
                 Title = "Title",

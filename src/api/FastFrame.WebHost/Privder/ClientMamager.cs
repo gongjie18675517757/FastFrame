@@ -3,7 +3,9 @@ using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Interface;
 using FastFrame.WebHost.Hubs;
 using Microsoft.AspNetCore.SignalR;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FastFrame.WebHost.Privder
@@ -13,38 +15,40 @@ namespace FastFrame.WebHost.Privder
     /// </summary>
     public class ClientMamager : IClientManage, IMessageSubscribeHost
     {
-        private readonly IHubContext<MessageHub> hubContext;
-        private readonly ICacheProvider cacheProvider;
+        private readonly IEnumerable<IClientConnection> clientConnections;
         private readonly IMessageQueue messageQueue;
 
-        private static readonly IDictionary<string, TaskCompletionSource<bool>> TaskCompletionSourceDic
+        private static readonly IDictionary<string, TaskCompletionSource<bool>> ConfirmTaskDic
             = new Dictionary<string, TaskCompletionSource<bool>>(100);
 
-        public ClientMamager(IHubContext<MessageHub> hubContext, ICacheProvider cacheProvider, IMessageQueue messageQueue)
+        private static readonly IDictionary<string, TaskCompletionSource<string[]>> ChooseTaskDic
+            = new Dictionary<string, TaskCompletionSource<string[]>>(100);
+
+        public ClientMamager(IEnumerable<IClientConnection> clientConnections, IMessageQueue messageQueue)
         {
-            this.hubContext = hubContext;
-            this.cacheProvider = cacheProvider;
+            this.clientConnections = clientConnections;
             this.messageQueue = messageQueue;
         }
 
-        public Task<bool> PublishChooseAsync(string userId, string title, string text, KeyValuePair<string, string> values, int timeout)
+        /// <summary>
+        /// 发布客户端选择
+        /// </summary>
+        /// <param name="clientChoose"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public async Task<string[]> PublishChooseAsync(ClientChoose clientChoose, string userId)
         {
-            throw new System.NotImplementedException();
-        }
+            var taskCompletionSource = new TaskCompletionSource<string[]>();
+            ChooseTaskDic.Add(clientChoose.Id, taskCompletionSource);
 
-        public async Task<bool> PublishConfirmAsync(ClientConfirm clientConfirm, string userId)
-        { 
-            var taskCompletionSource = new TaskCompletionSource<bool>();
-            TaskCompletionSourceDic.Add(clientConfirm.Id, taskCompletionSource);
+            await PublishSendAsync(IClientManage.ClientChoose, clientChoose.ToJson(), new string[] { userId });
 
-            await PublishSendAsync(IClientManage.ClientConfirm, clientConfirm.ToJson(), new string[] { userId });
+            var task = await Task.WhenAny(taskCompletionSource.Task, Task.Delay(clientChoose.Timeout * 1000 + 500));
 
-            var task = await Task.WhenAny(taskCompletionSource.Task, ExistsConfirmTimeOut(clientConfirm.Timeout));
-
-            lock (TaskCompletionSourceDic)
+            lock (ChooseTaskDic)
             {
-                if (TaskCompletionSourceDic.TryGetValue(clientConfirm.Id, out _))
-                    TaskCompletionSourceDic.Remove(clientConfirm.Id);
+                if (ChooseTaskDic.TryGetValue(clientChoose.Id, out _))
+                    ChooseTaskDic.Remove(clientChoose.Id);
             }
 
 
@@ -55,22 +59,51 @@ namespace FastFrame.WebHost.Privder
         }
 
         /// <summary>
-        /// 检查客户端确认是否超时
-        /// </summary> 
-        /// <param name="timeout"></param>
+        /// 发布客户端确定
+        /// </summary>
+        /// <param name="clientConfirm"></param>
+        /// <param name="userId"></param>
         /// <returns></returns>
-        private async Task<bool> ExistsConfirmTimeOut(int timeout)
+        public async Task<bool> PublishConfirmAsync(ClientConfirm clientConfirm, string userId)
         {
-            await Task.Delay(timeout * 1000 + 500);
-            return false;
+            var taskCompletionSource = new TaskCompletionSource<bool>();
+            ConfirmTaskDic.Add(clientConfirm.Id, taskCompletionSource);
+
+            await PublishSendAsync(IClientManage.ClientConfirm, clientConfirm.ToJson(), new string[] { userId });
+
+            var task = await Task.WhenAny(taskCompletionSource.Task, Task.Delay(clientConfirm.Timeout * 1000 + 500));
+
+            lock (ConfirmTaskDic)
+            {
+                if (ConfirmTaskDic.TryGetValue(clientConfirm.Id, out _))
+                    ConfirmTaskDic.Remove(clientConfirm.Id);
+            }
+
+
+            if (task == taskCompletionSource.Task)
+                return await taskCompletionSource.Task;
+            else
+                throw new MsgException("客户端确认超时");
         }
 
-
+        /// <summary>
+        /// 发布客户端通知
+        /// </summary>
+        /// <param name="notify"></param>
+        /// <param name="userIds"></param>
+        /// <returns></returns>
         public async Task PublishNotifyAsync(ClientNotify notify, string[] userIds)
         {
             await PublishSendAsync(IClientManage.ClientNotify, notify.ToJson(), userIds);
         }
 
+        /// <summary>
+        /// 发布消息给客户端
+        /// </summary>
+        /// <param name="msgType"></param>
+        /// <param name="msgContent"></param>
+        /// <param name="userIds"></param>
+        /// <returns></returns>
         public async Task<string> PublishSendAsync(string msgType, string msgContent, string[] userIds)
         {
             return await messageQueue.PublishAsync(IMessageQueue.Service2ClientMessage, new Service2ClientMessage
@@ -94,11 +127,22 @@ namespace FastFrame.WebHost.Privder
                 /*客户端的确认响应*/
                 case IClientManage.ClientConfirm:
                     var clientConfirmResult = msg.MsgContent.ToObject<ClientConfirmResult>();
-                    lock (TaskCompletionSourceDic)
+                    lock (ConfirmTaskDic)
                     {
-                        if (TaskCompletionSourceDic.TryGetValue(clientConfirmResult.Id, out var taskCompletionSource))
+                        if (ConfirmTaskDic.TryGetValue(clientConfirmResult.Id, out var taskCompletionSource))
                         {
                             taskCompletionSource.SetResult(clientConfirmResult.Result);
+                        }
+                    }
+                    break;
+                /*客户端的选择响应*/
+                case IClientManage.ClientChoose:
+                    var clientChooseResult = msg.MsgContent.ToObject<ClientChooseResult>();
+                    lock (ChooseTaskDic)
+                    {
+                        if (ChooseTaskDic.TryGetValue(clientChooseResult.Id, out var taskCompletionSource))
+                        {
+                            taskCompletionSource.SetResult(clientChooseResult.Result);
                         }
                     }
                     break;
@@ -116,8 +160,128 @@ namespace FastFrame.WebHost.Privder
             await SendAsync(msg.ToUser, msg.MsgType, msg.MsgContent);
         }
 
+        /// <summary>
+        /// 检查是否在线
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public async IAsyncEnumerable<string> ExistsIsOnLine(string userId)
+        {
+            foreach (var clientConnection in clientConnections)
+                if (await clientConnection.ExistsIsOnLine(userId))
+                    yield return clientConnection.Name;
+        }
+
 
         private async Task SendAsync(string[] userIds, string msg_type, params object[] arguments)
+        {
+            foreach (var clientConnection in clientConnections)
+                await clientConnection.SendAsync(userIds, msg_type, arguments);
+        }
+    }
+
+    /// <summary>
+    /// 异步任务帮忙类
+    /// </summary>
+    /// <typeparam name="TResult"></typeparam>
+    public static class TaskCompletionSourceCenter<TResult>
+    {
+        private static readonly IDictionary<string, TaskCompletionSource<TResult>> dic
+           = new Dictionary<string, TaskCompletionSource<TResult>>(100); 
+
+        /// <summary>
+        /// 创建任务
+        /// </summary>
+        /// <param name="id"></param> 
+        /// <returns></returns>
+        public static void MakeTaskCompletionSource(string id)
+        {
+            var taskCompletionSource = new TaskCompletionSource<TResult>();
+            lock (dic)
+            {
+                dic.Add(id, taskCompletionSource);
+            }
+        }
+
+        /// <summary>
+        /// 等待任务完成
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="millisecondsDelay"></param>
+        /// <returns></returns>
+        public static async Task<TResult> DelayTaskCompletionSource(string id, int? millisecondsDelay)
+        {
+            Task<TResult> task = null;
+            lock (dic)
+            {
+                if (dic.TryGetValue(id, out var taskCompletionSource))
+                    task = taskCompletionSource.Task;
+            }
+
+            if (task == null)
+                throw new MsgException("任务丢失");
+
+            /*判断超时*/
+            var any_task = millisecondsDelay == null ?
+                            task :
+                            await Task.WhenAny(task, Task.Delay(millisecondsDelay.Value));
+
+            lock (dic)
+            {
+                if (dic.TryGetValue(id, out _))
+                    dic.Remove(id);
+            }
+
+            if (any_task == task)
+                return await task;
+            else
+                throw new MsgException("客户端确认超时");
+        }
+
+        /// <summary>
+        /// 设置任务完成
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        public static void SetTaskCompletionSource(string id, Action<TaskCompletionSource<TResult>> action)
+        {
+            lock (dic)
+            {
+                if (dic.TryGetValue(id, out var task))
+                {
+                    action(task);
+                    dic.Remove(id);
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// 客户端连接抽象
+    /// </summary>
+    public class ClientConnection : IClientConnection
+    {
+        private readonly IHubContext<MessageHub> hubContext;
+        private readonly ICacheProvider cacheProvider;
+
+        public ClientConnection(IHubContext<MessageHub> hubContext,
+                                ICacheProvider cacheProvider)
+        {
+            this.hubContext = hubContext;
+            this.cacheProvider = cacheProvider;
+        }
+
+        public string Name => "后台网页";
+
+        /// <summary>
+        /// 发送消息(直接发送)
+        /// </summary>
+        /// <param name="userIds"></param>
+        /// <param name="msg_type"></param>
+        /// <param name="arguments"></param>
+        /// <returns></returns>
+        public async Task SendAsync(string[] userIds, string msg_type, params object[] arguments)
         {
             if (userIds == null)
                 await hubContext.Clients.All.SendAsync(msg_type, arguments);
@@ -131,6 +295,17 @@ namespace FastFrame.WebHost.Privder
                 foreach (var clientId in clientIds)
                     await hubContext.Clients.Client(clientId).SendAsync(msg_type, arguments);
             }
+        }
+
+        /// <summary>
+        /// 检查是否在线
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public async Task<bool> ExistsIsOnLine(string userId)
+        {
+            var clientIds = await cacheProvider.HGetAsync<List<string>>(ConstValuePool.CacheUserMapKey, userId);
+            return clientIds.Any();
         }
     }
 }

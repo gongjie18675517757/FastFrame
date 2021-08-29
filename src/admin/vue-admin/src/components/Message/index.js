@@ -3,6 +3,7 @@ import store from '../../store'
 import Alert from './Alert.vue'
 import Confirm from './Confirm.vue'
 import Prompt from './Prompt.vue'
+import Choose from './Choose.vue'
 
 
 const message = {
@@ -14,6 +15,12 @@ const message = {
     },
     confirm(pars) {
         return this.dialog(Confirm, {
+            width: '600px',
+            ...pars
+        })
+    },    
+    choose(pars) {
+        return this.dialog(Choose, {
             width: '600px',
             ...pars
         })

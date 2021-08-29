@@ -6,20 +6,39 @@
     </v-toolbar>
 
     <v-card-text>
-      <v-divider class="mb-5"></v-divider>
-      <div v-html="content"></div>
-      <br />
-      <v-divider class="mt-5"></v-divider>
+      <p v-if="text">{{ text }}</p>
+      <template v-if="multiple">
+        <v-checkbox
+          v-model="value"
+          v-for="n in values"
+          :key="n.Key || n"
+          :label="n.Value || n"
+          :value="n.Key || n"
+          hide-details
+        ></v-checkbox>
+      </template>
+      <template v-else>
+        <v-radio-group v-model="value" hide-details="">
+          <v-radio
+            v-for="n in values"
+            :key="n.Key || n"
+            :label="n.Value || n"
+            :value="n.Key || n"
+          ></v-radio>
+        </v-radio-group>
+      </template>
     </v-card-text>
     <v-card-actions>
       <v-btn text @click="cancel">取消</v-btn>
       <v-spacer></v-spacer>
-      <v-btn color="primary" text @click="success"
+      <v-btn
+        color="primary"
+        text
+        @click="success"
+        :disabled="!value || value.length == 0"
         >确认
         <template v-if="timeoute">({{ val }})</template>
       </v-btn>
-
-   
     </v-card-actions>
   </v-card>
 </template>
@@ -28,12 +47,15 @@
 export default {
   props: {
     title: String,
-    content: String,
-    timeoute: Number
+    text: String,
+    values: Array,
+    timeoute: Number,
+    multiple: Boolean
   },
   data() {
     return {
-      val: this.timeoute
+      val: this.timeoute,
+      value: this.multiple ? [] : null
     };
   },
   mounted() {
@@ -57,7 +79,7 @@ export default {
       this.$emit("close");
     },
     success() {
-      this.$emit("success");
+      this.$emit("success", this.value);
     }
   }
 };

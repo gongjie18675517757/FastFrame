@@ -112,6 +112,7 @@ namespace FastFrame.WebHost
                 .AddScoped<IPermissionDefinitionContext, PermissionDefinitionContext>()
                 .AddScoped<IEventBus, EventBus>()
                 .AddSingleton<IClientManage, ClientMamager>()
+                .AddSingleton<IClientConnection, ClientConnection>()
                 .AddSingleton<ICacheProvider, CacheProvider>()
                 .AddSingleton<IBackgroundJob, HangfireBackgroundJob>()
                 .AddSingleton<IMessageQueue, MessageQueue>()

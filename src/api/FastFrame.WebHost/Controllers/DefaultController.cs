@@ -39,9 +39,20 @@ namespace FastFrame.WebHost.Controllers
 
         // POST: api/Default
         [HttpPost]
-        public async Task<bool> Post([FromForm] string title, [FromForm] string content)
+        public async Task<string[]> Post([FromForm] string title, [FromForm] string content)
         {
-            return await clientManage.PublishConfirmAsync(new ClientConfirm { Content = content, Title = title }, appSession.CurrUser?.Id);
+            return await clientManage
+                .PublishChooseAsync(new ClientChoose
+                {
+                    Text = content,
+                    Title = title,
+                    Values = new[] {
+                        new KeyValuePair<string,string>("1","1"),
+                        new KeyValuePair<string,string>("2","2"),
+                    },
+                    Multiple = true,
+                    Timeout = 10
+                }, appSession.CurrUser?.Id);
         }
 
         // PUT: api/Default/5

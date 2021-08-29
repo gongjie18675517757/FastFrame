@@ -626,28 +626,35 @@
         </member>
         <member name="T:FastFrame.Infrastructure.Interface.IClientManage">
             <summary>
-            客户端连接管理
+            客户端管理
             </summary>
         </member>
         <member name="M:FastFrame.Infrastructure.Interface.IClientManage.PublishSendAsync(System.String,System.String,System.String[])">
             <summary>
-            给指定用户发送消息
+            给指定用户发送消息(发布到消息队列)
             </summary> 
         </member>
         <member name="M:FastFrame.Infrastructure.Interface.IClientManage.PublishNotifyAsync(FastFrame.Infrastructure.Interface.ClientNotify,System.String[])">
             <summary>
-            通知用户 
+            通知用户(发布到消息队列)
             </summary> 
         </member>
         <member name="M:FastFrame.Infrastructure.Interface.IClientManage.PublishConfirmAsync(FastFrame.Infrastructure.Interface.ClientConfirm,System.String)">
             <summary>
-            提示用户确认
+            提示用户确认(发布到消息队列)
             </summary> 
         </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IClientManage.PublishChooseAsync(System.String,System.String,System.String,System.Collections.Generic.KeyValuePair{System.String,System.String},System.Int32)">
+        <member name="M:FastFrame.Infrastructure.Interface.IClientManage.PublishChooseAsync(FastFrame.Infrastructure.Interface.ClientChoose,System.String)">
             <summary>
-            提示用户选择
+            提示用户选择(发布到消息队列)
             </summary> 
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IClientManage.ExistsIsOnLine(System.String)">
+            <summary>
+            检查是否在线
+            </summary>
+            <param name="userId"></param>
+            <returns>在线的连接名</returns>
         </member>
         <member name="F:FastFrame.Infrastructure.Interface.IClientManage.ClientNotify">
             <summary>
@@ -662,6 +669,37 @@
         <member name="F:FastFrame.Infrastructure.Interface.IClientManage.ClientChoose">
             <summary>
             要求客户端选择
+            </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Interface.IClientConnection">
+            <summary>
+            抽象客户端连接
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IClientConnection.SendAsync(System.String[],System.String,System.Object[])">
+            <summary>
+            发送消息(直接发送)
+            </summary>
+            <param name="userIds"></param>
+            <param name="msg_type"></param>
+            <param name="arguments"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IClientConnection.ExistsIsOnLine(System.String)">
+            <summary>
+            检查是否在线
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.IClientConnection.Name">
+            <summary>
+            连接名称
+            </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Interface.Client2ServiceMessage">
+            <summary>
+            服务端消息
             </summary>
         </member>
         <member name="P:FastFrame.Infrastructure.Interface.Client2ServiceMessage.MsgType">
@@ -752,6 +790,56 @@
         <member name="P:FastFrame.Infrastructure.Interface.ClientConfirmResult.Result">
             <summary>
             确认结果
+            </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Interface.ClientChoose">
+            <summary>
+            客户端选择
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.ClientChoose.Id">
+            <summary>
+            确认会话ID
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.ClientChoose.Multiple">
+            <summary>
+            是否多选
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.ClientChoose.Title">
+            <summary>
+            标题
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.ClientChoose.Text">
+            <summary>
+            提示文本
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.ClientChoose.Values">
+            <summary>
+            可选值列表
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.ClientChoose.Timeout">
+            <summary>
+            超时(秒)
+            </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Interface.ClientChooseResult">
+            <summary>
+            客户端选择结果
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.ClientChooseResult.Id">
+            <summary>
+            确认会话ID
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.ClientChooseResult.Result">
+            <summary>
+            选择结果
             </summary>
         </member>
         <member name="T:FastFrame.Infrastructure.Interface.ICurrUser">

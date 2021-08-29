@@ -64,7 +64,6 @@ connection.on("client.notify", function ([msg]) {
 
 connection.on("client.confirm", async function ([msg]) {
     msg = JSON.parse(msg);
-    window.console.log(msg);
     let result = false;
     try {
         await message.confirm({
@@ -85,8 +84,26 @@ connection.on("client.confirm", async function ([msg]) {
 
 })
 
-connection.on("client.choose", function () {
-    window.console.log(...arguments)
+connection.on("client.choose", async function ([msg]) {
+    msg = JSON.parse(msg);
+    let result = null;
+    try {
+        result = await message.choose({
+            title: msg.Title,
+            text: msg.Text,
+            timeoute: msg.Timeout,
+            multiple: msg.Multiple,
+            values: msg.Values
+        })
+    } finally {
+        connection.invoke('ClientResponse', JSON.stringify({
+            MsgType: 'client.choose',
+            MsgContent: JSON.stringify({
+                Id: msg.Id,
+                Result: result
+            })
+        }))
+    }
 })
 
 connection.on("client.onConnected", function () {

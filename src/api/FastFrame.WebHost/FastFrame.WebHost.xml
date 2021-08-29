@@ -357,13 +357,6 @@
             客户端连接管理
             </summary>
         </member>
-        <member name="M:FastFrame.WebHost.Privder.ClientMamager.ExistsConfirmTimeOut(System.Int32)">
-            <summary>
-            检查客户端确认是否超时
-            </summary> 
-            <param name="timeout"></param>
-            <returns></returns>
-        </member>
         <member name="M:FastFrame.WebHost.Privder.ClientMamager.HandleSubscribeServerMessage(System.String,FastFrame.Infrastructure.Interface.Client2ServiceMessage)">
             <summary>
             订阅通知(客户端发送给服务端的消息)

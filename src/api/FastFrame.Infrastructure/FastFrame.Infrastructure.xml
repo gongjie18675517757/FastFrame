@@ -4,6 +4,279 @@
         <name>FastFrame.Infrastructure</name>
     </assembly>
     <members>
+        <member name="T:FastFrame.Infrastructure.Client.Client2ServiceMessage">
+            <summary>
+            服务端消息
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Client.Client2ServiceMessage.MsgType">
+            <summary>
+            消息类型
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Client.Client2ServiceMessage.MsgContent">
+            <summary>
+            消息体
+            </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Client.ClientChoose">
+            <summary>
+            客户端选择
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Client.ClientChoose.Id">
+            <summary>
+            确认会话ID
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Client.ClientChoose.Multiple">
+            <summary>
+            是否多选
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Client.ClientChoose.Title">
+            <summary>
+            标题
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Client.ClientChoose.Text">
+            <summary>
+            提示文本
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Client.ClientChoose.Values">
+            <summary>
+            可选值列表
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Client.ClientChoose.Timeout">
+            <summary>
+            超时(秒)
+            </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Client.ClientChooseResult">
+            <summary>
+            客户端选择结果
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Client.ClientChooseResult.Id">
+            <summary>
+            确认会话ID
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Client.ClientChooseResult.Result">
+            <summary>
+            选择结果
+            </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Client.ClientConfirm">
+            <summary>
+            客户端确认
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Client.ClientConfirm.Id">
+            <summary>
+            确认会话ID
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Client.ClientConfirm.Title">
+            <summary>
+            标题
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Client.ClientConfirm.Content">
+            <summary>
+            内容
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Client.ClientConfirm.Timeout">
+            <summary>
+            超时(秒)
+            </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Client.ClientConfirmResult">
+            <summary>
+            客户端确认结果
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Client.ClientConfirmResult.Id">
+            <summary>
+            确认会话ID
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Client.ClientConfirmResult.Result">
+            <summary>
+            确认结果
+            </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Client.ClientMamager">
+            <summary>
+            客户端连接管理
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Client.ClientMamager.PublishChooseAsync(FastFrame.Infrastructure.Client.ClientChoose,System.String)">
+            <summary>
+            发布客户端选择
+            </summary>
+            <param name="input"></param>
+            <param name="userId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Client.ClientMamager.PublishConfirmAsync(FastFrame.Infrastructure.Client.ClientConfirm,System.String)">
+            <summary>
+            发布客户端确定
+            </summary>
+            <param name="input"></param>
+            <param name="userId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Client.ClientMamager.PublishNotifyAsync(FastFrame.Infrastructure.Client.ClientNotify,System.String[])">
+            <summary>
+            发布客户端通知
+            </summary>
+            <param name="notify"></param>
+            <param name="userIds"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Client.ClientMamager.PublishSendAsync(System.String,System.String,System.String[])">
+            <summary>
+            发布消息给客户端
+            </summary>
+            <param name="msgType"></param>
+            <param name="msgContent"></param>
+            <param name="userIds"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Client.ClientMamager.HandleSubscribeServerMessage(System.String,FastFrame.Infrastructure.Client.Client2ServiceMessage)">
+            <summary>
+            订阅通知(客户端发送给服务端的消息)
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Infrastructure.Client.ClientMamager.HandleSubscribeClientMessage(System.String,FastFrame.Infrastructure.Client.Service2ClientMessage)">
+            <summary>
+            订阅通知(服务端发送给客户端的消息)
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Infrastructure.Client.ClientMamager.ExistsIsOnLine(System.String)">
+            <summary>
+            检查是否在线
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Client.ClientNotify">
+            <summary>
+            客户端通知
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Client.ClientNotify.Id">
+            <summary>
+            通知ID
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Client.ClientNotify.Title">
+            <summary>
+            通知标题
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Client.ClientNotify.Content">
+            <summary>
+            通知内容
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Client.ClientNotify.ModuleName">
+            <summary>
+            模块名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Client.ClientNotify.ToUrl">
+            <summary>
+            跳转地址
+            </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Client.IClientConnection">
+            <summary>
+            抽象客户端连接
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Client.IClientConnection.SendAsync(System.String[],System.String,System.Object[])">
+            <summary>
+            发送消息(直接发送)
+            </summary>
+            <param name="userIds"></param>
+            <param name="msg_type"></param>
+            <param name="arguments"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Client.IClientConnection.ExistsIsOnLine(System.String)">
+            <summary>
+            检查是否在线
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Client.IClientConnection.Name">
+            <summary>
+            连接名称
+            </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Client.IClientManage">
+            <summary>
+            客户端管理
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Client.IClientManage.PublishSendAsync(System.String,System.String,System.String[])">
+            <summary>
+            给指定用户发送消息(发布到消息队列)
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Infrastructure.Client.IClientManage.PublishNotifyAsync(FastFrame.Infrastructure.Client.ClientNotify,System.String[])">
+            <summary>
+            通知用户(发布到消息队列)
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Infrastructure.Client.IClientManage.PublishConfirmAsync(FastFrame.Infrastructure.Client.ClientConfirm,System.String)">
+            <summary>
+            提示用户确认(发布到消息队列)
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Infrastructure.Client.IClientManage.PublishChooseAsync(FastFrame.Infrastructure.Client.ClientChoose,System.String)">
+            <summary>
+            提示用户选择(发布到消息队列)
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Infrastructure.Client.IClientManage.ExistsIsOnLine(System.String)">
+            <summary>
+            检查是否在线
+            </summary>
+            <param name="userId"></param>
+            <returns>在线的连接名</returns>
+        </member>
+        <member name="F:FastFrame.Infrastructure.Client.IClientManage.ClientNotify">
+            <summary>
+            通知客户端
+            </summary>
+        </member>
+        <member name="F:FastFrame.Infrastructure.Client.IClientManage.ClientConfirm">
+            <summary>
+            要求客户端确认
+            </summary>
+        </member>
+        <member name="F:FastFrame.Infrastructure.Client.IClientManage.ClientChoose">
+            <summary>
+            要求客户端选择
+            </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Client.Service2ClientMessage">
+            <summary>
+            客户端消息
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Client.Service2ClientMessage.ToUser">
+            <summary>
+            要通知的人
+            </summary>
+        </member>
         <member name="T:FastFrame.Infrastructure.ComparisonCollection`2">
             <summary>
             比较集合,返回差异
@@ -624,224 +897,6 @@
             缓存
             </summary>
         </member>
-        <member name="T:FastFrame.Infrastructure.Interface.IClientManage">
-            <summary>
-            客户端管理
-            </summary>
-        </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IClientManage.PublishSendAsync(System.String,System.String,System.String[])">
-            <summary>
-            给指定用户发送消息(发布到消息队列)
-            </summary> 
-        </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IClientManage.PublishNotifyAsync(FastFrame.Infrastructure.Interface.ClientNotify,System.String[])">
-            <summary>
-            通知用户(发布到消息队列)
-            </summary> 
-        </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IClientManage.PublishConfirmAsync(FastFrame.Infrastructure.Interface.ClientConfirm,System.String)">
-            <summary>
-            提示用户确认(发布到消息队列)
-            </summary> 
-        </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IClientManage.PublishChooseAsync(FastFrame.Infrastructure.Interface.ClientChoose,System.String)">
-            <summary>
-            提示用户选择(发布到消息队列)
-            </summary> 
-        </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IClientManage.ExistsIsOnLine(System.String)">
-            <summary>
-            检查是否在线
-            </summary>
-            <param name="userId"></param>
-            <returns>在线的连接名</returns>
-        </member>
-        <member name="F:FastFrame.Infrastructure.Interface.IClientManage.ClientNotify">
-            <summary>
-            通知客户端
-            </summary>
-        </member>
-        <member name="F:FastFrame.Infrastructure.Interface.IClientManage.ClientConfirm">
-            <summary>
-            要求客户端确认
-            </summary>
-        </member>
-        <member name="F:FastFrame.Infrastructure.Interface.IClientManage.ClientChoose">
-            <summary>
-            要求客户端选择
-            </summary>
-        </member>
-        <member name="T:FastFrame.Infrastructure.Interface.IClientConnection">
-            <summary>
-            抽象客户端连接
-            </summary>
-        </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IClientConnection.SendAsync(System.String[],System.String,System.Object[])">
-            <summary>
-            发送消息(直接发送)
-            </summary>
-            <param name="userIds"></param>
-            <param name="msg_type"></param>
-            <param name="arguments"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IClientConnection.ExistsIsOnLine(System.String)">
-            <summary>
-            检查是否在线
-            </summary>
-            <param name="userId"></param>
-            <returns></returns>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.IClientConnection.Name">
-            <summary>
-            连接名称
-            </summary>
-        </member>
-        <member name="T:FastFrame.Infrastructure.Interface.Client2ServiceMessage">
-            <summary>
-            服务端消息
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.Client2ServiceMessage.MsgType">
-            <summary>
-            消息类型
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.Client2ServiceMessage.MsgContent">
-            <summary>
-            消息体
-            </summary>
-        </member>
-        <member name="T:FastFrame.Infrastructure.Interface.Service2ClientMessage">
-            <summary>
-            客户端消息
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.Service2ClientMessage.ToUser">
-            <summary>
-            要通知的人
-            </summary>
-        </member>
-        <member name="T:FastFrame.Infrastructure.Interface.ClientNotify">
-            <summary>
-            客户端通知
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.ClientNotify.Id">
-            <summary>
-            通知ID
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.ClientNotify.Title">
-            <summary>
-            通知标题
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.ClientNotify.Content">
-            <summary>
-            通知内容
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.ClientNotify.ModuleName">
-            <summary>
-            模块名称
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.ClientNotify.ToUrl">
-            <summary>
-            跳转地址
-            </summary>
-        </member>
-        <member name="T:FastFrame.Infrastructure.Interface.ClientConfirm">
-            <summary>
-            客户端确认
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.ClientConfirm.Id">
-            <summary>
-            确认会话ID
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.ClientConfirm.Title">
-            <summary>
-            标题
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.ClientConfirm.Content">
-            <summary>
-            内容
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.ClientConfirm.Timeout">
-            <summary>
-            超时(秒)
-            </summary>
-        </member>
-        <member name="T:FastFrame.Infrastructure.Interface.ClientConfirmResult">
-            <summary>
-            客户端确认结果
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.ClientConfirmResult.Id">
-            <summary>
-            确认会话ID
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.ClientConfirmResult.Result">
-            <summary>
-            确认结果
-            </summary>
-        </member>
-        <member name="T:FastFrame.Infrastructure.Interface.ClientChoose">
-            <summary>
-            客户端选择
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.ClientChoose.Id">
-            <summary>
-            确认会话ID
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.ClientChoose.Multiple">
-            <summary>
-            是否多选
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.ClientChoose.Title">
-            <summary>
-            标题
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.ClientChoose.Text">
-            <summary>
-            提示文本
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.ClientChoose.Values">
-            <summary>
-            可选值列表
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.ClientChoose.Timeout">
-            <summary>
-            超时(秒)
-            </summary>
-        </member>
-        <member name="T:FastFrame.Infrastructure.Interface.ClientChooseResult">
-            <summary>
-            客户端选择结果
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.ClientChooseResult.Id">
-            <summary>
-            确认会话ID
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.ClientChooseResult.Result">
-            <summary>
-            选择结果
-            </summary>
-        </member>
         <member name="T:FastFrame.Infrastructure.Interface.ICurrUser">
             <summary>
             当前用户
@@ -1006,39 +1061,6 @@
             <param name="userId"></param>
             <returns></returns>
         </member>
-        <member name="T:FastFrame.Infrastructure.Interface.IIntervalWorkHost">
-            <summary>
-            标记此类有需要执行定时任务
-            </summary>
-        </member>
-        <member name="T:FastFrame.Infrastructure.Interface.IMessageQueue">
-            <summary>
-            消息队列
-            </summary>
-        </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IMessageQueue.PublishAsync(System.String,System.String)">
-            <summary>
-            发布消息
-            </summary>
-            <param name="qname">消息名</param>
-            <param name="msg">消息体</param>
-            <returns>消息ID</returns>
-        </member>
-        <member name="F:FastFrame.Infrastructure.Interface.IMessageQueue.Service2ClientMessage">
-            <summary>
-            服务端发送给客户端
-            </summary>
-        </member>
-        <member name="F:FastFrame.Infrastructure.Interface.IMessageQueue.Client2ServiceMessage">
-            <summary>
-            客户端发送给服务端
-            </summary>
-        </member>
-        <member name="T:FastFrame.Infrastructure.Interface.IMessageSubscribeHost">
-            <summary>
-            标记此类有需要消费消息
-            </summary>
-        </member>
         <member name="T:FastFrame.Infrastructure.Interface.IResourceProvider">
             <summary>
             附件资源操作提供者
@@ -1137,6 +1159,98 @@
             </summary>
             <param name="resourceId"></param>
             <returns></returns>
+        </member>
+        <member name="T:FastFrame.Infrastructure.IntervalWork.IIntervalWorkHost">
+            <summary>
+            标记此类有需要执行定时任务
+            </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.IntervalWork.IntervalWorkAttribute">
+            <summary>
+            后台定时任务
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.IntervalWork.IntervalWorkAttribute.CronExperssion">
+            <summary>
+            Cron表达式
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.IntervalWork.IntervalWorkServiceCollectionExtensions.IntervalMethodList">
+            <summary>
+            定时任务列表
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.IntervalWork.IntervalWorkServiceCollectionExtensions.AddIntervalWork(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Reflection.Assembly[])">
+            <summary>
+            添加定时任务
+            </summary>
+            <param name="services"></param>
+            <param name="assemblies"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.IntervalWork.IntervalWorkServiceCollectionExtensions.AddAssembly(System.Reflection.Assembly)">
+            <summary>
+            添加程序集
+            </summary>
+            <param name="assembly"></param>
+        </member>
+        <member name="T:FastFrame.Infrastructure.MessageQueue.IMessageQueue">
+            <summary>
+            消息队列
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.MessageQueue.IMessageQueue.PublishAsync(System.String,System.String)">
+            <summary>
+            发布消息
+            </summary>
+            <param name="qname">消息名</param>
+            <param name="msg">消息体</param>
+            <returns>消息ID</returns>
+        </member>
+        <member name="F:FastFrame.Infrastructure.MessageQueue.IMessageQueue.Service2ClientMessage">
+            <summary>
+            服务端发送给客户端
+            </summary>
+        </member>
+        <member name="F:FastFrame.Infrastructure.MessageQueue.IMessageQueue.Client2ServiceMessage">
+            <summary>
+            客户端发送给服务端
+            </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.MessageQueue.IMessageSubscribeHost">
+            <summary>
+            标记此类有需要消费消息
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.MessageQueue.MessageQueueServiceCollectionExtensions.SubscribeMethodList">
+            <summary>
+            订阅列表
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.MessageQueue.MessageQueueServiceCollectionExtensions.AddMessageQueue(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Reflection.Assembly[])">
+            <summary>
+            添加消息队列
+            </summary>
+            <param name="services"></param>
+            <param name="assemblies"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.MessageQueue.MessageQueueServiceCollectionExtensions.AddAssembly(System.Reflection.Assembly)">
+            <summary>
+            添加程序集
+            </summary>
+            <param name="assembly"></param>
+        </member>
+        <member name="T:FastFrame.Infrastructure.MessageQueue.MessageSubscribeAttribute">
+            <summary>
+            认阅消息
+            方法签名:(string msg_id,T msg),第一个参数为消息ID,订阅方自行判断重复消息的处理
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.MessageQueue.MessageSubscribeAttribute.Channel">
+            <summary>
+            消息管道
+            </summary>
         </member>
         <member name="T:FastFrame.Infrastructure.Module.EnumInfo">
             <summary>
@@ -1730,6 +1844,36 @@
             </summary>
             <param name="property"></param>
             <param name="basePath"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastFrame.Infrastructure.TaskCompletionSourceCenter`1">
+            <summary>
+            异步任务中心
+            </summary>
+            <typeparam name="TResult"></typeparam>
+        </member>
+        <member name="M:FastFrame.Infrastructure.TaskCompletionSourceCenter`1.MakeTaskCompletionSource(System.String)">
+            <summary>
+            创建任务
+            </summary>
+            <param name="id"></param> 
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.TaskCompletionSourceCenter`1.DelayTaskCompletionSource(System.String,System.Nullable{System.Int32},System.String)">
+            <summary>
+            等待任务完成
+            </summary>
+            <param name="id"></param>
+            <param name="millisecondsDelay"></param>
+            <param name="timeoutErrorMsg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.TaskCompletionSourceCenter`1.SetTaskCompletionSource(System.String,System.Action{System.Threading.Tasks.TaskCompletionSource{`0}})">
+            <summary>
+            设置任务完成
+            </summary>
+            <param name="id"></param>
+            <param name="action"></param>
             <returns></returns>
         </member>
         <member name="T:FastFrame.Infrastructure.VerifyCodeExtended">

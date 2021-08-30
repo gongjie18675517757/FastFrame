@@ -1,11 +1,9 @@
-﻿using FastFrame.Infrastructure;
-using FastFrame.Infrastructure.Interface;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace FastFrame.Application
+namespace FastFrame.Infrastructure.MessageQueue
 {
     public static class MessageQueueServiceCollectionExtensions
     {

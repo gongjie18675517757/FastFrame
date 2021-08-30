@@ -142,7 +142,7 @@ export default new Vuex.Store({
     setPermission(state, payload) {
       state.permissionList = payload
     },
-    setThemeColor(state, payload) { 
+    setThemeColor(state, payload) {
       state.themeColor = payload.value
       localStorage.setItem(key_themeColor, payload.value)
     },
@@ -225,8 +225,17 @@ export default new Vuex.Store({
     logout({ state }) {
       state.isLoadPermission = false
       state.currUser = {}
+      state.notifys = []
+      state.newNotifys = []
+      state.dialogs = []
+      state.menuList = []
+      state.friendMsgs = []
+      state.toasts = []
+      state.permissionList = []
+      state.isLoadPermission = false
       stop();
       $http.post('/api/account/logout')
+      router.replace(`/login?`)
     },
 
     /**

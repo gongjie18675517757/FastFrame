@@ -2,9 +2,9 @@
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace FastFrame.Application
+namespace FastFrame.Infrastructure.IntervalWork
 {
-    public class IntervalWorkServiceInit : IService, IApplicationInitialLifetime
+    public class IntervalWorkServiceInit :  IApplicationInitialLifetime
     {
         private readonly IBackgroundJob backgroundJob;
 
@@ -23,12 +23,12 @@ namespace FastFrame.Application
 
                 foreach (var item in methodList)
                 {
-                    method.MakeGenericMethod(item.type).Invoke(backgroundJob, new object[] { 
+                    method.MakeGenericMethod(item.type).Invoke(backgroundJob, new object[] {
                         item.method,
                         item.cron
                     });
                 }
-            } 
-        }  
+            }
+        }
     }
 }

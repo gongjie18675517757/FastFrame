@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace FastFrame.Application
+namespace FastFrame.Infrastructure.IntervalWork
 {
     public static class IntervalWorkServiceCollectionExtensions
     {
@@ -26,6 +26,8 @@ namespace FastFrame.Application
         {
             foreach (var assembly in assemblies)
                 AddAssembly(assembly);
+
+            services.AddScoped<IApplicationInitialLifetime, IntervalWorkServiceInit>();
 
             return services;
         }

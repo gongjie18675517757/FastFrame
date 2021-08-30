@@ -2,8 +2,11 @@
 using CSRedis;
 using FastFrame.Application;
 using FastFrame.Database;
+using FastFrame.Infrastructure.Client;
 using FastFrame.Infrastructure.EventBus;
 using FastFrame.Infrastructure.Interface;
+using FastFrame.Infrastructure.IntervalWork;
+using FastFrame.Infrastructure.MessageQueue;
 using FastFrame.Infrastructure.Module;
 using FastFrame.Infrastructure.Permission;
 using FastFrame.Repository;
@@ -119,8 +122,8 @@ namespace FastFrame.WebHost
                 .AddSingleton<IApplicationInitialLifetime, MessageQueue>()
                 .AddServices()
                 .AddRepository()
-                .AddIntervalWork(typeof(IService).Assembly)
-                .AddMessageQueue(typeof(IService).Assembly, typeof(Startup).Assembly)
+                .AddIntervalWork(typeof(IService).Assembly, typeof(Startup).Assembly, typeof(Infrastructure.Extension).Assembly)
+                .AddMessageQueue(typeof(IService).Assembly, typeof(Startup).Assembly,typeof(Infrastructure.Extension).Assembly)
                 ;
 
             services.AddSingleton(x =>
@@ -231,7 +234,9 @@ namespace FastFrame.WebHost
                     await applicationInitialProvider.InitialAsync();
 
                 //BackgroundJob.Enqueue(() => Console.WriteLine(DateTime.Now));
-                RecurringJob.AddOrUpdate(() => Console.WriteLine(DateTime.Now), Cron.Minutely);
+                var v1 = Infrastructure.Extension.ToObject<int>("1");
+                var v2 = Infrastructure.Extension.ToObject<bool>("true");
+                RecurringJob.AddOrUpdate(() => Console.WriteLine($"{v1} {v2}"), Cron.Minutely);
 
             });
 

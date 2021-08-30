@@ -352,20 +352,26 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="T:FastFrame.WebHost.Privder.ClientMamager">
+        <member name="T:FastFrame.WebHost.Privder.ClientConnection">
             <summary>
-            客户端连接管理
+            客户端连接抽象实现
             </summary>
         </member>
-        <member name="M:FastFrame.WebHost.Privder.ClientMamager.HandleSubscribeServerMessage(System.String,FastFrame.Infrastructure.Interface.Client2ServiceMessage)">
+        <member name="M:FastFrame.WebHost.Privder.ClientConnection.SendAsync(System.String[],System.String,System.Object[])">
             <summary>
-            订阅通知(客户端发送给服务端的消息)
-            </summary> 
+            发送消息(直接发送)
+            </summary>
+            <param name="userIds"></param>
+            <param name="msg_type"></param>
+            <param name="arguments"></param>
+            <returns></returns>
         </member>
-        <member name="M:FastFrame.WebHost.Privder.ClientMamager.HandleSubscribeClientMessage(System.String,FastFrame.Infrastructure.Interface.Service2ClientMessage)">
+        <member name="M:FastFrame.WebHost.Privder.ClientConnection.ExistsIsOnLine(System.String)">
             <summary>
-            订阅通知(服务端发送给客户端的消息)
-            </summary> 
+            检查是否在线
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
         </member>
         <member name="M:FastFrame.WebHost.Privder.ExcelExportProvider.GenerateExcelColumns``1">
             <summary>

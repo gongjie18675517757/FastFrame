@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace FastFrame.Infrastructure.Interface
+namespace FastFrame.Infrastructure.MessageQueue
 {
     /// <summary>
     /// 消息队列

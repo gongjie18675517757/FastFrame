@@ -1,4 +1,4 @@
-﻿namespace FastFrame.Infrastructure.Interface
+﻿namespace FastFrame.Infrastructure.IntervalWork
 {
     /// <summary>
     /// 标记此类有需要执行定时任务

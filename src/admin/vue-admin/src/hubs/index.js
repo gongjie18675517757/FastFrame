@@ -110,5 +110,10 @@ connection.on("client.onConnected", function () {
     window.console.log(...arguments)
 })
 
+connection.on("client.identity.expiration", function () {
+    window.console.log(...arguments) 
+    store.dispatch("logout")
+})
+
 
 

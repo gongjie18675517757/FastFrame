@@ -100,8 +100,7 @@ export default {
           icon: "fullscreen_exit",
           title: "注销",
           click: async () => {
-            this.$store.dispatch("logout");
-            this.$router.push("/login");
+            this.$store.dispatch("logout"); 
           }
         }
       ]

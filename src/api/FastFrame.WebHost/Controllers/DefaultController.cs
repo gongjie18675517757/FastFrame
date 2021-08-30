@@ -1,4 +1,5 @@
 ﻿using FastFrame.Application.Chat;
+using FastFrame.Infrastructure.Client;
 using FastFrame.Infrastructure.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -22,24 +23,9 @@ namespace FastFrame.WebHost.Controllers
             this.clientManage = clientManage;
         }
 
-        // GET: api/Default
+       
         [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            logger.LogError("xxxxxxx");
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET: api/Default/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST: api/Default
-        [HttpPost]
-        public async Task<string[]> Post([FromForm] string title, [FromForm] string content)
+        public async Task<string[]> Get(string title, string content)
         {
             return await clientManage
                 .PublishChooseAsync(new ClientChoose
@@ -47,10 +33,24 @@ namespace FastFrame.WebHost.Controllers
                     Text = content,
                     Title = title,
                     Values = new[] {
-                        new KeyValuePair<string,string>("1","1"),
-                        new KeyValuePair<string,string>("2","2"),
+                                    new KeyValuePair<string,string>("1","1"),
+                                    new KeyValuePair<string,string>("2","2"),
                     },
                     Multiple = true,
+                    Timeout = 10
+                }, appSession.CurrUser?.Id);
+        }
+
+        // POST: api/Default
+        [HttpPost]
+        public async Task<bool> Post([FromForm] string title, [FromForm] string content)
+        {
+            return await clientManage
+                .PublishConfirmAsync(new ClientConfirm
+                {
+
+                    Title = title,
+                    Content = "是否确认?",
                     Timeout = 10
                 }, appSession.CurrUser?.Id);
         }

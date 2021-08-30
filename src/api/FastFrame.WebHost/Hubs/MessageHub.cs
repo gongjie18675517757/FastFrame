@@ -1,5 +1,6 @@
 ﻿using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Interface;
+using FastFrame.Infrastructure.MessageQueue;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -45,23 +46,26 @@ namespace FastFrame.WebHost.Hubs
             var user = token.FromBase64().ToObject<CurrUser>();
 
             if (user == null)
+            {
+                await Clients.Caller.SendAsync("client.identity.expiration", "身份认证失败！!");
                 return;
+            }
 
             Context.GetHttpContext().Items.Add(ConstValuePool.Token_Name, user);
             await UpdateUserState(user.Id, values => values.Add(connectionId));
             await Clients.Caller.SendAsync("client.onConnected", "signalR身份认证成功!");
 
-            var uid = user.Id;
-            backgroundJob.SetTimeout<IClientManage>(v => v.PublishNotifyAsync(new ClientNotify
-            {
-                Content = "模拟测试消息",
-                Id = IdGenerate.NetId(),
-                ModuleName = "ModuleName",
-                Title = "Title",
-                ToUrl = "ToUrl"
-            }, new string[] {
-                uid
-            }), TimeSpan.FromSeconds(5));
+            //var uid = user.Id;
+            //backgroundJob.SetTimeout<IClientManage>(v => v.PublishNotifyAsync(new ClientNotify
+            //{
+            //    Content = "模拟测试消息",
+            //    Id = IdGenerate.NetId(),
+            //    ModuleName = "ModuleName",
+            //    Title = "Title",
+            //    ToUrl = "ToUrl"
+            //}, new string[] {
+            //    uid
+            //}), TimeSpan.FromSeconds(5));
         }
 
         private async Task UpdateUserState(string userId, Action<List<string>> action)

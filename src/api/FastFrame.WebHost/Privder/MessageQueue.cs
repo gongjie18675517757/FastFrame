@@ -1,11 +1,10 @@
 ﻿using CSRedis;
-using FastFrame.Application;
+using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Interface;
+using FastFrame.Infrastructure.MessageQueue;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
-using FastFrame.Infrastructure;
 
 namespace FastFrame.WebHost.Privder
 {

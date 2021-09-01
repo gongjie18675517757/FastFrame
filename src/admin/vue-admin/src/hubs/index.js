@@ -30,7 +30,11 @@ export async function start() {
         onConnectioned()
     } catch (error) {
         window.console.error(error);
-        onError(error)
+        if (error.statusCode && error.statusCode == 401) {
+            store.dispatch('logout')
+        } else {
+            onError(error)
+        }
     }
 }
 /**
@@ -111,7 +115,7 @@ connection.on("client.onConnected", function () {
 })
 
 connection.on("client.identity.expiration", function () {
-    window.console.log(...arguments) 
+    window.console.log(...arguments)
     store.dispatch("logout")
 })
 

@@ -31,12 +31,6 @@ namespace FastFrame.Entity.Basis
         /// <summary>
         /// 是否文件夹
         /// </summary>
-        public bool IsFolder { get; set; }
-
-        /// <summary>
-        /// 子节点数量
-        /// </summary>
-        [ReadOnly]
-        public int ChildCount { get; set; }
+        public bool IsFolder { get; set; } 
     }
 }

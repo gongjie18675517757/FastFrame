@@ -102,5 +102,22 @@ namespace FastFrame.Repository
         {
             return context.SaveChangesAsync();
         }
+
+        public Task<int> ExecSqlAsync(string sql)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetDbTableName()
+        {
+
+            var entityType = context.Set<T>().EntityType;
+            return string.Join(".", new[] { entityType.GetSchema(), entityType.GetTableName() }.Where(v => !v.IsNullOrWhiteSpace()));
+        }
+
+        public string GetDbColumnName(string propName)
+        {
+            return context.Set<T>().EntityType.FindProperty(propName).GetColumnBaseName();
+        }
     }
 }

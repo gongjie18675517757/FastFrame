@@ -33,6 +33,11 @@ module.exports = {
         ws: true,
         changeOrigin: true
       },
+      '/hangfire': {
+        target: 'http://localhost:62431/',
+        ws: true,
+        changeOrigin: true
+      },
     }
   }
 }

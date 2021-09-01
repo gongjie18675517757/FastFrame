@@ -42,7 +42,6 @@ namespace FastFrame.Application.Basis
 							Name = _meidia.Name,
 							Resource_Id = _meidia.Resource_Id,
 							IsFolder = _meidia.IsFolder,
-							ChildCount = _meidia.ChildCount,
 							Id = _meidia.Id,
 							Create_User_Id = _meidia.Create_User_Id,
 							CreateTime = _meidia.CreateTime,
@@ -51,7 +50,7 @@ namespace FastFrame.Application.Basis
 							Super = _super_Id,
 							Create_User = _create_User_Id,
 							Modify_User = _modify_User_Id,
-							HasTreeChildren = repository.Any(c => c.Super_Id == _meidia.Id)
+							ChildCount = repository.Count(c => c.Super_Id == _meidia.Id)
 						};
 			return query;
 		}

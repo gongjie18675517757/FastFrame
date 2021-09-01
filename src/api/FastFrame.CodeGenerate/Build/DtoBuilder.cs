@@ -126,10 +126,10 @@ namespace FastFrame.CodeGenerate.Build
             if (typeof(ITreeEntity).IsAssignableFrom(type))
                 yield return new PropInfo
                 {
-                    Name = "HasTreeChildren",
-                    DefaultValue = "false",
-                    Summary = "是否有下级",
-                    TypeName = "bool"
+                    Name = "ChildCount",
+                    DefaultValue = "0",
+                    Summary = "下级数量",
+                    TypeName = "int"
                 };
 
             if (typeof(IHaveMultiFile).IsAssignableFrom(type))

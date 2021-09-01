@@ -41,7 +41,6 @@ namespace FastFrame.Application.Basis
 							EnCode = _dept.EnCode,
 							Name = _dept.Name,
 							Super_Id = _dept.Super_Id,
-							ChildCount = _dept.ChildCount,
 							Id = _dept.Id,
 							Create_User_Id = _dept.Create_User_Id,
 							CreateTime = _dept.CreateTime,
@@ -50,7 +49,7 @@ namespace FastFrame.Application.Basis
 							Super = _super_Id,
 							Create_User = _create_User_Id,
 							Modify_User = _modify_User_Id,
-							HasTreeChildren = repository.Any(c => c.Super_Id == _dept.Id)
+							ChildCount = repository.Count(c => c.Super_Id == _dept.Id)
 						};
 			return query;
 		}

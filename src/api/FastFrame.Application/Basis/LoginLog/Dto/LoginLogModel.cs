@@ -5,8 +5,10 @@ using System.Text;
 
 namespace FastFrame.Application.Basis
 {
-    public class LoginLogModel:IDto<LoginLog>
+    public class LoginLogModel : IDto<LoginLog>
     {
+        private bool isEnabled;
+
         public string Id { get; set; }
 
         /// <summary>
@@ -42,6 +44,6 @@ namespace FastFrame.Application.Basis
         /// <summary>
         /// 是否有效
         /// </summary>
-        public bool IsEnabled { get; set; }
+        public bool IsEnabled { get => isEnabled && ExpiredTime > DateTime.Now; set => isEnabled = value; }
     }
 }

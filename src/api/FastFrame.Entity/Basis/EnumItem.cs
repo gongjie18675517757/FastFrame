@@ -39,13 +39,7 @@ namespace FastFrame.Entity.Basis
         /// <summary>
         /// 上级
         /// </summary>  
-        [RelatedTo(typeof(EnumItem))]
-        public string Super_Id { get; set; }
-
-        /// <summary>
-        /// 子节点数量
-        /// </summary>
-        [ReadOnly]
-        public int ChildCount { get; set; }
+        [RelatedTo(typeof(EnumItem))] 
+        public string Super_Id { get; set; } 
     }
 }

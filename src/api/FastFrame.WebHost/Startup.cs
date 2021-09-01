@@ -53,10 +53,20 @@ namespace FastFrame.WebHost
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.Configure<IISServerOptions>(config =>
-            {
-                config.AutomaticAuthentication = false;
-            });
+            //services.Configure<IISServerOptions>(config =>
+            //{
+            //    config.AutomaticAuthentication = false;
+            //});
+
+
+
+            services.AddHangfire(configuration => configuration
+                  .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                  .UseSimpleAssemblyNameTypeSerializer()
+                  .UseRecommendedSerializerSettings()
+                  .UseStorage(new Hangfire.MemoryStorage.MemoryStorage()));
+
+            services.AddHangfireServer();
 
             services.AddMvc(opts =>
                 {
@@ -84,16 +94,7 @@ namespace FastFrame.WebHost
             services.AddOptions();
             services.Configure<ResourceOption>(Configuration.GetSection("ResourceOption"));
             services.AddMemoryCache();
-            services.AddSession();
-
-
-
-            services.AddHangfire(configuration => configuration
-                  .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
-                  .UseSimpleAssemblyNameTypeSerializer()
-                  .UseRecommendedSerializerSettings()
-                  .UseStorage(new Hangfire.MemoryStorage.MemoryStorage()));
-            services.AddHangfireServer();
+            services.AddSession(); 
 
             services
                 .AddHttpContextAccessor()
@@ -119,11 +120,12 @@ namespace FastFrame.WebHost
                 .AddSingleton<ICacheProvider, CacheProvider>()
                 .AddSingleton<IBackgroundJob, HangfireBackgroundJob>()
                 .AddSingleton<IMessageQueue, MessageQueue>()
-                .AddSingleton<IApplicationInitialLifetime, MessageQueue>()
+                .AddSingleton<IApplicationInitialLifetime>(v => (MessageQueue)v.GetService<IMessageQueue>())
+                .AddSingleton<IApplicationUnInitialLifetime>(v => (MessageQueue)v.GetService<IMessageQueue>())
                 .AddServices()
                 .AddRepository()
                 .AddIntervalWork(typeof(IService).Assembly, typeof(Startup).Assembly, typeof(Infrastructure.Extension).Assembly)
-                .AddMessageQueue(typeof(IService).Assembly, typeof(Startup).Assembly,typeof(Infrastructure.Extension).Assembly)
+                .AddMessageQueue(typeof(IService).Assembly, typeof(Startup).Assembly, typeof(Infrastructure.Extension).Assembly)
                 ;
 
             services.AddSingleton(x =>
@@ -211,11 +213,15 @@ namespace FastFrame.WebHost
             {
                 endpoints.MapHub<MessageHub>("/hub/message");
                 endpoints.MapControllers();
+                endpoints.MapHangfireDashboard();
 
                 //endpoints.MapControllerRoute(
                 //    name: "default",
                 //    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
+          
+  
 
             var logger = app.ApplicationServices.GetService<ILogger<Startup>>();
 

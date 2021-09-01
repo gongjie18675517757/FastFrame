@@ -278,6 +278,25 @@
             <param name="updateAction">更新方法</param>
             <returns></returns>
         </member>
+        <member name="T:FastFrame.Application.HanldeTreeService">
+            <summary>
+            处理树节点
+            </summary>
+        </member>
+        <member name="M:FastFrame.Application.HanldeTreeService.HandleAsync">
+            <summary>
+            每分钟一次
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.HanldeTreeService.HanldTreeAsync``1(System.String[])">
+            <summary>
+            记录树层级
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <param name="treeKeys"></param>
+            <returns></returns>
+        </member>
         <member name="T:FastFrame.Application.IAutoNumberService">
             <summary>
             自动编号服务
@@ -397,11 +416,6 @@
             上级 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Basis.DeptDto.ChildCount">
-            <summary>
-            子节点数量 
-            </summary>
-        </member>
         <member name="P:FastFrame.Application.Basis.DeptDto.Create_User_Id">
             <summary>
             创建人 
@@ -432,9 +446,9 @@
             修改时间 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Basis.DeptDto.HasTreeChildren">
+        <member name="P:FastFrame.Application.Basis.DeptDto.ChildCount">
             <summary>
-            是否有下级 
+            下级数量 
             </summary>
         </member>
         <member name="T:FastFrame.Application.Basis.DeptViewModel">
@@ -487,11 +501,6 @@
             上级 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Basis.EnumItemDto.ChildCount">
-            <summary>
-            子节点数量 
-            </summary>
-        </member>
         <member name="P:FastFrame.Application.Basis.EnumItemDto.Create_User_Id">
             <summary>
             创建人 
@@ -522,9 +531,9 @@
             修改时间 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Basis.EnumItemDto.HasTreeChildren">
+        <member name="P:FastFrame.Application.Basis.EnumItemDto.ChildCount">
             <summary>
-            是否有下级 
+            下级数量 
             </summary>
         </member>
         <member name="T:FastFrame.Application.Basis.EnumItemViewModel">
@@ -612,11 +621,6 @@
             是否文件夹 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Basis.MeidiaDto.ChildCount">
-            <summary>
-            子节点数量 
-            </summary>
-        </member>
         <member name="P:FastFrame.Application.Basis.MeidiaDto.Create_User_Id">
             <summary>
             创建人 
@@ -647,9 +651,9 @@
             修改时间 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Basis.MeidiaDto.HasTreeChildren">
+        <member name="P:FastFrame.Application.Basis.MeidiaDto.ChildCount">
             <summary>
-            是否有下级 
+            下级数量 
             </summary>
         </member>
         <member name="P:FastFrame.Application.Basis.MeidiaModel.Super_Id">
@@ -1165,12 +1169,7 @@
         </member>
         <member name="P:FastFrame.Application.Basis.TenantDto.ChildCount">
             <summary>
-            子节点数量 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.TenantDto.HasTreeChildren">
-            <summary>
-            是否有下级 
+            下级数量 
             </summary>
         </member>
         <member name="T:FastFrame.Application.Basis.TenantViewModel">

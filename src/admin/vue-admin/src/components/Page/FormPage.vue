@@ -3,7 +3,7 @@
     <v-layout align-center justify-center :class="{ singleLine: singleLine }">
       <v-flex v-bind="flex" :style="{ padding: isTab ? '1px' : null }">
         <v-card>
-          <v-toolbar flat dense color="transparent" height="30px">
+          <v-toolbar flat dense color="transparent"  >
             <v-toolbar-title>{{ title }}</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items v-if="!isDialog">
@@ -38,7 +38,7 @@
               <v-list dense>
                 <permission-facatory
                   v-for="item in [
-                    ...($vuetify.breakpoint.smAndDown ? visibleToolItems : []),
+                    ...($vuetify.breakpoint.smAndDown ? visibleToolItems : [])
                   ]"
                   :key="item.key || item.name"
                   :permission="item.permission"
@@ -89,7 +89,7 @@
             v-if="model"
             :class="[
               isDialog ? 'dialogPage' : isTab ? 'tabPage' : 'fullPage',
-              'form-page',
+              'form-page'
             ]"
           >
             <v-layout wrap style="padding: 0px; margin: 0px">
@@ -98,13 +98,13 @@
                   :key="group.key.title"
                   xs12
                   :xl10="!isDialog || singleLine"
-                  style="padding: 0px; margin: 0 auto"
+                  style="padding: 5px; margin: 0 auto"
                 >
                   <v-card v-if="group.values.length > 1" tile>
-                    <v-toolbar flat dense color="transparent" height="30px;">
+                    <v-toolbar flat color="transparent" dense>
                       <v-toolbar-title>{{ group.key.title }}:</v-toolbar-title>
                     </v-toolbar>
-                    <!-- <v-divider></v-divider> -->
+                    <v-divider></v-divider>
                     <v-card-text>
                       <component
                         :is="singleLine ? 'div' : 'v-layout'"
@@ -160,7 +160,7 @@
               :permission="btn.permission"
             >
               <v-btn
-                @click="evalAction(btn)" 
+                @click="evalAction(btn)"
                 small
                 color="primary"
                 :disabled="evalDisabled(btn)"
@@ -187,7 +187,7 @@ import Input from "@/components/Inputs";
 export default {
   components: {
     Input,
-    VuePerfectScrollbar,
+    VuePerfectScrollbar
   },
 
   props: {
@@ -204,7 +204,7 @@ export default {
     canEdit: Boolean,
     hasManage: Boolean,
     formGroups: Array,
-    toolItems: Array,
+    toolItems: Array
   },
   data() {
     return {};
@@ -213,29 +213,29 @@ export default {
     flex() {
       if (!this.singleLine) {
         return {
-          xs12: true,
+          xs12: true
         };
       } else {
         return {
-          xs12: true,
+          xs12: true
         };
       }
     },
     formGroupExpandValue: {
       get() {
-        return this.formGroups.map((r) => r.key.value);
+        return this.formGroups.map(r => r.key.value);
       },
       set(val) {
         for (let index = 0; index < val.length; index++) {
           const value = val[index];
           this.formGroups[index].value = value;
         }
-      },
+      }
     },
     visibleToolItems() {
       if (this.hideToolitem) return [];
       return this.toolItems.filter(this.evalVisible);
-    },
+    }
   },
 
   methods: {
@@ -264,8 +264,8 @@ export default {
     },
     evalAction(item) {
       this.$emit(`toolItemClick`, item);
-    },
-  },
+    }
+  }
 };
 </script>
 

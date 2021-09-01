@@ -45,5 +45,24 @@ namespace FastFrame.Repository
         /// </summary>
         /// <returns></returns>
         IQueryable<T> Queryable { get; }
+
+        /// <summary>
+        /// 执行SQL   
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        Task<int> ExecSqlAsync(string sql);
+
+        /// <summary>
+        /// 获取数据库表名
+        /// </summary> 
+        string GetDbTableName(); 
+
+        /// <summary>
+        /// 获取数据库列名
+        /// </summary>
+        /// <param name="propName"></param>
+        /// <returns></returns>
+        string GetDbColumnName(string propName); 
     }
 }

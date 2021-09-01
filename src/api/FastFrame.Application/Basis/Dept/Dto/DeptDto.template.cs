@@ -42,11 +42,6 @@ namespace FastFrame.Application.Basis
 		public DeptViewModel Super {get;set;}
 		
 		/// <summary>
-		/// 子节点数量 
-		/// </summary>
-		public int ChildCount {get;set;}
-		
-		/// <summary>
 		/// 创建人 
 		/// </summary>
 		[Hide(HideMark.Form)]
@@ -84,9 +79,9 @@ namespace FastFrame.Application.Basis
 		public DateTime ModifyTime {get;set;}
 		
 		/// <summary>
-		/// 是否有下级 
+		/// 下级数量 
 		/// </summary>
-		public bool HasTreeChildren {get;set;}
+		public int ChildCount {get;set;}
 		
 		
 	}

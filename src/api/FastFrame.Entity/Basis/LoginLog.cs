@@ -5,8 +5,10 @@ namespace FastFrame.Entity.Basis
     /// <summary>
     /// 登陆Log
     /// </summary> 
-    public class LoginLog : IEntity, IHasTenant 
+    public class LoginLog : IEntity, IHasTenant
     {
+        private bool isEnabled;
+
         public string Id { get; set; }
 
         /// <summary>
@@ -32,7 +34,7 @@ namespace FastFrame.Entity.Basis
         /// <summary>
         /// 是否有效
         /// </summary>
-        public bool IsEnabled { get; set; }
+        public bool IsEnabled { get => isEnabled && ExpiredTime > DateTime.Now; set => isEnabled = value; }
 
         public string GetToken() => Id;
     }

@@ -161,11 +161,6 @@
             上级
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Basis.Dept.ChildCount">
-            <summary>
-            子节点数量
-            </summary>
-        </member>
         <member name="T:FastFrame.Entity.Basis.DeptMember">
             <summary>
             部门成员
@@ -215,11 +210,6 @@
             <summary>
             上级
             </summary>  
-        </member>
-        <member name="P:FastFrame.Entity.Basis.EnumItem.ChildCount">
-            <summary>
-            子节点数量
-            </summary>
         </member>
         <member name="T:FastFrame.Entity.Basis.LoginLog">
             <summary>
@@ -274,11 +264,6 @@
         <member name="P:FastFrame.Entity.Basis.Meidia.IsFolder">
             <summary>
             是否文件夹
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.Meidia.ChildCount">
-            <summary>
-            子节点数量
             </summary>
         </member>
         <member name="T:FastFrame.Entity.Basis.Notify">
@@ -559,11 +544,6 @@
         <member name="P:FastFrame.Entity.Basis.Tenant.Id">
             <summary>
             主键
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.Tenant.ChildCount">
-            <summary>
-            子节点数量
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Basis.TenantHost.Host">
@@ -1661,6 +1641,11 @@
             编号
             </summary>
         </member>
+        <member name="T:FastFrame.Entity.INotGenerateKey">
+            <summary>
+            标记为不要自动生成主键
+            </summary>
+        </member>
         <member name="T:FastFrame.Entity.IQuery">
             <summary>
             标记为视图或表
@@ -1674,11 +1659,6 @@
         <member name="P:FastFrame.Entity.ITreeEntity.Super_Id">
             <summary>
             上级ID
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.ITreeEntity.ChildCount">
-            <summary>
-            下级数量
             </summary>
         </member>
         <member name="T:FastFrame.Entity.TargetInfo">

@@ -211,7 +211,7 @@ namespace FastFrame.CodeGenerate.Build
             }
 
             if (typeof(ITreeEntity).IsAssignableFrom(type))
-                yield return $"\t\t\t\tHasTreeChildren = repository.Any(c => c.Super_Id == _{typeName}.Id)";
+                yield return $"\t\t\t\tChildCount = repository.Count(c => c.Super_Id == _{typeName}.Id)";
 
             yield return "\t\t\t};";
             yield return "return query;";

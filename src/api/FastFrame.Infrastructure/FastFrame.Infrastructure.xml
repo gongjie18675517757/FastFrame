@@ -741,11 +741,6 @@
             <param name="parms"></param>
             <param name="timeSpan"></param>
         </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IBackgroundJob.Secondly">
-            <summary>
-            每秒
-            </summary>
-        </member>
         <member name="M:FastFrame.Infrastructure.Interface.IBackgroundJob.Minutely">
             <summary>
             每分钟

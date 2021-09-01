@@ -28,7 +28,7 @@ namespace FastFrame.Infrastructure.IntervalWork
                 AddAssembly(assembly);
 
             services.AddScoped<IApplicationInitialLifetime, IntervalWorkServiceInit>();
-
+             
             return services;
         }
 

@@ -69,15 +69,7 @@ namespace FastFrame.Infrastructure.Interface
             var methodCallExpression = Expression.Call(parameterExpression, method, arguments);
             var expression = Expression.Lambda<Func<TService, Task>>(methodCallExpression, parameterExpression);
             SetTimeout(expression, timeSpan);
-        }
-
-        /// <summary>
-        /// 每秒
-        /// </summary>
-        public static string Secondly()
-        {
-            return "* * * * * *";
-        }
+        }  
 
         /// <summary>
         /// 每分钟

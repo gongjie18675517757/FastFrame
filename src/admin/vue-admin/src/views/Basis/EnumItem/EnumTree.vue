@@ -9,14 +9,14 @@ export default {
     init() {
       Promise.all([
         getEnumValues("EnumItem", "Key"),
-        this.$http.get(`/api/enumitem/GetHasChildrenNames`),
+        this.$http.get(`/api/enumitem/GetHasChildrenNames`)
       ]).then(([arr, brr]) => {
-        this.items = arr.map((v) => ({
+        this.items = arr.map(v => ({
           ...v,
           id: v.Key,
           name: v.Value,
           type: "root",
-          ...(brr.includes(v.Key) ? { children: [] } : {}),
+          ...(brr.includes(v.Key) ? { children: [] } : {})
         }));
       });
     },
@@ -33,20 +33,20 @@ export default {
           break;
       }
 
-      arr = arr.map((v) => ({
+      arr = arr.map(v => ({
         ...v,
         id: v.Id,
         name: [v.Value, v.Code]
-          .filter((v) => v)
+          .filter(v => v)
           .map((v, i) => (i > 0 ? `(${v})` : v))
           .join(""),
-        ...(v.HasTreeChildren ? { children: [] } : {}),
-        type: "node",
+        ...(v.tChildCount > 0 ? { children: [] } : {}),
+        type: "node"
       }));
 
       children.push(...arr);
-    },
-  },
+    }
+  }
 };
 </script>
 

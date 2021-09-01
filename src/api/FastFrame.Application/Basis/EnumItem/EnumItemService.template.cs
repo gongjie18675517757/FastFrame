@@ -43,7 +43,6 @@ namespace FastFrame.Application.Basis
 							Value = _enumItem.Value,
 							Order = _enumItem.Order,
 							Super_Id = _enumItem.Super_Id,
-							ChildCount = _enumItem.ChildCount,
 							Id = _enumItem.Id,
 							Create_User_Id = _enumItem.Create_User_Id,
 							CreateTime = _enumItem.CreateTime,
@@ -52,7 +51,7 @@ namespace FastFrame.Application.Basis
 							Super = _super_Id,
 							Create_User = _create_User_Id,
 							Modify_User = _modify_User_Id,
-							HasTreeChildren = repository.Any(c => c.Super_Id == _enumItem.Id)
+							ChildCount = repository.Count(c => c.Super_Id == _enumItem.Id)
 						};
 			return query;
 		}

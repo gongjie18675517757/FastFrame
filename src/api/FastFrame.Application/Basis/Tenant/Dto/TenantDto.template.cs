@@ -51,14 +51,9 @@ namespace FastFrame.Application.Basis
 		public string HandIcon_Id {get;set;}
 		
 		/// <summary>
-		/// 子节点数量 
+		/// 下级数量 
 		/// </summary>
 		public int ChildCount {get;set;}
-		
-		/// <summary>
-		/// 是否有下级 
-		/// </summary>
-		public bool HasTreeChildren {get;set;}
 		
 		
 	}

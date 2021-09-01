@@ -235,7 +235,7 @@ export default new Vuex.Store({
       state.isLoadPermission = false
       stop();
       $http.post('/api/account/logout')
-      router.replace(`/login?`)
+      router.replace(`/login?redirect=${router.currentRoute.fullPath}`)
     },
 
     /**

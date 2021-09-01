@@ -2,6 +2,8 @@
 using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Interface;
 using FastFrame.Infrastructure.MessageQueue;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -11,10 +13,11 @@ namespace FastFrame.WebHost.Privder
     /// <summary>
     /// 消息队列
     /// </summary>
-    public class MessageQueue : IMessageQueue, IApplicationInitialLifetime
+    public class MessageQueue : IMessageQueue, IApplicationInitialLifetime, IApplicationUnInitialLifetime
     {
         private readonly CSRedisClient redisClient;
         private readonly IBackgroundJob backgroundJob;
+        private static List<CSRedisClient.SubscribeObject> list;
 
         public MessageQueue(CSRedisClient redisClient, IBackgroundJob backgroundJob)
         {
@@ -26,9 +29,25 @@ namespace FastFrame.WebHost.Privder
         {
             await Task.Yield();
 
+            list = new List<CSRedisClient.SubscribeObject>(MessageQueueServiceCollectionExtensions.SubscribeMethodList.Count);
+
             /*收集所有订阅的*/
             foreach (var item in MessageQueueServiceCollectionExtensions.SubscribeMethodList)
-                redisClient.Subscribe((item.Key, OnSubscribe));
+                list.Add(redisClient.Subscribe((item.Key, OnSubscribe)));
+            //redisClient.Subscribe((item.Key, e => OnSubscribe(e)));
+        }
+
+        public async Task UnInitialAsync()
+        {
+            await Task.Yield();
+
+            foreach (var item in list)
+            {
+                item.Unsubscribe();
+                item.Dispose();
+            }
+
+            list.Clear();
         }
 
         /// <summary>
@@ -74,6 +93,6 @@ namespace FastFrame.WebHost.Privder
             var msgId = await redisClient.PublishAsync(channel, msg);
 
             return msgId.ToString();
-        }
+        } 
     }
 }

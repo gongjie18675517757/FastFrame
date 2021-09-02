@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net;
+using System.Threading.Tasks;
 
 namespace FastFrame.Infrastructure.Interface
 {
@@ -11,15 +12,17 @@ namespace FastFrame.Infrastructure.Interface
         /// 验证TOKEN是否有效
         /// </summary>
         /// <param name="token"></param>
+        /// <param name="address"></param>
         /// <returns></returns>
-        Task<bool> ExistsTokenAsync(string token);
+        Task<bool> ExistsTokenAsync(string token, IPAddress address);
 
         /// <summary>
         /// 生成身份
         /// </summary>
         /// <param name="userId"></param>
+        /// <param name="address"></param>
         /// <returns></returns>
-        Task<IIdentity> GenerateIdentity(string userId);
+        Task<IIdentity> GenerateIdentity(string userId,IPAddress address);
 
         /// <summary>
         /// 刷新TOKEN

@@ -14,23 +14,32 @@ namespace FastFrame.Application.Basis
         private readonly IRepository<LoginLog> loginLogs;
         private readonly IRepository<User> users;
 
-        public LoginLogServcie(IRepository<LoginLog> loginLogs,IRepository<User> users)
+        public LoginLogServcie(IRepository<LoginLog> loginLogs, IRepository<User> users)
         {
             this.loginLogs = loginLogs;
             this.users = users;
         }
 
-        public Task<PageList<LoginLogModel>> PageListAsync(Pagination pageInfo)
-        { 
+        public async Task<PageList<LoginLogModel>> PageListAsync(Pagination pageInfo)
+        {
             var query = from a in loginLogs
                         join b in users on a.User_Id equals b.Id
-                        select new
+                        select new LoginLogModel
                         {
-                             b,
-                             a
+                            Account = b.Account,
+                            Id = a.Id,
+                            IsEnabled = a.IsEnabled,
+                            ExpiredTime = a.ExpiredTime,
+                            IPAddress = a.IPAddress,
+                            LastTime = a.LastTime,
+                            LoginTime = a.LoginTime,
+                            Name = b.Name,
+                            User_Id = a.User_Id
                         };
 
-            return ExpressionExtended<LoginLogModel>.GetTearPropQueryable(query).PageListAsync(pageInfo);
+            var list=await query.PageListAsync(pageInfo);
+
+            return list;
         }
     }
 }

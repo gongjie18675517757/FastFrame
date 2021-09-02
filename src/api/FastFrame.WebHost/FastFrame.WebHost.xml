@@ -352,6 +352,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:FastFrame.WebHost.Privder.AppSessionProvider.GetIPAddress">
+            <summary>
+            获取当前连接的IP
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:FastFrame.WebHost.Privder.ClientConnection">
             <summary>
             客户端连接抽象实现

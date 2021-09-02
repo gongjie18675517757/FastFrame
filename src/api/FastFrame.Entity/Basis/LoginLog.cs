@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 
 namespace FastFrame.Entity.Basis
 {
@@ -32,10 +33,13 @@ namespace FastFrame.Entity.Basis
         public DateTime ExpiredTime { get; set; }
 
         /// <summary>
+        /// IP
+        /// </summary>
+        public string IPAddress { get; set; }
+
+        /// <summary>
         /// 是否有效
         /// </summary>
         public bool IsEnabled { get => isEnabled && ExpiredTime > DateTime.Now; set => isEnabled = value; }
-
-        public string GetToken() => Id;
     }
 }

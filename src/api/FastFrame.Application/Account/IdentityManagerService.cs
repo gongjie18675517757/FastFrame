@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace FastFrame.Application.Account
@@ -16,7 +17,7 @@ namespace FastFrame.Application.Account
 
         class Identity : LoginLog, IIdentity
         {
-
+            public string GetToken() => Id;
         }
 
         public IdentityManagerService(IRepository<LoginLog> loginLogRepository, IServiceProvider serviceProvider)
@@ -25,7 +26,7 @@ namespace FastFrame.Application.Account
             this.serviceProvider = serviceProvider;
         }
 
-        public async Task<IIdentity> GenerateIdentity(string userId)
+        public async Task<IIdentity> GenerateIdentity(string userId, IPAddress address)
         {
             var identity = new Identity
             {
@@ -34,7 +35,8 @@ namespace FastFrame.Application.Account
                 Id = null,
                 LastTime = DateTime.Now,
                 LoginTime = DateTime.Now,
-                User_Id = userId
+                User_Id = userId,
+                IPAddress = address?.ToString()
             };
             await loginLogRepository.AddAsync(identity);
             await loginLogRepository.CommmitAsync();
@@ -63,12 +65,14 @@ namespace FastFrame.Application.Account
         /// 验证Token
         /// </summary>
         /// <param name="token"></param>
+        /// <param name="address"></param>
         /// <returns></returns>
-        public async Task<bool> ExistsTokenAsync(string token)
+        public async Task<bool> ExistsTokenAsync(string token, IPAddress address)
         {
+            var ip = address?.ToString();
             var dt = DateTime.Now;
-            return
-                   await loginLogRepository.AnyAsync(v => v.Id == token && v.IsEnabled && v.IsEnabled && dt < v.ExpiredTime);
+            return await loginLogRepository
+                .AnyAsync(v => v.Id == token && v.IsEnabled && v.IsEnabled && dt < v.ExpiredTime && v.IPAddress == ip);
         }
 
         /// <summary>

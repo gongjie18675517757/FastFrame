@@ -236,6 +236,11 @@
             过期时间
             </summary>
         </member>
+        <member name="P:FastFrame.Entity.Basis.LoginLog.IPAddress">
+            <summary>
+            IP
+            </summary>
+        </member>
         <member name="P:FastFrame.Entity.Basis.LoginLog.IsEnabled">
             <summary>
             是否有效

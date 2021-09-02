@@ -36,7 +36,7 @@ namespace FastFrame.Application.Account
                 if (user.Enable == EnabledMark.disabled)
                     throw new MsgException("帐号已被停用");
 
-                var identity = await identityManager.GenerateIdentity(user.Id);
+                var identity = await identityManager.GenerateIdentity(user.Id, appSession.GetIPAddress());
 
                 var curr = new CurrUser()
                 {

@@ -95,7 +95,7 @@ namespace FastFrame.Repository
         /// </summary> 
         public virtual async Task<T> GetAsync(string id)
         {
-            return await Queryable.Where(v => v.Id == id).SingleOrDefaultAsync();
+            return await context.Set<T>().FindAsync(id);
         }
 
         public Task<int> CommmitAsync()

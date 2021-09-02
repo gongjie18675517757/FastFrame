@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace FastFrame.WebHost.Privder
@@ -14,9 +15,9 @@ namespace FastFrame.WebHost.Privder
     public class AppSessionProvider : IApplicationSession
     {
         private readonly IHttpContextAccessor httpContextAccessor;
-        private readonly IMemoryCache memoryCache; 
+        private readonly IMemoryCache memoryCache;
         private readonly IHostEnvironment hostEnvironment;
-         
+
         private Tenant tenant;
 
         public AppSessionProvider(IHttpContextAccessor httpContextAccessor,
@@ -25,7 +26,7 @@ namespace FastFrame.WebHost.Privder
         {
             this.httpContextAccessor = httpContextAccessor;
 
-            this.memoryCache = memoryCache; 
+            this.memoryCache = memoryCache;
             this.hostEnvironment = hostEnvironment;
         }
 
@@ -33,8 +34,8 @@ namespace FastFrame.WebHost.Privder
 
         public string Tenant_Id => tenant?.Tenant_Id;
 
-        public string ApplicationRootPath => hostEnvironment.IsProduction() ? 
-                    hostEnvironment?.ContentRootPath ?? AppDomain.CurrentDomain.BaseDirectory : 
+        public string ApplicationRootPath => hostEnvironment.IsProduction() ?
+                    hostEnvironment?.ContentRootPath ?? AppDomain.CurrentDomain.BaseDirectory :
                     AppDomain.CurrentDomain.BaseDirectory;
 
         private bool TryGetHeaderValue(string[] headerNames, out string host)
@@ -80,20 +81,19 @@ namespace FastFrame.WebHost.Privder
         {
             if (CurrUser != null)
             {
-                httpContextAccessor.HttpContext.Response.Cookies.Delete(ConstValuePool.Token_Name); 
+                httpContextAccessor.HttpContext.Response.Cookies.Delete(ConstValuePool.Token_Name);
                 await httpContextAccessor.HttpContext.RequestServices.GetService<IIdentityManager>().SetTokenFailureAsync(CurrUser.ToKen);
             }
         }
 
         public async Task RefreshIdentityAsync()
-        { 
+        {
             await httpContextAccessor.HttpContext.RequestServices.GetService<IIdentityManager>().RefreshTokenAsync(CurrUser.ToKen);
             await LoginAsync(CurrUser);
         }
 
         private string GetIdentity()
         {
-
             var request = httpContextAccessor.HttpContext.Request;
             var identity = string.Empty;
             if (request.Headers.TryGetValue(ConstValuePool.Token_Name, out var headerValue))
@@ -105,6 +105,15 @@ namespace FastFrame.WebHost.Privder
             return identity;
         }
 
+        /// <summary>
+        /// 获取当前连接的IP
+        /// </summary>
+        /// <returns></returns>
+        public IPAddress GetIPAddress()
+        {
+            return httpContextAccessor?.HttpContext?.Connection?.RemoteIpAddress;
+        }
+
         public async Task InitAsync()
         {
             var identity = GetIdentity();
@@ -112,12 +121,8 @@ namespace FastFrame.WebHost.Privder
             {
                 var curr = identity.FromBase64().ToObject<CurrUser>();
                 if (curr != null)
-                {
-                    if (await httpContextAccessor.HttpContext.RequestServices.GetService<IIdentityManager>().ExistsTokenAsync(curr.ToKen))
-                    {
+                    if (await httpContextAccessor.HttpContext.RequestServices.GetService<IIdentityManager>().ExistsTokenAsync(curr.ToKen, GetIPAddress()))
                         CurrUser = curr;
-                    }
-                }
             }
 
             var host = GetHost();

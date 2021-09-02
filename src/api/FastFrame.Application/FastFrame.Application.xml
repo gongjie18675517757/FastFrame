@@ -45,11 +45,12 @@
             刷新Token
             </summary> 
         </member>
-        <member name="M:FastFrame.Application.Account.IdentityManagerService.ExistsTokenAsync(System.String)">
+        <member name="M:FastFrame.Application.Account.IdentityManagerService.ExistsTokenAsync(System.String,System.Net.IPAddress)">
             <summary>
             验证Token
             </summary>
             <param name="token"></param>
+            <param name="address"></param>
             <returns></returns>
         </member>
         <member name="M:FastFrame.Application.Account.IdentityManagerService.SetTokenFailureAsync(System.String)">
@@ -584,6 +585,11 @@
         <member name="P:FastFrame.Application.Basis.LoginLogModel.ExpiredTime">
             <summary>
             过期时间
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.LoginLogModel.IPAddress">
+            <summary>
+            IP
             </summary>
         </member>
         <member name="P:FastFrame.Application.Basis.LoginLogModel.IsEnabled">

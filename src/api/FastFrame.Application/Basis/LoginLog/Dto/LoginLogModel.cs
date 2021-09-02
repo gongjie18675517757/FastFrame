@@ -1,6 +1,7 @@
 ﻿using FastFrame.Entity.Basis;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 
 namespace FastFrame.Application.Basis
@@ -40,6 +41,11 @@ namespace FastFrame.Application.Basis
         /// 过期时间
         /// </summary>
         public DateTime ExpiredTime { get; set; }
+
+        /// <summary>
+        /// IP
+        /// </summary>
+        public string IPAddress { get; set; }
 
         /// <summary>
         /// 是否有效

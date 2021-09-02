@@ -185,9 +185,12 @@ namespace FastFrame.WebHost.Privder
 
                 if (pageList.Data.Count < pagination.PageSize)
                     break;
+
+                pagination.PageIndex++;
             }
 
             SetUsedRangeStyles(sh, rIndex, cIndex);
+            sh.View.FreezePanes(2, 1);
 
             return package.GetAsByteArray();
         }

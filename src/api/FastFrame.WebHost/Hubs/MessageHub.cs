@@ -12,15 +12,16 @@ namespace FastFrame.WebHost.Hubs
 {
     public class MessageHub : Hub
     {
-        private readonly ICacheProvider cacheProvider;
-        private readonly IBackgroundJob backgroundJob;
+        private readonly ICacheProvider cacheProvider; 
         private readonly IMessageQueue messageQueue;
+        private readonly IIdentityManager identityManager;
 
-        public MessageHub(ICacheProvider cacheProvider, IBackgroundJob backgroundJob, IMessageQueue messageQueue)
+        public MessageHub(ICacheProvider cacheProvider, IMessageQueue messageQueue,IIdentityManager identityManager)
         {
             this.cacheProvider = cacheProvider;
-            this.backgroundJob = backgroundJob;
+
             this.messageQueue = messageQueue;
+            this.identityManager = identityManager;
         }
 
         /// <summary>
@@ -29,8 +30,8 @@ namespace FastFrame.WebHost.Hubs
         /// <param name="msg"></param>
         /// <returns></returns>
         public async Task ClientResponse(string msg)
-        {
-            await messageQueue.PublishAsync(IMessageQueue.Client2ServiceMessage, msg);
+        { 
+            await messageQueue.PublishAsync(IMessageQueue.Client2ServiceMessage, msg); 
         }
 
 
@@ -44,28 +45,23 @@ namespace FastFrame.WebHost.Hubs
                 return;
 
             var user = token.FromBase64().ToObject<CurrUser>();
+            if(!await identityManager.ExistsTokenAsync(user.ToKen, Context.GetHttpContext().Connection.RemoteIpAddress))
+            {
+                await Clients.Caller.SendAsync("client.identity.expiration", "身份认证失败[IP地址不对]！!");
+                Context.Abort();
+                return;
+            }
 
             if (user == null)
             {
                 await Clients.Caller.SendAsync("client.identity.expiration", "身份认证失败！!");
+                Context.Abort();
                 return;
             }
 
             Context.GetHttpContext().Items.Add(ConstValuePool.Token_Name, user);
             await UpdateUserState(user.Id, values => values.Add(connectionId));
-            await Clients.Caller.SendAsync("client.onConnected", "signalR身份认证成功!");
-
-            //var uid = user.Id;
-            //backgroundJob.SetTimeout<IClientManage>(v => v.PublishNotifyAsync(new ClientNotify
-            //{
-            //    Content = "模拟测试消息",
-            //    Id = IdGenerate.NetId(),
-            //    ModuleName = "ModuleName",
-            //    Title = "Title",
-            //    ToUrl = "ToUrl"
-            //}, new string[] {
-            //    uid
-            //}), TimeSpan.FromSeconds(5));
+            await Clients.Caller.SendAsync("client.onConnected", "signalR身份认证成功!"); 
         }
 
         private async Task UpdateUserState(string userId, Action<List<string>> action)

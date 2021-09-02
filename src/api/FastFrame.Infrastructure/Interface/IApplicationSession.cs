@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -43,7 +44,13 @@ namespace FastFrame.Infrastructure.Interface
         /// 初始化
         /// </summary>
         /// <returns></returns>
-        Task InitAsync(); 
+        Task InitAsync();
+
+        /// <summary>
+        /// 获取当前连接的IP
+        /// </summary>
+        /// <returns></returns>
+        IPAddress GetIPAddress();
 
         /// <summary>
         /// 运行目录

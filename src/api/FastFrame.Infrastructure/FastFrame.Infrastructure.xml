@@ -677,6 +677,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:FastFrame.Infrastructure.Interface.IApplicationSession.GetIPAddress">
+            <summary>
+            获取当前连接的IP
+            </summary>
+            <returns></returns>
+        </member>
         <member name="P:FastFrame.Infrastructure.Interface.IApplicationSession.ApplicationRootPath">
             <summary>
             运行目录
@@ -1021,18 +1027,20 @@
             身份管理
             </summary>
         </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IIdentityManager.ExistsTokenAsync(System.String)">
+        <member name="M:FastFrame.Infrastructure.Interface.IIdentityManager.ExistsTokenAsync(System.String,System.Net.IPAddress)">
             <summary>
             验证TOKEN是否有效
             </summary>
             <param name="token"></param>
+            <param name="address"></param>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IIdentityManager.GenerateIdentity(System.String)">
+        <member name="M:FastFrame.Infrastructure.Interface.IIdentityManager.GenerateIdentity(System.String,System.Net.IPAddress)">
             <summary>
             生成身份
             </summary>
             <param name="userId"></param>
+            <param name="address"></param>
             <returns></returns>
         </member>
         <member name="M:FastFrame.Infrastructure.Interface.IIdentityManager.RefreshTokenAsync(System.String)">

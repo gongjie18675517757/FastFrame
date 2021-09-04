@@ -16,7 +16,7 @@ namespace FastFrame.WebHost
                  /*替换成AspectCore的容器实现，性能更高*/
                  .UseServiceProviderFactory(new ServiceContextProviderFactory())                     
                  .ConfigureWebHostDefaults(webBuilder =>
-                   {
+                   { 
                        webBuilder.UseStartup<Startup>();
                    });
     } 

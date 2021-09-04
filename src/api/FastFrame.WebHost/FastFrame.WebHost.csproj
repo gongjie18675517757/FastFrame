@@ -43,7 +43,9 @@
   <ItemGroup>
     <PackageReference Include="Hangfire.AspNetCore" Version="1.7.25" />
     <PackageReference Include="Hangfire.Core" Version="1.7.25" />
-    <PackageReference Include="Hangfire.MemoryStorage" Version="1.7.0" />
+    <!--<PackageReference Include="Hangfire.MemoryStorage" Version="1.7.0" />-->
+    <!--<PackageReference Include="Hangfire.MySqlStorage" Version="2.0.3" />-->
+    <PackageReference Include="HangFire.Redis.StackExchange" Version="1.8.4" />
     <!--<PackageReference Include="Hangfire.MySqlStorage" Version="2.0.3" />-->
     <PackageReference Condition="'$(Configuration)'=='DEBUG'" Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.9">
       <PrivateAssets>all</PrivateAssets>
@@ -53,7 +55,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.9" />
     <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="5.0.3" /> 
     <PackageReference Include="AspectCore.Core" Version="2.2.0" />
-    <PackageReference Include="CSRedisCore" Version="3.6.6" />    
+    <!--<PackageReference Include="CSRedisCore" Version="3.6.6" />-->    
     <PackageReference Condition="'$(Configuration)'=='DEBUG'" Include="Swashbuckle.AspNetCore" Version="6.2.1" /> 
   </ItemGroup>
 

@@ -1,9 +1,6 @@
-﻿using CSRedis;
-using FastFrame.Infrastructure;
+﻿using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Interface;
 using FastFrame.Infrastructure.MessageQueue;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -15,11 +12,10 @@ namespace FastFrame.WebHost.Privder
     /// </summary>
     public class MessageQueue : IMessageQueue, IApplicationInitialLifetime, IApplicationUnInitialLifetime
     {
-        private readonly CSRedisClient redisClient;
+        private readonly StackExchange.Redis.ConnectionMultiplexer redisClient;
         private readonly IBackgroundJob backgroundJob;
-        private static List<CSRedisClient.SubscribeObject> list;
 
-        public MessageQueue(CSRedisClient redisClient, IBackgroundJob backgroundJob)
+        public MessageQueue(StackExchange.Redis.ConnectionMultiplexer redisClient, IBackgroundJob backgroundJob)
         {
             this.redisClient = redisClient;
             this.backgroundJob = backgroundJob;
@@ -27,36 +23,24 @@ namespace FastFrame.WebHost.Privder
 
         public async Task InitialAsync()
         {
-            await Task.Yield();
-
-            list = new List<CSRedisClient.SubscribeObject>(MessageQueueServiceCollectionExtensions.SubscribeMethodList.Count);
-
             /*收集所有订阅的*/
             foreach (var item in MessageQueueServiceCollectionExtensions.SubscribeMethodList)
-                list.Add(redisClient.Subscribe((item.Key, OnSubscribe)));
-            //redisClient.Subscribe((item.Key, e => OnSubscribe(e)));
+                await redisClient.GetSubscriber().SubscribeAsync(item.Key, OnSubscribe);
+
         }
 
         public async Task UnInitialAsync()
         {
-            await Task.Yield();
-
-            foreach (var item in list)
-            {
-                item.Unsubscribe();
-                item.Dispose();
-            }
-
-            list.Clear();
+            foreach (var item in MessageQueueServiceCollectionExtensions.SubscribeMethodList)
+                await redisClient.GetSubscriber().UnsubscribeAsync(item.Key, OnSubscribe);
         }
 
         /// <summary>
         /// 触发订阅事件
-        /// </summary>
-        /// <param name="e"></param>
-        private void OnSubscribe(CSRedisClient.SubscribeMessageEventArgs e)
+        /// </summary> 
+        private void OnSubscribe(StackExchange.Redis.RedisChannel channel, StackExchange.Redis.RedisValue e)
         {
-            if (MessageQueueServiceCollectionExtensions.SubscribeMethodList.TryGetValue(e.Channel, out var list))
+            if (MessageQueueServiceCollectionExtensions.SubscribeMethodList.TryGetValue(channel, out var list))
             {
                 var settimeOutMethod = typeof(IBackgroundJob).GetMethod(nameof(IBackgroundJob.SetTimeoutByMethod), BindingFlags.Instance | BindingFlags.Public);
                 foreach (var g in list.GroupBy(v => v.type))
@@ -70,15 +54,15 @@ namespace FastFrame.WebHost.Privder
                         var msgType = method.GetParameters()[1].ParameterType;
 
                         /*尝试序列化为强类型*/
-                        if (!e.Body.TryToObject(msgType, out object msgData))
-                            msgData = e.Body;
+                        if (!e.ToString().TryToObject(msgType, out object msgData))
+                            msgData = e.ToString();
 
 
                         /*执行延时方法（将订阅的方法放入队列）*/
                         methodInfo.Invoke(backgroundJob, new object[] {
                             method,
                             new object[]{
-                                e.MessageId.ToString(),
+                                channel.ToString(),
                                 msgData
                             },
                             null
@@ -90,9 +74,9 @@ namespace FastFrame.WebHost.Privder
 
         public async Task<string> PublishAsync(string channel, string msg)
         {
-            var msgId = await redisClient.PublishAsync(channel, msg);
+            var msgId = await redisClient.GetSubscriber().PublishAsync(channel, msg);
 
             return msgId.ToString();
-        } 
+        }
     }
 }

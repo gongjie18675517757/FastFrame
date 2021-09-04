@@ -23,9 +23,9 @@ namespace FastFrame.WebHost.Controllers
             this.clientManage = clientManage;
         }
 
-       
+
         [HttpGet]
-        public async Task<string[]> Get(string title, string content)
+        public async Task<string[]> ChooseAsync(string title, string content)
         {
             return await clientManage
                 .PublishChooseAsync(new ClientChoose
@@ -43,7 +43,7 @@ namespace FastFrame.WebHost.Controllers
 
         // POST: api/Default
         [HttpPost]
-        public async Task<bool> Post([FromForm] string title, [FromForm] string content)
+        public async Task<bool> ConfirmAsync([FromForm] string title, [FromForm] string content)
         {
             return await clientManage
                 .PublishConfirmAsync(new ClientConfirm

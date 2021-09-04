@@ -1,4 +1,9 @@
-﻿//升级EF工具
+﻿--mysql hangfire创建表失败时
+SET GLOBAL INNODB_LARGE_PREFIX = ON;
+SET GLOBAL innodb_file_format = BARRACUDA;
+
+
+//升级EF工具
 dotnet tool update -g dotnet-ef 
  
 //生成迁移

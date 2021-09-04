@@ -391,11 +391,10 @@
             消息队列
             </summary>
         </member>
-        <member name="M:FastFrame.WebHost.Privder.MessageQueue.OnSubscribe(CSRedis.CSRedisClient.SubscribeMessageEventArgs)">
+        <member name="M:FastFrame.WebHost.Privder.MessageQueue.OnSubscribe(StackExchange.Redis.RedisChannel,StackExchange.Redis.RedisValue)">
             <summary>
             触发订阅事件
-            </summary>
-            <param name="e"></param>
+            </summary> 
         </member>
         <member name="M:FastFrame.WebHost.Privder.ModuleExportProvider.GetModuleStruts(System.String)">
             <summary>

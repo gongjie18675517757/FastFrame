@@ -1,4 +1,4 @@
-﻿using CSRedis;
+﻿using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Interface;
 using System;
 using System.Threading.Tasks;
@@ -7,38 +7,68 @@ namespace FastFrame.WebHost.Privder
 {
     public class CacheProvider : ICacheProvider
     {
-        private readonly CSRedisClient redisClient;
+        private readonly StackExchange.Redis.ConnectionMultiplexer redisClient;
+        private readonly int defaultDatabase;
+        private readonly string prefix;
 
-        public CacheProvider(CSRedisClient redisClient)
+        public CacheProvider(StackExchange.Redis.ConnectionMultiplexer redisClient)
         {
             this.redisClient = redisClient;
+            var configurationOptions = StackExchange.Redis.ConfigurationOptions.Parse(redisClient.Configuration);
+            defaultDatabase = configurationOptions.DefaultDatabase ?? -1;
+            prefix = configurationOptions.ChannelPrefix;
         }
+
+
+
+        private static T ConvertValue<T>(StackExchange.Redis.RedisValue value)
+        {
+            if (!value.HasValue)
+                return default;
+
+            return value.ToString().ToObject<T>();
+        }
+
+        private string ConvertKey(string key)
+        {
+            if (prefix.IsNullOrWhiteSpace())
+                return key;
+
+            return $"{prefix}{key}";
+        }
+
         public Task DelAsync(string key)
         {
-            return redisClient.DelAsync(key);
+            return redisClient.GetDatabase(defaultDatabase).KeyDeleteAsync(ConvertKey(key));
         }
 
-        public Task<T> GetAsync<T>(string key)
+        public async Task<T> GetAsync<T>(string key)
         {
-            return redisClient.GetAsync<T>(key);
+            var value = await redisClient.GetDatabase(defaultDatabase).StringGetAsync(ConvertKey(key));
+            return ConvertValue<T>(value);
         }
 
-        public Task<T> HGetAsync<T>(string key, string field)
+        public async Task<T> HGetAsync<T>(string key, string field)
         {
-            return redisClient.HGetAsync<T>(key, field);
+            try
+            {
+                var value = await redisClient.GetDatabase(defaultDatabase).HashGetAsync(ConvertKey(key), field);
+                return ConvertValue<T>(value);
+            }
+            catch (Exception)
+            {
+                return default;
+            }
         }
 
-        public Task HSetAsync<T>(string key, string field, T val, TimeSpan? expire)
+        public async Task HSetAsync<T>(string key, string field, T val, TimeSpan? expire)
         {
-            return redisClient.HSetAsync(key, field, val);
+            await redisClient.GetDatabase(defaultDatabase).HashSetAsync(ConvertKey(key), field, val.ToJson());
         }
 
-        public Task SetAsync<T>(string key, T val, TimeSpan? expire)
+        public async Task SetAsync<T>(string key, T val, TimeSpan? expire)
         {
-            var expireSeconds = -1;
-            if (expire != null)
-                expireSeconds = Convert.ToInt32(expire.Value.TotalSeconds);
-            return redisClient.SetAsync(key, val, expireSeconds);
+            await redisClient.GetDatabase(defaultDatabase).StringSetAsync(ConvertKey(key), val?.ToJson(), expire);
         }
     }
 }

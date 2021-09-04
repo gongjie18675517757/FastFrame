@@ -1,6 +1,4 @@
-﻿using AspectCore.DynamicProxy;
-using CSRedis;
-using FastFrame.Application;
+﻿using FastFrame.Application;
 using FastFrame.Database;
 using FastFrame.Infrastructure.Client;
 using FastFrame.Infrastructure.EventBus;
@@ -26,12 +24,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Threading.Tasks;
 
 namespace FastFrame.WebHost
 {
@@ -45,6 +38,7 @@ namespace FastFrame.WebHost
         public IConfiguration Configuration { get; }
         private const string ConnectionName = "Local_Mysql";
 
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<CookiePolicyOptions>(options =>
@@ -53,18 +47,20 @@ namespace FastFrame.WebHost
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            //services.Configure<IISServerOptions>(config =>
-            //{
-            //    config.AutomaticAuthentication = false;
-            //});
+            var configurationOptions = StackExchange.Redis.ConfigurationOptions.Parse(Configuration.GetConnectionString("RedisConnection"));
+            var connectionMultiplexer = StackExchange.Redis.ConnectionMultiplexer.Connect(configurationOptions);
+            services.AddSingleton(connectionMultiplexer);            
 
-
-
-            services.AddHangfire(configuration => configuration
-                  .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
-                  .UseSimpleAssemblyNameTypeSerializer()
-                  .UseRecommendedSerializerSettings()
-                  .UseStorage(new Hangfire.MemoryStorage.MemoryStorage()));
+            services.AddHangfire(configuration =>
+                                    configuration
+                                      .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                                      .UseSimpleAssemblyNameTypeSerializer()
+                                      .UseRecommendedSerializerSettings()
+                                      .UseRedisStorage(connectionMultiplexer, new Hangfire.Redis.RedisStorageOptions
+                                      {
+                                          Prefix = configurationOptions.ChannelPrefix,
+                                          Db = configurationOptions.DefaultDatabase ?? -1,
+                                      }));
 
             services.AddHangfireServer();
 
@@ -94,7 +90,7 @@ namespace FastFrame.WebHost
             services.AddOptions();
             services.Configure<ResourceOption>(Configuration.GetSection("ResourceOption"));
             services.AddMemoryCache();
-            services.AddSession(); 
+            services.AddSession();
 
             services
                 .AddHttpContextAccessor()
@@ -128,12 +124,7 @@ namespace FastFrame.WebHost
                 .AddMessageQueue(typeof(IService).Assembly, typeof(Startup).Assembly, typeof(Infrastructure.Extension).Assembly)
                 ;
 
-            services.AddSingleton(x =>
-            {
-                var redisClient = new CSRedisClient(Configuration.GetConnectionString("RedisConnection"));
-                RedisHelper.Initialization(redisClient);
-                return redisClient;
-            });
+
 
 #if DEBUG
             services.AddSwaggerGen(options =>
@@ -220,8 +211,8 @@ namespace FastFrame.WebHost
                 //    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
 
-          
-  
+
+
 
             var logger = app.ApplicationServices.GetService<ILogger<Startup>>();
 
@@ -240,9 +231,9 @@ namespace FastFrame.WebHost
                     await applicationInitialProvider.InitialAsync();
 
                 //BackgroundJob.Enqueue(() => Console.WriteLine(DateTime.Now));
-                var v1 = Infrastructure.Extension.ToObject<int>("1");
-                var v2 = Infrastructure.Extension.ToObject<bool>("true");
-                RecurringJob.AddOrUpdate(() => Console.WriteLine($"{v1} {v2}"), Cron.Minutely);
+                //var v1 = Infrastructure.Extension.ToObject<int>("1");
+                //var v2 = Infrastructure.Extension.ToObject<bool>("true");
+                //RecurringJob.AddOrUpdate(() => Console.WriteLine($"{v1} {v2}"), Cron.Minutely);
 
             });
 
@@ -256,6 +247,9 @@ namespace FastFrame.WebHost
                 {
                     await applicationInitialProvider.UnInitialAsync();
                 }
+
+                /*关闭redis*/
+                await app.ApplicationServices.GetService<StackExchange.Redis.ConnectionMultiplexer>().CloseAsync();
             });
 
             applicationLifetime.ApplicationStopped.Register(() =>

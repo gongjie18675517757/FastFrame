@@ -41,5 +41,11 @@ namespace FastFrame.Entity
         [ReadOnly]
         [Hide(HideMark.Form)]
         public virtual DateTime ModifyTime { get; set; } = DateTime.Now;
+
+        /// <summary>
+        /// 租户ID
+        /// </summary>
+        [Exclude]
+        public string Tenant_Id { get; set; }
     }
 }

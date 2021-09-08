@@ -18,7 +18,7 @@ namespace FastFrame.WebHost.Privder
 
         public void SetInterval<TService>(Expression<Func<TService, Task>> methodCall, string cronExperssion)
         {
-            RecurringJob.AddOrUpdate(methodCall, Cron.Minutely());
+            RecurringJob.AddOrUpdate(methodCall, cronExperssion,TimeZoneInfo.Local);
         }
 
         public void SetTimeout<TService>(Expression<Func<TService, Task>> methodCall, TimeSpan? timeSpan)

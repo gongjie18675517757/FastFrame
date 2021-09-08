@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FastFrame.Infrastructure.Interface
+namespace FastFrame.Infrastructure.Identity
 {
     /// <summary>
     /// 身份接口

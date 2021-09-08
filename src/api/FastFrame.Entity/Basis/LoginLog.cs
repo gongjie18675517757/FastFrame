@@ -41,5 +41,8 @@ namespace FastFrame.Entity.Basis
         /// 是否有效
         /// </summary>
         public bool IsEnabled { get => isEnabled && ExpiredTime > DateTime.Now; set => isEnabled = value; }
+
+
+        public string Tenant_Id { get; set; }
     }
 }

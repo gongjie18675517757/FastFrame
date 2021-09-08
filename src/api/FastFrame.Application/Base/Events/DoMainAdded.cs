@@ -8,13 +8,6 @@ namespace FastFrame.Application.Events
     /// <typeparam name="T"></typeparam>
     public class DoMainAdded<T> : BaseEventData<T>  
     {
-        public DoMainAdded(T data, params object[] args)
-        {
-            Data = data;
-            Args = args;
-        }
-
-        public T Data { get; }
-        public object[] Args { get; }
+        public string Id { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using FastFrame.Entity.Basis;
 using FastFrame.Infrastructure;
+using FastFrame.Infrastructure.Identity;
 using FastFrame.Infrastructure.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;

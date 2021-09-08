@@ -1,4 +1,4 @@
-﻿using FastFrame.Infrastructure.Interface;
+﻿using FastFrame.Infrastructure.Resource;
 using System.IO;
 
 namespace FastFrame.Application

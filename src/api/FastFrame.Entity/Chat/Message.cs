@@ -37,6 +37,8 @@ namespace FastFrame.Entity.Chat
         /// <summary>
         /// 主键
         /// </summary>
-        public string Id { get; set; } 
+        public string Id { get; set; }
+
+        public string Tenant_Id { get; set; }
     }
 }

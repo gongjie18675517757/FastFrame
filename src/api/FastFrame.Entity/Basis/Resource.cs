@@ -8,7 +8,7 @@ namespace FastFrame.Entity.Basis
     /// </summary>     
     [RelatedField(nameof(Name))]
     [Export(ExportMark.ViewModel)]
-    public class Resource : IEntity, IHasTenant
+    public class Resource : IEntity
     {
         /// <summary>
         /// 资源名称
@@ -48,6 +48,6 @@ namespace FastFrame.Entity.Basis
         /// </summary>
         public DateTime UploadTime { get; set; }
 
-        public string Id { get; set; }
+        public string Id { get; set; } 
     }
 }

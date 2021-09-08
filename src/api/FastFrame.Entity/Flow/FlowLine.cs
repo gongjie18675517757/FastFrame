@@ -6,7 +6,7 @@ namespace FastFrame.Entity.Flow
     /// 流程连接线
     /// </summary>
     [Export(ExportMark.DTO)]
-    public class FlowLine : IEntity, IHasSoftDelete, IHasTenant
+    public class FlowLine : IEntity, IHasSoftDelete
     {
         public string Id { get; set; }
 

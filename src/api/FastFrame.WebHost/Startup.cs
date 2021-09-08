@@ -1,12 +1,16 @@
-﻿using FastFrame.Application;
+﻿using AspectCore.Configuration;
+using AspectCore.Extensions.DependencyInjection;
+using FastFrame.Application;
 using FastFrame.Database;
 using FastFrame.Infrastructure.Client;
 using FastFrame.Infrastructure.EventBus;
 using FastFrame.Infrastructure.Interface;
 using FastFrame.Infrastructure.IntervalWork;
+using FastFrame.Infrastructure.Lock;
 using FastFrame.Infrastructure.MessageQueue;
 using FastFrame.Infrastructure.Module;
 using FastFrame.Infrastructure.Permission;
+using FastFrame.Infrastructure.Resource;
 using FastFrame.Repository;
 using FastFrame.WebHost.Hubs;
 using FastFrame.WebHost.Middleware;
@@ -55,11 +59,11 @@ namespace FastFrame.WebHost
                                     configuration
                                       .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
                                       .UseSimpleAssemblyNameTypeSerializer()
-                                      .UseRecommendedSerializerSettings()
+                                      .UseRecommendedSerializerSettings()  
                                       .UseRedisStorage(connectionMultiplexer, new Hangfire.Redis.RedisStorageOptions
                                       {
                                           Prefix = configurationOptions.ChannelPrefix,
-                                          Db = configurationOptions.DefaultDatabase ?? -1,
+                                          Db = configurationOptions.DefaultDatabase ?? -1,                                             
                                       }));
 
             services.AddHangfireServer();
@@ -114,6 +118,7 @@ namespace FastFrame.WebHost
                 .AddSingleton<IClientManage, ClientMamager>()
                 .AddSingleton<IClientConnection, ClientConnection>()
                 .AddSingleton<ICacheProvider, CacheProvider>()
+                .AddSingleton<ILockFacatory, CacheProvider>()
                 .AddSingleton<IBackgroundJob, HangfireBackgroundJob>()
                 .AddSingleton<IMessageQueue, MessageQueue>()
                 .AddSingleton<IApplicationInitialLifetime>(v => (MessageQueue)v.GetService<IMessageQueue>())
@@ -123,9 +128,13 @@ namespace FastFrame.WebHost
                 .AddIntervalWork(typeof(IService).Assembly, typeof(Startup).Assembly, typeof(Infrastructure.Extension).Assembly)
                 .AddMessageQueue(typeof(IService).Assembly, typeof(Startup).Assembly, typeof(Infrastructure.Extension).Assembly)
                 ;
+            services.AddSingleton<LockMethodAttribute>();
 
-
-
+            /*添加动态代理*/
+            services.ConfigureDynamicProxy(config =>
+            {
+                config.Interceptors.AddTyped<LockMethodAttribute>(Predicates.ForService("*Service"));
+            });
 #if DEBUG
             services.AddSwaggerGen(options =>
             {
@@ -172,7 +181,7 @@ namespace FastFrame.WebHost
             var defaultFilesOptions = new DefaultFilesOptions();
             defaultFilesOptions.DefaultFileNames.Add("index.html");
             app.UseDefaultFiles(defaultFilesOptions);
-            app.UseStaticFiles();
+            app.UseStaticFiles(); 
 
             /*记录接口请求时间*/
             app.UseMiddleware<InvodeTimeMiddleware>();
@@ -182,7 +191,6 @@ namespace FastFrame.WebHost
 
             /*初始化应用会话状态*/
             app.UseMiddleware<AppSessionInitMiddleware>();
-
 
             /*异步处理中间件*/
             app.UseMiddleware<ExceptionMiddleware>();

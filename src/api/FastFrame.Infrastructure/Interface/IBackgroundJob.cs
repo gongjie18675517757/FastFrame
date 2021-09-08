@@ -48,7 +48,7 @@ namespace FastFrame.Infrastructure.Interface
 
 
         /// <summary>
-        /// 延时执行
+        /// 延时执行一次
         /// </summary>
         /// <typeparam name="TService"></typeparam>
         /// <param name="methodCall"></param>
@@ -56,7 +56,7 @@ namespace FastFrame.Infrastructure.Interface
         void SetTimeout<TService>(Expression<Func<TService, Task>> methodCall, TimeSpan? timeSpan);
 
         /// <summary>
-        /// 延时执行
+        /// 延时执行一次
         /// </summary>
         /// <typeparam name="TService"></typeparam> 
         /// <param name="method"></param>

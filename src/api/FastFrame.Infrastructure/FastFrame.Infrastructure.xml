@@ -602,6 +602,134 @@
             <param name="haveBase64Dencode"></param>
             <returns></returns>
         </member>
+        <member name="T:FastFrame.Infrastructure.Identity.ICurrUser">
+            <summary>
+            当前用户
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Identity.ICurrUser.ToKen">
+            <summary>
+            当前ToKen的ID
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Identity.ICurrUser.Id">
+            <summary>
+            用户ID
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Identity.ICurrUser.Name">
+            <summary>
+            用户名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Identity.ICurrUser.Account">
+            <summary>
+            帐号名
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Identity.ICurrUser.IsAdmin">
+            <summary>
+            是否管理员
+            </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Identity.DataPermission">
+            <summary>
+            数据权限
+            </summary>
+        </member>
+        <member name="F:FastFrame.Infrastructure.Identity.DataPermission.A">
+            <summary>
+            本人录入
+            </summary>
+        </member>
+        <member name="F:FastFrame.Infrastructure.Identity.DataPermission.B">
+            <summary>
+            本部门录入
+            </summary>
+        </member>
+        <member name="F:FastFrame.Infrastructure.Identity.DataPermission.C">
+            <summary>
+            全部
+            </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Identity.IIdentity">
+            <summary>
+            身份接口
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Identity.IIdentity.IsEnabled">
+            <summary>
+            是否有效
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Identity.IIdentity.ExpiredTime">
+            <summary>
+            过期时间
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Identity.IIdentity.LastTime">
+            <summary>
+            最后活动时间
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Identity.IIdentity.LoginTime">
+            <summary>
+            登陆时间
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Identity.IIdentity.User_Id">
+            <summary>
+            用户ID
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Identity.IIdentity.GetToken">
+            <summary>
+            获取TOKEN
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Identity.IIdentityManager">
+            <summary>
+            身份管理
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Identity.IIdentityManager.ExistsTokenAsync(System.String,System.Net.IPAddress)">
+            <summary>
+            验证TOKEN是否有效
+            </summary>
+            <param name="token"></param>
+            <param name="address"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Identity.IIdentityManager.GenerateIdentity(System.String,System.Net.IPAddress)">
+            <summary>
+            生成身份
+            </summary>
+            <param name="userId"></param>
+            <param name="address"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Identity.IIdentityManager.RefreshTokenAsync(System.String)">
+            <summary>
+            刷新TOKEN
+            </summary>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Identity.IIdentityManager.SetTokenFailureAsync(System.String)">
+            <summary>
+            强制TOKEN失效
+            </summary>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Identity.IIdentityManager.SetUserAllTokenFailureAsync(System.String)">
+            <summary>
+            强制用户所有TOKEN失效
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
+        </member>
         <member name="T:FastFrame.Infrastructure.ImageExtended">
             <summary>
             图片处理扩展
@@ -653,7 +781,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IApplicationSession.LoginAsync(FastFrame.Infrastructure.Interface.ICurrUser)">
+        <member name="M:FastFrame.Infrastructure.Interface.IApplicationSession.LoginAsync(FastFrame.Infrastructure.Identity.ICurrUser)">
             <summary>
             登陆
             </summary>
@@ -732,7 +860,7 @@
         </member>
         <member name="M:FastFrame.Infrastructure.Interface.IBackgroundJob.SetTimeout``1(System.Linq.Expressions.Expression{System.Func{``0,System.Threading.Tasks.Task}},System.Nullable{System.TimeSpan})">
             <summary>
-            延时执行
+            延时执行一次
             </summary>
             <typeparam name="TService"></typeparam>
             <param name="methodCall"></param>
@@ -740,7 +868,7 @@
         </member>
         <member name="M:FastFrame.Infrastructure.Interface.IBackgroundJob.SetTimeoutByMethod``1(System.Reflection.MethodInfo,System.Object[],System.Nullable{System.TimeSpan})">
             <summary>
-            延时执行
+            延时执行一次
             </summary>
             <typeparam name="TService"></typeparam> 
             <param name="method"></param>
@@ -898,56 +1026,6 @@
             缓存
             </summary>
         </member>
-        <member name="T:FastFrame.Infrastructure.Interface.ICurrUser">
-            <summary>
-            当前用户
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.ICurrUser.ToKen">
-            <summary>
-            当前ToKen的ID
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.ICurrUser.Id">
-            <summary>
-            用户ID
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.ICurrUser.Name">
-            <summary>
-            用户名称
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.ICurrUser.Account">
-            <summary>
-            帐号名
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.ICurrUser.IsAdmin">
-            <summary>
-            是否管理员
-            </summary>
-        </member>
-        <member name="T:FastFrame.Infrastructure.Interface.DataPermission">
-            <summary>
-            数据权限
-            </summary>
-        </member>
-        <member name="F:FastFrame.Infrastructure.Interface.DataPermission.A">
-            <summary>
-            本人录入
-            </summary>
-        </member>
-        <member name="F:FastFrame.Infrastructure.Interface.DataPermission.B">
-            <summary>
-            本部门录入
-            </summary>
-        </member>
-        <member name="F:FastFrame.Infrastructure.Interface.DataPermission.C">
-            <summary>
-            全部
-            </summary>
-        </member>
         <member name="T:FastFrame.Infrastructure.Interface.IExcelExportProvider">
             <summary>
             EXCEL导出
@@ -986,183 +1064,6 @@
             获取值方法
             </summary>
         </member>
-        <member name="T:FastFrame.Infrastructure.Interface.IIdentity">
-            <summary>
-            身份接口
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.IIdentity.IsEnabled">
-            <summary>
-            是否有效
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.IIdentity.ExpiredTime">
-            <summary>
-            过期时间
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.IIdentity.LastTime">
-            <summary>
-            最后活动时间
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.IIdentity.LoginTime">
-            <summary>
-            登陆时间
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.IIdentity.User_Id">
-            <summary>
-            用户ID
-            </summary>
-        </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IIdentity.GetToken">
-            <summary>
-            获取TOKEN
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="T:FastFrame.Infrastructure.Interface.IIdentityManager">
-            <summary>
-            身份管理
-            </summary>
-        </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IIdentityManager.ExistsTokenAsync(System.String,System.Net.IPAddress)">
-            <summary>
-            验证TOKEN是否有效
-            </summary>
-            <param name="token"></param>
-            <param name="address"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IIdentityManager.GenerateIdentity(System.String,System.Net.IPAddress)">
-            <summary>
-            生成身份
-            </summary>
-            <param name="userId"></param>
-            <param name="address"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IIdentityManager.RefreshTokenAsync(System.String)">
-            <summary>
-            刷新TOKEN
-            </summary>
-            <param name="token"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IIdentityManager.SetTokenFailureAsync(System.String)">
-            <summary>
-            强制TOKEN失效
-            </summary>
-            <param name="token"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IIdentityManager.SetUserAllTokenFailureAsync(System.String)">
-            <summary>
-            强制用户所有TOKEN失效
-            </summary>
-            <param name="userId"></param>
-            <returns></returns>
-        </member>
-        <member name="T:FastFrame.Infrastructure.Interface.IResourceProvider">
-            <summary>
-            附件资源操作提供者
-            </summary>
-        </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IResourceProvider.WriteAsync(System.IO.Stream)">
-            <summary>
-            保存
-            </summary> 
-        </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IResourceProvider.ReadAsync(System.String)">
-            <summary>
-            读取
-            </summary> 
-        </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IResourceProvider.ExistsAsync(System.String)">
-            <summary>
-            检查是否存在
-            </summary> 
-        </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IResourceProvider.GetFilePath(System.String)">
-            <summary>
-            获取实际文件路径
-            </summary>
-            <param name="relativelyPath"></param>
-            <returns></returns>
-        </member>
-        <member name="T:FastFrame.Infrastructure.Interface.IResourceInfo">
-            <summary>
-            资源信息
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.IResourceInfo.Name">
-            <summary>
-            名称 
-            </summary> 
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.IResourceInfo.Size">
-            <summary>
-            大小 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.IResourceInfo.ContentType">
-            <summary>
-            类型 
-            </summary> 
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.IResourceInfo.UploaderName">
-            <summary>
-            上传人 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.IResourceInfo.UploadTime">
-            <summary>
-            上传时间 
-            </summary>
-        </member>
-        <member name="T:FastFrame.Infrastructure.Interface.IResourceStreamInfo">
-            <summary>
-            资源流
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.IResourceStreamInfo.Name">
-            <summary>
-            名称 
-            </summary> 
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.IResourceStreamInfo.ResourceBlobStream">
-            <summary>
-            资源流
-            </summary>
-        </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IResourceStreamInfo.ReplaceBlobStream(System.IO.Stream)">
-            <summary>
-            替换资源
-            </summary>
-            <param name="input"></param>
-        </member>
-        <member name="T:FastFrame.Infrastructure.Interface.IResourceStoreProvider">
-            <summary>
-            资源存储
-            </summary>
-        </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IResourceStoreProvider.TrySaveResource(System.String,System.String,System.IO.Stream)">
-            <summary>
-            尝试保存资源
-            </summary>
-            <param name="name"></param>
-            <param name="contentType"></param>
-            <param name="stream"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IResourceStoreProvider.TryGetResource(System.String)">
-            <summary>
-            尝试获取资源
-            </summary>
-            <param name="resourceId"></param>
-            <returns></returns>
-        </member>
         <member name="T:FastFrame.Infrastructure.IntervalWork.IIntervalWorkHost">
             <summary>
             标记此类有需要执行定时任务
@@ -1196,6 +1097,12 @@
             添加程序集
             </summary>
             <param name="assembly"></param>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Lock.ILockHolder.LockRelease">
+            <summary>
+            释放锁
+            </summary>
+            <returns></returns>
         </member>
         <member name="T:FastFrame.Infrastructure.MessageQueue.IMessageQueue">
             <summary>
@@ -1696,6 +1603,105 @@
             <summary>
             权限组文本
             </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Resource.IResourceInfo">
+            <summary>
+            资源信息
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Resource.IResourceInfo.Name">
+            <summary>
+            名称 
+            </summary> 
+        </member>
+        <member name="P:FastFrame.Infrastructure.Resource.IResourceInfo.Size">
+            <summary>
+            大小 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Resource.IResourceInfo.ContentType">
+            <summary>
+            类型 
+            </summary> 
+        </member>
+        <member name="P:FastFrame.Infrastructure.Resource.IResourceInfo.UploaderName">
+            <summary>
+            上传人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Resource.IResourceInfo.UploadTime">
+            <summary>
+            上传时间 
+            </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Resource.IResourceProvider">
+            <summary>
+            附件资源操作提供者
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Resource.IResourceProvider.WriteAsync(System.IO.Stream)">
+            <summary>
+            保存
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Infrastructure.Resource.IResourceProvider.ReadAsync(System.String)">
+            <summary>
+            读取
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Infrastructure.Resource.IResourceProvider.ExistsAsync(System.String)">
+            <summary>
+            检查是否存在
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Infrastructure.Resource.IResourceProvider.GetFilePath(System.String)">
+            <summary>
+            获取实际文件路径
+            </summary>
+            <param name="relativelyPath"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Resource.IResourceStoreProvider">
+            <summary>
+            资源存储
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Resource.IResourceStoreProvider.TrySaveResource(System.String,System.String,System.IO.Stream)">
+            <summary>
+            尝试保存资源
+            </summary>
+            <param name="name"></param>
+            <param name="contentType"></param>
+            <param name="stream"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Resource.IResourceStoreProvider.TryGetResource(System.String)">
+            <summary>
+            尝试获取资源
+            </summary>
+            <param name="resourceId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Resource.IResourceStreamInfo">
+            <summary>
+            资源流
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Resource.IResourceStreamInfo.Name">
+            <summary>
+            名称 
+            </summary> 
+        </member>
+        <member name="P:FastFrame.Infrastructure.Resource.IResourceStreamInfo.ResourceBlobStream">
+            <summary>
+            资源流
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Resource.IResourceStreamInfo.ReplaceBlobStream(System.IO.Stream)">
+            <summary>
+            替换资源
+            </summary>
+            <param name="input"></param>
         </member>
         <member name="T:FastFrame.Infrastructure.SlideVerificationCreater">
             <summary>

@@ -1,5 +1,4 @@
-﻿using FastFrame.Infrastructure.Interface;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.StaticFiles;
@@ -16,6 +15,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using System;
 using System.Net;
 using Microsoft.AspNetCore.Components.Routing;
+using FastFrame.Infrastructure.Resource;
 
 namespace FastFrame.WebHost.Middleware
 {

@@ -5,7 +5,7 @@ namespace FastFrame.Entity.Basis
     /// <summary>
     /// 编号记录
     /// </summary> 
-    public class NumberRecord : IEntity,IHasSoftDelete,IHasTenant
+    public class NumberRecord : IEntity, IHasSoftDelete, IHasTenant
     {
         public string Id { get; set; }
 
@@ -39,5 +39,8 @@ namespace FastFrame.Entity.Basis
         /// 上一期流水
         /// </summary>
         public int PrevSerial { get; set; }
-    } 
+
+
+        public string Tenant_Id { get; set; }
+    }
 }

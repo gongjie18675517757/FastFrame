@@ -59,12 +59,12 @@ namespace FastFrame.Database
                     entityTypeBuilder.HasIndex("isdeleted").HasDatabaseName($"Index_{entityType.Name}_isdeleted");
                 }
 
-                /*多租户标记*/
-                if (typeof(IHasTenant).IsAssignableFrom(entityType))
-                {
-                    entityTypeBuilder.Property<string>("tenant_id").HasMaxLength(25);
-                    entityTypeBuilder.HasIndex("tenant_id").HasDatabaseName($"Index_{entityType.Name}_tenant_id");
-                }
+                ///*多租户标记*/
+                //if (typeof(IHasTenant).IsAssignableFrom(entityType))
+                //{
+                //    entityTypeBuilder.Property<string>("tenant_id").HasMaxLength(25);
+                //    entityTypeBuilder.HasIndex("tenant_id").HasDatabaseName($"Index_{entityType.Name}_tenant_id");
+                //}
             }
 
 
@@ -129,10 +129,11 @@ namespace FastFrame.Database
                 else if (propType.IsEnum)
                 {
                     propertyBuilder.HasConversion<string>().HasMaxLength(50);
+                    entityTypeBuilder.HasIndex(property.Name).HasDatabaseName($"Index_{entityType.Name}_{property.Name}");
                 }
             }
 
-            /*处理继续承的关键字*/
+            /*处理表继承的关键字*/
             if (!isInheritTable && entityTypeBuilder.Metadata.GetProperties().Any(v => v.Name == "Discriminator"))
             {
                 entityTypeBuilder

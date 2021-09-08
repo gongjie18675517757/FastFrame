@@ -1,6 +1,7 @@
 ﻿using FastFrame.Database;
 using FastFrame.Entity;
 using FastFrame.Infrastructure;
+using FastFrame.Infrastructure.Identity;
 using FastFrame.Infrastructure.Interface;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -39,9 +40,7 @@ namespace FastFrame.Repository
                     IQueryable<T> query = context.Set<T>().AsNoTracking();
                     var tenantId = AppSession?.Tenant_Id;
                     if (!tenantId.IsNullOrWhiteSpace() && typeof(IHasTenant).IsAssignableFrom(typeof(T)))
-                    {
                         query = query.Where(v => EF.Property<string>(v, "tenant_id") == tenantId);
-                    }
 
                     queryable = query;
                 }

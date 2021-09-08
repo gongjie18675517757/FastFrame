@@ -6,7 +6,7 @@ namespace FastFrame.Entity.Flow
     /// 流程节点
     /// </summary>
     [Export(ExportMark.DTO)]
-    public class FlowNode : IEntity, IHasSoftDelete, IHasTenant
+    public class FlowNode : IEntity, IHasSoftDelete
     {
         public string Id { get; set; }
 

@@ -1,4 +1,4 @@
-﻿using FastFrame.Infrastructure.Interface;
+﻿using FastFrame.Infrastructure.Resource;
 using FastFrame.WebHost.Middleware;
 using Microsoft.Extensions.Options;
 using System;

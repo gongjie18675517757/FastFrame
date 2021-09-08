@@ -3,7 +3,7 @@
     /// <summary>
     /// 树结构表
     /// </summary>
-    public interface ITreeEntity
+    public interface ITreeEntity:IEntity
     {
         /// <summary>
         /// 上级ID

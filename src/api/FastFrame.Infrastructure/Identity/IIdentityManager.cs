@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
 
-namespace FastFrame.Infrastructure.Interface
+namespace FastFrame.Infrastructure.Identity
 {
     /// <summary>
     /// 身份管理
@@ -22,7 +22,7 @@ namespace FastFrame.Infrastructure.Interface
         /// <param name="userId"></param>
         /// <param name="address"></param>
         /// <returns></returns>
-        Task<IIdentity> GenerateIdentity(string userId,IPAddress address);
+        Task<IIdentity> GenerateIdentity(string userId, IPAddress address);
 
         /// <summary>
         /// 刷新TOKEN

@@ -1,6 +1,7 @@
 ﻿using FastFrame.Entity.Basis;
 using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Interface;
+using FastFrame.Infrastructure.Resource;
 using FastFrame.Repository;
 using Microsoft.EntityFrameworkCore;
 using System;

@@ -6,7 +6,7 @@ namespace FastFrame.Application
     /// <summary>
     /// 自动缓存
     /// </summary>
-    public class AutoCacheInterceptor : AbstractInterceptorAttribute
+    public sealed class AutoCacheInterceptor : AbstractInterceptorAttribute
     {
         private readonly AutoCacheOperate autoCacheOperate;
 

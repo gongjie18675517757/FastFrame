@@ -3,7 +3,7 @@
     /// <summary>
     /// 节点审核角色
     /// </summary> 
-    public class FlowNodeRole : IEntity, IHasSoftDelete, IHasTenant
+    public class FlowNodeRole : IEntity, IHasSoftDelete
     {
         public string Id { get; set; }
 

@@ -1,5 +1,5 @@
 ﻿using FastFrame.Entity.Basis;
-using FastFrame.Infrastructure.Interface;
+using FastFrame.Infrastructure.Identity;
 using FastFrame.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;

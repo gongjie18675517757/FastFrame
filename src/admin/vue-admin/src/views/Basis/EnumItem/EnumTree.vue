@@ -40,7 +40,7 @@ export default {
           .filter(v => v)
           .map((v, i) => (i > 0 ? `(${v})` : v))
           .join(""),
-        ...(v.tChildCount > 0 ? { children: [] } : {}),
+        ...(v.ChildCount > 0 ? { children: [] } : {}),
         type: "node"
       }));
 

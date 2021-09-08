@@ -1,4 +1,5 @@
 ﻿using FastFrame.Infrastructure;
+using FastFrame.Infrastructure.Identity;
 using FastFrame.Infrastructure.Interface;
 using FastFrame.Infrastructure.MessageQueue;
 using Microsoft.AspNetCore.SignalR;

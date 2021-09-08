@@ -8,13 +8,6 @@ namespace FastFrame.Application.Events
     /// <typeparam name="T"></typeparam>
     public class DoMainDeleted<T> : BaseEventData<T>  
     {
-        public DoMainDeleted(string id,object data)
-        {
-            Id = id;
-            Data = data;
-        }
-
-        public string Id { get; }
-        public object Data { get; }
+        public string Id { get; set; }
     }
 }

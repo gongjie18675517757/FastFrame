@@ -1,11 +1,13 @@
 ﻿using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Interface;
+using FastFrame.Infrastructure.Lock;
 using System;
 using System.Threading.Tasks;
 
 namespace FastFrame.WebHost.Privder
 {
-    public class CacheProvider : ICacheProvider
+
+    public class CacheProvider : ICacheProvider, ILockFacatory
     {
         private readonly StackExchange.Redis.ConnectionMultiplexer redisClient;
         private readonly int defaultDatabase;
@@ -20,7 +22,6 @@ namespace FastFrame.WebHost.Privder
         }
 
 
-
         private static T ConvertValue<T>(StackExchange.Redis.RedisValue value)
         {
             if (!value.HasValue)
@@ -28,6 +29,7 @@ namespace FastFrame.WebHost.Privder
 
             return value.ToString().ToObject<T>();
         }
+
 
         private string ConvertKey(string key)
         {
@@ -37,8 +39,23 @@ namespace FastFrame.WebHost.Privder
             return $"{prefix}{key}";
         }
 
+        public async Task<ILockHolder> TryCreateLockAsync(string key, TimeSpan timeSpan)
+        {
+            key = ConvertKey(key);
+            var token = Guid.NewGuid().ToString("d");
+            var database = redisClient.GetDatabase(defaultDatabase);
+
+            var exists = await database.LockTakeAsync(key, token, timeSpan);
+
+            if (exists)
+                return new LockHolder(key, token, database);
+
+            return null;
+        }
+
         public Task DelAsync(string key)
         {
+
             return redisClient.GetDatabase(defaultDatabase).KeyDeleteAsync(ConvertKey(key));
         }
 

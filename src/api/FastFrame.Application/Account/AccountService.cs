@@ -2,6 +2,7 @@
 using FastFrame.Entity.Basis;
 using FastFrame.Entity.Enums;
 using FastFrame.Infrastructure;
+using FastFrame.Infrastructure.Identity;
 using FastFrame.Infrastructure.Interface;
 using FastFrame.Repository;
 using Microsoft.EntityFrameworkCore;

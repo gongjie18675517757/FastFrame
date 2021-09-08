@@ -9,6 +9,8 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using System.IO;
+using FastFrame.Infrastructure.Identity;
+using FastFrame.Infrastructure.Resource;
 
 namespace FastFrame.WebHost.Controllers.Account
 {

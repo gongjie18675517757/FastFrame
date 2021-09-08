@@ -21,5 +21,5 @@
         /// 键值
         /// </summary>
         public virtual string Value_Id { get; set; }
-    }  
+    }
 }

@@ -73,12 +73,15 @@ namespace FastFrame.Database.Migrations
                         .HasColumnName("super_id")
                         .HasComment("上级");
 
+                    b.Property<string>("Tenant_Id")
+                        .HasMaxLength(25)
+                        .IsUnicode(true)
+                        .HasColumnType("varchar(25)")
+                        .HasColumnName("tenant_id")
+                        .HasComment("租户ID");
+
                     b.Property<bool>("isdeleted")
                         .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("tenant_id")
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
 
                     b.HasKey("Id");
 
@@ -91,11 +94,11 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("Super_Id")
                         .HasDatabaseName("Index_Dept_Super_Id");
 
+                    b.HasIndex("Tenant_Id")
+                        .HasDatabaseName("Index_Dept_Tenant_Id");
+
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_Dept_isdeleted");
-
-                    b.HasIndex("tenant_id")
-                        .HasDatabaseName("Index_Dept_tenant_id");
 
                     b.ToTable("basis_dept");
 
@@ -206,6 +209,13 @@ namespace FastFrame.Database.Migrations
                         .HasColumnName("super_id")
                         .HasComment("上级");
 
+                    b.Property<string>("Tenant_Id")
+                        .HasMaxLength(25)
+                        .IsUnicode(true)
+                        .HasColumnType("varchar(25)")
+                        .HasColumnName("tenant_id")
+                        .HasComment("租户ID");
+
                     b.Property<string>("Value")
                         .IsRequired()
                         .HasMaxLength(150)
@@ -217,14 +227,13 @@ namespace FastFrame.Database.Migrations
                     b.Property<bool>("isdeleted")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("tenant_id")
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("Create_User_Id")
                         .HasDatabaseName("Index_EnumItem_Create_User_Id");
+
+                    b.HasIndex("Key")
+                        .HasDatabaseName("Index_EnumItem_Key");
 
                     b.HasIndex("Modify_User_Id")
                         .HasDatabaseName("Index_EnumItem_Modify_User_Id");
@@ -232,11 +241,11 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("Super_Id")
                         .HasDatabaseName("Index_EnumItem_Super_Id");
 
+                    b.HasIndex("Tenant_Id")
+                        .HasDatabaseName("Index_EnumItem_Tenant_Id");
+
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_EnumItem_isdeleted");
-
-                    b.HasIndex("tenant_id")
-                        .HasDatabaseName("Index_EnumItem_tenant_id");
 
                     b.ToTable("basis_enumitem");
 
@@ -259,7 +268,9 @@ namespace FastFrame.Database.Migrations
                         .HasComment("过期时间");
 
                     b.Property<string>("IPAddress")
-                        .HasColumnType("varchar(45)")
+                        .HasMaxLength(200)
+                        .IsUnicode(true)
+                        .HasColumnType("varchar(200)")
                         .HasColumnName("ipaddress")
                         .HasComment("IP");
 
@@ -278,6 +289,13 @@ namespace FastFrame.Database.Migrations
                         .HasColumnName("logintime")
                         .HasComment("登陆时间");
 
+                    b.Property<string>("Tenant_Id")
+                        .HasMaxLength(25)
+                        .IsUnicode(true)
+                        .HasColumnType("varchar(25)")
+                        .HasColumnName("tenant_id")
+                        .HasComment("");
+
                     b.Property<string>("User_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
@@ -285,17 +303,13 @@ namespace FastFrame.Database.Migrations
                         .HasColumnName("user_id")
                         .HasComment("关联：User");
 
-                    b.Property<string>("tenant_id")
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("Tenant_Id")
+                        .HasDatabaseName("Index_LoginLog_Tenant_Id");
 
                     b.HasIndex("User_Id")
                         .HasDatabaseName("Index_LoginLog_User_Id");
-
-                    b.HasIndex("tenant_id")
-                        .HasDatabaseName("Index_LoginLog_tenant_id");
 
                     b.ToTable("basis_loginlog");
 
@@ -363,12 +377,15 @@ namespace FastFrame.Database.Migrations
                         .HasColumnName("super_id")
                         .HasComment("上级");
 
+                    b.Property<string>("Tenant_Id")
+                        .HasMaxLength(25)
+                        .IsUnicode(true)
+                        .HasColumnType("varchar(25)")
+                        .HasColumnName("tenant_id")
+                        .HasComment("租户ID");
+
                     b.Property<bool>("isdeleted")
                         .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("tenant_id")
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
 
                     b.HasKey("Id");
 
@@ -384,11 +401,11 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("Super_Id")
                         .HasDatabaseName("Index_Meidia_Super_Id");
 
+                    b.HasIndex("Tenant_Id")
+                        .HasDatabaseName("Index_Meidia_Tenant_Id");
+
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_Meidia_isdeleted");
-
-                    b.HasIndex("tenant_id")
-                        .HasDatabaseName("Index_Meidia_tenant_id");
 
                     b.ToTable("basis_meidia");
 
@@ -450,6 +467,13 @@ namespace FastFrame.Database.Migrations
                         .HasColumnName("resource_id")
                         .HasComment("附件");
 
+                    b.Property<string>("Tenant_Id")
+                        .HasMaxLength(25)
+                        .IsUnicode(true)
+                        .HasColumnType("varchar(25)")
+                        .HasColumnName("tenant_id")
+                        .HasComment("租户ID");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -468,10 +492,6 @@ namespace FastFrame.Database.Migrations
                     b.Property<bool>("isdeleted")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("tenant_id")
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("Create_User_Id")
@@ -486,14 +506,14 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("Resource_Id")
                         .HasDatabaseName("Index_Notify_Resource_Id");
 
+                    b.HasIndex("Tenant_Id")
+                        .HasDatabaseName("Index_Notify_Tenant_Id");
+
                     b.HasIndex("Type_Id")
                         .HasDatabaseName("Index_Notify_Type_Id");
 
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_Notify_isdeleted");
-
-                    b.HasIndex("tenant_id")
-                        .HasDatabaseName("Index_Notify_tenant_id");
 
                     b.ToTable("basis_notify");
 
@@ -587,26 +607,32 @@ namespace FastFrame.Database.Migrations
                         .HasColumnName("taskdate")
                         .HasComment("是否取日期");
 
+                    b.Property<string>("Tenant_Id")
+                        .HasMaxLength(25)
+                        .IsUnicode(true)
+                        .HasColumnType("varchar(25)")
+                        .HasColumnName("tenant_id")
+                        .HasComment("租户ID");
+
                     b.Property<bool>("isdeleted")
                         .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("tenant_id")
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Create_User_Id")
                         .HasDatabaseName("Index_NumberOption_Create_User_Id");
 
+                    b.HasIndex("FmtDate")
+                        .HasDatabaseName("Index_NumberOption_FmtDate");
+
                     b.HasIndex("Modify_User_Id")
                         .HasDatabaseName("Index_NumberOption_Modify_User_Id");
 
+                    b.HasIndex("Tenant_Id")
+                        .HasDatabaseName("Index_NumberOption_Tenant_Id");
+
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_NumberOption_isdeleted");
-
-                    b.HasIndex("tenant_id")
-                        .HasDatabaseName("Index_NumberOption_tenant_id");
 
                     b.ToTable("basis_numberoption");
 
@@ -650,6 +676,13 @@ namespace FastFrame.Database.Migrations
                         .HasColumnName("serial")
                         .HasComment("流水");
 
+                    b.Property<string>("Tenant_Id")
+                        .HasMaxLength(25)
+                        .IsUnicode(true)
+                        .HasColumnType("varchar(25)")
+                        .HasColumnName("tenant_id")
+                        .HasComment("");
+
                     b.Property<int>("Year")
                         .HasColumnType("int")
                         .HasColumnName("year")
@@ -658,17 +691,13 @@ namespace FastFrame.Database.Migrations
                     b.Property<bool>("isdeleted")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("tenant_id")
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("Tenant_Id")
+                        .HasDatabaseName("Index_NumberRecord_Tenant_Id");
 
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_NumberRecord_isdeleted");
-
-                    b.HasIndex("tenant_id")
-                        .HasDatabaseName("Index_NumberRecord_tenant_id");
 
                     b.ToTable("basis_numberrecord");
 
@@ -730,17 +759,10 @@ namespace FastFrame.Database.Migrations
                         .HasColumnName("uploader_id")
                         .HasComment("上传人");
 
-                    b.Property<string>("tenant_id")
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("Uploader_Id")
                         .HasDatabaseName("Index_Resource_Uploader_Id");
-
-                    b.HasIndex("tenant_id")
-                        .HasDatabaseName("Index_Resource_tenant_id");
 
                     b.ToTable("basis_resource");
 
@@ -814,12 +836,15 @@ namespace FastFrame.Database.Migrations
                         .HasColumnName("remarks")
                         .HasComment("备注");
 
+                    b.Property<string>("Tenant_Id")
+                        .HasMaxLength(25)
+                        .IsUnicode(true)
+                        .HasColumnType("varchar(25)")
+                        .HasColumnName("tenant_id")
+                        .HasComment("租户ID");
+
                     b.Property<bool>("isdeleted")
                         .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("tenant_id")
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
 
                     b.HasKey("Id");
 
@@ -829,11 +854,11 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("Modify_User_Id")
                         .HasDatabaseName("Index_Role_Modify_User_Id");
 
+                    b.HasIndex("Tenant_Id")
+                        .HasDatabaseName("Index_Role_Tenant_Id");
+
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_Role_isdeleted");
-
-                    b.HasIndex("tenant_id")
-                        .HasDatabaseName("Index_Role_tenant_id");
 
                     b.ToTable("basis_role");
 
@@ -1070,6 +1095,53 @@ namespace FastFrame.Database.Migrations
                         .HasComment("");
                 });
 
+            modelBuilder.Entity("FastFrame.Entity.Basis.TreeChild", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(25)
+                        .IsUnicode(true)
+                        .HasColumnType("varchar(25)")
+                        .HasColumnName("id")
+                        .HasComment("");
+
+                    b.Property<string>("Child_Id")
+                        .HasMaxLength(25)
+                        .IsUnicode(true)
+                        .HasColumnType("varchar(25)")
+                        .HasColumnName("child_id")
+                        .HasComment("下级");
+
+                    b.Property<string>("Super_Id")
+                        .HasMaxLength(25)
+                        .IsUnicode(true)
+                        .HasColumnType("varchar(25)")
+                        .HasColumnName("super_id")
+                        .HasComment("上级");
+
+                    b.Property<string>("TreeName")
+                        .HasMaxLength(50)
+                        .IsUnicode(true)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("treename")
+                        .HasComment("树名称");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Child_Id")
+                        .HasDatabaseName("Index_TreeChild_Child_Id");
+
+                    b.HasIndex("Super_Id")
+                        .HasDatabaseName("Index_TreeChild_Super_Id");
+
+                    b.HasIndex("TreeName")
+                        .HasDatabaseName("Index_TreeChild_TreeName");
+
+                    b.ToTable("basis_treechild");
+
+                    b
+                        .HasComment("树的递归下级");
+                });
+
             modelBuilder.Entity("FastFrame.Entity.Basis.User", b =>
                 {
                     b.Property<string>("Id")
@@ -1168,17 +1240,23 @@ namespace FastFrame.Database.Migrations
                         .HasColumnName("phonenumber")
                         .HasComment("手机号码");
 
+                    b.Property<string>("Tenant_Id")
+                        .HasMaxLength(25)
+                        .IsUnicode(true)
+                        .HasColumnType("varchar(25)")
+                        .HasColumnName("tenant_id")
+                        .HasComment("租户ID");
+
                     b.Property<bool>("isdeleted")
                         .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("tenant_id")
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Create_User_Id")
                         .HasDatabaseName("Index_User_Create_User_Id");
+
+                    b.HasIndex("Enable")
+                        .HasDatabaseName("Index_User_Enable");
 
                     b.HasIndex("HandIcon_Id")
                         .HasDatabaseName("Index_User_HandIcon_Id");
@@ -1186,11 +1264,11 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("Modify_User_Id")
                         .HasDatabaseName("Index_User_Modify_User_Id");
 
+                    b.HasIndex("Tenant_Id")
+                        .HasDatabaseName("Index_User_Tenant_Id");
+
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_User_isdeleted");
-
-                    b.HasIndex("tenant_id")
-                        .HasDatabaseName("Index_User_tenant_id");
 
                     b.ToTable("basis_user");
 
@@ -1248,10 +1326,6 @@ namespace FastFrame.Database.Migrations
                         .HasColumnName("title")
                         .HasComment("标题");
 
-                    b.Property<string>("tenant_id")
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("FromUser_Id")
@@ -1259,9 +1333,6 @@ namespace FastFrame.Database.Migrations
 
                     b.HasIndex("Replay_Email_Id")
                         .HasDatabaseName("Index_Email_Replay_Email_Id");
-
-                    b.HasIndex("tenant_id")
-                        .HasDatabaseName("Index_Email_tenant_id");
 
                     b.ToTable("chat_email");
 
@@ -1376,6 +1447,9 @@ namespace FastFrame.Database.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Category")
+                        .HasDatabaseName("Index_EmailTarget_Category");
+
                     b.HasIndex("Email_Id")
                         .HasDatabaseName("Index_EmailTarget_Email_Id");
 
@@ -1430,11 +1504,17 @@ namespace FastFrame.Database.Migrations
                         .HasColumnName("resource_id")
                         .HasComment("图片?附件ID");
 
-                    b.Property<string>("tenant_id")
+                    b.Property<string>("Tenant_Id")
                         .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
+                        .IsUnicode(true)
+                        .HasColumnType("varchar(25)")
+                        .HasColumnName("tenant_id")
+                        .HasComment("");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Category")
+                        .HasDatabaseName("Index_FriendMessage_Category");
 
                     b.HasIndex("From_Id")
                         .HasDatabaseName("Index_FriendMessage_From_Id");
@@ -1442,8 +1522,8 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("Resource_Id")
                         .HasDatabaseName("Index_FriendMessage_Resource_Id");
 
-                    b.HasIndex("tenant_id")
-                        .HasDatabaseName("Index_FriendMessage_tenant_id");
+                    b.HasIndex("Tenant_Id")
+                        .HasDatabaseName("Index_FriendMessage_Tenant_Id");
 
                     b.ToTable("chat_friendmessage");
 
@@ -1512,12 +1592,15 @@ namespace FastFrame.Database.Migrations
                         .HasColumnName("summary")
                         .HasComment("简介");
 
+                    b.Property<string>("Tenant_Id")
+                        .HasMaxLength(25)
+                        .IsUnicode(true)
+                        .HasColumnType("varchar(25)")
+                        .HasColumnName("tenant_id")
+                        .HasComment("租户ID");
+
                     b.Property<bool>("isdeleted")
                         .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("tenant_id")
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
 
                     b.HasKey("Id");
 
@@ -1533,11 +1616,11 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("Modify_User_Id")
                         .HasDatabaseName("Index_Group_Modify_User_Id");
 
+                    b.HasIndex("Tenant_Id")
+                        .HasDatabaseName("Index_Group_Tenant_Id");
+
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_Group_isdeleted");
-
-                    b.HasIndex("tenant_id")
-                        .HasDatabaseName("Index_Group_tenant_id");
 
                     b.ToTable("chat_group");
 
@@ -1631,11 +1714,17 @@ namespace FastFrame.Database.Migrations
                         .HasColumnName("resource_id")
                         .HasComment("图片?附件ID");
 
-                    b.Property<string>("tenant_id")
+                    b.Property<string>("Tenant_Id")
                         .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
+                        .IsUnicode(true)
+                        .HasColumnType("varchar(25)")
+                        .HasColumnName("tenant_id")
+                        .HasComment("");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Category")
+                        .HasDatabaseName("Index_GroupMessage_Category");
 
                     b.HasIndex("From_Id")
                         .HasDatabaseName("Index_GroupMessage_From_Id");
@@ -1646,8 +1735,8 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("Resource_Id")
                         .HasDatabaseName("Index_GroupMessage_Resource_Id");
 
-                    b.HasIndex("tenant_id")
-                        .HasDatabaseName("Index_GroupMessage_tenant_id");
+                    b.HasIndex("Tenant_Id")
+                        .HasDatabaseName("Index_GroupMessage_Tenant_Id");
 
                     b.ToTable("chat_groupmessage");
 
@@ -1807,10 +1896,6 @@ namespace FastFrame.Database.Migrations
                     b.Property<bool>("isdeleted")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("tenant_id")
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("Bill_Id")
@@ -1819,20 +1904,23 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("CurrStep_Id")
                         .HasDatabaseName("Index_FlowInstance_CurrStep_Id");
 
+                    b.HasIndex("Enabled")
+                        .HasDatabaseName("Index_FlowInstance_Enabled");
+
                     b.HasIndex("LastChecker_Id")
                         .HasDatabaseName("Index_FlowInstance_LastChecker_Id");
 
                     b.HasIndex("Sponsor_Id")
                         .HasDatabaseName("Index_FlowInstance_Sponsor_Id");
 
+                    b.HasIndex("Status")
+                        .HasDatabaseName("Index_FlowInstance_Status");
+
                     b.HasIndex("WorkFlow_Id")
                         .HasDatabaseName("Index_FlowInstance_WorkFlow_Id");
 
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_FlowInstance_isdeleted");
-
-                    b.HasIndex("tenant_id")
-                        .HasDatabaseName("Index_FlowInstance_tenant_id");
 
                     b.ToTable("flow_flowinstance");
 
@@ -1866,10 +1954,6 @@ namespace FastFrame.Database.Migrations
                     b.Property<bool>("isdeleted")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("tenant_id")
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("BeDept_Id")
@@ -1880,9 +1964,6 @@ namespace FastFrame.Database.Migrations
 
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_FlowInstanceDept_isdeleted");
-
-                    b.HasIndex("tenant_id")
-                        .HasDatabaseName("Index_FlowInstanceDept_tenant_id");
 
                     b.ToTable("flow_flowinstancedept");
 
@@ -1932,10 +2013,6 @@ namespace FastFrame.Database.Migrations
                     b.Property<bool>("isdeleted")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("tenant_id")
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("WorkFlow_Id")
@@ -1943,9 +2020,6 @@ namespace FastFrame.Database.Migrations
 
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_FlowLine_isdeleted");
-
-                    b.HasIndex("tenant_id")
-                        .HasDatabaseName("Index_FlowLine_tenant_id");
 
                     b.ToTable("flow_flowline");
 
@@ -2071,10 +2145,6 @@ namespace FastFrame.Database.Migrations
                     b.Property<bool>("isdeleted")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("tenant_id")
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("WorkFlow_Id")
@@ -2082,9 +2152,6 @@ namespace FastFrame.Database.Migrations
 
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_FlowNode_isdeleted");
-
-                    b.HasIndex("tenant_id")
-                        .HasDatabaseName("Index_FlowNode_tenant_id");
 
                     b.ToTable("flow_flownode");
 
@@ -2119,10 +2186,6 @@ namespace FastFrame.Database.Migrations
                     b.Property<bool>("isdeleted")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("tenant_id")
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("FlowNode_Id")
@@ -2130,9 +2193,6 @@ namespace FastFrame.Database.Migrations
 
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_FlowNodeField_isdeleted");
-
-                    b.HasIndex("tenant_id")
-                        .HasDatabaseName("Index_FlowNodeField_tenant_id");
 
                     b.ToTable("flow_flownodefield");
 
@@ -2166,10 +2226,6 @@ namespace FastFrame.Database.Migrations
                     b.Property<bool>("isdeleted")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("tenant_id")
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("FlowNode_Id")
@@ -2180,9 +2236,6 @@ namespace FastFrame.Database.Migrations
 
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_FlowNodeRole_isdeleted");
-
-                    b.HasIndex("tenant_id")
-                        .HasDatabaseName("Index_FlowNodeRole_tenant_id");
 
                     b.ToTable("flow_flownoderole");
 
@@ -2216,10 +2269,6 @@ namespace FastFrame.Database.Migrations
                     b.Property<bool>("isdeleted")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("tenant_id")
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("FlowNode_Id")
@@ -2230,9 +2279,6 @@ namespace FastFrame.Database.Migrations
 
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_FlowNodeUser_isdeleted");
-
-                    b.HasIndex("tenant_id")
-                        .HasDatabaseName("Index_FlowNodeUser_tenant_id");
 
                     b.ToTable("flow_flownodeuser");
 
@@ -2310,11 +2356,10 @@ namespace FastFrame.Database.Migrations
                     b.Property<bool>("isdeleted")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("tenant_id")
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("Action")
+                        .HasDatabaseName("Index_FlowProcess_Action");
 
                     b.HasIndex("FlowInstance_Id")
                         .HasDatabaseName("Index_FlowProcess_FlowInstance_Id");
@@ -2327,9 +2372,6 @@ namespace FastFrame.Database.Migrations
 
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_FlowProcess_isdeleted");
-
-                    b.HasIndex("tenant_id")
-                        .HasDatabaseName("Index_FlowProcess_tenant_id");
 
                     b.ToTable("flow_flowprocess");
 
@@ -2369,10 +2411,6 @@ namespace FastFrame.Database.Migrations
                     b.Property<bool>("isdeleted")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("tenant_id")
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("FKey_Id")
@@ -2383,9 +2421,6 @@ namespace FastFrame.Database.Migrations
 
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_FlowSnapshot_isdeleted");
-
-                    b.HasIndex("tenant_id")
-                        .HasDatabaseName("Index_FlowSnapshot_tenant_id");
 
                     b.ToTable("flow_flowsnapshot");
 
@@ -2460,10 +2495,6 @@ namespace FastFrame.Database.Migrations
                     b.Property<bool>("isdeleted")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("tenant_id")
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("FlowInstance_Id")
@@ -2480,9 +2511,6 @@ namespace FastFrame.Database.Migrations
 
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_FlowStep_isdeleted");
-
-                    b.HasIndex("tenant_id")
-                        .HasDatabaseName("Index_FlowStep_tenant_id");
 
                     b.ToTable("flow_flowstep");
 
@@ -2537,10 +2565,6 @@ namespace FastFrame.Database.Migrations
                     b.Property<bool>("isdeleted")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("tenant_id")
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("BeDept_Id")
@@ -2560,9 +2584,6 @@ namespace FastFrame.Database.Migrations
 
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_FlowStepUser_isdeleted");
-
-                    b.HasIndex("tenant_id")
-                        .HasDatabaseName("Index_FlowStepUser_tenant_id");
 
                     b.ToTable("flow_flowstepuser");
 
@@ -2639,6 +2660,13 @@ namespace FastFrame.Database.Migrations
                         .HasColumnName("remarks")
                         .HasComment("备注");
 
+                    b.Property<string>("Tenant_Id")
+                        .HasMaxLength(25)
+                        .IsUnicode(true)
+                        .HasColumnType("varchar(25)")
+                        .HasColumnName("tenant_id")
+                        .HasComment("租户ID");
+
                     b.Property<int>("Version")
                         .HasColumnType("int")
                         .HasColumnName("version")
@@ -2647,23 +2675,22 @@ namespace FastFrame.Database.Migrations
                     b.Property<bool>("isdeleted")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("tenant_id")
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("Create_User_Id")
                         .HasDatabaseName("Index_WorkFlow_Create_User_Id");
 
+                    b.HasIndex("Enabled")
+                        .HasDatabaseName("Index_WorkFlow_Enabled");
+
                     b.HasIndex("Modify_User_Id")
                         .HasDatabaseName("Index_WorkFlow_Modify_User_Id");
 
+                    b.HasIndex("Tenant_Id")
+                        .HasDatabaseName("Index_WorkFlow_Tenant_Id");
+
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_WorkFlow_isdeleted");
-
-                    b.HasIndex("tenant_id")
-                        .HasDatabaseName("Index_WorkFlow_tenant_id");
 
                     b.ToTable("flow_workflow");
 
@@ -2775,12 +2802,15 @@ namespace FastFrame.Database.Migrations
                         .HasColumnName("starttime")
                         .HasComment("开始时间");
 
+                    b.Property<string>("Tenant_Id")
+                        .HasMaxLength(25)
+                        .IsUnicode(true)
+                        .HasColumnType("varchar(25)")
+                        .HasColumnName("tenant_id")
+                        .HasComment("租户ID");
+
                     b.Property<bool>("isdeleted")
                         .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("tenant_id")
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
 
                     b.HasKey("Id");
 
@@ -2793,17 +2823,23 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("Dept_Id")
                         .HasDatabaseName("Index_OaLeave_Dept_Id");
 
+                    b.HasIndex("FlowStatus")
+                        .HasDatabaseName("Index_OaLeave_FlowStatus");
+
                     b.HasIndex("Job_Id")
                         .HasDatabaseName("Index_OaLeave_Job_Id");
+
+                    b.HasIndex("LeaveCategory")
+                        .HasDatabaseName("Index_OaLeave_LeaveCategory");
 
                     b.HasIndex("Modify_User_Id")
                         .HasDatabaseName("Index_OaLeave_Modify_User_Id");
 
+                    b.HasIndex("Tenant_Id")
+                        .HasDatabaseName("Index_OaLeave_Tenant_Id");
+
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_OaLeave_isdeleted");
-
-                    b.HasIndex("tenant_id")
-                        .HasDatabaseName("Index_OaLeave_tenant_id");
 
                     b.ToTable("oa_oaleave");
 

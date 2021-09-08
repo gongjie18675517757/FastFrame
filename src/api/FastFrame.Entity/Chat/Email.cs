@@ -5,7 +5,7 @@ namespace FastFrame.Entity.Chat
     /// <summary>
     /// 邮件
     /// </summary>
-    public class Email : IEntity, IHasTenant
+    public class Email : IEntity
     {
         /// <summary>
         /// 标题

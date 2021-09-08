@@ -5,7 +5,7 @@ namespace FastFrame.Entity.Flow
     /// <summary>
     /// 节点动态审核人
     /// </summary> 
-    public class FlowNodeField : IEntity, IHasSoftDelete, IHasTenant
+    public class FlowNodeField : IEntity, IHasSoftDelete
     {
         public string Id { get; set; }
 

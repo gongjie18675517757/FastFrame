@@ -1,4 +1,4 @@
-﻿namespace FastFrame.Infrastructure.Interface
+﻿namespace FastFrame.Infrastructure.Identity
 {
     /// <summary>
     /// 当前用户
@@ -28,7 +28,7 @@
         /// <summary>
         /// 是否管理员
         /// </summary>
-        bool IsAdmin { get; set; } 
+        bool IsAdmin { get; set; }
     }
 
     /// <summary>
@@ -49,6 +49,6 @@
         /// <summary>
         /// 全部
         /// </summary>
-        C 
+        C
     }
 }

@@ -24,10 +24,14 @@ namespace FastFrame.Repository
         /// </summary> 
         public virtual async Task<T> AddAsync(T entity)
         {
-            /*验证唯一性+关联性*/
-            entity.Id = IdGenerate.NetId();
-            if (entity is IHasTenant)
-                context.Entry(entity).Property<string>("tenant_id").CurrentValue = AppSession?.Tenant_Id;
+            /*自动生成主键*/
+            if (!(entity is INotGenerateableKey) || entity.Id.IsNullOrWhiteSpace())
+                entity.Id = IdGenerate.NetId();
+
+            /*自动填充租户ID*/
+            var tenant_id = AppSession?.Tenant_Id;
+            if (entity is IHasTenant hasTenant && tenant_id != null)
+                hasTenant.Tenant_Id = tenant_id;
 
             var entityEntry = context.Entry(entity);
             entityEntry.State = EntityState.Added;

@@ -72,6 +72,13 @@
             自动缓存
             </summary>
         </member>
+        <member name="T:FastFrame.Application.LockMethodAttribute">
+            <summary>
+            方法锁，同一时间只允许一个相同参数的实例执行
+            要求无参或简单参数
+            要求返回Task,或者void
+            </summary>
+        </member>
         <member name="T:FastFrame.Application.AutoNumberService">
             <summary>
             自动编号
@@ -284,18 +291,79 @@
             处理树节点
             </summary>
         </member>
-        <member name="M:FastFrame.Application.HanldeTreeService.HandleAsync">
+        <member name="M:FastFrame.Application.HanldeTreeService.InitialAsync">
             <summary>
-            每分钟一次
+            项目启动时执行一次检查
             </summary>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.Application.HanldeTreeService.HanldTreeAsync``1(System.String[])">
+        <member name="M:FastFrame.Application.HanldeTreeService.ExistsNotInitAsync">
             <summary>
-            记录树层级
+            检查是否未初始化
+            如果没有执行过树结构计算，则直接计算一次
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.HanldeTreeService.HandleCompareChildrenAsync">
+            <summary>
+            每天23:59执行
+            比较并更新所有树状节点的递归下级
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.HanldeTreeService.HanldTreeLevelBySuperIdAsync``1(System.String[])">
+            <summary>
+            向下计算树层级关联
             </summary>
             <typeparam name="TEntity"></typeparam>
             <param name="treeKeys"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.HanldeTreeService.HanldTreeLevelByChildIdAsync``1(System.String[])">
+            <summary>
+            向上计算层次关联
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <param name="treeKeys"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.HanldeTreeService.HanldTreeLevelByChildIdAsync(System.String,System.String[])">
+            <summary>
+            向上计算层次关联
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Application.HanldeTreeService.TrySaveTreeLevelAsync(System.String,System.String,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            保存
+            </summary>
+            <param name="treeName"></param>
+            <param name="id"></param>
+            <param name="children"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.HanldeTreeService.TryMakeChildRelate``1(System.String,System.Boolean)">
+            <summary>
+            尝试建立关系(向下)
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <param name="id"></param>
+            <param name="hasLoopChild">是否向下递归</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.HanldeTreeService.GetLoopChildTreeId``1(System.String)">
+            <summary>
+            递归全部下级
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.HanldeTreeService.GetLoopSuperId``1(System.String)">
+            <summary>
+            递归取全部上级
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <param name="id"></param>
             <returns></returns>
         </member>
         <member name="T:FastFrame.Application.IAutoNumberService">

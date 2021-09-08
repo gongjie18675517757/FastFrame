@@ -57,7 +57,7 @@ namespace FastFrame.Entity.Flow
     /// <summary>
     /// 流程实例
     /// </summary> 
-    public class FlowInstance : IEntity, IHasSoftDelete, IHasTenant
+    public class FlowInstance : IEntity, IHasSoftDelete
     {
         public string Id { get; set; }
 
@@ -146,7 +146,7 @@ namespace FastFrame.Entity.Flow
     /// <summary>
     /// 流程实例归属科室
     /// </summary>
-    public class FlowInstanceDept : IEntity, IHasSoftDelete, IHasTenant
+    public class FlowInstanceDept : IEntity, IHasSoftDelete
     {
         public string Id { get; set; }
 
@@ -164,7 +164,7 @@ namespace FastFrame.Entity.Flow
     /// <summary>
     /// 流程快照
     /// </summary> 
-    public class FlowSnapshot : IEntity, IHasSoftDelete, IHasTenant
+    public class FlowSnapshot : IEntity, IHasSoftDelete
     {
         public string Id { get; set; }
 
@@ -187,7 +187,7 @@ namespace FastFrame.Entity.Flow
     /// <summary>
     /// 流程步骤
     /// </summary> 
-    public class FlowStep : IEntity, IHasSoftDelete, IHasTenant
+    public class FlowStep : IEntity, IHasSoftDelete
     {
         public string Id { get; set; }
 
@@ -241,7 +241,7 @@ namespace FastFrame.Entity.Flow
     /// <summary>
     /// 流程步骤审核人
     /// </summary> 
-    public class FlowStepUser : IEntity, IHasSoftDelete, IHasTenant
+    public class FlowStepUser : IEntity, IHasSoftDelete
     {
         public string Id { get; set; }
 
@@ -274,7 +274,7 @@ namespace FastFrame.Entity.Flow
     /// <summary>
     /// 审批过程
     /// </summary> 
-    public class FlowProcess : IEntity, IHasSoftDelete, IHasTenant
+    public class FlowProcess : IEntity, IHasSoftDelete
     {
         public string Id { get; set; }
 

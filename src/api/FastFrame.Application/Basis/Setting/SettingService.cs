@@ -37,8 +37,8 @@ namespace FastFrame.Application.Basis
                  .OrderBy(v => Guid.NewGuid())
                  .Select(v => v.Path)
                  .FirstOrDefaultAsync();
-        }     
-        
+        }
+
         /// <summary>
         /// 获取随机验证码滑块图
         /// </summary>
@@ -170,7 +170,9 @@ namespace FastFrame.Application.Basis
 
             await loader.GetService<IEventBus>().TriggerEventAsync(new Events.DoMainUpdateing<SettingModel>(input, entity));
             await settings.CommmitAsync();
-            await loader.GetService<IEventBus>().TriggerEventAsync(new Events.DoMainUpdated<SettingModel>(input, entity));
+
+            var updateEvent = new Events.DoMainUpdated<SettingModel> { Id = entity.Id };
+            loader.GetService<Infrastructure.Interface.IBackgroundJob>().SetTimeout<IEventBus>(v => v.TriggerEventAsync(updateEvent), null);
         }
     }
 }

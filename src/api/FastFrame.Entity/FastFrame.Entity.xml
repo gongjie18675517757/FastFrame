@@ -566,6 +566,26 @@
             租户
             </summary>
         </member>
+        <member name="T:FastFrame.Entity.Basis.TreeChild">
+            <summary>
+            树的递归下级
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.TreeChild.TreeName">
+            <summary>
+            树名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.TreeChild.Super_Id">
+            <summary>
+            上级
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.TreeChild.Child_Id">
+            <summary>
+            下级
+            </summary>
+        </member>
         <member name="T:FastFrame.Entity.Basis.User">
             <summary>
             用户
@@ -1561,6 +1581,11 @@
             修改时间
             </summary>
         </member>
+        <member name="P:FastFrame.Entity.BaseEntity.Tenant_Id">
+            <summary>
+            租户ID
+            </summary>
+        </member>
         <member name="T:FastFrame.Entity.IEntity">
             <summary>
             标记为表
@@ -1606,6 +1631,11 @@
             标记使用多租户
             </summary>
         </member>
+        <member name="P:FastFrame.Entity.IHasTenant.Tenant_Id">
+            <summary>
+            租户ID,根租户为null
+            </summary>
+        </member>
         <member name="T:FastFrame.Entity.IHaveCheck">
             <summary>
             标识需要审核
@@ -1644,6 +1674,11 @@
         <member name="P:FastFrame.Entity.IHaveNumber.Number">
             <summary>
             编号
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.INotGenerateableKey">
+            <summary>
+            不自动生成ID
             </summary>
         </member>
         <member name="T:FastFrame.Entity.INotGenerateKey">

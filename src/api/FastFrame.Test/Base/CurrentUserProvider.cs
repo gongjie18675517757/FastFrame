@@ -1,4 +1,5 @@
 ﻿using FastFrame.Entity.Basis;
+using FastFrame.Infrastructure.Identity;
 using FastFrame.Infrastructure.Interface;
 using System;
 using System.Net;

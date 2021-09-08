@@ -13,6 +13,7 @@ using System.Data;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FastFrame.Application
 {
@@ -100,7 +101,16 @@ namespace FastFrame.Application
             await OnAdding(input, entity);
             await repository.CommmitAsync();
 
-            await EventBus?.TriggerEventAsync(new DoMainAdded<TDto>(input));
+
+            var addEvent = new DoMainAdded<TDto> { Id = entity.Id };
+            Loader.GetService<IBackgroundJob>().SetTimeout<IEventBus>(v => v.TriggerEventAsync(addEvent), null);
+
+            if (entity is ITreeEntity treeEntity)
+            {
+                var keys = new string[] { treeEntity.Super_Id };
+                var typeName = typeof(TEntity).Name;
+                Loader.GetService<IBackgroundJob>().SetTimeout<HanldeTreeService>(v => v.HanldTreeLevelByChildIdAsync(typeName, keys), null);
+            }
 
             return entity.Id;
         }
@@ -138,7 +148,15 @@ namespace FastFrame.Application
 
             foreach (var entity in entitys)
             {
-                await EventBus?.TriggerEventAsync(new DoMainDeleted<TDto>(entity.Id, entity));
+                var delEvent = new DoMainDeleted<TDto>() { Id = entity.Id };
+                Loader.GetService<IBackgroundJob>().SetTimeout<IEventBus>(v => v.TriggerEventAsync(delEvent), null);
+
+                if (entity is ITreeEntity treeEntity)
+                {
+                    var keys = new string[] { treeEntity.Super_Id };
+                    var typeName = typeof(TEntity).Name;
+                    Loader.GetService<IBackgroundJob>().SetTimeout<HanldeTreeService>(v => v.HanldTreeLevelByChildIdAsync(typeName, keys), null);
+                }
             }
         }
 
@@ -153,6 +171,9 @@ namespace FastFrame.Application
 
             if (input is IHaveMultiFileDto haveMultiFile)
                 await EventBus.TriggerEventAsync(new DoMainUpdateing<IHaveMultiFileDto>(haveMultiFile, entity));
+
+            if (input is ITreeEntity treeEntity)
+                await EventBus.TriggerEventAsync(new DoMainUpdateing<ITreeEntity>(treeEntity));
         }
 
         /// <summary>
@@ -171,7 +192,7 @@ namespace FastFrame.Application
                 throw new ArgumentNullException(nameof(input));
             }
             var entity = await repository.GetAsync(input.Id);
-
+            var prev = entity.MapTo<TEntity, TEntity>();
             //await repository.BeginTransactionAsync(IsolationLevel.ReadCommitted);
             await OnBeforeUpdate(entity, input);
 
@@ -186,7 +207,16 @@ namespace FastFrame.Application
             await OnUpdateing(input, entity);
             await repository.UpdateAsync(entity);
             await repository.CommmitAsync();
-            await EventBus?.TriggerEventAsync(new DoMainUpdated<TDto>(input));
+
+            var updateEvent = new DoMainUpdated<TDto> { Id = entity.Id };
+            Loader.GetService<IBackgroundJob>().SetTimeout<IEventBus>(v => v.TriggerEventAsync(updateEvent), null);
+
+            if (entity is ITreeEntity treeEntity && prev is ITreeEntity prevTreeEntity)
+            {
+                var keys = new string[] { treeEntity.Super_Id, prevTreeEntity.Super_Id };
+                var typeName = typeof(TEntity).Name;
+                Loader.GetService<IBackgroundJob>().SetTimeout<HanldeTreeService>(v => v.HanldTreeLevelByChildIdAsync(typeName, keys), null);
+            }
         }
 
         /// <summary>

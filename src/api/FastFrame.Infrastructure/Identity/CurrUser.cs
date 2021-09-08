@@ -1,4 +1,4 @@
-﻿namespace FastFrame.Infrastructure.Interface
+﻿namespace FastFrame.Infrastructure.Identity
 {
     public class CurrUser : ICurrUser
     {
@@ -8,7 +8,7 @@
 
         public string Name { get; set; }
 
-        public bool IsAdmin { get; set; } 
+        public bool IsAdmin { get; set; }
 
         public string ToKen { get; set; }
     }

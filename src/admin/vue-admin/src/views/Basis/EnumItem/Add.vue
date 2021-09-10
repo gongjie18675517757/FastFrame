@@ -40,11 +40,11 @@ export default {
             ...arr,
             {
               Name: "Key",
-              Readonly: () => this.model.Id || !!this.superid,
+              Readonly: () => !!this.model.Id || !!this.superid,
             },
             {
               Name: "Super_Id",
-              visible: this.model.Id || !this.superid,
+              visible: !!this.model.Id || !this.superid,
               requestUrl: (v) => `/api/EnumItem/EnumItemList/${v.Key || ""}`,
             },
           ];

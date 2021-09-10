@@ -172,8 +172,8 @@ namespace FastFrame.Application
             if (input is IHaveMultiFileDto haveMultiFile)
                 await EventBus.TriggerEventAsync(new DoMainUpdateing<IHaveMultiFileDto>(haveMultiFile, entity));
 
-            if (input is ITreeEntity treeEntity)
-                await EventBus.TriggerEventAsync(new DoMainUpdateing<ITreeEntity>(treeEntity));
+            if (entity is ITreeEntity treeEntity)
+                await Loader.GetService<HanldeTreeService>().ExistsLoopRef(treeEntity);
         }
 
         /// <summary>

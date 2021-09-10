@@ -109,7 +109,7 @@
                       <component
                         :is="singleLine ? 'div' : 'v-layout'"
                         wrap
-                        style="padding-bottom: 15px"
+                        style="padding: 15px"
                       >
                         <Input
                           v-for="item in group.values"

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using FastFrame.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,7 +19,7 @@ namespace FastFrame.Application.Basis
         protected override async Task OnGetListing(IEnumerable<DeptDto> dtos)
         {
             await base.OnGetListing(dtos);
-            
+
             var keyValuePairs = await EventBus.RequestAsync<IEnumerable<KeyValuePair<string, (UserViewModel[], string[])>>, DeptDto[]>(dtos.ToArray());
             foreach (var item in dtos)
             {
@@ -27,6 +29,16 @@ namespace FastFrame.Application.Basis
                     .SelectMany(v => v.Value.Item1)
                     .Where(v => item.Managers.Contains(v.Id));
             }
+        }
+
+        public async Task<IEnumerable<ITreeModel>> GetChildrenBySuperId(string id)
+        {
+            return await Query()
+               .Where(v => v.Super_Id == id)
+               .OrderBy(v => v.EnCode)
+               .ThenBy(v => v.Name)
+               .MapTo<DeptDto, TreeModel>()
+               .ToListAsync();
         }
     }
 }

@@ -1,5 +1,3 @@
- 
-
 <script>
 import { getEnumValues } from "../../../generate";
 import BaseTreeVue from "../../../components/Trees/BaseTree.vue";
@@ -48,7 +46,4 @@ export default {
     }
   }
 };
-</script>
-
-<style>
-</style>
+</script> 

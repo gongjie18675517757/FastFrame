@@ -53,12 +53,9 @@ namespace FastFrame.Application
         [LockMethod()]
         public virtual async Task ExistsNotInitAsync()
         {
-            await Task.Delay(30 * 1000);
-
             var treeChildren = loader.GetService<IRepository<TreeChild>>();
             if (!await treeChildren.AnyAsync())
                 await HandleCompareChildrenAsync();
-            //loader.GetService<IBackgroundJob>().SetTimeout<HanldeTreeService>(v => v.HandleCompareChildrenAsync(), null);
         }
 
         /// <summary>
@@ -101,7 +98,7 @@ namespace FastFrame.Application
         {
             foreach (var treeKey in treeKeys)
             {
-                var superIds = await GetLoopSuperId<TEntity>(treeKey).ToListAsync();
+                var superIds = await GetLoopSuperId<TEntity>(treeKey);
                 foreach (var superId in superIds)
                     await TryMakeChildRelate<TEntity>(superId, false);
             }
@@ -177,7 +174,8 @@ namespace FastFrame.Application
             if (!id.IsNullOrWhiteSpace())
             {
                 /*递归全部子孙级节点*/
-                var loopChildrenIds = await GetLoopChildTreeId<TEntity>(id).ToListAsync();
+                var loopChildrenIds = new List<string>();
+                await GetLoopChildTreeId<TEntity>(id, id, loopChildrenIds);
                 await TrySaveTreeLevelAsync(typeof(TEntity).Name, id, loopChildrenIds);
             }
 
@@ -198,11 +196,14 @@ namespace FastFrame.Application
         /// 递归全部下级
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
+        /// <param name="rootId"></param>
         /// <param name="id"></param>
+        /// <param name="resultList"></param>
         /// <returns></returns>
-        private async IAsyncEnumerable<string> GetLoopChildTreeId<TEntity>(string id) where TEntity : class, IEntity, ITreeEntity
+        private async Task GetLoopChildTreeId<TEntity>(string rootId, string id, List<string> resultList) where TEntity : class, IEntity, ITreeEntity
         {
             var entities = loader.GetService<IRepository<TEntity>>();
+            const string err_msg = "检查到循环引用";
 
             var childrenList = await entities
                 .Where(v => v.Super_Id == id)
@@ -210,18 +211,13 @@ namespace FastFrame.Application
                 .ToArrayAsync();
 
             foreach (var childrenId in childrenList)
-                yield return childrenId;
-
-            foreach (var childrenId in childrenList)
             {
-                var childChildList = await GetLoopChildTreeId<TEntity>(childrenId).ToListAsync();
-                foreach (var childrenChildrenId in childChildList)
-                {
-                    yield return childrenChildrenId;
-                }
-            }
+                if (resultList.Contains(childrenId))
+                    throw new MsgException($"{err_msg} {rootId}<==>{childrenId}");
 
-            yield break;
+                resultList.Add(childrenId);
+                await GetLoopChildTreeId<TEntity>(rootId, childrenId, resultList);
+            }
         }
 
         /// <summary>
@@ -230,12 +226,12 @@ namespace FastFrame.Application
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="id"></param>
         /// <returns></returns>
-        private async IAsyncEnumerable<string> GetLoopSuperId<TEntity>(string id) where TEntity : class, IEntity, ITreeEntity
+        private async Task<IEnumerable<string>> GetLoopSuperId<TEntity>(string id) where TEntity : class, IEntity, ITreeEntity
         {
             var entities = loader.GetService<IRepository<TEntity>>().Queryable;
             string prevId = id;
-
-            yield return id;
+            const string err_msg = "检查到循环引用";
+            var list = new List<string>() { id };
 
             while (true)
             {
@@ -247,10 +243,49 @@ namespace FastFrame.Application
                 if (superId.IsNullOrWhiteSpace())
                     break;
 
-                yield return superId;
+                if (list.Contains(superId))
+                    throw new MsgException($"{err_msg} {superId}<==>{id}");
+                list.Add(superId);
 
                 prevId = superId;
             }
+
+            return list;
+        }
+
+        /// <summary>
+        /// 检查循环引用 
+        /// </summary> 
+        public async Task ExistsLoopRef(ITreeEntity treeEntity)
+        {
+            var treeType = treeEntity.GetType();
+            var method = this.GetType().GetMethod(nameof(ExistsLoopRefByKey)).MakeGenericMethod(treeType);
+            await (Task)method.Invoke(this, new object[] { treeEntity.Super_Id, treeEntity.Id });
+        }
+
+        /// <summary>
+        /// 检查循环引用
+        /// 树节点的上级，不可以是自己，不可以是自己的下级
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="rootKey">要检查的树节点</param>
+        /// <param name="key">当前递归到的节点</param>
+        /// <returns></returns>
+        public async Task ExistsLoopRefByKey<TEntity>(string rootKey, string key) where TEntity : class, IEntity, ITreeEntity
+        {
+            const string err_msg = "检查到循环引用";
+            var entities = loader.GetService<IRepository<TEntity>>().Queryable;
+
+            if (key == rootKey)
+                throw new MsgException(err_msg);  
+            
+            var childrenList = await entities
+              .Where(v => v.Super_Id == key)
+              .Select(v => v.Id)
+              .ToArrayAsync();
+
+            foreach (var child_id in childrenList)
+                await ExistsLoopRefByKey<TEntity>(rootKey, child_id);
         }
     }
 }

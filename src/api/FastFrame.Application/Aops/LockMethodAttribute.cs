@@ -32,8 +32,10 @@ namespace FastFrame.Application
                 .Concat(context.Parameters.Select(v => v?.ToString()))
                 .Where(v => !string.IsNullOrWhiteSpace(v));
 
+            /*拼类名+方法名+参数*/
             var resource = string.Join(".", sb);
 
+            /*尝试获取锁*/
             var lockHolder = await context
                 .ServiceProvider
                 .GetService<ILockFacatory>()

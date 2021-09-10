@@ -38,7 +38,7 @@ namespace FastFrame.WebHost.Privder
                 if (liveTime.Value.TotalSeconds < 2)
                 {
                     Console.WriteLine($"资源:{key}还余:{liveTime}秒,执行延时1秒");
-                    await database.KeyExpireAsync(key, liveTime.Value.Add(TimeSpan.FromSeconds(1)));
+                    //await database.KeyExpireAsync(key, liveTime.Value.Add(TimeSpan.FromSeconds(1)));
                 }
 
                 await Task.Delay(1000);

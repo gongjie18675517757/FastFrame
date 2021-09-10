@@ -416,7 +416,9 @@ export let pageMethods = {
    * @returns 
    */
   getFormPageParsBySelectedTreeItem() {
-    return Promise.resolve({})
+    return Promise.resolve({
+
+    })
   },
 
   /**
@@ -470,19 +472,20 @@ export let pageMethods = {
    * 删除操作
    * @param {*} arr 
    */
-  remove(arr = []) {
-    this.$message.confirm({
+  async remove(arr = []) {
+    await this.$message.confirm({
       title: "提示",
       content: "确认要删除吗?"
-    }).then(() => {
-      let ids = arr.map(r => r.Id);
-      for (const id of ids) {
-        let index = this.selection.findIndex(r => r.Id == id);
-        this.$http.delete(`/api/${this.name}/delete/${id}`).then(() => {
-          this.selection.splice(index, 1);
-        });
-      }
-    });
+    })
+    let ids = arr.map(r => r.Id);
+    for (const id of ids) {
+      let index = this.selection.findIndex(r => r.Id == id);
+      await this.$http.delete(`/api/${this.name}/delete/${id}`)
+      this.selection.splice(index, 1);
+
+      index = this.rows.findIndex(r => r.Id == id);
+      this.rows.splice(index, 1);
+    }
   },
 
   /**
@@ -530,12 +533,27 @@ export let pageMethods = {
     }
   },
 
+/**
+ * 获取树键名
+ * @returns 
+ */
+  getTreeKey() {
+    return 'Super_Id'
+  },
+
   /**
    * 根据选中的树结点，生成查询参数
    * @returns 
    */
-  getRequestParsBySelectedTreeItem() {
-    return Promise.resolve([])
+  async getRequestParsBySelectedTreeItem(v) {
+    let treeKey = await this.getTreeKey(v);
+    return [
+      {
+        Name: treeKey,
+        compare: "==",
+        value: v.id,
+      },
+    ]
   },
 
   /**
@@ -591,9 +609,10 @@ export let pageMethods = {
       }).filter(v => v.Value.length > 0)
 
     };
-
+  
     if (this.treeSelectedItem) {
-      let arr = await this.getRequestParsByTreeItem(this.treeSelectedItem);
+      let arr = await this.getRequestParsBySelectedTreeItem(this.treeSelectedItem);
+
       if (arr.length > 0) {
         pageInfo.Filters.push({
           key: "and",
@@ -646,6 +665,7 @@ export let pageMethods = {
   loadList: throttle(function (pager) {
     this.loading = true;
     this.rows = [];
+
     Promise.resolve(pager)
       .then(this.getRequestPars)
       .then(pagePars => {
@@ -707,6 +727,7 @@ export let pageMethods = {
    */
   handleTreeItemActived(val) {
     this.treeSelectedItem = val;
+
     this.$nextTick(this.loadList)
   }
 }

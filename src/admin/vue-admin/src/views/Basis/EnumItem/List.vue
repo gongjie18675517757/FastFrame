@@ -9,7 +9,7 @@ export default {
     return {
       ...Page.data.call(this),
       ...pageInfo,
-      treeComponent: EnumTreeVue,
+      treeComponent: EnumTreeVue
     };
   },
   methods: {
@@ -26,32 +26,23 @@ export default {
           return `${v.name}:下级字典内容`;
       }
     },
-    getRequestParsByTreeItem(v) {
+    getTreeKey(v) {
       switch (v.type) {
         case "root":
-          return [
-            {
-              Name: "Key",
-              compare: "==",
-              value: v.id,
-            },
-          ];
+          return "Key";
         default:
-          return [
-            {
-              Name: "Super_Id",
-              compare: "==",
-              value: v.id,
-            },
-          ];
+          return Page.methods.getTreeKey.call(
+            this,
+            ...arguments
+          );
       }
     },
     getFormPageParsBySelectedTreeItem(v) {
       return {
         keyname: v.Key,
-        superid: v.Id || "",
+        superid: v.Id || ""
       };
-    },
-  },
+    }
+  }
 };
 </script>

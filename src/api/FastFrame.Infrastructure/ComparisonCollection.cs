@@ -26,9 +26,9 @@ namespace FastFrame.Infrastructure
             this.compare = compare ?? new Func<TBefore, TAfter, bool>((x, y) => x.Equals(y));
         }
 
-        public IEnumerable<TBefore> Befores { get;  }
+        public IEnumerable<TBefore> Befores { get; }
 
-        public IEnumerable<TAfter> Afters { get;  }
+        public IEnumerable<TAfter> Afters { get; }
 
         /// <summary>
         /// 返回标识为新增的内容
@@ -49,11 +49,26 @@ namespace FastFrame.Infrastructure
         /// <returns></returns>
         public IEnumerable<TBefore> GetCollectionByDeleted()
         {
-            foreach (var before in Befores)
+            var befores = Befores.GroupBy(before => Afters.FirstOrDefault(after => compare(before, after))).ToList();
+            foreach (var beforeGroup in befores)
             {
-                if (!Afters.Any(x => compare(before, x)))
-                    yield return before;
+                if (beforeGroup.Key == null)
+                    foreach (var item in beforeGroup)
+                        yield return item;
+
+                var arr = beforeGroup.ToArray();
+
+                for (int i = 1; i < arr.Length; i++)
+                    yield return arr[i];
             }
+
+
+            //var useAfterList = new List<TAfter>();
+            //foreach (var before in Befores)
+            //{
+            //    if (!Afters.Any(x => compare(before, x)))
+            //        yield return before;
+            //}
         }
 
         /// <summary>

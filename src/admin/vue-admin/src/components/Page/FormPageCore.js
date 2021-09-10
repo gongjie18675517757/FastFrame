@@ -539,7 +539,7 @@ export let formMethods = {
       this.$eventBus.$emit(`${this.name}_update`)
       this.onSaveAfter(res);
     } catch (error) {
-      this.$message.toast.error(error.message);
+      // this.$message.toast.error(error.message);
     } finally {
       this.submiting = false;
     }
@@ -585,10 +585,8 @@ export let formMethods = {
     if (this.isTab) {
       this.$emit("close");
     }
-    if (this.isDialog) {
+    else if (this.isDialog) {
       this.$emit("close");
-    } else {
-      this.goList();
     }
   }
 }

@@ -2,7 +2,7 @@
 
 namespace FastFrame.Application.Basis
 {
-    public partial class DeptDto
+    public partial class DeptDto: ITreeModel
     {
         public IEnumerable<UserViewModel> Members { get; set; }
 

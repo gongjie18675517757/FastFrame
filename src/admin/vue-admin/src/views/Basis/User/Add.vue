@@ -2,7 +2,7 @@
 let pageInfo = {
   area: "Basis",
   name: "User",
-  direction: "用户",
+  direction: "用户"
 };
 import Page from "@/components/Page/FormPageCore.js";
 export default {
@@ -10,18 +10,30 @@ export default {
   data() {
     return {
       ...Page.data.call(this),
-      ...pageInfo,
+      ...pageInfo
     };
   },
   methods: {
     ...Page.methods,
+
+    fmtModelObject() {
+      return Page.methods.fmtModelObject
+        .call(this, ...arguments)
+        .then(model => {
+          return {
+            Depts: this.super_id ? [{ Id: this.super_id }] : [],
+            Roles: [],
+            ...model
+          };
+        });
+    },
     getModelObjectItems() {
       return Page.methods.getModelObjectItems
         .call(this, ...arguments)
-        .then((opts) => {
+        .then(opts => {
           return [
             ...opts,
-             
+
             {
               Name: "Depts",
               Description: "用户所在部门",
@@ -29,7 +41,7 @@ export default {
               Type: "Array",
               requestUrl: `/api/user/deptList`,
               flex: { xs6: true },
-               
+              visible: () => !this.super_id
             },
             {
               Name: "Roles",
@@ -37,18 +49,11 @@ export default {
               Relate: "Role",
               Type: "Array",
               requestUrl: `/api/user/roleList`,
-              flex: { xs6: true },
-            },
+              flex: { xs6: true }
+            }
           ];
         });
-    },
-    fmtModelObject(frm) {
-      return Page.methods.fmtModelObject.call(this, frm).then((frm) => {
-        frm.Depts = frm.Depts || [];
-        frm.Roles = frm.Roles || [];
-        return frm;
-      });
-    },
-  },
+    }
+  }
 };
 </script>  

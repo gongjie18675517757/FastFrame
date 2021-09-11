@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,6 +17,7 @@ namespace FastFrame.Infrastructure
         /// 页码
         /// </summary>
         public int PageIndex { get => _pageIndex <= 0 ? 1 : _pageIndex; set => _pageIndex = value; }
+
         /// <summary>
         /// 每页数量
         /// </summary>
@@ -41,6 +43,35 @@ namespace FastFrame.Infrastructure
         /// 排序方式
         /// </summary>
         public string SortMode { get; set; } = "Desc";
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="func"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public bool TryGetFilterValue(Func<Filter, bool> func, out string value)
+        {
+            value = null;
+            foreach (var kv in Filters)
+            {
+                foreach (var f in kv.Value)
+                {
+                    if (func(f))
+                    {
+                        kv.Value.Remove(f);
+
+                        if (kv.Value.Count == 0)
+                            Filters.Remove(kv);
+
+                        value = f.Value;
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
     }
 
 

@@ -1474,6 +1474,14 @@
             排序方式
             </summary>
         </member>
+        <member name="M:FastFrame.Infrastructure.Pagination.TryGetFilterValue(System.Func{FastFrame.Infrastructure.Filter,System.Boolean},System.String@)">
+            <summary>
+            
+            </summary>
+            <param name="func"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
         <member name="T:FastFrame.Infrastructure.Permission.IPermissionChecker">
             <summary>
             权限检查者

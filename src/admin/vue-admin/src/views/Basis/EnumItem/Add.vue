@@ -5,8 +5,8 @@ export default {
   ...Page,
   props: {
     ...Page.props,
-    keyname: String,
-    superid: String,
+    key_name: String,
+    super_id: String,
   },
   data() {
     return {
@@ -26,8 +26,8 @@ export default {
         .then((model) => {
           return {
             ...model,
-            Key: model.Key || this.keyname || null,
-            Super_Id: model.Super_Id || this.superid || null,
+            Key: model.Key || this.key_name || null,
+            Super_Id: model.Super_Id || this.super_id || null,
           };
         });
     },
@@ -40,11 +40,11 @@ export default {
             ...arr,
             {
               Name: "Key",
-              Readonly: () => !!this.model.Id || !!this.superid,
+              Readonly: () => !!this.model.Id || !!this.super_id || !!this.key_name,
             },
             {
               Name: "Super_Id",
-              visible: !!this.model.Id || !this.superid,
+              visible: !!this.model.Id || !this.super_id,
               requestUrl: (v) => `/api/EnumItem/EnumItemList/${v.Key || ""}`,
             },
           ];

@@ -2,9 +2,10 @@
 let pageInfo = {
   area: "Basis",
   name: "User",
-  direction: "用户",
+  direction: "用户"
 };
 import Page from "../../../components/Page/ListPageCore.js";
+import DeptTreeVue from "../../../components/Trees/DeptTree.vue";
 
 export default {
   ...Page,
@@ -14,12 +15,13 @@ export default {
       ...data,
       ...pageInfo,
       toolItems: data.toolItems.concat(pageInfo.toolItems),
+      treeComponent: DeptTreeVue
     };
   },
   methods: {
     ...Page.methods,
     getToolItems() {
-      return Page.methods.getToolItems.call(this, ...arguments).then((arr) => {
+      return Page.methods.getToolItems.call(this, ...arguments).then(arr => {
         return [
           ...arr,
           {
@@ -36,11 +38,11 @@ export default {
                 `/api/user/ToogleAdminIdentity/${Id}`
               );
               this.$message.toast.success("切换成功!");
-              let index = rows.findIndex((r) => r.Id == Id);
+              let index = rows.findIndex(r => r.Id == Id);
               if (index > -1) {
                 rows.splice(index, 1, result);
               }
-            },
+            }
           },
           {
             name: "ToogleDisabled",
@@ -56,33 +58,41 @@ export default {
                 `/api/user/ToogleDisabled/${Id}`
               );
               this.$message.toast.success("切换成功!");
-              let index = rows.findIndex((r) => r.Id == Id);
+              let index = rows.findIndex(r => r.Id == Id);
               if (index > -1) {
                 rows.splice(index, 1, result);
               }
-            },
-          },
+            }
+          }
         ];
       });
     },
     getColumns() {
-      return Page.methods.getColumns.call(this, ...arguments).then((arr) => {
+      return Page.methods.getColumns.call(this, ...arguments).then(arr => {
         return [
           ...arr,
           {
             Name: "Depts",
             Description: "所属科室",
-            getValueFunc: ({ value }) => value.map((v) => v.Name).join(","),
+            getValueFunc: ({ value }) => value.map(v => v.Name).join(",")
           },
           {
             Name: "Roles",
             Description: "拥有角色",
-            getValueFunc: ({ value }) => value.map((v) => v.Name).join(","),
-          },
+            getValueFunc: ({ value }) => value.map(v => v.Name).join(",")
+          }
         ];
       });
     },
-  },
+    getPageTitle(v) {
+      if (v == null) {
+        return "全部用户";
+      }
+
+      return `${v.Name}:下级用户`;
+    },
+    
+  }
 };
 </script>
 

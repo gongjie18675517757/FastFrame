@@ -133,7 +133,7 @@ namespace FastFrame.WebHost
             /*添加动态代理*/
             services.ConfigureDynamicProxy(config =>
             {
-                config.Interceptors.AddTyped<LockMethodAttribute>(Predicates.ForService("*Service"));
+                //config.Interceptors.AddTyped<LockMethodAttribute>(Predicates.ForService("*Service"));
             });
 #if DEBUG
             services.AddSwaggerGen(options =>

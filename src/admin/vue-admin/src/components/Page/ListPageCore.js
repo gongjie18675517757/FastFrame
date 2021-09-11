@@ -415,10 +415,10 @@ export let pageMethods = {
    * 传递给表单页的参数
    * @returns 
    */
-  getFormPageParsBySelectedTreeItem() {
-    return Promise.resolve({
-
-    })
+  getFormPageParsBySelectedTreeItem(v) {
+    return {
+      super_id: v.Id || ""
+    };
   },
 
   /**
@@ -533,10 +533,10 @@ export let pageMethods = {
     }
   },
 
-/**
- * 获取树键名
- * @returns 
- */
+  /**
+   * 获取树键名
+   * @returns 
+   */
   getTreeKey() {
     return 'Super_Id'
   },
@@ -609,7 +609,7 @@ export let pageMethods = {
       }).filter(v => v.Value.length > 0)
 
     };
-  
+
     if (this.treeSelectedItem) {
       let arr = await this.getRequestParsBySelectedTreeItem(this.treeSelectedItem);
 

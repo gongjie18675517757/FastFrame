@@ -80,7 +80,8 @@ export let formProps = {
   pars: Object,
   isDialog: Boolean,
   isTab: Boolean,
-  id: String
+  id: String,
+  super_id: String,
 };
 
 /**
@@ -216,7 +217,7 @@ export let formComputed = {
     }))
     opts = opts.filter(v => {
       if (typeof v.visible == 'function')
-        return v.visible.call(this.this.model)
+        return v.visible.call(this,this.model)
       else if (typeof v.visible == 'boolean')
         return v.visible
       else

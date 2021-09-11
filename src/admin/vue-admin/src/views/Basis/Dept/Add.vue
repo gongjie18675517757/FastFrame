@@ -4,7 +4,7 @@ let pageInfo = {
   name: "Dept",
   direction: "部门"
 };
-import Page from "@/components/Page/FormPageCore.js";
+import Page from "../../../components/Page/FormPageCore.js";
 export default {
   ...Page,
   data() {
@@ -15,31 +15,44 @@ export default {
   },
   methods: {
     ...Page.methods,
-    fmtModelObject(frm) {
-      return Page.methods.fmtModelObject.call(this, frm).then(frm => {
-        frm.Members = frm.Members || [];
-        frm.Managers = frm.Managers || [];
-        return frm;
-      });
+    fmtModelObject() {
+      return Page.methods.fmtModelObject
+        .call(this, ...arguments)
+        .then(model => {
+          return {
+            Members: [],
+            Managers: [],
+            ...model,
+            Super_Id:model.Super_Id || this.super_id
+          };
+        });
     },
-    getModelObjectItems(opts) {
-      return Page.methods.getModelObjectItems.call(this, opts).then(opts => {
-        opts.push({
-          Name: "Members",
-          Description: "部门成员",
-          Relate: "User",
-          Type: "Array",
-          requestUrl: `/api/dept/UserList`
+    getModelObjectItems() {
+      return Page.methods.getModelObjectItems
+        .call(this, ...arguments)
+        .then(arr => {
+          return [
+            ...arr,
+            {
+              Name: "Super_Id",
+              visible: () => !this.super_id
+            },
+            {
+              Name: "Members",
+              Description: "部门成员",
+              Relate: "User",
+              Type: "Array",
+              requestUrl: `/api/dept/UserList`
+            },
+            {
+              Name: "Managers",
+              Description: "部门主管",
+              Type: "Array",
+              EnumValues: model =>
+                model.Members.map(v => ({ Key: v.Id, Value: v.Name }))
+            }
+          ];
         });
-        opts.push({
-          Name: "Managers",
-          Description: "部门主管",
-          Type: "Array",
-          EnumValues: model =>
-            model.Members.map(v => ({ Key: v.Id, Value: v.Name }))
-        });
-        return opts;
-      });
     }
   }
 };

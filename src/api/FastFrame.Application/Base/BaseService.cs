@@ -246,7 +246,7 @@ namespace FastFrame.Application
             return dto;
         }
 
-        protected virtual IQueryable<TDto> GetListQueryableing(IQueryable<TDto> query) => query;
+        protected virtual IQueryable<TDto> GetListQueryableing(IQueryable<TDto> query, Pagination pageInfo) => query;
 
         /// <summary>
         /// 返回列表数据时
@@ -269,7 +269,8 @@ namespace FastFrame.Application
         /// </summary> 
         public virtual async Task<PageList<TDto>> PageListAsync(Pagination pageInfo)
         {
-            var query = GetListQueryableing(Query());
+            var query = Query();
+            query = GetListQueryableing(query, pageInfo);
             var pageList = await query.PageListAsync(pageInfo);
 
             await OnGetListing(pageList.Data);

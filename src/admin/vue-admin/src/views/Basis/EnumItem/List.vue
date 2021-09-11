@@ -39,8 +39,8 @@ export default {
     },
     getFormPageParsBySelectedTreeItem(v) {
       return {
-        keyname: v.Key,
-        superid: v.Id || ""
+        key_name: v.Key,
+        super_id: v.Id || ""
       };
     }
   }

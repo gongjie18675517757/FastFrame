@@ -12,4 +12,9 @@ dotnet ef database update  --project fastframe.database --startup-project fastfr
 dotnet ef migrations script   20210902151308_210902.1 --project fastframe.database --startup-project fastframe.webhost
 
 //发布
-dotnet publish -c release
+
+
+
+
+
+

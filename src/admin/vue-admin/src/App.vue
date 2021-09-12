@@ -23,18 +23,17 @@
 </template>
 
 <script>
-import ToastVue from './components/Message/Toast.vue';
-import NotifyVue from './components/Message/Notify.vue';
-
+import ToastVue from "./components/Message/Toast.vue";
+import NotifyVue from "./components/Message/Notify.vue";
 
 export default {
   components: {
     ToastVue,
-    NotifyVue,
+    NotifyVue
   },
   data() {
     return {
-      resufreshed: true,
+      resufreshed: true
     };
   },
   computed: {
@@ -43,7 +42,7 @@ export default {
     },
     isXs() {
       return this.$vuetify.breakpoint.xs;
-    },
+    }
   },
   watch: {
     isXs(val) {
@@ -52,7 +51,7 @@ export default {
       if (val && this.$store.state.singlePageMode) {
         this.$store.state.singlePageMode = true;
       }
-    },
+    }
   },
   beforeCreate() {
     let isXs = this.$vuetify.breakpoint.xs;
@@ -64,21 +63,21 @@ export default {
   methods: {
     resufresh() {
       this.resufreshed = false;
-      this.$nextTick(function () {
+      this.$nextTick(function() {
         this.resufreshed = true;
       });
     },
     handleDialogSuccess(dialog, ...arges) {
       dialog.resolve(...arges);
-      let index = this.dialogs.findIndex((v) => v == dialog);
+      let index = this.dialogs.findIndex(v => v == dialog);
       this.dialogs.splice(index, 1);
     },
     handleDialogClose(dialog, ...arges) {
       dialog.reject(...arges);
-      let index = this.dialogs.findIndex((v) => v == dialog);
+      let index = this.dialogs.findIndex(v => v == dialog);
       this.dialogs.splice(index, 1);
-    },
-  },
+    }
+  }
 };
 </script>
  
@@ -87,18 +86,24 @@ export default {
 html {
   overflow-y: hidden;
 }
+
+ 
+
 .form-page .v-expansion-panel__container--active .v-expansion-panel__header {
   padding: 0px;
 }
+
 .form-page-group-header {
   font-weight: bold;
   font-size: 20px;
 }
+
 .v-dialog {
   box-shadow: none !important;
   -webkit-box-shadow: none;
   overflow: hidden;
 }
+
 .form {
   padding: 5px;
 }

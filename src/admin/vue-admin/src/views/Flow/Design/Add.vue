@@ -1,118 +1,506 @@
 <template>
-  <div>
-    <RemoteJs :src="dependJs" @load="handleJsLoad" />
-    <div style="width:100%; white-space:nowrap;">
-      <!--  控件 -->
-      <span style="display: inline-block; vertical-align: top; padding: 5px; width:110px">
-        <div ref="myPaletteDiv" style="border: solid 1px black; height: 420px"></div>
-      </span>
-
-      <!--  设计面板 -->
-      <span style="display: inline-block; vertical-align: top; padding: 5px; width:80%">
-        <div ref="myFlowDesignerDiv" style="border: solid 1px black; height: 420px"></div>
-      </span>
-    </div>
-  </div>
+  <v-container grid-list-xl fluid app>
+    <v-layout align-center justify-center>
+      <v-flex>
+        <v-card>
+          <v-toolbar flat dense color="transparent">
+            <v-toolbar-title>流程设计</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-btn icon @click="$emit('close')" title="关闭">
+              <v-icon>close</v-icon>
+            </v-btn>
+          </v-toolbar>
+          <v-divider></v-divider>
+          <v-card-text style="padding:0px;">
+            <VuePerfectScrollbar class="flow-design-container">
+              <div class="zoom">
+                <v-icon @click="zoom -= 10" color="p">zoom_out</v-icon>
+                {{ zoom }}%
+                <v-icon @click="zoom += 10" color="p">zoom_in</v-icon>
+              </div>
+              <div
+                class="flow-design-areas"
+                :style="{ transform: `scale(${zoom / 100})` }"
+              >
+                <flow-node-design-vue
+                  v-for="(node, nodeIndex) in nodes"
+                  :key="nodeIndex"
+                  :node="node"
+                  :makeNodeFunc="makeNodeFunc"
+                  @add-note="handleNodeAdd($event, nodeIndex)"
+                  @change="handleChange"
+                />
+              </div>
+            </VuePerfectScrollbar>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
-import RemoteJs from "../../../components/RemoteJS.vue";
-import FlowDesigner from "../flow-desinger";
+import VuePerfectScrollbar from "vue-perfect-scrollbar";
+import FlowNodeDesignVue from "./FlowNodeDesign.vue";
+
 export default {
   components: {
-    RemoteJs
+    VuePerfectScrollbar,
+    FlowNodeDesignVue
   },
   data() {
     return {
-      dependJs: "/libs/js/go.js"
+      zoom: 100,
+      nodes: [
+        {
+          nodeType: "start"
+        },
+        {
+          nodeType: "branch",
+          branchs: [
+            {
+              weight: 1,
+              isDefault: false,
+              nodes: [
+                {
+                  nodeType: "cond",
+                  title: "条件1",
+                  filters: [
+                    {
+                      Name: null,
+                      Value: null,
+                      Compare: null
+                    }
+                  ]
+                },
+                {
+                  nodeType: "check",
+                  title: "审批人1"
+                },
+                {
+                  nodeType: "check",
+                  title: "审批人3"
+                }
+              ]
+            },
+            {
+              weight: 0,
+              isDefault: true,
+              nodes: [
+                {
+                  nodeType: "cond",
+                  title: "默认条件",
+                  filters: []
+                },
+                {
+                  nodeType: "check",
+                  title: "审批人2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          nodeType: "check",
+          title: "审批人1"
+        },
+        {
+          nodeType: "end"
+        }
+      ]
     };
   },
   methods: {
-    handleJsLoad() {
-      // 流程图设计器
-      var myDesigner = (window.myDesigner = new FlowDesigner({
-        el: this.$refs.myFlowDesignerDiv,
-        onDiagramModified: this.onDiagramModified,
-        onSelectionDeleting: this.onSelectionDeleting,
-        onEditNode:this.onEditNode
-      }));
-
-      // 初始化控件面板
-      myDesigner.initToolbar(this.$refs.myPaletteDiv);
-
-      // 在设计面板中显示流程图
-      myDesigner.displayFlow({
-        class: "go.GraphLinksModel",
-        modelData: { position: "-5 -5" },
-        nodeDataArray: [
-          // {
-          //   key: "1",
-          //   text: "开始",
-          //   figure: "Circle",
-          //   fill: "#4fba4f",
-          //   stepType: 1,
-          //   loc: "90 110"
-          // },
-          // {
-          //   key: "2",
-          //   text: "结束",
-          //   figure: "Circle",
-          //   fill: "#CE0620",
-          //   stepType: 4,
-          //   loc: "770 110"
-          // },
-          // { key: "3", text: "填写请假信息 ", loc: "210 110", remark: "" },
-          // { key: "4", text: "部门经理审核 ", loc: "370 110", remark: "" },
-          // { key: "5", text: "人事审核  ", loc: "640 110", remark: "" },
-          // { key: "6", text: "副总经理审核  ", loc: "510 40", remark: "" },
-          // { key: "7", text: "总经理审核  ", loc: "500 180", remark: "" }
-        ],
-        linkDataArray: [
-          // { from: "1", to: "3" },
-          // { from: "3", to: "4" },
-          // { from: "4", to: "5" },
-          // { from: "5", to: "2" },
-          // {
-          //   from: "4",
-          //   to: "6",
-          //   key: "1001",
-          //   text: "小于5天 ",
-          //   remark: "",
-          //   condition: "Days<5"
-          // },
-          // { from: "6", to: "5" },
-          // {
-          //   from: "4",
-          //   to: "7",
-          //   key: "1002",
-          //   text: "大于5天 ",
-          //   remark: "",
-          //   condition: "Days>5"
-          // },
-          // { from: "7", to: "5" }
-        ]
-      });
+    handleChange() {},
+    handleNodeAdd(type, index) {
+      let node = this.makeNodeFunc(type);
+      this.nodes.splice(index + 1, 0, node);
+      this.handleChange();
     },
+    makeNodeFunc(type) {
+      switch (type) {
+        case "check":
+          return {
+            nodeType: "check",
+            title: "审批人"
+          };
 
-    /**
-     * 图形有变化时
-     */
-    onDiagramModified() {
-     
-    },
-    /**
-     * 节点删除时
-     */
-    onSelectionDeleting(e) {
-      e.cancel = false;
-    },
-    /**
-     * 更新节点信息
-     */
-    onEditNode(node,updateTextFunc){
-      let txt= prompt('输入节点名称','')
-      updateTextFunc(txt);
+        case "branch":
+          return {
+            nodeType: "branch",
+            branchs: [
+              {
+                weight: 1,
+                isDefault: false,
+                nodes: [
+                  {
+                    nodeType: "cond",
+                    title: "条件1",
+                    filters: [
+                      {
+                        Name: null,
+                        Value: null,
+                        Compare: null
+                      }
+                    ]
+                  },
+                  {
+                    nodeType: "check",
+                    title: "审批人1"
+                  },
+                  {
+                    nodeType: "check",
+                    title: "审批人3"
+                  }
+                ]
+              },
+              {
+                weight: 0,
+                isDefault: true,
+                nodes: [
+                  {
+                    nodeType: "cond",
+                    title: "默认条件",
+                    filters: []
+                  },
+                  {
+                    nodeType: "check",
+                    title: "审批人2"
+                  }
+                ]
+              }
+            ]
+          };
+
+        default:
+          return null;
+      }
     }
   }
 };
 </script>
+
+<style lang="stylus">
+.flow-design-container {
+  background: #e9eaeb;
+  position: relative;
+  overflow: auto;
+  height: 70vh;
+  padding: 12px;
+
+  .list-enter-active, .list-leave-active {
+    transition: all 1s;
+  }
+
+  .list-enter, .list-leave-to {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  .zoom {
+    position: fixed;
+    right: 50px;
+    z-index: 10;
+  }
+
+  .flow-design-areas {
+    .node-condition.node-box {
+      display: inline-flex;
+      flex-direction: column;
+      box-shadow: 0 1px 8px 0 rgb(0 0 0 / 10%);
+      border-radius: 4px;
+      margin-top: 50px;
+      margin-right: 50px;
+      margin-left: 50px;
+    }
+
+    .node {
+      width: 100%;
+      display: inline-flex;
+      flex-direction: column;
+      width: 100%;
+      align-items: center;
+      position: relative;
+
+      .branch-wrap {
+        display: inline-flex;
+        width: 100%;
+        justify-content: center;
+
+        .branch-wrap-box {
+          display: flex;
+          position: relative;
+
+          .branch-box {
+            display: flex;
+            min-height: 180px;
+            margin-top: 15px;
+            border-top: 2px solid #ababab;
+            border-bottom: 2px solid #ababab;
+
+            .add-branch {
+              width: 84px;
+              height: 34px;
+              background-color: #fff;
+              position: absolute;
+              left: 50%;
+              transform: translateX(-50%);
+              top: 0;
+              border-radius: 4px;
+              font-size: 14px;
+              color: #4A94FF;
+              text-align: center;
+              line-height: 34px;
+              z-index: 21;
+              font-family: PingFangSC-Medium;
+              cursor: pointer;
+              user-select: none;
+            }
+
+            .add-branch:hover {
+              box-shadow: 0 1px 8px 0 rgb(0 0 0 / 20%);
+            }
+
+            .col-box {
+              display: inline-flex;
+              align-items: center;
+              flex-direction: column;
+              position: relative;
+              padding: 0 20px;
+
+              .top-left-cover-line {
+                top: -3px;
+                left: -1px;
+                height: 4px;
+                width: 50%;
+                background-color: rgb(233, 234, 235);
+                position: absolute;
+              }
+
+              .bottom-left-cover-line {
+                bottom: -3px;
+                left: -1px;
+                height: 4px;
+                width: 50%;
+                background-color: rgb(233, 234, 235);
+                position: absolute;
+              }
+
+              .top-right-cover-line {
+                top: -3px;
+                right: -1px;
+                height: 4px;
+                width: 50%;
+                background-color: rgb(233, 234, 235);
+                position: absolute;
+              }
+
+              .bottom-right-cover-line {
+                bottom: -3px;
+                right: -1px;
+                height: 4px;
+                width: 50%;
+                background-color: rgb(233, 234, 235);
+                position: absolute;
+              }
+            }
+
+            .col-box::before {
+              content: '';
+              position: absolute;
+              top: 0;
+              left: 0;
+              right: 0;
+              bottom: 0;
+              z-index: 0;
+              margin: auto;
+              width: 2px;
+              height: 100%;
+              background-color: #ababab;
+            }
+          }
+        }
+      }
+
+      .add-node:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: -1;
+        margin: auto;
+        width: 2px;
+        height: 100%;
+        background-color: #ababab;
+      }
+
+      .add-node {
+        width: 240px;
+        display: inline-flex;
+        flex-shrink: 0;
+        position: relative;
+
+        .add-node-btn {
+          user-select: none;
+          width: 240px;
+          padding: 30px 0;
+          display: flex;
+          justify-content: center;
+          flex-shrink: 0;
+          flex-grow: 1;
+
+          .btn:hover {
+            background-color: #8599AA;
+            box-shadow: 0 1px 8px 0 #8599AA;
+          }
+
+          .btn {
+            position: relative;
+            outline: 0;
+            width: 30px;
+            height: 30px;
+            background-color: #A0B5C8;
+            border-radius: 50%;
+            line-height: 30px;
+            cursor: pointer;
+
+            .btn-icon:before {
+              content: '';
+              position: absolute;
+              display: inline-block;
+              width: 2px;
+              height: 16px;
+              left: 14px;
+              top: 7px;
+              background-color: #fff;
+            }
+
+            .btn-icon:after {
+              content: '';
+              position: absolute;
+              display: inline-block;
+              height: 2px;
+              width: 16px;
+              top: 14px;
+              left: 7px;
+              background-color: #fff;
+            }
+          }
+        }
+      }
+
+      .node-box {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        background: #FFF;
+        width: 240px;
+        min-height: 92px;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        cursor: pointer;
+        z-index: 10;
+
+        &.node-start {
+          color: #4A94FF;
+        }
+
+        &.node-start:hover {
+          box-shadow: 0 1px 8px 0 #4a94ff;
+        }
+
+        &.node-end:hover {
+          box-shadow: 0 1px 8px 0 green;
+        }
+
+        &.node-check:hover {
+          box-shadow: 0 1px 8px 0 #FCAD22;
+        }
+
+        &.node-cond:hover {
+          box-shadow: 0 1px 8px 0 #88939F;
+        }
+
+        &.node-start, &.node-end, &.node-check, &.node-cond {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 240px;
+          min-height: 56px;
+          height: 56px;
+          box-shadow: 0 1px 8px 0 #ababab;
+          cursor: default;
+          font-size: 15px;
+        }
+
+        &.node-check {
+          height: 92px;
+          cursor pointer
+        }
+
+        &.node-check:after {
+          background: #FCAD22;
+          content: '';
+          position: absolute;
+          display: inline-block;
+          height: 4px;
+          width: 100%;
+          top: 0;
+          left: 0;
+          border-radius: 2px 2px 0 0;
+        }
+
+        &.node-cond:after {
+          background: #88939F;
+          content: '';
+          position: absolute;
+          display: inline-block;
+          height: 4px;
+          width: 100%;
+          top: 0;
+          left: 0;
+          border-radius: 2px 2px 0 0;
+        }
+
+        &.node-start:after {
+          background: #4A94FF;
+          content: '';
+          position: absolute;
+          display: inline-block;
+          height: 4px;
+          width: 100%;
+          top: 0;
+          left: 0;
+          border-radius: 2px 2px 0 0;
+        }
+
+        &.node-end:after {
+          background: green;
+          content: '';
+          position: absolute;
+          display: inline-block;
+          height: 4px;
+          width: 100%;
+          top: 0;
+          left: 0;
+          border-radius: 2px 2px 0 0;
+        }
+      }
+    }
+
+    .line-end-arrow {
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 4px;
+      border-style: solid;
+      border-width: 8px 5px 4px;
+      border-color: #ababab transparent transparent;
+    }
+  }
+}
+</style>

@@ -81,6 +81,7 @@ export default new Vuetify({
         // },
         themes: {
             light: {
+                p: '#1976D2',
                 primary: '#1976D2',
                 secondary: '#424242',
                 accent: '#82B1FF',

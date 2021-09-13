@@ -28,6 +28,7 @@
                   :node="node"
                   :makeNodeFunc="makeNodeFunc"
                   @add-note="handleNodeAdd($event, nodeIndex)"
+                  @remove-node="handleNodeRemove(nodeIndex)"
                   @change="handleChange"
                 />
               </div>
@@ -41,7 +42,7 @@
 
 <script>
 import VuePerfectScrollbar from "vue-perfect-scrollbar";
-import FlowNodeDesignVue from "./FlowNodeDesign.vue";
+import FlowNodeDesignVue from "./FlowNode.vue";
 
 export default {
   components: {
@@ -175,6 +176,9 @@ export default {
         default:
           return null;
       }
+    },
+    async handleNodeRemove(index) {      
+      this.nodes.splice(index, 1);
     }
   }
 };
@@ -435,9 +439,9 @@ export default {
           font-size: 15px;
         }
 
-        &.node-check {
+        &.node-check, &.node-cond {
           height: 92px;
-          cursor pointer
+          cursor: pointer;
         }
 
         &.node-check:after {

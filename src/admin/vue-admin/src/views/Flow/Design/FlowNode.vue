@@ -9,32 +9,28 @@
     <template v-else-if="node.nodeType == 'check'">
       <div class="node-box node-check">
         <span class="node-move-up-icon node-move-up-icon-disable"></span>
-        <div class="line-end-arrow"></div>
-        <div class="title">
-          <span class="node-title-name">审批人</span>
-          <span class="node-title-name-editable"
-            ><i class="ww_icon ww_approvalFlowIcon_Editable"></i
-          ></span>
-          <span class="node-title-operate" style="flex-grow: 1;"
-            ><span class="node-title-delete"
-              ><i class="ww_icon ww_approvalFlowIcon_Close"></i
-            ></span>
-          </span>
-        </div>
-        <div class="content">
-          <div class="content-text">
-            <div><div class="content-text-default">请选择审批人</div></div>
-          </div>
-          <i class="ww_commonImg ww_commonImg_PageNavArrowRightDisabled"></i>
-        </div>
         <span class="node-move-down-icon node-move-down-icon-disable"></span>
+        <div class="line-end-arrow"></div>
+        <v-node
+          :title.sync="node.title"
+          :nodeType="node.nodeType"
+          :readonly="readonly"
+          :editabled="editabled"
+          @remove-node="$emit('remove-node')"
+        />
       </div>
     </template>
     <template v-else-if="node.nodeType == 'cond'">
       <div class="node-condition">
         <div class="node-box node-cond node-condition">
           <div class="line-end-arrow"></div>
-          {{ node.title }}
+          <v-node
+            :title.sync="node.title"
+            :nodeType="node.nodeType"
+            :readonly="readonly"
+            :editabled="editabled"
+            @remove-node="$emit('remove-node')"
+          />
         </div>
       </div>
     </template>
@@ -62,8 +58,14 @@
                 :key="`${branchIndex}_${childNodeIndex}`"
                 :node="childNode"
                 @add-note="handleNodeAdd($event, childNodeIndex, branch.nodes)"
+                @remove-node="handleNodeRemove(childNodeIndex, branchIndex)"
                 @change="$emit('change')"
                 :makeNodeFunc="makeNodeFunc"
+                :editabled="
+                  childNode.nodeType != 'cond' ||
+                    branchIndex != node.branchs.length - 1
+                "
+                :readonly="readonly"
               />
             </div>
           </div>
@@ -100,7 +102,11 @@
         </div>
         <div class="add-node-btn">
           <!-- @click="addNode(nodes, nodeIndex, 'check')" -->
-          <div class="btn" @click.stop="addMenuVisible = !addMenuVisible">
+          <div
+            class="btn"
+            v-if="!readonly"
+            @click.stop="addMenuVisible = !addMenuVisible"
+          >
             <span class="btn-icon"></span>
           </div>
         </div>
@@ -110,13 +116,17 @@
 </template>
 
 <script>
+import FlowNodeVue from "./FlowNodeContent.vue";
+
 export default {
   components: {
-    "v-self": () => import("./FlowNodeDesign.vue")
+    "v-self": () => import("./FlowNode.vue"),
+    "v-node": FlowNodeVue
   },
   props: {
     node: Object,
     readonly: Boolean,
+    editabled: Boolean,
     makeNodeFunc: Function
   },
   data() {
@@ -138,8 +148,18 @@ export default {
           icon: "branch"
         }
       ],
-      addMenuVisible: false
+      addMenuVisible: false,
+      delMenuVisible: false,
+      editInputVisible: false,
+      titleTemp: null
     };
+  },
+  watch: {
+    editInputVisible(val) {
+      if (val) {
+        this.titleTemp = this.node.title;
+      }
+    }
   },
   mounted() {
     window.addEventListener("click", this.tryHideAddMenu);
@@ -168,6 +188,21 @@ export default {
       let node = this.makeNodeFunc(type);
       nodes.splice(index + 1, 0, node);
       this.$emit("change");
+    },
+    handleNodeRemove(index, branchIndex) {
+      let branch = this.node.branchs[branchIndex];
+      let node = branch.nodes[index];
+      branch.nodes.splice(index, 1);
+
+      if (node.nodeType == "cond") {
+        this.node.branchs.splice(branchIndex, 1);
+        if (this.node.branchs.length <= 1) 
+          this.$emit("remove-node");
+      }
+    },
+    handleTitleInput() {
+      this.node.title = this.titleTemp;
+      this.editInputVisible = false;
     }
   }
 };
@@ -330,6 +365,12 @@ export default {
   background: #FFF9EE;
   box-shadow: 0 0 0 0 #4a94ff;
   color: #FCAD22;
+}
+
+.node-cond .title {
+  background: #EEF4FB;
+  box-shadow: 0 0 0 0 #4a94ff;
+  color: #88939F;
 }
 
 .node-box .title {

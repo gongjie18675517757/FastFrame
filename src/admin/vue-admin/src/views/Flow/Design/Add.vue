@@ -11,7 +11,12 @@
             </v-btn>
           </v-toolbar>
           <v-divider></v-divider>
-          <v-card-text style="padding:0px;">
+          <v-card-text
+            style="padding:0px;"
+            @mousedown="handleMousedown"
+            ref="container"
+            :style="{ cursor: moveing ? 'move' : null }"
+          >
             <VuePerfectScrollbar class="flow-design-container">
               <div class="zoom">
                 <v-icon @click="zoom -= 10" color="p">zoom_out</v-icon>
@@ -20,16 +25,31 @@
               </div>
               <div
                 class="flow-design-areas"
-                :style="{ transform: `scale(${zoom / 100})` }"
+                :style="{
+                  transform: `scale(${zoom / 100})`,
+                  top: `${top}px`,
+                  left: `${left}px`
+                }"
               >
-                <flow-node-design-vue
+                <flow-node
                   v-for="(node, nodeIndex) in nodes"
                   :key="nodeIndex"
                   :node="node"
                   :makeNodeFunc="makeNodeFunc"
+                  editabled
                   @add-note="handleNodeAdd($event, nodeIndex)"
                   @remove-node="handleNodeRemove(nodeIndex)"
                   @change="handleChange"
+                  @move-up="handleMoveUp(nodeIndex)"
+                  @move-down="handleMoveDown(nodeIndex)"
+                  :moveupable="
+                    nodeIndex > 0 &&
+                      ['check'].includes(nodes[nodeIndex - 1].nodeType)
+                  "
+                  :movedownable="
+                    nodeIndex < nodes.length - 1 &&
+                      ['check'].includes(nodes[nodeIndex + 1].nodeType)
+                  "
                 />
               </div>
             </VuePerfectScrollbar>
@@ -42,16 +62,19 @@
 
 <script>
 import VuePerfectScrollbar from "vue-perfect-scrollbar";
-import FlowNodeDesignVue from "./FlowNode.vue";
+import FlowNode from "./FlowNode.vue";
 
 export default {
   components: {
     VuePerfectScrollbar,
-    FlowNodeDesignVue
+    FlowNode
   },
   data() {
     return {
       zoom: 100,
+      top: 30,
+      left: 0,
+      moveing: false,
       nodes: [
         {
           nodeType: "start"
@@ -177,8 +200,39 @@ export default {
           return null;
       }
     },
-    async handleNodeRemove(index) {      
+    handleNodeRemove(index) {
       this.nodes.splice(index, 1);
+    },
+    handleMoveUp(index) {
+      let [r] = this.nodes.splice(index, 1);
+      this.nodes.splice(index - 1, 0, r);
+    },
+    handleMoveDown(index) {
+      let [r] = this.nodes.splice(index, 1);
+      this.nodes.splice(index + 1, 0, r);
+    },
+    handleMousedown() {
+      this.moveing = true;
+      this.$refs.container.addEventListener(
+        "mousemove",
+        this.handleMousemove
+      );
+      this.$refs.container.addEventListener("mouseup", this.handleMouseup);
+    },
+    handleMouseup() {
+      this.moveing = false;
+      this.$refs.container.removeEventListener(
+        "mousemove",
+        this.handleMousemove
+      );
+      this.$refs.container.removeEventListener(
+        "mouseup",
+        this.handleMouseup
+      );
+    },
+    handleMousemove(e) {
+      this.left += e.movementX;
+      this.top += e.movementY;
     }
   }
 };
@@ -208,6 +262,11 @@ export default {
   }
 
   .flow-design-areas {
+    position: absolute;
+    top: 30px;
+    left: 0px;
+    user-select: none;
+
     .node-condition.node-box {
       display: inline-flex;
       flex-direction: column;
@@ -230,6 +289,7 @@ export default {
         display: inline-flex;
         width: 100%;
         justify-content: center;
+        background: #e9eaeb;
 
         .branch-wrap-box {
           display: flex;

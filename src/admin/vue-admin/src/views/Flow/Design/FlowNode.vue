@@ -8,10 +8,18 @@
     </template>
     <template v-else-if="node.nodeType == 'check'">
       <div class="node-box node-check">
-        <span class="node-move-up-icon node-move-up-icon-disable"></span>
-        <span class="node-move-down-icon node-move-down-icon-disable"></span>
+        <span
+          class="node-move-up-icon node-move-up-icon-disable"
+          v-if="moveupable"
+          @click="$emit('move-up')"
+        ></span>
+        <span
+          class="node-move-down-icon node-move-down-icon-disable"
+          v-if="movedownable"
+          @click="$emit('move-down')"
+        ></span>
         <div class="line-end-arrow"></div>
-        <v-node
+        <v-node-content
           :title.sync="node.title"
           :nodeType="node.nodeType"
           :readonly="readonly"
@@ -24,7 +32,7 @@
       <div class="node-condition">
         <div class="node-box node-cond node-condition">
           <div class="line-end-arrow"></div>
-          <v-node
+          <v-node-content
             :title.sync="node.title"
             :nodeType="node.nodeType"
             :readonly="readonly"
@@ -38,7 +46,7 @@
       <div class="branch-wrap">
         <div class="branch-wrap-box">
           <div class="branch-box">
-            <div class="add-branch">添加条件</div>
+            <div class="add-branch" @click="addBranch">添加条件</div>
             <div
               class="col-box"
               v-for="(branch, branchIndex) in node.branchs"
@@ -60,7 +68,21 @@
                 @add-note="handleNodeAdd($event, childNodeIndex, branch.nodes)"
                 @remove-node="handleNodeRemove(childNodeIndex, branchIndex)"
                 @change="$emit('change')"
+                @move-up="handleMoveUp(childNodeIndex, branchIndex)"
+                @move-down="handleMoveDown(childNodeIndex, branchIndex)"
                 :makeNodeFunc="makeNodeFunc"
+                :moveupable="
+                  childNodeIndex > 0 &&
+                    ['check'].includes(
+                      branch.nodes[childNodeIndex - 1].nodeType
+                    )
+                "
+                :movedownable="
+                  childNodeIndex < branch.nodes.length - 1 &&
+                    ['check'].includes(
+                      branch.nodes[childNodeIndex + 1].nodeType
+                    )
+                "
                 :editabled="
                   childNode.nodeType != 'cond' ||
                     branchIndex != node.branchs.length - 1
@@ -116,17 +138,19 @@
 </template>
 
 <script>
-import FlowNodeVue from "./FlowNodeContent.vue";
+import FlowNodeContent from "./FlowNodeContent.vue";
 
 export default {
   components: {
     "v-self": () => import("./FlowNode.vue"),
-    "v-node": FlowNodeVue
+    "v-node-content": FlowNodeContent
   },
   props: {
     node: Object,
     readonly: Boolean,
     editabled: Boolean,
+    moveupable: Boolean,
+    movedownable: Boolean,
     makeNodeFunc: Function
   },
   data() {
@@ -184,6 +208,33 @@ export default {
       this.addMenuVisible = false;
       this.$emit("add-note", r.Key);
     },
+    addBranch() {
+      this.node.branchs.splice(0,0,{
+        weight: 1,
+        isDefault: false,
+        nodes: [
+          {
+            nodeType: "cond",
+            title: "条件1",
+            filters: [
+              {
+                Name: null,
+                Value: null,
+                Compare: null
+              }
+            ]
+          },
+          {
+            nodeType: "check",
+            title: "审批人1"
+          },
+          {
+            nodeType: "check",
+            title: "审批人3"
+          }
+        ]
+      });
+    },
     handleNodeAdd(type, index, nodes) {
       let node = this.makeNodeFunc(type);
       nodes.splice(index + 1, 0, node);
@@ -196,13 +247,24 @@ export default {
 
       if (node.nodeType == "cond") {
         this.node.branchs.splice(branchIndex, 1);
-        if (this.node.branchs.length <= 1) 
-          this.$emit("remove-node");
+        if (this.node.branchs.length <= 1) this.$emit("remove-node");
       }
     },
     handleTitleInput() {
       this.node.title = this.titleTemp;
       this.editInputVisible = false;
+    },
+    handleMoveUp(index, branchIndex) {
+      let branch = this.node.branchs[branchIndex];
+      let nodes = branch.nodes;
+      let [r] = nodes.splice(index, 1);
+      nodes.splice(index - 1, 0, r);
+    },
+    handleMoveDown(index, branchIndex) {
+      let branch = this.node.branchs[branchIndex];
+      let nodes = branch.nodes;
+      let [r] = nodes.splice(index, 1);
+      nodes.splice(index + 1, 0, r);
     }
   }
 };

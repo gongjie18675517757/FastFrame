@@ -4,9 +4,9 @@ namespace FastFrame.Database.Mapping.Flow
 {
 		
 	/// <summary>
-	/// 流程步骤 
+	/// 流程节点审核人/抄送人 
 	/// </summary>
-	public partial class FlowStepMapping:BaseEntityMapping<FlowStep>
+	public partial class FlowNodeCheckerMapping:BaseEntityMapping<FlowNodeChecker>
 	{
 		
 		

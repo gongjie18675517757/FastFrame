@@ -25,6 +25,10 @@
     <ProjectReference Include="..\FastFrame.Infrastructure\FastFrame.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Mapping\Flow\" />
+  </ItemGroup>
+
 
 
  

@@ -5,21 +5,12 @@ using System.ComponentModel.DataAnnotations;
 namespace FastFrame.Entity.Flow
 {
     /// <summary>
-    /// 工作流
+    /// 工作流    
     /// </summary>
     [Export]
-    [RelatedField(nameof(Name))]
-    [Unique(nameof(BeModuleName), nameof(Version))]
+    [RelatedField(nameof(BeModule),nameof(Version))] 
     public class WorkFlow : BaseEntity
-    {
-        /// <summary>
-        /// 名称
-        /// </summary>
-        [Required]
-        [Unique]
-        [StringLength(100)]
-        public string Name { get; set; }
-
+    { 
         /// <summary>
         /// 适用模块
         /// </summary>
@@ -59,12 +50,7 @@ namespace FastFrame.Entity.Flow
     /// </summary> 
     public class FlowInstance : IEntity, IHasSoftDelete
     {
-        public string Id { get; set; }
-
-        /// <summary>
-        /// 版本
-        /// </summary>
-        public int Version { get; set; }
+        public string Id { get; set; } 
 
         /// <summary>
         /// 状态
@@ -182,61 +168,7 @@ namespace FastFrame.Entity.Flow
         /// 快照内容
         /// </summary>
         public string SnapshotContent { get; set; }
-    }
-
-    /// <summary>
-    /// 流程步骤
-    /// </summary> 
-    public class FlowStep : IEntity, IHasSoftDelete
-    {
-        public string Id { get; set; }
-
-        /// <summary>
-        /// 关联：FlowInstance
-        /// </summary>
-        public string FlowInstance_Id { get; set; }
-
-        /// <summary>
-        /// 关联：FlowNode
-        /// </summary>
-        public string FlowNode_Id { get; set; }
-
-        /// <summary>
-        /// 步骤序号
-        /// </summary>
-        public int StepOrder { get; set; }
-
-        /// <summary>
-        /// 步骤名称
-        /// </summary>
-        [StringLength(50)]
-        public string StepName { get; set; }
-
-        /// <summary>
-        /// 关联：FlowStep，上一步
-        /// </summary>
-        public string PrevStep_Id { get; set; }
-
-        /// <summary>
-        /// 上一步节点键
-        /// </summary>
-        public int PrevStepKey { get; set; }
-
-        /// <summary>
-        /// 关联：FlowStep，下一步
-        /// </summary>
-        public string NextStep_Id { get; set; }
-
-        /// <summary>
-        /// 下一步节点键
-        /// </summary>
-        public int NextStepKey { get; set; }
-
-        /// <summary>
-        /// 节点键
-        /// </summary>
-        public int FlowNodeKey { get; set; }
-    }
+    } 
 
     /// <summary>
     /// 流程步骤审核人
@@ -251,24 +183,14 @@ namespace FastFrame.Entity.Flow
         public string FlowInstance_Id { get; set; }
 
         /// <summary>
-        /// 关联：FlowStep
+        /// 关联：FlowNode
         /// </summary>
-        public string FlowStep_Id { get; set; }
+        public string FlowNode_Id { get; set; }
 
         /// <summary>
         /// 关联：User
         /// </summary>
-        public string User_Id { get; set; }
-
-        /// <summary>
-        /// 归属科室
-        /// </summary>
-        public string BeDept_Id { get; set; }
-
-        /// <summary>
-        /// 归属角色
-        /// </summary>
-        public string BeRole_Id { get; set; }
+        public string User_Id { get; set; } 
     }
 
     /// <summary>
@@ -281,17 +203,7 @@ namespace FastFrame.Entity.Flow
         /// <summary>
         /// 关联：FlowInstance
         /// </summary>
-        public string FlowInstance_Id { get; set; }
-
-        /// <summary>
-        /// 关联：FlowStep
-        /// </summary>
-        public string FlowStep_Id { get; set; }
-
-        /// <summary>
-        /// 节点key
-        /// </summary>
-        public int NodeKey { get; set; }
+        public string FlowInstance_Id { get; set; } 
 
         /// <summary>
         /// 步骤名称
@@ -307,13 +219,7 @@ namespace FastFrame.Entity.Flow
         /// <summary>
         /// 操作人
         /// </summary>
-        public string Operater_Id { get; set; }
-
-        /// <summary>
-        /// 操作人名称
-        /// </summary>
-        [StringLength(50)]
-        public string OperaterName { get; set; }
+        public string Operater_Id { get; set; } 
 
         /// <summary>
         /// 时间
@@ -325,5 +231,23 @@ namespace FastFrame.Entity.Flow
         /// </summary>
         [StringLength(500)]
         public string Desc { get; set; }
+    }
+
+    /// <summary>
+    /// 指定的下一步审核人
+    /// </summary>
+    public class FlowProcessNextChecker : IEntity
+    {
+        public string Id { get; set; }
+
+        /// <summary>
+        /// 关联:FlowProcess
+        /// </summary>
+        public string FlowProcess_Id { get; set; }
+
+        /// <summary>
+        /// 关联:User
+        /// </summary>
+        public string Checker_Id { get; set; }
     }
 }

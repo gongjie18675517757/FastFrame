@@ -18,13 +18,6 @@ namespace FastFrame.Application.Flow
 		
 		
 		/// <summary>
-		/// 名称 
-		/// </summary>
-		[StringLength(100)]
-		[Required()]
-		public string Name {get;set;}
-		
-		/// <summary>
 		/// 适用模块 
 		/// </summary>
 		[StringLength(100)]

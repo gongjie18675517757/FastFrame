@@ -4,9 +4,9 @@ namespace FastFrame.Database.Mapping.Flow
 {
 		
 	/// <summary>
-	/// 节点动态审核人 
+	/// 节点事件 
 	/// </summary>
-	public partial class FlowNodeFieldMapping:BaseEntityMapping<FlowNodeField>
+	public partial class FlowNodeEventMapping:BaseEntityMapping<FlowNodeEvent>
 	{
 		
 		

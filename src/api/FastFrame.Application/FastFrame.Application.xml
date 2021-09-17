@@ -1657,206 +1657,29 @@
             操作内容
             </summary>
         </member>
-        <member name="T:FastFrame.Application.Flow.FlowCenterService">
+        <member name="T:FastFrame.Application.Flow.FlowNodeModel">
             <summary>
-            流程中心
+            流程节点
             </summary>
         </member>
-        <member name="M:FastFrame.Application.Flow.FlowCenterService.HandleFlowOperateAsync``1(System.String,FastFrame.Application.Flow.FlowOperateInput)">
+        <member name="P:FastFrame.Application.Flow.FlowNodeModel.Nodes">
             <summary>
-            流程操作
-            </summary>
-            <typeparam name="TEntity"></typeparam>
-            <param name="id"></param>
-            <param name="flowOperate"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Application.Flow.FlowCenterService.HandleFlowOperateAsync``1(``0,FastFrame.Application.Flow.FlowOperateInput)">
-            <summary>
-            流程操作
-            </summary>
-            <typeparam name="TEntity"></typeparam>
-            <param name="entity"></param>
-            <param name="flowOperate"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Application.Flow.FlowCenterService.VerificationCanCheck(System.String)">
-            <summary>
-            验证当前步骤是否可以操作
-            </summary>
-            <param name="id"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Application.Flow.FlowCenterService.HandleUnCheckActionAsync``1(``0,FastFrame.Application.Flow.FlowOperateInput)">
-            <summary>
-            处理反审核操作
-            </summary>
-            <typeparam name="TEntity"></typeparam>
-            <param name="entity"></param>
-            <param name="flowOperate"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Application.Flow.FlowCenterService.HandleRefuseActionAsync``1(``0,FastFrame.Application.Flow.FlowOperateInput)">
-            <summary>
-            处理拒绝动作
-            </summary>
-            <typeparam name="TEntity"></typeparam>
-            <param name="entity"></param>
-            <param name="flowOperate"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Application.Flow.FlowCenterService.HandleWithdrawActionAsync``1(``0,FastFrame.Application.Flow.FlowOperateInput)">
-            <summary>
-            处理退回动作
-            </summary>
-            <typeparam name="TEntity"></typeparam>
-            <param name="entity"></param>
-            <param name="flowOperate"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Application.Flow.FlowCenterService.HandlePassActionAsync``1(``0,FastFrame.Application.Flow.FlowOperateInput)">
-            <summary>
-            处理审核通过动作
-            </summary>
-            <typeparam name="TEntity"></typeparam>
-            <param name="entity"></param>
-            <param name="flowOperate"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Application.Flow.FlowCenterService.HandleUnSubmitActionAsync``1(``0,FastFrame.Application.Flow.FlowOperateInput)">
-            <summary>
-            处理撤回动作
-            </summary>
-            <typeparam name="TEntity"></typeparam>
-            <param name="entity"></param>
-            <param name="flowOperate"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Application.Flow.FlowCenterService.HandleSubmitActionAsync``1(``0,FastFrame.Application.Flow.FlowOperateInput)">
-            <summary>
-            处理提交动作
-            </summary>
-            <typeparam name="TEntity"></typeparam>
-            <param name="entity"></param>
-            <param name="flowOperate"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Application.Flow.FlowCenterService.MatchStepCheckUser``1(``0,FastFrame.Application.Flow.FlowNodeDto)">
-            <summary>
-            匹配流程步骤可审核的人
-            </summary>
-            <typeparam name="TEntity"></typeparam>
-            <param name="entity"></param>
-            <param name="flowNode"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Application.Flow.FlowCenterService.GenerateFlowSteps``1(``0,System.Collections.Generic.IEnumerable{FastFrame.Application.Flow.FlowNodeDto},System.Collections.Generic.IEnumerable{FastFrame.Application.Flow.FlowLineDto})">
-            <summary>
-            生成流程步骤
-            </summary>
-            <typeparam name="TEntity"></typeparam>
-            <param name="entity"></param>
-            <param name="flowNodes"></param>
-            <param name="flowLines"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Application.Flow.FlowCenterService.MatchNodeLines``1(``0,System.Collections.Generic.IEnumerable{FastFrame.Application.Flow.FlowLineDto})">
-            <summary>
-            匹配流程线
-            </summary>
-            <typeparam name="TEntity"></typeparam>
-            <param name="entity"></param>
-            <param name="flowLines"></param>
-            <returns></returns>
-        </member>
-        <member name="T:FastFrame.Application.Flow.FlowLineDto">
-            <summary>
-            流程连接线 
+            下级节点
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Flow.FlowLineDto.Conds">
+        <member name="P:FastFrame.Application.Flow.FlowNodeModel.Conds">
             <summary>
-            流程线条件
+            条件
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Flow.FlowLineDto.WorkFlow_Id">
+        <member name="P:FastFrame.Application.Flow.FlowNodeModel.Events">
             <summary>
-            关联:WorkFlow 
+            事件
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Flow.FlowLineDto.Text">
+        <member name="P:FastFrame.Application.Flow.FlowNodeModel.Checkers">
             <summary>
-            名称 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Flow.FlowLineDto.Weights">
-            <summary>
-            权重 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Flow.FlowLineDto.From">
-            <summary>
-            从 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Flow.FlowLineDto.To">
-            <summary>
-            到 
-            </summary>
-        </member>
-        <member name="T:FastFrame.Application.Flow.FlowNodeDto">
-            <summary>
-            流程节点 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Flow.FlowNodeDto.Roles">
-            <summary>
-            节点审核角色
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Flow.FlowNodeDto.Users">
-            <summary>
-            节点审核人
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Flow.FlowNodeDto.Fields">
-            <summary>
-            节点动态审核人
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Flow.FlowNodeDto.WorkFlow_Id">
-            <summary>
-            关联:WorkFlow 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Flow.FlowNodeDto.Name">
-            <summary>
-            名称 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Flow.FlowNodeDto.Key">
-            <summary>
-            节点键 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Flow.FlowNodeDto.DeptCheck">
-            <summary>
-            主管审核 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Flow.FlowNodeDto.TriggerAppNotify">
-            <summary>
-            触发应用通知 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Flow.FlowNodeDto.TriggerWxNotify">
-            <summary>
-            触发微信通知 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Flow.FlowNodeDto.TriggerSmsNotify">
-            <summary>
-            触发短信通知 
+            审核人
             </summary>
         </member>
         <member name="T:FastFrame.Application.Flow.WorkFlowDto">
@@ -1867,16 +1690,6 @@
         <member name="P:FastFrame.Application.Flow.WorkFlowDto.Nodes">
             <summary>
             流程节点
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Flow.WorkFlowDto.Lines">
-            <summary>
-            流程链
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Flow.WorkFlowDto.Name">
-            <summary>
-            名称 
             </summary>
         </member>
         <member name="P:FastFrame.Application.Flow.WorkFlowDto.BeModule">
@@ -1939,9 +1752,14 @@
             工作流 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Flow.WorkFlowViewModel.Name">
+        <member name="P:FastFrame.Application.Flow.WorkFlowViewModel.BeModule">
             <summary>
-            名称 
+            适用模块 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.WorkFlowViewModel.Version">
+            <summary>
+            版本 
             </summary>
         </member>
         <member name="P:FastFrame.Application.Flow.WorkFlowViewModel.Id">

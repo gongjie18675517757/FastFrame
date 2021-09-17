@@ -26,43 +26,28 @@ namespace FastFrame.Application.Basis
     {
         private readonly IRepository<RoleMember> roleMembers;
         private readonly IRepository<User> users;
-        private readonly IRepository<Role> roles;
-        private readonly IRepository<FlowStepUser> flowStepUsers;
-        private readonly IRepository<FlowInstance> flowInstances;
+        private readonly IRepository<Role> roles; 
         private readonly HandleOne2ManyService<UserViewModel, RoleMember> handleRoleMemberService;
         private readonly HandleOne2ManyService<RoleViewModel, RoleMember> handleUserRoleService;
 
         public RoleMemberService(
             IRepository<RoleMember> roleMembers,
             IRepository<User> users,
-            IRepository<Role> roles,
-            IRepository<FlowStepUser> flowStepUsers,
-            IRepository<FlowInstance> flowInstances,
+            IRepository<Role> roles, 
             HandleOne2ManyService<UserViewModel, RoleMember> handleRoleMemberService,
             HandleOne2ManyService<RoleViewModel, RoleMember> handleUserRoleService)
         {
             this.roleMembers = roleMembers;
             this.users = users;
-            this.roles = roles;
-            this.flowStepUsers = flowStepUsers;
-            this.flowInstances = flowInstances;
+            this.roles = roles; 
             this.handleRoleMemberService = handleRoleMemberService;
             this.handleUserRoleService = handleUserRoleService;
         }
 
         public async Task HandleEventAsync(DoMainDeleteing<RoleDto> @event)
         {
-            await handleRoleMemberService.DelManyAsync(v => v.FKey_Id == @event.Id);
-
-            /*处理流程中此角色的审批人*/
-            var stepUsers = await flowStepUsers
-                    .Where(v => v.BeRole_Id == @event.Id && flowInstances.Any(r => r.Id == v.FlowInstance_Id))
-                    .ToListAsync();
-
-            foreach (var stepUser in stepUsers)
-            {
-                await flowStepUsers.DeleteAsync(stepUser);
-            }
+            await handleRoleMemberService.DelManyAsync(v => v.FKey_Id == @event.Id);  
+            
         }
 
         public async Task HandleEventAsync(DoMainUpdateing<RoleDto> @event)

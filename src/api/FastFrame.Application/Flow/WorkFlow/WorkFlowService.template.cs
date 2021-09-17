@@ -36,7 +36,6 @@ namespace FastFrame.Application.Flow
 						from _modify_User_Id in t__modify_User_Id.DefaultIfEmpty()
 						select new WorkFlowDto
 						{
-							Name = _workFlow.Name,
 							BeModule = _workFlow.BeModule,
 							BeModuleName = _workFlow.BeModuleName,
 							Version = _workFlow.Version,

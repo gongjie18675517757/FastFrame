@@ -25,8 +25,6 @@ namespace FastFrame.Application.Flow
         protected override async Task OnGeting(WorkFlowDto dto)
         {
             await base.OnGeting(dto);
-            dto.Lines = await EventBus.RequestAsync<IEnumerable<FlowLineDto>, WorkFlowDto>(dto);
-            dto.Nodes = await EventBus.RequestAsync<IEnumerable<FlowNodeDto>, WorkFlowDto>(dto);
         }
 
         protected override async Task OnDeleteing(WorkFlow entity)
@@ -50,58 +48,78 @@ namespace FastFrame.Application.Flow
             return base.OnUpdateing(input, entity);
         }
 
+        /// <summary>
+        /// 验证流程节点是否配置正确
+        /// </summary>
+        /// <param name="workFlow"></param>
         private void VerifyFlowNodes(WorkFlowDto workFlow)
         {
             if (workFlow is null)
                 throw new System.ArgumentNullException(nameof(workFlow));
 
-            if (workFlow.Nodes?.Any() == false)
-                throw new MsgException("无有效节点！");
+            if (workFlow.Nodes == null || !workFlow.Nodes.Any())
+                throw new MsgException("无有效节点");
 
-            if (workFlow.Nodes.Count(v => v.Key == 0) != 1)
-                throw new MsgException("有且只允许有一个起点！");
+            if (!workFlow.Nodes.Any(v => v.NodeEnum == FlowNodeEnum.start))
+                throw new MsgException("无起点");
 
-            if (workFlow.Nodes.Count(v => v.Key == -1) != 1)
-                throw new MsgException("有且只允许有一个终点！");
+            if (!workFlow.Nodes.Any(v => v.NodeEnum == FlowNodeEnum.end))
+                throw new MsgException("无终点");
 
-            if (workFlow.Lines?.Any() == false)
-                throw new MsgException("节点之间无连线！");
+            var nodes = workFlow.Nodes.ToArray();
 
-            if (workFlow.Lines.Any(v => v.From == v.To))
-                throw new MsgException("连线不正确，不能上下级相同！");
-
-            if (workFlow.Lines.Any(v => v.From == 0 && -1 == v.To))
-                throw new MsgException("连线不正确，起点不可直连终点！");
-
-            /*判断节点有没有包含在连线网中*/
-            foreach (var node in workFlow.Nodes)
+            for (int i = 0; i < nodes.Length; i++)
             {
-                if (!workFlow.Lines.Any(r => r.From == node.Key || r.To == node.Key))
-                    throw new MsgException($"连线不正确，节点：{node.Name}没有连线！");
-            }
+                var node = nodes[i];
 
-            /*验证节点连线的正确性*/
-            VerifyLines(workFlow.Nodes, workFlow.Lines, 0);
+                switch (node.NodeEnum)
+                {
+                    case FlowNodeEnum.start:
+                        if (i != 0)
+                            throw new MsgException("起点位置不正确!");
+                        break;
+                    case FlowNodeEnum.branch:
+                    case FlowNodeEnum.check:
+                    case FlowNodeEnum.cc:
+                    case FlowNodeEnum.cond:
+                        VerifyFlowNode(node);
+                        break;
+                    case FlowNodeEnum.end:
+                        if (i != nodes.Length - 1)
+                            throw new MsgException("终点位置不正确!");
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
 
-        private void VerifyLines(IEnumerable<FlowNodeDto> flowNodes, IEnumerable<FlowLineDto> flowLines, int from)
+        /// <summary>
+        /// 验证节点配置是否正确
+        /// </summary>
+        /// <param name="node"></param>
+        private void VerifyFlowNode(FlowNodeModel node)
         {
-            /*上一个节点名称*/
-            var fromNode = flowNodes.Where(v => v.Key == from).FirstOrDefault();
-            if (fromNode == null)
-                throw new MsgException($"连线没有匹配到节点!");
-
-            var lines = flowLines.Where(v => v.From == from);
-            if (!lines.Any())
-                throw new MsgException($"节点名称:{fromNode.Name}没有下级节点!");
-
-            foreach (var line in lines)
+            switch (node.NodeEnum)
             {
-                /*-1表示终点*/
-                if (line.To == -1)
-                    continue;
+                case FlowNodeEnum.start:
+                    throw new MsgException("起点位置不正确!"); 
+                case FlowNodeEnum.branch:
 
-                VerifyLines(flowNodes, flowLines, line.To);
+                    break;
+                case FlowNodeEnum.check:
+
+                    break;
+                case FlowNodeEnum.cc:
+
+                    break;
+                case FlowNodeEnum.cond:
+
+                    break;
+                case FlowNodeEnum.end:
+                    throw new MsgException("终点位置不正确!");
+                default:
+                    break;
             }
         }
     }

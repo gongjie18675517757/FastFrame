@@ -4,9 +4,9 @@ namespace FastFrame.Database.Mapping.Flow
 {
 		
 	/// <summary>
-	/// 节点审核角色 
+	/// 流程节点条件 
 	/// </summary>
-	public partial class FlowNodeRoleMapping:BaseEntityMapping<FlowNodeRole>
+	public partial class FlowNodeCondMapping:BaseEntityMapping<FlowNodeCond>
 	{
 		
 		

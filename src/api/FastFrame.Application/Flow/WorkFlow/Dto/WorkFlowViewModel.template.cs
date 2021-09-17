@@ -14,9 +14,14 @@ namespace FastFrame.Application.Flow
 		}
 		
 		/// <summary>
-		/// 名称 
+		/// 适用模块 
 		/// </summary>
-		public string Name {get;set;}
+		public string BeModule {get;set;}
+		
+		/// <summary>
+		/// 版本 
+		/// </summary>
+		public int Version {get;set;}
 		
 		/// <summary>
 		/// 主键 

@@ -39,6 +39,27 @@ namespace FastFrame.Entity.Flow
         /// 缺省分支(为分支时)
         /// </summary>
         public bool? IsDefault { get; set; }
+
+        /// <summary>
+        /// 审批方式(多人时)
+        /// </summary>
+        public FlowNodeCheckEnum? CheckEnum { get; set; }
+    }
+
+    /// <summary>
+    /// 审批方式
+    /// </summary>
+    public enum FlowNodeCheckEnum
+    {
+        /// <summary>
+        /// 或签
+        /// </summary>
+        or,
+
+        /// <summary>
+        /// 会签
+        /// </summary>
+        and
     }
 
     /// <summary>

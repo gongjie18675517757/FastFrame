@@ -282,6 +282,12 @@
             <param name="moduleName"></param>
             <returns></returns>
         </member>
+        <member name="M:FastFrame.WebHost.Controllers.Flow.WorkFlowController.GetChildrenBySuperId">
+            <summary>
+            获取树形视图
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:FastFrame.WebHost.Controllers.OA.OaLeaveController">
             <summary>
             请假单 

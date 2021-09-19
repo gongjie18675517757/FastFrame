@@ -1772,6 +1772,18 @@
             工作流 服务实现 
             </summary>
         </member>
+        <member name="M:FastFrame.Application.Flow.WorkFlowService.VerifyFlowNodes(FastFrame.Application.Flow.WorkFlowDto)">
+            <summary>
+            验证流程节点是否配置正确
+            </summary>
+            <param name="workFlow"></param>
+        </member>
+        <member name="M:FastFrame.Application.Flow.WorkFlowService.VerifyFlowNode(FastFrame.Application.Flow.FlowNodeModel)">
+            <summary>
+            验证节点配置是否正确
+            </summary>
+            <param name="node"></param>
+        </member>
         <member name="T:FastFrame.Application.OA.OaLeaveDto">
             <summary>
             请假单 

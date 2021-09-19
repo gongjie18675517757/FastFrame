@@ -479,6 +479,38 @@
             <param name="source"></param>
             <returns></returns>
         </member>
+        <member name="M:FastFrame.Infrastructure.Extension.EachLoopChild``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Collections.Generic.IEnumerable{``0}},``0,System.Action{System.ValueTuple{``0,``0}})">
+            <summary>
+            递归子节点
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="enumerable"></param>
+            <param name="childSelector"></param>
+            <param name="super"></param>
+            <param name="eachAction"></param>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Extension.SelectLoopChild``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Collections.Generic.IEnumerable{``0}})">
+            <summary>
+            展开子节点
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="enumerable"></param>
+            <param name="childSelector"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Extension.SelectLoopChild``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1},System.Func{``0,``1},System.Action{``0,System.Collections.Generic.IEnumerable{``0}},``1)">
+            <summary>
+            组合树
+            </summary>
+            <typeparam name="T">树类型</typeparam>
+            <typeparam name="TKey">树键类型</typeparam>
+            <param name="enumerable">未组合的一维节点</param>
+            <param name="patentFunc">取上级键</param>
+            <param name="keyFunc">取当前健</param>
+            <param name="setChildAction">设置下级</param>
+            <param name="parent_id">指定当前父节点</param>
+            <returns></returns>
+        </member>
         <member name="M:FastFrame.Infrastructure.Extension.TryGetValueOrDefault``2(System.Collections.Generic.IDictionary{``0,``1},``0)">
             <summary>
             获取字典值，如果没有，就返回默认值

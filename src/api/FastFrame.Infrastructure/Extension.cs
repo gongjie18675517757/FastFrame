@@ -17,6 +17,89 @@ namespace FastFrame.Infrastructure
     public static class Extension
     {
         /// <summary>
+        /// 递归子节点
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="enumerable"></param>
+        /// <param name="childSelector"></param>
+        /// <param name="super"></param>
+        /// <param name="eachAction"></param>
+        public static void EachLoopChild<T>(this IEnumerable<T> enumerable, Func<T, IEnumerable<T>> childSelector, T super, Action<(T patent, T child)> eachAction)
+        {
+            if (enumerable == null)
+                return;
+
+            if (childSelector == null)
+                throw new ArgumentException();
+
+            if (eachAction == null)
+                throw new ArgumentException();
+
+            foreach (var item in enumerable)
+            {
+                eachAction((super, item));
+                EachLoopChild(childSelector(item), childSelector, item, eachAction);
+            }
+        }
+
+        /// <summary>
+        /// 展开子节点
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="enumerable"></param>
+        /// <param name="childSelector"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> SelectLoopChild<T>(this IEnumerable<T> enumerable, Func<T, IEnumerable<T>> childSelector)
+        {
+            if (enumerable == null)
+                yield break;
+
+            if (childSelector == null)
+                throw new ArgumentException();
+
+            foreach (var item in enumerable)
+            {
+                yield return item;
+
+                var children = SelectLoopChild(childSelector(item), childSelector);
+
+                if (children != null && children.Any())
+                    foreach (var child in children)
+                        yield return child;
+            }
+        }
+
+        /// <summary>
+        /// 组合树
+        /// </summary>
+        /// <typeparam name="T">树类型</typeparam>
+        /// <typeparam name="TKey">树键类型</typeparam>
+        /// <param name="enumerable">未组合的一维节点</param>
+        /// <param name="patentFunc">取上级键</param>
+        /// <param name="keyFunc">取当前健</param>
+        /// <param name="setChildAction">设置下级</param>
+        /// <param name="parent_id">指定当前父节点</param>
+        /// <returns></returns>
+        public static IEnumerable<T> SelectLoopChild<T, TKey>(this IEnumerable<T> enumerable, Func<T, TKey> patentFunc, Func<T, TKey> keyFunc, Action<T, IEnumerable<T>> setChildAction, TKey parent_id)
+        {
+            if (enumerable is null)
+                yield break;
+
+            if (patentFunc is null)
+                throw new ArgumentNullException(nameof(patentFunc));
+
+            foreach (var item in enumerable)
+            {
+                if (EqualityComparer<TKey>.Default.Equals(patentFunc(item), parent_id))
+                {
+                    var children = SelectLoopChild(enumerable, patentFunc, keyFunc, setChildAction, keyFunc(item));
+                    setChildAction(item, children);
+                    yield return item;
+                }
+            }
+        }
+
+        /// <summary>
         /// 获取字典值，如果没有，就返回默认值
         /// </summary>
         /// <typeparam name="TKey"></typeparam>

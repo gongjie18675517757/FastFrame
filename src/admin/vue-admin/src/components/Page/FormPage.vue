@@ -3,7 +3,7 @@
     <v-layout align-center justify-center :class="{ singleLine: singleLine }">
       <v-flex v-bind="flex" :style="{ padding: isTab ? '1px' : null }">
         <v-card>
-          <v-toolbar flat dense color="transparent"  >
+          <v-toolbar flat dense color="transparent">
             <v-toolbar-title>{{ title }}</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items v-if="!isDialog">

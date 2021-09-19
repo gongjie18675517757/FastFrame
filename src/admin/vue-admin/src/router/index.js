@@ -124,7 +124,7 @@ export const pages = [{
     keepAlive: false
   },
   component: () =>
-    import(`@/views/Flow/Design/Add.vue`)
+    import(`@/views/Flow/Design/FlowDesign.vue`)
 },
 {
   path: '/Setting',

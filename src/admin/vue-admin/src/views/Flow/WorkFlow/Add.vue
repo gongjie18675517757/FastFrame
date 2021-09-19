@@ -1,66 +1,83 @@
 <script>
 let pageInfo = { area: "Flow", name: "WorkFlow", direction: "工作流" };
 import Page from "../../../components/Page/FormPageCore.js";
-import FlowDesignVue from "./FlowDesign.vue";
+import FlowDesignVue from "../Design/FlowDesign.vue";
+
 export default {
   ...Page,
+
   data() {
     let data = Page.data.call(this);
     return {
       ...data,
-      ...pageInfo
+      ...pageInfo,
+      kvs: []
     };
   },
   methods: {
     ...Page.methods,
-    fmtModelObject() {
-      return Page.methods.fmtModelObject.call(this, ...arguments).then(v => {
-        return {
-          ...v,
-          Nodes: v.Nodes || [],
-          Lines: v.Lines || []
-        };
-      });
+    async init() {
+      this.kvs = await this.$http.get(`/api/common/HaveCheckModuleList`);
+      await Page.methods.init.call(this);
     },
-    fmtModelObjectItems() {
-      return Page.methods.fmtModelObjectItems
-        .call(this, ...arguments)
-        .then(arr => {
-          return this.$http.get(`/api/common/HaveCheckModuleList`).then(kvs => {
-            return [
-              ...arr,
-              {
-                Name: "BeModule",
-                EnumValues: kvs,
-                callback: ({ model, value }) => {
-                  model.BeModuleName = null;
-                  model.Version = 1;
-                  if (value) {
-                    model.BeModuleName = value.Value;
+    async fmtModelObject() {
+      let v = await Page.methods.fmtModelObject.call(this, ...arguments);
+      return {
+        Nodes: v.Nodes || [
+          {
+            nodeType: "start"
+          },
+          {
+            nodeType: "end"
+          }
+        ],
+        ...v,
+        BeModule: v.BeModule || this.super_id,
+        Version: v.Id || (await this.getVersion(this.super_id))
+      };
+    },
+    getVersion(val) {
+      return this.$http.get(`/api/WorkFlow/GetLastVersion/${val}`);
+    },
+    async fmtModelObjectItems() {
+      let kvs = this.kvs;
+      let arr = await Page.methods.fmtModelObjectItems.call(this, ...arguments);
 
-                    /**
-                     * 请求模块最大的版本号
-                     */
-                    this.$http
-                      .get(`/api/WorkFlow/GetLastVersion/${value.Key}`)
-                      .then(v => {
-                        model.Version = v;
-                      });
-                  }
-                }
-              },
-              {
-                Name: "BeModuleName",
-                Hide: "All"
-              },
-              {
-                Name: "Nodes",
-                template: FlowDesignVue,
-                GroupNames:['流程设计']
-              }
-            ];
-          });
-        });
+      return [
+        ...arr,
+        {
+          Name: "BeModule",
+          EnumValues: kvs,
+          Readonly: () => !!this.super_id,
+          callback: ({ model, value }) => {
+            model.BeModuleName = null;
+            model.Version = 1;
+            if (value) {
+              model.BeModuleName = value.Value;
+
+              /**
+               * 请求模块最大的版本号
+               */
+              this.getVersion(value.Key).then(v => {
+                model.Version = v;
+              });
+            }
+          }
+        },
+        {
+          Name: "BeModuleName",
+          visible: false
+        },
+        {
+          Name: "Remarks",
+          Length: 200
+        },
+        {
+          Name: "Nodes",
+          GroupNames:['审核过程'],
+          template:FlowDesignVue
+        },
+      ];
     }
   }
 };

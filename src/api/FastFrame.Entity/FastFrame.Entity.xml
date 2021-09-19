@@ -1096,6 +1096,26 @@
             缺省分支(为分支时)
             </summary>
         </member>
+        <member name="P:FastFrame.Entity.Flow.FlowNode.CheckEnum">
+            <summary>
+            审批方式(多人时)
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Flow.FlowNodeCheckEnum">
+            <summary>
+            审批方式
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FlowNodeCheckEnum.or">
+            <summary>
+            或签
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FlowNodeCheckEnum.and">
+            <summary>
+            会签
+            </summary>
+        </member>
         <member name="T:FastFrame.Entity.Flow.FlowNodeCond">
             <summary>
             流程节点条件

@@ -14,8 +14,9 @@ namespace FastFrame.WebHost.Privder
     {
         private readonly IModuleDesProvider descriptionProvider;
         private readonly IApplicationSession appSessionProvider;
-        private static readonly Dictionary<string, ModuleStruct> cacheModuleKvs = new Dictionary<string, ModuleStruct>();
+        private static readonly Dictionary<string, ModuleStruct> cacheModuleKvs = new();
         private static IEnumerable<KeyValuePair<string, string>> haveCheckModuleList = null;
+        private static readonly object _lock = new();
 
         public ModuleExportProvider(IModuleDesProvider descriptionProvider, IApplicationSession appSessionProvider)
         {
@@ -131,15 +132,16 @@ namespace FastFrame.WebHost.Privder
         /// <returns></returns>
         public IEnumerable<KeyValuePair<string, string>> HaveCheckModuleList()
         {
-            lock (this)
+            lock (_lock)
             {
                 var haveCheckType = typeof(IHaveCheck);
-                haveCheckModuleList = TypeManger.RegisterdTypes
-                  .Where(v => haveCheckType.IsAssignableFrom(v) && v.IsClass && !v.IsAbstract)
-                  .Select(v => new KeyValuePair<string, string>(v.Name, descriptionProvider.GetClassDescription(v)))
-                  .Concat(cacheModuleKvs.Values.Where(v => v.HaveCheck).Select(v => new KeyValuePair<string, string>(v.Name, v.Description)))
-                  .Distinct()
-                  .ToList();
+                if (haveCheckModuleList == null)
+                    haveCheckModuleList = TypeManger.RegisterdTypes
+                      .Where(v => haveCheckType.IsAssignableFrom(v) && v.IsClass && !v.IsAbstract)
+                      .Select(v => new KeyValuePair<string, string>(v.Name, descriptionProvider.GetClassDescription(v)))
+                      .Concat(cacheModuleKvs.Values.Where(v => v.HaveCheck).Select(v => new KeyValuePair<string, string>(v.Name, v.Description)))
+                      .Distinct()
+                      .ToList();
             }
             return haveCheckModuleList;
         }

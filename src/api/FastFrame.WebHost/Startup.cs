@@ -51,10 +51,10 @@ namespace FastFrame.WebHost
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.Configure<IISServerOptions>(options =>
-            {
-                options.AutomaticAuthentication = false;
-            });
+            //services.Configure<IISServerOptions>(options =>
+            //{
+            //    options.AutomaticAuthentication = false;
+            //});
 
             var configurationOptions = StackExchange.Redis.ConfigurationOptions.Parse(Configuration.GetConnectionString("RedisConnection"));
             var connectionMultiplexer = StackExchange.Redis.ConnectionMultiplexer.Connect(configurationOptions);

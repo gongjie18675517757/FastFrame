@@ -136,7 +136,7 @@ export default {
     if (this.singleLine) {
       flex = {
         xs12: 1,
-
+        
       }
     }
 
@@ -145,13 +145,13 @@ export default {
 
 
     //长文本
-    if (!component && this.Length && this.Length >= 200 && this.Length < 4000) {
+    if (!component && this.Length && this.Length > 200 && this.Length < 4000) {
       component = h(TextArea, {
         props,
         on
       }, [fieldLabel])
       flex = {
-        xs12: 1,
+        xs12: 1, 
       }
     }
     /**

@@ -53,11 +53,17 @@ namespace FastFrame.Application
             await Task.CompletedTask;
         }
 
+        protected virtual async Task OnAddOrUpdateing(TDto input, TEntity entity)
+        {
+            await Task.CompletedTask;
+        }
+
         /// <summary>
         /// 新增时
         /// </summary> 
         protected virtual async Task OnAdding(TDto input, TEntity entity)
         {
+            await OnAddOrUpdateing(input, entity);
             await OnChangeing(input, entity);
 
             if (entity is IHaveNumber haveNumber)
@@ -165,6 +171,7 @@ namespace FastFrame.Application
         /// </summary> 
         protected virtual async Task OnUpdateing(TDto input, TEntity entity)
         {
+            await OnAddOrUpdateing(input, entity);
             await OnChangeing(input, entity);
 
             await EventBus?.TriggerEventAsync(new DoMainUpdateing<TDto>(input, entity));

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace FastFrame.Application.Flow
 {
@@ -22,9 +23,134 @@ namespace FastFrame.Application.Flow
             return GetAsync(request);
         }
 
-        protected override async Task OnGeting(WorkFlowDto dto)
+        protected override async Task OnAdding(WorkFlowDto input, WorkFlow entity)
         {
-            await base.OnGeting(dto);
+            entity.Version = await GetLastVersion(entity.BeModule);
+
+            await base.OnAdding(input, entity);
+        }
+
+        protected override async Task OnBeforeUpdate(WorkFlow before, WorkFlowDto after)
+        {
+            /*判断流程有没有被使用，有则不允许修改*/
+            if (await Loader.GetService<IRepository<FlowInstance>>().AnyAsync(v => v.WorkFlow_Id == before.Id))
+                throw new MsgException("流程使用中，不允许修改,可以复制当前流程并生成一个新的版本！");
+
+            await base.OnBeforeUpdate(before, after);
+        }
+
+        protected override async Task OnAddOrUpdateing(WorkFlowDto input, WorkFlow entity)
+        {
+            /*验证流程节点是否配置正确*/
+            VerifyFlowNodes(input);
+
+            await base.OnAddOrUpdateing(input, entity);
+        }
+
+        protected override async Task OnChangeing(WorkFlowDto input, WorkFlow entity)
+        {
+            await base.OnChangeing(input, entity);
+
+            var id = entity.Id;
+            var flowNodes = Loader.GetService<IRepository<FlowNode>>();
+            var afterNodeList = input?.Nodes.SelectLoopChild(v => v.Nodes);
+
+            /*同步更新子节点*/
+            await Loader
+                .GetService<HandleOne2ManyService<FlowNode, FlowNode>>()
+                .UpdateManyAsync(
+                    v => v.WorkFlow_Id == id,
+                    afterNodeList,
+                    (a, b) => a.Id == b.Id,
+                    v =>
+                    {
+                        v.WorkFlow_Id = entity.Id;
+                        return v;
+                    },
+                    (before, after) =>
+                    {
+                        after.MapSet(before);
+                        before.WorkFlow_Id = entity.Id;
+                    }
+                );
+
+            input?.Nodes.EachLoopChild(v => v.Nodes, null, temp =>
+            {
+                var (patent, child) = temp;
+                child.Super_Id = patent?.Id;
+            });
+
+            /*同步更新条件*/
+            await Loader
+                .GetService<HandleOne2ManyService<FlowNodeCond, FlowNodeCond>>()
+                .UpdateManyAsync(
+                    v => v.WorkFlow_Id == id,
+                    afterNodeList?.SelectMany(v => v.Conds.Select(x =>
+                    {
+                        x.FlowNode_Id = v.Id;
+                        x.WorkFlow_Id = id;
+                        return x;
+                    })),
+                    (a, b) => a.Id == b.Id,
+                    v =>
+                    {
+                        v.WorkFlow_Id = entity.Id;
+                        return v;
+                    },
+                    (before, after) =>
+                    {
+                        after.MapSet(before);
+                        before.WorkFlow_Id = entity.Id;
+                    }
+                );
+
+            /*同步更新事件*/
+            await Loader
+                .GetService<HandleOne2ManyService<FlowNodeEvent, FlowNodeEvent>>()
+                .UpdateManyAsync(
+                    v => v.WorkFlow_Id == id,
+                    afterNodeList?.SelectMany(v => v.Events.Select(x =>
+                    {
+                        x.FlowNode_Id = v.Id;
+                        x.WorkFlow_Id = id;
+                        return x;
+                    })),
+                    (a, b) => a.Id == b.Id,
+                    v =>
+                    {
+                        v.WorkFlow_Id = entity.Id;
+                        return v;
+                    },
+                    (before, after) =>
+                    {
+                        after.MapSet(before);
+                        before.WorkFlow_Id = entity.Id;
+                    }
+                );
+
+            /*同步更新审核人*/
+            await Loader
+                .GetService<HandleOne2ManyService<FlowNodeChecker, FlowNodeChecker>>()
+                .UpdateManyAsync(
+                    v => v.WorkFlow_Id == id,
+                    afterNodeList?.SelectMany(v => v.Checkers.Select(x =>
+                    {
+                        x.FlowNode_Id = v.Id;
+                        x.WorkFlow_Id = id;
+                        return x;
+                    })),
+                    (a, b) => a.Id == b.Id,
+                    v =>
+                    {
+                        v.WorkFlow_Id = entity.Id;
+                        return v;
+                    },
+                    (before, after) =>
+                    {
+                        after.MapSet(before);
+                        before.WorkFlow_Id = entity.Id;
+                    }
+                );
         }
 
         protected override async Task OnDeleteing(WorkFlow entity)
@@ -36,16 +162,24 @@ namespace FastFrame.Application.Flow
             await base.OnDeleteing(entity);
         }
 
-        protected override Task OnAdding(WorkFlowDto input, WorkFlow entity)
+        protected override async Task OnGeting(WorkFlowDto dto)
         {
-            VerifyFlowNodes(input);
-            return base.OnAdding(input, entity);
-        }
+            await base.OnGeting(dto);
 
-        protected override Task OnUpdateing(WorkFlowDto input, WorkFlow entity)
-        {
-            VerifyFlowNodes(input);
-            return base.OnUpdateing(input, entity);
+            var id = dto.Id;
+            var flowNodes = await Loader.GetService<IRepository<FlowNode>>().Where(v => v.WorkFlow_Id == id).MapTo<FlowNode, FlowNodeModel>().ToListAsync();
+            var flowNodeConds = await Loader.GetService<IRepository<FlowNodeCond>>().Where(v => v.WorkFlow_Id == id).ToListAsync();
+            var flowNodeEvents = await Loader.GetService<IRepository<FlowNodeEvent>>().Where(v => v.WorkFlow_Id == id).ToListAsync();
+            var flowNodeCheckers = await Loader.GetService<IRepository<FlowNodeChecker>>().Where(v => v.WorkFlow_Id == id).ToListAsync();
+
+            foreach (var node in flowNodes)
+            {
+                node.Conds = flowNodeConds.Where(v => v.FlowNode_Id == node.Id).ToList();
+                node.Events = flowNodeEvents.Where(v => v.FlowNode_Id == node.Id).ToList();
+                node.Checkers = flowNodeCheckers.Where(v => v.FlowNode_Id == node.Id).ToList();
+            }
+
+            dto.Nodes = flowNodes.SelectLoopChild(v => v.Super_Id, v => v.Id, (a, b) => a.Nodes = b.ToList(), null);
         }
 
         /// <summary>
@@ -103,7 +237,7 @@ namespace FastFrame.Application.Flow
             switch (node.NodeEnum)
             {
                 case FlowNodeEnum.start:
-                    throw new MsgException("起点位置不正确!"); 
+                    throw new MsgException("起点位置不正确!");
                 case FlowNodeEnum.branch:
 
                     break;
@@ -122,5 +256,21 @@ namespace FastFrame.Application.Flow
                     break;
             }
         }
+
+        public async Task<IEnumerable<ITreeModel>> GetChildrenBySuperId()
+        {
+            await Task.CompletedTask;
+            var valuePairs = Loader.GetService<Infrastructure.Module.IModuleExportProvider>().HaveCheckModuleList();
+
+            return valuePairs.Select(v => new TreeModel
+            {
+                ChildCount = 0,
+                Id = v.Key,
+                Name = v.Value,
+                Super_Id = v.Key
+            });
+        }
+
+        
     }
 }

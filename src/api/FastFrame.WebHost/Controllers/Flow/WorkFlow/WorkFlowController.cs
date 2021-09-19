@@ -1,5 +1,7 @@
-﻿using FastFrame.Infrastructure.Permission;
+﻿using FastFrame.Application;
+using FastFrame.Infrastructure.Permission;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
 
@@ -13,12 +15,20 @@ namespace FastFrame.WebHost.Controllers.Flow
         /// <param name="moduleName"></param>
         /// <returns></returns>
         [Permission("Add")]
-        [HttpGet("{GetLastVersion}")]
+        [HttpGet("{moduleName}")]
         public async Task<int> GetLastVersion(string moduleName)
         {
-             
-
             return await service.GetLastVersion(moduleName);
+        }
+
+        /// <summary>
+        /// 获取树形视图
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IEnumerable<ITreeModel>> GetChildrenBySuperId()
+        {
+            return await service.GetChildrenBySuperId();
         }
     }
 }

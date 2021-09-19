@@ -32,6 +32,7 @@ const message = {
         return new Promise((resolve, reject) => {
             store.state.dialogs.push({
                 component,
+                ...pars,
                 resolve,
                 reject,
                 pars: {

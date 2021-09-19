@@ -1,63 +1,67 @@
 <template>
-  <v-container grid-list-xl fluid app>
-    <v-layout align-center justify-center>
-      <v-flex>
-        <v-card>
-          <v-toolbar flat dense color="transparent">
-            <v-toolbar-title>流程设计</v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-btn icon @click="$emit('close')" title="关闭">
-              <v-icon>close</v-icon>
-            </v-btn>
-          </v-toolbar>
-          <v-divider></v-divider>
-          <v-card-text
-            style="padding:0px;"
-            @mousedown="handleMousedown"
-            ref="container"
-            :style="{ cursor: moveing ? 'move' : null }"
-          >
-            <VuePerfectScrollbar class="flow-design-container">
-              <div class="zoom">
-                <v-icon @click="zoom -= 10" color="p">zoom_out</v-icon>
-                {{ zoom }}%
-                <v-icon @click="zoom += 10" color="p">zoom_in</v-icon>
-              </div>
-              <div
-                class="flow-design-areas"
-                :style="{
-                  transform: `scale(${zoom / 100})`,
-                  top: `${top}px`,
-                  left: `${left}px`
-                }"
-              >
-                <flow-node
-                  v-for="(node, nodeIndex) in nodes"
-                  :key="nodeIndex"
-                  :node="node"
-                  :makeNodeFunc="makeNodeFunc"
-                  editabled
-                  @add-note="handleNodeAdd($event, nodeIndex)"
-                  @remove-node="handleNodeRemove(nodeIndex)"
-                  @change="handleChange"
-                  @move-up="handleMoveUp(nodeIndex)"
-                  @move-down="handleMoveDown(nodeIndex)"
-                  :moveupable="
-                    nodeIndex > 0 &&
-                      ['check'].includes(nodes[nodeIndex - 1].nodeType)
-                  "
-                  :movedownable="
-                    nodeIndex < nodes.length - 1 &&
-                      ['check'].includes(nodes[nodeIndex + 1].nodeType)
-                  "
-                />
-              </div>
-            </VuePerfectScrollbar>
-          </v-card-text>
-        </v-card>
-      </v-flex>
-    </v-layout>
-  </v-container>
+  <v-card>
+    <v-toolbar flat dense color="transparent">
+      <v-toolbar-title>流程设计</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn icon @click="zoom -= 10" title="缩小">
+        <v-icon color="p">zoom_out</v-icon></v-btn
+      >
+      {{ zoom }}%
+      <v-btn icon @click="zoom += 10" title="放大">
+        <v-icon color="p">zoom_in</v-icon>
+      </v-btn>
+
+      <v-btn icon @click="$emit('close')" title="关闭" v-if="isDialog">
+        <v-icon>close</v-icon>
+      </v-btn>
+      <v-btn icon @click="handleFullScreen" title="最大化" v-else>
+        <v-icon>mdi-fullscreen</v-icon>
+      </v-btn>
+    </v-toolbar>
+    <v-divider></v-divider>
+    <v-card-text
+      style="padding:0px;"
+      @mousedown="handleMousedown"
+      ref="container"
+      :style="{ cursor: moveing ? 'move' : null }"
+    >
+      <VuePerfectScrollbar class="flow-design-container" :style="{height:isDialog?'calc(100vh - 50px)':null}">
+        <!-- <div class="zoom">
+          <v-icon @click="zoom -= 10" color="p">zoom_out</v-icon>
+          {{ zoom }}%
+          <v-icon @click="zoom += 10" color="p">zoom_in</v-icon>
+        </div> -->
+        <div
+          class="flow-design-areas"
+          :style="{
+            transform: `scale(${zoom / 100})`,
+            top: `${top}px`,
+            left: `${left}px`
+          }"
+        >
+          <flow-node
+            v-for="(node, nodeIndex) in nodes"
+            :key="nodeIndex"
+            :node="node"
+            :makeNodeFunc="makeNodeFunc"
+            editabled
+            @add-note="handleNodeAdd($event, nodeIndex)"
+            @remove-node="handleNodeRemove(nodeIndex)"
+            @change="handleChange"
+            @move-up="handleMoveUp(nodeIndex)"
+            @move-down="handleMoveDown(nodeIndex)"
+            :moveupable="
+              nodeIndex > 0 && ['check'].includes(nodes[nodeIndex - 1].nodeType)
+            "
+            :movedownable="
+              nodeIndex < nodes.length - 1 &&
+                ['check'].includes(nodes[nodeIndex + 1].nodeType)
+            "
+          />
+        </div>
+      </VuePerfectScrollbar>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>
@@ -69,13 +73,19 @@ export default {
     VuePerfectScrollbar,
     FlowNode
   },
+  props: {
+    isDialog: Boolean,
+    value: {
+      type: Array
+    }
+  },
   data() {
     return {
       zoom: 100,
       top: 30,
       left: 0,
       moveing: false,
-      nodes: [
+      list: [
         {
           nodeType: "start"
         },
@@ -133,6 +143,11 @@ export default {
         }
       ]
     };
+  },
+  computed: {
+    nodes() {
+      return this.value || this.list;
+    }
   },
   methods: {
     handleChange() {},
@@ -213,10 +228,7 @@ export default {
     },
     handleMousedown() {
       this.moveing = true;
-      this.$refs.container.addEventListener(
-        "mousemove",
-        this.handleMousemove
-      );
+      this.$refs.container.addEventListener("mousemove", this.handleMousemove);
       this.$refs.container.addEventListener("mouseup", this.handleMouseup);
     },
     handleMouseup() {
@@ -225,14 +237,18 @@ export default {
         "mousemove",
         this.handleMousemove
       );
-      this.$refs.container.removeEventListener(
-        "mouseup",
-        this.handleMouseup
-      );
+      this.$refs.container.removeEventListener("mouseup", this.handleMouseup);
     },
     handleMousemove(e) {
       this.left += e.movementX;
       this.top += e.movementY;
+    },
+    handleFullScreen() {
+      this.$message.dialog(() => import("./FlowDesign.vue"), {
+        fullscreen: true,
+        hideOverlay: true,
+        value: this.nodes
+      });
     }
   }
 };
@@ -242,8 +258,7 @@ export default {
 .flow-design-container {
   background: #e9eaeb;
   position: relative;
-  overflow: auto;
-  height: 70vh;
+  overflow: auto; 
   padding: 12px;
 
   .list-enter-active, .list-leave-active {
@@ -262,9 +277,9 @@ export default {
   }
 
   .flow-design-areas {
-    position: absolute;
-    top: 30px;
-    left: 0px;
+    // position: absolute;
+    // top: 30px;
+    // left: 0px;
     user-select: none;
 
     .node-condition.node-box {

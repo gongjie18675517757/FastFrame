@@ -10,6 +10,8 @@
       :key="i"
       :value="true"
       :width="dialog.pars.width"
+      :fullscreen="dialog.fullscreen"
+      :hide-overlay="dialog.hideOverlay"
       colored-border
     >
       <component
@@ -86,8 +88,6 @@ export default {
 html {
   overflow-y: hidden;
 }
-
- 
 
 .form-page .v-expansion-panel__container--active .v-expansion-panel__header {
   padding: 0px;

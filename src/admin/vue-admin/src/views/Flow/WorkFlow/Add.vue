@@ -25,10 +25,10 @@ export default {
       return {
         Nodes: v.Nodes || [
           {
-            nodeType: "start"
+            NodeEnum: "start"
           },
           {
-            nodeType: "end"
+            NodeEnum: "end"
           }
         ],
         ...v,

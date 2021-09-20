@@ -87,7 +87,7 @@ namespace FastFrame.Entity.Flow
         /// <summary>
         /// 条件
         /// </summary>
-        public FlowNodeCondCompareEnum CompareEnum { get; set; } 
+        public FlowNodeCondCompareEnum CompareEnum { get; set; }
 
         /// <summary>
         /// 值类型
@@ -332,9 +332,24 @@ namespace FastFrame.Entity.Flow
         field,
 
         /// <summary>
-        /// 部门主管
+        /// 指定部门人员
         /// </summary>
         dept,
+
+        /// <summary>
+        /// 上级部门人员
+        /// </summary>
+        parent_dept,
+
+        /// <summary>
+        /// 上级部门主管
+        /// </summary>
+        parent_dept_manage,
+
+        /// <summary>
+        /// 当前部门主管
+        /// </summary>
+        dept_manage,
 
         /// <summary>
         /// 上个节点指定

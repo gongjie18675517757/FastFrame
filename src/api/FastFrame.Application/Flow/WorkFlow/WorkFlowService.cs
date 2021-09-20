@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using System;
+using FastFrame.Entity.Basis;
 
 namespace FastFrame.Application.Flow
 {
@@ -271,6 +272,62 @@ namespace FastFrame.Application.Flow
             });
         }
 
-        
+        public async Task<IEnumerable<KeyValuePair<string, string>>> CheckerList(FlowNodeCheckerEnum checkerEnum, string moduleName, string kw)
+        {
+            switch (checkerEnum)
+            {
+                case FlowNodeCheckerEnum.user:
+                    return await Loader
+                        .GetService<IRepository<User>>()
+                        .Where(v => v.Enable == Entity.Enums.EnabledMark.enabled)
+                        .Where(v => kw == null || v.Name.Contains(kw) || v.Account.Contains(kw))
+                        .OrderBy(v => v.Account)
+                        .ThenBy(v => v.Name)
+                        .Take(200)
+                        .Select(v => new KeyValuePair<string, string>(v.Id, v.Account + "[" + v.Name + "]"))
+                        .ToListAsync();
+                case FlowNodeCheckerEnum.role:
+                    return await Loader
+                         .GetService<IRepository<Role>>()
+                         .Where(v => !v.IsDefault)
+                         .Where(v => kw == null || v.Name.Contains(kw) || v.EnCode.Contains(kw))
+                         .OrderBy(v => v.EnCode)
+                         .ThenBy(v => v.Name)
+                         .Take(200)
+                         .Select(v => new KeyValuePair<string, string>(v.Id, v.EnCode + "[" + v.Name + "]"))
+                         .ToListAsync();
+                case FlowNodeCheckerEnum.field:
+                    if (moduleName.IsNullOrWhiteSpace())
+                        return Array.Empty<KeyValuePair<string, string>>();
+                    return Loader
+                            .GetService<Infrastructure.Module.IModuleExportProvider>()
+                            .GetModuleStruts(moduleName)
+                            .FieldInfoStruts
+                            .Where(v => v.Relate == nameof(User))
+                            .Select(v => new KeyValuePair<string, string>(v.Name, v.Description))
+                            .ToList();
+                case FlowNodeCheckerEnum.dept:
+                    return await Loader
+                         .GetService<IRepository<Dept>>()
+                         .Where(v => kw == null || v.Name.Contains(kw) || v.EnCode.Contains(kw))
+                         .OrderBy(v => v.EnCode)
+                         .ThenBy(v => v.Name)
+                         .Take(200)
+                         .Select(v => new KeyValuePair<string, string>(v.Id, v.EnCode + "[" + v.Name + "]"))
+                         .ToListAsync();
+                case FlowNodeCheckerEnum.prev_appoint:
+                    break;
+                case FlowNodeCheckerEnum.parent_dept:
+                    break;
+                case FlowNodeCheckerEnum.parent_dept_manage:
+                    break;
+                case FlowNodeCheckerEnum.dept_manage:
+                    break;
+                default:
+                    break;
+            }
+
+            return Array.Empty<KeyValuePair<string, string>>();
+        }
     }
 }

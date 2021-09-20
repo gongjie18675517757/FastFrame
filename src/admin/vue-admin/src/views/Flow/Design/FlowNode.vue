@@ -1,12 +1,12 @@
 <template>
   <div class="node" v-if="node">
-    <template v-if="node.nodeType == 'start'">
-      <div class="node-box node-start">流程开始</div>
+    <template v-if="node.NodeEnum == 'start'">
+      <div class="node-box node-start">流程提交</div>
     </template>
-    <template v-else-if="node.nodeType == 'end'">
-      <div class="node-box node-end">流程结束</div>
+    <template v-else-if="node.NodeEnum == 'end'">
+      <div class="node-box node-end">流程完结</div>
     </template>
-    <template v-else-if="node.nodeType == 'check'">
+    <template v-else-if="node.NodeEnum == 'check'">
       <div class="node-box node-check">
         <span
           class="node-move-up-icon node-move-up-icon-disable"
@@ -20,53 +20,56 @@
         ></span>
         <div class="line-end-arrow"></div>
         <v-node-content
-          :title.sync="node.title"
-          :nodeType="node.nodeType"
+          :title.sync="node.Title"
+          :NodeEnum="node.NodeEnum"
           :readonly="readonly"
           :editabled="editabled"
           @remove-node="$emit('remove-node')"
+          @node-selected="$emit('node-selected', node)"
         />
       </div>
     </template>
-    <template v-else-if="node.nodeType == 'cond'">
+    <template v-else-if="node.NodeEnum == 'cond'">
       <div class="node-condition">
         <div class="node-box node-cond node-condition">
           <div class="line-end-arrow"></div>
           <v-node-content
-            :title.sync="node.title"
-            :nodeType="node.nodeType"
+            :title.sync="node.Title"
+            :NodeEnum="node.NodeEnum"
             :readonly="readonly"
             :editabled="editabled"
             @remove-node="$emit('remove-node')"
+            @node-selected="$emit('node-selected', node)"
           />
         </div>
       </div>
     </template>
-    <template v-else-if="node.nodeType == 'branch'">
+    <template v-else-if="node.NodeEnum == 'branch'">
       <div class="branch-wrap">
         <div class="branch-wrap-box">
           <div class="branch-box">
             <div class="add-branch" @click="addBranch">添加条件</div>
             <div
               class="col-box"
-              v-for="(branch, branchIndex) in node.branchs"
+              v-for="(branch, branchIndex) in node.Nodes"
               :key="branchIndex"
             >
               <template v-if="branchIndex == 0">
                 <div class="top-left-cover-line"></div>
                 <div class="bottom-left-cover-line"></div>
               </template>
-              <template v-if="branchIndex == node.branchs.length - 1">
+              <template v-if="branchIndex == node.Nodes.length - 1">
                 <div class="top-right-cover-line"></div>
                 <div class="bottom-right-cover-line"></div>
               </template>
 
               <v-self
-                v-for="(childNode, childNodeIndex) in branch.nodes"
+                v-for="(childNode, childNodeIndex) in branch.Nodes"
                 :key="`${branchIndex}_${childNodeIndex}`"
                 :node="childNode"
-                @add-note="handleNodeAdd($event, childNodeIndex, branch.nodes)"
+                @add-note="handleNodeAdd($event, childNodeIndex, branch.Nodes)"
                 @remove-node="handleNodeRemove(childNodeIndex, branchIndex)"
+                @node-selected="$emit('node-selected', $event)"
                 @change="$emit('change')"
                 @move-up="handleMoveUp(childNodeIndex, branchIndex)"
                 @move-down="handleMoveDown(childNodeIndex, branchIndex)"
@@ -74,18 +77,18 @@
                 :moveupable="
                   childNodeIndex > 0 &&
                     ['check'].includes(
-                      branch.nodes[childNodeIndex - 1].nodeType
+                      branch.Nodes[childNodeIndex - 1].NodeEnum
                     )
                 "
                 :movedownable="
-                  childNodeIndex < branch.nodes.length - 1 &&
+                  childNodeIndex < branch.Nodes.length - 1 &&
                     ['check'].includes(
-                      branch.nodes[childNodeIndex + 1].nodeType
+                      branch.Nodes[childNodeIndex + 1].NodeEnum
                     )
                 "
                 :editabled="
-                  childNode.nodeType != 'cond' ||
-                    branchIndex != node.branchs.length - 1
+                  childNode.NodeEnum != 'cond' ||
+                    branchIndex != node.Nodes.length - 1
                 "
                 :readonly="readonly"
               />
@@ -94,10 +97,10 @@
         </div>
       </div>
     </template>
-    <template v-if="!['start', 'cond'].includes(node.nodeType)">
+    <template v-if="!['start', 'cond'].includes(node.NodeEnum)">
       <div class="line-end-arrow"></div>
     </template>
-    <template v-if="!['end'].includes(node.nodeType)">
+    <template v-if="!['end'].includes(node.NodeEnum)">
       <div class="add-node">
         <div
           class="add-node-menu-wrap add-node-menu-right"
@@ -181,7 +184,7 @@ export default {
   watch: {
     editInputVisible(val) {
       if (val) {
-        this.titleTemp = this.node.title;
+        this.titleTemp = this.node.Title;
       }
     }
   },
@@ -209,28 +212,26 @@ export default {
       this.$emit("add-note", r.Key);
     },
     addBranch() {
-      this.node.branchs.splice(0,0,{
-        weight: 1,
-        isDefault: false,
-        nodes: [
+      this.node.Nodes.splice(0, 0, {
+        Weight: 1,
+        IsDefault: false,
+        Nodes: [
           {
-            nodeType: "cond",
-            title: "条件1",
-            filters: [
-              {
-                Name: null,
-                Value: null,
-                Compare: null
-              }
-            ]
+            NodeEnum: "cond",
+            Title: "条件1",
+            Conds: []
           },
           {
-            nodeType: "check",
-            title: "审批人1"
+            NodeEnum: "check",
+            Title: "审批人1",
+            Events:[],
+            Checkers:[]
           },
           {
-            nodeType: "check",
-            title: "审批人3"
+            NodeEnum: "check",
+            Title: "审批人3",
+            Events:[],
+            Checkers:[]
           }
         ]
       });
@@ -241,28 +242,28 @@ export default {
       this.$emit("change");
     },
     handleNodeRemove(index, branchIndex) {
-      let branch = this.node.branchs[branchIndex];
-      let node = branch.nodes[index];
-      branch.nodes.splice(index, 1);
+      let branch = this.node.Nodes[branchIndex];
+      let node = branch.Nodes[index];
+      branch.Nodes.splice(index, 1);
 
-      if (node.nodeType == "cond") {
-        this.node.branchs.splice(branchIndex, 1);
-        if (this.node.branchs.length <= 1) this.$emit("remove-node");
+      if (node.NodeEnum == "cond") {
+        this.node.Nodes.splice(branchIndex, 1);
+        if (this.node.Nodes.length <= 1) this.$emit("remove-node");
       }
     },
     handleTitleInput() {
-      this.node.title = this.titleTemp;
+      this.node.Title = this.titleTemp;
       this.editInputVisible = false;
     },
     handleMoveUp(index, branchIndex) {
-      let branch = this.node.branchs[branchIndex];
-      let nodes = branch.nodes;
+      let branch = this.node.Nodes[branchIndex];
+      let nodes = branch.Nodes;
       let [r] = nodes.splice(index, 1);
       nodes.splice(index - 1, 0, r);
     },
     handleMoveDown(index, branchIndex) {
-      let branch = this.node.branchs[branchIndex];
-      let nodes = branch.nodes;
+      let branch = this.node.Nodes[branchIndex];
+      let nodes = branch.Nodes;
       let [r] = nodes.splice(index, 1);
       nodes.splice(index + 1, 0, r);
     }

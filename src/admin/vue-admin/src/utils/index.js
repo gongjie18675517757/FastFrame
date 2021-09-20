@@ -13,8 +13,8 @@ export const debounce = _debounce;
 /**
  * 事件总线
  */
-export const eventBus = new Vue() 
- 
+export const eventBus = new Vue()
+
 
 /**
  * 改变首字母大小写
@@ -265,6 +265,23 @@ export function selectMany(arr = [], selector = r => [r]) {
     }
 
     return brr;
+}
+
+/**
+ * 
+ * @param {*} arr 
+ * @param {*} keySelector 
+ * @param {*} valueSelector 
+ */
+export function createObject(arr = [], keySelector = v => v.Key, valueSelector = v => v.Value) {
+    let obj = {
+
+    };
+    for (const r of arr) {
+        obj[keySelector(r)] = valueSelector(r)
+    }
+
+    return obj;
 }
 
 

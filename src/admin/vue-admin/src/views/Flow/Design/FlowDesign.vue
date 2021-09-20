@@ -25,7 +25,10 @@
       ref="container"
       :style="{ cursor: moveing ? 'move' : null }"
     >
-      <VuePerfectScrollbar class="flow-design-container" :style="{height:isDialog?'calc(100vh - 50px)':null}">
+      <VuePerfectScrollbar
+        class="flow-design-container"
+        :style="{ height: isDialog ? 'calc(100vh - 50px)' : null }"
+      >
         <!-- <div class="zoom">
           <v-icon @click="zoom -= 10" color="p">zoom_out</v-icon>
           {{ zoom }}%
@@ -47,30 +50,39 @@
             editabled
             @add-note="handleNodeAdd($event, nodeIndex)"
             @remove-node="handleNodeRemove(nodeIndex)"
+            @node-selected="handleSelected"
             @change="handleChange"
             @move-up="handleMoveUp(nodeIndex)"
             @move-down="handleMoveDown(nodeIndex)"
             :moveupable="
-              nodeIndex > 0 && ['check'].includes(nodes[nodeIndex - 1].nodeType)
+              nodeIndex > 0 && ['check'].includes(nodes[nodeIndex - 1].NodeEnum)
             "
             :movedownable="
               nodeIndex < nodes.length - 1 &&
-                ['check'].includes(nodes[nodeIndex + 1].nodeType)
+                ['check'].includes(nodes[nodeIndex + 1].NodeEnum)
             "
           />
         </div>
       </VuePerfectScrollbar>
     </v-card-text>
+    <FlowNodeAttrsVue
+      :selectedNode="selectedNode"
+      v-model="drawer"
+      :isDialog="isDialog"
+      @close="handleSettingClose"
+    />
   </v-card>
 </template>
 
 <script>
 import VuePerfectScrollbar from "vue-perfect-scrollbar";
 import FlowNode from "./FlowNode.vue";
+import FlowNodeAttrsVue from "./FlowNodeAttrs.vue";
 
 export default {
   components: {
     VuePerfectScrollbar,
+    FlowNodeAttrsVue,
     FlowNode
   },
   props: {
@@ -85,21 +97,23 @@ export default {
       top: 30,
       left: 0,
       moveing: false,
+      drawer: false,
+      selectedNode: null,
       list: [
         {
-          nodeType: "start"
+          NodeEnum: "start"
         },
         {
-          nodeType: "branch",
-          branchs: [
+          NodeEnum: "branch",
+          Nodes: [
             {
-              weight: 1,
-              isDefault: false,
+              Weight: 1,
+              IsDefault: false,
               nodes: [
                 {
-                  nodeType: "cond",
-                  title: "条件1",
-                  filters: [
+                  NodeEnum: "cond",
+                  Title: "条件1",
+                  Conds: [
                     {
                       Name: null,
                       Value: null,
@@ -108,38 +122,46 @@ export default {
                   ]
                 },
                 {
-                  nodeType: "check",
-                  title: "审批人1"
+                  NodeEnum: "check",
+                  Title: "审批人1",
+                  Events: [],
+                  Checkers: []
                 },
                 {
-                  nodeType: "check",
-                  title: "审批人3"
+                  NodeEnum: "check",
+                  Title: "审批人3",
+                  Events: [],
+                  Checkers: []
                 }
               ]
             },
             {
-              weight: 0,
-              isDefault: true,
+              Weight: 0,
+              IsDefault: true,
               nodes: [
                 {
-                  nodeType: "cond",
-                  title: "默认条件",
-                  filters: []
+                  NodeEnum: "cond",
+                  Title: "默认条件",
+                  Conds: []
                 },
                 {
-                  nodeType: "check",
-                  title: "审批人2"
+                  NodeEnum: "check",
+                  Title: "审批人2",
+                  Events: [],
+                  Checkers: []
                 }
               ]
             }
           ]
         },
         {
-          nodeType: "check",
-          title: "审批人1"
+          NodeEnum: "check",
+          Title: "审批人1",
+          Events: [],
+          Checkers: []
         },
         {
-          nodeType: "end"
+          NodeEnum: "end"
         }
       ]
     };
@@ -160,51 +182,53 @@ export default {
       switch (type) {
         case "check":
           return {
-            nodeType: "check",
-            title: "审批人"
+            NodeEnum: "check",
+            Title: "审批人",
+            Events: [],
+            Checkers: []
           };
 
         case "branch":
           return {
-            nodeType: "branch",
-            branchs: [
+            NodeEnum: "branch",
+            Nodes: [
               {
-                weight: 1,
-                isDefault: false,
-                nodes: [
+                Weight: 1,
+                IsDefault: false,
+                Nodes: [
                   {
-                    nodeType: "cond",
-                    title: "条件1",
-                    filters: [
-                      {
-                        Name: null,
-                        Value: null,
-                        Compare: null
-                      }
-                    ]
+                    NodeEnum: "cond",
+                    Title: "条件1",
+                    Conds: []
                   },
                   {
-                    nodeType: "check",
-                    title: "审批人1"
+                    NodeEnum: "check",
+                    Title: "审批人1",
+                    Events: [],
+                    Checkers: []
                   },
                   {
-                    nodeType: "check",
-                    title: "审批人3"
+                    NodeEnum: "check",
+                    Title: "审批人3",
+                    Events: [],
+                    Checkers: []
                   }
                 ]
               },
               {
-                weight: 0,
-                isDefault: true,
-                nodes: [
+                Weight: 0,
+                IsDefault: true,
+                Nodes: [
                   {
-                    nodeType: "cond",
-                    title: "默认条件",
-                    filters: []
+                    NodeEnum: "cond",
+                    Title: "默认条件",
+                    Conds: []
                   },
                   {
-                    nodeType: "check",
-                    title: "审批人2"
+                    NodeEnum: "check",
+                    Title: "审批人2",
+                    Events: [],
+                    Checkers: []
                   }
                 ]
               }
@@ -249,6 +273,15 @@ export default {
         hideOverlay: true,
         value: this.nodes
       });
+    },
+    handleSelected(node) {
+      // console.log(...arguments);
+      this.selectedNode = node;
+      this.drawer = true;
+    },
+    handleSettingClose() {
+      this.selectedNode = null;
+      this.drawer = false;
     }
   }
 };
@@ -258,7 +291,7 @@ export default {
 .flow-design-container {
   background: #e9eaeb;
   position: relative;
-  overflow: auto; 
+  overflow: auto;
   padding: 12px;
 
   .list-enter-active, .list-leave-active {

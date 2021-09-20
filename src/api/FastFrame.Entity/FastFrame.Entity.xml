@@ -1368,7 +1368,22 @@
         </member>
         <member name="F:FastFrame.Entity.Flow.FlowNodeCheckerEnum.dept">
             <summary>
-            部门主管
+            指定部门人员
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FlowNodeCheckerEnum.parent_dept">
+            <summary>
+            上级部门人员
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FlowNodeCheckerEnum.parent_dept_manage">
+            <summary>
+            上级部门主管
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FlowNodeCheckerEnum.dept_manage">
+            <summary>
+            当前部门主管
             </summary>
         </member>
         <member name="F:FastFrame.Entity.Flow.FlowNodeCheckerEnum.prev_appoint">

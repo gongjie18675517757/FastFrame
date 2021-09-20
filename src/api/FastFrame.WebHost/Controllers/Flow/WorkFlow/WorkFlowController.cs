@@ -1,4 +1,5 @@
 ﻿using FastFrame.Application;
+using FastFrame.Entity.Flow;
 using FastFrame.Infrastructure.Permission;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -29,6 +30,13 @@ namespace FastFrame.WebHost.Controllers.Flow
         public async Task<IEnumerable<ITreeModel>> GetChildrenBySuperId()
         {
             return await service.GetChildrenBySuperId();
+        }
+
+        [Permission(new[] { "Add", "Update" })]
+        [HttpGet]
+        public async Task<IEnumerable<KeyValuePair<string, string>>> CheckerList(FlowNodeCheckerEnum checkerEnum, string moduleName, string kw)
+        {
+            return await service.CheckerList(checkerEnum, moduleName, kw);
         }
     }
 }

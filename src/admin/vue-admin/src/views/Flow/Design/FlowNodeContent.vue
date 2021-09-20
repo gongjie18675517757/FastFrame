@@ -1,5 +1,5 @@
 <template>
-  <div style="width:100%;">
+  <div style="width:100%;" @click="$emit('node-selected')">
     <div class="title">
       <span class="node-title-name">{{ title }}</span>
       <span class="node-title-name-editable">
@@ -46,7 +46,7 @@
           </template>
           <v-card>
             <v-card-text style="padding:12px;">
-              确认要删除此{{nodeType=='cond'?'条件分支':'节点'}}吗?
+              确认要删除此{{NodeEnum=='cond'?'条件分支':'节点'}}吗?
               <v-spacer></v-spacer>
             </v-card-text>
             <v-card-actions>
@@ -77,7 +77,7 @@
 export default {
   props: {
     title: String,
-    nodeType: String,
+    NodeEnum: String,
     placeholder: String,
     readonly: Boolean,
     editabled: Boolean
@@ -101,7 +101,7 @@ export default {
       if (this.placeholder) {
         return this.placeholder;
       }
-      switch (this.nodeType) {
+      switch (this.NodeEnum) {
         case "check":
           return "请选择审核人";
 

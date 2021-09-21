@@ -7,7 +7,7 @@ SET GLOBAL innodb_file_format = BARRACUDA;
 dotnet tool update -g dotnet-ef 
  
 //生成迁移
-dotnet ef migrations add 210919.1  --project fastframe.database --startup-project fastframe.webhost
+dotnet ef migrations add 210921.1  --project fastframe.database --startup-project fastframe.webhost
 dotnet ef database update  --project fastframe.database --startup-project fastframe.webhost
 dotnet ef migrations script   20210902151308_210902.1 --project fastframe.database --startup-project fastframe.webhost
 

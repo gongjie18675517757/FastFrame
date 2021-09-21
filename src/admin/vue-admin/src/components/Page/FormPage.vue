@@ -29,9 +29,9 @@
             </v-toolbar-items>
             <v-menu offset-y>
               <template v-slot:activator="{ on }">
-                <v-btn v-on="on" color="primary" text small title="更多">
+                <v-btn v-on="on" icon color="primary"   title="更多">
                   <v-icon>more_vert</v-icon>
-                  设置
+                  <!-- 设置 -->
                 </v-btn>
               </template>
 

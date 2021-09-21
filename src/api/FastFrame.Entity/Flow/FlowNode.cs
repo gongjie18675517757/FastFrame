@@ -15,6 +15,11 @@ namespace FastFrame.Entity.Flow
         public string WorkFlow_Id { get; set; }
 
         /// <summary>
+        /// 排序
+        /// </summary>
+        public int OrderVal { get; set; }
+
+        /// <summary>
         /// 标题
         /// </summary> 
         [StringLength(200)]
@@ -165,6 +170,11 @@ namespace FastFrame.Entity.Flow
         /// 分支
         /// </summary>
         branch,
+
+        /// <summary>
+        /// 子分支
+        /// </summary>
+        branch_child,
 
         /// <summary>
         /// 审核 

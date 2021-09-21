@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using System;
 using FastFrame.Entity.Basis;
+using FastFrame.Infrastructure.Module;
 
 namespace FastFrame.Application.Flow
 {
@@ -27,7 +28,6 @@ namespace FastFrame.Application.Flow
         protected override async Task OnAdding(WorkFlowDto input, WorkFlow entity)
         {
             entity.Version = await GetLastVersion(entity.BeModule);
-
             await base.OnAdding(input, entity);
         }
 
@@ -45,6 +45,9 @@ namespace FastFrame.Application.Flow
             /*验证流程节点是否配置正确*/
             VerifyFlowNodes(input);
 
+            if (TypeManger.TryGetType(entity.BeModule, out var type))
+                entity.BeModuleName = Loader.GetService<IModuleDesProvider>().GetClassDescription(type);
+
             await base.OnAddOrUpdateing(input, entity);
         }
 
@@ -54,7 +57,29 @@ namespace FastFrame.Application.Flow
 
             var id = entity.Id;
             var flowNodes = Loader.GetService<IRepository<FlowNode>>();
-            var afterNodeList = input?.Nodes.SelectLoopChild(v => v.Nodes);
+            var afterNodeList = input?.Nodes.SelectLoopChild(v => v.Nodes).ToArray();
+
+            /*更新格式*/
+            input?.Nodes.EachLoopChild(v => v.Nodes, null, temp =>
+            {
+                var (patent, child) = temp;
+                if (child.NodeEnum == FlowNodeEnum.branch)
+                {
+                    foreach (var node in child.Nodes)
+                    {
+                        node.IsDefault = false;
+                        node.NodeEnum = FlowNodeEnum.branch_child;
+                    }
+
+                    child.Nodes.LastOrDefault().IsDefault = true;
+                }
+
+                if (patent?.NodeEnum == FlowNodeEnum.branch_child && child?.NodeEnum == FlowNodeEnum.cond)
+                    child.IsDefault = patent.IsDefault;
+            });
+
+            for (int i = 0; i < afterNodeList.Length; i++)
+                afterNodeList[i].OrderVal = i + 1;
 
             /*同步更新子节点*/
             await Loader
@@ -75,23 +100,24 @@ namespace FastFrame.Application.Flow
                     }
                 );
 
+            /*更新ID*/
             input?.Nodes.EachLoopChild(v => v.Nodes, null, temp =>
-            {
-                var (patent, child) = temp;
-                child.Super_Id = patent?.Id;
-            });
+                       {
+                           var (patent, child) = temp;
+                           child.Super_Id = patent?.Id;
+                       });
 
             /*同步更新条件*/
             await Loader
                 .GetService<HandleOne2ManyService<FlowNodeCond, FlowNodeCond>>()
                 .UpdateManyAsync(
                     v => v.WorkFlow_Id == id,
-                    afterNodeList?.SelectMany(v => v.Conds.Select(x =>
-                    {
-                        x.FlowNode_Id = v.Id;
-                        x.WorkFlow_Id = id;
-                        return x;
-                    })),
+                    afterNodeList?.Where(v => v.Conds != null).SelectMany(v => v.Conds.Select(x =>
+                        {
+                            x.FlowNode_Id = v.Id;
+                            x.WorkFlow_Id = id;
+                            return x;
+                        })),
                     (a, b) => a.Id == b.Id,
                     v =>
                     {
@@ -110,12 +136,12 @@ namespace FastFrame.Application.Flow
                 .GetService<HandleOne2ManyService<FlowNodeEvent, FlowNodeEvent>>()
                 .UpdateManyAsync(
                     v => v.WorkFlow_Id == id,
-                    afterNodeList?.SelectMany(v => v.Events.Select(x =>
-                    {
-                        x.FlowNode_Id = v.Id;
-                        x.WorkFlow_Id = id;
-                        return x;
-                    })),
+                    afterNodeList?.Where(v => v.Events != null).SelectMany(v => v.Events.Select(x =>
+                        {
+                            x.FlowNode_Id = v.Id;
+                            x.WorkFlow_Id = id;
+                            return x;
+                        })),
                     (a, b) => a.Id == b.Id,
                     v =>
                     {
@@ -134,12 +160,12 @@ namespace FastFrame.Application.Flow
                 .GetService<HandleOne2ManyService<FlowNodeChecker, FlowNodeChecker>>()
                 .UpdateManyAsync(
                     v => v.WorkFlow_Id == id,
-                    afterNodeList?.SelectMany(v => v.Checkers.Select(x =>
-                    {
-                        x.FlowNode_Id = v.Id;
-                        x.WorkFlow_Id = id;
-                        return x;
-                    })),
+                    afterNodeList?.Where(v => v.Checkers != null).SelectMany(v => v.Checkers.Select(x =>
+                        {
+                            x.FlowNode_Id = v.Id;
+                            x.WorkFlow_Id = id;
+                            return x;
+                        })),
                     (a, b) => a.Id == b.Id,
                     v =>
                     {
@@ -180,7 +206,7 @@ namespace FastFrame.Application.Flow
                 node.Checkers = flowNodeCheckers.Where(v => v.FlowNode_Id == node.Id).ToList();
             }
 
-            dto.Nodes = flowNodes.SelectLoopChild(v => v.Super_Id, v => v.Id, (a, b) => a.Nodes = b.ToList(), null);
+            dto.Nodes = flowNodes.OrderBy(v => v.OrderVal).ThenBy(v => v.Id).SelectLoopChild(v => v.Super_Id, v => v.Id, (a, b) => a.Nodes = b.ToList(), null);
         }
 
         /// <summary>
@@ -304,6 +330,7 @@ namespace FastFrame.Application.Flow
                             .GetModuleStruts(moduleName)
                             .FieldInfoStruts
                             .Where(v => v.Relate == nameof(User))
+                            .Where(v => kw.IsNullOrWhiteSpace() || v.Description.Contains(kw))
                             .Select(v => new KeyValuePair<string, string>(v.Name, v.Description))
                             .ToList();
                 case FlowNodeCheckerEnum.dept:

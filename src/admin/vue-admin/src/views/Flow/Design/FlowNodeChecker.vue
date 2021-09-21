@@ -50,7 +50,13 @@
       </v-list>
     </v-card-text>
     <v-card-actions>
-      <v-btn text small color="p" v-if="CheckerEnum && hasSelectEnum.includes(CheckerEnum)" @click="CheckerEnum = null">
+      <v-btn
+        text
+        small
+        color="p"
+        v-if="CheckerEnum && hasSelectEnum.includes(CheckerEnum)"
+        @click="CheckerEnum = null"
+      >
         取消
       </v-btn>
       <v-spacer></v-spacer>
@@ -59,7 +65,10 @@
         small
         color="p"
         @click="addEvent"
-        :disabled="CheckerEnum == null || (hasSelectEnum.includes(CheckerEnum) && selectedList.length==0)"
+        :disabled="
+          CheckerEnum == null ||
+            (hasSelectEnum.includes(CheckerEnum) && selectedList.length == 0)
+        "
       >
         确定
       </v-btn>
@@ -69,8 +78,12 @@
 
 <script>
 import { getEnumValues } from "../../../generate";
+import { throttle } from "../../../utils";
 
 export default {
+  props: {
+    moduleName: String
+  },
   data() {
     return {
       CheckerEnumKvs: [],
@@ -89,6 +102,11 @@ export default {
         this.selectedList = [];
         this.loadList();
       }
+    },
+    kw() {
+      if (this.CheckerEnum && this.hasSelectEnum.includes(this.CheckerEnum)) {
+        this.loadList();
+      }
     }
   },
   async mounted() {
@@ -96,18 +114,26 @@ export default {
   },
   methods: {
     addEvent() {
-      
-      this.$emit("add-node-checker");
+      if (this.CheckerEnum && this.hasSelectEnum.includes(this.CheckerEnum)) {
+        this.$emit(
+          "add-node-checker",
+          this.selectedList.map(v => ({
+            CheckerEnum: this.CheckerEnum,
+            Checker_Id: v.Key,
+            CheckerName: v.Value
+          }))
+        );
+      }
     },
-    async loadList() {
+    loadList: throttle(async function() {
       let res = await this.$http.get(
         `/api/WorkFlow/CheckerList?checkerEnum=${
           this.CheckerEnum
-        }&moduleName=&kw=${this.kw || ""}`
+        }&moduleName=${this.moduleName || ""}&kw=${this.kw || ""}`
       );
 
       this.list = res.filter(v => !this.selectedList.some(x => x.Key == v.Key));
-    },
+    }, 1000),
     hanldeAddSelected(r, rIndex) {
       this.selectedList.push(r);
       this.list.splice(rIndex, 1);

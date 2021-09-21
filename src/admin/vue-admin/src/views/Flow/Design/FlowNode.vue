@@ -10,12 +10,12 @@
       <div class="node-box node-check">
         <span
           class="node-move-up-icon node-move-up-icon-disable"
-          v-if="moveupable"
+          v-if="moveupable && !readonly"
           @click="$emit('move-up')"
         ></span>
         <span
           class="node-move-down-icon node-move-down-icon-disable"
-          v-if="movedownable"
+          v-if="movedownable && !readonly"
           @click="$emit('move-down')"
         ></span>
         <div class="line-end-arrow"></div>
@@ -38,6 +38,7 @@
             :NodeEnum="node.NodeEnum"
             :readonly="readonly"
             :editabled="editabled"
+            :placeholder="node.IsDefault?'缺省条件':null"
             @remove-node="$emit('remove-node')"
             @node-selected="$emit('node-selected', node)"
           />
@@ -48,7 +49,8 @@
       <div class="branch-wrap">
         <div class="branch-wrap-box">
           <div class="branch-box">
-            <div class="add-branch" @click="addBranch">添加条件</div>
+            <div class="add-branch" v-if="readonly">条件分支</div>
+            <div class="add-branch" v-else @click="addBranch">添加条件</div>
             <div
               class="col-box"
               v-for="(branch, branchIndex) in node.Nodes"
@@ -219,22 +221,24 @@ export default {
           {
             NodeEnum: "cond",
             Title: "条件1",
-            Conds: []
+            Conds: [],
+            IsDefault: false,
           },
           {
             NodeEnum: "check",
             Title: "审批人1",
-            Events:[],
-            Checkers:[]
+            Events: [],
+            Checkers: []
           },
           {
             NodeEnum: "check",
             Title: "审批人3",
-            Events:[],
-            Checkers:[]
+            Events: [],
+            Checkers: []
           }
         ]
       });
+      this.$emit("change");
     },
     handleNodeAdd(type, index, nodes) {
       let node = this.makeNodeFunc(type);
@@ -250,22 +254,26 @@ export default {
         this.node.Nodes.splice(branchIndex, 1);
         if (this.node.Nodes.length <= 1) this.$emit("remove-node");
       }
+      this.$emit("change");
     },
     handleTitleInput() {
       this.node.Title = this.titleTemp;
       this.editInputVisible = false;
+      this.$emit("change");
     },
     handleMoveUp(index, branchIndex) {
       let branch = this.node.Nodes[branchIndex];
       let nodes = branch.Nodes;
       let [r] = nodes.splice(index, 1);
       nodes.splice(index - 1, 0, r);
+      this.$emit("change");
     },
     handleMoveDown(index, branchIndex) {
       let branch = this.node.Nodes[branchIndex];
       let nodes = branch.Nodes;
       let [r] = nodes.splice(index, 1);
       nodes.splice(index + 1, 0, r);
+      this.$emit("change");
     }
   }
 };

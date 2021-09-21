@@ -48,6 +48,7 @@
             :node="node"
             :makeNodeFunc="makeNodeFunc"
             editabled
+            :readonly="disabled"
             @add-note="handleNodeAdd($event, nodeIndex)"
             @remove-node="handleNodeRemove(nodeIndex)"
             @node-selected="handleSelected"
@@ -70,6 +71,8 @@
       v-model="drawer"
       :isDialog="isDialog"
       @close="handleSettingClose"
+      :moduleName="model ? model.BeModule : null"
+      :disabled="disabled"
     />
   </v-card>
 </template>
@@ -89,8 +92,11 @@ export default {
     isDialog: Boolean,
     value: {
       type: Array
-    }
+    },
+    model: Object,
+    disabled: Boolean
   },
+
   data() {
     return {
       zoom: 100,
@@ -109,7 +115,7 @@ export default {
             {
               Weight: 1,
               IsDefault: false,
-              nodes: [
+              Nodes: [
                 {
                   NodeEnum: "cond",
                   Title: "条件1",
@@ -138,7 +144,7 @@ export default {
             {
               Weight: 0,
               IsDefault: true,
-              nodes: [
+              Nodes: [
                 {
                   NodeEnum: "cond",
                   Title: "默认条件",
@@ -172,7 +178,9 @@ export default {
     }
   },
   methods: {
-    handleChange() {},
+    handleChange() {
+      this.$emit("change", this.value);
+    },
     handleNodeAdd(type, index) {
       let node = this.makeNodeFunc(type);
       this.nodes.splice(index + 1, 0, node);
@@ -194,12 +202,14 @@ export default {
             Nodes: [
               {
                 Weight: 1,
+                NodeEnum: "branch-child",
                 IsDefault: false,
                 Nodes: [
                   {
                     NodeEnum: "cond",
                     Title: "条件1",
-                    Conds: []
+                    Conds: [],
+                    IsDefault: false
                   },
                   {
                     NodeEnum: "check",
@@ -217,12 +227,14 @@ export default {
               },
               {
                 Weight: 0,
+                NodeEnum: "branch-child",
                 IsDefault: true,
                 Nodes: [
                   {
                     NodeEnum: "cond",
                     Title: "默认条件",
-                    Conds: []
+                    Conds: [],
+                    IsDefault: true
                   },
                   {
                     NodeEnum: "check",
@@ -241,14 +253,17 @@ export default {
     },
     handleNodeRemove(index) {
       this.nodes.splice(index, 1);
+      this.$emit("change");
     },
     handleMoveUp(index) {
       let [r] = this.nodes.splice(index, 1);
       this.nodes.splice(index - 1, 0, r);
+      this.$emit("change");
     },
     handleMoveDown(index) {
       let [r] = this.nodes.splice(index, 1);
       this.nodes.splice(index + 1, 0, r);
+      this.$emit("change");
     },
     handleMousedown() {
       this.moveing = true;
@@ -271,11 +286,15 @@ export default {
       this.$message.dialog(() => import("./FlowDesign.vue"), {
         fullscreen: true,
         hideOverlay: true,
-        value: this.nodes
+        value: this.nodes,
+        model: this.model,
+        disabled: this.disabled
       });
     },
     handleSelected(node) {
-      // console.log(...arguments);
+      // console.log(node);
+      if (node.NodeEnum == "cond" && node.IsDefault) return;
+
       this.selectedNode = node;
       this.drawer = true;
     },

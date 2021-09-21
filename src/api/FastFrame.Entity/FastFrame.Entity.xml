@@ -1071,6 +1071,11 @@
             关联:WorkFlow
             </summary>
         </member>
+        <member name="P:FastFrame.Entity.Flow.FlowNode.OrderVal">
+            <summary>
+            排序
+            </summary>
+        </member>
         <member name="P:FastFrame.Entity.Flow.FlowNode.Title">
             <summary>
             标题
@@ -1209,6 +1214,11 @@
         <member name="F:FastFrame.Entity.Flow.FlowNodeEnum.branch">
             <summary>
             分支
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FlowNodeEnum.branch_child">
+            <summary>
+            子分支
             </summary>
         </member>
         <member name="F:FastFrame.Entity.Flow.FlowNodeEnum.check">

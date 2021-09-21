@@ -3,6 +3,15 @@ let pageInfo = { area: "Flow", name: "WorkFlow", direction: "工作流" };
 import Page from "../../../components/Page/FormPageCore.js";
 import FlowDesignVue from "../Design/FlowDesign.vue";
 
+const defaultNodes = [
+  {
+    NodeEnum: "start"
+  },
+  {
+    NodeEnum: "end"
+  }
+];
+
 export default {
   ...Page,
 
@@ -23,17 +32,10 @@ export default {
     async fmtModelObject() {
       let v = await Page.methods.fmtModelObject.call(this, ...arguments);
       return {
-        Nodes: v.Nodes || [
-          {
-            NodeEnum: "start"
-          },
-          {
-            NodeEnum: "end"
-          }
-        ],
+        Nodes: v.Nodes || [...defaultNodes],
         ...v,
         BeModule: v.BeModule || this.super_id,
-        Version: v.Id || (await this.getVersion(this.super_id))
+        Version: v.Id ? v.Version : await this.getVersion(this.super_id)
       };
     },
     getVersion(val) {
@@ -52,6 +54,7 @@ export default {
           callback: ({ model, value }) => {
             model.BeModuleName = null;
             model.Version = 1;
+            model.Nodes = [...defaultNodes];
             if (value) {
               model.BeModuleName = value.Value;
 
@@ -74,9 +77,9 @@ export default {
         },
         {
           Name: "Nodes",
-          GroupNames:['审核过程'],
-          template:FlowDesignVue
-        },
+          GroupNames: ["审核过程"],
+          template: FlowDesignVue
+        }
       ];
     }
   }

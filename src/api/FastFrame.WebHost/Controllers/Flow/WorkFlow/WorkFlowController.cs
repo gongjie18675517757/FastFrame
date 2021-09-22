@@ -38,5 +38,10 @@ namespace FastFrame.WebHost.Controllers.Flow
         {
             return await service.CheckerList(checkerEnum, moduleName, kw);
         }
+
+        public async Task<IEnumerable<KeyValuePair<string,string>>> RelateKvs(string entityName)
+        {
+            IHaveCheck
+        }
     }
 }

@@ -8,7 +8,7 @@
       :label="label"
       :errorMessages="errorMessages"
       :placeholder="description"
-      dense
+      :dense="!isXs"
       @click="handleInputClick"
     >
       <template #default>

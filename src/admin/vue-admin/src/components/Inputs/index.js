@@ -9,6 +9,7 @@ import FileInput from './FileInput'
 import EnumItemInput from './EnumItemInput.js'
 
 export default {
+  inheritAttrs:true,
   props: {
     value: [String, Number, Boolean, Array],
     model: Object,
@@ -22,11 +23,14 @@ export default {
     },
     canEdit: Boolean,
     IsRequired: Boolean,
+    isXs: Boolean,
     Length: Number,
     Hide: String,
     ModuleName: String,
     Relate: String,
+    requestUrl: String,
     EnumItemInfo: Object,
+    component: Object,
     Type: {
       type: String,
       default: "text"
@@ -66,6 +70,7 @@ export default {
       return {
         ...this.$attrs,
         value: this.value,
+        requestUrl: this.requestUrl,
         disabled: this.evalDisabled,
         label: null,//this.Description,
         description: this.Description,
@@ -74,7 +79,7 @@ export default {
         errorCount: this.errorMessages.length,
         error: !!this.errorMessages.find(r => r),
         required: this.IsRequired,
-        isXs: this.$vuetify.breakpoint.smAndDown,
+        isXs: this.isXs || this.$vuetify.breakpoint.smAndDown,
       }
     }
   },
@@ -136,11 +141,16 @@ export default {
     if (this.singleLine) {
       flex = {
         xs12: 1,
-        
+
       }
     }
 
-    let component = this.component;
+    let component = this.component ? h(this.component, {
+      props: {
+        ...props,
+      },
+      on
+    }) : null;
 
 
 
@@ -151,7 +161,7 @@ export default {
         on
       }, [fieldLabel])
       flex = {
-        xs12: 1, 
+        xs12: 1,
       }
     }
     /**
@@ -220,7 +230,7 @@ export default {
       if (!props.disabled || props.isXs) {
         let textProps = {
           ...props,
-          dense: true,
+          dense: !props.isXs,
           singleLine: !props.isXs,
           readonly: props.disabled,
         }
@@ -328,14 +338,21 @@ export default {
           class: [this.canEdit ? 'v-text-field' : null]
         }, [fieldLabel, component])
       }
-      return h('v-flex', {
-        attrs: props.isXs ? { xs12: true } : flex,
-        class: ['input-container'],
-        style: {
-          padding: '5px',
-          color: props.error ? 'red' : null
-        }
-      }, [component])
+
+      if (this.isXs) {
+        return component;
+      }
+      else {
+        return h('v-flex', {
+          attrs: props.isXs ? { xs12: true } : flex,
+          class: ['input-container'],
+          style: {
+            padding: '5px',
+            color: props.error ? 'red' : null
+          }
+        }, [component])
+      }
+
 
 
 

@@ -10,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using FastFrame.Entity.Basis;
 using FastFrame.Infrastructure.Module;
+using FastFrame.Entity;
+using System.Linq.Dynamic.Core;
 
 namespace FastFrame.Application.Flow
 {
@@ -355,6 +357,23 @@ namespace FastFrame.Application.Flow
             }
 
             return Array.Empty<KeyValuePair<string, string>>();
+        }
+
+
+        public async Task<IEnumerable<KeyValuePair<string, string>>> RelateKvs(string entityName, string kw)
+        {
+            if (TypeManger.TryGetType(entityName, out var type) && typeof(IHaveCheck).IsAssignableFrom(type))
+            {
+                var repositoryType = typeof(IRepository<>).MakeGenericType(type);
+                var repository = Loader.GetService(repositoryType);
+                var queryable= (IQueryable)repository.GetType().GetProperty("Queryable");
+
+                 
+            }
+            else
+            {
+                return Array.Empty<KeyValuePair<string, string>>();
+            }
         }
     }
 }

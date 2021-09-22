@@ -27,35 +27,26 @@
 </template>
 
 <script>
+import { throttle } from "../../utils";
 export default {
   props: {
     model: Object,
+    requestUrl: String,
     value: [String, Array],
     disabled: Boolean,
     label: String,
     errorMessages: Array,
     isXs: Boolean,
     description: String,
-    EnumItemInfo: Object,
-    multiple: Boolean,
-    values: {
-      type: Array,
-      default: () => []
-    }
+    multiple: Boolean
   },
   data() {
     return {
-      keyword: null
+      keyword: null,
+      items: []
     };
   },
   computed: {
-    items() {
-      return this.values.map(v => ({
-        text: v.Value,
-        value: v.Key
-      }));
-    },
-
     /**
      * 字典文本
      */
@@ -71,6 +62,16 @@ export default {
           .map(v => v.Value)
           .join(",") || "无"
       );
+    }
+  },
+  watch: {
+    keyword: {
+      immediate: true,
+      handler: "loadList"
+    },
+    disabled: {
+      immediate: true,
+      handler: "loadList"
     }
   },
   methods: {
@@ -101,7 +102,14 @@ export default {
         this.$emit("change", item);
       }
       this.keyword = null;
-    }
+    },
+    loadList: throttle(async function() {
+      if (this.disabled) return;
+      let url = this.requestUrl;
+      if (!url.includes("?")) url = `${url}?`;
+      url = `${url}&kw=${this.keyword || ""}`;
+      this.items = await this.$http.get(url);
+    }, 500)
   }
 };
 </script>

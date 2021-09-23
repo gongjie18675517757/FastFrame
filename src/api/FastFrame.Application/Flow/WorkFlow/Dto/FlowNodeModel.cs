@@ -16,7 +16,7 @@ namespace FastFrame.Application.Flow
         /// <summary>
         /// 条件
         /// </summary>
-        public IEnumerable<FlowNodeCond> Conds { get; set; }
+        public IEnumerable<FlowNodeCond[]> Conds { get; set; }
 
         /// <summary>
         /// 事件

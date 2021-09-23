@@ -28,3 +28,16 @@ Vue.component('fragments-facatory', {
         return context.children;
     }
 })
+
+
+Vue.filter('substring', function (v, len) {
+    if (!v) {
+        return null;
+    }
+
+    if (v.length > len) {
+        return `${v.substring(0, len)}...`
+    }
+
+    return v;
+})

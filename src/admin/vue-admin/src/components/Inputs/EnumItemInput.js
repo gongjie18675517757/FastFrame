@@ -78,7 +78,7 @@ export default {
           'item-text': 'Value',
           'item-value': 'Id',
           multiple: this.multiple,
-          dense: true,
+          dense: !this.isXs,
           singleLine: !this.isXs,
         },
         on: {

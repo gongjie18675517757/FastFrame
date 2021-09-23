@@ -33,7 +33,13 @@
     </v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn text small color="p" @click="addCond">
+      <v-btn
+        text
+        small
+        color="p"
+        @click="addCond"
+        :disabled="!value_Id || !valueEnum || !compareVal"
+      >
         确定
       </v-btn>
     </v-card-actions>
@@ -41,7 +47,7 @@
 </template>
 
 <script>
-import ComboboxVue from '../../../components/Inputs/Combobox.vue';
+import ComboboxVue from "../../../components/Inputs/Combobox.vue";
 import {
   getEnumValues,
   getModelObjectItems,
@@ -123,14 +129,13 @@ export default {
       let keys = Object.entries(compareDic)
         .filter(([, arr]) => !arr.some(func => !func(field)))
         .map(([key]) => key);
-      //   console.log(keys);
       this.compares = this.CompareEnumKvs.filter(v => keys.includes(v.Key));
     },
     async handlevalueEnumChange(val) {
       let arr = await getModelObjectItems(this.moduleName);
       let option = arr.find(v => v.Name == this.filedVal);
-      let items = this.fields.filter(v=>v.Type==option.Type);
-      let self=this;
+      let items = this.fields.filter(v => v.Type == option.Type);
+      let self = this;
 
       switch (val) {
         case "input_value":
@@ -144,13 +149,20 @@ export default {
                   ...option,
                   value: self.value_Id,
                   isXs: true,
-                  canEdit:true,
-                  Description:'指定内容',
-                  Readonly:null,
-                  component:option.Relate?ComboboxVue:null,
-                  requestUrl:option.Relate?`/api/WorkFlow/RelateKvs/${option.Relate}`:null,
-                  callback: r => {
-                    console.log(r);
+                  canEdit: true,
+                  Description: "指定内容",
+                  Readonly: null,
+                  component: option.Relate ? ComboboxVue : null,
+                  requestUrl: option.Relate
+                    ? `/api/WorkFlow/RelateKvs/${option.Relate}`
+                    : null,
+                  callback: ({ value }) => {
+                    if (value && value.Key && value.Value) {
+                      self.value_Id = value.Key;
+                      self.valueText = value.Value;
+                    } else {
+                      self.valueText = value;
+                    }
                   }
                 },
                 on: {
@@ -191,8 +203,13 @@ export default {
       }
     },
     addCond() {
-      const arr = [];
-      this.$emit("add-node-conds", arr);
+      this.$emit("add-node-cond", {
+        FieldName: this.filedVal,
+        CompareEnum: this.compareVal,
+        ValueEnum: this.valueEnum,
+        Value_Id: this.value_Id,
+        ValueText: this.valueText
+      });
     }
   }
 };

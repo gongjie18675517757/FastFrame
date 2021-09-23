@@ -14,6 +14,8 @@
       :dense="!isXs"
       :return-object="false"
       @input="handleChange"
+      item-text="Value"
+      item-value="Key"
     >
       <template v-slot:selection="props">{{ getText(props) }}</template>
       <template #default>
@@ -27,7 +29,7 @@
 </template>
 
 <script>
-import { throttle } from "../../utils";
+import { debounce } from "../../utils";
 export default {
   props: {
     model: Object,
@@ -57,7 +59,7 @@ export default {
       }
 
       return (
-        this.values
+        this.items
           .filter(v => val.includes(v.Key))
           .map(v => v.Value)
           .join(",") || "无"
@@ -77,7 +79,7 @@ export default {
   methods: {
     getText({ item, index }) {
       if (item) {
-        let txt = this.values
+        let txt = this.items
           .filter(v => v.Key == item)
           .map(v => v.Value)
           .join(",");
@@ -95,15 +97,15 @@ export default {
 
       if (this.multiple) {
         val = val || [];
-        let items = this.values.filter(v => val.includes(v.Key));
+        let items = this.items.filter(v => val.includes(v.Key));
         this.$emit("change", items);
       } else {
-        let item = this.values.find(v => v.Key == val);
+        let item = this.items.find(v => v.Key == val);
         this.$emit("change", item);
       }
       this.keyword = null;
     },
-    loadList: throttle(async function() {
+    loadList: debounce(async function() {
       if (this.disabled) return;
       let url = this.requestUrl;
       if (!url.includes("?")) url = `${url}?`;

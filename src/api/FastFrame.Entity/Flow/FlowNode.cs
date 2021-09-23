@@ -90,6 +90,11 @@ namespace FastFrame.Entity.Flow
         public string FieldName { get; set; }
 
         /// <summary>
+        /// 条件组号
+        /// </summary>
+        public int GroupIndex { get; set; }
+
+        /// <summary>
         /// 条件
         /// </summary>
         public FlowNodeCondCompareEnum CompareEnum { get; set; }

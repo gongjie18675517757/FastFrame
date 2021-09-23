@@ -12,6 +12,7 @@ using FastFrame.Entity.Basis;
 using FastFrame.Infrastructure.Module;
 using FastFrame.Entity;
 using System.Linq.Dynamic.Core;
+using System.Reflection;
 
 namespace FastFrame.Application.Flow
 {
@@ -359,16 +360,55 @@ namespace FastFrame.Application.Flow
             return Array.Empty<KeyValuePair<string, string>>();
         }
 
-
         public async Task<IEnumerable<KeyValuePair<string, string>>> RelateKvs(string entityName, string kw)
         {
-            if (TypeManger.TryGetType(entityName, out var type) && typeof(IHaveCheck).IsAssignableFrom(type))
+            if (TypeManger.TryGetType(entityName, out var type) && typeof(IEntity).IsAssignableFrom(type))
             {
                 var repositoryType = typeof(IRepository<>).MakeGenericType(type);
-                var repository = Loader.GetService(repositoryType);
-                var queryable= (IQueryable)repository.GetType().GetProperty("Queryable");
+                var queryable = (IQueryable)Loader.GetService(repositoryType);
+                var fields = Array.Empty<string>();
+                if (type.GetCustomAttribute<RelatedFieldAttribute>() is RelatedFieldAttribute relatedField)
+                    fields = relatedField.FieldNames.ToArray();
+                else
+                    fields = type
+                        .GetProperties()
+                        .Where(v => !v.Name.EndsWith("_Id") && v.PropertyType == typeof(string))
+                        .Select(v => v.Name)
+                        .ToArray();
 
-                 
+
+                if (!kw.IsNullOrWhiteSpace())
+                    queryable = queryable
+                        .Where(string.Join(" and ", fields.Select(v => $"{v}.Contains(@0)")), kw);
+
+                var dynamics = await queryable
+                    .Select($"new {{ Id,{string.Join(",", fields)}}}")
+                    .OrderBy(string.Join(",", fields))
+                    .Take(200)
+                    .ToDynamicListAsync();
+
+                var list = dynamics.ToJson().ToObject<Dictionary<string, string>[]>();
+
+                return list
+                    .Select(v =>
+                        new KeyValuePair<string, string>(
+                            v.TryGetValueOrDefault("Id"),
+                            string
+                                .Join(
+                                    "",
+                                    fields
+                                        .Select((f, fIndex) =>
+                                        {
+                                            var val = v.TryGetValueOrDefault(f);
+                                            if (val.IsNullOrWhiteSpace())
+                                                return null;
+
+                                            if (fIndex == 0)
+                                                return val;
+                                            else
+                                                return $"[{val}]";
+                                        })
+                                        .Where(v => !v.IsNullOrWhiteSpace()))));
             }
             else
             {

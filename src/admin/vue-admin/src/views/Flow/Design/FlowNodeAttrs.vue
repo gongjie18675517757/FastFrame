@@ -186,16 +186,52 @@
             >
               <template #activator="{ on, attrs }">
                 <v-btn color="primary" dark v-bind="attrs" v-on="on" text small>
-                  添加条件
+                  添加条件{{selectedNode.Conds.length == 0?'':'组'}}
                 </v-btn>
               </template>
               <flow-node-cond-vue
                 v-if="addCondEnum"
                 :moduleName="moduleName"
-                @add-node-conds="handleAddNodeConds"
+                @add-node-cond="handleAddNodeCond"
               />
             </v-menu>
-            <v-list dense>
+            <v-list
+              dense
+              v-for="(arr, arrIndex) in selectedNode.Conds.length > 0
+                ? selectedNode.Conds
+                : [[]]"
+              :key="arrIndex"
+            >
+              <v-subheader v-if="selectedNode.Conds.length > 0">
+                条件组{{ arrIndex + 1 }}:
+                <v-menu
+                  v-if="!disabled"
+                  :value="currCondIndex == arrIndex"
+                  offset-y
+                  :close-on-content-click="false"
+                  min-width="200px"
+                  @input="currCondIndex = $event ? arrIndex : null"
+                >
+                  <template #activator="{ on, attrs }">
+                    <v-btn
+                      color="primary"
+                      dark
+                      v-bind="attrs"
+                      v-on="on"
+                      text
+                      small
+                    >
+                      添加条件
+                    </v-btn>
+                  </template>
+                  <flow-node-cond-vue
+                    v-if="currCondIndex == arrIndex"
+                    :moduleName="moduleName"
+                    @add-node-cond="handleAddNodeCond($event, arr)"
+                  />
+                </v-menu>
+              </v-subheader>
+
               <v-list-item v-if="selectedNode.Conds.length == 0">
                 <v-list-item-title>
                   未定义条件
@@ -210,14 +246,29 @@
                 </v-list-item-title>
               </v-list-item>
 
-              <v-list-item
-                v-for="(r, rIndex) in selectedNode.Conds"
-                :key="rIndex"
-              >
-                <v-list-item-title> </v-list-item-title>
-                <v-list-item-icon v-if="!disabled">
-                  <v-icon color="p" @click="removeCond(rIndex)">close</v-icon>
-                </v-list-item-icon>
+              <v-list-item v-for="(r, rIndex) in arr" :key="rIndex" two-line>
+                <v-list-item-title>
+                  <v-list-item-content>
+                    <v-list-item-title
+                      ><code style="color:blue;padding:15px;">
+                        {{ FieldNameObj[r.FieldName] }}
+                      </code>
+                      <v-icon
+                        v-if="!disabled"
+                        color="p"
+                        @click="removeCond(rIndex, arr)"
+                        style="float: right;"
+                        >close</v-icon
+                      >
+                    </v-list-item-title>
+                    <v-list-item-subtitle>
+                      <code style="color:blue;padding:15px;" :title="r.ValueText">
+                        {{ CompareEnumObj[r.CompareEnum] }}
+                        {{ r.ValueText | substring(10) }}({{ ValueEnumObj[r.ValueEnum] }})
+                      </code>
+                    </v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item-title>
               </v-list-item></v-list
             >
           </legend>
@@ -238,12 +289,11 @@
 </template>
 
 <script>
-import { getEnumValues } from "../../../generate";
+import { getEnumValues, getModuleStrut } from "../../../generate";
 import { groupBy, createObject } from "../../../utils";
 import FlowNodeCheckerVue from "./FlowNodeChecker.vue";
-import FlowNodeCondVue from './FlowNodeCond.vue';
+import FlowNodeCondVue from "./FlowNodeCond.vue";
 import FlowNodeEventVue from "./FlowNodeEvent.vue";
-
 
 export default {
   components: {
@@ -268,7 +318,12 @@ export default {
       addCheckerEnum: false,
       CheckerEnumObj: {},
 
-      addCondEnum: false
+      addCondEnum: false,
+      currCondIndex: null,
+
+      FieldNameObj: {},
+      CompareEnumObj: {},
+      ValueEnumObj: {}
     };
   },
   async mounted() {
@@ -283,6 +338,17 @@ export default {
     );
     this.CheckerEnumObj = createObject(
       await getEnumValues("FlowNodeChecker", "CheckerEnum")
+    );
+    this.FieldNameObj = createObject(
+      (await getModuleStrut(this.moduleName)).FieldInfoStruts,
+      v => v.Name,
+      v => v.Description
+    );
+    this.CompareEnumObj = createObject(
+      await getEnumValues("FlowNodeCond", "CompareEnum")
+    );
+    this.ValueEnumObj = createObject(
+      await getEnumValues("FlowNodeCond", "ValueEnum")
     );
   },
   methods: {
@@ -330,19 +396,30 @@ export default {
     removeChecker(rIndex) {
       this.selectedNode.Checkers.splice(rIndex, 1);
     },
-    handleAddNodeConds(arr) {
+    handleAddNodeCond(item, arr) {
       this.addCondEnum = false;
-      let brr = [...this.selectedNode.Conds, ...arr];
-      this.selectedNode.Conds = groupBy(
-        brr,
-        v => ({
-          CheckerEnum: v.CheckerEnum
-        }),
-        (a, b) => a.CheckerEnum == b.CheckerEnum
-      ).map(v => v.key);
+      this.currCondIndex = null;
+      if (!arr) {
+        this.selectedNode.Conds.push([item])
+      } else if (
+        !arr.some(
+          v =>
+            v.CheckerEnum == item.CheckerEnum &&
+            v.CompareEnum == item.CompareEnum &&
+            v.ValueEnum == item.ValueEnum &&
+            v.Value_Id == item.Value_Id &&
+            v.ValueText == item.ValueText
+        )
+      ) {
+        arr.push(item);
+      }
     },
-    removeCond(rIndex) {
-      this.selectedNode.Conds.splice(rIndex, 1);
+    removeCond(rIndex, arr) {
+      arr.splice(rIndex, 1);
+      if (arr.length == 0) {
+        let index = this.selectedNode.Conds.findIndex(v => v == arr);
+        this.selectedNode.Conds.splice(index, 1);
+      }
     }
   }
 };

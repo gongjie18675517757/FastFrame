@@ -36,7 +36,7 @@ namespace FastFrame.Entity.Flow
         public string Super_Id { get; set; }
 
         /// <summary>
-        /// 优先级(为分支时)
+        /// 条件权重(为分支时)
         /// </summary>
         public decimal? Weight { get; set; }
 

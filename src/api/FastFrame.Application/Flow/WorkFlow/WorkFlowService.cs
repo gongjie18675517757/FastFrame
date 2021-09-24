@@ -78,7 +78,11 @@ namespace FastFrame.Application.Flow
                 }
 
                 if (patent?.NodeEnum == FlowNodeEnum.branch_child && child?.NodeEnum == FlowNodeEnum.cond)
+                {
                     child.IsDefault = patent.IsDefault;
+
+                    patent.Weight = child.Weight;
+                }
             });
 
             for (int i = 0; i < afterNodeList.Length; i++)
@@ -115,12 +119,16 @@ namespace FastFrame.Application.Flow
                 .GetService<HandleOne2ManyService<FlowNodeCond, FlowNodeCond>>()
                 .UpdateManyAsync(
                     v => v.WorkFlow_Id == id,
-                    afterNodeList?.Where(v => v.Conds != null).SelectMany(v => v.Conds.Select(x =>
-                        {
-                            x.FlowNode_Id = v.Id;
-                            x.WorkFlow_Id = id;
-                            return x;
-                        })),
+                    afterNodeList?
+                        .Where(v => v.Conds != null)
+                        .SelectMany(v =>
+                            v.Conds.SelectMany((x, xIndex) => x.Select(c =>
+                              {
+                                  c.FlowNode_Id = v.Id;
+                                  c.WorkFlow_Id = id;
+                                  c.GroupIndex = xIndex;
+                                  return c;
+                              }))),
                     (a, b) => a.Id == b.Id,
                     v =>
                     {
@@ -204,7 +212,12 @@ namespace FastFrame.Application.Flow
 
             foreach (var node in flowNodes)
             {
-                node.Conds = flowNodeConds.Where(v => v.FlowNode_Id == node.Id).ToList();
+                node.Conds = flowNodeConds
+                    .Where(v => v.FlowNode_Id == node.Id)
+                    .GroupBy(v => v.GroupIndex)
+                    .OrderBy(v => v.Key)
+                    .Select(v => v.ToArray())
+                    .ToList();
                 node.Events = flowNodeEvents.Where(v => v.FlowNode_Id == node.Id).ToList();
                 node.Checkers = flowNodeCheckers.Where(v => v.FlowNode_Id == node.Id).ToList();
             }

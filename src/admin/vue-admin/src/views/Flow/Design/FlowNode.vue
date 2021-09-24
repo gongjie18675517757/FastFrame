@@ -24,6 +24,7 @@
           :NodeEnum="node.NodeEnum"
           :readonly="readonly"
           :editabled="editabled"
+          :placeholder="nodeContentText"
           @remove-node="$emit('remove-node')"
           @node-selected="$emit('node-selected', node)"
         />
@@ -38,7 +39,8 @@
             :NodeEnum="node.NodeEnum"
             :readonly="readonly"
             :editabled="editabled"
-            :placeholder="node.IsDefault?'缺省条件':null"
+            :placeholder="node.IsDefault ? '缺省条件' : nodeContentText"
+            :weight="node.Weight"
             @remove-node="$emit('remove-node')"
             @node-selected="$emit('node-selected', node)"
           />
@@ -69,6 +71,7 @@
                 v-for="(childNode, childNodeIndex) in branch.Nodes"
                 :key="`${branchIndex}_${childNodeIndex}`"
                 :node="childNode"
+                :moduleName="moduleName"
                 @add-note="handleNodeAdd($event, childNodeIndex, branch.Nodes)"
                 @remove-node="handleNodeRemove(childNodeIndex, branchIndex)"
                 @node-selected="$emit('node-selected', $event)"
@@ -143,6 +146,8 @@
 </template>
 
 <script>
+import { getModuleStrut } from "../../../generate";
+import { createObject } from '../../../utils';
 import FlowNodeContent from "./FlowNodeContent.vue";
 
 export default {
@@ -156,7 +161,8 @@ export default {
     editabled: Boolean,
     moveupable: Boolean,
     movedownable: Boolean,
-    makeNodeFunc: Function
+    makeNodeFunc: Function,
+    moduleName: String
   },
   data() {
     return {
@@ -180,8 +186,27 @@ export default {
       addMenuVisible: false,
       delMenuVisible: false,
       editInputVisible: false,
-      titleTemp: null
+      titleTemp: null,
+      FieldNameObj: {}
     };
+  },
+
+  computed: {
+    nodeContentText() {
+      const node = this.node;
+      switch (node.NodeEnum) {
+        case "check":
+          return node.Checkers.map(v => v.CheckerName).join(",");
+        case "cond":
+          return node.Conds.map(arr =>
+            arr.map(v => `${this.FieldNameObj[v.FieldName]} ${v.CompareEnum} ${v.ValueText}`).join(" and ")
+          ).map(v=>`(${v})`).join(" or ");
+        default:
+          break;
+      }
+
+      return null;
+    }
   },
   watch: {
     editInputVisible(val) {
@@ -190,8 +215,13 @@ export default {
       }
     }
   },
-  mounted() {
+  async mounted() {
     window.addEventListener("click", this.tryHideAddMenu);
+    this.FieldNameObj = createObject(
+      (await getModuleStrut(this.moduleName)).FieldInfoStruts,
+      v => v.Name,
+      v => v.Description
+    );
   },
   beforeDestroy() {
     window.removeEventListener("click", this.tryHideAddMenu);
@@ -222,7 +252,7 @@ export default {
             NodeEnum: "cond",
             Title: "条件1",
             Conds: [],
-            IsDefault: false,
+            IsDefault: false
           },
           {
             NodeEnum: "check",

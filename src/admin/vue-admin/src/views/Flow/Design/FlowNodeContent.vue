@@ -1,7 +1,11 @@
 <template>
   <div style="width:100%;" @click="$emit('node-selected')">
     <div class="title">
-      <span class="node-title-name">{{ title }}</span>
+      <span class="node-title-name">{{ title }}
+        <span v-if="NodeEnum=='cond' && weight">
+          (权重:{{weight}})
+        </span>
+      </span>
       <span class="node-title-name-editable">
         <v-menu
           offset-y
@@ -65,7 +69,7 @@
     <div class="content">
       <div class="content-text">
         <div>
-          <div class="content-text-default">{{ text }}</div>
+          <div class="content-text-default">{{ text | substring(20)}}</div>
         </div>
       </div>
       <i v-if="!readonly && editabled" class="ww_commonImg ww_commonImg_PageNavArrowRightDisabled"></i>
@@ -80,7 +84,8 @@ export default {
     NodeEnum: String,
     placeholder: String,
     readonly: Boolean,
-    editabled: Boolean
+    editabled: Boolean,
+    weight:[Number,String]
   },
   data() {
     return {

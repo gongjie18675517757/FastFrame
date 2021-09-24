@@ -23,6 +23,7 @@
           v-model="selectedNode.Title"
           hide-details
           :disabled="disabled"
+          @change="onChange"
         ></v-text-field>
         <template v-if="['check'].includes(selectedNode.NodeEnum)">
           <v-radio-group
@@ -171,6 +172,14 @@
           </legend>
         </template>
         <template v-if="['cond'].includes(selectedNode.NodeEnum)">
+          <v-text-field
+            label="权重(越大越优先):"
+            v-model="selectedNode.Weight"
+            hide-details
+            :disabled="disabled"
+            @change="onChange"
+            type="number"            
+          ></v-text-field>
           <legend
             class="v-label theme--light"
             style="left: 0px; right: auto; position: relative;cursor: text;font-size: 14px;height: auto;"
@@ -186,7 +195,9 @@
             >
               <template #activator="{ on, attrs }">
                 <v-btn color="primary" dark v-bind="attrs" v-on="on" text small>
-                  添加条件{{selectedNode.Conds.length == 0?'':'组'}}
+                  添加条件{{
+                    selectedNode.Conds.length == 0 ? "" : "组(关系为“或”)"
+                  }}
                 </v-btn>
               </template>
               <flow-node-cond-vue
@@ -262,9 +273,14 @@
                       >
                     </v-list-item-title>
                     <v-list-item-subtitle>
-                      <code style="color:blue;padding:15px;" :title="r.ValueText">
+                      <code
+                        style="color:blue;padding:15px;"
+                        :title="r.ValueText"
+                      >
                         {{ CompareEnumObj[r.CompareEnum] }}
-                        {{ r.ValueText | substring(10) }}({{ ValueEnumObj[r.ValueEnum] }})
+                        {{ r.ValueText | substring(10) }}({{
+                          ValueEnumObj[r.ValueEnum]
+                        }})
                       </code>
                     </v-list-item-subtitle>
                   </v-list-item-content>
@@ -290,7 +306,7 @@
 
 <script>
 import { getEnumValues, getModuleStrut } from "../../../generate";
-import { groupBy, createObject } from "../../../utils";
+import { createObject } from "../../../utils";
 import FlowNodeCheckerVue from "./FlowNodeChecker.vue";
 import FlowNodeCondVue from "./FlowNodeCond.vue";
 import FlowNodeEventVue from "./FlowNodeEvent.vue";
@@ -306,7 +322,8 @@ export default {
     value: Boolean,
     disabled: Boolean,
     isDialog: Boolean,
-    moduleName: String
+    moduleName: String,
+    onChange: Function
   },
   data() {
     return {
@@ -360,47 +377,54 @@ export default {
     },
     handleAddNodeEvents(arr) {
       this.addEventEnum = false;
-      let brr = [...this.selectedNode.Events, ...arr];
-      this.selectedNode.Events = groupBy(
-        brr,
-        v => ({
-          EventTrigger: v.EventTrigger,
-          EventNotify: v.EventNotify,
-          EventTarget: v.EventTarget
-        }),
-        (a, b) =>
-          a.EventTrigger == b.EventTrigger &&
-          a.EventNotify == b.EventNotify &&
-          a.EventTarget == b.EventTarget
-      ).map(v => v.key);
+      for (const b of arr) {
+        if (
+          !this.selectedNode.Events.some(
+            a =>
+              a.EventTrigger == b.EventTrigger &&
+              a.EventNotify == b.EventNotify &&
+              a.EventTarget == b.EventTarget
+          )
+        ) {
+          this.selectedNode.Events.push(b);
+        }
+      }
+
+      this.onChange && this.onChange();
     },
     removeEvent(rIndex) {
       this.selectedNode.Events.splice(rIndex, 1);
+
+      this.onChange && this.onChange();
     },
     handleAddNodeCheckers(arr) {
       this.addCheckerEnum = false;
-      let brr = [...this.selectedNode.Checkers, ...arr];
-      this.selectedNode.Checkers = groupBy(
-        brr,
-        v => ({
-          CheckerEnum: v.CheckerEnum,
-          Checker_Id: v.Checker_Id,
-          CheckerName: v.CheckerName
-        }),
-        (a, b) =>
-          a.CheckerEnum == b.CheckerEnum &&
-          a.Checker_Id == b.Checker_Id &&
-          a.CheckerName == b.CheckerName
-      ).map(v => v.key);
+
+      for (const b of arr) {
+        if (
+          !this.selectedNode.Checkers.some(
+            a =>
+              a.CheckerEnum == b.CheckerEnum &&
+              a.Checker_Id == b.Checker_Id &&
+              a.CheckerName == b.CheckerName
+          )
+        ) {
+          this.selectedNode.Checkers.push(b);
+        }
+      }
+
+      this.onChange && this.onChange();
     },
     removeChecker(rIndex) {
       this.selectedNode.Checkers.splice(rIndex, 1);
+
+      this.onChange && this.onChange();
     },
     handleAddNodeCond(item, arr) {
       this.addCondEnum = false;
       this.currCondIndex = null;
       if (!arr) {
-        this.selectedNode.Conds.push([item])
+        this.selectedNode.Conds.push([item]);
       } else if (
         !arr.some(
           v =>
@@ -413,6 +437,8 @@ export default {
       ) {
         arr.push(item);
       }
+
+      this.onChange && this.onChange();
     },
     removeCond(rIndex, arr) {
       arr.splice(rIndex, 1);
@@ -420,6 +446,8 @@ export default {
         let index = this.selectedNode.Conds.findIndex(v => v == arr);
         this.selectedNode.Conds.splice(index, 1);
       }
+
+      this.onChange && this.onChange();
     }
   }
 };

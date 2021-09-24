@@ -207,7 +207,8 @@ export default {
         FieldName: this.filedVal,
         CompareEnum: this.compareVal,
         ValueEnum: this.valueEnum,
-        Value_Id: this.value_Id,
+        /*一样说明是文本框，保留一个就好了*/
+        Value_Id: this.value_Id == this.valueText ? null : this.value_Id,
         ValueText: this.valueText
       });
     }

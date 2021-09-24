@@ -46,6 +46,7 @@
             v-for="(node, nodeIndex) in nodes"
             :key="nodeIndex"
             :node="node"
+            :moduleName="model ? model.BeModule : null"
             :makeNodeFunc="makeNodeFunc"
             editabled
             :readonly="disabled"
@@ -73,6 +74,7 @@
       @close="handleSettingClose"
       :moduleName="model ? model.BeModule : null"
       :disabled="disabled"
+      :onChange="handleChange"
     />
   </v-card>
 </template>
@@ -288,7 +290,8 @@ export default {
         hideOverlay: true,
         value: this.nodes,
         model: this.model,
-        disabled: this.disabled
+        disabled: this.disabled,
+        onChange:this.handleChange
       });
     },
     handleSelected(node) {
@@ -312,6 +315,7 @@ export default {
   position: relative;
   overflow: auto;
   padding: 12px;
+  width: 100%;
 
   .list-enter-active, .list-leave-active {
     transition: all 1s;

@@ -1093,7 +1093,7 @@
         </member>
         <member name="P:FastFrame.Entity.Flow.FlowNode.Weight">
             <summary>
-            优先级(为分支时)
+            条件权重(为分支时)
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Flow.FlowNode.IsDefault">
@@ -1139,6 +1139,11 @@
         <member name="P:FastFrame.Entity.Flow.FlowNodeCond.FieldName">
             <summary>
             字段名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowNodeCond.GroupIndex">
+            <summary>
+            条件组号
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Flow.FlowNodeCond.CompareEnum">

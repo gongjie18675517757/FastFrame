@@ -178,7 +178,7 @@
             hide-details
             :disabled="disabled"
             @change="onChange"
-            type="number"            
+            type="number"
           ></v-text-field>
           <legend
             class="v-label theme--light"
@@ -356,11 +356,12 @@ export default {
     this.CheckerEnumObj = createObject(
       await getEnumValues("FlowNodeChecker", "CheckerEnum")
     );
-    this.FieldNameObj = createObject(
-      (await getModuleStrut(this.moduleName)).FieldInfoStruts,
-      v => v.Name,
-      v => v.Description
-    );
+    if (this.moduleName)
+      this.FieldNameObj = createObject(
+        (await getModuleStrut(this.moduleName)).FieldInfoStruts,
+        v => v.Name,
+        v => v.Description
+      );
     this.CompareEnumObj = createObject(
       await getEnumValues("FlowNodeCond", "CompareEnum")
     );

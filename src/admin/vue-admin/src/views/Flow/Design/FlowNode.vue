@@ -147,7 +147,7 @@
 
 <script>
 import { getModuleStrut } from "../../../generate";
-import { createObject } from '../../../utils';
+import { createObject } from "../../../utils";
 import FlowNodeContent from "./FlowNodeContent.vue";
 
 export default {
@@ -199,8 +199,17 @@ export default {
           return node.Checkers.map(v => v.CheckerName).join(",");
         case "cond":
           return node.Conds.map(arr =>
-            arr.map(v => `${this.FieldNameObj[v.FieldName]} ${v.CompareEnum} ${v.ValueText}`).join(" and ")
-          ).map(v=>`(${v})`).join(" or ");
+            arr
+              .map(
+                v =>
+                  `${this.FieldNameObj[v.FieldName]} ${v.CompareEnum} ${
+                    v.ValueText
+                  }`
+              )
+              .join(" and ")
+          )
+            .map(v => `(${v})`)
+            .join(" or ");
         default:
           break;
       }
@@ -217,11 +226,12 @@ export default {
   },
   async mounted() {
     window.addEventListener("click", this.tryHideAddMenu);
-    this.FieldNameObj = createObject(
-      (await getModuleStrut(this.moduleName)).FieldInfoStruts,
-      v => v.Name,
-      v => v.Description
-    );
+    if (this.moduleName)
+      this.FieldNameObj = createObject(
+        (await getModuleStrut(this.moduleName)).FieldInfoStruts,
+        v => v.Name,
+        v => v.Description
+      );
   },
   beforeDestroy() {
     window.removeEventListener("click", this.tryHideAddMenu);

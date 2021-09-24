@@ -121,13 +121,7 @@ export default {
                 {
                   NodeEnum: "cond",
                   Title: "条件1",
-                  Conds: [
-                    {
-                      Name: null,
-                      Value: null,
-                      Compare: null
-                    }
-                  ]
+                  Conds: []
                 },
                 {
                   NodeEnum: "check",
@@ -291,7 +285,7 @@ export default {
         value: this.nodes,
         model: this.model,
         disabled: this.disabled,
-        onChange:this.handleChange
+        onChange: this.handleChange
       });
     },
     handleSelected(node) {

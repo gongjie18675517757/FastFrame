@@ -123,6 +123,12 @@ export default {
             CheckerName: v.Value
           }))
         );
+      } else {
+        this.$emit("add-node-checker", [
+          {
+            CheckerEnum: this.CheckerEnum
+          }
+        ]);
       }
     },
     loadList: throttle(async function() {

@@ -92,5 +92,10 @@ namespace FastFrame.Entity.OA
         {
             return new string[] { Dept_Id };
         }
+
+        public string GetDescription()
+        {
+            return $"请假:{Days}天";
+        }
     }
 }

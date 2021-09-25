@@ -1,4 +1,5 @@
 ﻿using FastFrame.Entity.Enums;
+using System.Threading.Tasks;
 
 namespace FastFrame.Entity
 {
@@ -11,5 +12,11 @@ namespace FastFrame.Entity
         /// 流程状态
         /// </summary>
         FlowStatusEnum FlowStatus { get; set; }
+
+        /// <summary>
+        /// 获取摘要
+        /// </summary>
+        /// <returns></returns>
+        string GetDescription();
     }
 }

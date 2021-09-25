@@ -86,24 +86,15 @@
                     label
                     small
                     style="margin-left:5px;"
-                    color="secondary"
-                    >{{ CheckerEnumObj[r.CheckerEnum] }}</v-chip
-                  >
-                  <v-chip
-                    label
-                    small
-                    style="margin-left:5px;"
-                    color="p"
                     text-color="#fff"
-                    v-if="r.CheckerName"
-                    >{{ r.CheckerName }}</v-chip
+                    color="p"
+                    @input="removeChecker(rIndex)"
+                     :close="!disabled"
+                    >{{ CheckerEnumObj[r.CheckerEnum] }}:{{
+                      r.CheckerName
+                    }}</v-chip
                   >
                 </v-list-item-title>
-                <v-list-item-icon v-if="!disabled">
-                  <v-icon color="p" @click="removeChecker(rIndex)"
-                    >close</v-icon
-                  >
-                </v-list-item-icon>
               </v-list-item></v-list
             >
           </legend>
@@ -150,23 +141,18 @@
                 :key="rIndex"
               >
                 <v-list-item-title>
-                  <v-chip label small color="primary">{{
-                    EventTriggerObj[r.EventTrigger]
-                  }}</v-chip>
                   <v-chip
                     label
                     small
-                    style="margin-left:5px;"
-                    color="secondary"
-                    >{{ EventNotifyObj[r.EventNotify] }}</v-chip
-                  >
-                  <v-chip label small style="margin-left:5px;" color="accent">{{
-                    EventTargetObj[r.EventTarget]
-                  }}</v-chip>
+                    color="p"
+                    text-color="#fff"
+                    :close="!disabled"
+                    @input="removeEvent(rIndex)"
+                    >{{ EventTriggerObj[r.EventTrigger] }}:{{
+                      EventNotifyObj[r.EventNotify]
+                    }}=> {{ EventTargetObj[r.EventTarget] }}
+                  </v-chip>
                 </v-list-item-title>
-                <v-list-item-icon v-if="!disabled">
-                  <v-icon color="p" @click="removeEvent(rIndex)">close</v-icon>
-                </v-list-item-icon>
               </v-list-item></v-list
             >
           </legend>

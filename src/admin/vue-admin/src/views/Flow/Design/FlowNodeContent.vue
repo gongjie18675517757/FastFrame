@@ -69,7 +69,7 @@
     <div class="content">
       <div class="content-text">
         <div>
-          <div class="content-text-default">{{ text | substring(20)}}</div>
+          <div class="content-text-default">{{ text | substring(17)}}</div>
         </div>
       </div>
       <i v-if="!readonly && editabled" class="ww_commonImg ww_commonImg_PageNavArrowRightDisabled"></i>

@@ -146,7 +146,7 @@
 </template>
 
 <script>
-import { getModuleStrut } from "../../../generate";
+import { getEnumValues, getModuleStrut } from "../../../generate";
 import { createObject } from "../../../utils";
 import FlowNodeContent from "./FlowNodeContent.vue";
 
@@ -187,7 +187,8 @@ export default {
       delMenuVisible: false,
       editInputVisible: false,
       titleTemp: null,
-      FieldNameObj: {}
+      FieldNameObj: {},
+      CheckerEnumObj: {}
     };
   },
 
@@ -196,7 +197,7 @@ export default {
       const node = this.node;
       switch (node.NodeEnum) {
         case "check":
-          return node.Checkers.map(v => v.CheckerName).join(",");
+          return node.Checkers.map(v => v.CheckerName || this.CheckerEnumObj[v.CheckerEnum]).join(",");
         case "cond":
           return node.Conds.map(arr =>
             arr
@@ -232,6 +233,10 @@ export default {
         v => v.Name,
         v => v.Description
       );
+
+    this.CheckerEnumObj = createObject(
+      await getEnumValues("FlowNodeChecker", "CheckerEnum")
+    );
   },
   beforeDestroy() {
     window.removeEventListener("click", this.tryHideAddMenu);

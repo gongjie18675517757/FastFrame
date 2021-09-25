@@ -8,14 +8,13 @@ namespace FastFrame.Entity.Flow
     /// 工作流    
     /// </summary>
     [Export]
-    [RelatedField(nameof(BeModule),nameof(Version))] 
+    [RelatedField(nameof(BeModule), nameof(Version))]
     public class WorkFlow : BaseEntity
-    { 
+    {
         /// <summary>
         /// 适用模块
         /// </summary>
         [StringLength(100)]
-        [Unique]
         [ReadOnly(ReadOnlyMark.Edit)]
         public string BeModule { get; set; }
 
@@ -50,12 +49,7 @@ namespace FastFrame.Entity.Flow
     /// </summary> 
     public class FlowInstance : IEntity, IHasSoftDelete
     {
-        public string Id { get; set; } 
-
-        /// <summary>
-        /// 状态
-        /// </summary>
-        public EnabledMark Enabled { get; set; }
+        public string Id { get; set; }
 
         /// <summary>
         /// 归属模块
@@ -83,6 +77,12 @@ namespace FastFrame.Entity.Flow
         public string BillNumber { get; set; }
 
         /// <summary>
+        /// 单据摘要
+        /// </summary>
+        [StringLength(500)]
+        public string BillDes { get; set; }
+
+        /// <summary>
         /// 流程状态
         /// </summary>
         public FlowStatusEnum Status { get; set; }
@@ -94,9 +94,9 @@ namespace FastFrame.Entity.Flow
         public string WorkFlow_Id { get; set; }
 
         /// <summary>
-        /// 当前步骤
+        /// 当前节点
         /// </summary>
-        public string CurrStep_Id { get; set; }
+        public string CurrNode_Id { get; set; }
 
         /// <summary>
         /// 流程发起人
@@ -132,7 +132,7 @@ namespace FastFrame.Entity.Flow
     /// <summary>
     /// 流程实例归属科室
     /// </summary>
-    public class FlowInstanceDept : IEntity, IHasSoftDelete
+    public class FlowBeDept : IEntity, IHasSoftDelete
     {
         public string Id { get; set; }
 
@@ -157,46 +157,18 @@ namespace FastFrame.Entity.Flow
         /// <summary>
         /// 关联：FlowInstance
         /// </summary>
-        public string FlowInstance_Id { get; set; }
-
-        /// <summary>
-        /// 外键：流程ID，或者单据ID
-        /// </summary>
-        public string FKey_Id { get; set; }
+        public string FlowInstance_Id { get; set; } 
 
         /// <summary>
         /// 快照内容
         /// </summary>
         public string SnapshotContent { get; set; }
-    } 
+    }
 
     /// <summary>
     /// 流程步骤审核人
     /// </summary> 
-    public class FlowStepUser : IEntity, IHasSoftDelete
-    {
-        public string Id { get; set; }
-
-        /// <summary>
-        /// 关联：FlowInstance
-        /// </summary>
-        public string FlowInstance_Id { get; set; }
-
-        /// <summary>
-        /// 关联：FlowNode
-        /// </summary>
-        public string FlowNode_Id { get; set; }
-
-        /// <summary>
-        /// 关联：User
-        /// </summary>
-        public string User_Id { get; set; } 
-    }
-
-    /// <summary>
-    /// 审批过程
-    /// </summary> 
-    public class FlowProcess : IEntity, IHasSoftDelete
+    public class FlowInstanceUser : IEntity, IHasSoftDelete
     {
         public string Id { get; set; }
 
@@ -206,10 +178,33 @@ namespace FastFrame.Entity.Flow
         public string FlowInstance_Id { get; set; } 
 
         /// <summary>
+        /// 关联：User
+        /// </summary>
+        public string User_Id { get; set; }
+    }
+
+    /// <summary>
+    /// 审批步骤
+    /// </summary> 
+    public class FlowStep : IEntity, IHasSoftDelete
+    {
+        public string Id { get; set; }
+
+        /// <summary>
+        /// 关联：FlowInstance
+        /// </summary>
+        public string FlowInstance_Id { get; set; }
+
+        /// <summary>
+        /// 关联:FlowNode
+        /// </summary>
+        public string FlowNode_Id { get; set; }
+
+        /// <summary>
         /// 步骤名称
         /// </summary>
-        [StringLength(50)]
-        public string FlowStepName { get; set; }
+        [StringLength(200)]
+        public string FlowNodeName { get; set; }
 
         /// <summary>
         /// 动作
@@ -219,7 +214,7 @@ namespace FastFrame.Entity.Flow
         /// <summary>
         /// 操作人
         /// </summary>
-        public string Operater_Id { get; set; } 
+        public string Operater_Id { get; set; }
 
         /// <summary>
         /// 时间
@@ -236,14 +231,14 @@ namespace FastFrame.Entity.Flow
     /// <summary>
     /// 指定的下一步审核人
     /// </summary>
-    public class FlowProcessNextChecker : IEntity
+    public class FlowNextChecker : IEntity
     {
         public string Id { get; set; }
 
         /// <summary>
-        /// 关联:FlowProcess
+        /// 关联:FlowStep
         /// </summary>
-        public string FlowProcess_Id { get; set; }
+        public string FlowStep_Id { get; set; }
 
         /// <summary>
         /// 关联:User

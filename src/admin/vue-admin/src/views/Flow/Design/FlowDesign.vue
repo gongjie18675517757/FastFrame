@@ -198,7 +198,7 @@ export default {
             Nodes: [
               {
                 Weight: 1,
-                NodeEnum: "branch-child",
+                NodeEnum: "branch_child",
                 IsDefault: false,
                 Nodes: [
                   {
@@ -223,7 +223,7 @@ export default {
               },
               {
                 Weight: 0,
-                NodeEnum: "branch-child",
+                NodeEnum: "branch_child",
                 IsDefault: true,
                 Nodes: [
                   {

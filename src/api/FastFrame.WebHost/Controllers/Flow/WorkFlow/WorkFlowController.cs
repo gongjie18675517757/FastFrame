@@ -45,5 +45,12 @@ namespace FastFrame.WebHost.Controllers.Flow
         {
             return await service.RelateKvs(entityName, kw);
         }
+
+        [HttpPost("{id}")]
+        [Permission("ToggleEnable", "切换启用/停用")]
+        public async Task ToggleEnable(string id)
+        {
+            await service.ToggleEnable(id);
+        }
     }
 }

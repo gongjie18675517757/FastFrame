@@ -17,6 +17,6 @@ namespace FastFrame.Application.Flow
         /// <summary>
         /// 审批过程
         /// </summary>
-        public IEnumerable<FlowProcess>  FlowProcesses { get; set; }
+        public IEnumerable<FlowStep>  FlowProcesses { get; set; }
     }
 }

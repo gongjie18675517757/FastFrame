@@ -74,9 +74,11 @@ axios.interceptors.response.use(function (response) {
                 }
 
                 break;
+            case 404:
+                $message.toast.error('请求资源丢失,提尝试刷新或者联系您的实施工程师!') 
+                break;
             case 400:
             case 403:
-            case 404:
                 $message.toast.error(error.response.data.Message)
                 error = new Error(error.response.data.Message);
                 break;

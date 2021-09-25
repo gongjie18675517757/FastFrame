@@ -13,7 +13,7 @@ namespace FastFrame.Application.Flow
     /// <typeparam name="TEntity"></typeparam>
     public partial class FlowOperateing<TEntity>:IEventData where TEntity : IHaveCheck
     {
-        public FlowOperateing(TEntity entity, FlowOperateInput operateInput, IEnumerable<FlowProcess> flowProcess)
+        public FlowOperateing(TEntity entity, FlowOperateInput operateInput, IEnumerable<FlowStep> flowProcess)
         {
             Entity = entity;
             FlowProcess = flowProcess;
@@ -28,7 +28,7 @@ namespace FastFrame.Application.Flow
         /// <summary>
         /// 审批步骤
         /// </summary>
-        public IEnumerable<FlowProcess> FlowProcess { get; }
+        public IEnumerable<FlowStep> FlowProcess { get; }
 
         /// <summary>
         /// 操作内容

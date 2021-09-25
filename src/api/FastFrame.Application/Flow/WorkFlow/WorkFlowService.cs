@@ -16,6 +16,9 @@ using System.Reflection;
 
 namespace FastFrame.Application.Flow
 {
+    /// <summary>
+    /// 流程管理
+    /// </summary>
     public partial class WorkFlowService : IRequestHandle<WorkFlowDto, string>
     {
         public async Task<int> GetLastVersion(string moduleName)
@@ -23,9 +26,12 @@ namespace FastFrame.Application.Flow
             return await workFlowRepository.Where(v => v.BeModule == moduleName).Select(v => v.Version).OrderByDescending(v => v).FirstOrDefaultAsync() + 1;
         }
 
-        public Task<WorkFlowDto> HandleRequestAsync(string request)
+        public async Task<WorkFlowDto> HandleRequestAsync(string request)
         {
-            return GetAsync(request);
+            if (request.IsNullOrWhiteSpace())
+                return null;
+
+            return await GetAsync(request);
         }
 
         protected override async Task OnAdding(WorkFlowDto input, WorkFlow entity)
@@ -428,5 +434,30 @@ namespace FastFrame.Application.Flow
                 return Array.Empty<KeyValuePair<string, string>>();
             }
         }
+
+
+        public async Task ToggleEnable(string id)
+        {
+            var entity = await workFlowRepository.GetAsync(id);
+            if (entity == null)
+                throw new NotFoundException();
+
+            switch (entity.Enabled)
+            {
+                case Entity.Enums.EnabledMark.enabled:
+                    entity.Enabled = Entity.Enums.EnabledMark.disabled;
+                    break;
+                case Entity.Enums.EnabledMark.disabled:
+                    entity.Enabled = Entity.Enums.EnabledMark.enabled;
+                    break;
+                default:
+                    break;
+            }
+
+            await workFlowRepository.UpdateAsync(entity);
+            await workFlowRepository.CommmitAsync();
+        }
     }
+
+
 }

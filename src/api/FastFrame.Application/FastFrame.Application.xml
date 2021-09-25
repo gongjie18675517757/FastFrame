@@ -487,6 +487,19 @@
             验证唯一性
             </summary> 
         </member>
+        <member name="T:FastFrame.Application.IWorkFlowDescriptionProvider`1">
+            <summary>
+            提供流程单据的摘要
+            </summary>
+            <typeparam name="TCheckEntity"></typeparam>
+        </member>
+        <member name="M:FastFrame.Application.IWorkFlowDescriptionProvider`1.GetDescription(`0)">
+            <summary>
+            返回单据摘要
+            </summary>
+            <param name="check_entity"></param>
+            <returns></returns>
+        </member>
         <member name="T:FastFrame.Application.Basis.DeptService">
             <summary>
             部门 服务实现 
@@ -1767,7 +1780,48 @@
             主键 
             </summary>
         </member>
+        <member name="T:FastFrame.Application.Flow.WorkFlowCenterService">
+            <summary>
+            流程中心
+            </summary>
+        </member>
+        <member name="M:FastFrame.Application.Flow.WorkFlowCenterService.SubmitFlow(System.String,System.String[],FastFrame.Application.Flow.SubmitFlowInput)">
+            <summary>
+            提交流程
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Application.Flow.WorkFlowCenterService.SubmitFlow``1(System.String[],FastFrame.Application.Flow.SubmitFlowInput)">
+            <summary>
+            提交流程
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Application.Flow.WorkFlowCenterService.SubmitFlow``1(System.String,FastFrame.Application.Flow.SubmitFlowInput,System.Boolean)">
+            <summary>
+            提交流程
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Application.Flow.WorkFlowCenterService.SubmitFlow``1(``0,FastFrame.Application.Flow.SubmitFlowInput,System.Boolean)">
+            <summary>
+            提交流程
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Application.Flow.WorkFlowCenterService.MatchNextNode(System.Collections.Generic.IEnumerable{FastFrame.Application.Flow.FlowNodeModel},System.String)">
+            <summary>
+            匹配下一个节点
+            </summary>
+            <param name="nodes"></param>
+            <param name="curr_node_id"></param>
+            <returns></returns>
+        </member>
+        <member name="P:FastFrame.Application.Flow.SubmitFlowInput.Des">
+            <summary>
+            提交说明
+            </summary>
+        </member>
         <member name="T:FastFrame.Application.Flow.WorkFlowService">
+            <summary>
+            流程管理
+            </summary>
             <summary>
             工作流 服务实现 
             </summary>

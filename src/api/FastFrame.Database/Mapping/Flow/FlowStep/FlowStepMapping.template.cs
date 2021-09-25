@@ -4,9 +4,9 @@ namespace FastFrame.Database.Mapping.Flow
 {
 		
 	/// <summary>
-	/// 审批过程 
+	/// 审批步骤 
 	/// </summary>
-	public partial class FlowProcessMapping:BaseEntityMapping<FlowProcess>
+	public partial class FlowStepMapping:BaseEntityMapping<FlowStep>
 	{
 		
 		

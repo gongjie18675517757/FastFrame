@@ -10,6 +10,7 @@ using FastFrame.Entity.Enums;
 using FastFrame.Infrastructure.EventBus;
 using FastFrame.Infrastructure;
 using System.Collections.Generic;
+using System.Linq.Dynamic.Core;
 
 namespace FastFrame.Application.Flow
 {
@@ -112,7 +113,7 @@ namespace FastFrame.Application.Flow
 
             /*创建流程实例*/
             if (flowInstance == null)
-                flowInstance = new FlowInstance
+                flowInstance = await flowInstances.AddAsync(new FlowInstance
                 {
                     BeModuleName = beModuleName,
                     BeModuleText = moduleDesProvider.GetClassDescription(typeof(TBillEntity)),
@@ -128,7 +129,7 @@ namespace FastFrame.Application.Flow
                     StartTime = DateTime.Now,
                     Status = FlowStatusEnum.processing,
                     WorkFlow_Id = work_flow_id
-                };
+                });
 
             /*写入流程实际状态*/
             flowInstance.WorkFlow_Id = work_flow_id;
@@ -181,28 +182,6 @@ namespace FastFrame.Application.Flow
                     }
                 );
 
-            /*生成流程快照*/
-            WorkFlowDto workFlowDto = null;
-            if (work_flow_id != null)
-                workFlowDto = await loader.GetService<IEventBus>().RequestAsync<WorkFlowDto, string>(work_flow_id);
-            await loader
-                .GetService<HandleOne2ManyService<string, FlowSnapshot>>()
-                .UpdateManyAsync(
-                    v => v.FlowInstance_Id == flowInstance.Id,
-                    workFlowDto != null ? new[] { workFlowDto.Nodes?.ToJson() } : null,
-                    (a, b) => true,
-                    v => new FlowSnapshot
-                    {
-                        FlowInstance_Id = flowInstance.Id,
-                        SnapshotContent = v
-                    },
-                    (before, after) =>
-                    {
-                        before.SnapshotContent = after;
-                    }
-                );
-
-
             /*写入流程步骤*/
             flowStep = await flowSteps.AddAsync(new FlowStep
             {
@@ -229,22 +208,204 @@ namespace FastFrame.Application.Flow
                     Id = null,
                     Operater_Id = curr?.Id,
                     OperateTime = DateTime.Now,
-                }); 
-            } 
+                });
+            }
+
+            /*取出流程配置*/
+            IEnumerable<FlowNodeModel> flowNodeModels = Array.Empty<FlowNodeModel>();
+            if (work_flow_id != null)
+                flowNodeModels = await loader.GetService<IEventBus>().RequestAsync<FlowNodeModel[], string>(work_flow_id);
+
+            /*匹配到的流程*/
+            var match_nodes = MatchNodes(flowNodeModels, bill_Entity).ToArray();
+
+            /*下一个节点*/
+            var curr_node = MatchNextNode(match_nodes, bill_Entity, null);
+
+            /*生成流程快照*/
+            await loader
+                .GetService<HandleOne2ManyService<FlowSnapshot, FlowSnapshot>>()
+                .UpdateManyAsync(
+                    v => v.FlowInstance_Id == flowInstance.Id,
+                     match_nodes.Select((v, i) => new FlowSnapshot
+                     {
+                         FlowInstance_Id = flowInstance.Id,
+                         OrderVal = i,
+                         FlowNode_Id = v.Id,
+                         Id = null
+                     }),
+                    (a, b) => a.FlowNode_Id == b.FlowNode_Id,
+                    v => v,
+                    (before, after) =>
+                    {
+                        before.OrderVal = after.OrderVal;
+                    }
+                );
+
+            /*计算审核人*/
 
 
+            /*流程走完了*/
+            if (curr_node == null)
+            {
+                flowInstance.IsComlete = true;
+                flowInstance.CompleteTime = DateTime.Now;
+                flowInstance.Status = FlowStatusEnum.finished;
+                flowInstance.CurrNode_Id = null;
+                bill_Entity.FlowStatus = FlowStatusEnum.finished;
+            }
+            else
+            {
+                flowInstance.CurrNode_Id = curr_node.Id;
+            }
 
-        } 
+            await flowInstances.UpdateAsync(flowInstance);
+            await loader.GetService<IRepository<TBillEntity>>().UpdateAsync(bill_Entity);
+
+            /*生成审批事件[审批中]*/ 
+
+            if (auto_tran)
+            {
+                await flowInstances.CommmitAsync();
+
+                /*生成审核事件[审批后]*/
+
+            }
+        }
 
         /// <summary>
-        /// 匹配下一个节点
-        /// </summary>
-        /// <param name="nodes"></param>
-        /// <param name="curr_node_id"></param>
-        /// <returns></returns>
-        private FlowNodeModel MatchNextNode(IEnumerable<FlowNodeModel> nodes,string curr_node_id)
+        /// 计算下一个流程节点
+        /// </summary> 
+        private static FlowNodeModel MatchNextNode<TBillEntity>(IEnumerable<FlowNodeModel> match_nodes, TBillEntity bill_Entity, string curr_node_id)
+            where TBillEntity : class, IHaveCheck, new()
         {
-            return null;
+            return match_nodes.SkipWhile(v => v.Id == curr_node_id || curr_node_id.IsNullOrWhiteSpace()).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// 计算流程节点
+        /// </summary>  
+        private static IEnumerable<FlowNodeModel> MatchNodes<TBillEntity>(IEnumerable<FlowNodeModel> nodes, TBillEntity bill_Entity)
+            where TBillEntity : class, IHaveCheck, new()
+        {
+            if (nodes == null || !nodes.Any())
+                yield break;
+
+            foreach (var item in nodes)
+            {
+                switch (item.NodeEnum)
+                {
+                    case FlowNodeEnum.check:
+                    case FlowNodeEnum.cc:
+                        yield return item;
+                        break;
+                    case FlowNodeEnum.branch:
+                        /*确定走哪个分支*/
+                        var child_brahchs = item
+                            .Nodes
+                            .OrderByDescending(v => v.IsDefault == true ? -1 : Math.Max(v.Weight ?? 0, 0))
+                            .ThenBy(v => v.OrderVal);
+                        var branch = child_brahchs.FirstOrDefault(v => MatchBrahsh(v, bill_Entity));
+                        var children = MatchNodes(branch.Nodes, bill_Entity);
+                        foreach (var child in children)
+                            yield return child;
+                        break;
+                    case FlowNodeEnum.branch_child:
+                    case FlowNodeEnum.cond:
+                    case FlowNodeEnum.start:
+                    case FlowNodeEnum.end:
+                    default:
+                        break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 判断子分支是否满足
+        /// </summary>
+        /// <typeparam name="TBillEntity"></typeparam>
+        /// <param name="flowNode"></param>
+        /// <param name="bill_Entity"></param>
+        /// <returns></returns>
+        private static bool MatchBrahsh<TBillEntity>(FlowNodeModel flowNode, TBillEntity bill_Entity)
+             where TBillEntity : class, IHaveCheck, new()
+        {
+            if (flowNode.NodeEnum != FlowNodeEnum.branch_child)
+                throw new MsgException("分支的下级类型不正确");
+
+            if (flowNode.IsDefault == true)
+                return true;
+
+            var cond_node = flowNode.Nodes.FirstOrDefault(v => v.NodeEnum == FlowNodeEnum.cond);
+            if (cond_node == null)
+                throw new MsgException("未定义条件分支");
+
+            if (cond_node.Conds == null || !cond_node.Conds.Any())
+                return true;
+
+
+            foreach (var g in cond_node.Conds)
+            {
+                if (g == null || !g.Any())
+                    continue;
+
+                var query = new[] { bill_Entity }.AsQueryable();
+
+                foreach (var cond in g)
+                {
+                    if (cond.FieldName.IsNullOrWhiteSpace())
+                        continue;
+
+                    if (cond.Value_Id.IsNullOrWhiteSpace() && cond.ValueText.IsNullOrWhiteSpace())
+                        continue;
+
+                    if (typeof(TBillEntity).GetProperty(cond.FieldName) == null)
+                        continue;
+
+                    /*要比较的值*/
+                    object value = null;
+                    switch (cond.ValueEnum)
+                    {
+                        case FlowNodeCondValueEnum.input_value:
+                            value = cond.Value_Id ?? cond.ValueText;
+                            break;
+                        case FlowNodeCondValueEnum.form_field:
+                            value = bill_Entity.GetValue(cond.Value_Id);
+                            break;
+                        default:
+                            break;
+                    }
+
+                    switch (cond.CompareEnum)
+                    {
+                        case FlowNodeCondCompareEnum.gte:
+                            query = query.Where($"{cond.FieldName}>=@0", value);
+                            break;
+                        case FlowNodeCondCompareEnum.lte:
+                            query = query.Where($"{cond.FieldName}<=@0", value);
+                            break;
+                        case FlowNodeCondCompareEnum.eq:
+                            query = query.Where($"{cond.FieldName}==@0", value);
+                            break;
+                        case FlowNodeCondCompareEnum.not_eq:
+                            query = query.Where($"{cond.FieldName}!=@0", value);
+                            break;
+                        case FlowNodeCondCompareEnum.like:
+                            query = query.Where($"{cond.FieldName}.Contains(@0)", value);
+                            break;
+                        case FlowNodeCondCompareEnum.not_like:
+                            query = query.Where($"!{cond.FieldName}.Contains(@0)", value);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                if (query.Any())
+                    return true;
+            }
+
+            return false;
         }
     }
 

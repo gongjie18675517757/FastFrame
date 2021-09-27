@@ -148,7 +148,7 @@ namespace FastFrame.Entity.Flow
     }
 
     /// <summary>
-    /// 流程快照
+    /// 流程快照(将已提交的流程审核顺序存起来)
     /// </summary> 
     public class FlowSnapshot : IEntity, IHasSoftDelete
     {
@@ -157,12 +157,17 @@ namespace FastFrame.Entity.Flow
         /// <summary>
         /// 关联：FlowInstance
         /// </summary>
-        public string FlowInstance_Id { get; set; } 
+        public string FlowInstance_Id { get; set; }
 
         /// <summary>
-        /// 快照内容
+        /// 排序
         /// </summary>
-        public string SnapshotContent { get; set; }
+        public int OrderVal { get; set; }
+
+        /// <summary>
+        /// 节点ID
+        /// </summary>
+        public string FlowNode_Id { get; set; }
     }
 
     /// <summary>
@@ -175,7 +180,7 @@ namespace FastFrame.Entity.Flow
         /// <summary>
         /// 关联：FlowInstance
         /// </summary>
-        public string FlowInstance_Id { get; set; } 
+        public string FlowInstance_Id { get; set; }
 
         /// <summary>
         /// 关联：User

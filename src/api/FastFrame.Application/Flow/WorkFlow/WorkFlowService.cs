@@ -19,19 +19,51 @@ namespace FastFrame.Application.Flow
     /// <summary>
     /// 流程管理
     /// </summary>
-    public partial class WorkFlowService : IRequestHandle<WorkFlowDto, string>
+    public partial class WorkFlowService :
+        IRequestHandle<FlowNodeModel[], string>,
+        IRequestHandle<FlowNodeModel[], string[]>
     {
         public async Task<int> GetLastVersion(string moduleName)
         {
             return await workFlowRepository.Where(v => v.BeModule == moduleName).Select(v => v.Version).OrderByDescending(v => v).FirstOrDefaultAsync() + 1;
         }
 
-        public async Task<WorkFlowDto> HandleRequestAsync(string request)
+        public async Task<FlowNodeModel[]> HandleRequestAsync(string request)
         {
             if (request.IsNullOrWhiteSpace())
                 return null;
 
-            return await GetAsync(request);
+            var id = request;
+            var ids = await Loader.GetService<IRepository<FlowNode>>().Where(v => v.WorkFlow_Id == id).Select(v => v.Id).ToArrayAsync();
+            var flowNodes = await HandleRequestAsync(ids);
+
+            return flowNodes
+                .OrderBy(v => v.OrderVal)
+                .ThenBy(v => v.Id)
+                .SelectLoopChild(v => v.Super_Id, v => v.Id, (a, b) => a.Nodes = b.ToList(), null)
+                .ToArray();
+        }
+
+        public async Task<FlowNodeModel[]> HandleRequestAsync(string[] request)
+        {
+            var flowNodes = await Loader.GetService<IRepository<FlowNode>>().Where(v => request.Contains(v.Id)).MapTo<FlowNode, FlowNodeModel>().ToArrayAsync();
+            var flowNodeConds = await Loader.GetService<IRepository<FlowNodeCond>>().Where(v => request.Contains(v.FlowNode_Id)).ToListAsync();
+            var flowNodeEvents = await Loader.GetService<IRepository<FlowNodeEvent>>().Where(v => request.Contains(v.FlowNode_Id)).ToListAsync();
+            var flowNodeCheckers = await Loader.GetService<IRepository<FlowNodeChecker>>().Where(v => request.Contains(v.FlowNode_Id)).ToListAsync();
+
+            foreach (var node in flowNodes)
+            {
+                node.Conds = flowNodeConds
+                    .Where(v => v.FlowNode_Id == node.Id)
+                    .GroupBy(v => v.GroupIndex)
+                    .OrderBy(v => v.Key)
+                    .Select(v => v.ToArray())
+                    .ToList();
+                node.Events = flowNodeEvents.Where(v => v.FlowNode_Id == node.Id).ToList();
+                node.Checkers = flowNodeCheckers.Where(v => v.FlowNode_Id == node.Id).ToList();
+            }
+
+            return request.SelectMany(v => flowNodes.Where(f => f.Id == v)).ToArray();
         }
 
         protected override async Task OnAdding(WorkFlowDto input, WorkFlow entity)
@@ -43,8 +75,27 @@ namespace FastFrame.Application.Flow
         protected override async Task OnBeforeUpdate(WorkFlow before, WorkFlowDto after)
         {
             /*判断流程有没有被使用，有则不允许修改*/
-            if (await Loader.GetService<IRepository<FlowInstance>>().AnyAsync(v => v.WorkFlow_Id == before.Id))
-                throw new MsgException("流程使用中，不允许修改,可以复制当前流程并生成一个新的版本！");
+            if (await Loader.GetService<IRepository<FlowInstance>>().AnyAsync(v => v.WorkFlow_Id == before.Id /*&& !v.IsComlete*/))
+            {
+                /*判断节点是否改变了*/
+                var beforeList = await Loader
+                    .GetService<IRepository<FlowNode>>()
+                    .Where(v => v.WorkFlow_Id == before.Id)
+                    .OrderBy(v => v.OrderVal)
+                    .Select(v => v.Id)
+                    .ToArrayAsync();
+
+                var afterNodeList = after?.Nodes.SelectLoopChild(v => v.Nodes).ToArray();
+
+                if (beforeList.Length != afterNodeList.Length)
+                    throw new MsgException("此流程已被使用过，不允许再修改,可以复制当前流程并生成一个新的版本！");
+
+                for (int i = 0; i < afterNodeList.Length; i++)
+                {
+                    if (beforeList[i] != afterNodeList[i].Id)
+                        throw new MsgException("此流程已被使用过，不允许再修改,可以复制当前流程并生成一个新的版本！");
+                }
+            }
 
             await base.OnBeforeUpdate(before, after);
         }
@@ -209,26 +260,7 @@ namespace FastFrame.Application.Flow
         protected override async Task OnGeting(WorkFlowDto dto)
         {
             await base.OnGeting(dto);
-
-            var id = dto.Id;
-            var flowNodes = await Loader.GetService<IRepository<FlowNode>>().Where(v => v.WorkFlow_Id == id).MapTo<FlowNode, FlowNodeModel>().ToListAsync();
-            var flowNodeConds = await Loader.GetService<IRepository<FlowNodeCond>>().Where(v => v.WorkFlow_Id == id).ToListAsync();
-            var flowNodeEvents = await Loader.GetService<IRepository<FlowNodeEvent>>().Where(v => v.WorkFlow_Id == id).ToListAsync();
-            var flowNodeCheckers = await Loader.GetService<IRepository<FlowNodeChecker>>().Where(v => v.WorkFlow_Id == id).ToListAsync();
-
-            foreach (var node in flowNodes)
-            {
-                node.Conds = flowNodeConds
-                    .Where(v => v.FlowNode_Id == node.Id)
-                    .GroupBy(v => v.GroupIndex)
-                    .OrderBy(v => v.Key)
-                    .Select(v => v.ToArray())
-                    .ToList();
-                node.Events = flowNodeEvents.Where(v => v.FlowNode_Id == node.Id).ToList();
-                node.Checkers = flowNodeCheckers.Where(v => v.FlowNode_Id == node.Id).ToList();
-            }
-
-            dto.Nodes = flowNodes.OrderBy(v => v.OrderVal).ThenBy(v => v.Id).SelectLoopChild(v => v.Super_Id, v => v.Id, (a, b) => a.Nodes = b.ToList(), null);
+            dto.Nodes = await HandleRequestAsync(dto.Id);
         }
 
         /// <summary>

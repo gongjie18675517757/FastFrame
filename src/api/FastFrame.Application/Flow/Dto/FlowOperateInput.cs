@@ -35,4 +35,12 @@ namespace FastFrame.Application.Flow
         /// </summary>
         public Dictionary<string, string> Items { get; set; }
     }
+
+    public class BatchFlowOperateInput: FlowOperateInput
+    {
+        /// <summary>
+        /// 单据主键
+        /// </summary>
+        public string[] Keys { get; set; }
+    }
 }

@@ -40,7 +40,22 @@ namespace FastFrame.Application
             //    var implementedType = typeof(HandleHaveNumberService<>).MakeGenericType(type);
 
             //    services.AddScoped(eventHandleType, implementedType);
-            //} 
+            //}        
+
+            /*注册审批事件处理*/
+            interfaceType = typeof(IHaveCheck);
+            types = interfaceType.Assembly.GetTypes()
+                .Where(x =>
+                    interfaceType.IsAssignableFrom(x) &&
+                    x.IsClass && !x.IsAbstract);
+
+            foreach (var type in types)
+            {
+                var eventHandleType = typeof(IEventHandle<>).MakeGenericType(typeof(Flow.FlowOperated<>).MakeGenericType(type));
+                var implementedType = typeof(Flow.HandleFlowOperatedService<>).MakeGenericType(type);
+
+                services.AddScoped(eventHandleType, implementedType);
+            }
 
             services.AddScoped(typeof(HandleOne2ManyService<,>));
             return services;

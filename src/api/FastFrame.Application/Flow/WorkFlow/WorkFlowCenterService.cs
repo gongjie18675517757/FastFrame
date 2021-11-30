@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq.Dynamic.Core;
 using FastFrame.Entity.Basis;
 using FastFrame.Infrastructure.Lock;
+using Microsoft.Extensions.Logging;
 
 namespace FastFrame.Application.Flow
 {
@@ -29,61 +30,90 @@ namespace FastFrame.Application.Flow
         }
 
         /// <summary>
-        /// 流程操作
+        /// 流程操作[批量]
         /// </summary> 
-        public async Task HandleFlowOperate(string moduleName, string[] bill_ids, FlowOperateInput input)
+        public IAsyncEnumerable<FlowOperateOutput> HandleFlowOperate(string moduleName, BatchFlowOperateInput input)
         {
             if (!Infrastructure.Module.TypeManger.TryGetType(moduleName, out var type))
-                throw new Infrastructure.NotFoundException();
+                throw new NotFoundException();
 
             if (!typeof(IHaveCheck).IsAssignableFrom(type))
-                throw new Infrastructure.NotFoundException();
+                throw new NotFoundException();
 
             if (!type.IsClass)
-                throw new Infrastructure.NotFoundException();
+                throw new NotFoundException();
 
             if (type.IsAbstract)
-                throw new Infrastructure.NotFoundException();
+                throw new NotFoundException();
 
             var method = GetType()
                 .GetMethods()
-                .Where(v => v.Name == nameof(HandleFlowOperate))
-                .FirstOrDefault(v => v.IsPublic && v.IsGenericMethod && v.GetParameters()[0].ParameterType == typeof(string[]));
+                .Where(v => v.Name == nameof(BatchHandleFlowOperate))
+                .FirstOrDefault(v => v.IsPublic && v.IsGenericMethod);
 
             method = method.MakeGenericMethod(type);
-            await (Task)method.Invoke(this, new object[] { bill_ids, input });
+            return (IAsyncEnumerable<FlowOperateOutput>)method.Invoke(this, new object[] { input });
         }
 
         /// <summary>
-        /// 流程操作
+        /// 流程操作[批量]
         /// </summary> 
-        public async Task HandleFlowOperate<TBillEntity>(string[] bill_ids, FlowOperateInput input) where TBillEntity : class, IHaveCheck, new()
+        public async IAsyncEnumerable<FlowOperateOutput> BatchHandleFlowOperate<TBillEntity>(BatchFlowOperateInput input)
+            where TBillEntity : class, IHaveCheck, new()
         {
-            foreach (var bill_id in bill_ids)
-                await HandleFlowOperate<TBillEntity>(bill_id, input, false);
+            var flowSteps = loader.GetService<IRepository<FlowStep>>();
+            var flowInstances = loader.GetService<IRepository<FlowInstance>>();
+            var logger = loader.GetService<ILogger<WorkFlowCenterService>>();
+            foreach (var bill_id in input.Keys)
+            {
+                FlowOperateOutput output = null;
+                try
+                {
+                    var flowStatusEnum = await HandleFlowOperate<TBillEntity>(bill_id, input, true);
+                    var stepList = await flowSteps
+                        .Where(v => flowInstances.Any(x => x.Bill_Id == bill_id && x.Id == v.FlowInstance_Id))
+                        .OrderBy(v => v.Id)
+                        .ToListAsync();
 
+                    output = new FlowOperateSuccessOutput(bill_id, flowStatusEnum, stepList);
 
+                }
+                catch (NotFoundException)
+                {
+                    output = new FlowOperateFailOutput(bill_id, "未找到单据或者单据已过期");
+                }
+                catch (MsgException ex)
+                {
+                    output = new FlowOperateFailOutput(bill_id, ex.Message);
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "流程审核失败");
+                    output = new FlowOperateFailOutput(bill_id, "发生未知错误!");
+                }
+
+                yield return output;
+            }
         }
 
         /// <summary>
         /// 流程操作
         /// </summary> 
-        public async Task HandleFlowOperate<TBillEntity>(string bill_id, FlowOperateInput input, bool auto_tran = true)
+        public async Task<FlowStatusEnum> HandleFlowOperate<TBillEntity>(string bill_id, FlowOperateInput input, bool auto_tran = true)
             where TBillEntity : class, IHaveCheck, new()
         {
             var bill_Entity = await loader.GetService<IRepository<TBillEntity>>().GetAsync(bill_id);
             if (bill_Entity == null)
                 throw new Infrastructure.NotFoundException();
 
-            await HandleFlowOperate(bill_Entity, input, auto_tran);
+            return await HandleFlowOperate(bill_Entity, input, auto_tran);
         }
-
 
 
         /// <summary>
         /// 流程操作
         /// </summary> 
-        public async Task HandleFlowOperate<TBillEntity>(TBillEntity bill_Entity, FlowOperateInput input, bool auto_tran)
+        public async Task<FlowStatusEnum> HandleFlowOperate<TBillEntity>(TBillEntity bill_Entity, FlowOperateInput input, bool auto_tran)
             where TBillEntity : class, IHaveCheck, new()
         {
             if (bill_Entity == null)
@@ -460,12 +490,32 @@ namespace FastFrame.Application.Flow
 
                         break;
                     case FlowActionEnum.uncheck:
-                        if (flowInstance == null)
-                            throw new MsgException("流程还未提交!");
+                        {
+                            if (flowInstance == null)
+                                throw new MsgException("流程还未提交!");
+
+                            /*上一个审核的节点*/
+                            var prev_note_id = await flowSteps
+                                .Where(v => v.FlowInstance_Id == flowInstance.Id)
+                                .Where(v => v.FlowNode_Id != null)
+                                .OrderByDescending(v => v.Id)
+                                .Select(v => v.FlowNode_Id)
+                                .FirstOrDefaultAsync();
+
+                            if (prev_note_id == null)
+                                throw new MsgException("没有可反审核的节点!");
 
 
 
-                        break;
+                            /*说明是会签/*/
+                            if (prev_note_id == flowInstance.CurrNode_Id)
+                            {
+
+                            }
+
+                            throw new MsgException("未实现");
+                        }
+                    //break;
                     default:
                         break;
                 }
@@ -482,9 +532,11 @@ namespace FastFrame.Application.Flow
                 var msg = new FlowOperated<TBillEntity>(bill_Entity.Id);
                 flowInstances.AddCommitEventListen(msg.TriggerEvent);
 
-                /*如果自动提交了事务,则*/
+                /*提交事务*/
                 if (auto_tran)
                     await flowInstances.CommmitAsync();
+
+                return flowInstance.Status;
             }
             catch (Exception)
             {
@@ -947,7 +999,7 @@ namespace FastFrame.Application.Flow
 
             return false;
         }
+
+
     }
-
-
 }

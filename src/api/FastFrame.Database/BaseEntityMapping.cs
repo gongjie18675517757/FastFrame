@@ -90,9 +90,13 @@ namespace FastFrame.Database
 
                 if (typeof(IEntity).IsAssignableFrom(entityType))
                 {
-                    /*索引ID*/
-                    if (property.Name.EndsWith("Id") && property.Name != "Id")
+                    /*加索引*/
+                    if ((property.Name.EndsWith("Id") && property.Name != "Id") || 
+                        propType.IsEnum || 
+                        propType == typeof(bool))
+                    {
                         entityTypeBuilder.HasIndex(property.Name).HasDatabaseName($"Index_{entityType.Name}_{property.Name}");
+                    }
 
                     if (propType == typeof(string))
                     {
@@ -128,8 +132,7 @@ namespace FastFrame.Database
                 /*转换枚举*/
                 else if (propType.IsEnum)
                 {
-                    propertyBuilder.HasConversion<string>().HasMaxLength(50);
-                    entityTypeBuilder.HasIndex(property.Name).HasDatabaseName($"Index_{entityType.Name}_{property.Name}");
+                    propertyBuilder.HasConversion<string>().HasMaxLength(50); 
                 }
             }
 

@@ -21,18 +21,13 @@
         pass,
 
         /// <summary>
-        /// 退回
+        /// 不通过
         /// </summary>
-        withdraw,
-
-        /// <summary>
-        /// 拒绝
-        /// </summary>
-        refuse,
+        ng,
 
         /// <summary>
         /// 反审核
         /// </summary>
-        uncheck
+        uncheck, 
     }
 }

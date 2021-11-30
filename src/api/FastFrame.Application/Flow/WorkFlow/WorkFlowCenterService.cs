@@ -11,6 +11,8 @@ using FastFrame.Infrastructure.EventBus;
 using FastFrame.Infrastructure;
 using System.Collections.Generic;
 using System.Linq.Dynamic.Core;
+using FastFrame.Entity.Basis;
+using FastFrame.Infrastructure.Lock;
 
 namespace FastFrame.Application.Flow
 {
@@ -27,9 +29,9 @@ namespace FastFrame.Application.Flow
         }
 
         /// <summary>
-        /// 提交流程
+        /// 流程操作
         /// </summary> 
-        public async Task SubmitFlow(string moduleName, string[] bill_ids, SubmitFlowInput input)
+        public async Task HandleFlowOperate(string moduleName, string[] bill_ids, FlowOperateInput input)
         {
             if (!Infrastructure.Module.TypeManger.TryGetType(moduleName, out var type))
                 throw new Infrastructure.NotFoundException();
@@ -45,7 +47,7 @@ namespace FastFrame.Application.Flow
 
             var method = GetType()
                 .GetMethods()
-                .Where(v => v.Name == nameof(SubmitFlow))
+                .Where(v => v.Name == nameof(HandleFlowOperate))
                 .FirstOrDefault(v => v.IsPublic && v.IsGenericMethod && v.GetParameters()[0].ParameterType == typeof(string[]));
 
             method = method.MakeGenericMethod(type);
@@ -53,239 +55,770 @@ namespace FastFrame.Application.Flow
         }
 
         /// <summary>
-        /// 提交流程
+        /// 流程操作
         /// </summary> 
-        public async Task SubmitFlow<TBillEntity>(string[] bill_ids, SubmitFlowInput input) where TBillEntity : class, IHaveCheck, new()
+        public async Task HandleFlowOperate<TBillEntity>(string[] bill_ids, FlowOperateInput input) where TBillEntity : class, IHaveCheck, new()
         {
             foreach (var bill_id in bill_ids)
-                await SubmitFlow<TBillEntity>(bill_id, input, false);
+                await HandleFlowOperate<TBillEntity>(bill_id, input, false);
 
 
         }
 
         /// <summary>
-        /// 提交流程
+        /// 流程操作
         /// </summary> 
-        public async Task SubmitFlow<TBillEntity>(string bill_id, SubmitFlowInput input, bool auto_tran = true) where TBillEntity : class, IHaveCheck, new()
+        public async Task HandleFlowOperate<TBillEntity>(string bill_id, FlowOperateInput input, bool auto_tran = true)
+            where TBillEntity : class, IHaveCheck, new()
         {
             var bill_Entity = await loader.GetService<IRepository<TBillEntity>>().GetAsync(bill_id);
             if (bill_Entity == null)
                 throw new Infrastructure.NotFoundException();
 
-            await SubmitFlow(bill_Entity, input, auto_tran);
+            await HandleFlowOperate(bill_Entity, input, auto_tran);
         }
 
+
+
         /// <summary>
-        /// 提交流程
+        /// 流程操作
         /// </summary> 
-        public async Task SubmitFlow<TBillEntity>(TBillEntity bill_Entity, SubmitFlowInput input, bool auto_tran)
+        public async Task HandleFlowOperate<TBillEntity>(TBillEntity bill_Entity, FlowOperateInput input, bool auto_tran)
             where TBillEntity : class, IHaveCheck, new()
         {
             if (bill_Entity == null)
-                throw new Infrastructure.NotFoundException();
+                throw new NotFoundException();
 
-            var applicationSession = loader.GetService<Infrastructure.Interface.IApplicationSession>();
-            var curr = applicationSession?.CurrUser;
+            /*加并发锁*/
+            var lockHolder = await loader.GetService<ILockFacatory>().TryCreateLockAsync(bill_Entity.Id, TimeSpan.FromSeconds(3));
+            if (lockHolder == null)
+                throw new MsgException("此单据正在进行流程流转,请稍后再试!");
 
-            var moduleDesProvider = loader.GetService<Infrastructure.Module.IModuleDesProvider>();
-            var flowInstances = loader.GetService<IRepository<FlowInstance>>();
+            try
+            {
+                /*生成审批事件[审批前]*/
+                await loader.GetService<IEventBus>().TriggerEventAsync(new FlowOperateBefore<TBillEntity>(bill_Entity, input));
+
+                var applicationSession = loader.GetService<Infrastructure.Interface.IApplicationSession>();
+                var curr = applicationSession?.CurrUser;
+
+                /*记录流程是否完结了*/
+                var flow_state = bill_Entity.FlowStatus;
+
+                var moduleDesProvider = loader.GetService<Infrastructure.Module.IModuleDesProvider>();
+                var flowInstances = loader.GetService<IRepository<FlowInstance>>();
+                var flowSteps = loader.GetService<IRepository<FlowStep>>();
+                var flowStepCheckers = loader.GetService<IRepository<FlowStepChecker>>();
+                var flowNodes = loader.GetService<IRepository<FlowNode>>();
+
+                /*取流程实例*/
+                var flowInstance = await flowInstances.FirstOrDefaultAsync(v => v.Bill_Id == bill_Entity.Id);
+
+                /*清除未完成的步骤(每次要重算后面的步骤)*/
+                if (flowInstance != null)
+                {
+                    var stepFilter = flowSteps.Where(v => v.FlowInstance_Id == flowInstance.Id && !v.IsFinished);
+                    var beforeStepList = await stepFilter.ToListAsync();
+                    var beforeCheckerList = await flowStepCheckers.Where(v => stepFilter.Any(x => v.FlowStep_Id == v.Id)).ToListAsync();
+
+                    foreach (var item in beforeStepList)
+                        await flowSteps.DeleteAsync(item);
+
+                    foreach (var item in beforeCheckerList)
+                        await flowStepCheckers.DeleteAsync(item);
+                }
+
+
+                /*验证状态*/
+                switch (input.ActionEnum)
+                {
+                    case FlowActionEnum.submit:
+                        {
+                            if (flowInstance != null &&
+                               !new FlowStatusEnum[] { FlowStatusEnum.unsubmitted, FlowStatusEnum.ng }.Contains(flowInstance.Status))
+                                throw new MsgException("此单据已提交过了，不可重复提交流程!");
+
+                            /*当前模块名称*/
+                            var beModuleName = typeof(TBillEntity).Name;
+
+                            /*计算匹配流程*/
+                            var work_flow_id = await loader
+                                .GetService<IRepository<WorkFlow>>()
+                                .Where(v => v.BeModule == beModuleName)
+                                .Where(v => v.Enabled == EnabledMark.enabled)
+                                .OrderByDescending(v => v.Version)
+                                .Select(v => v.Id)
+                                .FirstOrDefaultAsync();
+
+                            /*创建流程实例*/
+                            if (flowInstance == null)
+                            {
+                                flowInstance = await flowInstances.AddAsync(new FlowInstance
+                                {
+                                    BeModuleName = beModuleName,
+                                    BeModuleText = moduleDesProvider.GetClassDescription(typeof(TBillEntity)),
+                                    BillNumber = bill_Entity.Number,
+                                    Bill_Id = bill_Entity.Id,
+                                    BillDes = bill_Entity.GetDescription(),
+                                    Id = null,
+                                    CompleteTime = null,
+                                    CurrNode_Id = null,
+                                    CurrNodeName = null,
+                                    IsComlete = false,
+                                    LastChecker_Id = null,
+                                    LastCheckTime = null,
+                                    LastCheckerName = null,
+                                    Sponsor_Id = curr?.Id,
+                                    SponsorName = curr?.Name,
+                                    StartTime = DateTime.Now,
+                                    Status = FlowStatusEnum.processing,
+                                    WorkFlow_Id = work_flow_id,
+                                });
+                            }
+                            /*更新流程实际状态*/
+                            else
+                            {
+                                flowInstance.BillDes = bill_Entity.GetDescription();
+                                flowInstance.BillNumber = bill_Entity.Number;
+                                flowInstance.WorkFlow_Id = work_flow_id;
+                                flowInstance.Sponsor_Id = curr?.Id;
+                                flowInstance.SponsorName = curr?.Name;
+                                flowInstance.StartTime = DateTime.Now;
+                                flowInstance.Status = FlowStatusEnum.processing;
+                                flowInstance.IsComlete = false;
+                                SetCurrNote(flowInstance, null);
+                            }
+
+                            /*更新单据摘要*/
+                            var workFlowDescriptionProvider = loader.GetService<IWorkFlowDescriptionProvider<TBillEntity>>();
+                            if (workFlowDescriptionProvider != null)
+                                flowInstance.BillDes = await workFlowDescriptionProvider.GetDescription(bill_Entity);
+
+                            /*写入步骤*/
+                            await flowSteps.AddAsync(new FlowStep
+                            {
+                                Action = FlowActionEnum.submit,
+                                Desc = input.Desc,
+                                FlowInstance_Id = flowInstance.Id,
+                                FlowNodeName = "提交流程",
+                                FlowNode_Id = null,
+                                Id = null,
+                                Operater_Id = curr?.Id,
+                                OperaterName = curr?.Name,
+                                OperateTime = DateTime.Now,
+                                BeForm_Id = null,
+                                IsFinished = true,
+                            });
+
+                            /*取出流程配置*/
+                            FlowNodeModel[] match_nodes = await MatchNextFlowNotes(bill_Entity, work_flow_id, null);
+
+                            /*说明没有有效节点,审核就完成了*/
+                            if (match_nodes.Length == 0)
+                            {
+                                SetFlowCompalte(flowInstance, FlowStatusEnum.pass);
+
+                                /*写入步骤*/
+                                await flowSteps.AddAsync(new FlowStep
+                                {
+                                    Action = null,
+                                    Desc = "未定义流程,提交即完结",
+                                    FlowInstance_Id = flowInstance.Id,
+                                    FlowNodeName = "缺省节点",
+                                    FlowNode_Id = null,
+                                    Id = null,
+                                    Operater_Id = curr?.Id,
+                                    OperaterName = curr?.Name,
+                                    OperateTime = DateTime.Now,
+                                    BeForm_Id = null,
+                                    IsFinished = true,
+                                });
+                            }
+
+                            /*写入新的步骤*/
+                            else
+                            {
+                                SetCurrNote(flowInstance, match_nodes[0]);
+                                await WriteNextStep(bill_Entity, flowInstance, match_nodes, null, null);
+                            }
+                        }
+
+                        break;
+                    case FlowActionEnum.unsubmit:
+                        {
+                            if (flowInstance == null)
+                                throw new MsgException("流程还未提交!");
+
+                            if (flowInstance.Sponsor_Id != curr.Id)
+                                throw new MsgException("流程不是由您提交的,无法撤回!");
+
+                            if (flowInstance.Status != FlowStatusEnum.processing)
+                                throw new MsgException("审核中的流程才可以撤回!");
+
+                            await flowSteps.AddAsync(new FlowStep
+                            {
+                                FlowInstance_Id = flowInstance.Id,
+                                Desc = input.Desc,
+                                BeForm_Id = null,
+                                Action = FlowActionEnum.unsubmit,
+                                FlowNodeName = await flowNodes
+                                    .Where(v => v.Id == flowInstance.CurrNode_Id)
+                                    .Select(v => v.Title)
+                                    .FirstOrDefaultAsync(),
+                                FlowNode_Id = flowInstance.CurrNode_Id,
+                                IsFinished = true,
+                                OperaterName = curr?.Name,
+                                Operater_Id = curr?.Id,
+                                OperateTime = DateTime.Now,
+                            });
+
+                            SetFlowCompalte(flowInstance, FlowStatusEnum.unsubmitted);
+                        }
+
+                        break;
+                    case FlowActionEnum.pass:
+                    case FlowActionEnum.ng:
+                        {
+                            if (flowInstance == null)
+                                throw new MsgException("流程还未提交!");
+
+                            if (flowInstance.Status != FlowStatusEnum.processing)
+                                throw new MsgException("流程未在审核中!");
+
+                            /*匹配到的流程*/
+                            var match_nodes = await MatchNextFlowNotes(bill_Entity, flowInstance.WorkFlow_Id, flowInstance.CurrNode_Id);
+
+                            if (match_nodes.Length == 0)
+                                throw new MsgException("计算流程步骤失败,请联系管理员!");
+
+                            var curr_node = match_nodes[0];
+
+                            /*计算可审批人*/
+                            var checkerIds = await MatchCheckerIds(curr_node, bill_Entity, flowInstance.Sponsor_Id).ToListAsync();
+                            var ids = checkerIds.Where(v => !v.IsNullOrWhiteSpace()).Distinct().ToArray();
+                            if (!ids.Contains(curr?.Id))
+                            {
+                                throw new MsgException("当前步骤您并没有权限审核,可能是由于单据审批期间您的部门/角色发生了变化!");
+                            }
+
+                            /*写入步骤*/
+                            await flowSteps.AddAsync(new FlowStep
+                            {
+                                Action = input.ActionEnum,
+                                Desc = input.Desc,
+                                FlowInstance_Id = flowInstance.Id,
+                                FlowNodeName = curr_node.Title,
+                                FlowNode_Id = curr_node.Id,
+                                Id = null,
+                                Operater_Id = curr?.Id,
+                                OperaterName = curr?.Name,
+                                OperateTime = DateTime.Now,
+                                BeForm_Id = null,
+                                IsFinished = true,
+                            });
+
+                            /*更新最后审核人*/
+                            flowInstance.LastCheckTime = DateTime.Now;
+                            flowInstance.LastChecker_Id = curr?.Id;
+                            flowInstance.LastCheckerName = curr?.Name;
+
+                            /*审核模式*/
+                            var check_mode = curr_node.CheckEnum ?? FlowNodeCheckEnum.or;
+
+                            /*考虑会签/或签/投票*/
+                            switch (check_mode)
+                            {
+                                case FlowNodeCheckEnum.or:
+                                    {
+                                        switch (input.ActionEnum)
+                                        {
+                                            case FlowActionEnum.pass:
+                                                {
+                                                    var next_notes = match_nodes.Skip(1).ToArray();
+
+                                                    /*说明审核完了*/
+                                                    if (next_notes.Length == 0)
+                                                    {
+                                                        SetFlowCompalte(flowInstance, FlowStatusEnum.pass);
+                                                    }
+                                                    /*说明后面还有步骤*/
+                                                    else
+                                                    {
+                                                        SetCurrNote(flowInstance, next_notes[0]);
+                                                        await WriteNextStep(bill_Entity, flowInstance, next_notes, input.NextCheckerIds, null);
+                                                    }
+                                                }
+                                                break;
+                                            case FlowActionEnum.ng:
+                                                SetFlowCompalte(flowInstance, FlowStatusEnum.ng);
+                                                break;
+                                        }
+                                    }
+                                    break;
+                                case FlowNodeCheckEnum.and:
+                                    {
+                                        switch (input.ActionEnum)
+                                        {
+                                            case FlowActionEnum.pass:
+                                                {
+                                                    var checked_steps = await GetNoteCheckeSteps(flowInstance.Id, flowInstance.CurrNode_Id, ids);
+
+
+                                                    /*所有的人都审核完了,进入下一个步骤*/
+                                                    if (ids
+                                                        .Where(v => v != curr?.Id)
+                                                        .All(v => checked_steps
+                                                                    .Any(x => x.Action == FlowActionEnum.pass && x.Operater_Id == v)))
+                                                    {
+                                                        var next_notes = match_nodes.Skip(1).ToArray();
+
+                                                        /*审核完了*/
+                                                        if (next_notes.Length == 0)
+                                                        {
+                                                            SetFlowCompalte(flowInstance, FlowStatusEnum.pass);
+                                                        }
+
+                                                        /*还有下面步骤*/
+                                                        else
+                                                        {
+                                                            await WriteNextStep(bill_Entity, flowInstance, next_notes, input.NextCheckerIds, null);
+                                                            SetCurrNote(flowInstance, next_notes[0]);
+                                                        }
+                                                    }
+                                                    /*当前节点还没审核完*/
+                                                    else
+                                                    {
+                                                        var next_notes = match_nodes;
+                                                        var checked_userids = checked_steps.Select(v => v.Operater_Id).Append(curr?.Id).ToArray();
+                                                        await WriteNextStep(bill_Entity, flowInstance, next_notes, input.NextCheckerIds, checked_userids);
+                                                    }
+
+                                                }
+                                                break;
+                                            case FlowActionEnum.ng:
+                                                SetFlowCompalte(flowInstance, FlowStatusEnum.ng);
+                                                break;
+                                        }
+                                    }
+                                    break;
+                                case FlowNodeCheckEnum.vote:
+                                    {
+                                        var vote_scale = curr_node.VoteScale ?? 1;
+                                        var checked_steps = await GetNoteCheckeSteps(flowInstance.Id, flowInstance.CurrNode_Id, ids);
+
+
+                                        /*所有的人都审核完了,进入下一个步骤*/
+                                        if (ids
+                                            .Where(v => v != curr?.Id)
+                                            .All(v => checked_steps
+                                                        .Any(x => x.Action == FlowActionEnum.pass && x.Operater_Id == v)))
+                                        {
+                                            var pass_count = checked_steps
+                                                 .Select(v => v.Action)
+                                                 .Append(input.ActionEnum)
+                                                 .Where(v => v != null && v.Value == FlowActionEnum.pass)
+                                                 .Count();
+
+                                            /*投票结果通过*/
+                                            if (pass_count >= ids.Length * vote_scale)
+                                            {
+                                                var next_notes = match_nodes.Skip(1).ToArray();
+
+                                                /*审核完了*/
+                                                if (next_notes.Length == 0)
+                                                {
+                                                    SetFlowCompalte(flowInstance, FlowStatusEnum.pass);
+                                                }
+
+                                                /*还有下面步骤*/
+                                                else
+                                                {
+                                                    await WriteNextStep(bill_Entity, flowInstance, next_notes, input.NextCheckerIds, null);
+                                                    SetCurrNote(flowInstance, next_notes[0]);
+                                                }
+                                            }
+
+                                            /*投票结果不通过*/
+                                            else
+                                            {
+                                                SetFlowCompalte(flowInstance, FlowStatusEnum.ng);
+                                            }
+                                        }
+                                        /*当前节点还没审核完*/
+                                        else
+                                        {
+                                            var next_notes = match_nodes;
+                                            var checked_userids = checked_steps.Select(v => v.Operater_Id).Append(curr?.Id).ToArray();
+                                            await WriteNextStep(bill_Entity, flowInstance, next_notes, input.NextCheckerIds, checked_userids);
+                                        }
+                                    }
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+
+                        break;
+                    case FlowActionEnum.uncheck:
+                        if (flowInstance == null)
+                            throw new MsgException("流程还未提交!");
+
+
+
+                        break;
+                    default:
+                        break;
+                }
+
+
+                await flowInstances.UpdateAsync(flowInstance);
+                bill_Entity.FlowStatus = flowInstance.Status;
+                await loader.GetService<IRepository<TBillEntity>>().UpdateAsync(bill_Entity);
+
+                /*生成审批事件[审批中]*/
+                await loader.GetService<IEventBus>().TriggerEventAsync(new FlowOperateing<TBillEntity>(bill_Entity, flowInstance, input));
+
+                /*注册审核事件[审批后]*/
+                var msg = new FlowOperated<TBillEntity>(bill_Entity.Id);
+                flowInstances.AddCommitEventListen(msg.TriggerEvent);
+
+                /*如果自动提交了事务,则*/
+                if (auto_tran)
+                    await flowInstances.CommmitAsync();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                await lockHolder.LockRelease();
+            }
+        }
+
+        /// <summary>
+        /// 获取指定节点已审核的人
+        /// </summary>
+        /// <param name="flow_instance_id">流程实例ID</param>
+        /// <param name="note_id">指定的节点ID</param>
+        /// <param name="can_check_user_ids">可审核的人</param>
+        /// <returns></returns>
+        private async Task<IEnumerable<FlowStep>> GetNoteCheckeSteps(string flow_instance_id, string note_id, string[] can_check_user_ids)
+        {
             var flowSteps = loader.GetService<IRepository<FlowStep>>();
-            var flowInstanceUsers = loader.GetService<IRepository<FlowInstanceUser>>();
 
-            /*判断单据是否提交过了*/
-            var flowInstance = await flowInstances.FirstOrDefaultAsync(v => v.Bill_Id == bill_Entity.Id);
-            if (flowInstance != null && !new FlowStatusEnum[] { }.Contains(flowInstance.Status))
-                throw new Infrastructure.MsgException("此单据已提交过了，不可重复提交流程!");
-
-            /*当前模块名称*/
-            var beModuleName = typeof(TBillEntity).Name;
-            /*最后的审核步骤*/
-            FlowStep flowStep = null;
-
-            /*计算匹配流程*/
-            var work_flow_id = await loader
-                .GetService<IRepository<WorkFlow>>()
-                .Where(v => v.BeModule == beModuleName)
-                .Where(v => v.Enabled == EnabledMark.enabled)
-                .OrderByDescending(v => v.Version)
+            /*取最近一次的提交*/
+            var last_submit_id = await flowSteps
+                .Where(v => v.FlowInstance_Id == flow_instance_id && v.Action == FlowActionEnum.submit && v.IsFinished)
+                .OrderByDescending(v => v.Id)
                 .Select(v => v.Id)
                 .FirstOrDefaultAsync();
 
-            /*创建流程实例*/
-            if (flowInstance == null)
-                flowInstance = await flowInstances.AddAsync(new FlowInstance
-                {
-                    BeModuleName = beModuleName,
-                    BeModuleText = moduleDesProvider.GetClassDescription(typeof(TBillEntity)),
-                    BillNumber = null,// (bill_Entity is IHaveNumber haveNumber)
-                    Bill_Id = bill_Entity.Id,
-                    Id = null,
-                    CompleteTime = null,
-                    CurrNode_Id = null,
-                    IsComlete = false,
-                    LastChecker_Id = null,
-                    LastCheckTime = null,
-                    Sponsor_Id = curr?.Id,
-                    StartTime = DateTime.Now,
-                    Status = FlowStatusEnum.processing,
-                    WorkFlow_Id = work_flow_id
-                });
+            /*取该节点哪些人已经审核了,且没有反审核的*/
+            var checked_steps = await flowSteps
+                .Where(v => v.FlowInstance_Id == flow_instance_id &&
+                            v.FlowNode_Id == note_id &&
+                            v.IsFinished &&
+                            v.Id.CompareTo(last_submit_id) > 0 &&
+                            can_check_user_ids.Contains(v.Operater_Id) &&
+                            /*审批动作=通过/退回/拒绝*/
+                            (v.Action == FlowActionEnum.pass || v.Action == FlowActionEnum.ng) &&
+                            /*没有反审核的*/
+                            !flowSteps.Any(x => x.FlowInstance_Id == v.FlowInstance_Id &&
+                                                x.FlowNode_Id == v.FlowNode_Id &&
+                                                x.IsFinished &&
+                                                x.Id.CompareTo(last_submit_id) > 0 &&
+                                                x.Action == FlowActionEnum.uncheck &&
+                                                v.Operater_Id == v.Operater_Id))
+                .OrderByDescending(v => v.Id)
+                .ToArrayAsync();
 
-            /*写入流程实际状态*/
-            flowInstance.WorkFlow_Id = work_flow_id;
-            flowInstance.Sponsor_Id = curr?.Id;
-            flowInstance.StartTime = DateTime.Now;
-            flowInstance.Status = FlowStatusEnum.processing;
-            flowInstance.IsComlete = false;
+            return checked_steps;
+        }
 
-
-            /*写入单号*/
-            if (bill_Entity is IHaveNumber haveNumber)
-                flowInstance.BillNumber = haveNumber.Number;
-
-            /*写入单据摘要*/
-            var workFlowDescriptionProvider = loader.GetService<IWorkFlowDescriptionProvider<TBillEntity>>();
-            if (workFlowDescriptionProvider != null)
-                flowInstance.BillDes = await workFlowDescriptionProvider.GetDescription(bill_Entity);
-            else
-                flowInstance.BillDes = bill_Entity.GetDescription();
-
-            /*写入归属部门*/
-            string[] dept_ids = null;
-            if (bill_Entity is IHaveDept haveDept)
-                dept_ids = haveDept.GetBeDeptIds();
-            else if (bill_Entity is IHasManage hasManage)
-                dept_ids = await loader
-                    .GetService<IRepository<Entity.Basis.DeptMember>>()
-                    .Where(v => v.User_Id == hasManage.Create_User_Id)
-                    .Select(v => v.Dept_Id)
-                    .Distinct()
-                    .ToArrayAsync();
-            else if (curr != null)
-                dept_ids = await loader
-                    .GetService<IRepository<Entity.Basis.DeptMember>>()
-                    .Where(v => v.User_Id == curr.Id)
-                    .Select(v => v.Dept_Id)
-                    .Distinct()
-                    .ToArrayAsync();
-            await loader
-                .GetService<HandleOne2ManyService<string, FlowBeDept>>()
-                .UpdateManyAsync(
-                    v => v.FlowInstance_Id == flowInstance.Id,
-                    dept_ids,
-                    (a, b) => a.BeDept_Id == b,
-                    v => new FlowBeDept
-                    {
-                        BeDept_Id = v,
-                        Id = null,
-                        FlowInstance_Id = flowInstance.Id
-                    }
-                );
-
-            /*写入流程步骤*/
-            flowStep = await flowSteps.AddAsync(new FlowStep
-            {
-                Action = FlowActionEnum.submit,
-                Desc = input?.Des,
-                FlowInstance_Id = flowInstance.Id,
-                FlowNodeName = "提交",
-                FlowNode_Id = null,
-                Id = null,
-                Operater_Id = curr?.Id,
-                OperateTime = DateTime.Now
-            });
-
-            /*未匹配到流程,默认完结*/
-            if (work_flow_id == null)
-            {
-                flowStep = await flowSteps.AddAsync(new FlowStep
-                {
-                    Action = FlowActionEnum.pass,
-                    Desc = "未匹配到流程,自动通过",
-                    FlowInstance_Id = flowInstance.Id,
-                    FlowNodeName = "自动通过",
-                    FlowNode_Id = null,
-                    Id = null,
-                    Operater_Id = curr?.Id,
-                    OperateTime = DateTime.Now,
-                });
-            }
-
-            /*取出流程配置*/
+        /// <summary>
+        /// 获取余下的步骤
+        /// </summary>
+        /// <typeparam name="TBillEntity">类型</typeparam>
+        /// <param name="bill_Entity">单据实例</param>
+        /// <param name="work_flow_id">流程ID</param>
+        /// <param name="curr_note_id">当前节点</param>
+        /// <returns></returns>
+        private async Task<FlowNodeModel[]> MatchNextFlowNotes<TBillEntity>(TBillEntity bill_Entity, string work_flow_id, string curr_note_id) where TBillEntity : class, IHaveCheck, new()
+        {
             IEnumerable<FlowNodeModel> flowNodeModels = Array.Empty<FlowNodeModel>();
             if (work_flow_id != null)
                 flowNodeModels = await loader.GetService<IEventBus>().RequestAsync<FlowNodeModel[], string>(work_flow_id);
 
             /*匹配到的流程*/
-            var match_nodes = MatchNodes(flowNodeModels, bill_Entity).ToArray();
+            var match_nodes = MatchNodes(flowNodeModels, bill_Entity, curr_note_id).ToArray();
+            return match_nodes;
+        }
 
-            /*下一个节点*/
-            var curr_node = MatchNextNode(match_nodes, bill_Entity, null);
-
-            /*生成流程快照*/
-            await loader
-                .GetService<HandleOne2ManyService<FlowSnapshot, FlowSnapshot>>()
-                .UpdateManyAsync(
-                    v => v.FlowInstance_Id == flowInstance.Id,
-                     match_nodes.Select((v, i) => new FlowSnapshot
-                     {
-                         FlowInstance_Id = flowInstance.Id,
-                         OrderVal = i,
-                         FlowNode_Id = v.Id,
-                         Id = null
-                     }),
-                    (a, b) => a.FlowNode_Id == b.FlowNode_Id,
-                    v => v,
-                    (before, after) =>
-                    {
-                        before.OrderVal = after.OrderVal;
-                    }
-                );
-
-            /*计算审核人*/
-
-
-            /*流程走完了*/
-            if (curr_node == null)
+        /// <summary>
+        /// 写入新的步骤
+        /// </summary>
+        /// <typeparam name="TBillEntity">实体类型</typeparam>
+        /// <param name="bill_Entity">单据实例</param>
+        /// <param name="flowInstance">流程实例</param>
+        /// <param name="match_nodes">要写入的节点</param>
+        /// <param name="nextCheckerIds">指定的下级审核人</param>
+        /// <param name="excludeUserIds">要排除的审核人</param>
+        /// <returns></returns>
+        private async Task WriteNextStep<TBillEntity>(TBillEntity bill_Entity,
+                                                      FlowInstance flowInstance,
+                                                      FlowNodeModel[] match_nodes,
+                                                      string[] nextCheckerIds,
+                                                      string[] excludeUserIds)
+            where TBillEntity : class, IHaveCheck, new()
+        {
+            var flowSteps = loader.GetService<IRepository<FlowStep>>();
+            var flowStepCheckers = loader.GetService<IRepository<FlowStepChecker>>();
+            for (int i = 0; i < match_nodes.Length; i++)
             {
-                flowInstance.IsComlete = true;
-                flowInstance.CompleteTime = DateTime.Now;
-                flowInstance.Status = FlowStatusEnum.finished;
-                flowInstance.CurrNode_Id = null;
-                bill_Entity.FlowStatus = FlowStatusEnum.finished;
-            }
-            else
-            {
-                flowInstance.CurrNode_Id = curr_node.Id;
-            }
+                var item = match_nodes[i];
 
-            await flowInstances.UpdateAsync(flowInstance);
-            await loader.GetService<IRepository<TBillEntity>>().UpdateAsync(bill_Entity);
+                switch (item.NodeEnum)
+                {
+                    case FlowNodeEnum.start:
+                    case FlowNodeEnum.end:
+                    case FlowNodeEnum.branch:
+                    case FlowNodeEnum.branch_child:
+                    case FlowNodeEnum.cond:
+                    case FlowNodeEnum.cc:
+                        break;
+                    case FlowNodeEnum.check:
+                        /*计算可审批人*/
+                        var checkerIds = await MatchCheckerIds(item, bill_Entity, flowInstance.Sponsor_Id).ToListAsync();
 
-            /*生成审批事件[审批中]*/ 
+                        /*写入待完成步骤*/
+                        var step = await flowSteps.AddAsync(new FlowStep
+                        {
+                            Action = null,
+                            Desc = null,
+                            FlowInstance_Id = flowInstance.Id,
+                            FlowNodeName = item.Title,
+                            FlowNode_Id = item.Id,
+                            Id = null,
+                            Operater_Id = null,
+                            OperaterName = null,
+                            OperateTime = null,
+                            BeForm_Id = null,
+                            IsFinished = false,
+                        });
 
-            if (auto_tran)
-            {
-                await flowInstances.CommmitAsync();
 
-                /*生成审核事件[审批后]*/
+                        /*指定下级审核人*/
+                        if (i == 0 && nextCheckerIds != null && item.Checkers.Any(v => v.CheckerEnum == FlowNodeCheckerEnum.prev_appoint))
+                            checkerIds.AddRange(nextCheckerIds);
 
+                        /*要排除指定某些人*/
+                        if (i == 0 && excludeUserIds != null && item.Checkers.Any(v => v.CheckerEnum == FlowNodeCheckerEnum.prev_appoint))
+                            checkerIds = checkerIds.Where(v => !excludeUserIds.Contains(v)).ToList();
+
+                        /*写入待完成的审核人*/
+                        var ids = checkerIds.Where(v => !v.IsNullOrWhiteSpace()).Distinct().ToArray();
+                        foreach (var id in ids)
+                        {
+                            await flowStepCheckers.AddAsync(new FlowStepChecker
+                            {
+                                Bill_Id = bill_Entity.Id,
+                                Id = null,
+                                FlowStep_Id = step.Id,
+                                FlowInstance_Id = flowInstance.Id,
+                                User_Id = id
+                            });
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
             }
         }
 
         /// <summary>
-        /// 计算下一个流程节点
-        /// </summary> 
-        private static FlowNodeModel MatchNextNode<TBillEntity>(IEnumerable<FlowNodeModel> match_nodes, TBillEntity bill_Entity, string curr_node_id)
-            where TBillEntity : class, IHaveCheck, new()
+        /// 设置当前节点
+        /// </summary>
+        /// <param name="flowInstance"></param>
+        /// <param name="note"></param>
+        private static void SetCurrNote(FlowInstance flowInstance, FlowNodeModel note)
         {
-            return match_nodes.SkipWhile(v => v.Id == curr_node_id || curr_node_id.IsNullOrWhiteSpace()).FirstOrDefault();
+            flowInstance.CurrNode_Id = note?.Id;
+            flowInstance.CurrNodeName = note?.Title;
+        }
+
+        /// <summary>
+        /// 设置流程结束
+        /// </summary>
+        /// <param name="flowInstance"></param>
+        /// <param name="statusEnum"></param>
+        private static void SetFlowCompalte(FlowInstance flowInstance, FlowStatusEnum statusEnum)
+        {
+            flowInstance.IsComlete = true;
+            flowInstance.CompleteTime = DateTime.Now;
+            flowInstance.Status = statusEnum;
+            flowInstance.CurrNode_Id = null;
+            flowInstance.CurrNodeName = null;
+        }
+
+
+
+        /// <summary>
+        /// 获取可审核的人
+        /// </summary>
+        /// <typeparam name="TBillEntity">类型</typeparam>
+        /// <param name="flowNode">节点</param>
+        /// <param name="bill_Entity">单据实例</param>
+        /// <param name="sponsor_id">提交人</param>
+        /// <returns></returns>
+        public async IAsyncEnumerable<string> MatchCheckerIds<TBillEntity>(FlowNodeModel flowNode, TBillEntity bill_Entity, string sponsor_id)
+        {
+            if (flowNode.Checkers == null)
+                yield break;
+
+            foreach (var item in flowNode.Checkers)
+            {
+                switch (item.CheckerEnum)
+                {
+                    case FlowNodeCheckerEnum.user:
+                        {
+                            if (item.Checker_Id.IsNullOrWhiteSpace())
+                                continue;
+
+                            yield return item.Checker_Id;
+                            break;
+                        }
+                    case FlowNodeCheckerEnum.role:
+                        {
+                            if (item.Checker_Id.IsNullOrWhiteSpace())
+                                continue;
+
+                            var list = await loader
+                               .GetService<IRepository<RoleMember>>()
+                               .Where(v => v.FKey_Id == item.Checker_Id)
+                               .Select(v => v.Value_Id)
+                               .ToListAsync();
+
+                            foreach (var uid in list)
+                                yield return uid;
+
+                            break;
+                        }
+                    case FlowNodeCheckerEnum.field:
+                        {
+                            if (item.Checker_Id.IsNullOrWhiteSpace())
+                                continue;
+
+                            var value = bill_Entity.GetValue(item.Checker_Id)?.ToString();
+                            if (!value.IsNullOrWhiteSpace())
+                                yield return value;
+                            break;
+                        }
+                    case FlowNodeCheckerEnum.dept:
+                        {
+                            if (item.Checker_Id.IsNullOrWhiteSpace())
+                                continue;
+
+                            var list = await loader
+                                .GetService<IRepository<DeptMember>>()
+                                .Where(v => v.Dept_Id == item.Checker_Id)
+                                .Select(v => v.User_Id)
+                                .ToListAsync();
+
+                            foreach (var uid in list)
+                                yield return uid;
+
+                            break;
+                        }
+                    case FlowNodeCheckerEnum.dept_manage:
+                        {
+                            if (item.Checker_Id.IsNullOrWhiteSpace())
+                                continue;
+
+                            var list = await loader
+                                .GetService<IRepository<DeptMember>>()
+                                .Where(v => v.Dept_Id == item.Checker_Id && v.IsManager)
+                                .Select(v => v.User_Id)
+                                .ToListAsync();
+
+                            foreach (var uid in list)
+                                yield return uid;
+
+                            break;
+                        }
+                    case FlowNodeCheckerEnum.parent_dept:
+                        {
+                            var deptMembers = loader
+                                .GetService<IRepository<DeptMember>>()
+                                .Where(v => v.User_Id == sponsor_id);
+                            var depts = loader
+                                .GetService<IRepository<Dept>>()
+                                .Where(v => deptMembers.Any(x => x.Dept_Id == v.Id));
+                            var list = await loader
+                                .GetService<IRepository<DeptMember>>()
+                                .Where(v => depts.Any(x => x.Super_Id == v.Dept_Id))
+                                .Select(v => v.User_Id)
+                                .ToListAsync();
+
+                            foreach (var uid in list)
+                                yield return uid;
+
+                            break;
+                        }
+                    case FlowNodeCheckerEnum.parent_dept_manage:
+                        {
+                            var deptMembers = loader
+                                .GetService<IRepository<DeptMember>>()
+                                .Where(v => v.User_Id == sponsor_id);
+                            var depts = loader
+                                .GetService<IRepository<Dept>>()
+                                .Where(v => deptMembers.Any(x => x.Dept_Id == v.Id));
+                            var list = await loader
+                                .GetService<IRepository<DeptMember>>()
+                                .Where(v => v.IsManager && depts.Any(x => x.Super_Id == v.Dept_Id))
+                                .Select(v => v.User_Id)
+                                .ToListAsync();
+
+                            foreach (var uid in list)
+                                yield return uid;
+
+                            break;
+                        }
+                    case FlowNodeCheckerEnum.prev_appoint:
+                        break;
+                    case FlowNodeCheckerEnum.cur_dept_manage:
+                        {
+                            var deptMembers = loader
+                                .GetService<IRepository<DeptMember>>()
+                                .Where(v => v.User_Id == sponsor_id);
+
+                            var list = await loader
+                                .GetService<IRepository<DeptMember>>()
+                                .Where(v => v.IsManager && deptMembers.Any(x => x.Dept_Id == v.Dept_Id))
+                                .Select(v => v.User_Id)
+                                .ToListAsync();
+
+                            foreach (var uid in list)
+                                yield return uid;
+
+                            break;
+                        }
+                    default:
+                        break;
+                }
+            }
         }
 
         /// <summary>
         /// 计算流程节点
-        /// </summary>  
-        private static IEnumerable<FlowNodeModel> MatchNodes<TBillEntity>(IEnumerable<FlowNodeModel> nodes, TBillEntity bill_Entity)
+        /// </summary>
+        /// <typeparam name="TBillEntity">单据类型</typeparam>
+        /// <param name="nodes">所有流程节点</param>
+        /// <param name="bill_Entity">单据实例</param>
+        /// <param name="start_node_id">开始节点,提交时为Null,审核时为当前流程节点</param>
+        /// <returns></returns>
+        private static IEnumerable<FlowNodeModel> MatchNodes<TBillEntity>(IEnumerable<FlowNodeModel> nodes, TBillEntity bill_Entity, string start_node_id)
             where TBillEntity : class, IHaveCheck, new()
         {
             if (nodes == null || !nodes.Any())
@@ -293,11 +826,15 @@ namespace FastFrame.Application.Flow
 
             foreach (var item in nodes)
             {
+                if (item.Id == start_node_id)
+                    start_node_id = null;
+
                 switch (item.NodeEnum)
                 {
                     case FlowNodeEnum.check:
                     case FlowNodeEnum.cc:
-                        yield return item;
+                        if (start_node_id.IsNullOrWhiteSpace() || item.Id == start_node_id)
+                            yield return item;
                         break;
                     case FlowNodeEnum.branch:
                         /*确定走哪个分支*/
@@ -306,14 +843,17 @@ namespace FastFrame.Application.Flow
                             .OrderByDescending(v => v.IsDefault == true ? -1 : Math.Max(v.Weight ?? 0, 0))
                             .ThenBy(v => v.OrderVal);
                         var branch = child_brahchs.FirstOrDefault(v => MatchBrahsh(v, bill_Entity));
-                        var children = MatchNodes(branch.Nodes, bill_Entity);
+                        var children = MatchNodes(branch.Nodes, bill_Entity, start_node_id);
                         foreach (var child in children)
                             yield return child;
                         break;
-                    case FlowNodeEnum.branch_child:
-                    case FlowNodeEnum.cond:
                     case FlowNodeEnum.start:
                     case FlowNodeEnum.end:
+                    //if (start_node_id.IsNullOrWhiteSpace() || item.Id == start_node_id)
+                    //    yield return item;
+                    //break;
+                    case FlowNodeEnum.branch_child:
+                    case FlowNodeEnum.cond:
                     default:
                         break;
                 }
@@ -323,9 +863,9 @@ namespace FastFrame.Application.Flow
         /// <summary>
         /// 判断子分支是否满足
         /// </summary>
-        /// <typeparam name="TBillEntity"></typeparam>
-        /// <param name="flowNode"></param>
-        /// <param name="bill_Entity"></param>
+        /// <typeparam name="TBillEntity">类型</typeparam>
+        /// <param name="flowNode">分支节点</param>
+        /// <param name="bill_Entity">实体</param>
         /// <returns></returns>
         private static bool MatchBrahsh<TBillEntity>(FlowNodeModel flowNode, TBillEntity bill_Entity)
              where TBillEntity : class, IHaveCheck, new()
@@ -409,11 +949,5 @@ namespace FastFrame.Application.Flow
         }
     }
 
-    public class SubmitFlowInput
-    {
-        /// <summary>
-        /// 提交说明
-        /// </summary>
-        public string Des { get; set; }
-    }
+
 }

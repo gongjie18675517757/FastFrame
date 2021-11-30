@@ -29,7 +29,7 @@
             </v-toolbar-items>
             <v-menu offset-y>
               <template v-slot:activator="{ on }">
-                <v-btn v-on="on" icon color="primary"   title="更多">
+                <v-btn v-on="on" icon color="primary" title="更多">
                   <v-icon>more_vert</v-icon>
                   <!-- 设置 -->
                 </v-btn>
@@ -38,7 +38,7 @@
               <v-list dense>
                 <permission-facatory
                   v-for="item in [
-                    ...($vuetify.breakpoint.smAndDown ? visibleToolItems : [])
+                    ...($vuetify.breakpoint.smAndDown ? visibleToolItems : []),
                   ]"
                   :key="item.key || item.name"
                   :permission="item.permission"
@@ -89,7 +89,7 @@
             v-if="model"
             :class="[
               isDialog ? 'dialogPage' : isTab ? 'tabPage' : 'fullPage',
-              'form-page'
+              'form-page',
             ]"
           >
             <v-layout wrap style="padding: 0px; margin: 0px">
@@ -111,22 +111,25 @@
                         wrap
                         style="padding: 15px"
                       >
-                        <Input
-                          v-for="item in group.values"
-                          v-bind="item"
-                          :key="item.Name"
-                          :model="model"
-                          :canEdit="canEdit"
-                          :disabled="!canEdit"
-                          :singleLine="singleLine"
-                          :errorMessages="formErrorMessages[item.Name]"
-                          :value="model[item.Name]"
-                          @change="
-                            $emit('changed', { item: item, value: $event })
-                          "
-                          @input="handleInput(item, $event)"
-                          :ref="item.Name"
-                        />
+                        <template v-for="item in group.values">
+                          <slot :name="item.Name">
+                            <Input
+                              :key="item.Name"
+                              v-bind="item"
+                              :model="model"
+                              :canEdit="canEdit"
+                              :disabled="!canEdit"
+                              :singleLine="singleLine"
+                              :errorMessages="formErrorMessages[item.Name]"
+                              :value="model[item.Name]"
+                              @change="
+                                $emit('changed', { item: item, value: $event })
+                              "
+                              @input="handleInput(item, $event)"
+                              :ref="item.Name"
+                            />
+                          </slot>
+                        </template>
                       </component>
                     </v-card-text>
                   </v-card>
@@ -187,7 +190,7 @@ import Input from "@/components/Inputs";
 export default {
   components: {
     Input,
-    VuePerfectScrollbar
+    VuePerfectScrollbar,
   },
 
   props: {
@@ -204,7 +207,7 @@ export default {
     canEdit: Boolean,
     hasManage: Boolean,
     formGroups: Array,
-    toolItems: Array
+    toolItems: Array,
   },
   data() {
     return {};
@@ -213,29 +216,29 @@ export default {
     flex() {
       if (!this.singleLine) {
         return {
-          xs12: true
+          xs12: true,
         };
       } else {
         return {
-          xs12: true
+          xs12: true,
         };
       }
     },
     formGroupExpandValue: {
       get() {
-        return this.formGroups.map(r => r.key.value);
+        return this.formGroups.map((r) => r.key.value);
       },
       set(val) {
         for (let index = 0; index < val.length; index++) {
           const value = val[index];
           this.formGroups[index].value = value;
         }
-      }
+      },
     },
     visibleToolItems() {
       if (this.hideToolitem) return [];
       return this.toolItems.filter(this.evalVisible);
-    }
+    },
   },
 
   methods: {
@@ -264,8 +267,8 @@ export default {
     },
     evalAction(item) {
       this.$emit(`toolItemClick`, item);
-    }
-  }
+    },
+  },
 };
 </script>
 

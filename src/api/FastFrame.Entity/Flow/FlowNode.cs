@@ -49,5 +49,10 @@ namespace FastFrame.Entity.Flow
         /// 审批方式(多人时)
         /// </summary>
         public FlowNodeCheckEnum? CheckEnum { get; set; }
+
+        /// <summary>
+        /// 通过比例(多人审批且审批方式为投票时)
+        /// </summary>
+        public decimal? VoteScale { get; set; }
     }
 }

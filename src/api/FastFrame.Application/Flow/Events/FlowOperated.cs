@@ -1,6 +1,7 @@
 ﻿using FastFrame.Entity;
 using FastFrame.Entity.Flow;
 using FastFrame.Infrastructure.EventBus;
+using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 
 namespace FastFrame.Application.Flow
@@ -11,26 +12,25 @@ namespace FastFrame.Application.Flow
     /// <typeparam name="TEntity"></typeparam>
     public partial class FlowOperated<TEntity> : IEventData where TEntity : IHaveCheck
     {
-        public FlowOperated(TEntity entity, FlowOperateInput operateInput, IEnumerable<FlowStep> flowProcess)
+        public FlowOperated(string key)
         {
-            Entity = entity;
-            FlowProcess = flowProcess;
-            OperateInput = operateInput;
+            Key = key;
         }
 
         /// <summary>
-        /// 单据实体
+        /// 单据主键
         /// </summary>
-        public TEntity Entity { get; }
+        public string Key { get; }
 
         /// <summary>
-        /// 审批过程
+        /// 触发事件
         /// </summary>
-        public IEnumerable<FlowStep> FlowProcess { get; }
-
-        /// <summary>
-        /// 操作内容
-        /// </summary>
-        public FlowOperateInput OperateInput { get; }
+        /// <param name="loader"></param>
+        /// <returns></returns>
+        public Task TriggerEvent(IServiceProvider loader)
+        {
+            loader.GetService<FastFrame.Infrastructure.Interface.IBackgroundJob>().SetTimeout<IEventBus>(v => v.TriggerEventAsync(this), null);
+            return Task.CompletedTask;
+        }
     }
 }

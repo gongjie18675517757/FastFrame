@@ -28,6 +28,9 @@ namespace FastFrame.Repository
                 } 
             }
 
+
+            services.AddScoped<EventListenManger>();
+
             return services;
         }
     }

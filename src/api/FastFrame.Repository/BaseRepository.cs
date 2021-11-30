@@ -14,10 +14,28 @@ namespace FastFrame.Repository
 {
     internal class BaseRepository<T> : BaseQueryable<T>, IRepository<T> where T : class, IEntity
     {
-        public BaseRepository(DataBase context, IApplicationSession appSession) : base(context, appSession)
+        private const string TranCommitSuccessEventKey = "TranCommitSuccessEventKey";
+        private readonly EventListenManger eventListenManger;
+        private readonly IServiceProvider loader;
+
+        public BaseRepository(DataBase context,
+                              EventListenManger eventListenManger,
+                              IServiceProvider loader,
+                              IApplicationSession appSession) : base(context, appSession)
         {
+            this.eventListenManger = eventListenManger;
+            this.loader = loader;
         }
 
+        /// <summary>
+        /// 添加事务提交后的事件
+        /// 注意:此处的回调中一定要处理异常
+        /// </summary>
+        /// <param name="func"></param>
+        public void AddCommitEventListen(Func<IServiceProvider, Task> func)
+        {
+            eventListenManger.AddEventListen(TranCommitSuccessEventKey, func);
+        }
 
         /// <summary>
         /// 添加
@@ -84,7 +102,7 @@ namespace FastFrame.Repository
             await Task.CompletedTask;
 
             /*如果附加过了，则不重新附加*/
-            if (context.ChangeTracker.Entries<T>().Any(v =>v.State==EntityState.Detached && v.Entity == entity))
+            if (context.ChangeTracker.Entries<T>().Any(v => v.State == EntityState.Detached && v.Entity == entity))
                 return entity;
 
             var entityEntry = context.Entry(entity);
@@ -106,14 +124,20 @@ namespace FastFrame.Repository
             return await context.Set<T>().FindAsync(id);
         }
 
-        public Task<int> CommmitAsync()
+        public async Task<int> CommmitAsync()
         {
-            return context.SaveChangesAsync();
+            var count = await context.SaveChangesAsync();
+
+            /*触发事务提交完成的事件*/
+            foreach (var item in eventListenManger[TranCommitSuccessEventKey])
+                await item?.Invoke(loader);
+
+            return count;
         }
 
         public Task<int> ExecSqlAsync(string sql)
         {
-            throw new NotImplementedException();
+            return context.Database.ExecuteSqlRawAsync(sql);
         }
 
         public string GetDbTableName()

@@ -11,6 +11,8 @@ namespace FastFrame.Application.Flow
     /// </summary>
     public class FlowOperateInput
     {
+        private string[] nextCheckerIds;
+
         /// <summary>
         /// 动作
         /// </summary>
@@ -22,6 +24,11 @@ namespace FastFrame.Application.Flow
         /// </summary>
         [StringLength(500)]
         public string Desc { get; set; }
+
+        /// <summary>
+        /// 下一步审批人
+        /// </summary>
+        public string[] NextCheckerIds { get => nextCheckerIds ?? Array.Empty<string>(); set => nextCheckerIds = value; }
 
         /// <summary>
         /// 附件内容

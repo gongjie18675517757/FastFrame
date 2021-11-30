@@ -1,33 +1,36 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <ApplicationIcon />
-    <OutputType>Exe</OutputType>
-    <StartupObject />
-    <LangVersion>default</LangVersion>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<ApplicationIcon />
+		<OutputType>Exe</OutputType>
+		<StartupObject />
+		<LangVersion>default</LangVersion>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Build\RepositoryBuild.cs" />
-  </ItemGroup>
 
-  <ItemGroup>
-    <!--<PackageReference Include="Terminal.Gui" Version="0.81.0" />-->
-  </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\FastFrame.Entity\FastFrame.Entity.csproj" />
-    <ProjectReference Include="..\FastFrame.Infrastructure\FastFrame.Infrastructure.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Build\RepositoryBuild.cs" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Update="Add.vue">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="List.vue">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<!--<PackageReference Include="Terminal.Gui" Version="0.81.0" />-->
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\FastFrame.Entity\FastFrame.Entity.csproj" />
+		<ProjectReference Include="..\FastFrame.Infrastructure\FastFrame.Infrastructure.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="Add.vue">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="List.vue">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
 </Project>

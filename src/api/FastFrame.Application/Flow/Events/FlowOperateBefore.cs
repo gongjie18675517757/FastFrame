@@ -4,7 +4,7 @@ using FastFrame.Infrastructure.EventBus;
 namespace FastFrame.Application.Flow
 {
     /// <summary>
-    /// 流程操作前
+    /// 流程操作前(状态还未生成)
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     public partial class FlowOperateBefore<TEntity> : IEventData where TEntity : IHaveCheck

@@ -1,6 +1,4 @@
-﻿using AspectCore.Configuration;
-using AspectCore.Extensions.DependencyInjection;
-using FastFrame.Application;
+﻿using FastFrame.Application;
 using FastFrame.Database;
 using FastFrame.Infrastructure.Client;
 using FastFrame.Infrastructure.EventBus;
@@ -16,19 +14,10 @@ using FastFrame.WebHost.Hubs;
 using FastFrame.WebHost.Middleware;
 using FastFrame.WebHost.Privder;
 using Hangfire;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
-using System;
-using System.IO;
 
 namespace FastFrame.WebHost
 {

@@ -8,15 +8,15 @@ using System.Text;
 namespace FastFrame.Application.Flow
 {
     /// <summary>
-    /// 流程操作时
+    /// 流程操作时(状态生成完成,事务提交前)
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
-    public partial class FlowOperateing<TEntity>:IEventData where TEntity : IHaveCheck
+    public partial class FlowOperateing<TEntity> : IEventData where TEntity : IHaveCheck
     {
-        public FlowOperateing(TEntity entity, FlowOperateInput operateInput, IEnumerable<FlowStep> flowProcess)
+        public FlowOperateing(TEntity entity, FlowInstance flowInstance, FlowOperateInput operateInput)
         {
             Entity = entity;
-            FlowProcess = flowProcess;
+            FlowInstance = flowInstance;
             OperateInput = operateInput;
         }
 
@@ -26,9 +26,9 @@ namespace FastFrame.Application.Flow
         public TEntity Entity { get; }
 
         /// <summary>
-        /// 审批步骤
+        /// 流程实例
         /// </summary>
-        public IEnumerable<FlowStep> FlowProcess { get; }
+        public FlowInstance FlowInstance { get; }
 
         /// <summary>
         /// 操作内容

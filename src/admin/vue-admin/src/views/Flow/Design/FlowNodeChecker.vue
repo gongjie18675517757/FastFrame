@@ -88,7 +88,7 @@ export default {
     return {
       CheckerEnumKvs: [],
       CheckerEnum: null,
-      hasSelectEnum: ["user", "role", "field", "dept"],
+      hasSelectEnum: ["user", "role", "field", "dept",'dept_manage'],
       kw: null,
       list: [],
       selectedList: []

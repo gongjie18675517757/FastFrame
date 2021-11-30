@@ -6,7 +6,7 @@ namespace FastFrame.Entity
     /// <summary>
     /// 标识需要审核
     /// </summary>
-    public interface IHaveCheck : IEntity
+    public interface IHaveCheck : IEntity, IHaveNumber
     {
         /// <summary>
         /// 流程状态

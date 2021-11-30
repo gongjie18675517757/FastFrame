@@ -13,6 +13,11 @@
         /// <summary>
         /// 会签
         /// </summary>
-        and
+        and,
+
+        /// <summary>
+        /// 投票
+        /// </summary>
+        vote,
     }
 }

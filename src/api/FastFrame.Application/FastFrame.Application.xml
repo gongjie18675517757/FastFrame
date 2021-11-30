@@ -1805,12 +1805,23 @@
             提交流程
             </summary> 
         </member>
-        <member name="M:FastFrame.Application.Flow.WorkFlowCenterService.MatchNextNode(System.Collections.Generic.IEnumerable{FastFrame.Application.Flow.FlowNodeModel},System.String)">
+        <member name="M:FastFrame.Application.Flow.WorkFlowCenterService.MatchNextNode``1(System.Collections.Generic.IEnumerable{FastFrame.Application.Flow.FlowNodeModel},``0,System.String)">
             <summary>
-            匹配下一个节点
+            计算下一个流程节点
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Application.Flow.WorkFlowCenterService.MatchNodes``1(System.Collections.Generic.IEnumerable{FastFrame.Application.Flow.FlowNodeModel},``0)">
+            <summary>
+            计算流程节点
+            </summary>  
+        </member>
+        <member name="M:FastFrame.Application.Flow.WorkFlowCenterService.MatchBrahsh``1(FastFrame.Application.Flow.FlowNodeModel,``0)">
+            <summary>
+            判断子分支是否满足
             </summary>
-            <param name="nodes"></param>
-            <param name="curr_node_id"></param>
+            <typeparam name="TBillEntity"></typeparam>
+            <param name="flowNode"></param>
+            <param name="bill_Entity"></param>
             <returns></returns>
         </member>
         <member name="P:FastFrame.Application.Flow.SubmitFlowInput.Des">

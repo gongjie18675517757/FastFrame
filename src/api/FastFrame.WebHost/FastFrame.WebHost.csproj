@@ -1,90 +1,101 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <UserSecretsId>baa687c8-fef2-457d-b3b8-191741af27e2</UserSecretsId>
-    <!--<AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>-->
-  </PropertyGroup>
+	<PropertyGroup>
+		<!--<TargetFramework>net5.0</TargetFramework>-->
+		<TargetFramework>net6.0</TargetFramework>
+		<!--<Nullable>enable</Nullable>-->
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UserSecretsId>baa687c8-fef2-457d-b3b8-191741af27e2</UserSecretsId>
+		<!--<AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>-->
+	</PropertyGroup>
 
-  <PropertyGroup>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <!--<AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>-->
-    <LangVersion>default</LangVersion>
-  </PropertyGroup>
+	<PropertyGroup>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<!--<AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>-->
+		<LangVersion>default</LangVersion>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DocumentationFile>.\FastFrame.WebHost.xml</DocumentationFile>
-    <NoWarn>1701;1702;1591;</NoWarn>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<DefineConstants>DEBUG;TRACE</DefineConstants>
+		<DocumentationFile>.\FastFrame.WebHost.xml</DocumentationFile>
+		<NoWarn>1701;1702;1591;</NoWarn>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <NoWarn>1701;1702;1591;</NoWarn>
-    <DocumentationFile>.\FastFrame.WebHost.xml</DocumentationFile>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<NoWarn>1701;1702;1591;</NoWarn>
+		<DocumentationFile>.\FastFrame.WebHost.xml</DocumentationFile>
+	</PropertyGroup>
 
-  <ItemGroup> 
-    <Compile Remove="Logs\**" /> 
-    <Content Remove="Logs\**" /> 
-    <EmbeddedResource Remove="Logs\**" /> 
-    <None Remove="Logs\**" /> 
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Logs\**" />
+		<Content Remove="Logs\**" />
+		<EmbeddedResource Remove="Logs\**" />
+		<None Remove="Logs\**" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Content Remove="log4net.config" />
-    <Content Remove="Nlog.config" />
-  </ItemGroup>
+	<ItemGroup>
+	  <Compile Remove="Startup.cs" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Include="log4net.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<Content Remove="log4net.config" />
+		<Content Remove="Nlog.config" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Hangfire.AspNetCore" Version="1.7.25" />
-    <PackageReference Include="Hangfire.Core" Version="1.7.25" />
-    <!--<PackageReference Include="Hangfire.MemoryStorage" Version="1.7.0" />-->
-    <!--<PackageReference Include="Hangfire.MySqlStorage" Version="2.0.3" />-->
-    <PackageReference Include="HangFire.Redis.StackExchange" Version="1.8.4" />
-    <!--<PackageReference Include="Hangfire.MySqlStorage" Version="2.0.3" />-->
-    <PackageReference Condition="'$(Configuration)'=='DEBUG'" Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.9">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="AspectCore.Extensions.DependencyInjection" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.9" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="5.0.3" /> 
-    <PackageReference Include="AspectCore.Core" Version="2.2.0" /> 
-    <!--<PackageReference Include="RedLock.net" Version="2.3.1" />-->
-    <!--<PackageReference Include="CSRedisCore" Version="3.6.6" />-->    
-    <PackageReference Condition="'$(Configuration)'=='DEBUG'" Include="Swashbuckle.AspNetCore" Version="6.2.1" /> 
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="log4net.config">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\FastFrame.Database\FastFrame.Database.csproj" />
-    <ProjectReference Include="..\FastFrame.Entity\FastFrame.Entity.csproj" />
-    <ProjectReference Include="..\FastFrame.Infrastructure\FastFrame.Infrastructure.csproj" />
-    <ProjectReference Include="..\FastFrame.Repository\FastFrame.Repository.csproj" />
-    <ProjectReference Include="..\FastFrame.Application\FastFrame.Application.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Hangfire.AspNetCore" Version="1.7.27" />
+		<PackageReference Include="Hangfire.Core" Version="1.7.27" />
+		<!--<PackageReference Include="Hangfire.MemoryStorage" Version="1.7.0" />-->
+		<!--<PackageReference Include="Hangfire.MySqlStorage" Version="2.0.3" />-->
+		<PackageReference Include="HangFire.Redis.StackExchange" Version="1.8.5" />
+		<!--<PackageReference Include="Hangfire.MySqlStorage" Version="2.0.3" />-->
+		<PackageReference Condition="'$(Configuration)'=='DEBUG'" Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="AspectCore.Extensions.DependencyInjection" Version="2.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="6.0.0" />
+		<PackageReference Include="AspectCore.Core" Version="2.2.0" />
+		<!--<PackageReference Include="RedLock.net" Version="2.3.1" />-->
+		<!--<PackageReference Include="CSRedisCore" Version="3.6.6" />-->
+		<PackageReference Condition="'$(Configuration)'=='DEBUG'" Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Update="publish.ps1">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
-    <None Update="verify_img\bg.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="verify_img\side.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\FastFrame.Database\FastFrame.Database.csproj" />
+		<ProjectReference Include="..\FastFrame.Entity\FastFrame.Entity.csproj" />
+		<ProjectReference Include="..\FastFrame.Infrastructure\FastFrame.Infrastructure.csproj" />
+		<ProjectReference Include="..\FastFrame.Repository\FastFrame.Repository.csproj" />
+		<ProjectReference Include="..\FastFrame.Application\FastFrame.Application.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Properties\PublishProfiles\" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Update="publish.ps1">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</None>
+		<None Update="verify_img\bg.jpg">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="verify_img\side.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
-  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
+	<ItemGroup>
+		<Folder Include="Properties\PublishProfiles\" />
+	</ItemGroup>
+
+	<ProjectExtensions>
+		<VisualStudio>
+			<UserProperties appsettings_1json__JsonSchema="" />
+		</VisualStudio>
+	</ProjectExtensions>
 
 </Project>

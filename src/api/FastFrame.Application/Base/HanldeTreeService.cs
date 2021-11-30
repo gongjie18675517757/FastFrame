@@ -43,6 +43,8 @@ namespace FastFrame.Application
         {
             await Task.CompletedTask;
             loader.GetService<IBackgroundJob>().SetTimeout<HanldeTreeService>(v => v.ExistsNotInitAsync(), null);
+            loader.GetService<IBackgroundJob>().SetTimeout<HanldeTreeService>(v => v.ExistsNotInitAsync(), null);
+            loader.GetService<IBackgroundJob>().SetTimeout<HanldeTreeService>(v => v.ExistsNotInitAsync(), null);
         }
 
         /// <summary>
@@ -155,7 +157,7 @@ namespace FastFrame.Application
             catch (Exception ex)
             {
                 logger.LogError(ex, "保存树形关系失败！");
-                throw ex;
+                throw;
             }
         }
 
@@ -277,8 +279,8 @@ namespace FastFrame.Application
             var entities = loader.GetService<IRepository<TEntity>>().Queryable;
 
             if (key == rootKey)
-                throw new MsgException(err_msg);  
-            
+                throw new MsgException(err_msg);
+
             var childrenList = await entities
               .Where(v => v.Super_Id == key)
               .Select(v => v.Id)

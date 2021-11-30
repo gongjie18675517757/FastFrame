@@ -141,6 +141,21 @@
             </summary>
             <param name="uniqueNames">需要验证唯一的属性</param>
         </member>
+        <member name="T:FastFrame.Entity.Basis.BillBeDept">
+            <summary>
+            单据归属部门
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.BillBeDept.Bill_Id">
+            <summary>
+            关联：Bill
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.BillBeDept.BeDept_Id">
+            <summary>
+            归属部门
+            </summary> 
+        </member>
         <member name="T:FastFrame.Entity.Basis.Dept">
             <summary>
             部门
@@ -1511,51 +1526,6 @@
             最后审批时间
             </summary>
         </member>
-        <member name="T:FastFrame.Entity.Flow.FlowBeDept">
-            <summary>
-            流程实例归属科室
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Flow.FlowBeDept.FlowInstance_Id">
-            <summary>
-            关联：FlowInstance
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Flow.FlowBeDept.BeDept_Id">
-            <summary>
-            归属部门
-            </summary> 
-        </member>
-        <member name="T:FastFrame.Entity.Flow.FlowSnapshot">
-            <summary>
-            流程快照
-            </summary> 
-        </member>
-        <member name="P:FastFrame.Entity.Flow.FlowSnapshot.FlowInstance_Id">
-            <summary>
-            关联：FlowInstance
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Flow.FlowSnapshot.SnapshotContent">
-            <summary>
-            快照内容
-            </summary>
-        </member>
-        <member name="T:FastFrame.Entity.Flow.FlowInstanceUser">
-            <summary>
-            流程步骤审核人
-            </summary> 
-        </member>
-        <member name="P:FastFrame.Entity.Flow.FlowInstanceUser.FlowInstance_Id">
-            <summary>
-            关联：FlowInstance
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Flow.FlowInstanceUser.User_Id">
-            <summary>
-            关联：User
-            </summary>
-        </member>
         <member name="T:FastFrame.Entity.Flow.FlowStep">
             <summary>
             审批步骤
@@ -1571,6 +1541,11 @@
             关联:FlowNode
             </summary>
         </member>
+        <member name="P:FastFrame.Entity.Flow.FlowStep.BeForm_Id">
+            <summary>
+            关联表单的ID
+            </summary>
+        </member>
         <member name="P:FastFrame.Entity.Flow.FlowStep.FlowNodeName">
             <summary>
             步骤名称
@@ -1581,9 +1556,19 @@
             动作
             </summary>
         </member>
+        <member name="P:FastFrame.Entity.Flow.FlowStep.IsFinished">
+            <summary>
+            是否已办理
+            </summary>
+        </member>
         <member name="P:FastFrame.Entity.Flow.FlowStep.Operater_Id">
             <summary>
-            操作人
+            审批人
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowStep.OperaterName">
+            <summary>
+            审批人
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Flow.FlowStep.OperateTime">
@@ -1593,12 +1578,37 @@
         </member>
         <member name="P:FastFrame.Entity.Flow.FlowStep.Desc">
             <summary>
-            描述
+            审批意见
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Flow.FlowStepChecker">
+            <summary>
+            流程步骤审核人
+            </summary> 
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowStepChecker.FlowStep_Id">
+            <summary>
+            关联：FlowStep
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowStepChecker.User_Id">
+            <summary>
+            关联：User  
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowStepChecker.Bill_Id">
+            <summary>
+            单据ID
+            </summary> 
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowStepChecker.FlowInstance_Id">
+            <summary>
+            关联：FlowInstance
             </summary>
         </member>
         <member name="T:FastFrame.Entity.Flow.FlowNextChecker">
             <summary>
-            指定的下一步审核人
+            审批时指定的下一步审核人
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Flow.FlowNextChecker.FlowStep_Id">

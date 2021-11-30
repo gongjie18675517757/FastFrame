@@ -1,16 +1,28 @@
+ <template>
+  <v-page v-bind="childProps" v-on="childListeners">
+    <template #test>
+      <h1>
+        测试插槽能力
+      </h1>
+    </template>
+  </v-page>
+</template>
+
  <script>
 let pageInfo = {
   area: "Basis",
   name: "User",
-  direction: "用户"
+  direction: "用户",
 };
-import Page from "@/components/Page/FormPageCore.js";
+
+import Page from "../../../components/Page/FormPageCore.js";
+ 
 export default {
   ...Page,
   data() {
     return {
       ...Page.data.call(this),
-      ...pageInfo
+      ...pageInfo,
     };
   },
   methods: {
@@ -19,18 +31,18 @@ export default {
     fmtModelObject() {
       return Page.methods.fmtModelObject
         .call(this, ...arguments)
-        .then(model => {
+        .then((model) => {
           return {
             Depts: this.super_id ? [{ Id: this.super_id }] : [],
             Roles: [],
-            ...model
+            ...model,
           };
         });
     },
     getModelObjectItems() {
       return Page.methods.getModelObjectItems
         .call(this, ...arguments)
-        .then(opts => {
+        .then((opts) => {
           return [
             ...opts,
 
@@ -41,7 +53,7 @@ export default {
               Type: "Array",
               requestUrl: `/api/user/deptList`,
               flex: { xs6: true },
-              visible: () => !this.super_id
+              visible: () => !this.super_id,
             },
             {
               Name: "Roles",
@@ -49,11 +61,15 @@ export default {
               Relate: "Role",
               Type: "Array",
               requestUrl: `/api/user/roleList`,
-              flex: { xs6: true }
-            }
+              flex: { xs6: true },
+            },
+            {
+              Name: "test",
+             
+            },
           ];
         });
-    }
-  }
+    },
+  },
 };
 </script>  

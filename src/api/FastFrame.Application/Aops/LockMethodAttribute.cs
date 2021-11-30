@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Diagnostics;
 
 namespace FastFrame.Application
 {
@@ -47,16 +48,20 @@ namespace FastFrame.Application
                 {
                     await next(context);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    throw ex;
+                    throw;
                 }
                 finally
                 {
                     await lockHolder.LockRelease();
                 }
             }
-             
+            else
+            {
+                Debug.Print("");
+            }
+
             if (context.IsAsync())
             {
                 context.ReturnValue = Task.CompletedTask;

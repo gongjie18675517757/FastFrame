@@ -269,6 +269,8 @@ namespace FastFrame.Application.Flow
         /// <param name="workFlow"></param>
         private void VerifyFlowNodes(WorkFlowDto workFlow)
         {
+            /*如果下级的审核人是由上级分配的,则上级只能是或签*/
+
             if (workFlow is null)
                 throw new System.ArgumentNullException(nameof(workFlow));
 
@@ -387,6 +389,7 @@ namespace FastFrame.Application.Flow
                             .Where(v => kw.IsNullOrWhiteSpace() || v.Description.Contains(kw))
                             .Select(v => new KeyValuePair<string, string>(v.Name, v.Description))
                             .ToList();
+                case FlowNodeCheckerEnum.dept_manage:
                 case FlowNodeCheckerEnum.dept:
                     return await Loader
                          .GetService<IRepository<Dept>>()
@@ -402,7 +405,7 @@ namespace FastFrame.Application.Flow
                     break;
                 case FlowNodeCheckerEnum.parent_dept_manage:
                     break;
-                case FlowNodeCheckerEnum.dept_manage:
+                case FlowNodeCheckerEnum.cur_dept_manage:
                     break;
                 default:
                     break;

@@ -26,6 +26,11 @@
         dept,
 
         /// <summary>
+        /// 指定部门主管
+        /// </summary>
+        dept_manage,
+
+        /// <summary>
         /// 上级部门人员
         /// </summary>
         parent_dept,
@@ -38,7 +43,7 @@
         /// <summary>
         /// 当前部门主管
         /// </summary>
-        dept_manage,
+        cur_dept_manage,
 
         /// <summary>
         /// 上个节点指定

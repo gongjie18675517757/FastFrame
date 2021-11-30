@@ -193,60 +193,7 @@ export let formData = {
   toolItems: []
 };
 
-/**
- * 计算属性
- */
-export let formComputed = {
-  title() {
-    if (this.canEdit && this.id) {
-      return `修改${this.direction}`;
-    } else if (this.id) {
-      return `查看${this.direction}`;
-    } else {
-      return `添加${this.direction}`;
-    }
-  },
-  formGroups() {
-    let opts = this.options || [];
-    if (this.hasManage && this.showMamageField && this.model && this.model.Id) {
-      opts = [...opts, ...this.manageOptions];
-    }
-    opts = distinct(opts, v => v.Name, (a, b) => ({
-      ...a,
-      ...b
-    }))
-    opts = opts.filter(v => {
-      if (typeof v.visible == 'function')
-        return v.visible.call(this,this.model)
-      else if (typeof v.visible == 'boolean')
-        return v.visible
-      else
-        return true;
-    })
 
-    let brr = selectMany(opts, r => {
-      return (r.GroupNames || ["基础信息"]).map(p => {
-        return {
-          ...r,
-          title: p
-        };
-      });
-    });
-
-    let arr = groupBy(
-      brr,
-      r => ({
-        title: r.title,
-        value: true
-      }),
-      (a, b) => a.title == b.title
-    );
-    return arr.filter(v => v.values.length > 0);
-  },
-  updateBtnVisible() {
-    return this.hasManage && this.id && !this.changed && !this.canEdit
-  }
-}
 
 /**
  * 页面方法
@@ -673,6 +620,68 @@ export let FormPageMixin = {
   },
 };
 
+/**
+ * 计算属性
+ */
+export let formComputed = {
+  title() {
+    if (this.canEdit && this.id) {
+      return `修改${this.direction}`;
+    } else if (this.id) {
+      return `查看${this.direction}`;
+    } else {
+      return `添加${this.direction}`;
+    }
+  },
+  formGroups() {
+    let opts = this.options || [];
+    if (this.hasManage && this.showMamageField && this.model && this.model.Id) {
+      opts = [...opts, ...this.manageOptions];
+    }
+    opts = distinct(opts, v => v.Name, (a, b) => ({
+      ...a,
+      ...b
+    }))
+    opts = opts.filter(v => {
+      if (typeof v.visible == 'function')
+        return v.visible.call(this, this.model)
+      else if (typeof v.visible == 'boolean')
+        return v.visible
+      else
+        return true;
+    })
+
+    let brr = selectMany(opts, r => {
+      return (r.GroupNames || ["基础信息"]).map(p => {
+        return {
+          ...r,
+          title: p
+        };
+      });
+    });
+
+    let arr = groupBy(
+      brr,
+      r => ({
+        title: r.title,
+        value: true
+      }),
+      (a, b) => a.title == b.title
+    );
+    return arr.filter(v => v.values.length > 0);
+  },
+  updateBtnVisible() {
+    return this.hasManage && this.id && !this.changed && !this.canEdit
+  },
+  childProps() {
+    let props = makeChildProps.call(this);
+    return props;
+  },
+  childListeners() {
+    let listeners = makeChildListeners.call(this);
+    return listeners
+  }
+}
 
 /**
  * 导出基础类型
@@ -698,8 +707,8 @@ export default {
     ...formMethods
   },
   render(h) {
-    let props = makeChildProps.call(this);
-    let listeners = makeChildListeners.call(this);
+    let props = this.childProps;
+    let listeners = this.childListeners;
     return h("v-page", {
       props,
       on: listeners

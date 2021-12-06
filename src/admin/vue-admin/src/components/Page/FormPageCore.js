@@ -12,6 +12,8 @@ import {
   getModuleStrut
 } from "../../generate";
 import { FileDetailTable } from "../Table";
+import { makeButtons, makeButtonsInputMode } from './handleFlow'
+
 
 /**
  * 要注入的方法名
@@ -26,25 +28,22 @@ export function makeToolItems() {
   return [
     {
       title: "编辑",
-      color: "primary",
       name: "Update",
       key: 'edit',
       iconName: "edit",
-      small: true,
-      text: true,
+      outlined: true,
       action: this.handleEdit,
       visible: () => this.updateBtnVisible
     },
     {
-      title: "取消编辑",
-      color: "primary",
-      key: 'cancelEdit',
-      iconName: "mdi-cancel",
+      title: "关闭",
+      color: "warning",
+      name: "close",
+      iconName: "keyboard_return",
       permission: [],
-      small: true,
-      text: true,
-      action: this.init,
-      visible: () => this.canEdit && this.form && this.form.Id
+      action: this.close,
+      visible: true,
+      outlined: true,
     },
     {
       title: "保存",
@@ -52,23 +51,11 @@ export function makeToolItems() {
       name: "Update,Add",
       key: 'save',
       iconName: "mdi-content-save-edit-outline",
-      small: true,
-      text: true,
+
       action: this.submit,
       loading: this.submiting,
       visible: () => this.hasManage && this.canEdit,
       disabled: () => !this.changed
-    },
-    {
-      title: "关闭",
-      color: "success",
-      name: "close",
-      iconName: "close",
-      small: true,
-      text: true,
-      permission: [],
-      action: this.close,
-      visible: () => !this.isDialog
     },
   ]
 }
@@ -218,6 +205,7 @@ export let formMethods = {
       .then(obj => {
         this.hasManage = obj.HasManage;
         this.hasFiles = obj.HasFiles;
+        this.haveCheck = obj.HaveCheck;
       })
       .then(this.getRules)
       .then(this.fmtRules)
@@ -298,9 +286,21 @@ export let formMethods = {
   /**
    * 加载工具条
    */
-  getToolItems() {
-    let arr = makeToolItems.call(this);
-    arr = arr.map(v => {
+  async getToolItems() {
+    let arr = await makeToolItems.call(this);
+    let brr = this.haveCheck ? [
+      {
+        component: {
+          functional: true,
+          render: (h) => h('fragments-facatory', null, makeButtons({
+            selection: [this.model],
+            mode: makeButtonsInputMode.FORM,
+            editing: this.canEdit
+          }).map(v => h(v.component)))
+        }
+      }
+    ] : [];
+    return [...brr, ...arr].map(v => {
       /**
        * 未定义权限，但有定义name值时
        */
@@ -316,8 +316,7 @@ export let formMethods = {
         ...v,
         permission
       };
-    });
-    return Promise.resolve(arr)
+    })
   },
 
   /**
@@ -626,11 +625,11 @@ export let FormPageMixin = {
 export let formComputed = {
   title() {
     if (this.canEdit && this.id) {
-      return `修改${this.direction}`;
+      return `${this.direction}`;
     } else if (this.id) {
-      return `查看${this.direction}`;
+      return `${this.direction}`;
     } else {
-      return `添加${this.direction}`;
+      return `${this.direction}`;
     }
   },
   formGroups() {

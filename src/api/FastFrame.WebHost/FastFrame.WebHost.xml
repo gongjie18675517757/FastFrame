@@ -270,6 +270,26 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:FastFrame.WebHost.Controllers.Flow.WorkFlowCenterController">
+            <summary>
+            流程中心
+            </summary>
+        </member>
+        <member name="M:FastFrame.WebHost.Controllers.Flow.WorkFlowCenterController.FlowOperate(System.String,FastFrame.Application.Flow.BatchFlowOperateInput)">
+            <summary>
+            流程操作
+            </summary>
+            <param name="moduleName"></param>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.WebHost.Controllers.Flow.WorkFlowCenterController.PageList(System.String)">
+            <summary>
+            审批列表
+            </summary>
+            <param name="qs"></param>
+            <returns></returns>
+        </member>
         <member name="T:FastFrame.WebHost.Controllers.Flow.WorkFlowController">
             <summary>
             工作流 

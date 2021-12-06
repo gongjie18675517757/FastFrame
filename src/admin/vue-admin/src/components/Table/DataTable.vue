@@ -121,7 +121,7 @@ export default {
                 text: "#",
                 value: "index",
                 sortable: false,
-                width: "50px"
+                width: "20px"
               }
             ]),
 
@@ -130,7 +130,7 @@ export default {
             text: c.Description,
             value: c.Name,
             sortBy: this.isXs ? false : !!c.sortBy,
-            width: c.width || "100px",
+            width: c.width || "140px",
             align: c.align || "center"
           };
         })

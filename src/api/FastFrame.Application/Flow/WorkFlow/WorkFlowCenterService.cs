@@ -29,6 +29,22 @@ namespace FastFrame.Application.Flow
             this.loader = loader;
         }
 
+        public Task<PageList<FlowInstance>> PageList(Pagination pagination)
+        {
+            var applicationSession = loader.GetService<Infrastructure.Interface.IApplicationSession>();
+            var curr = applicationSession?.CurrUser;
+
+            var flowStepCheckers = loader.GetService<IRepository<FlowStepChecker>>().Where(v => v.User_Id == curr.Id);
+            var flowSteps1 = loader.GetService<IRepository<FlowStep>>().Where(v => v.Operater_Id == curr.Id);
+            var flowSteps = loader.GetService<IRepository<FlowStep>>().Where(v => flowStepCheckers.Any(x => x.FlowStep_Id == v.Id));
+
+            return loader
+                 .GetService<IRepository<FlowInstance>>()
+                 .Where(v => flowSteps.Any(x => !x.IsFinished && x.FlowInstance_Id == v.Id && x.FlowNode_Id == v.CurrNode_Id) ||
+                             flowSteps1.Any(x => x.FlowInstance_Id == v.Id))
+                 .PageListAsync(pagination);
+        }
+
         /// <summary>
         /// 流程操作[批量]
         /// </summary> 

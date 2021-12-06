@@ -1,4 +1,5 @@
 ﻿using FastFrame.Entity.Enums;
+using FastFrame.Entity.Flow;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

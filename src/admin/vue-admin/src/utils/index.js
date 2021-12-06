@@ -17,24 +17,6 @@ export const eventBus = new Vue()
 
 
 /**
- * 改变首字母大小写
- * @param {*} str 
- * @param {*} map 
- * @param {*} filter 
- */
-export function changeChar(str = '', map = (x) => x, filter = (item, index) => index == 0) {
-    if (str == '')
-        return ''
-    let charArr = str.split('')
-    for (let index = 0; index < charArr.length; index++) {
-        let char = charArr[index];
-        if (filter(char, index))
-            charArr[index] = map(charArr[index])
-    }
-    return charArr.join('');
-}
-
-/**
  * 生成数组 
  * @param {*} length 
  */
@@ -351,4 +333,67 @@ export function fmtRequestPars(key, value) {
     }
 }
 
- 
+export function toHexString(text) {
+    return encodeUtf8(text).map(v => v.toString(16)).join('')
+}
+
+export function fromHexString(text) {
+    if (!text)
+        return text;
+
+    if (!/^[0-9a-f]+$/.test(text))
+        return text;
+
+    var length = text.length / 2;
+    var bytes = new Array(length);
+
+    for (var i = 0; i < length; i++) {
+        var s = [text[i * 2], text[i * 2 + 1]].join('')
+        var b = parseInt(s, 16);
+
+        bytes[i] = b;
+    }
+
+    return decodeUtf8(bytes);
+}
+
+export function encodeUtf8(text) {
+    const code = encodeURIComponent(text);
+    const bytes = [];
+    for (var i = 0; i < code.length; i++) {
+        const c = code.charAt(i);
+        if (c === '%') {
+            const hex = code.charAt(i + 1) + code.charAt(i + 2);
+            const hexVal = parseInt(hex, 16);
+            bytes.push(hexVal);
+            i += 2;
+        } else bytes.push(c.charCodeAt(0));
+    }
+    return bytes;
+}
+
+export function decodeUtf8(bytes) {
+    var encoded = "";
+    for (var i = 0; i < bytes.length; i++) {
+        encoded += '%' + bytes[i].toString(16);
+    }
+    return decodeURIComponent(encoded);
+}
+
+/**
+ * 生成Vue的上下文件,使用适配函数式组件与普通组件
+ * @param {*} param0 
+ * @returns 
+ */
+export function makeVueContext({
+    inject = []
+}) {
+    return {
+        listeners: this.$listeners,
+        props: this.$props,
+        data: {
+            attrs: this.$attrs
+        },
+        injections: createObject(inject, v => v, v => this[v])
+    }
+}

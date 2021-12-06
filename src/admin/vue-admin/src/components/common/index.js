@@ -41,3 +41,4 @@ Vue.filter('substring', function (v, len) {
 
     return v;
 })
+

@@ -1592,9 +1592,19 @@
             描述
             </summary>
         </member>
+        <member name="P:FastFrame.Application.Flow.FlowOperateInput.NextCheckerIds">
+            <summary>
+            下一步审批人
+            </summary>
+        </member>
         <member name="P:FastFrame.Application.Flow.FlowOperateInput.Items">
             <summary>
             附件内容
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.BatchFlowOperateInput.Keys">
+            <summary>
+            单据主键
             </summary>
         </member>
         <member name="T:FastFrame.Application.Flow.FlowOperateOutput">
@@ -1602,19 +1612,44 @@
             审批操作结果
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Flow.FlowOperateOutput.FlowStatus">
+        <member name="P:FastFrame.Application.Flow.FlowOperateOutput.Key">
+            <summary>
+            单据主键
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.FlowOperateOutput.IsSuccess">
+            <summary>
+            是否成功
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Flow.FlowOperateSuccessOutput">
+            <summary>
+            审批成功
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.FlowOperateSuccessOutput.FlowStatus">
             <summary>
             最终状态
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Flow.FlowOperateOutput.FlowProcesses">
+        <member name="P:FastFrame.Application.Flow.FlowOperateSuccessOutput.FlowProcesses">
             <summary>
-            审批过程
+            最终的审批过程
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Flow.FlowOperateFailOutput">
+            <summary>
+            审批失败
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.FlowOperateFailOutput.ErrMessage">
+            <summary>
+            失败原因
             </summary>
         </member>
         <member name="T:FastFrame.Application.Flow.FlowOperateBefore`1">
             <summary>
-            流程操作前
+            流程操作前(状态还未生成)
             </summary>
             <typeparam name="TEntity"></typeparam>
         </member>
@@ -1634,24 +1669,21 @@
             </summary>
             <typeparam name="TEntity"></typeparam>
         </member>
-        <member name="P:FastFrame.Application.Flow.FlowOperated`1.Entity">
+        <member name="P:FastFrame.Application.Flow.FlowOperated`1.Key">
             <summary>
-            单据实体
+            单据主键
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Flow.FlowOperated`1.FlowProcess">
+        <member name="M:FastFrame.Application.Flow.FlowOperated`1.TriggerEvent(System.IServiceProvider)">
             <summary>
-            审批过程
+            触发事件
             </summary>
-        </member>
-        <member name="P:FastFrame.Application.Flow.FlowOperated`1.OperateInput">
-            <summary>
-            操作内容
-            </summary>
+            <param name="loader"></param>
+            <returns></returns>
         </member>
         <member name="T:FastFrame.Application.Flow.FlowOperateing`1">
             <summary>
-            流程操作时
+            流程操作时(状态生成完成,事务提交前)
             </summary>
             <typeparam name="TEntity"></typeparam>
         </member>
@@ -1660,9 +1692,9 @@
             单据实体
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Flow.FlowOperateing`1.FlowProcess">
+        <member name="P:FastFrame.Application.Flow.FlowOperateing`1.FlowInstance">
             <summary>
-            审批步骤
+            流程实例
             </summary>
         </member>
         <member name="P:FastFrame.Application.Flow.FlowOperateing`1.OperateInput">
@@ -1780,54 +1812,110 @@
             主键 
             </summary>
         </member>
+        <member name="T:FastFrame.Application.Flow.HandleFlowOperatedService`1">
+            <summary>
+            处理流程审核完成后的事件
+            </summary>
+            <typeparam name="TBillEntity"></typeparam>
+        </member>
         <member name="T:FastFrame.Application.Flow.WorkFlowCenterService">
             <summary>
             流程中心
             </summary>
         </member>
-        <member name="M:FastFrame.Application.Flow.WorkFlowCenterService.SubmitFlow(System.String,System.String[],FastFrame.Application.Flow.SubmitFlowInput)">
+        <member name="M:FastFrame.Application.Flow.WorkFlowCenterService.HandleFlowOperate(System.String,FastFrame.Application.Flow.BatchFlowOperateInput)">
             <summary>
-            提交流程
+            流程操作[批量]
             </summary> 
         </member>
-        <member name="M:FastFrame.Application.Flow.WorkFlowCenterService.SubmitFlow``1(System.String[],FastFrame.Application.Flow.SubmitFlowInput)">
+        <member name="M:FastFrame.Application.Flow.WorkFlowCenterService.BatchHandleFlowOperate``1(FastFrame.Application.Flow.BatchFlowOperateInput)">
             <summary>
-            提交流程
+            流程操作[批量]
             </summary> 
         </member>
-        <member name="M:FastFrame.Application.Flow.WorkFlowCenterService.SubmitFlow``1(System.String,FastFrame.Application.Flow.SubmitFlowInput,System.Boolean)">
+        <member name="M:FastFrame.Application.Flow.WorkFlowCenterService.HandleFlowOperate``1(System.String,FastFrame.Application.Flow.FlowOperateInput,System.Boolean)">
             <summary>
-            提交流程
+            流程操作
             </summary> 
         </member>
-        <member name="M:FastFrame.Application.Flow.WorkFlowCenterService.SubmitFlow``1(``0,FastFrame.Application.Flow.SubmitFlowInput,System.Boolean)">
+        <member name="M:FastFrame.Application.Flow.WorkFlowCenterService.HandleFlowOperate``1(``0,FastFrame.Application.Flow.FlowOperateInput,System.Boolean)">
             <summary>
-            提交流程
+            流程操作
             </summary> 
         </member>
-        <member name="M:FastFrame.Application.Flow.WorkFlowCenterService.MatchNextNode``1(System.Collections.Generic.IEnumerable{FastFrame.Application.Flow.FlowNodeModel},``0,System.String)">
+        <member name="M:FastFrame.Application.Flow.WorkFlowCenterService.GetNoteCheckeSteps(System.String,System.String,System.String[])">
             <summary>
-            计算下一个流程节点
-            </summary> 
+            获取指定节点已审核的人
+            </summary>
+            <param name="flow_instance_id">流程实例ID</param>
+            <param name="note_id">指定的节点ID</param>
+            <param name="can_check_user_ids">可审核的人</param>
+            <returns></returns>
         </member>
-        <member name="M:FastFrame.Application.Flow.WorkFlowCenterService.MatchNodes``1(System.Collections.Generic.IEnumerable{FastFrame.Application.Flow.FlowNodeModel},``0)">
+        <member name="M:FastFrame.Application.Flow.WorkFlowCenterService.MatchNextFlowNotes``1(``0,System.String,System.String)">
+            <summary>
+            获取余下的步骤
+            </summary>
+            <typeparam name="TBillEntity">类型</typeparam>
+            <param name="bill_Entity">单据实例</param>
+            <param name="work_flow_id">流程ID</param>
+            <param name="curr_note_id">当前节点</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.Flow.WorkFlowCenterService.WriteNextStep``1(``0,FastFrame.Entity.Flow.FlowInstance,FastFrame.Application.Flow.FlowNodeModel[],System.String[],System.String[])">
+            <summary>
+            写入新的步骤
+            </summary>
+            <typeparam name="TBillEntity">实体类型</typeparam>
+            <param name="bill_Entity">单据实例</param>
+            <param name="flowInstance">流程实例</param>
+            <param name="match_nodes">要写入的节点</param>
+            <param name="nextCheckerIds">指定的下级审核人</param>
+            <param name="excludeUserIds">要排除的审核人</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.Flow.WorkFlowCenterService.SetCurrNote(FastFrame.Entity.Flow.FlowInstance,FastFrame.Application.Flow.FlowNodeModel)">
+            <summary>
+            设置当前节点
+            </summary>
+            <param name="flowInstance"></param>
+            <param name="note"></param>
+        </member>
+        <member name="M:FastFrame.Application.Flow.WorkFlowCenterService.SetFlowCompalte(FastFrame.Entity.Flow.FlowInstance,FastFrame.Entity.Enums.FlowStatusEnum)">
+            <summary>
+            设置流程结束
+            </summary>
+            <param name="flowInstance"></param>
+            <param name="statusEnum"></param>
+        </member>
+        <member name="M:FastFrame.Application.Flow.WorkFlowCenterService.MatchCheckerIds``1(FastFrame.Application.Flow.FlowNodeModel,``0,System.String)">
+            <summary>
+            获取可审核的人
+            </summary>
+            <typeparam name="TBillEntity">类型</typeparam>
+            <param name="flowNode">节点</param>
+            <param name="bill_Entity">单据实例</param>
+            <param name="sponsor_id">提交人</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.Flow.WorkFlowCenterService.MatchNodes``1(System.Collections.Generic.IEnumerable{FastFrame.Application.Flow.FlowNodeModel},``0,System.String)">
             <summary>
             计算流程节点
-            </summary>  
+            </summary>
+            <typeparam name="TBillEntity">单据类型</typeparam>
+            <param name="nodes">所有流程节点</param>
+            <param name="bill_Entity">单据实例</param>
+            <param name="start_node_id">开始节点,提交时为Null,审核时为当前流程节点</param>
+            <returns></returns>
         </member>
         <member name="M:FastFrame.Application.Flow.WorkFlowCenterService.MatchBrahsh``1(FastFrame.Application.Flow.FlowNodeModel,``0)">
             <summary>
             判断子分支是否满足
             </summary>
-            <typeparam name="TBillEntity"></typeparam>
-            <param name="flowNode"></param>
-            <param name="bill_Entity"></param>
+            <typeparam name="TBillEntity">类型</typeparam>
+            <param name="flowNode">分支节点</param>
+            <param name="bill_Entity">实体</param>
             <returns></returns>
-        </member>
-        <member name="P:FastFrame.Application.Flow.SubmitFlowInput.Des">
-            <summary>
-            提交说明
-            </summary>
         </member>
         <member name="T:FastFrame.Application.Flow.WorkFlowService">
             <summary>

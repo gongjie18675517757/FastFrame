@@ -23,6 +23,8 @@ const key_dialogMode = "dialogMode"
 const key_themeColor = 'themeColor'
 
 
+
+
 export default new Vuex.Store({
   state: {
     /**
@@ -66,7 +68,20 @@ export default new Vuex.Store({
     /**
      * 当前登陆用户
      */
-    currUser: {},
+    currUser: {
+      /**
+       * 用户ID
+       */
+      Id: null,
+      /**
+       * 用户帐号
+       */
+      Account: null,
+      /**
+       * 用户姓名
+       */
+      Name: null
+    },
 
     /**
      * 当前企业

@@ -921,41 +921,6 @@
             岗位
             </summary>
         </member>
-        <member name="T:FastFrame.Entity.Enums.FlowActionEnum">
-            <summary>
-            流程动作
-            </summary>
-        </member>
-        <member name="F:FastFrame.Entity.Enums.FlowActionEnum.submit">
-            <summary>
-            提交
-            </summary>
-        </member>
-        <member name="F:FastFrame.Entity.Enums.FlowActionEnum.unsubmit">
-            <summary>
-            撤回
-            </summary>
-        </member>
-        <member name="F:FastFrame.Entity.Enums.FlowActionEnum.pass">
-            <summary>
-            通过
-            </summary>
-        </member>
-        <member name="F:FastFrame.Entity.Enums.FlowActionEnum.withdraw">
-            <summary>
-            退回
-            </summary>
-        </member>
-        <member name="F:FastFrame.Entity.Enums.FlowActionEnum.refuse">
-            <summary>
-            拒绝
-            </summary>
-        </member>
-        <member name="F:FastFrame.Entity.Enums.FlowActionEnum.uncheck">
-            <summary>
-            反审核
-            </summary>
-        </member>
         <member name="T:FastFrame.Entity.Enums.FlowStatusEnum">
             <summary>
             流程状态
@@ -963,32 +928,22 @@
         </member>
         <member name="F:FastFrame.Entity.Enums.FlowStatusEnum.unsubmitted">
             <summary>
-            未提交
-            </summary>
-        </member>
-        <member name="F:FastFrame.Entity.Enums.FlowStatusEnum.submitted">
-            <summary>
-            已提交
+            待提交
             </summary>
         </member>
         <member name="F:FastFrame.Entity.Enums.FlowStatusEnum.processing">
             <summary>
-            进行中
+            审核中
             </summary>
         </member>
-        <member name="F:FastFrame.Entity.Enums.FlowStatusEnum.finished">
+        <member name="F:FastFrame.Entity.Enums.FlowStatusEnum.pass">
             <summary>
-            已完结
+            审核通过
             </summary>
         </member>
-        <member name="F:FastFrame.Entity.Enums.FlowStatusEnum.returned">
+        <member name="F:FastFrame.Entity.Enums.FlowStatusEnum.ng">
             <summary>
-            已退回
-            </summary>
-        </member>
-        <member name="F:FastFrame.Entity.Enums.FlowStatusEnum.refuse">
-            <summary>
-            已拒绝
+            审核不通过
             </summary>
         </member>
         <member name="T:FastFrame.Entity.Enums.FmtDateEnum">
@@ -1076,6 +1031,36 @@
             其它
             </summary>
         </member>
+        <member name="T:FastFrame.Entity.Flow.FlowActionEnum">
+            <summary>
+            流程动作
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FlowActionEnum.submit">
+            <summary>
+            提交
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FlowActionEnum.unsubmit">
+            <summary>
+            撤回
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FlowActionEnum.pass">
+            <summary>
+            通过
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FlowActionEnum.ng">
+            <summary>
+            不通过
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FlowActionEnum.uncheck">
+            <summary>
+            反审核
+            </summary>
+        </member>
         <member name="T:FastFrame.Entity.Flow.FlowNodeCheckEnum">
             <summary>
             审批方式
@@ -1089,6 +1074,11 @@
         <member name="F:FastFrame.Entity.Flow.FlowNodeCheckEnum.and">
             <summary>
             会签
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FlowNodeCheckEnum.vote">
+            <summary>
+            投票
             </summary>
         </member>
         <member name="T:FastFrame.Entity.Flow.FlowNodeCheckerEnum">
@@ -1116,6 +1106,11 @@
             指定部门人员
             </summary>
         </member>
+        <member name="F:FastFrame.Entity.Flow.FlowNodeCheckerEnum.dept_manage">
+            <summary>
+            指定部门主管
+            </summary>
+        </member>
         <member name="F:FastFrame.Entity.Flow.FlowNodeCheckerEnum.parent_dept">
             <summary>
             上级部门人员
@@ -1126,7 +1121,7 @@
             上级部门主管
             </summary>
         </member>
-        <member name="F:FastFrame.Entity.Flow.FlowNodeCheckerEnum.dept_manage">
+        <member name="F:FastFrame.Entity.Flow.FlowNodeCheckerEnum.cur_dept_manage">
             <summary>
             当前部门主管
             </summary>
@@ -1316,6 +1311,11 @@
             审批方式(多人时)
             </summary>
         </member>
+        <member name="P:FastFrame.Entity.Flow.FlowNode.VoteScale">
+            <summary>
+            通过比例(多人审批且审批方式为投票时)
+            </summary>
+        </member>
         <member name="T:FastFrame.Entity.Flow.FlowNodeChecker">
             <summary>
             流程节点审核人/抄送人
@@ -1491,12 +1491,12 @@
             关联流程
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Flow.FlowInstance.CurrNode_Id">
+        <member name="P:FastFrame.Entity.Flow.FlowInstance.CurrNodeName">
             <summary>
             当前节点
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Flow.FlowInstance.Sponsor_Id">
+        <member name="P:FastFrame.Entity.Flow.FlowInstance.SponsorName">
             <summary>
             流程发起人
             </summary>    
@@ -1516,7 +1516,7 @@
             完结时间
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Flow.FlowInstance.LastChecker_Id">
+        <member name="P:FastFrame.Entity.Flow.FlowInstance.LastCheckerName">
             <summary>
             最后审批人
             </summary>
@@ -1548,7 +1548,7 @@
         </member>
         <member name="P:FastFrame.Entity.Flow.FlowStep.FlowNodeName">
             <summary>
-            步骤名称
+            节点名称
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Flow.FlowStep.Action">
@@ -1770,6 +1770,11 @@
             <summary>
             标识需要审核
             </summary>
+        </member>
+        <member name="P:FastFrame.Entity.IHaveCheck.Create_User_Id">
+            <summary>
+            创建人
+            </summary>        
         </member>
         <member name="P:FastFrame.Entity.IHaveCheck.FlowStatus">
             <summary>

@@ -1,4 +1,5 @@
 export default {
+  name:'enum-item-input',
   props: {
     model: Object,
     value: [String, Array],

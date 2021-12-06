@@ -31,11 +31,16 @@ import NotifyVue from "./components/Message/Notify.vue";
 export default {
   components: {
     ToastVue,
-    NotifyVue
+    NotifyVue,
+  },
+  provide() {
+    return {
+      get_Vuetify: () => this.$vuetify,
+    };
   },
   data() {
     return {
-      resufreshed: true
+      resufreshed: true,
     };
   },
   computed: {
@@ -44,7 +49,7 @@ export default {
     },
     isXs() {
       return this.$vuetify.breakpoint.xs;
-    }
+    },
   },
   watch: {
     isXs(val) {
@@ -53,7 +58,7 @@ export default {
       if (val && this.$store.state.singlePageMode) {
         this.$store.state.singlePageMode = true;
       }
-    }
+    },
   },
   beforeCreate() {
     let isXs = this.$vuetify.breakpoint.xs;
@@ -65,21 +70,21 @@ export default {
   methods: {
     resufresh() {
       this.resufreshed = false;
-      this.$nextTick(function() {
+      this.$nextTick(function () {
         this.resufreshed = true;
       });
     },
     handleDialogSuccess(dialog, ...arges) {
       dialog.resolve(...arges);
-      let index = this.dialogs.findIndex(v => v == dialog);
+      let index = this.dialogs.findIndex((v) => v == dialog);
       this.dialogs.splice(index, 1);
     },
     handleDialogClose(dialog, ...arges) {
       dialog.reject(...arges);
-      let index = this.dialogs.findIndex(v => v == dialog);
+      let index = this.dialogs.findIndex((v) => v == dialog);
       this.dialogs.splice(index, 1);
-    }
-  }
+    },
+  },
 };
 </script>
  
@@ -141,5 +146,19 @@ html {
 .dialog-page {
   height: calc(100vh - 255px);
   overflow: auto;
+}
+
+.border-input .v-text-field > .v-input__control > .v-input__slot:after {
+  display: none;
+}
+
+.border-input .v-text-field > .v-input__control > .v-input__slot:before {
+  display: none;
+}
+
+.border-input .v-text-field .v-input__slot, .border-input .v-input__slot {
+  border: 1px solid #ababab;
+  border-radius: 1px;
+  padding: 4px 12px;
 }
 </style>

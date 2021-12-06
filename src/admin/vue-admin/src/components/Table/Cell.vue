@@ -4,6 +4,7 @@ import EnumItemInput from "@/components/Inputs/EnumItemInput";
 import SelectInput from "@/components/Inputs/SelectInput.vue";
 import { getDownLoadPath } from "../../config";
 export default {
+  functional: true,
   props: {
     info: {
       type: Object,
@@ -14,52 +15,50 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {};
-  },
-  computed: {
+  
+  render(h, context) {
+    // console.log(context);
+    const { info, props } = context.props;
+    const { EnumItemInfo, EnumValues, renderFunc } = info;
+
     /**
      * 当前对象值
      */
-    value() {
-      return getValue(this.props.item, this.info.Name);
-    },
+    const value = getValue(props.item, info.Name);
 
     /**
      * 是否文件
      */
-    isFile() {
-      return this.info.Relate && this.info.Relate.ModuleName == "Resource";
-    },
+    const isFile = info.Relate && info.Relate.ModuleName == "Resource";
 
     /**
      * 外键对象
      */
-    fkObject() {
-      if (this.info.Relate && this.info.Relate.ModuleName && this.value) {
-        let tempName = this.info.Name.replace(/_Id$/, "");
-        return getValue(this.props.item, tempName);
+    const fkObject = (function () {
+      if (info.Relate && info.Relate.ModuleName && value) {
+        let tempName = info.Name.replace(/_Id$/, "");
+        return getValue(props.item, tempName);
       } else {
         return null;
       }
-    },
+    })();
 
     /**
      * 文本
      */
-    text() {
-      let { getValueFunc, Type, Relate, Name } = this.info;
-      let text = this.value;
-      let length = this.info.Length || 0;
+    const text = (function () {
+      let { getValueFunc, Type, Relate, Name } = info;
+      let text = value;
+      let length = info.Length || 0;
 
       /**
        * 自定义取值逻辑
        */
       if (typeof getValueFunc == "function") {
         return getValueFunc({
-          value: this.value,
-          model: this.props.item,
-          info: this.info,
+          value: value,
+          model: props.item,
+          info: info,
         });
       } else if (length >= 4000) {
         /**
@@ -77,9 +76,9 @@ export default {
         /**
          * 外键
          */
-        let obj = this.fkObject;
+        let obj = fkObject;
         if (obj) {
-          return this.info.Relate.RelateFields.map((v) => obj[v])
+          return info.Relate.RelateFields.map((v) => obj[v])
             .map((v, i) => (i > 0 ? `[${v}]` : v))
             .join("");
         } else {
@@ -100,32 +99,32 @@ export default {
       } else {
         return text;
       }
-    },
-  },
-
-  render(h) {
-    let { IsLink, EnumItemInfo, EnumValues, renderFunc } = this.info;
+    })();
 
     /**
      * 自定义渲染逻辑
      */
     if (typeof renderFunc == "function") {
       return renderFunc(h, {
-        value: this.value,
-        model: this.props.item,
-        info: this.info,
+        value: value,
+        text: text,
+        model: props.item,
+        info: info,
       });
-    } else if (IsLink) {
-      return h(
-        "a",
-        {
-          on: {
-            click: () => this.$emit("toEdit", this.props.item),
-          },
-        },
-        this.text
-      );
-    } else if (this.isFile) {
+    }
+
+    //  else if (IsLink) {
+    //   return h(
+    //     "a",
+    //     {
+    //       on: {
+    //         click: () => this.$emit("toEdit", this.props.item),
+    //       },
+    //     },
+    //     this.text
+    //   );
+    // }
+    if (isFile) {
       /**
        * 文件下载
        */
@@ -134,15 +133,12 @@ export default {
         {
           on: {
             click: () => {
-              let url = getDownLoadPath(
-                this.value,
-                this.fkObject ? this.fkObject.Name : ""
-              );
+              let url = getDownLoadPath(value, fkObject ? fkObject.Name : "");
               window.open(url);
             },
           },
         },
-        this.text
+        text
       );
     } else if (EnumItemInfo) {
       /**
@@ -150,10 +146,10 @@ export default {
        */
       return h(EnumItemInput, {
         props: {
-          value: this.value,
+          value: value,
           EnumItemInfo,
           disabled: true,
-          multiple: this.info.Type == "Array",
+          multiple: info.Type == "Array",
         },
       });
     } else if (
@@ -163,19 +159,19 @@ export default {
       (Array.isArray(EnumValues) && EnumValues.length > 0) ||
       typeof EnumValues == "function"
     ) {
-      if (typeof EnumValues == "function") {
-        EnumValues = EnumValues.call(this, this.props.item);
-      }
       return h(SelectInput, {
         props: {
-          value: this.value,
-          values: EnumValues,
+          value: value,
+          values:
+            typeof EnumValues == "function"
+              ? EnumValues(props.item)
+              : EnumValues,
           disabled: true,
-          multiple: this.info.Type == "Array",
+          multiple: info.Type == "Array",
         },
       });
     } else {
-      return h("span", null, this.text);
+      return h("span", null, text);
     }
   },
 };

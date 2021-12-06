@@ -160,7 +160,8 @@ export default {
         window.console.error(error);
       }
     },
-    change($event = {}) {
+    change($event) {
+      $event=$event || {}
       this.$emit("change", $event);
       this.$emit("input", $event.Id || null);
       if (!$event.Id) {

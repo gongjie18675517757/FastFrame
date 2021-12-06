@@ -9,6 +9,11 @@ namespace FastFrame.Entity
     public interface IHaveCheck : IEntity, IHaveNumber
     {
         /// <summary>
+        /// 创建人
+        /// </summary>        
+        string Create_User_Id { get; set; }
+
+        /// <summary>
         /// 流程状态
         /// </summary>
         FlowStatusEnum FlowStatus { get; set; }

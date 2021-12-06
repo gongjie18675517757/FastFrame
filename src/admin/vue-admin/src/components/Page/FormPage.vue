@@ -2,31 +2,13 @@
   <v-container grid-list-xl fluid app>
     <v-layout align-center justify-center :class="{ singleLine: singleLine }">
       <v-flex v-bind="flex" :style="{ padding: isTab ? '1px' : null }">
-        <v-card>
-          <v-toolbar flat dense color="transparent">
+        <v-card flat tile>
+          <v-toolbar flat dense height="30px">
             <v-toolbar-title>{{ title }}</v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-toolbar-items v-if="!isDialog">
-              <permission-facatory
-                v-for="btn in visibleToolItems.filter(
-                  () => !$vuetify.breakpoint.smAndDown
-                )"
-                :key="btn.key || btn.name"
-                :permission="btn.permission"
-              >
-                <v-btn
-                  @click="evalAction(btn)"
-                  text
-                  small
-                  color="primary"
-                  :disabled="evalDisabled(btn)"
-                  v-bind="btn"
-                >
-                  <v-icon v-if="btn.iconName">{{ btn.iconName }}</v-icon>
-                  &emsp; {{ btn.title }}
-                </v-btn>
-              </permission-facatory>
-            </v-toolbar-items>
+            <v-btn icon @click="$emit('close')" title="关闭" v-if="isDialog">
+              <v-icon>close</v-icon>
+            </v-btn>
             <v-menu offset-y>
               <template v-slot:activator="{ on }">
                 <v-btn v-on="on" icon color="primary" title="更多">
@@ -58,14 +40,14 @@
                   </v-list-item>
                 </permission-facatory>
 
-                <v-list-item @click="$emit('toggle:singleLine')">
+                <!-- <v-list-item @click="$emit('toggle:singleLine')">
                   <v-list-item-action>
                     <v-checkbox :value="singleLine"></v-checkbox>
                   </v-list-item-action>
                   <v-list-item-content>
                     <v-list-item-title>{{ "单行布局" }}</v-list-item-title>
                   </v-list-item-content>
-                </v-list-item>
+                </v-list-item> -->
                 <v-list-item
                   v-if="hasManage && model.Id"
                   @click="$emit('toggle:showMamageField')"
@@ -79,11 +61,8 @@
                 </v-list-item>
               </v-list>
             </v-menu>
-            <v-btn icon @click="$emit('close')" title="关闭" v-if="isDialog">
-              <v-icon>close</v-icon>
-            </v-btn>
           </v-toolbar>
-          <v-divider></v-divider>
+          <!-- <v-divider></v-divider> -->
           <v-card-text
             class="form-content"
             v-if="model"
@@ -97,15 +76,29 @@
                 <v-flex
                   :key="group.key.title"
                   xs12
-                  :xl10="!isDialog || singleLine"
+                  :xl10="!isDialog && !singleLine"
+                  :xl8="singleLine"
                   style="padding: 5px; margin: 0 auto"
                 >
-                  <v-card v-if="group.values.length > 1" tile>
-                    <v-toolbar flat color="transparent" dense>
+                  <v-card v-if="group.values.length > 1" tile elevation="1">
+                    <v-toolbar flat color="transparent" dense height="30px">
                       <v-toolbar-title>{{ group.key.title }}:</v-toolbar-title>
+                      <v-spacer></v-spacer>
+                      <v-toolbar-items>
+                        <v-btn
+                          icon
+                          @click="toggleFold(group.key.title)"
+                          color="p"
+                        >
+                          <v-icon v-if="isFold(group.key.title)"
+                            >expand_more</v-icon
+                          >
+                          <v-icon v-else>expand_less</v-icon>
+                        </v-btn>
+                      </v-toolbar-items>
                     </v-toolbar>
-                    <v-divider></v-divider>
-                    <v-card-text>
+                    <!-- <v-divider></v-divider> -->
+                    <v-card-text v-show="!isFold(group.key.title)">
                       <component
                         :is="singleLine ? 'div' : 'v-layout'"
                         wrap
@@ -127,6 +120,10 @@
                               "
                               @input="handleInput(item, $event)"
                               :ref="item.Name"
+                              :flex="{
+                                xl8:
+                                  singleLine && !$vuetify.breakpoint.smAndDown,
+                              }"
                             />
                           </slot>
                         </template>
@@ -145,35 +142,48 @@
                     :singleLine="singleLine"
                     :errorMessages="formErrorMessages[item.Name]"
                     :value="model[item.Name]"
+                    :isFold="isFold(group.key.title)"
                     @change="$emit('changed', { item: item, value: $event })"
                     @input="handleInput(item, $event)"
                     :ref="item.Name"
-                  />
+                  >
+                    <template #fold-button>
+                      <v-toolbar-items>
+                        <v-btn
+                          icon
+                          @click="toggleFold(group.key.title)"
+                          color="p"
+                        >
+                          <v-icon v-if="isFold(group.key.title)"
+                            >expand_more</v-icon
+                          >
+                          <v-icon v-else>expand_less</v-icon>
+                        </v-btn>
+                      </v-toolbar-items>
+                    </template>
+                  </component>
                 </v-flex>
               </template>
             </v-layout>
           </v-card-text>
-          <v-card-actions
-            v-if="!hideToolitem && ($vuetify.breakpoint.smAndDown || isDialog)"
-          >
+          <v-card-actions v-if="!hideToolitem">
             <v-spacer></v-spacer>
             <permission-facatory
               v-for="btn in visibleToolItems.filter(evalVisible)"
               :key="btn.key || btn.name"
               :permission="btn.permission"
             >
-              <v-btn
+              <component
+                :is="btn.component || 'v-btn'"
                 @click="evalAction(btn)"
-                small
-                color="primary"
-                :disabled="evalDisabled(btn)"
                 v-bind="btn"
-                block
-                :text="false"
+                :disabled="evalDisabled(btn)"
+                :block="$vuetify.breakpoint.smAndDown"
+                tile
               >
-                <v-icon v-if="btn.iconName">{{ btn.iconName }}</v-icon>
+                <v-icon left v-if="btn.iconName">{{ btn.iconName }}</v-icon>
                 {{ btn.title }}
-              </v-btn>
+              </component>
             </permission-facatory>
             <v-spacer></v-spacer>
           </v-card-actions>
@@ -210,7 +220,9 @@ export default {
     toolItems: Array,
   },
   data() {
-    return {};
+    return {
+      folds: [],
+    };
   },
   computed: {
     flex() {
@@ -242,6 +254,16 @@ export default {
   },
 
   methods: {
+    isFold(key) {
+      return this.folds.includes(key);
+    },
+    toggleFold(key) {
+      if (this.isFold(key)) {
+        this.folds = this.folds.filter((v) => v != key);
+      } else {
+        this.folds.push(key);
+      }
+    },
     handleInput(item, v) {
       this.model[item.Name] = v;
       this.$emit("tooggle:changed");
@@ -288,7 +310,7 @@ export default {
 }
 
 .tabPage {
-  height: calc(100vh - 170px);
+  height: calc(100vh - 200px);
   overflow: auto;
   overflow-x: hidden;
 }

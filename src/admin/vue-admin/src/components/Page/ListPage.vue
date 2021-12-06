@@ -1,4 +1,4 @@
-<template>
+<template >
   <v-container grid-list-xl fluid app>
     <v-layout row wrap>
       <v-flex xs12 :style="{ padding: isTab ? '0px' : null }">
@@ -15,17 +15,17 @@
                 :key="btn.key || btn.name"
                 :permission="btn.permission"
               >
-                <v-btn
-                  @click="evalAction(btn)"
-                  text
-                  small
-                  color="primary"
+                <component
+                  :is="btn.component || 'v-btn'"
+                  @click="evalAction(btn)" 
                   :disabled="evalDisabled(btn)"
+                  tile
                   v-bind="btn"
+                  :action="null"
                 >
-                  <v-icon v-if="btn.iconName">{{ btn.iconName }}</v-icon>
+                  <v-icon left v-if="btn.iconName">{{ btn.iconName }}</v-icon>
                   {{ btn.title }}
-                </v-btn>
+                </component>
               </permission-facatory>
             </v-toolbar-items>
             <!-- <span> -->
@@ -45,7 +45,7 @@
                   :icon="$vuetify.breakpoint.smAndDown"
                 >
                   <v-icon>more_vert</v-icon>
-                  <span v-if="!$vuetify.breakpoint.smAndDown">更多</span>
+                  <span v-if="!$vuetify.breakpoint.smAndDown"></span>
                 </v-btn>
               </template>
               <v-list dense>
@@ -136,6 +136,7 @@ import Table from "@/components/Table/DataTable.vue";
 import { skip, take } from "../../utils";
 
 export default {
+   
   components: {
     Table,
   },

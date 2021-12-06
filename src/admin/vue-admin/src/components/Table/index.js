@@ -44,7 +44,8 @@ export const BasisDetaiTable = {
       type: String,
       default: 'Id'
     },
-    loading: Boolean
+    loading: Boolean,
+    isFold: Boolean,
   },
   data() {
     return {
@@ -52,9 +53,12 @@ export const BasisDetaiTable = {
     }
   },
   render(h) {
+    // console.log(this.$slots);
+    // console.log(this.$scopedSlots);
     return h('v-card', {
       props: {
-        tile: true
+        tile: true,
+        elevation:1
       }
     }, [
       h('v-toolbar', {
@@ -75,11 +79,16 @@ export const BasisDetaiTable = {
           on: {
             click: () => this.$emit(`itemClick:${v.name}`, this.selection)
           }
-        }, [v.icon ? h('v-icon', null, v.icon) : null, h('span', null, v.caption)]))
+        }, [v.icon ? h('v-icon', null, v.icon) : null, h('span', null, v.caption)])),
+        h('v-spacer'),
+        this.$scopedSlots['fold-button']?this.$scopedSlots['fold-button']():null
       ]),
       // h('v-divider'),
       h('v-card-text', {
-        class: ['form-content']
+        class: ['form-content'],
+        style: {
+          display: this.isFold ? 'none' : null
+        }
       }, [
         h(Table, {
           props: {
@@ -103,6 +112,7 @@ export const BasisDetaiTable = {
  * 
  */
 export const FormDetailObj = {
+  inheritAttrs:true,
   props: {
     value: defArray,
     model: Object,
@@ -234,15 +244,17 @@ export const FormDetailObj = {
         value: this.value,
         title: this.title,
         columns: this.dynamicColumns,
-        toolItems: this.dynamicToolItems
+        toolItems: this.dynamicToolItems,
+        ...this.$attrs
       },
       on: {
         ...this.$listeners,
         edit: this.edit,
         remove: this.remove,
         'itemClick:add': this.add
-      }
-    })
+      },
+      scopedSlots: this.$scopedSlots
+    }, this.$slots)
   }
 }
 
@@ -328,6 +340,7 @@ export const SelectDetailTable = function () {
  * 文件列表
  */
 export const FileDetailObj = {
+  inheritAttrs:true,
   props: {
     value: defArray,
     model: Object,
@@ -387,7 +400,7 @@ export const FileDetailObj = {
   },
   computed: {
     rows() {
-      return this.value.filter(v =>!this.fileKey ||  v.Key == this.fileKey)
+      return this.value.filter(v => !this.fileKey || v.Key == this.fileKey)
     }
   },
   methods: {
@@ -471,9 +484,12 @@ export const FileDetailObj = {
               }, '上传') : null
             }
           }
-        ]
-      }
-    })
+        ],
+        ...this.$attrs
+      },
+      scopedSlots: this.$scopedSlots
+    }, this.$slots)
+
   }
 }
 

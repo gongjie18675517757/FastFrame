@@ -6,7 +6,7 @@
     public enum FlowStatusEnum
     {
         /// <summary>
-        /// 等提交
+        /// 待提交
         /// </summary>
         unsubmitted,
 

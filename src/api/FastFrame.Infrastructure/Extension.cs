@@ -231,6 +231,9 @@ namespace FastFrame.Infrastructure
             if (string.IsNullOrWhiteSpace(@in))
                 return default;
 
+            if (!System.Text.RegularExpressions.Regex.IsMatch(@in, "^[0-9a-f]+$"))
+                return default;
+
             if (encoding == null)
                 encoding = Encoding.UTF8;
 
@@ -239,6 +242,7 @@ namespace FastFrame.Infrastructure
             for (int i = 0; i < bytes.Length; i++)
             {
                 var s = new string(new char[] { @in[i * 2], @in[i * 2 + 1] });
+
                 var b = byte.Parse(s, System.Globalization.NumberStyles.HexNumber);
 
                 bytes[i] = b;
@@ -393,9 +397,9 @@ namespace FastFrame.Infrastructure
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="in"></param>
-        /// <param name="haveBase64Dencode"></param>
+        /// <param name="haveHexDencode"></param>
         /// <returns></returns>
-        public static T ToObject<T>(this string @in, bool haveBase64Dencode = false)
+        public static T ToObject<T>(this string @in, bool haveHexDencode = false)
         {
             if (@in.IsNullOrWhiteSpace())
             {
@@ -403,8 +407,9 @@ namespace FastFrame.Infrastructure
             }
             try
             {
-                if (haveBase64Dencode)
-                    @in = @in.FromBase64();
+                if (haveHexDencode)
+                    @in = @in.FromHexString();
+
                 return JsonConvert.DeserializeObject<T>(@in);
             }
             catch (Exception ex)
@@ -419,7 +424,7 @@ namespace FastFrame.Infrastructure
             result = null;
 
             if (@in.IsNullOrWhiteSpace())
-                return false; 
+                return false;
 
             try
             {

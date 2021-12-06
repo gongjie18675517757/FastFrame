@@ -1,3 +1,4 @@
+ 
 import { getDownLoadPath } from "../../config";
 import {
   getColumns,
@@ -5,8 +6,9 @@ import {
   getQueryOptions
 } from "../../generate";
 import {
-  distinct, throttle, fmtRequestPars, saveFile, getIconFunc
+  distinct, throttle, fmtRequestPars, saveFile, getIconFunc, toHexString
 } from '../../utils'
+import { makeButtons, makeButtonsInputMode } from './handleFlow'
 
 /**
  * 按钮组1
@@ -20,18 +22,18 @@ export let makeToolItems = function () {
     action: this.toEdit,
     visible: () => this.ModuleStrut.HasManage
   },
-  {
-    title: "修改",
-    color: "warning",
-    name: "Update",
-    iconName: "edit",
-    visible: () => this.ModuleStrut.HasManage,
-    disabled: () => {
-      let val = this.selection.length != 1;
-      return val;
-    },
-    action: () => this.toEdit(this.selection[0])
-  },
+  // {
+  //   title: "修改",
+  //   color: "warning",
+  //   name: "Update",
+  //   iconName: "edit",
+  //   visible: () => this.ModuleStrut.HasManage,
+  //   disabled: () => {
+  //     let val = this.selection.length != 1;
+  //     return val;
+  //   },
+  //   action: () => this.toEdit(this.selection[0])
+  // },
   {
     title: "搜索",
     color: "info",
@@ -40,32 +42,32 @@ export let makeToolItems = function () {
     iconName: "search",
     action: this.queryDialog
   },
-  {
-    title: "删除",
-    color: "warning",
-    name: "Delete",
-    iconName: "delete",
-    visible: () => this.ModuleStrut.HasManage,
-    disabled: () => this.selection.length != 1,
-    action: () => this.remove(this.selection)
-  },
-  {
-    title: "刷新",
-    color: "success",
-    name: "List",
-    key: "Refresh",
-    iconName: "refresh",
-    action: () => {
-      this.query = []
-      this.loadList()
-    }
-  },
+  // {
+  //   title: "删除",
+  //   color: "warning",
+  //   name: "Delete",
+  //   iconName: "delete",
+  //   visible: () => this.ModuleStrut.HasManage,
+  //   disabled: () => this.selection.length != 1,
+  //   action: () => this.remove(this.selection)
+  // },
+  // {
+  //   title: "刷新",
+  //   color: "success",
+  //   name: "List",
+  //   key: "Refresh",
+  //   iconName: "refresh",
+  //   action: () => {
+  //     this.query = []
+  //     this.loadList()
+  //   }
+  // },
   {
     title: "导出",
-    color: "basis",
+    color: "primary",
     name: "List",
     key: "export",
-    iconName: "import_export",
+    iconName: "mdi-export",
     action: this.exportList
   }
   ]
@@ -255,7 +257,7 @@ export let pageMethods = {
   /**
    * 初始化
    */
-  init() {
+  async init() {
     /**
      * 未单独定义结构名时
      */
@@ -266,37 +268,53 @@ export let pageMethods = {
      */
     this.permissionName = this.permissionName || this.name;
 
+    /**
+     * 标记未初始化
+     */
     this.isInited = false;
 
-    return Promise.resolve()
-      .then(this.getModuleStrut)
-      .then(this.fmtModuleStrut)
-      .then(strut => this.ModuleStrut = strut)
-      .then(() => this.getToolItems())
-      .then(toolItems => this.toolItems = toolItems)
-      .then(this.getColumns)
-      .then(this.fmtColumns)
-      .then(arr => this.columns = distinct(arr, v => v.Name, (a, b) => ({
-        ...a,
-        ...b
-      })))
-      .then(this.getQueryOptions)
-      .then(arr => distinct(arr, v => `${v.Name}${v.compare}`, (a, b) => ({
-        ...a, ...b
-      }))).then(arr => {
-        this.queryOptions = arr.map(v => ({
-          ...v,
-          value: JSON.parse(JSON.stringify(v.value))
-        }));
-        this.query = [
-          {
-            Key: 'and',
-            Value: arr
-          }
-        ]
-      }).then(() => {
-        this.isInited = true;
-      })
+    /**
+     * 加载模块结构
+     */
+    this.ModuleStrut = await this.fmtModuleStrut(await this.getModuleStrut());
+
+    /**
+     * 生成工具条
+     */
+    this.toolItems = await this.getToolItems();
+
+    /**
+     * 生成列
+     */
+    this.columns = distinct(await this.fmtColumns(await this.getColumns()), v => v.Name, (a, b) => ({
+      ...a,
+      ...b
+    }));
+
+    /**
+     * 生成查询项
+     */
+    this.queryOptions = distinct(await this.getQueryOptions(), v => `${v.Name}${v.compare}`, (a, b) => ({
+      ...a, ...b
+    })).map(v => ({
+      ...v,
+      value: JSON.parse(JSON.stringify(v.value))
+    }));
+
+    /**
+     * 组合查询项
+     */
+    this.query = [
+      {
+        Key: 'and',
+        Value: this.queryOptions
+      }
+    ]
+
+    /**
+     * 标记加载完成
+     */
+    this.isInited = true;
   },
   /**
    * 获取当前模块结构
@@ -322,93 +340,160 @@ export let pageMethods = {
   /**
    * 格式化列
    */
-  fmtColumns(arr) {
-    return Promise.resolve(arr).then(arr => {
-      return this.getRowOperateItems().then(items => {
-        return [
-          ...(items.length > 0 ? [
-            {
-              Name: 'Operate',
-              Description: '操作',
-              renderFunc: (h, context) => {
-                return h('div', null, items.map(func => func(h, context)))
-              }
-            }
-          ] : []),
-          ...arr,
-          ...(this.ModuleStrut.HasFiles ? [
-            {
-              Name: 'Files',
-              Description: '附件',
-              renderFunc: (h, { value }) => {
-                return value && value.length > 0 ? h('v-menu', {
-                  scopedSlots: {
-                    activator: props => h('a', {
-                      on: props.on,
+  async fmtColumns(arr) {
+    let items = await this.getRowOperateItems();
 
-                    }, '查看')
-                  }
-                }, [
-                  h('v-list', {
-                    props: {
-                      dense: true
-                    }
-                  }, value.map(v => h('v-list-item', {
-                    key: v.Id,
-                    on: {
-                      click: () => {
-                        window.open(getDownLoadPath(v.Id, v.Name))
-                      }
-                    }
-                  }, [
-                    h('v-list-item-avatar', null, [
-                      h('img', {
-                        attrs: {
-                          src: getIconFunc(v)
-                        }
-                      })
-                    ]),
-                    h('v-list-item-content', null, v.Name)
-                  ])))
-                ]) : null
+    for (const c of arr) {
+      if (c.IsLink) {
+        c.renderFunc = (h, { text, model }) => h('v-btn', {
+          props: {
+            small: true,
+            text: true,
+            color: 'primary'
+          },
+          on: {
+            click: () => this.toEdit(model)
+          }
+        }, text)
+      }
+    }
+
+    return [
+      ...(items.length > 0 ? [
+        {
+          Name: 'Operate',
+          Description: '操作',
+          renderFunc: (h, context) => {
+            return h('div', null, items.map(func => func(h, context)))
+          }
+        }
+      ] : []),
+      ...arr,
+      ...(this.ModuleStrut.HasFiles ? [
+        {
+          Name: 'Files',
+          Description: '附件',
+          renderFunc: (h, { value }) => {
+            return value && value.length > 0 ? h('v-menu', {
+              scopedSlots: {
+                activator: props => h('a', {
+                  on: props.on,
+
+                }, '查看')
               }
-            }
-          ] : [])
-        ]
-      })
-    })
+            }, [
+              h('v-list', {
+                props: {
+                  dense: true
+                }
+              }, value.map(v => h('v-list-item', {
+                key: v.Id,
+                on: {
+                  click: () => {
+                    window.open(getDownLoadPath(v.Id, v.Name))
+                  }
+                }
+              }, [
+                h('v-list-item-avatar', null, [
+                  h('img', {
+                    attrs: {
+                      src: getIconFunc(v)
+                    }
+                  })
+                ]),
+                h('v-list-item-content', null, v.Name)
+              ])))
+            ]) : null
+          }
+        }
+      ] : [])
+    ]
   },
 
   /**
    * 获取操作按钮
    */
-  getToolItems() {
-    return Promise.resolve(makeToolItems.call(this)).then(arr => {
-      return arr.map(v => {
-        /**
-         * 未定义权限，但有定义name值时
-         */
-        let { permission, name } = v;
-        if (!permission && name) {
-          permission = `${this.permissionName}.${name}`
+  async getToolItems() {
+    let arr = await makeToolItems.call(this);
+    let brr = this.ModuleStrut.HaveCheck ? [
+      {
+        component: {
+          functional: true,
+          render: h => h('fragments-facatory', null, makeButtons({
+            selection: this.selection,
+            mode: makeButtonsInputMode.LIST,
+            moduleName:this.name,
+            btnAttrs: {
+            }
+          }).map(v => h(v.component)))
         }
-        if (permission && !Array.isArray(permission)) {
-          permission = [permission]
-        }
-        return {
-          ...v,
-          permission
-        };
       }
-      );
-    })
+    ] : []; 
+
+    return [...brr, ...arr].map(v => {
+      /**
+       * 未定义权限，但有定义name值时
+       */
+      let { permission, name } = v;
+      if (!permission && name) {
+        permission = `${this.permissionName}.${name}`
+      }
+      if (permission && !Array.isArray(permission)) {
+        permission = [permission]
+      }
+      return {
+        ...v,
+        permission
+      };
+    }
+    );
   },
 
   /**
    * 获取行操作按钮
    */
   getRowOperateItems() {
-    return Promise.resolve([])
+    return Promise.resolve([
+      (h, { model }) => {
+        return this.ModuleStrut.HasManage ? h('v-btn', {
+          props: {
+            text: true,
+            'x-small': true,
+            color: 'primary'
+          },
+          on: {
+            click: () => {
+              this.toEdit(model)
+            }
+          }
+        }, '编辑') : null
+      },
+      (h, { model }) => {
+        return this.ModuleStrut.HasManage ? h('v-btn', {
+          props: {
+            text: true,
+            'x-small': true,
+            color: 'primary'
+          },
+          on: {
+            click: () => {
+              this.remove([model])
+            }
+          }
+        }, '删除') : null
+      },
+      (h, { model }) => {
+        return this.ModuleStrut.HaveCheck ? h('fragments-facatory', null, makeButtons({
+          selection: [model],
+          mode: makeButtonsInputMode.CELL,
+          moduleName:this.name,
+          btnAttrs: {
+            // text: true,
+            // 'x-small': true,
+          }
+        }).map(v => h(v.component))) : null
+      }
+    ])
   },
 
   /**
@@ -526,8 +611,11 @@ export let pageMethods = {
    */
   getRequedtMethod() {
     return (url, pageProps, pars) => {
-      const btoa = process.env.NODE_ENV == 'development' ? v => v : window.btoa;
-      let qs = btoa(JSON.stringify(pageProps, fmtRequestPars))
+
+      let qs = JSON.stringify(pageProps, fmtRequestPars);
+      if (process.env.NODE_ENV == 'development') {
+        qs = toHexString(qs)
+      }
       let parsQueryString = Object.entries(pars || {}).map((k, v) => `${k}=${v}`).join('&')
       return this.$http.get(`${url}?qs=${qs}&${parsQueryString}`);
     }
@@ -805,7 +893,6 @@ export let makeChildListeners = function () {
     loadList: this.loadList,
     loadMoreList: this.loadMoreList,
     toolItemClick: item => item.action.call(this, { item, selection: this.selection, rows: this.rows }),
-    toEdit: (val) => this.toEdit(val),
     changeShowMamageField: () => this.showMamageField = !this.showMamageField,
 
   };

@@ -631,7 +631,7 @@
             </summary>
             <typeparam name="T"></typeparam>
             <param name="in"></param>
-            <param name="haveBase64Dencode"></param>
+            <param name="haveHexDencode"></param>
             <returns></returns>
         </member>
         <member name="T:FastFrame.Infrastructure.Identity.ICurrUser">
@@ -1129,6 +1129,14 @@
             添加程序集
             </summary>
             <param name="assembly"></param>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Lock.ILockFacatory.TryCreateLockAsync(System.String,System.TimeSpan)">
+            <summary>
+            尝试创建锁,如果资源被占用,则返回NULL
+            </summary>
+            <param name="key"></param>
+            <param name="timeSpan"></param>
+            <returns></returns>
         </member>
         <member name="M:FastFrame.Infrastructure.Lock.ILockHolder.LockRelease">
             <summary>

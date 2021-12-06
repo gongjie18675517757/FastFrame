@@ -1,4 +1,4 @@
-﻿namespace FastFrame.Entity.Enums
+﻿namespace FastFrame.Entity.Flow
 {
     /// <summary>
     /// 流程动作

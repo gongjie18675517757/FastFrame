@@ -6,9 +6,9 @@
     temporary
     right
     width="300px"
-    style="border-radius: 0px;"
+    style="border-radius: 0px"
   >
-    <v-card v-if="selectedNode" style="box-shadow: none;">
+    <v-card v-if="selectedNode" style="box-shadow: none">
       <v-toolbar flat dense color="transparent">
         <v-toolbar-title>{{ selectedNode.Title }}节点属性</v-toolbar-title>
         <v-spacer></v-spacer>
@@ -37,10 +37,43 @@
               label="会签(多人时,全部人审核即通过)"
               value="and"
             ></v-radio>
+            <v-radio
+              label="投票(多人时,指定比例的人审核即通过)"
+              value="vote"
+            ></v-radio>
           </v-radio-group>
+          <v-slider
+            label="投票通过比例:"
+            v-if="selectedNode.CheckEnum == 'vote'"
+            v-model="selectedNode.VoteScale"
+            thumb-label
+            hide-details
+            min="1"
+            max="100"
+            :disabled="disabled"
+            @change="onChange"
+            ><template v-slot:append>
+              <v-text-field
+                v-model="selectedNode.VoteScale"
+                class="mt-0 pt-0"
+                hide-details
+                single-line
+                type="number"
+                style="width:40px"
+                suffix="%"
+                controls="false"
+              ></v-text-field> </template
+          ></v-slider>
           <legend
             class="v-label theme--light"
-            style="left: 0px; right: auto; position: relative;cursor: text;font-size: 14px;height: auto;"
+            style="
+              left: 0px;
+              right: auto;
+              position: relative;
+              cursor: text;
+              font-size: 14px;
+              height: auto;
+            "
           >
             <br />
             流程节点审批人:
@@ -85,11 +118,11 @@
                   <v-chip
                     label
                     small
-                    style="margin-left:5px;"
+                    style="margin-left: 5px"
                     text-color="#fff"
                     color="p"
                     @input="removeChecker(rIndex)"
-                     :close="!disabled"
+                    :close="!disabled"
                     >{{ CheckerEnumObj[r.CheckerEnum] }}:{{
                       r.CheckerName
                     }}</v-chip
@@ -100,7 +133,14 @@
           </legend>
           <legend
             class="v-label theme--light"
-            style="left: 0px; right: auto; position: relative;cursor: text;font-size: 14px;height: auto;"
+            style="
+              left: 0px;
+              right: auto;
+              position: relative;
+              cursor: text;
+              font-size: 14px;
+              height: auto;
+            "
           >
             <br />
             触发事件:
@@ -168,7 +208,14 @@
           ></v-text-field>
           <legend
             class="v-label theme--light"
-            style="left: 0px; right: auto; position: relative;cursor: text;font-size: 14px;height: auto;"
+            style="
+              left: 0px;
+              right: auto;
+              position: relative;
+              cursor: text;
+              font-size: 14px;
+              height: auto;
+            "
           >
             <br />
             分支条件:
@@ -247,20 +294,20 @@
                 <v-list-item-title>
                   <v-list-item-content>
                     <v-list-item-title
-                      ><code style="color:blue;padding:15px;">
+                      ><code style="color: blue; padding: 15px">
                         {{ FieldNameObj[r.FieldName] }}
                       </code>
                       <v-icon
                         v-if="!disabled"
                         color="p"
                         @click="removeCond(rIndex, arr)"
-                        style="float: right;"
+                        style="float: right"
                         >close</v-icon
                       >
                     </v-list-item-title>
                     <v-list-item-subtitle>
                       <code
-                        style="color:blue;padding:15px;"
+                        style="color: blue; padding: 15px"
                         :title="r.ValueText"
                       >
                         {{ CompareEnumObj[r.CompareEnum] }}
@@ -301,7 +348,7 @@ export default {
   components: {
     FlowNodeEventVue,
     FlowNodeCheckerVue,
-    FlowNodeCondVue
+    FlowNodeCondVue,
   },
   props: {
     selectedNode: Object,
@@ -309,7 +356,7 @@ export default {
     disabled: Boolean,
     isDialog: Boolean,
     moduleName: String,
-    onChange: Function
+    onChange: Function,
   },
   data() {
     return {
@@ -326,7 +373,7 @@ export default {
 
       FieldNameObj: {},
       CompareEnumObj: {},
-      ValueEnumObj: {}
+      ValueEnumObj: {},
     };
   },
   async mounted() {
@@ -345,8 +392,8 @@ export default {
     if (this.moduleName)
       this.FieldNameObj = createObject(
         (await getModuleStrut(this.moduleName)).FieldInfoStruts,
-        v => v.Name,
-        v => v.Description
+        (v) => v.Name,
+        (v) => v.Description
       );
     this.CompareEnumObj = createObject(
       await getEnumValues("FlowNodeCond", "CompareEnum")
@@ -367,7 +414,7 @@ export default {
       for (const b of arr) {
         if (
           !this.selectedNode.Events.some(
-            a =>
+            (a) =>
               a.EventTrigger == b.EventTrigger &&
               a.EventNotify == b.EventNotify &&
               a.EventTarget == b.EventTarget
@@ -390,7 +437,7 @@ export default {
       for (const b of arr) {
         if (
           !this.selectedNode.Checkers.some(
-            a =>
+            (a) =>
               a.CheckerEnum == b.CheckerEnum &&
               a.Checker_Id == b.Checker_Id &&
               a.CheckerName == b.CheckerName
@@ -414,7 +461,7 @@ export default {
         this.selectedNode.Conds.push([item]);
       } else if (
         !arr.some(
-          v =>
+          (v) =>
             v.CheckerEnum == item.CheckerEnum &&
             v.CompareEnum == item.CompareEnum &&
             v.ValueEnum == item.ValueEnum &&
@@ -430,15 +477,23 @@ export default {
     removeCond(rIndex, arr) {
       arr.splice(rIndex, 1);
       if (arr.length == 0) {
-        let index = this.selectedNode.Conds.findIndex(v => v == arr);
+        let index = this.selectedNode.Conds.findIndex((v) => v == arr);
         this.selectedNode.Conds.splice(index, 1);
       }
 
       this.onChange && this.onChange();
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style>
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 </style>

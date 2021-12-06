@@ -7,6 +7,7 @@
 
 <script>
 export default {
+  // functional:true,
   props: {
     value: Boolean,
     disabled: Boolean,

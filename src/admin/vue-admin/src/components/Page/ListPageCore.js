@@ -425,7 +425,7 @@ export let pageMethods = {
             moduleName:this.name,
             btnAttrs: {
             }
-          }).map(v => h(v.component)))
+          }).map(v => h(v)))
         }
       }
     ] : []; 
@@ -491,7 +491,7 @@ export let pageMethods = {
             // text: true,
             // 'x-small': true,
           }
-        }).map(v => h(v.component))) : null
+        }).map(v => h(v))) : null
       }
     ])
   },

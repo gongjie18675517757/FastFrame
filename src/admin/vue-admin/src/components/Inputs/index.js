@@ -35,6 +35,7 @@ export default {
     isXs: Boolean,
     Length: Number,
     Hide: String,
+    labelWidth: String,
     ModuleName: String,
     Relate: String,
     requestUrl: String,
@@ -121,7 +122,7 @@ export default {
     let fieldLabel = h('span', {
       slot: 'prepend',
       style: {
-        width: '150px',
+        width: props.labelWidth || '150px',
         textAlign: 'right',
         // 'margin-top': childProps.disabled ? null : '4px',
         'padding': '5px 12px',
@@ -157,11 +158,10 @@ export default {
         }
       }
     }
+ 
 
     let flex = {
-      xs12: 1,
-      sm6: 1,
-
+      xs12: 1, 
       ...props.flex
     }
 

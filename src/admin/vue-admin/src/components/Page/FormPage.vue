@@ -1,5 +1,5 @@
 <template>
-  <v-container grid-list-xl fluid app>
+  <v-container grid-list-xl fluid app ref="container" v-resize="handleResize">
     <v-layout align-center justify-center :class="{ singleLine: singleLine }">
       <v-flex v-bind="flex" :style="{ padding: isTab ? '1px' : null }">
         <v-card flat tile>
@@ -9,7 +9,7 @@
             <v-btn icon @click="$emit('close')" title="关闭" v-if="isDialog">
               <v-icon>close</v-icon>
             </v-btn>
-            <v-menu offset-y>
+            <v-menu offset-y v-if="$vuetify.breakpoint.smAndDown && visibleToolItems.length > 0">
               <template v-slot:activator="{ on }">
                 <v-btn v-on="on" icon color="primary" title="更多">
                   <v-icon>more_vert</v-icon>
@@ -76,12 +76,23 @@
                 <v-flex
                   :key="group.key.title"
                   xs12
-                  :xl10="!isDialog && !singleLine"
-                  :xl8="singleLine"
+                  :xl10="!isDialog && !singleLine && containerWidth > 1440"
+                  :xl8="singleLine && containerWidth > 1440"
                   style="padding: 5px; margin: 0 auto"
                 >
-                  <v-card v-if="group.values.length > 1" tile elevation="1">
-                    <v-toolbar flat color="transparent" dense height="30px">
+                  <v-card
+                    v-if="group.values.length > 1"
+                    tile
+                    elevation="1"
+                    :class="{ 'no-box-shadow': formGroups.length == 1 }"
+                  >
+                    <v-toolbar
+                      v-if="formGroups.length > 1"
+                      flat
+                      color="transparent"
+                      dense
+                      height="30px"
+                    >
                       <v-toolbar-title>{{ group.key.title }}:</v-toolbar-title>
                       <v-spacer></v-spacer>
                       <v-toolbar-items>
@@ -99,11 +110,7 @@
                     </v-toolbar>
                     <!-- <v-divider></v-divider> -->
                     <v-card-text v-show="!isFold(group.key.title)">
-                      <component
-                        :is="singleLine ? 'div' : 'v-layout'"
-                        wrap
-                        style="padding: 15px"
-                      >
+                      <component :is="singleLine ? 'div' : 'v-layout'" wrap>
                         <template v-for="item in group.values">
                           <slot :name="item.Name">
                             <Input
@@ -115,15 +122,13 @@
                               :singleLine="singleLine"
                               :errorMessages="formErrorMessages[item.Name]"
                               :value="model[item.Name]"
+                              :flex="{ xs12: singleLine, sm6: !singleLine }"
+                              :labelWidth="labelWidth"
                               @change="
                                 $emit('changed', { item: item, value: $event })
                               "
                               @input="handleInput(item, $event)"
                               :ref="item.Name"
-                              :flex="{
-                                xl8:
-                                  singleLine && !$vuetify.breakpoint.smAndDown,
-                              }"
                             />
                           </slot>
                         </template>
@@ -222,6 +227,7 @@ export default {
   data() {
     return {
       folds: [],
+      containerWidth: 0,
     };
   },
   computed: {
@@ -250,6 +256,12 @@ export default {
     visibleToolItems() {
       if (this.hideToolitem) return [];
       return this.toolItems.filter(this.evalVisible);
+    },
+    labelWidth() {
+      // return this.formGroups.map((v) =>
+      //   v.values.map((x) => (x.Description ? x.Description.length : 0))
+      // );
+      return this.containerWidth > 1220 ? "20em" : "10em";
     },
   },
 
@@ -289,6 +301,9 @@ export default {
     },
     evalAction(item) {
       this.$emit(`toolItemClick`, item);
+    },
+    handleResize() {
+      this.containerWidth = this.$refs.container.clientWidth;
     },
   },
 };

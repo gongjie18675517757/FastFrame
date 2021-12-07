@@ -106,7 +106,7 @@ export let formData = {
   formErrorMessages: {},
 
   /**
-   * 页面表彰项
+   * 页面表单项
    */
   options: [],
 
@@ -189,7 +189,7 @@ export let formMethods = {
   /**
    * 页面初始化
    */
-  init() {
+  async init() {
     this.canEdit = false;
     /**
    * 未单独定义结构名时
@@ -201,40 +201,25 @@ export let formMethods = {
      */
     this.permissionName = this.permissionName || this.name;
 
-    return this.getModuleStrut(this.strutName)
-      .then(obj => {
-        this.hasManage = obj.HasManage;
-        this.hasFiles = obj.HasFiles;
-        this.haveCheck = obj.HaveCheck;
-      })
-      .then(this.getRules)
-      .then(this.fmtRules)
-      .then(rules => {
-        this.rules = rules;
-      })
-      .then(this.getModelObject)
-      .then(this.fmtModelObject)
-      .then((model) => {
-        let formErrs = {};
-        for (const name of Object.keys(model)) {
-          formErrs[name] = [];
-        }
-        this.formErrorMessages = formErrs;
-        this.model = model;
-      })
-      .then(this.getModelObjectItems)
-      .then(this.fmtModelObjectItems)
-      .then(options => {
-        this.options = distinct(options, v => v.Name, (a, b) => ({ ...a, ...b }));
-      })
-      .then(this.getToolItems)
-      .then(arr => {
-        this.toolItems = arr;
-      })
-      .then(() => {
-        this.changed = false;
-        this.canEdit = !this.model.Id;
-      })
+    let obj = await this.getModuleStrut(this.strutName)
+    this.hasManage = obj.HasManage;
+    this.hasFiles = obj.HasFiles;
+    this.haveCheck = obj.HaveCheck;
+
+    this.rules = await this.fmtRules(await this.getRules());
+    let model = await this.fmtModelObject(await this.getModelObject());
+    let formErrs = {};
+    for (const name of Object.keys(model)) {
+      formErrs[name] = [];
+    }
+    this.formErrorMessages = formErrs;
+    this.model = model;
+
+    this.options = distinct(await this.fmtModelObjectItems(await this.getModelObjectItems()), v => v.Name, (a, b) => ({ ...a, ...b }));
+    this.toolItems = await this.getToolItems();
+
+    this.changed = false;
+    this.canEdit = !this.model.Id;
   },
 
   /**
@@ -296,7 +281,7 @@ export let formMethods = {
             selection: [this.model],
             mode: makeButtonsInputMode.FORM,
             editing: this.canEdit
-          }).map(v => h(v.component)))
+          }).map(v => h(v)))
         }
       }
     ] : [];
@@ -482,8 +467,7 @@ export let formMethods = {
       let method = this.getPostMethod(id);
       let url = this.getPostUrl(id)
       let res = await method(url, postData)
-      this.$message.toast.success('保存成功');
-      this.$eventBus.$emit(`${this.name}_update`)
+
       this.onSaveAfter(res);
     } catch (error) {
       // this.$message.toast.error(error.message);
@@ -493,13 +477,17 @@ export let formMethods = {
   },
 
   /**
-   * 保存完成之后
+   * 保存方法调用成功之后
    * @param {*} res 
    */
   onSaveAfter(res) {
+    this.$message.toast.success('保存成功');
+    this.$eventBus.$emit(`${this.name}_update`)
+
     setTimeout(() => {
       if (res) {
         this.$emit('close');
+
         if (!this.isDialog) {
           this.$nextTick(() => {
             this.$router.replace(`/${this.name}/${res}`);

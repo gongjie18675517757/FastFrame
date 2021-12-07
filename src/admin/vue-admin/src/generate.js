@@ -98,6 +98,7 @@ export async function getColumns(name = '') {
  * 获取枚举列表
  * @param {*} tbName 
  * @param {*} filedName 
+ * @returns {Array}
  */
 export async function getEnumValues(tbName, filedName) {
   let {

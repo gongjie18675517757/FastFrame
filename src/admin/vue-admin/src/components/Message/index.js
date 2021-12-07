@@ -2,9 +2,76 @@ import Vue from 'vue'
 import store from '../../store'
 import Alert from './Alert.vue'
 import Confirm from './Confirm.vue'
-import Prompt from './Prompt.vue'
+import FormPageCore from '../Page/FormPageCore'
 import Choose from './Choose.vue'
 
+
+
+/**
+ * 生成弹窗表单工厂
+ * @param {*} pars 
+ * @returns 
+ */
+export function makePromptPageFacatory(pars) {
+    return {
+        ...FormPageCore,
+        data() {
+            const data = FormPageCore.data.call(this);
+            return {
+                ...data,
+                direction: pars.title,
+                singleLine: typeof (pars.singleLine) == 'boolean' ? pars.singleLine : true,
+                manageOptions: [],
+            }
+        },
+        methods: {
+            ...FormPageCore.methods,
+            async init() {
+                await FormPageCore.methods.init.call(this, ...arguments);
+                this.canEdit = true;
+            },
+            getModuleStrut() {
+                return {
+                    hasManage: true
+                }
+            },
+            getRules() {
+                return pars.rules;
+            },
+            getModelObject() {
+                return pars.model;
+            },
+            getModelObjectItems() {
+                return pars.options;
+            },
+            getToolItems() {
+                return [
+                    {
+                        title: "确认",
+                        color: "primary",
+                        key: 'save',
+                        iconName: "mdi-content-save-edit-outline",
+                        action: this.submit,
+                        visible: () => this.canEdit,
+
+                    },
+                ]
+            },
+            getPostMethod() {
+                if (typeof (pars.submitFunc) == 'function') {
+                    return (_url, model) => pars.submitFunc(model);
+                }
+
+                return (_url, model) => model;
+            },
+            onSaveAfter(res) {
+                let model = this.model;
+                this.$emit('success', { model, res })
+            },
+
+        }
+    }
+}
 
 const message = {
     alert(pars) {
@@ -18,15 +85,15 @@ const message = {
             width: '600px',
             ...pars
         })
-    },    
+    },
     choose(pars) {
         return this.dialog(Choose, {
             width: '600px',
             ...pars
         })
     },
-    prompt() {
-        return this.dialog(Prompt, ...arguments)
+    prompt(pars) {
+        return this.dialog(makePromptPageFacatory(pars), pars)
     },
     dialog(component, pars) {
         return new Promise((resolve, reject) => {
@@ -38,7 +105,6 @@ const message = {
                 pars: {
                     ...pars,
                     isDialog: true,
-
                 }
             })
         })

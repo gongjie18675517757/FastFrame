@@ -17,6 +17,7 @@
       <component
         :is="dialog.component"
         v-bind="dialog.pars"
+        v-on="dialog.pars.on"
         @success="handleDialogSuccess(dialog, $event)"
         @close="handleDialogClose(dialog, $event)"
       />
@@ -160,5 +161,9 @@ html {
   border: 1px solid #ababab;
   border-radius: 1px;
   padding: 4px 12px;
+}
+
+ .v-sheet.v-card.no-box-shadow {
+  box-shadow: none!important;
 }
 </style>

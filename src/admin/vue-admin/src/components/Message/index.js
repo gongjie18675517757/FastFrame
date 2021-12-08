@@ -4,6 +4,7 @@ import Alert from './Alert.vue'
 import Confirm from './Confirm.vue'
 import FormPageCore from '../Page/FormPageCore'
 import Choose from './Choose.vue'
+import { guid } from '../../utils'
 
 
 
@@ -97,16 +98,23 @@ const message = {
     },
     dialog(component, pars) {
         return new Promise((resolve, reject) => {
-            store.state.dialogs.push({
+            const dialogItem = {
                 component,
                 ...pars,
                 resolve,
                 reject,
+                _visible: false,
+                key:guid(),
                 pars: {
                     ...pars,
-                    isDialog: true,
+                    isDialog: true, 
                 }
-            })
+            }
+            store.state.dialogs.push(dialogItem)
+
+            setTimeout(() => {
+                dialogItem._visible = true;
+            }, 100);
         })
     },
     toast: {

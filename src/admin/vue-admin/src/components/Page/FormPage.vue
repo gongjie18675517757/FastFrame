@@ -11,7 +11,7 @@
             </v-btn>
             <v-menu offset-y v-if="$vuetify.breakpoint.smAndDown && visibleToolItems.length > 0">
               <template v-slot:activator="{ on }">
-                <v-btn v-on="on" icon color="primary" title="更多">
+                <v-btn v-on="on" icon color="primary" small title="更多">
                   <v-icon>more_vert</v-icon>
                   <!-- 设置 -->
                 </v-btn>

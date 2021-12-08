@@ -1,19 +1,15 @@
-﻿using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using FastFrame.Entity;
-using FastFrame.Repository;
-using FastFrame.Entity.Flow;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using FastFrame.Entity.Enums;
-using FastFrame.Infrastructure.EventBus;
-using FastFrame.Infrastructure;
-using System.Collections.Generic;
-using System.Linq.Dynamic.Core;
+﻿using FastFrame.Entity;
 using FastFrame.Entity.Basis;
+using FastFrame.Entity.Enums;
+using FastFrame.Entity.Flow;
+using FastFrame.Infrastructure;
+using FastFrame.Infrastructure.EventBus;
 using FastFrame.Infrastructure.Lock;
+using FastFrame.Repository;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System.Linq.Dynamic.Core;
 
 namespace FastFrame.Application.Flow
 {
@@ -85,14 +81,13 @@ namespace FastFrame.Application.Flow
                 FlowOperateOutput output = null;
                 try
                 {
-                    var flowStatusEnum = await HandleFlowOperate<TBillEntity>(bill_id, input, true);
+                    var flowInstance = await HandleFlowOperate<TBillEntity>(bill_id, input, true);
                     var stepList = await flowSteps
                         .Where(v => flowInstances.Any(x => x.Bill_Id == bill_id && x.Id == v.FlowInstance_Id))
                         .OrderBy(v => v.Id)
                         .ToListAsync();
 
-                    output = new FlowOperateSuccessOutput(bill_id, flowStatusEnum, stepList);
-
+                    output = new FlowOperateSuccessOutput(bill_id, flowInstance.Status, flowInstance.BillNumber, stepList); 
                 }
                 catch (NotFoundException)
                 {
@@ -115,7 +110,7 @@ namespace FastFrame.Application.Flow
         /// <summary>
         /// 流程操作
         /// </summary> 
-        public async Task<FlowStatusEnum> HandleFlowOperate<TBillEntity>(string bill_id, FlowOperateInput input, bool auto_tran = true)
+        public async Task<FlowInstance> HandleFlowOperate<TBillEntity>(string bill_id, FlowOperateInput input, bool auto_tran = true)
             where TBillEntity : class, IHaveCheck, new()
         {
             var bill_Entity = await loader.GetService<IRepository<TBillEntity>>().GetAsync(bill_id);
@@ -129,7 +124,7 @@ namespace FastFrame.Application.Flow
         /// <summary>
         /// 流程操作
         /// </summary> 
-        public async Task<FlowStatusEnum> HandleFlowOperate<TBillEntity>(TBillEntity bill_Entity, FlowOperateInput input, bool auto_tran)
+        public async Task<FlowInstance> HandleFlowOperate<TBillEntity>(TBillEntity bill_Entity, FlowOperateInput input, bool auto_tran)
             where TBillEntity : class, IHaveCheck, new()
         {
             if (bill_Entity == null)
@@ -549,10 +544,10 @@ namespace FastFrame.Application.Flow
                 flowInstances.AddCommitEventListen(msg.TriggerEvent);
 
                 /*提交事务*/
-                if (auto_tran)
-                    await flowInstances.CommmitAsync();
+                //if (auto_tran)
+                //    await flowInstances.CommmitAsync();
 
-                return flowInstance.Status;
+                return flowInstance;
             }
             catch (Exception)
             {

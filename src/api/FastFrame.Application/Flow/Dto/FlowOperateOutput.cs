@@ -31,9 +31,10 @@ namespace FastFrame.Application.Flow
     /// </summary>
     public class FlowOperateSuccessOutput : FlowOperateOutput
     {
-        public FlowOperateSuccessOutput(string key, FlowStatusEnum flowStatus, IEnumerable<FlowStep> flowProcesses) : base(key, true)
+        public FlowOperateSuccessOutput(string key, FlowStatusEnum flowStatus,string billNo, IEnumerable<FlowStep> flowProcesses) : base(key, true)
         {
             FlowStatus = flowStatus;
+            BillNumber = billNo;
             FlowProcesses = flowProcesses;
         }
 
@@ -41,6 +42,11 @@ namespace FastFrame.Application.Flow
         /// 最终状态
         /// </summary>
         public FlowStatusEnum FlowStatus { get; set; }
+
+        /// <summary>
+        /// 单据号码
+        /// </summary>
+        public string BillNumber { get; }
 
         /// <summary>
         /// 最终的审批过程

@@ -1632,6 +1632,11 @@
             最终状态
             </summary>
         </member>
+        <member name="P:FastFrame.Application.Flow.FlowOperateSuccessOutput.BillNumber">
+            <summary>
+            单据号码
+            </summary>
+        </member>
         <member name="P:FastFrame.Application.Flow.FlowOperateSuccessOutput.FlowProcesses">
             <summary>
             最终的审批过程

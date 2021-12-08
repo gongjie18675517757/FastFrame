@@ -3,32 +3,40 @@ import httpClient from '../../httpClient'
 import message from "../Message";
 import { getEnumValues } from "../../generate";
 import rules from "../../rules";
-
-class makeButtonsInput { }
-/**
- * 表单模型数据
- */
-makeButtonsInput.prototype.selection = [];
+import router from "../../router";
 
 /**
- * 模式 form/list/row
+ * 生成审核按钮操作
  */
-makeButtonsInput.prototype.mode = '';
+class makeButtonsInput {
+    constructor() {
+        /**
+         * 表单模型数据
+         */
+        this.selection = [];
 
-/**
- * 按钮属性
- */
-makeButtonsInput.prototype.btnAttrs = new Object();
+        /**
+         * 模式 form/list/row
+         */
+        this.mode = '';
 
-/**
- * 审核模块的名称
- */
-makeButtonsInput.prototype.moduleName = '';
+        /**
+         * 按钮属性
+         */
+        this.btnAttrs = new Object();
 
-/**
- * 是否在编辑中
- */
-makeButtonsInput.prototype.editing = false;
+        /**
+         * 审核模块的名称
+         */
+        this.moduleName = ''
+
+        /**
+         * 是否在编辑中
+         */
+        this.editing = false
+    }
+}
+
 
 /**
  * 生成按钮模式
@@ -51,26 +59,33 @@ export const makeButtonsInputMode = {
 }
 
 /**
- * 审核操作参数
+ * 审核操作
  */
-function handleFlowOperateInput() { }
+class handleFlowOperateInput extends makeButtonsInput {
+    constructor() {
+        super();
 
-/**
- * 可执行的操作
- */
-handleFlowOperateInput.prototype.actions = [];
+        /**
+         * 可执行的操作
+         */
+        this.actions = []
 
-/**
- * 标题
- */
-handleFlowOperateInput.prototype.title = [];
+        /**
+         * 标题
+         */
+        this.title = [];
+    }
+}
+
+new handleFlowOperateInput()
+
 
 /**
  * 审核操作
  * @param {handleFlowOperateInput} params 
  */
 async function handleFlowOperate(params) {
-    await httpClient.get('/')
+
     if (params.actions.length == 0)
         throw new Error('actions传参不正确!');
 
@@ -80,23 +95,68 @@ async function handleFlowOperate(params) {
     let kvs = (await getEnumValues('FlowStep', 'Action')).filter(v => params.actions.includes(v.Key))
 
     message.prompt({
-        width:'600px',
+        width: '600px',
         title: `${params.title}`,
-        submitFunc:model=>{
-            console.log(model);
+        submitFunc: async model => {
+            let res = await httpClient.post(`/api/WorkFlowCenter/FlowOperate/${params.moduleName}`, model);
+            for (const item of res) {
+                const r = params.selection.find(v => v.Id == item.Key);
+                if (item.IsSuccess && r) {
+                    r.FlowStatus = item.FlowStatus;
+                    if (Array.isArray(r.FlowProcesses)) {
+                        r.FlowProcesses.push(...item.FlowProcesses)
+                    }
+                }
+            }
+
+            message.alert({
+                title: '提示',
+                timeout: 0,
+                content: {
+                    functional: true,
+                    render(h) {
+                        return h('div', null, [
+                            h('p', `操作完成,共${res.length}张单据,成功${res.filter(v => v.IsSuccess).length}张单据,失败${res.filter(v => !v.IsSuccess).length}张单据`),
+                            h('ol', null, [
+                                ...res.map(v => h('li', { key: v.Key }, [
+                                    h('p', null, [
+                                        h('a', {
+                                            on: {
+                                                click: () => {
+                                                    let pages = router.getMatchedComponents(`/${params.moduleName}/${v.Key}`);
+                                                    if (pages.length > 1)
+                                                        message.dialog(pages[1], {
+                                                            width:'70vw',
+                                                            id: v.Key
+                                                        })
+                                                }
+                                            }
+                                        }, v.BillNumber)
+                                    ]),
+                                    h('p', null, v.IsSuccess ? '成功 √' : '失败 ×'),
+                                    v.IsSuccess ? null : h('p', null, `原因:${v.ErrMessage}`)
+                                ]))
+                            ])
+                        ])
+                    }
+                }
+            })
+
+            return res;
         },
         model: {
             ActionEnum: params.actions.find(v => v),
             Desc: null,
             NextCheckerIds: [],
-            Items: null
+            Items: null,
+            Keys: params.selection.map(v => v.Id).filter(v => v)
         },
         options: [
             {
                 Name: 'ActionEnum',
                 Description: `${params.title}选项`,
                 EnumValues: kvs,
-                Readonly: kvs.length <=1,
+                Readonly: kvs.length <= 1,
                 IsRequired: true
             },
             {
@@ -114,7 +174,6 @@ async function handleFlowOperate(params) {
                 rules.stringLength(`${params.title}意见`, 0, 500)
             ]
         },
-        ...params
     })
 }
 
@@ -124,9 +183,9 @@ async function handleFlowOperate(params) {
  */
 async function submit(params) {
     event.stopPropagation();
-    await handleFlowOperate({ 
+    await handleFlowOperate({
         ...params,
-        title:'提交',
+        title: '提交',
         actions: ['submit']
     })
 }
@@ -139,7 +198,7 @@ async function check(params) {
     event.stopPropagation();
     await handleFlowOperate({
         ...params,
-        title:'审核',
+        title: '审核',
         actions: ['pass', 'ng']
     })
 }

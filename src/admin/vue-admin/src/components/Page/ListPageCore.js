@@ -51,17 +51,17 @@ export let makeToolItems = function () {
   //   disabled: () => this.selection.length != 1,
   //   action: () => this.remove(this.selection)
   // },
-  // {
-  //   title: "刷新",
-  //   color: "success",
-  //   name: "List",
-  //   key: "Refresh",
-  //   iconName: "refresh",
-  //   action: () => {
-  //     this.query = []
-  //     this.loadList()
-  //   }
-  // },
+  {
+    title: "刷新",
+    color: "success",
+    name: "List",
+    key: "Refresh",
+    iconName: "refresh",
+    action: () => {
+      this.query = []
+      this.loadList()
+    }
+  },
   {
     title: "导出",
     color: "primary",

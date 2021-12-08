@@ -6,13 +6,16 @@
     <ToastVue />
     <NotifyVue />
     <v-dialog
-      v-for="(dialog, i) in dialogs"
-      :key="i"
-      :value="true"
+      v-for="dialog in dialogs"
+      :key="dialog.key"
+      :value="dialog._visible"
       :width="dialog.pars.width"
       :fullscreen="dialog.fullscreen"
       :hide-overlay="dialog.hideOverlay"
       colored-border
+      @input="handleDialogClose(dialog)"
+      persistent
+      scrollable
     >
       <component
         :is="dialog.component"
@@ -81,9 +84,13 @@ export default {
       this.dialogs.splice(index, 1);
     },
     handleDialogClose(dialog, ...arges) {
-      dialog.reject(...arges);
-      let index = this.dialogs.findIndex((v) => v == dialog);
-      this.dialogs.splice(index, 1);
+      dialog._visible = false;
+
+      setTimeout(() => {
+        dialog.reject(...arges);
+        let index = this.dialogs.findIndex((v) => v == dialog);
+        this.dialogs.splice(index, 1);
+      }, 1000);
     },
   },
 };
@@ -163,7 +170,7 @@ html {
   padding: 4px 12px;
 }
 
- .v-sheet.v-card.no-box-shadow {
-  box-shadow: none!important;
+.v-sheet.v-card, .no-box-shadow {
+  box-shadow: none !important;
 }
 </style>

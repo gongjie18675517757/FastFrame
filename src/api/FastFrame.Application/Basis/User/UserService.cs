@@ -102,16 +102,20 @@ namespace FastFrame.Application.Basis
             return base.OnBeforeUpdate(before, after);
         }
 
-        protected override IQueryable<UserDto> GetListQueryableing(IQueryable<UserDto> query, Pagination pageInfo)
+        protected override IQueryable<UserDto> GetListQueryableing(IQueryable<UserDto> query, IPagination pageInfo)
         {
             query = base.GetListQueryableing(query, pageInfo);
-            if (pageInfo.TryGetFilterValue(v => v.Name == nameof(ITreeModel.Super_Id), out var superId) && !superId.IsNullOrWhiteSpace())
-            {
-                var treeChildren = Loader.GetService<IRepository<TreeChild>>().Where(v => v.Super_Id == superId);
-                var deptMembers = Loader.GetService<IRepository<DeptMember>>().Where(v => v.Dept_Id == superId || treeChildren.Any(x => x.Child_Id == v.Dept_Id));
 
-                query = query.Where(v => deptMembers.Any(x => x.User_Id == v.Id));
-            }
+            pageInfo.TryReplaceFilter<Filter>(
+                v => v.Name == nameof(ITreeModel.Super_Id) && !v.Value.IsNullOrWhiteSpace(),
+                f =>
+                {
+                    var treeChildren = Loader.GetService<IRepository<TreeChild>>().Where(v => v.Super_Id == f.Value);
+                    var deptMembers = Loader.GetService<IRepository<DeptMember>>().Where(v => v.Dept_Id == f.Value || treeChildren.Any(x => x.Child_Id == v.Dept_Id));
+
+                    return new ExtensionFilter<UserDto>(v => deptMembers.Any(x => x.User_Id == v.Id));
+                });
+
             return query;
         }
     }

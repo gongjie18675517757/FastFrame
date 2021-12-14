@@ -1,4 +1,5 @@
-﻿using FastFrame.Application.Basis;
+﻿using FastFrame.Application;
+using FastFrame.Application.Basis;
 using FastFrame.Entity;
 using FastFrame.Entity.Enums;
 using FastFrame.Infrastructure;
@@ -153,7 +154,9 @@ namespace FastFrame.WebHost.Privder
             }
         }
 
-        public async Task<byte[]> GenerateExcelSteam<TDto>(Func<Pagination, Task<PageList<TDto>>> pageListFunc, IEnumerable<ExcelColumn<TDto>> columns, Pagination pagination)
+        public async Task<byte[]> GenerateExcelSteam<TDto>(Func<IPagination, Task<IPageList<TDto>>> pageListFunc,
+                                                           IEnumerable<ExcelColumn<TDto>> columns,
+                                                           IPagination pagination)
         {
             pagination ??= new Pagination();
             pagination.PageIndex = 1;

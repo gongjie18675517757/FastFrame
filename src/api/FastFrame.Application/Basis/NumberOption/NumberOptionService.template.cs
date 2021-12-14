@@ -53,7 +53,7 @@ namespace FastFrame.Application.Basis
 						};
 			return query;
 		}
-		public Task<PageList<NumberOptionViewModel>> ViewModelListAsync(Pagination page) 
+		public Task<IPageList<NumberOptionViewModel>> ViewModelListAsync(IPagination page) 
 		{
 			var query = numberOptionRepository.MapTo<NumberOption, NumberOptionViewModel>();
 			return query.PageListAsync(page);

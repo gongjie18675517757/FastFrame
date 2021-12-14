@@ -189,7 +189,7 @@
             返回列表数据时
             </summary> 
         </member>
-        <member name="M:FastFrame.Application.BaseService`2.PageListAsync(FastFrame.Infrastructure.Pagination)">
+        <member name="M:FastFrame.Application.BaseService`2.PageListAsync(FastFrame.Infrastructure.IPagination)">
             <summary>
             获取分页列表
             </summary> 
@@ -450,7 +450,7 @@
             附件
             </summary>
         </member>
-        <member name="M:FastFrame.Application.IPageListService`1.PageListAsync(FastFrame.Infrastructure.Pagination)">
+        <member name="M:FastFrame.Application.IPageListService`1.PageListAsync(FastFrame.Infrastructure.IPagination)">
             <summary>
             获取列表数据
             </summary>
@@ -1575,6 +1575,110 @@
             <summary>
             好友列表
             </summary>
+            <returns></returns>
+        </member>
+        <member name="P:FastFrame.Application.FilterExtensions`1.DefaultPredicate">
+            <summary>
+            默认过滤表达式
+            </summary>
+        </member>
+        <member name="M:FastFrame.Application.FilterExtensions`1.GetPropertyInfoByNames(System.Type,System.String)">
+            <summary>
+            返回多级属性
+            </summary>
+            <param name="type"></param>
+            <param name="propNamePath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.FilterExtensions`1.MakePredicate(System.String,System.String,System.String)">
+            <summary>
+            生成条件表达式
+            </summary>
+            <param name="name"></param>
+            <param name="compare"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastFrame.Application.Filter">
+            <summary>
+            字面量查询项
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Filter.Name">
+            <summary>
+            属性名称
+            支持多级 a.b.c
+            支持多个 a.b;a.c
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Filter.Compare">
+            <summary>
+            比较方式  
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Filter.Value">
+            <summary>
+            比较值
+            </summary>
+        </member>
+        <member name="M:FastFrame.Application.Filter.MakePredicate``1">
+            <summary>
+            生成表达式
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="T:FastFrame.Application.ExtensionFilter">
+            <summary>
+            表达式查询项
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.ExtensionFilter`1">
+            <summary>
+            表达式查询项
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:FastFrame.Application.Pagination">
+            <summary>
+            查询列表参数
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Pagination.PageIndex">
+            <summary>
+            页码
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Pagination.PageSize">
+            <summary>
+            每页数量
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Pagination.KeyWord">
+            <summary>
+            模糊条件
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Pagination.Filters">
+            <summary>
+            条件
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Pagination.SortName">
+            <summary>
+            排序列名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Pagination.SortMode">
+            <summary>
+            排序方式
+            </summary>
+        </member>
+        <member name="M:FastFrame.Application.Pagination.FromJson(System.String)">
+            <summary>
+            反序列化
+            </summary>
+            <param name="json"></param>
             <returns></returns>
         </member>
         <member name="T:FastFrame.Application.Flow.FlowOperateInput">

@@ -121,7 +121,7 @@ namespace FastFrame.CodeGenerate.Build
                         new ParameterInfo
                         {
                             DefineName="page",
-                            TypeName="Pagination"
+                            TypeName="IPagination"
                         }
                     }
                 };

@@ -53,7 +53,7 @@ namespace FastFrame.Application.Basis
 						};
 			return query;
 		}
-		public Task<PageList<DeptViewModel>> ViewModelListAsync(Pagination page) 
+		public Task<IPageList<DeptViewModel>> ViewModelListAsync(IPagination page) 
 		{
 			var query = deptRepository.MapTo<Dept, DeptViewModel>();
 			return query.PageListAsync(page);

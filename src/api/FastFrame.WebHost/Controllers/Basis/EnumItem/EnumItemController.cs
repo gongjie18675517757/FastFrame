@@ -40,9 +40,9 @@ namespace FastFrame.WebHost.Controllers.Basis
 
         [Permission(new string[] { "Add", "Update" })]
         [HttpGet("{name?}")]
-        public async Task<PageList<EnumItemViewModel>> EnumItemList(EnumName? name, string qs)
+        public async Task<IPageList<EnumItemViewModel>> EnumItemList(EnumName? name, string qs)
         {
-            return await service.EnumItemList(name, qs?.ToObject<Pagination>());
+            return await service.EnumItemList(name, Pagination.FromJson(qs));
         }
     }
 }

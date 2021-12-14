@@ -253,7 +253,7 @@ namespace FastFrame.Application
             return dto;
         }
 
-        protected virtual IQueryable<TDto> GetListQueryableing(IQueryable<TDto> query, Pagination pageInfo) => query;
+        protected virtual IQueryable<TDto> GetListQueryableing(IQueryable<TDto> query, IPagination pageInfo) => query;
 
         /// <summary>
         /// 返回列表数据时
@@ -274,7 +274,7 @@ namespace FastFrame.Application
         /// <summary>
         /// 获取分页列表
         /// </summary> 
-        public virtual async Task<PageList<TDto>> PageListAsync(Pagination pageInfo)
+        public virtual async Task<IPageList<TDto>> PageListAsync(IPagination pageInfo)
         {
             var query = Query();
             query = GetListQueryableing(query, pageInfo);
@@ -303,22 +303,23 @@ namespace FastFrame.Application
         /// </summary> 
         public virtual async Task<bool> VerifyUnique(UniqueInput input)
         {
-            var filters = input.KeyValues.Select(x => new Filter()
-            {
-                Compare = "==",
-                Value = x.Value,
-                Name = x.Key
-            }).ToList();
-            filters.Add(new Filter()
-            {
-                Compare = "!=",
-                Value = input.Id,
-                Name = "Id"
-            });
-            return await repository.Queryable.DynamicQuery(null, new List<KeyValuePair<string, List<Filter>>>
-            {
-                new KeyValuePair<string, List<Filter>>("and",filters)
-            }).AnyAsync();
+            var filters = input
+                .KeyValues
+                .Select(x => new Filter()
+                {
+                    Compare = "==",
+                    Value = x.Value,
+                    Name = x.Key
+                })
+                .Append(new Filter()
+                {
+                    Compare = "!=",
+                    Value = input.Id,
+                    Name = "Id"
+                });
+
+
+            return await repository.DynamicQuery(filters.ToArray()).AnyAsync();
         }
     }
 }

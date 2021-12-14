@@ -1,4 +1,5 @@
-﻿using FastFrame.Application.Basis;
+﻿using FastFrame.Application;
+using FastFrame.Application.Basis;
 using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Permission;
 using Microsoft.AspNetCore.Mvc;
@@ -11,8 +12,8 @@ namespace FastFrame.WebHost.Controllers.Basis
     {
         [Permission(new string[] { "Add", "Update" })]
         [HttpGet]
-        public Task<PageList<UserViewModel>> UserList(string qs)
+        public Task<IPageList<UserViewModel>> UserList(string qs)
             => Request.HttpContext.RequestServices
-                    .GetService<UserService>().ViewModelListAsync(qs.ToObject<Pagination>(true)); 
+                    .GetService<UserService>().ViewModelListAsync(Pagination.FromJson(qs)); 
     }
 }

@@ -20,7 +20,7 @@ namespace FastFrame.Application.Basis
             this.users = users;
         }
 
-        public async Task<PageList<LoginLogModel>> PageListAsync(Pagination pageInfo)
+        public async Task<IPageList<LoginLogModel>> PageListAsync(IPagination pageInfo)
         {
             var query = from a in loginLogs
                         join b in users on a.User_Id equals b.Id

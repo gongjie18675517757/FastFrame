@@ -40,7 +40,7 @@ namespace FastFrame.Application.Basis
 						};
 			return query;
 		}
-		public Task<PageList<TenantViewModel>> ViewModelListAsync(Pagination page) 
+		public Task<IPageList<TenantViewModel>> ViewModelListAsync(IPagination page) 
 		{
 			var query = tenantRepository.MapTo<Tenant, TenantViewModel>();
 			return query.PageListAsync(page);

@@ -232,7 +232,7 @@ namespace FastFrame.Infrastructure
                 return default;
 
             if (!System.Text.RegularExpressions.Regex.IsMatch(@in, "^[0-9a-f]+$"))
-                return default;
+                return @in;
 
             if (encoding == null)
                 encoding = Encoding.UTF8;
@@ -398,8 +398,9 @@ namespace FastFrame.Infrastructure
         /// <typeparam name="T"></typeparam>
         /// <param name="in"></param>
         /// <param name="haveHexDencode"></param>
+        /// <param name="converters"></param>
         /// <returns></returns>
-        public static T ToObject<T>(this string @in, bool haveHexDencode = false)
+        public static T ToObject<T>(this string @in, bool haveHexDencode = false,params JsonConverter[] converters)
         {
             if (@in.IsNullOrWhiteSpace())
             {
@@ -410,7 +411,7 @@ namespace FastFrame.Infrastructure
                 if (haveHexDencode)
                     @in = @in.FromHexString();
 
-                return JsonConvert.DeserializeObject<T>(@in);
+                return JsonConvert.DeserializeObject<T>(@in, converters);
             }
             catch (Exception ex)
             {

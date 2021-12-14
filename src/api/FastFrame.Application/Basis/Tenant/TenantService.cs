@@ -30,7 +30,7 @@ namespace FastFrame.Application.Basis
             entity.Tenant_Id = IdGenerate.NetId();
         }
 
-        protected override IQueryable<TenantDto> GetListQueryableing(IQueryable<TenantDto> query, Pagination pageInfo)
+        protected override IQueryable<TenantDto> GetListQueryableing(IQueryable<TenantDto> query, IPagination pageInfo)
         {
             query = base.GetListQueryableing(query, pageInfo);
             var isRoot = Tenant_Id.IsNullOrWhiteSpace();

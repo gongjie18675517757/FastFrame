@@ -1,4 +1,5 @@
-﻿using FastFrame.Application.Flow;
+﻿using FastFrame.Application;
+using FastFrame.Application.Flow;
 using FastFrame.Entity.Flow;
 using FastFrame.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
@@ -35,9 +36,9 @@ namespace FastFrame.WebHost.Controllers.Flow
         /// <param name="qs"></param>
         /// <returns></returns>
         [HttpGet]
-        public Task<PageList<FlowInstance>> PageList(string qs)
+        public Task<IPageList<FlowInstance>> PageList(string qs)
         {
-            return service.PageList(qs.ToObject<Pagination>(true));
+            return service.PageList(Pagination.FromJson(qs));
         }
     }
 }

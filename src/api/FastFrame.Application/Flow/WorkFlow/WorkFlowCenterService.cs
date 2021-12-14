@@ -25,7 +25,7 @@ namespace FastFrame.Application.Flow
             this.loader = loader;
         }
 
-        public Task<PageList<FlowInstance>> PageList(Pagination pagination)
+        public Task<IPageList<FlowInstance>> PageList(IPagination pagination)
         {
             var applicationSession = loader.GetService<Infrastructure.Interface.IApplicationSession>();
             var curr = applicationSession?.CurrUser;

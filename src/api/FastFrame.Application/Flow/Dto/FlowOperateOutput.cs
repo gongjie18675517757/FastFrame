@@ -31,7 +31,7 @@ namespace FastFrame.Application.Flow
     /// </summary>
     public class FlowOperateSuccessOutput : FlowOperateOutput
     {
-        public FlowOperateSuccessOutput(string key, FlowStatusEnum flowStatus,string billNo, IEnumerable<FlowStep> flowProcesses) : base(key, true)
+        public FlowOperateSuccessOutput(string key, FlowStatusEnum flowStatus, string billNo, IEnumerable<FlowStep> flowProcesses) : base(key, true)
         {
             FlowStatus = flowStatus;
             BillNumber = billNo;
@@ -61,7 +61,7 @@ namespace FastFrame.Application.Flow
     {
         public FlowOperateFailOutput(string key, string errMessage) : base(key, false)
         {
-            ErrMessage = errMessage;
+            ErrMessage = errMessage; 
         }
 
         /// <summary>

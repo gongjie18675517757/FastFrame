@@ -53,10 +53,10 @@ namespace FastFrame.Application.Basis
                 .ToListAsync();
         }
 
-        public async Task<PageList<EnumItemViewModel>> EnumItemList(EnumName? name, Pagination pagination)
+        public async Task<IPageList<EnumItemViewModel>> EnumItemList(EnumName? name, IPagination pagination)
         {
             if (name == null)
-                return new PageList<EnumItemViewModel> { };
+                return new PageList<EnumItemViewModel>();
 
             return await enumItemRepository.Where(v => v.Key == name).MapTo<EnumItem, EnumItemViewModel>().PageListAsync(pagination);
         }

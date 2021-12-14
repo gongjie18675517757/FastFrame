@@ -50,7 +50,7 @@ namespace FastFrame.Application.Basis
 						};
 			return query;
 		}
-		public Task<PageList<RoleViewModel>> ViewModelListAsync(Pagination page) 
+		public Task<IPageList<RoleViewModel>> ViewModelListAsync(IPagination page) 
 		{
 			var query = roleRepository.MapTo<Role, RoleViewModel>();
 			return query.PageListAsync(page);

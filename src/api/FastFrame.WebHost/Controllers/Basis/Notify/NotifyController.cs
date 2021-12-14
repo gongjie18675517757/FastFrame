@@ -1,4 +1,5 @@
-﻿using FastFrame.Application.Basis;
+﻿using FastFrame.Application;
+using FastFrame.Application.Basis;
 using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Permission;
 using Microsoft.AspNetCore.Mvc;
@@ -13,9 +14,9 @@ namespace FastFrame.WebHost.Controllers.Basis
         /// 所有通知
         /// </summary> 
         [HttpGet]
-        public async Task<PageList<NotifyDto>> AllList(string qs)
+        public async Task<IPageList<NotifyDto>> AllList(string qs)
         {
-            return await service.PageListAsync(qs.ToObject<Pagination>(true));
+            return await service.PageListAsync(Pagination.FromJson(qs));
         }
 
         /// <summary>
@@ -32,8 +33,8 @@ namespace FastFrame.WebHost.Controllers.Basis
 
         [Permission(new string[] { "Add", "Update" })]
         [HttpGet]
-        public Task<PageList<UserViewModel>> UserList(string qs)
+        public Task<IPageList<UserViewModel>> UserList(string qs)
             => Request.HttpContext.RequestServices
-                    .GetService<UserService>().ViewModelListAsync(qs.ToObject<Pagination>(true));
+                    .GetService<UserService>().ViewModelListAsync(Pagination.FromJson(qs));
     }
 }

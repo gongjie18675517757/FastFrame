@@ -1,4 +1,4 @@
- 
+
 import { getDownLoadPath } from "../../config";
 import {
   getColumns,
@@ -58,7 +58,7 @@ export let makeToolItems = function () {
     key: "Refresh",
     iconName: "refresh",
     action: () => {
-      this.query = []
+      // this.resetQuery();
       this.loadList()
     }
   },
@@ -296,26 +296,30 @@ export let pageMethods = {
      */
     this.queryOptions = distinct(await this.getQueryOptions(), v => `${v.Name}${v.compare}`, (a, b) => ({
       ...a, ...b
-    })).map(v => ({
-      ...v,
-      value: JSON.parse(JSON.stringify(v.value))
     }));
 
-    /**
-     * 组合查询项
-     */
-    this.query = [
-      {
-        Key: 'and',
-        Value: this.queryOptions
-      }
-    ]
+    this.resetQuery();
 
     /**
      * 标记加载完成
      */
     this.isInited = true;
   },
+  /**
+   * 重置查询条件
+   */
+  resetQuery() {
+    this.query = {
+      Key: 'and',
+      Value: [
+        this.queryOptions.map(v => ({
+          ...v,
+          value: v.value ? JSON.parse(JSON.stringify(v.value)) : null
+        }))
+      ]
+    }
+  },
+
   /**
    * 获取当前模块结构
    */
@@ -345,14 +349,12 @@ export let pageMethods = {
 
     for (const c of arr) {
       if (c.IsLink) {
-        c.renderFunc = (h, { text, model }) => h('v-btn', {
-          props: {
-            small: true,
-            text: true,
-            color: 'primary'
-          },
+        c.renderFunc = (h, { text, model }) => h('a', {
           on: {
-            click: () => this.toEdit(model)
+            click: () => {
+              event.stopPropagation();
+              this.toEdit(model);
+            }
           }
         }, text)
       }
@@ -422,13 +424,13 @@ export let pageMethods = {
           render: h => h('fragments-facatory', null, makeButtons({
             selection: this.selection,
             mode: makeButtonsInputMode.LIST,
-            moduleName:this.name,
+            moduleName: this.name,
             btnAttrs: {
             }
           }).map(v => h(v)))
         }
       }
-    ] : []; 
+    ] : [];
 
     return [...brr, ...arr].map(v => {
       /**
@@ -486,7 +488,7 @@ export let pageMethods = {
         return this.ModuleStrut.HaveCheck ? h('fragments-facatory', null, makeButtons({
           selection: [model],
           mode: makeButtonsInputMode.CELL,
-          moduleName:this.name,
+          moduleName: this.name,
           btnAttrs: {
             // text: true,
             // 'x-small': true,
@@ -585,12 +587,12 @@ export let pageMethods = {
    */
   queryDialog() {
     this.$message
-      .dialog(() => import('@/components/Dialog/SearchDialog.vue'), {
+      .dialog(() => import('../Dialog/SearchDialog.vue'), {
         title: `查询${this.direction}列表`,
         options: this.query,
         makeOptionsFunc: () => [...this.queryOptions.map(v => ({
           ...v,
-          value: JSON.parse(JSON.stringify(v.value))
+          value: v.value ? JSON.parse(JSON.stringify(v.value)) : null
         }))]
       })
       .then(query => {
@@ -613,7 +615,8 @@ export let pageMethods = {
     return (url, pageProps, pars) => {
 
       let qs = JSON.stringify(pageProps, fmtRequestPars);
-      if (process.env.NODE_ENV == 'development') {
+      // console.log(qs);
+      if (process.env.NODE_ENV != 'development') {
         qs = toHexString(qs)
       }
       let parsQueryString = Object.entries(pars || {}).map((k, v) => `${k}=${v}`).join('&')
@@ -663,40 +666,50 @@ export let pageMethods = {
     /*条件1 */
     let queryFilter = this.queryFilter || []
 
+    var filters = [
+      {
+        ...this.query,
+      },
+      {
+        Key: 'and',
+        Value: [
+          ...queryFilter,
+          ...(this.superId ? [
+            {
+              Name: 'super_Id',
+              value: this.superId,
+              compare: '=='
+            }
+          ] : [])
+        ]
+      }
+    ];
+    filters = JSON.parse(JSON.stringify(filters));
+
+    for (const f of filters) {
+      for (let index = 0; index < f.Value.length; index++) {
+        const arr = f.Value[index];
+        for (const v of arr) {
+          if (Array.isArray(v.value))
+            v.value = v.value.join(',')
+        }
+
+        f.Value[index] = arr.filter(x => !!x.value)
+      }
+
+      f.Value = f.Value.filter(arr => arr.length)
+    }
+
     let pageInfo = {
       PageIndex: page,
       PageSize: itemsPerPage,
       SortName: sortBy.join(','),
       SortMode: sortDesc.length > 0 && !sortDesc[0] ? "asc" : "desc",
-      Filters: [
-        ...this.query,
-        {
-          Key: 'and',
-          Value: [
-            ...queryFilter,
-            ...(this.superId ? [
-              {
-                Name: 'super_Id',
-                value: this.superId,
-                compare: '=='
-              }
-            ] : [])
-          ]
-        }
-      ].map(kv => {
-        return ({
-          ...kv,
-          Value: kv.Value.filter(v => {
-            return Array.isArray(v.value) ? v.value.length > 0 : !!v.value
-          }).map(v => ({
-            Name: v.Name,
-            compare: v.compare,
-            value: v.value
-          }))
-        })
-      }).filter(v => v.Value.length > 0)
-
+      Filters: filters.filter(v => v.Value.length > 0)
     };
+
+
+
 
     if (this.treeSelectedItem) {
       let arr = await this.getRequestParsBySelectedTreeItem(this.treeSelectedItem);
@@ -757,6 +770,7 @@ export let pageMethods = {
     Promise.resolve(pager)
       .then(this.getRequestPars)
       .then(pagePars => {
+        // console.log(pagePars);
         let method = this.getRequedtMethod()
         let url = this.getRequestUrl()
         return method(url, pagePars)
@@ -767,8 +781,9 @@ export let pageMethods = {
         this.rows = Data
         this.total = Total;
         this.loading = false;
-      }).catch(() => {
+      }).catch((err) => {
         this.loading = false;
+        window.console.error(err);
       })
   }, 500),
 

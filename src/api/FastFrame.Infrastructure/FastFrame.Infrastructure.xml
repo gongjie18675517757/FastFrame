@@ -625,13 +625,14 @@
             <param name="in"></param>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.Infrastructure.Extension.ToObject``1(System.String,System.Boolean)">
+        <member name="M:FastFrame.Infrastructure.Extension.ToObject``1(System.String,System.Boolean,Newtonsoft.Json.JsonConverter[])">
             <summary>
             反序列化
             </summary>
             <typeparam name="T"></typeparam>
             <param name="in"></param>
             <param name="haveHexDencode"></param>
+            <param name="converters"></param>
             <returns></returns>
         </member>
         <member name="T:FastFrame.Infrastructure.Identity.ICurrUser">
@@ -761,6 +762,23 @@
             </summary>
             <param name="userId"></param>
             <returns></returns>
+        </member>
+        <member name="T:FastFrame.Infrastructure.IFilter">
+            <summary>
+            查询条件
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.IFilter.MakePredicate``1">
+            <summary>
+            生成条件
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="T:FastFrame.Infrastructure.FilterMode">
+            <summary>
+            多条件组的查询模式
+            </summary>
         </member>
         <member name="T:FastFrame.Infrastructure.ImageExtended">
             <summary>
@@ -1070,7 +1088,7 @@
             <typeparam name="TDto"></typeparam>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IExcelExportProvider.GenerateExcelSteam``1(System.Func{FastFrame.Infrastructure.Pagination,System.Threading.Tasks.Task{FastFrame.Infrastructure.PageList{``0}}},System.Collections.Generic.IEnumerable{FastFrame.Infrastructure.Interface.ExcelColumn{``0}},FastFrame.Infrastructure.Pagination)">
+        <member name="M:FastFrame.Infrastructure.Interface.IExcelExportProvider.GenerateExcelSteam``1(System.Func{FastFrame.Infrastructure.IPagination,System.Threading.Tasks.Task{FastFrame.Infrastructure.IPageList{``0}}},System.Collections.Generic.IEnumerable{FastFrame.Infrastructure.Interface.ExcelColumn{``0}},FastFrame.Infrastructure.IPagination)">
             <summary>
             生成EXCEL流
             </summary>
@@ -1129,6 +1147,49 @@
             添加程序集
             </summary>
             <param name="assembly"></param>
+        </member>
+        <member name="T:FastFrame.Infrastructure.IPagination">
+            <summary>
+            查询列表参数
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.IPagination.Filters">
+            <summary>
+            条件
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.IPagination.KeyWord">
+            <summary>
+            模糊条件
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.IPagination.PageIndex">
+            <summary>
+            页码
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.IPagination.PageSize">
+            <summary>
+            每页数量
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.IPagination.SortMode">
+            <summary>
+            排序方式
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.IPagination.SortName">
+            <summary>
+            排序列名称
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.IPagination.TryReplaceFilter``1(System.Func{``0,System.Boolean},System.Func{``0,FastFrame.Infrastructure.IFilter})">
+            <summary>
+            尝试替换条件
+            如果返回为null,则删除
+            </summary>
+            <param name="func"></param>
+            <param name="replaceFunc"></param>
         </member>
         <member name="M:FastFrame.Infrastructure.Lock.ILockFacatory.TryCreateLockAsync(System.String,System.TimeSpan)">
             <summary>
@@ -1463,64 +1524,21 @@
             <param name="type"></param>
             <returns></returns>
         </member>
-        <member name="T:FastFrame.Infrastructure.PageList`1">
+        <member name="T:FastFrame.Infrastructure.IPageList`1">
             <summary>
             分页返回内容
             </summary>
             <typeparam name="T"></typeparam>
         </member>
-        <member name="P:FastFrame.Infrastructure.PageList`1.Total">
+        <member name="P:FastFrame.Infrastructure.IPageList`1.Total">
             <summary>
             返回查询到的总记录数量
             </summary> 
         </member>
-        <member name="P:FastFrame.Infrastructure.PageList`1.Data">
+        <member name="P:FastFrame.Infrastructure.IPageList`1.Data">
             <summary>
             数据
             </summary>
-        </member>
-        <member name="T:FastFrame.Infrastructure.Pagination">
-            <summary>
-            查询列表参数
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Pagination.PageIndex">
-            <summary>
-            页码
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Pagination.PageSize">
-            <summary>
-            每页数量
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Pagination.KeyWord">
-            <summary>
-            模糊条件
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Pagination.Filters">
-            <summary>
-            条件
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Pagination.SortName">
-            <summary>
-            排序列名称
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Pagination.SortMode">
-            <summary>
-            排序方式
-            </summary>
-        </member>
-        <member name="M:FastFrame.Infrastructure.Pagination.TryGetFilterValue(System.Func{FastFrame.Infrastructure.Filter,System.Boolean},System.String@)">
-            <summary>
-            
-            </summary>
-            <param name="func"></param>
-            <param name="value"></param>
-            <returns></returns>
         </member>
         <member name="T:FastFrame.Infrastructure.Permission.IPermissionChecker">
             <summary>

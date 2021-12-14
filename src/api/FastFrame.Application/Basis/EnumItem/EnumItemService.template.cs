@@ -55,7 +55,7 @@ namespace FastFrame.Application.Basis
 						};
 			return query;
 		}
-		public Task<PageList<EnumItemViewModel>> ViewModelListAsync(Pagination page) 
+		public Task<IPageList<EnumItemViewModel>> ViewModelListAsync(IPagination page) 
 		{
 			var query = enumItemRepository.MapTo<EnumItem, EnumItemViewModel>();
 			return query.PageListAsync(page);

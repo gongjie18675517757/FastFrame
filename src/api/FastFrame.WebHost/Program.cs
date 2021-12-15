@@ -154,7 +154,7 @@ services.ConfigureDynamicProxy(config =>
     //config.Interceptors.AddTyped<LockMethodAttribute>(Predicates.ForService("*Service"));
 });
 
-#if DEBUG
+//#if DEBUG
 builder.Services.AddEndpointsApiExplorer();
 var areas = typeof(Program)
        .Assembly
@@ -203,7 +203,7 @@ services.AddSwaggerGen(options =>
         return true;
     });
 });
-#endif
+//#endif
 #endregion
 
 #region Configure 
@@ -213,21 +213,21 @@ var applicationLifetime = app.Lifetime;
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage();
-
-#if DEBUG
-    /*注册swagger*/
-    app.UseSwagger();
-    //app.UseSwaggerUI(c =>
-    //{
-    //    //c.SwaggerEndpoint("/swagger/v1/swagger.json", "MsSystem API V1");
-    //    c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
-
-    //    foreach (var item in areas)
-    //        c.SwaggerEndpoint($"/swagger/{item}/swagger.json", item);
-    //});
-#endif
+    app.UseDeveloperExceptionPage(); 
 }
+
+//#if DEBUG
+/*注册swagger*/
+app.UseSwagger();
+//app.UseSwaggerUI(c =>
+//{
+//    //c.SwaggerEndpoint("/swagger/v1/swagger.json", "MsSystem API V1");
+//    c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
+
+//    foreach (var item in areas)
+//        c.SwaggerEndpoint($"/swagger/{item}/swagger.json", item);
+//});
+//#endif
 
 app.UseRewriter(new RewriteOptions().AddRewrite("swagger/index.html", "index.html",false));
 

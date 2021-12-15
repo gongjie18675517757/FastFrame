@@ -14,6 +14,7 @@ using FastFrame.WebHost.Hubs;
 using FastFrame.WebHost.Middleware;
 using FastFrame.WebHost.Privder;
 using Hangfire;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Converters;
 
@@ -165,12 +166,12 @@ var areas = typeof(Program)
 
 services.AddSwaggerGen(options =>
 {
-    //options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
-    //{
-    //    Title = "接口文档",
-    //    Version = "v1",
-    //    Description = "测试 webapi"
-    //});
+    options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Title = "接口文档",
+        Version = "v1",
+        Description = "测试 webapi"
+    });
 
     options.UseInlineDefinitionsForEnums();
     var basePath = AppDomain.CurrentDomain.BaseDirectory;
@@ -217,18 +218,18 @@ if (app.Environment.IsDevelopment())
 #if DEBUG
     /*注册swagger*/
     app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        //c.SwaggerEndpoint("/swagger/v1/swagger.json", "MsSystem API V1");
-        c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
+    //app.UseSwaggerUI(c =>
+    //{
+    //    //c.SwaggerEndpoint("/swagger/v1/swagger.json", "MsSystem API V1");
+    //    c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
 
-        foreach (var item in areas)
-            c.SwaggerEndpoint($"/swagger/{item}/swagger.json", item);
-    });
+    //    foreach (var item in areas)
+    //        c.SwaggerEndpoint($"/swagger/{item}/swagger.json", item);
+    //});
 #endif
 }
 
-//app.UseRewriter(new RewriteOptions().AddRewrite()) 
+app.UseRewriter(new RewriteOptions().AddRewrite("swagger/index.html", "index.html",false));
 
 //app.UseHttpsRedirection();
 

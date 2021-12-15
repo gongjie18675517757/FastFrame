@@ -1,0 +1,12 @@
+{
+  "version": "1.0",
+  "defaultProvider": "unpkg",
+  "libraries": [
+    {
+      "library": "rapidoc@9.1.3",
+      "provider": "unpkg",
+      "destination": "wwwroot/lib",
+      "files": ["dist/rapidoc-min.js"]
+    }
+  ]
+}

@@ -457,7 +457,7 @@ export let pageMethods = {
   getRowOperateItems() {
     return Promise.resolve([
       (h, { model }) => {
-        return this.ModuleStrut.HasManage ? h('v-btn', {
+        return this.ModuleStrut.HasManage && !this.columns.some(v => v.IsLink) ? h('v-btn', {
           props: {
             text: true,
             'x-small': true,

@@ -155,14 +155,23 @@ services.ConfigureDynamicProxy(config =>
 
 #if DEBUG
 builder.Services.AddEndpointsApiExplorer();
+var areas = typeof(Program)
+       .Assembly
+       .GetTypes()
+       .Where(v => v.IsClass && !v.IsAbstract && typeof(Microsoft.AspNetCore.Mvc.ControllerBase).IsAssignableFrom(v))
+       .Select(v => v.Namespace.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries).LastOrDefault())
+       .Distinct()
+       .ToArray();
+
 services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo()
-    {
-        Version = "v1",
-        Title = "API文档",
-        Description = "快速开发平台",
-    });
+    //options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    //{
+    //    Title = "接口文档",
+    //    Version = "v1",
+    //    Description = "测试 webapi"
+    //});
+
     options.UseInlineDefinitionsForEnums();
     var basePath = AppDomain.CurrentDomain.BaseDirectory;
     var xmlPath = Path.Combine(basePath, "FastFrame.WebHost.xml");
@@ -171,6 +180,27 @@ services.AddSwaggerGen(options =>
     options.IncludeXmlComments(xmlPath);
     xmlPath = Path.Combine(basePath, "FastFrame.Entity.xml");
     options.IncludeXmlComments(xmlPath);
+
+    foreach (var item in areas)
+    {
+        options.SwaggerDoc(item, new Microsoft.OpenApi.Models.OpenApiInfo
+        {
+            Title = item,
+            Version = "v1",
+            Description = item
+        });
+    }
+
+    options.DocInclusionPredicate((docName, apiDescription) =>
+    {
+        if (apiDescription.ActionDescriptor is Microsoft.AspNetCore.Mvc.Controllers.ControllerActionDescriptor caDescriptor)
+        {
+            var area = caDescriptor.ControllerTypeInfo.Namespace.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries).LastOrDefault();
+            return docName == area || !areas.Contains(docName);
+        }
+
+        return true;
+    });
 });
 #endif
 #endregion
@@ -189,8 +219,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "MsSystem API V1");
+        //c.SwaggerEndpoint("/swagger/v1/swagger.json", "MsSystem API V1");
         c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
+
+        foreach (var item in areas)
+            c.SwaggerEndpoint($"/swagger/{item}/swagger.json", item);
     });
 #endif
 }

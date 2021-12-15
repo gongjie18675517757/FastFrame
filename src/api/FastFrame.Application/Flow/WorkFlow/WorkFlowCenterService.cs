@@ -87,7 +87,7 @@ namespace FastFrame.Application.Flow
                         .OrderBy(v => v.Id)
                         .ToListAsync();
 
-                    output = new FlowOperateSuccessOutput(bill_id, flowInstance.Status, flowInstance.BillNumber, stepList); 
+                    output = new FlowOperateSuccessOutput(bill_id, flowInstance.Status, flowInstance.BillNumber, stepList);
                 }
                 catch (NotFoundException)
                 {
@@ -544,8 +544,8 @@ namespace FastFrame.Application.Flow
                 flowInstances.AddCommitEventListen(msg.TriggerEvent);
 
                 /*提交事务*/
-                //if (auto_tran)
-                //    await flowInstances.CommmitAsync();
+                if (auto_tran)
+                    await flowInstances.CommmitAsync();
 
                 return flowInstance;
             }
@@ -1009,8 +1009,6 @@ namespace FastFrame.Application.Flow
             }
 
             return false;
-        }
-
-
+        } 
     }
 }

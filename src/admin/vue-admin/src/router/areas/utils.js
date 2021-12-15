@@ -6,11 +6,11 @@ export function makeStandardRouteItems(title) {
         },
         {
             key: 'Add',
-            title: `添加${title}`,
+            title: `${title}`,
         },
         {
             key: ':id',
-            title: `查看${title}`,
+            title: `${title}`,
             path: 'Add',
             permission: 'Get'
         },

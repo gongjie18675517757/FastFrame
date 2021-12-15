@@ -3,7 +3,7 @@
     <v-layout align-center justify-center :class="{ singleLine: singleLine }">
       <v-flex v-bind="flex" :style="{ padding: isTab ? '1px' : null }">
         <v-card flat tile>
-          <v-toolbar flat dense height="30px">
+          <v-toolbar flat dense height="30px" v-if="!isTab">
             <v-toolbar-title>{{ title }}</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-btn icon @click="$emit('close')" title="关闭" v-if="isDialog">

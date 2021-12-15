@@ -244,7 +244,7 @@ export function makeButtons({ selection, mode, btnAttrs, moduleName, editing }) 
                 /**
                  * 是否可以审核
                  */
-                const canCheck = canSubmit
+                const canCheck = false
 
                 /**
                  * 是否显示提交按钮
@@ -257,8 +257,8 @@ export function makeButtons({ selection, mode, btnAttrs, moduleName, editing }) 
                  * 是否显示审核按钮
                  */
                 const visibleCheck = mode == makeButtonsInputMode.LIST ||
-                    (mode == makeButtonsInputMode.FORM && canSubmit) ||
-                    (mode == makeButtonsInputMode.CELL && canSubmit);
+                    (mode == makeButtonsInputMode.FORM && canCheck) ||
+                    (mode == makeButtonsInputMode.CELL && canCheck);
 
                 return h('fragments-facatory', null, [
                     /**

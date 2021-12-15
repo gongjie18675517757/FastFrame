@@ -55,7 +55,7 @@ export function makeToolItems() {
       action: this.submit,
       loading: this.submiting,
       visible: () => this.hasManage && this.canEdit,
-      disabled: () => !this.changed
+      disabled: () => false
     },
   ]
 }
@@ -280,7 +280,8 @@ export let formMethods = {
           render: (h) => h('fragments-facatory', null, makeButtons({
             selection: [this.model],
             mode: makeButtonsInputMode.FORM,
-            editing: this.canEdit
+            editing: this.canEdit,
+            moduleName:this.name
           }).map(v => h(v)))
         }
       }
@@ -559,7 +560,8 @@ export let makeChildProps = function () {
     formGroups: this.formGroups,
     isDialog: this.isDialog,
     hasManage: this.hasManage,
-    toolItems: this.toolItems
+    toolItems: this.toolItems,
+    isTab: this.isTab,
   };
 };
 

@@ -17,5 +17,19 @@ namespace FastFrame.Application
     public interface IDto<T> : IDto where T : class, IEntity
     {
 
+    } 
+ 
+
+    public interface IHaveCheckModel: IDto
+    {
+        /// <summary>
+        /// 下一步审核人
+        /// </summary>
+        public IEnumerable<string> CheckerIds { get; set; }
+
+        /// <summary>
+        /// 流程步骤
+        /// </summary>
+        public IEnumerable<Flow.FlowStepModel> StepList { get; set; }
     }
 }

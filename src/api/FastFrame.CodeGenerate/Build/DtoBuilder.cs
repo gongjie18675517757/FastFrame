@@ -72,7 +72,9 @@ namespace FastFrame.CodeGenerate.Build
                 Name = $"{type.Name}Dto",
                 BaseNames = new string[] { $"BaseDto<{type.Name}>" }
                                 .Concat(typeof(IHaveMultiFile).IsAssignableFrom(type) ? new[] { "IHaveMultiFileDto" } : Array.Empty<string>())
-                                .Concat(typeof(ITreeEntity).IsAssignableFrom(type) ? new[] { "ITreeModel" } : Array.Empty<string>()),
+                                .Concat(typeof(ITreeEntity).IsAssignableFrom(type) ? new[] { "ITreeModel" } : Array.Empty<string>())
+                                .Concat(typeof(IHaveCheck).IsAssignableFrom(type) ? new[] { "IHaveCheckModel" } : Array.Empty<string>())
+                                ,
                 Path = $"{TargetPath}\\{areaNameSpace}\\{type.Name}\\Dto\\{type.Name}Dto.template.cs",
                 CategoryName = "class",
                 PropInfos = GetPropInfos(type),
@@ -139,6 +141,24 @@ namespace FastFrame.CodeGenerate.Build
                     DefaultValue = "Array.Empty<ResourceModel>()",
                     Summary = "附件",
                     TypeName = "IEnumerable<ResourceModel>"
+                };
+
+            if (typeof(IHaveCheck).IsAssignableFrom(type))
+                yield return new PropInfo
+                {
+                    Name = "CheckerIds",
+                    DefaultValue = "Array.Empty<string>()",
+                    Summary = "可审核人",
+                    TypeName = "IEnumerable<string>"
+                };
+
+            if (typeof(IHaveCheck).IsAssignableFrom(type))
+                yield return new PropInfo
+                {
+                    Name = "StepList",
+                    DefaultValue = "Array.Empty<Flow.FlowStepModel>()",
+                    Summary = "流程步骤",
+                    TypeName = "IEnumerable<Flow.FlowStepModel>"
                 };
         }
 

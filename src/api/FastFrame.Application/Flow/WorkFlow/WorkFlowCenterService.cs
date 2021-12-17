@@ -1,4 +1,5 @@
-﻿using FastFrame.Entity;
+﻿using FastFrame.Application.Events;
+using FastFrame.Entity;
 using FastFrame.Entity.Basis;
 using FastFrame.Entity.Enums;
 using FastFrame.Entity.Flow;
@@ -16,7 +17,12 @@ namespace FastFrame.Application.Flow
     /// <summary>
     /// 流程中心
     /// </summary>
-    public partial class WorkFlowCenterService : IService
+    public partial class WorkFlowCenterService : IService,
+        IEventHandle<DoMainDeleteing<IHaveCheckModel>>,
+        IRequestHandle<IEnumerable<string>, IHaveCheckModel>,
+        IRequestHandle<IEnumerable<KeyValuePair<string, IEnumerable<string>>>, IEnumerable<IHaveCheckModel>>,
+        IRequestHandle<IEnumerable<Flow.FlowStepModel>, IHaveCheckModel>,
+        IRequestHandle<IEnumerable<KeyValuePair<string, IEnumerable<Flow.FlowStepModel>>>, IEnumerable<IHaveCheckModel>>
     {
         private readonly IServiceProvider loader;
 
@@ -1009,6 +1015,131 @@ namespace FastFrame.Application.Flow
             }
 
             return false;
-        } 
+        }
+
+        public async Task HandleEventAsync(DoMainDeleteing<IHaveCheckModel> @event)
+        {
+            var data = (IHaveCheck)@event.Data;
+            if (data.FlowStatus != FlowStatusEnum.unsubmitted)
+                throw new MsgException("单据已提交,不可删除");
+
+            var flowInstances = loader.GetService<IRepository<FlowInstance>>();
+            var flowInstance = await flowInstances.FirstOrDefaultAsync(v => v.Bill_Id == data.Id);
+            if (flowInstance == null)
+                return;
+
+            await flowInstances.DeleteAsync(flowInstance);
+
+            await loader
+                .GetService<HandleOne2ManyService<FlowStep, FlowStep>>()
+                .DelManyAsync(v => v.FlowInstance_Id == flowInstance.Id);
+
+            await loader
+                .GetService<HandleOne2ManyService<FlowStepChecker, FlowStepChecker>>()
+                .DelManyAsync(v => v.FlowInstance_Id == flowInstance.Id);
+
+            await loader
+                .GetService<HandleOne2ManyService<FlowNextChecker, FlowNextChecker>>()
+                .DelManyAsync(v =>
+                    loader.GetService<IRepository<FlowStep>>()
+                          .Any(x => x.FlowInstance_Id == flowInstance.Id && x.Id == v.FlowStep_Id));
+        }
+
+        public async Task<IEnumerable<string>> HandleRequestAsync(IHaveCheckModel request)
+        {
+            return (await GetNextCheckerIds(request)).SelectMany(v => v.Value);
+        }
+
+        public Task<IEnumerable<KeyValuePair<string, IEnumerable<string>>>> HandleRequestAsync(IEnumerable<IHaveCheckModel> request)
+        {
+            return GetNextCheckerIds(request.ToArray());
+        }
+
+        public async Task<IEnumerable<KeyValuePair<string, IEnumerable<string>>>> GetNextCheckerIds(params IHaveCheckModel[] request)
+        {
+            var ids = request.Select(v => v.Id).ToArray();
+
+            var flowInstances = loader.GetService<IRepository<FlowInstance>>();
+            var flowSteps = loader.GetService<IRepository<FlowStep>>();
+            var flowStepCheckers = loader.GetService<IRepository<FlowStepChecker>>();
+
+            var query = from a in flowInstances
+                        join b in flowSteps on a.Id equals b.FlowInstance_Id
+                        join c in flowStepCheckers on b.Id equals c.FlowStep_Id
+                        where !b.IsFinished && a.CurrNode_Id == b.FlowNode_Id
+                        where ids.Contains(a.Bill_Id)
+                        select new
+                        {
+                            a.Bill_Id,
+                            c.User_Id
+                        };
+
+            var list = await query.ToListAsync();
+
+            return list
+                .GroupBy(v => v.Bill_Id)
+                .Select(v => new KeyValuePair<string, IEnumerable<string>>(v.Key, v.Select(x => x.User_Id).Distinct()))
+                .ToList();
+        }
+
+        async Task<IEnumerable<Flow.FlowStepModel>> IRequestHandle<IEnumerable<Flow.FlowStepModel>, IHaveCheckModel>.HandleRequestAsync(IHaveCheckModel request)
+        {
+            return (await GetStepList(request)).SelectMany(v => v.Value);
+        }
+
+        Task<IEnumerable<KeyValuePair<string, IEnumerable<Flow.FlowStepModel>>>> IRequestHandle<IEnumerable<KeyValuePair<string, IEnumerable<Flow.FlowStepModel>>>, IEnumerable<IHaveCheckModel>>.HandleRequestAsync(IEnumerable<IHaveCheckModel> request)
+        {
+            return GetStepList(request.ToArray());
+        }
+
+        public async Task<IEnumerable<KeyValuePair<string, IEnumerable<Flow.FlowStepModel>>>> GetStepList(params IHaveCheckModel[] request)
+        {
+            var ids = request.Select(v => v.Id).ToArray();
+            var flowInstances = loader.GetService<IRepository<FlowInstance>>();
+            var flowSteps = loader.GetService<IRepository<FlowStep>>();
+
+            var query = from a in flowInstances
+                        join step in flowSteps on a.Id equals step.FlowInstance_Id
+                        where ids.Contains(a.Bill_Id)
+                        select new
+                        {
+                            a.Bill_Id,
+                            step
+                        };
+
+            var flowStepCheckers = loader.GetService<IRepository<FlowStepChecker>>();
+            var users = loader.GetService<IRepository<User>>();
+
+            var query2 = from a in flowInstances
+                         join b in flowSteps on a.Id equals b.FlowInstance_Id
+                         join c in flowStepCheckers on b.Id equals c.FlowStep_Id
+                         join u in users on c.User_Id equals u.Id
+                         where !b.IsFinished  
+                         where ids.Contains(a.Bill_Id)
+                         select new
+                         {
+                             b.Id,
+                             c.User_Id,
+                             u.Name
+                         };
+
+            var list = await query.ToListAsync();
+            var list2 = await query2.ToListAsync();
+
+            return list
+                .GroupBy(v => v.Bill_Id)
+                .Select(v => new KeyValuePair<string, IEnumerable<FlowStepModel>>(
+                    v.Key,
+                    v.Select(x => x.step)
+                     .OrderBy(v => v.Id)
+                     .Select(v =>
+                     {
+                         var x = v.MapTo<FlowStep, FlowStepModel>();
+                         x.Checker = list2.Where(y => y.Id == x.Id).Select(y => new KeyValuePair<string, string>(y.User_Id, y.Name));
+                         return x;
+                     })
+                     .ToList()))
+                .ToList();
+        }
     }
 }

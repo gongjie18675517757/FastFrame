@@ -1031,6 +1031,11 @@
             其它
             </summary>
         </member>
+        <member name="T:FastFrame.Entity.Flow.DFModule">
+            <summary>
+            动态表单
+            </summary>
+        </member>
         <member name="T:FastFrame.Entity.Flow.FlowActionEnum">
             <summary>
             流程动作
@@ -1266,6 +1271,96 @@
             离开时
             </summary>
         </member>
+        <member name="T:FastFrame.Entity.Flow.FlowInstance">
+            <summary>
+            流程实例
+            </summary> 
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowInstance.BeModuleName">
+            <summary>
+            归属模块
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowInstance.BeModuleText">
+            <summary>
+            单据名称
+            </summary> 
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowInstance.Bill_Id">
+            <summary>
+            单据ID
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowInstance.BillNumber">
+            <summary>
+            单据编号
+            </summary> 
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowInstance.BillDes">
+            <summary>
+            单据摘要
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowInstance.Status">
+            <summary>
+            流程状态
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowInstance.WorkFlow_Id">
+            <summary>
+            关联流程
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowInstance.CurrNodeName">
+            <summary>
+            当前节点
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowInstance.SponsorName">
+            <summary>
+            流程发起人
+            </summary>    
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowInstance.StartTime">
+            <summary>
+            发起时间
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowInstance.IsComlete">
+            <summary>
+            是否已完结
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowInstance.CompleteTime">
+            <summary>
+            完结时间
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowInstance.LastCheckerName">
+            <summary>
+            最后审批人
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowInstance.LastCheckTime">
+            <summary>
+            最后审批时间
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Flow.FlowNextChecker">
+            <summary>
+            审批时指定的下一步审核人
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowNextChecker.FlowStep_Id">
+            <summary>
+            关联:FlowStep
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.FlowNextChecker.Checker_Id">
+            <summary>
+            关联:User
+            </summary>
+        </member>
         <member name="T:FastFrame.Entity.Flow.FlowNode">
             <summary>
             流程节点
@@ -1421,111 +1516,6 @@
             通知目标
             </summary>
         </member>
-        <member name="T:FastFrame.Entity.Flow.WorkFlow">
-            <summary>
-            工作流    
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Flow.WorkFlow.BeModule">
-            <summary>
-            适用模块
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Flow.WorkFlow.BeModuleName">
-            <summary>
-            模块名称
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Flow.WorkFlow.Version">
-            <summary>
-            版本
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Flow.WorkFlow.Enabled">
-            <summary>
-            状态
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Flow.WorkFlow.Remarks">
-            <summary>
-            备注
-            </summary>
-        </member>
-        <member name="T:FastFrame.Entity.Flow.FlowInstance">
-            <summary>
-            流程实例
-            </summary> 
-        </member>
-        <member name="P:FastFrame.Entity.Flow.FlowInstance.BeModuleName">
-            <summary>
-            归属模块
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Flow.FlowInstance.BeModuleText">
-            <summary>
-            单据名称
-            </summary> 
-        </member>
-        <member name="P:FastFrame.Entity.Flow.FlowInstance.Bill_Id">
-            <summary>
-            单据ID
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Flow.FlowInstance.BillNumber">
-            <summary>
-            单据编号
-            </summary> 
-        </member>
-        <member name="P:FastFrame.Entity.Flow.FlowInstance.BillDes">
-            <summary>
-            单据摘要
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Flow.FlowInstance.Status">
-            <summary>
-            流程状态
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Flow.FlowInstance.WorkFlow_Id">
-            <summary>
-            关联流程
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Flow.FlowInstance.CurrNodeName">
-            <summary>
-            当前节点
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Flow.FlowInstance.SponsorName">
-            <summary>
-            流程发起人
-            </summary>    
-        </member>
-        <member name="P:FastFrame.Entity.Flow.FlowInstance.StartTime">
-            <summary>
-            发起时间
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Flow.FlowInstance.IsComlete">
-            <summary>
-            是否已完结
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Flow.FlowInstance.CompleteTime">
-            <summary>
-            完结时间
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Flow.FlowInstance.LastCheckerName">
-            <summary>
-            最后审批人
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Flow.FlowInstance.LastCheckTime">
-            <summary>
-            最后审批时间
-            </summary>
-        </member>
         <member name="T:FastFrame.Entity.Flow.FlowStep">
             <summary>
             审批步骤
@@ -1606,19 +1596,34 @@
             关联：FlowInstance
             </summary>
         </member>
-        <member name="T:FastFrame.Entity.Flow.FlowNextChecker">
+        <member name="T:FastFrame.Entity.Flow.WorkFlow">
             <summary>
-            审批时指定的下一步审核人
+            工作流    
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Flow.FlowNextChecker.FlowStep_Id">
+        <member name="P:FastFrame.Entity.Flow.WorkFlow.BeModule">
             <summary>
-            关联:FlowStep
+            适用模块
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Flow.FlowNextChecker.Checker_Id">
+        <member name="P:FastFrame.Entity.Flow.WorkFlow.BeModuleName">
             <summary>
-            关联:User
+            模块名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.WorkFlow.Version">
+            <summary>
+            版本
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.WorkFlow.Enabled">
+            <summary>
+            状态
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.WorkFlow.Remarks">
+            <summary>
+            备注
             </summary>
         </member>
         <member name="T:FastFrame.Entity.OA.OaLeave">

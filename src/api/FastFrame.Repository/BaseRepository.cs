@@ -102,7 +102,7 @@ namespace FastFrame.Repository
             await Task.CompletedTask;
 
             /*如果附加过了，则不重新附加*/
-            if (context.ChangeTracker.Entries<T>().Any(v => v.State == EntityState.Detached && v.Entity == entity))
+            if (context.ChangeTracker.Entries<T>().Any(v => v.State != EntityState.Detached && v.Entity.Id == entity.Id))
                 return entity;
 
             var entityEntry = context.Entry(entity);

@@ -13,7 +13,7 @@ namespace FastFrame.Application.OA
 	/// <summary>
 	/// 请假单 
 	/// </summary>
-	public partial class OaLeaveDto:BaseDto<OaLeave>,IHaveMultiFileDto
+	public partial class OaLeaveDto:BaseDto<OaLeave>,IHaveMultiFileDto,IHaveCheckModel
 	{
 		
 		
@@ -128,6 +128,16 @@ namespace FastFrame.Application.OA
 		/// 附件 
 		/// </summary>
 		public IEnumerable<ResourceModel> Files {get;set;}
+		
+		/// <summary>
+		/// 可审核人 
+		/// </summary>
+		public IEnumerable<string> CheckerIds {get;set;}
+		
+		/// <summary>
+		/// 流程步骤 
+		/// </summary>
+		public IEnumerable<Flow.FlowStepModel> StepList {get;set;}
 		
 		
 	}

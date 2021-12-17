@@ -17,6 +17,7 @@ using Hangfire;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Converters;
+using System.Text.Json.Serialization;
 
 #region .NET5的写法 
 //namespace FastFrame.WebHost
@@ -91,6 +92,11 @@ services
     {
         //opts.Filters.Add<GlobalFilter>();
     })
+    .AddJsonOptions(options => {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        options.JsonSerializerOptions.PropertyNamingPolicy = null;
+        options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+    })
     .AddNewtonsoftJson(options =>
     {
         options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
@@ -105,8 +111,8 @@ services
     .AddJsonProtocol(config =>
     {
         config.PayloadSerializerOptions.PropertyNamingPolicy = null;
-        config.PayloadSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
-        config.PayloadSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+        config.PayloadSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+        config.PayloadSerializerOptions.Converters.Add(item: new JsonStringEnumConverter());
     });
 
 services.AddLogging(r => r.AddLog4Net());
@@ -156,6 +162,7 @@ services.ConfigureDynamicProxy(config =>
 
 //#if DEBUG
 builder.Services.AddEndpointsApiExplorer();
+
 var areas = typeof(Program)
        .Assembly
        .GetTypes()
@@ -173,14 +180,19 @@ services.AddSwaggerGen(options =>
         Description = "测试 webapi"
     });
 
-    options.UseInlineDefinitionsForEnums();
+ 
     var basePath = AppDomain.CurrentDomain.BaseDirectory;
     var xmlPath = Path.Combine(basePath, "FastFrame.WebHost.xml");
     options.IncludeXmlComments(xmlPath);
-    xmlPath = Path.Combine(basePath, "FastFrame.Application.xml");
+    xmlPath = Path.Combine(basePath, "FastFrame.Infrastructure.xml");
     options.IncludeXmlComments(xmlPath);
     xmlPath = Path.Combine(basePath, "FastFrame.Entity.xml");
     options.IncludeXmlComments(xmlPath);
+    xmlPath = Path.Combine(basePath, "FastFrame.Application.xml");
+    options.IncludeXmlComments(xmlPath);
+
+
+    options.UseInlineDefinitionsForEnums();
 
     foreach (var item in areas)
     {
@@ -221,7 +233,7 @@ if (app.Environment.IsDevelopment())
 app.UseSwagger();
 //app.UseSwaggerUI(c =>
 //{
-//    //c.SwaggerEndpoint("/swagger/v1/swagger.json", "MsSystem API V1");
+//    c.SwaggerEndpoint("/swagger/v1/swagger.json", "MsSystem API V1");
 //    c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
 
 //    foreach (var item in areas)
@@ -229,7 +241,7 @@ app.UseSwagger();
 //});
 //#endif
 
-app.UseRewriter(new RewriteOptions().AddRewrite("swagger/index.html", "index.html",false));
+app.UseRewriter(new RewriteOptions().AddRewrite("swagger/index.html", "index.html", false));
 
 //app.UseHttpsRedirection();
 

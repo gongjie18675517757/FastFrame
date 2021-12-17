@@ -13,7 +13,7 @@ import {
 } from "../../generate";
 import { FileDetailTable } from "../Table";
 import { makeButtons, makeButtonsInputMode } from './handleFlow'
-
+import FlowStep from './FlowStep.vue'
 
 /**
  * 要注入的方法名
@@ -320,6 +320,15 @@ export let formMethods = {
           fileKey: null,
         })
       }
+
+      if (this.haveCheck) {
+        arr.push({
+          Name: 'StepList',
+          Description: '流程步骤',
+          GroupNames: ['流程步骤'],
+          template: FlowStep, 
+        })
+      }
       return [
         ...arr
       ]
@@ -381,6 +390,7 @@ export let formMethods = {
       if (this.hasFiles) {
         model.Files = model.Files || []
       }
+       
       return model;
     })
   },

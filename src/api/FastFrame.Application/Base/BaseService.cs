@@ -149,6 +149,11 @@ namespace FastFrame.Application
             {
                 await repository.DeleteAsync(entity);
                 await OnDeleteing(entity);
+
+                await EventBus.TriggerEventAsync(new DoMainDeleteing<TDto>(entity.Id, entity));
+
+                if (entity is IHaveCheck haveCheck)
+                    await EventBus.TriggerEventAsync(new DoMainDeleteing<IHaveCheckModel>(entity.Id, entity));
             }
             await repository.CommmitAsync();
 
@@ -233,6 +238,12 @@ namespace FastFrame.Application
         {
             if (output is IHaveMultiFileDto haveMultiFile)
                 haveMultiFile.Files = await EventBus.RequestAsync<IEnumerable<ResourceModel>, IHaveMultiFileDto>(haveMultiFile);
+
+            if (output is IHaveCheckModel haveCheckModel)
+            {
+                haveCheckModel.CheckerIds = await EventBus.RequestAsync<IEnumerable<string>, IHaveCheckModel>(haveCheckModel);
+                haveCheckModel.StepList = await EventBus.RequestAsync<IEnumerable<Flow.FlowStepModel>, IHaveCheckModel>(haveCheckModel);
+            }
         }
 
         /// <summary>
@@ -263,10 +274,30 @@ namespace FastFrame.Application
             if (typeof(IHaveMultiFileDto).IsAssignableFrom(typeof(TDto)))
             {
                 var haveMultiFiles = dtos.Cast<IHaveMultiFileDto>();
-                var valuePairs = await EventBus.RequestAsync<IEnumerable<KeyValuePair<string, IEnumerable<ResourceModel>>>, IEnumerable<IHaveMultiFileDto>>(haveMultiFiles);
+                var valuePairs = await EventBus
+                    .RequestAsync<IEnumerable<KeyValuePair<string, IEnumerable<ResourceModel>>>, IEnumerable<IHaveMultiFileDto>>(haveMultiFiles);
+
                 foreach (var fileDto in haveMultiFiles)
                 {
                     fileDto.Files = valuePairs.Where(v => v.Key == fileDto.Id).SelectMany(v => v.Value);
+                }
+            }
+
+            /*填充单据的流程信息*/
+            if (typeof(IHaveCheckModel).IsAssignableFrom(typeof(TDto)))
+            {
+                var haveCheckModels = dtos.Cast<IHaveCheckModel>();
+
+                var valuePairs = await EventBus
+                  .RequestAsync<IEnumerable<KeyValuePair<string, IEnumerable<string>>>, IEnumerable<IHaveCheckModel>>(haveCheckModels);
+
+                var valuePairs2 = await EventBus
+                  .RequestAsync<IEnumerable<KeyValuePair<string, IEnumerable<Flow.FlowStepModel>>>, IEnumerable<IHaveCheckModel>>(haveCheckModels);
+
+                foreach (var haveCheckModel in haveCheckModels)
+                {
+                    haveCheckModel.CheckerIds = valuePairs.Where(v => v.Key == haveCheckModel.Id).SelectMany(v => v.Value);
+                    haveCheckModel.StepList = valuePairs2.Where(v => v.Key == haveCheckModel.Id).SelectMany(v => v.Value);
                 }
             }
         }

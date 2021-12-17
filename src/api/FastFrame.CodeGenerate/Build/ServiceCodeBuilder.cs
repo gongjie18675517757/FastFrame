@@ -115,7 +115,7 @@ namespace FastFrame.CodeGenerate.Build
                     IsOverride = false,
                     MethodName = "ViewModelListAsync",
                     Modifier = "public",
-                    ResultTypeName = $"Task<PageList<{type.Name}ViewModel>>",
+                    ResultTypeName = $"Task<IPageList<{type.Name}ViewModel>>",
                     CodeBlock = GetViewModelListCodeBlock(type),
                     Parms = new ParameterInfo[] {
                         new ParameterInfo

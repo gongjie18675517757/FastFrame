@@ -440,6 +440,16 @@
             </summary>
             <typeparam name="T"></typeparam>
         </member>
+        <member name="P:FastFrame.Application.IHaveCheckModel.CheckerIds">
+            <summary>
+            下一步审核人
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.IHaveCheckModel.StepList">
+            <summary>
+            流程步骤
+            </summary>
+        </member>
         <member name="T:FastFrame.Application.IHaveMultiFileDto">
             <summary>
             标记有附件
@@ -1756,6 +1766,11 @@
             失败原因
             </summary>
         </member>
+        <member name="P:FastFrame.Application.Flow.FlowStepModel.Checker">
+            <summary>
+            审核人
+            </summary>
+        </member>
         <member name="T:FastFrame.Application.Flow.FlowOperateBefore`1">
             <summary>
             流程操作前(状态还未生成)
@@ -2144,6 +2159,16 @@
         <member name="P:FastFrame.Application.OA.OaLeaveDto.Files">
             <summary>
             附件 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.OA.OaLeaveDto.CheckerIds">
+            <summary>
+            可审核人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.OA.OaLeaveDto.StepList">
+            <summary>
+            流程步骤 
             </summary>
         </member>
         <member name="T:FastFrame.Application.OA.OaLeaveViewModel">

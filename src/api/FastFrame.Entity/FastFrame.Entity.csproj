@@ -17,9 +17,4 @@
 		<DocumentationFile>.\FastFrame.Entity.xml</DocumentationFile>
 	</PropertyGroup>
 
-	<ItemGroup>
-		<PackageReference Include="System.ComponentModel" Version="4.3.0" />
-		<PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
-	</ItemGroup>
-
 </Project>

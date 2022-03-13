@@ -261,7 +261,7 @@ export default {
       // return this.formGroups.map((v) =>
       //   v.values.map((x) => (x.Description ? x.Description.length : 0))
       // );
-      return this.containerWidth > 1220 ? "20em" : "10em";
+      return this.containerWidth > 1220 ? "10em" : "10em";
     },
   },
 

@@ -242,8 +242,17 @@ app.UseSwagger();
 //#endif
 
 app.UseRewriter(new RewriteOptions().AddRewrite("swagger/index.html", "index.html", false));
+app.UseRewriter(new RewriteOptions().AddRewrite("swagger", "index.html", false));
 
-//app.UseHttpsRedirection();
+//app.Use(async (context, next) => {
+//    await Task.CompletedTask;
+
+//    await next();
+//});
+
+////app.UseHttpsRedirection();
+
+
 
 /*使用静态文件*/
 var defaultFilesOptions = new DefaultFilesOptions();
@@ -260,11 +269,21 @@ app.UseSession();
 /*初始化应用会话状态*/
 app.UseMiddleware<AppSessionInitMiddleware>();
 
+/*处理资源文件*/
+app.UseMiddleware<ResourceMiddleware>();
+
+
+
 /*异步处理中间件*/
 app.UseMiddleware<ExceptionMiddleware>();
 
-/*处理资源文件*/
-app.UseMiddleware<ResourceMiddleware>();
+var xx = (string xx) => { };
+
+app.MapGet("", (string id) => { 
+
+});
+
+
 
 /*注册路由*/
 app.UseRouting();

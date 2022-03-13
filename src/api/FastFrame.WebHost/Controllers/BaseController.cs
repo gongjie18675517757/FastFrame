@@ -32,9 +32,86 @@ namespace FastFrame.WebHost.Controllers
         /// </summary> 
         [HttpGet]
         [Permission("List", "列表")]
-        public virtual async Task<IPageList<TDto>> List(string qs)
+        public virtual async Task<IPageList<TDto>> List([FromQuery]string qs)
         {
             return await service.PageListAsync(Pagination.FromJson(qs));
+        }
+
+        [HttpGet]
+        public Pagination TestPage()
+        {
+            return new Pagination
+            {
+                Filters = new KeyValuePair<FilterMode, IEnumerable<IFilter[]>>[]
+                {
+                    new KeyValuePair<FilterMode, IEnumerable<IFilter[]>>(FilterMode.and,new IFilter[][]
+                    {
+                        new IFilter[]
+                        {
+                            new Filter
+                            {
+                                Compare="==",
+                                Name="xx",
+                                Value="xx"
+                            },
+                            new Filter
+                            {
+                                Compare="==",
+                                Name="xx",
+                                Value="xx"
+                            },
+                        },
+                        new IFilter[]
+                        {
+                            new Filter
+                            {
+                                Compare="==",
+                                Name="xx",
+                                Value="xx"
+                            },
+                            new Filter
+                            {
+                                Compare="==",
+                                Name="xx",
+                                Value="xx"
+                            },
+                        }
+                    }),
+                    new KeyValuePair<FilterMode, IEnumerable<IFilter[]>>(FilterMode.and,new IFilter[][]
+                    {
+                        new IFilter[]
+                        {
+                            new Filter
+                            {
+                                Compare="==",
+                                Name="xx",
+                                Value="xx"
+                            },
+                            new Filter
+                            {
+                                Compare="==",
+                                Name="xx",
+                                Value="xx"
+                            },
+                        },
+                        new IFilter[]
+                        {
+                            new Filter
+                            {
+                                Compare="==",
+                                Name="xx",
+                                Value="xx"
+                            },
+                            new Filter
+                            {
+                                Compare="==",
+                                Name="xx",
+                                Value="xx"
+                            },
+                        }
+                    })
+                }
+            };
         }
 
         /// <summary>

@@ -3,12 +3,15 @@ import $http from '../httpClient'
 import { throttle as _throttle, debounce as _debounce } from 'lodash'
 import { getIcon } from './fileIcons'
 import { getUploadPath } from '../config';
+import _queryBuild from './queryBuild'
 
 export const getIconFunc = getIcon;
 
 export const throttle = _throttle;
 
 export const debounce = _debounce;
+
+export const queryBuild = _queryBuild;
 
 /**
  * 事件总线

@@ -19,7 +19,6 @@
 		<PackageReference Include="AspectCore.Extensions.Reflection" Version="2.2.0" />
 		<PackageReference Include="Funcular.DotNetCore.IdGenerators.Net" Version="1.0.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 		<PackageReference Include="ZKWeb.System.Drawing" Version="4.0.1" />
 

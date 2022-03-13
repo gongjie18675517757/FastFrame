@@ -132,7 +132,7 @@ namespace FastFrame.Infrastructure
     /// <summary>
     /// 表达式扩展
     /// </summary> 
-    public class ExpressionExtended<TResult>
+    public   class ExpressionExtended<TResult>
     {
         public static IQueryable<TResult> GetTearPropQueryable<TSource>(IQueryable<TSource> queryable)
         {
@@ -145,6 +145,8 @@ namespace FastFrame.Infrastructure
             return ExpressionExtended<TSource, TResult>.TearProp(source);
         }
     }
+
+ 
 
     /// <summary>
     /// 表达式扩展

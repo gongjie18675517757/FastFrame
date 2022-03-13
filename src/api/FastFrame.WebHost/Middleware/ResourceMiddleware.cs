@@ -71,9 +71,10 @@ namespace FastFrame.WebHost.Middleware
                 }
 
                 provider.TryGetContentType(Path.GetExtension(resourceStreamInfo.Name), out var contentType);
+                contentType = contentType ?? resourceStreamInfo.ContentType;
 
                 /*响应缩略图*/
-                if (contentType.StartsWith("image") && thumbnailPathRegex.IsMatch(path.Value))
+                if (contentType != null && contentType.StartsWith("image") && thumbnailPathRegex.IsMatch(path.Value))
                 {
                     int width = 300, height = 300;
                     _ = context.Request.Query.TryGetValue("width", out var widthText) && int.TryParse(widthText, out width);
@@ -87,10 +88,11 @@ namespace FastFrame.WebHost.Middleware
                 context.Response.StatusCode = 200;
                 context.Response.ContentType = contentType ?? "application/octet-stream";
 
-                //context.Response.Headers.TryAdd("Content-Disposition", $"attachment;filename={WebUtility.UrlEncode(resourceStreamInfo.Name)}");
+                if (context.Request.Query.TryGetValue("has_down", out var _))
+                    context.Response.Headers.TryAdd("Content-Disposition", $"attachment;filename={WebUtility.UrlEncode(resourceStreamInfo.Name)}");
                 context.Response.Headers.TryAdd("cache-control", new[] { "public,max-age=31536000" });
-                context.Response.Headers.TryAdd("Expires", new[] { DateTime.UtcNow.AddYears(1).ToString("R") });
-                context.Response.Headers.TryAdd("Last-Modified", DateTime.Now.ToString());
+                context.Response.Headers.TryAdd("Expires", new[] { resourceStreamInfo.ModifyTime.AddYears(10).ToString("R") });
+                context.Response.Headers.TryAdd("Last-Modified", resourceStreamInfo.ModifyTime.ToString("R"));
                 context.Response.Headers.TryAdd("ETag", resourceId);
 
                 context.Response.ContentLength = resourceStreamInfo.ResourceBlobStream.Length;

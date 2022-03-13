@@ -47,7 +47,7 @@ namespace FastFrame.WebHost.Privder
 
             var fieldInfoStructs = new List<ModuleFieldStrut>();
 
-            var instance = type.Assembly.CreateInstance(type.FullName);
+            var instance =System.Activator.CreateInstance(type);
             if (instance is IHasManage hasManage)
             {
                 var curr = appSessionProvider.CurrUser;
@@ -101,7 +101,9 @@ namespace FastFrame.WebHost.Privder
                     EnumValues = GetEnumValues(nullableType),
                     IsRequired = requiredAttribute != null,
                     GroupNames = formGroupAttribute?.GroupNames,
-                    EnumItemInfo = enumItemAttribute == null ? null : new EnumInfo { Name = enumItemAttribute.Name, SuperPropName = enumItemAttribute.SuperPropName }
+                    EnumItemInfo = enumItemAttribute == null ?
+                                    null : 
+                                    new EnumInfo { Name = enumItemAttribute.Name, SuperPropName = enumItemAttribute.SuperPropName }
                 });
             }
 

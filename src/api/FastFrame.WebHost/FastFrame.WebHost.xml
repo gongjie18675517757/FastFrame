@@ -26,13 +26,6 @@
             <param name="input"></param>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.WebHost.Controllers.Account.AccountController.Regist(FastFrame.Application.Basis.UserDto)">
-            <summary>
-            注册
-            </summary>
-            <param name="user"></param>
-            <returns></returns>
-        </member>
         <member name="M:FastFrame.WebHost.Controllers.Account.AccountController.LogOut">
             <summary>
             登出
@@ -269,6 +262,11 @@
             需要审核的模块
             </summary>
             <returns></returns>
+        </member>
+        <member name="T:FastFrame.WebHost.Controllers.Flow.DFModuleController">
+            <summary>
+            动态表单模块 
+            </summary>
         </member>
         <member name="T:FastFrame.WebHost.Controllers.Flow.WorkFlowCenterController">
             <summary>

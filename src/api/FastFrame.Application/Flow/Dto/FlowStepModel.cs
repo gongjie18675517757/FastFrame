@@ -9,4 +9,6 @@ namespace FastFrame.Application.Flow
         /// </summary>
         public IEnumerable<KeyValuePair<string,string>> Checker { get; set; }
     }
+
+
 }

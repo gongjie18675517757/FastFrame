@@ -1,68 +1,108 @@
 <template>
-  <div class="container">
-    <div class="resize-element">
-      改变大小试试
+  <div class="row">
+    <div class="col-8">
+      <h3>Draggable</h3>
+      <draggable
+        v-model="rows"
+        tag="v-layout"
+        class="row wrap fill-height align-center sortable-list"
+        style="background: grey;"
+      >
+        <v-flex
+          v-for="row in rows"
+          :key="row.index"
+          class="sortable"
+          xs12
+          my-2
+          style="background: red"
+        >
+          <draggable
+            :list="row.items"
+            tag="v-layout"
+            :group="{ name: 'row' }"
+            class="row wrap justify-space-around"
+          >
+            <v-flex
+              v-for="item in row.items"
+              :key="item.title"
+              xs4
+              pa-3
+              class="row-v"
+            >
+              <v-card style="height: 100px;">{{ item.title }}</v-card>
+            </v-flex>
+          </draggable>
+        </v-flex>
+      </draggable>
     </div>
-    <div class="resize-record">
-      触发了{{firedNum}}次resize事件。
-    </div>
+
+ 
   </div>
 </template>
- 
+
 <script>
-export default {
-  showName: '监听DOM变化',
-  data () {
-    return {
-      observer: null,
-      firedNum: 0,
-      recordOldValue: { // 记录下旧的宽高数据，避免重复触发回调函数
-        width: '0',
-        height: '0'
-      }
-    }
-  },
-  mounted () {
-    let MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver
-    let element = document.querySelector('.resize-element')
-    this.observer = new MutationObserver((mutationList) => {
-      for (let mutation of mutationList) {
-        console.log(mutation)
-      }
-      let width = getComputedStyle(element).getPropertyValue('width')
-      let height = getComputedStyle(element).getPropertyValue('height')
-      if (width === this.recordOldValue.width && height === this.recordOldValue.height) return
-      this.recordOldValue = {
-        width,
-        height
-      }
-      this.firedNum += 1
-    })
-    this.observer.observe(element, { attributes: true, attributeFilter: ['style'], attributeOldValue: true })
-  },
-  beforeDestroyed () {
-    if (this.observer) {
-      this.observer.disconnect()
-      this.observer.takeRecords()
-      this.observer = null
-    }
-  }
-}
-</script>
+import draggable from "vuedraggable";
  
-<style lang="stylus" scoped>
-.container
-  position relative
-  .resize-element
-    transform translate(-50%, -50%)
-    position absolute
-    top 50%
-    left 50%
-    height 100%
-    width 100%
-    overflow hidden
-    resize both
-    display block
-    box-shadow 0 0 1px 1px #3361D8
-    border-radius 2px
+
+export default {
+  name: "functional",
+  display: "Functional third party",
+  order: 17,
+  components: {
+    draggable
+  },
+  data() {
+    return {
+      enabled: true,
+      rows: [
+        {
+          index: 1,
+          items: [
+            {
+              title: "item 1",
+              type:'x',
+              children:[]
+            },
+            {
+              title: "item 4"
+            },
+            {
+              title: "item 4x"
+            }
+          ]
+
+        },
+        {
+          index: 2,
+          items: [
+            {
+              title: "item 2"
+            },
+            {
+              title: "item 3"
+            },
+            {
+              title: "item 3x"
+            }
+          ]
+        }
+      ]
+    };
+  }
+};
+</script>
+<style scoped>
+.buttons {
+  margin-top: 35px;
+}
+
+.row-v {
+  height: 150px;
+  width: 200px;
+}
+
+.ghost {
+  opacity: 0.5;
+  background: #c8ebfb;
+}
 </style>

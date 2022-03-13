@@ -119,7 +119,7 @@ export default {
       this.currItem = item;
     },
     handleDownload({ Id, Name }) {
-      window.open(getThumbnailPath(Id, Name));
+      window.open(getDownLoadPath(Id, Name));
     },
     handleRemove(item) {
       this.$message

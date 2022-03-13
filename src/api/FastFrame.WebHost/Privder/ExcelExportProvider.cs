@@ -7,10 +7,6 @@ using FastFrame.Infrastructure.Interface;
 using FastFrame.Infrastructure.Module;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace FastFrame.WebHost.Privder
 {

@@ -8,6 +8,7 @@ import {
 import {
   distinct, throttle, fmtRequestPars, saveFile, getIconFunc, toHexString
 } from '../../utils'
+import queryBuild from "../../utils/queryBuild";
 import { makeButtons, makeButtonsInputMode } from './handleFlow'
 
 /**
@@ -648,8 +649,49 @@ export let pageMethods = {
   },
 
   /**
+   * 构造查询参数
+   * @returns {queryBuild}
+   */
+  async buildQueryFilter() {
+    let qb = new queryBuild()
+    /**
+     * 外部传入的条件
+     */
+    qb.add_and(this.queryFilter || [])
+
+    /**
+     * 查询框的条件
+     */
+    qb.add(this.query);
+
+    /**
+     * 选择树的ID
+     */
+    if (this.superId)
+      qb.add_and([{
+        Name: 'super_Id',
+        value: this.superId,
+        compare: '=='
+      }])
+
+    /**
+     * 树条件
+     */
+    if (this.treeSelectedItem) {
+      let arr = await this.getRequestParsBySelectedTreeItem(this.treeSelectedItem);
+
+      if (arr.length > 0) {
+        qb.add_and(arr)
+      }
+    }
+
+    return qb;
+  },
+
+  /**
    * 获取请求参数
-   * @param {*} pager 
+   * @param {}} pager 
+   * @returns {{PageIndex:1,PageSize:20,SortName:'Id',SortMode:'asc',Filters:[]}}
    */
   async getRequestPars(pager) {
     if (pager) this.pager = pager;
@@ -662,66 +704,15 @@ export let pageMethods = {
       sortDesc
     } = pager;
 
-
-    /*条件1 */
-    let queryFilter = this.queryFilter || []
-
-    var filters = [
-      {
-        ...this.query,
-      },
-      {
-        Key: 'and',
-        Value: [
-          ...queryFilter,
-          ...(this.superId ? [
-            {
-              Name: 'super_Id',
-              value: this.superId,
-              compare: '=='
-            }
-          ] : [])
-        ]
-      }
-    ];
-    filters = JSON.parse(JSON.stringify(filters));
-
-    for (const f of filters) {
-      for (let index = 0; index < f.Value.length; index++) {
-        const arr = f.Value[index];
-        for (const v of arr) {
-          if (Array.isArray(v.value))
-            v.value = v.value.join(',')
-        }
-
-        f.Value[index] = arr.filter(x => !!x.value)
-      }
-
-      f.Value = f.Value.filter(arr => arr.length)
-    }
+    const qb = await this.buildQueryFilter();
 
     let pageInfo = {
       PageIndex: page,
       PageSize: itemsPerPage,
       SortName: sortBy.join(','),
       SortMode: sortDesc.length > 0 && !sortDesc[0] ? "asc" : "desc",
-      Filters: filters.filter(v => v.Value.length > 0)
+      Filters: qb.build()
     };
-
-
-
-
-    if (this.treeSelectedItem) {
-      let arr = await this.getRequestParsBySelectedTreeItem(this.treeSelectedItem);
-
-      if (arr.length > 0) {
-        pageInfo.Filters.push({
-          key: "and",
-          value: arr
-        })
-      }
-    }
-
 
     return pageInfo;
   },
@@ -745,6 +736,7 @@ export let pageMethods = {
     Promise.resolve(pager)
       .then(this.getRequestPars)
       .then(pagePars => {
+
         let method = this.getRequedtMethod()
         let url = this.getRequestUrl()
         return method(url, pagePars)
@@ -763,28 +755,22 @@ export let pageMethods = {
   /**
    * 加载列表数据
    */
-  loadList: throttle(function (pager) {
+  loadList: throttle(async function (pager) {
     this.loading = true;
     this.rows = [];
 
-    Promise.resolve(pager)
-      .then(this.getRequestPars)
-      .then(pagePars => {
-        // console.log(pagePars);
-        let method = this.getRequedtMethod()
-        let url = this.getRequestUrl()
-        return method(url, pagePars)
-      }).then(({
-        Total,
-        Data
-      }) => {
-        this.rows = Data
-        this.total = Total;
-        this.loading = false;
-      }).catch((err) => {
-        this.loading = false;
-        window.console.error(err);
-      })
+    try {
+      const pagePars = await this.getRequestPars(pager);
+      let method = this.getRequedtMethod();
+      let url = this.getRequestUrl();
+      let { Total, Data } = await method(url, pagePars);
+      this.rows = Data
+      this.total = Total;
+    } catch (error) {
+      window.console.error(error);
+    } finally {
+      this.loading = false;
+    } 
   }, 500),
 
   /**

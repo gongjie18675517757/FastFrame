@@ -1691,6 +1691,141 @@
             <param name="json"></param>
             <returns></returns>
         </member>
+        <member name="T:FastFrame.Application.Flow.DFModuleService">
+            <summary>
+            动态表单模块 服务实现 
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Flow.DFModuleDto">
+            <summary>
+            动态表单模块 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.DFModuleDto.Groups">
+            <summary>
+            分组
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.DFModuleDto.Name">
+            <summary>
+            编码 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.DFModuleDto.Description">
+            <summary>
+            名称 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.DFModuleDto.Version">
+            <summary>
+            版本 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.DFModuleDto.IsEnabled">
+            <summary>
+            是否启用 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.DFModuleDto.HaveCheck">
+            <summary>
+            是否需要审核 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.DFModuleDto.HaveNumber">
+            <summary>
+            是否需要编号 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.DFModuleDto.Create_User_Id">
+            <summary>
+            创建人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.DFModuleDto.Create_User">
+            <summary>
+            创建人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.DFModuleDto.CreateTime">
+            <summary>
+            创建时间 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.DFModuleDto.Modify_User_Id">
+            <summary>
+            修改人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.DFModuleDto.Modify_User">
+            <summary>
+            修改人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.DFModuleDto.ModifyTime">
+            <summary>
+            修改时间 
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Flow.DFModuleGroupModel">
+            <summary>
+            表单分组
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.DFModuleGroupModel.Fields">
+            <summary>
+            字段列表
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Flow.DFModuleFieldModel">
+            <summary>
+            分组字段
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.DFModuleFieldModel.Rules">
+            <summary>
+            验证规则 
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Flow.DFModuleViewModel">
+            <summary>
+            动态表单模块 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.DFModuleViewModel.Name">
+            <summary>
+            编码 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.DFModuleViewModel.Description">
+            <summary>
+            名称 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.DFModuleViewModel.Version">
+            <summary>
+            版本 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.DFModuleViewModel.IsEnabled">
+            <summary>
+            是否启用 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.DFModuleViewModel.HaveCheck">
+            <summary>
+            是否需要审核 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.DFModuleViewModel.HaveNumber">
+            <summary>
+            是否需要编号 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Flow.DFModuleViewModel.Id">
+            <summary>
+            主键 
+            </summary>
+        </member>
         <member name="T:FastFrame.Application.Flow.FlowOperateInput">
             <summary>
             审批操作

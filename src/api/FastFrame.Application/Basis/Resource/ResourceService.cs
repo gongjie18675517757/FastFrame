@@ -33,7 +33,10 @@ namespace FastFrame.Application.Basis
 
         public async Task<IResourceStreamInfo> TryGetResource(string resourceId)
         {
-            var info = await resourceRepository.Where(v => v.Id == resourceId).Select(v => new { v.Name, v.Path }).FirstOrDefaultAsync();
+            var info = await resourceRepository
+                .Where(v => v.Id == resourceId)
+                .Select(v => new { v.Name,v.ContentType, v.Path, v.UploadTime })
+                .FirstOrDefaultAsync();
 
             if (info == null)
                 return null;
@@ -45,7 +48,7 @@ namespace FastFrame.Application.Basis
             if (stream == null)
                 return null;
 
-            return new ResourceStreamModel(info.Name, stream); 
+            return new ResourceStreamModel(info.Name,info.ContentType, info.UploadTime, stream);
         }
 
         public async Task<IResourceInfo> TrySaveResource(string name, string contentType, Stream stream)

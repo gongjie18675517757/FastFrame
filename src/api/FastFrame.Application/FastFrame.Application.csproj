@@ -35,4 +35,10 @@
 		<ProjectReference Include="..\FastFrame.Repository\FastFrame.Repository.csproj" />
 	</ItemGroup>
 
+
+
+	<ItemGroup>
+	  <Folder Include="Flow\新文件夹\" />
+	</ItemGroup>
+
 </Project>

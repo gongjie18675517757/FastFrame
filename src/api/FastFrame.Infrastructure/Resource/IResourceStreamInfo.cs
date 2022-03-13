@@ -13,6 +13,16 @@ namespace FastFrame.Infrastructure.Resource
         string Name { get; }
 
         /// <summary>
+        /// 资源类型
+        /// </summary>
+        string ContentType { get; }
+
+        /// <summary>
+        /// 最后修改时间
+        /// </summary>
+        DateTime ModifyTime { get; }
+
+        /// <summary>
         /// 资源流
         /// </summary>
         Stream ResourceBlobStream { get; }

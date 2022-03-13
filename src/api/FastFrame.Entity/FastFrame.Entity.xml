@@ -85,6 +85,21 @@
             </summary>
             <param name="groupNames">归属分组名称</param>
         </member>
+        <member name="F:FastFrame.Entity.HideMark.All">
+            <summary>
+            全部
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.HideMark.Form">
+            <summary>
+            表单
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.HideMark.List">
+            <summary>
+            列表
+            </summary>
+        </member>
         <member name="T:FastFrame.Entity.ReadOnlyAttribute">
             <summary>
             标记只读
@@ -98,6 +113,16 @@
         <member name="T:FastFrame.Entity.ReadOnlyMark">
             <summary>
             只读标识 
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.ReadOnlyMark.All">
+            <summary>
+            任何时间
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.ReadOnlyMark.Edit">
+            <summary>
+            编辑时
             </summary>
         </member>
         <member name="T:FastFrame.Entity.RelatedFromAttribute">
@@ -1033,7 +1058,552 @@
         </member>
         <member name="T:FastFrame.Entity.Flow.DFModule">
             <summary>
+            动态表单模块
+            </summary>    
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFModule.Name">
+            <summary>
+            编码
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFModule.Description">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFModule.Version">
+            <summary>
+            版本
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFModule.IsEnabled">
+            <summary>
+            是否启用
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFModule.HaveCheck">
+            <summary>
+            是否需要审核
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFModule.HaveNumber">
+            <summary>
+            是否需要编号
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Flow.DFModuleGroup">
+            <summary>
+            动态表单分组
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFModuleGroup.DFModule_Id">
+            <summary>
+            所属模块
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFModuleGroup.Order">
+            <summary>
+            排序
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFModuleGroup.GroupName">
+            <summary>
+            标题
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Flow.DFModuleField">
+            <summary>
+            动态表单字段
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFModuleField.DFModule_Id">
+            <summary>
+            所属模块
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFModuleField.DFModuleGroup_Id">
+            <summary>
+            所属分组
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFModuleField.Super_Id">
+            <summary>
+            上级字段：为从表时
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFModuleField.Order">
+            <summary>
+            排序
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFModuleField.Name">
+            <summary>
+            编码
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFModuleField.Description">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFModuleField.FieldType">
+            <summary>
+            字段类型
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFModuleField.IsRelateField">
+            <summary>
+            是否为摘要字段
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFModuleField.ShowList">
+            <summary>
+            列表展示
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFModuleField.IsRequired">
+            <summary>
+            必填
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFModuleField.Readonly">
+            <summary>
+            只读标记
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFModuleField.Relate">
+            <summary>
+            关联模块
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFModuleField.EnumValues">
+            <summary>
+            枚举项(";"分隔)
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFModuleField.EnumItemName">
+            <summary>
+            数据字典项
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Flow.DFModuleFieldRule">
+            <summary>
+            字段验证规则
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFModuleFieldRule.DFModule_Id">
+            <summary>
+            所属模块
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFModuleFieldRule.DFModuleField_Id">
+            <summary>
+            关联字段
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFModuleFieldRule.RuleEnum">
+            <summary>
+            验证规则
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFModuleFieldRule.FuncContent">
+            <summary>
+            自定义验证规则
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Flow.FieldRuleEnum">
+            <summary>
+            预定义的表单验证规则
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FieldRuleEnum.email">
+            <summary>
+            邮箱
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FieldRuleEnum.phone">
+            <summary>
+            手机号
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FieldRuleEnum.unique">
+            <summary>
+            唯一验证
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FieldRuleEnum.func">
+            <summary>
+            自定义
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Flow.FieldTypeEnum">
+            <summary>
+            字段类型枚举
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FieldTypeEnum._text">
+            <summary>
+            单行文本(长度&lt;=200)
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FieldTypeEnum._textarea">
+            <summary>
+            多行文本(200&lt;长度&lt;=2000)
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FieldTypeEnum._richtext">
+            <summary>
+            富文本
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FieldTypeEnum._int32">
+            <summary>
+            整数
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FieldTypeEnum._decimal">
+            <summary>
+            小数
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FieldTypeEnum._enum">
+            <summary>
+            枚举(单选)
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FieldTypeEnum._enumMultiple">
+            <summary>
+            枚举(多选)
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FieldTypeEnum._enumitem">
+            <summary>
+            数据字典(预定义+单选)
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FieldTypeEnum._enumitemMultiple">
+            <summary>
+            数据字典(预定义+多选)
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FieldTypeEnum._custEnumitem">
+            <summary>
+            数据字典(自定义+单选)
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FieldTypeEnum._custEnumitemMultiple">
+            <summary>
+            数据字典(自定义+多选)
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FieldTypeEnum._date">
+            <summary>
+            仅日期
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FieldTypeEnum._time">
+            <summary>
+            仅时间
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FieldTypeEnum._datetime">
+            <summary>
+            日期时间
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FieldTypeEnum._file">
+            <summary>
+            单文件
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FieldTypeEnum._releate">
+            <summary>
+            远程选择
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FieldTypeEnum._childFormTable">
+            <summary>
+            从表(表单填写)
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FieldTypeEnum._childSelectTable">
+            <summary>
+            子表(选择关联)
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FieldTypeEnum._files">
+            <summary>
+            附件列表
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Flow.FieldTypeEnum._images">
+            <summary>
+            图片列表
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Flow.DFForm">
+            <summary>
             动态表单
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFForm.DFModule_Id">
+            <summary>
+            关联:DFModule
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFForm.DFModuleName">
+            <summary>
+            关联:DFModule
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFForm.Number">
+            <summary>
+            单据编号
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Flow.DFFormText">
+            <summary>
+            动态表单值
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFFormText.DFModuleField_Id">
+            <summary>
+            关联:DFModuleField
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFFormText.DFForm_Id">
+            <summary>
+            关联:DFForm
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFFormText.Row_Id">
+            <summary>
+            上级字段：为从表时
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFFormText.Value">
+            <summary>
+            值
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Flow.DFFormTextarea">
+            <summary>
+            动态表单值
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFFormTextarea.DFModuleField_Id">
+            <summary>
+            关联:DFModuleField
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFFormTextarea.DFForm_Id">
+            <summary>
+            关联:DFForm
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFFormTextarea.Row_Id">
+            <summary>
+            上级字段：为从表时
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFFormTextarea.Value">
+            <summary>
+            值
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Flow.DFFormRichtext">
+            <summary>
+            动态表单值
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFFormRichtext.DFModuleField_Id">
+            <summary>
+            关联:DFModuleField
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFFormRichtext.DFForm_Id">
+            <summary>
+            关联:DFForm
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFFormRichtext.Row_Id">
+            <summary>
+            上级字段：为从表时
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFFormRichtext.Value">
+            <summary>
+            值
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Flow.DFFormInt32">
+            <summary>
+            动态表单值
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFFormInt32.DFModuleField_Id">
+            <summary>
+            关联:DFModuleField
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFFormInt32.DFForm_Id">
+            <summary>
+            关联:DFForm
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFFormInt32.Row_Id">
+            <summary>
+            上级字段：为从表时
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFFormInt32.Value">
+            <summary>
+            值
+            </summary> 
+        </member>
+        <member name="T:FastFrame.Entity.Flow.DFFormDecimal">
+            <summary>
+            动态表单值
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFFormDecimal.DFModuleField_Id">
+            <summary>
+            关联:DFModuleField
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFFormDecimal.DFForm_Id">
+            <summary>
+            关联:DFForm
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFFormDecimal.Row_Id">
+            <summary>
+            上级字段：为从表时
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFFormDecimal.Value">
+            <summary>
+            值
+            </summary> 
+        </member>
+        <member name="T:FastFrame.Entity.Flow.DFFormDate">
+            <summary>
+            动态表单值
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFFormDate.DFModuleField_Id">
+            <summary>
+            关联:DFModuleField
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFFormDate.DFForm_Id">
+            <summary>
+            关联:DFForm
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFFormDate.Row_Id">
+            <summary>
+            上级字段：为从表时
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFFormDate.Value">
+            <summary>
+            值
+            </summary> 
+        </member>
+        <member name="T:FastFrame.Entity.Flow.DFFormTime">
+            <summary>
+            动态表单值
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFFormTime.DFModuleField_Id">
+            <summary>
+            关联:DFModuleField
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFFormTime.DFForm_Id">
+            <summary>
+            关联:DFForm
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFFormTime.Row_Id">
+            <summary>
+            上级字段：为从表时
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFFormTime.Value">
+            <summary>
+            值
+            </summary> 
+        </member>
+        <member name="T:FastFrame.Entity.Flow.DFFormDateTime">
+            <summary>
+            动态表单值
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFFormDateTime.DFModuleField_Id">
+            <summary>
+            关联:DFModuleField
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFFormDateTime.DFForm_Id">
+            <summary>
+            关联:DFForm
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFFormDateTime.Row_Id">
+            <summary>
+            上级字段：为从表时
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFFormDateTime.Value">
+            <summary>
+            值
+            </summary> 
+        </member>
+        <member name="T:FastFrame.Entity.Flow.DFFormRelate">
+            <summary>
+            动态表单值
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFFormRelate.DFModuleField_Id">
+            <summary>
+            关联:DFModuleField
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFFormRelate.DFForm_Id">
+            <summary>
+            关联:DFForm
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFFormRelate.Row_Id">
+            <summary>
+            上级字段：为从表时
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFFormRelate.Value">
+            <summary>
+            值
+            </summary> 
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFFormRelate.Value_Id">
+            <summary>
+            关联键
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Flow.DFFormRow">
+            <summary>
+            动态表单值
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFFormRow.DFModuleField_Id">
+            <summary>
+            关联:DFModuleField
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Flow.DFFormRow.DFForm_Id">
+            <summary>
+            关联:DFForm
             </summary>
         </member>
         <member name="T:FastFrame.Entity.Flow.FlowActionEnum">
@@ -1820,6 +2390,11 @@
         <member name="P:FastFrame.Entity.IHaveNumber.Number">
             <summary>
             编号
+            </summary>
+        </member>
+        <member name="M:FastFrame.Entity.IHaveNumber.GetModuleName">
+            <summary>
+            表单名称
             </summary>
         </member>
         <member name="T:FastFrame.Entity.INotGenerateableKey">

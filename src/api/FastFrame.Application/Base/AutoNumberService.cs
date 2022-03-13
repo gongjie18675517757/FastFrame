@@ -38,7 +38,7 @@ namespace FastFrame.Application
             if (entitys.Length == 0)
                 return;
 
-            var typeName = entitys[0].GetType().Name;
+            var typeName = entitys[0].GetModuleName();
             NumberOption opt = await GetNumberOptionAsync(typeName);
             NumberRecord record = await GetNumberRecordAsync(typeName, opt);
 

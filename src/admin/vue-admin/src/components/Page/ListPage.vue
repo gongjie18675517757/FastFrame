@@ -98,7 +98,7 @@
                 <component :is="treeComponent" :height="tableHeight"/>
               </v-col>
               <v-divider vertical v-if="treeComponent"></v-divider>
-              <v-col class="d-flex text-center" style="padding: 0px;padding-left:5px;">
+              <v-col :cols="treeComponent?9:null" class="d-flex text-center" style="padding: 0px;padding-left:5px;">
                 <v-scroll-y-transition mode="out-in">
                   <Table
                     :items="rows"

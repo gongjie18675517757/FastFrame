@@ -53,20 +53,20 @@ namespace FastFrame.WebHost.Controllers.Account
             return await service.LoginAsync(input);
         }
 
-        /// <summary>
-        /// 注册
-        /// </summary>
-        /// <param name="user"></param>
-        /// <returns></returns>
-        [HttpPost]
-        [AllowAnonymous]
-        public async Task<UserDto> Regist([FromBody] UserDto user)
-        {
-            if (!ExistsIsVerify())
-                throw new MsgException("行为验证失败！");
+        ///// <summary>
+        ///// 注册
+        ///// </summary>
+        ///// <param name="user"></param>
+        ///// <returns></returns>
+        //[HttpPost]
+        //[AllowAnonymous]
+        //public async Task<UserDto> Regist([FromBody] UserDto user)
+        //{
+        //    if (!ExistsIsVerify())
+        //        throw new MsgException("行为验证失败！");
 
-            return await service.RegistAsync(user);
-        }
+        //    return await service.RegistAsync(user);
+        //}
 
         /// <summary>
         /// 登出

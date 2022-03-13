@@ -93,9 +93,9 @@ namespace FastFrame.Application
                 var operate = compare.StartsWith("!") ? "!=" : "==";
 
                 var propType = T4Help.GetNullableType(propertyInfo.PropertyType);
-                if(propType.IsEnum)
+                if (propType.IsEnum)
                 {
-                    values= values.Select(v=>Enum.Parse(propType,v.ToString())).ToArray();
+                    values = values.Select(v => Enum.Parse(propType, v.ToString())).ToArray();
                 }
 
                 /*如果属性为数组，则要拆出来成多个OR*/
@@ -115,7 +115,7 @@ namespace FastFrame.Application
                     foreach (var v in values)
                         qList.Add($"{name}==(@{rIndex++})");
 
-                    queryStr = string.Join(" or ", qList); 
+                    queryStr = string.Join(" or ", qList);
                 }
             }
             else
@@ -259,10 +259,16 @@ namespace FastFrame.Application
         /// </summary>
         /// <param name="json"></param>
         /// <returns></returns>
-        public static IPagination FromJson(string json)
+        public static Pagination FromJson(string json)
         {
             return json.ToObject<Pagination>(true, FilterJsonConvert.Default);
         }
+
+        //public static bool TryParse(string qs, IFormatProvider provider, out Pagination pagination)
+        //{
+        //    pagination = FromJson(qs);
+        //    return pagination != null;
+        //}
     }
 
     public class PageList<T> : IPageList<T>

@@ -58,5 +58,16 @@ namespace FastFrame.WebHost.Controllers
         {
             return moduleExportProvider.HaveCheckModuleList();
         }
+
+        [HttpGet("{id}")]
+        public IActionResult Test(string id)
+        {
+            Response.Headers.Add("cache-control", new[] { "public,max-age=31536000" });
+            Response.Headers.Add("Expires", new[] { DateTime.UtcNow.AddYears(1).ToString("R") });
+            Response.Headers.Add("Last-Modified", DateTime.UtcNow.ToString("R"));
+            Response.Headers.Add("ETag", id);
+            var bytes = System.IO.File.ReadAllBytes(@"D:\CoreProject\FastFrame\src\api\FastFrame.WebHost\verify_img\bg.jpg");
+            return new FileContentResult(bytes, "image/png");
+        }
     }
 }

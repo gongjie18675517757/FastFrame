@@ -1758,6 +1758,16 @@
             名称 
             </summary> 
         </member>
+        <member name="P:FastFrame.Infrastructure.Resource.IResourceStreamInfo.ContentType">
+            <summary>
+            资源类型
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Resource.IResourceStreamInfo.ModifyTime">
+            <summary>
+            最后修改时间
+            </summary>
+        </member>
         <member name="P:FastFrame.Infrastructure.Resource.IResourceStreamInfo.ResourceBlobStream">
             <summary>
             资源流

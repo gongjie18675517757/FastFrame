@@ -9,5 +9,13 @@
         /// 编号
         /// </summary>
         string Number { set; get; }
+
+        /// <summary>
+        /// 表单名称
+        /// </summary>
+        string GetModuleName()
+        {
+            return this.GetType().Name;
+        }
     }
 }

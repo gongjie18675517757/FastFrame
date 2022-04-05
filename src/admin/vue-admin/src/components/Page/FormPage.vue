@@ -319,7 +319,7 @@ export default {
 }
 
 .fullPage {
-  height: calc(100vh - 135px);
+  height: calc(100vh - 167px);
   overflow: auto;
   overflow-x: hidden;
 }

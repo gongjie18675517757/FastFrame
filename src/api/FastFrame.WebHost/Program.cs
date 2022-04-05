@@ -171,6 +171,7 @@ var areas = typeof(Program)
        .Distinct()
        .ToArray();
 
+#if DEBUG 
 services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
@@ -215,7 +216,7 @@ services.AddSwaggerGen(options =>
         return true;
     });
 });
-//#endif
+#endif
 #endregion
 
 #region Configure 
@@ -228,7 +229,7 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage(); 
 }
 
-//#if DEBUG
+#if DEBUG
 /*注册swagger*/
 app.UseSwagger();
 //app.UseSwaggerUI(c =>
@@ -243,14 +244,7 @@ app.UseSwagger();
 
 app.UseRewriter(new RewriteOptions().AddRewrite("swagger/index.html", "index.html", false));
 app.UseRewriter(new RewriteOptions().AddRewrite("swagger", "index.html", false));
-
-//app.Use(async (context, next) => {
-//    await Task.CompletedTask;
-
-//    await next();
-//});
-
-////app.UseHttpsRedirection();
+#endif
 
 
 

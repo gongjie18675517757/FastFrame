@@ -4,7 +4,10 @@ using FastFrame.Infrastructure.Module;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Net;
+using System.Text;
 
 namespace FastFrame.WebHost.Controllers
 {
@@ -21,7 +24,7 @@ namespace FastFrame.WebHost.Controllers
         /// <summary>
         /// 生成ID
         /// </summary> 
-        [HttpGet] 
+        [HttpGet]
         public IEnumerable<string> Get(int count = 1)
         {
             return Enumerable.Range(1, count).Select(x => IdGenerate.NetId());
@@ -30,7 +33,7 @@ namespace FastFrame.WebHost.Controllers
         /// <summary>
         /// 生成密码
         /// </summary> 
-        [HttpGet("{pwd}")] 
+        [HttpGet("{pwd}")]
         public KeyValuePair<string, string> MakePassword(string pwd)
         {
             var user = new User();
@@ -59,15 +62,7 @@ namespace FastFrame.WebHost.Controllers
             return moduleExportProvider.HaveCheckModuleList();
         }
 
-        [HttpGet("{id}")]
-        public IActionResult Test(string id)
-        {
-            Response.Headers.Add("cache-control", new[] { "public,max-age=31536000" });
-            Response.Headers.Add("Expires", new[] { DateTime.UtcNow.AddYears(1).ToString("R") });
-            Response.Headers.Add("Last-Modified", DateTime.UtcNow.ToString("R"));
-            Response.Headers.Add("ETag", id);
-            var bytes = System.IO.File.ReadAllBytes(@"D:\CoreProject\FastFrame\src\api\FastFrame.WebHost\verify_img\bg.jpg");
-            return new FileContentResult(bytes, "image/png");
-        }
+ 
+        
     }
 }

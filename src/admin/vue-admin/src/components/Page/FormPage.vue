@@ -1,200 +1,170 @@
 <template>
   <v-container grid-list-xl fluid app ref="container" v-resize="handleResize">
-    <v-layout align-center justify-center :class="{ singleLine: singleLine }">
-      <v-flex v-bind="flex" :style="{ padding: isTab ? '1px' : null }">
-        <v-card flat tile>
-          <v-toolbar flat dense height="30px" v-if="!isTab">
-            <v-toolbar-title>{{ title }}</v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-btn icon @click="$emit('close')" title="关闭" v-if="isDialog">
-              <v-icon>close</v-icon>
+    <v-card flat tile>
+      <v-toolbar flat dense height="30px" v-if="!isTab">
+        <v-toolbar-title>{{ title }}</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn icon @click="$emit('close')" title="关闭" v-if="isDialog">
+          <v-icon>close</v-icon>
+        </v-btn>
+        <v-menu
+          offset-y
+          v-if="$vuetify.breakpoint.smAndDown && visibleToolItems.length > 0"
+        >
+          <template v-slot:activator="{ on }">
+            <v-btn v-on="on" icon color="primary" small title="更多">
+              <v-icon>more_vert</v-icon>
+              <!-- 设置 -->
             </v-btn>
-            <v-menu offset-y v-if="$vuetify.breakpoint.smAndDown && visibleToolItems.length > 0">
-              <template v-slot:activator="{ on }">
-                <v-btn v-on="on" icon color="primary" small title="更多">
-                  <v-icon>more_vert</v-icon>
-                  <!-- 设置 -->
-                </v-btn>
-              </template>
+          </template>
 
-              <v-list dense>
-                <permission-facatory
-                  v-for="item in [
-                    ...($vuetify.breakpoint.smAndDown ? visibleToolItems : []),
-                  ]"
-                  :key="item.key || item.name"
-                  :permission="item.permission"
-                >
-                  <v-list-item
-                    :title="item.title"
-                    :disabled="evalDisabled(item)"
-                    @click="evalAction(item)"
-                  >
-                    <v-list-item-action>
-                      <v-icon>{{ item.iconName }}</v-icon>
-                    </v-list-item-action>
-
-                    <v-list-item-content>
-                      <v-list-item-title>{{ item.title }}</v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-                </permission-facatory>
-
-                <!-- <v-list-item @click="$emit('toggle:singleLine')">
-                  <v-list-item-action>
-                    <v-checkbox :value="singleLine"></v-checkbox>
-                  </v-list-item-action>
-                  <v-list-item-content>
-                    <v-list-item-title>{{ "单行布局" }}</v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item> -->
-                <v-list-item
-                  v-if="hasManage && model.Id"
-                  @click="$emit('toggle:showMamageField')"
-                >
-                  <v-list-item-action>
-                    <v-checkbox :value="showMamageField"></v-checkbox>
-                  </v-list-item-action>
-                  <v-list-item-content>
-                    <v-list-item-title>{{ "显示管理字段" }}</v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list>
-            </v-menu>
-          </v-toolbar>
-          <!-- <v-divider></v-divider> -->
-          <v-card-text
-            class="form-content"
-            v-if="model"
-            :class="[
-              isDialog ? 'dialogPage' : isTab ? 'tabPage' : 'fullPage',
-              'form-page',
-            ]"
-          >
-            <v-layout wrap style="padding: 0px; margin: 0px">
-              <template v-for="group in formGroups">
-                <v-flex
-                  :key="group.key.title"
-                  xs12
-                  :xl10="!isDialog && !singleLine && containerWidth > 1440"
-                  :xl8="singleLine && containerWidth > 1440"
-                  style="padding: 5px; margin: 0 auto"
-                >
-                  <v-card
-                    v-if="group.values.length > 1"
-                    tile
-                    elevation="1"
-                    :class="{ 'no-box-shadow': formGroups.length == 1 }"
-                  >
-                    <v-toolbar
-                      v-if="formGroups.length > 1"
-                      flat
-                      color="transparent"
-                      dense
-                      height="30px"
-                    >
-                      <v-toolbar-title>{{ group.key.title }}:</v-toolbar-title>
-                      <v-spacer></v-spacer>
-                      <v-toolbar-items>
-                        <v-btn
-                          icon
-                          @click="toggleFold(group.key.title)"
-                          color="p"
-                        >
-                          <v-icon v-if="isFold(group.key.title)"
-                            >expand_more</v-icon
-                          >
-                          <v-icon v-else>expand_less</v-icon>
-                        </v-btn>
-                      </v-toolbar-items>
-                    </v-toolbar>
-                    <!-- <v-divider></v-divider> -->
-                    <v-card-text v-show="!isFold(group.key.title)">
-                      <component :is="singleLine ? 'div' : 'v-layout'" wrap>
-                        <template v-for="item in group.values">
-                          <slot :name="item.Name">
-                            <Input
-                              :key="item.Name"
-                              v-bind="item"
-                              :model="model"
-                              :canEdit="canEdit"
-                              :disabled="!canEdit"
-                              :singleLine="singleLine"
-                              :errorMessages="formErrorMessages[item.Name]"
-                              :value="model[item.Name]"
-                              :flex="{ xs12: singleLine, sm6: !singleLine }"
-                              :labelWidth="labelWidth"
-                              @change="
-                                $emit('changed', { item: item, value: $event })
-                              "
-                              @input="handleInput(item, $event)"
-                              :ref="item.Name"
-                            />
-                          </slot>
-                        </template>
-                      </component>
-                    </v-card-text>
-                  </v-card>
-                  <component
-                    v-else
-                    v-for="item in group.values"
-                    :key="item.Name"
-                    :is="item.template"
-                    v-bind="item"
-                    :model="model"
-                    :canEdit="canEdit"
-                    :disabled="!canEdit"
-                    :singleLine="singleLine"
-                    :errorMessages="formErrorMessages[item.Name]"
-                    :value="model[item.Name]"
-                    :isFold="isFold(group.key.title)"
-                    @change="$emit('changed', { item: item, value: $event })"
-                    @input="handleInput(item, $event)"
-                    :ref="item.Name"
-                  >
-                    <template #fold-button>
-                      <v-toolbar-items>
-                        <v-btn
-                          icon
-                          @click="toggleFold(group.key.title)"
-                          color="p"
-                        >
-                          <v-icon v-if="isFold(group.key.title)"
-                            >expand_more</v-icon
-                          >
-                          <v-icon v-else>expand_less</v-icon>
-                        </v-btn>
-                      </v-toolbar-items>
-                    </template>
-                  </component>
-                </v-flex>
-              </template>
-            </v-layout>
-          </v-card-text>
-          <v-card-actions v-if="!hideToolitem">
-            <v-spacer></v-spacer>
+          <v-list dense>
             <permission-facatory
-              v-for="btn in visibleToolItems.filter(evalVisible)"
-              :key="btn.key || btn.name"
-              :permission="btn.permission"
+              v-for="item in [
+                ...($vuetify.breakpoint.smAndDown ? visibleToolItems : []),
+              ]"
+              :key="item.key || item.name"
+              :permission="item.permission"
             >
-              <component
-                :is="btn.component || 'v-btn'"
-                @click="evalAction(btn)"
-                v-bind="btn"
-                :disabled="evalDisabled(btn)"
-                :block="$vuetify.breakpoint.smAndDown"
-                tile
+              <v-list-item
+                :title="item.title"
+                :disabled="evalDisabled(item)"
+                @click="evalAction(item)"
               >
-                <v-icon left v-if="btn.iconName">{{ btn.iconName }}</v-icon>
-                {{ btn.title }}
-              </component>
+                <v-list-item-action>
+                  <v-icon>{{ item.iconName }}</v-icon>
+                </v-list-item-action>
+
+                <v-list-item-content>
+                  <v-list-item-title>{{ item.title }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
             </permission-facatory>
-            <v-spacer></v-spacer>
-          </v-card-actions>
-        </v-card>
-      </v-flex>
-    </v-layout>
+
+            <v-list-item
+              v-if="hasManage && model.Id"
+              @click="$emit('toggle:showMamageField')"
+            >
+              <v-list-item-action>
+                <v-checkbox :value="showMamageField"></v-checkbox>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>{{ "显示管理字段" }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </v-toolbar>
+      <!-- <v-divider></v-divider> -->
+      <v-card-text
+        class="form-content"
+        v-if="model"
+        :class="[
+          isDialog ? 'dialogPage' : isTab ? 'tabPage' : 'fullPage',
+          'form-page',
+        ]"
+      >
+        <v-row align="center" justify="center">
+          <v-col
+            v-for="group in formGroups"
+            :key="group.key.title"
+            v-bind="pageFlex"
+          >
+            <v-card
+              v-if="group.values.filter((x) => !x.template).length > 0"
+              tile
+              elevation="1"
+              :class="{ 'no-box-shadow': formGroups.length == 1 }"
+            >
+              <v-toolbar flat color="transparent" dense height="30px">
+                <v-toolbar-title>{{ group.key.title }}:</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-toolbar-items>
+                  <v-btn icon @click="toggleFold(group.key.title)" color="p">
+                    <v-icon v-if="isFold(group.key.title)">expand_more</v-icon>
+                    <v-icon v-else>expand_less</v-icon>
+                  </v-btn>
+                </v-toolbar-items>
+              </v-toolbar>
+              <!-- <v-divider></v-divider> -->
+              <v-card-text v-show="!isFold(group.key.title)">
+                <v-row align="center" no-gutters>
+                  <slot
+                    v-for="item in group.values.filter((x) => !x.template)"
+                    :name="item.Name"
+                  >
+                    <v-col :cols="item.cols">
+                      <Input
+                        :key="item.Name"
+                        v-bind="item"
+                        :model="model"
+                        :canEdit="canEdit"
+                        :disabled="!canEdit"
+                        :errorMessages="formErrorMessages[item.Name]"
+                        :value="model[item.Name]"
+                        :labelWidth="labelWidth"
+                        @change="
+                          $emit('changed', { item: item, value: $event })
+                        "
+                        @input="handleInput(item, $event)"
+                        :ref="item.Name"
+                      />
+                    </v-col>
+                  </slot>
+                </v-row>
+              </v-card-text>
+            </v-card>
+            <component
+              v-else
+              v-for="item in group.values.filter((x) => !!x.template)"
+              :key="item.Name"
+              :is="item.template"
+              v-bind="item"
+              :model="model"
+              :canEdit="canEdit"
+              :disabled="!canEdit"
+              :singleLine="singleLine"
+              :errorMessages="formErrorMessages[item.Name]"
+              :value="model[item.Name]"
+              :isFold="isFold(group.key.title)"
+              @change="$emit('changed', { item: item, value: $event })"
+              @input="handleInput(item, $event)"
+              :ref="item.Name"
+            >
+              <template #fold-button>
+                <v-toolbar-items>
+                  <v-btn icon @click="toggleFold(group.key.title)" color="p">
+                    <v-icon v-if="isFold(group.key.title)">expand_more</v-icon>
+                    <v-icon v-else>expand_less</v-icon>
+                  </v-btn>
+                </v-toolbar-items>
+              </template>
+            </component>
+          </v-col>
+        </v-row>
+      </v-card-text>
+      <v-card-actions v-if="!hideToolitem">
+        <v-spacer></v-spacer>
+        <permission-facatory
+          v-for="btn in visibleToolItems.filter(evalVisible)"
+          :key="btn.key || btn.name"
+          :permission="btn.permission"
+        >
+          <component
+            :is="btn.component || 'v-btn'"
+            @click="evalAction(btn)"
+            v-bind="btn"
+            :disabled="evalDisabled(btn)"
+            :block="$vuetify.breakpoint.smAndDown"
+            tile
+          >
+            <v-icon left v-if="btn.iconName">{{ btn.iconName }}</v-icon>
+            {{ btn.title }}
+          </component>
+        </permission-facatory>
+        <v-spacer></v-spacer>
+      </v-card-actions>
+    </v-card>
   </v-container>
 </template>
 
@@ -223,6 +193,16 @@ export default {
     hasManage: Boolean,
     formGroups: Array,
     toolItems: Array,
+    pageFormCols: {
+      type: Number,
+      default: 1,
+    },
+    pageFlex: {
+      type: Object,
+      default: () => ({
+        cols: 12,
+      }),
+    },
   },
   data() {
     return {
@@ -300,7 +280,7 @@ export default {
       return val;
     },
     evalAction(item) {
-      this.$emit(`toolItemClick`, item);
+      item.action && item.action(item);
     },
     handleResize() {
       this.containerWidth = this.$refs.container.clientWidth;

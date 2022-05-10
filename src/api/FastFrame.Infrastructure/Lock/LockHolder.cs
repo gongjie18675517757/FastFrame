@@ -3,7 +3,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace FastFrame.WebHost.Privder
+namespace FastFrame.Infrastructure.Lock
 {
     public class LockHolder : ILockHolder, System.IDisposable
     {

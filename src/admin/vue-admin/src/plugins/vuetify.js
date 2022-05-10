@@ -28,7 +28,8 @@ import Vuetify, {
     VListItemContent,
     VDivider,
     VSelect,
-    VChip
+    VChip,
+    VCol
 } from 'vuetify/lib';
 import zhHans from 'vuetify/es5/locale/zh-Hans'
 
@@ -62,7 +63,8 @@ Vue.use(Vuetify, {
         VListItemContent,
         VDivider,
         VSelect,
-        VChip
+        VChip,
+        VCol
     },
 
 });

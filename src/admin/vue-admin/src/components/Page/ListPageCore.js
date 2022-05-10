@@ -253,7 +253,7 @@ export let pageMethods = {
    * @returns 
    */
   getPageTitle() {
-    return this.direction + '列表'
+    return this.direction 
   },
   /**
    * 初始化
@@ -456,9 +456,10 @@ export let pageMethods = {
    * 获取行操作按钮
    */
   getRowOperateItems() {
-    return Promise.resolve([
-      (h, { model }) => {
-        return this.ModuleStrut.HasManage && !this.columns.some(v => v.IsLink) ? h('v-btn', {
+    const arr = [];
+    if (this.ModuleStrut.HasManage && !this.columns.some(v => v.IsLink)) {
+      arr.push((function (h, { model }) {
+        return h('v-btn', {
           props: {
             text: true,
             'x-small': true,
@@ -469,9 +470,12 @@ export let pageMethods = {
               this.toEdit(model)
             }
           }
-        }, '编辑') : null
-      },
-      (h, { model }) => {
+        }, '编辑')
+      }).bind(this))
+    }
+
+    if (this.ModuleStrut.HasManage) {
+      arr.push((function (h, { model }) {
         return this.ModuleStrut.HasManage ? h('v-btn', {
           props: {
             text: true,
@@ -484,8 +488,11 @@ export let pageMethods = {
             }
           }
         }, '删除') : null
-      },
-      (h, { model }) => {
+      }).bind(this))
+    }
+
+    if (this.ModuleStrut.HaveCheck) {
+      arr.push((function (h, { model }) {
         return this.ModuleStrut.HaveCheck ? h('fragments-facatory', null, makeButtons({
           selection: [model],
           mode: makeButtonsInputMode.CELL,
@@ -495,8 +502,10 @@ export let pageMethods = {
             // 'x-small': true,
           }
         }).map(v => h(v))) : null
-      }
-    ])
+      }).bind(this))
+    }
+
+    return Promise.resolve(arr)
   },
 
   /**
@@ -770,7 +779,7 @@ export let pageMethods = {
       window.console.error(error);
     } finally {
       this.loading = false;
-    } 
+    }
   }, 500),
 
   /**

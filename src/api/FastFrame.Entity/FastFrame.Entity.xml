@@ -166,6 +166,46 @@
             </summary>
             <param name="uniqueNames">需要验证唯一的属性</param>
         </member>
+        <member name="T:FastFrame.Entity.Basis.ApiRequestLog">
+            <summary>
+            api请求记录
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.ApiRequestLog.IPAddress">
+            <summary>
+            IP
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.ApiRequestLog.User_Id">
+            <summary>
+            请求人
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.ApiRequestLog.UserName">
+            <summary>
+            请求人
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.ApiRequestLog.RequestTime">
+            <summary>
+            请求时间
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.ApiRequestLog.Path">
+            <summary>
+            请求地址
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.ApiRequestLog.Milliseconds">
+            <summary>
+            耗时数(毫秒)
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.ApiRequestLog.StatusCode">
+            <summary>
+            响应状态码
+            </summary>
+        </member>
         <member name="T:FastFrame.Entity.Basis.BillBeDept">
             <summary>
             单据归属部门
@@ -2259,6 +2299,71 @@
         <member name="P:FastFrame.Entity.OA.OaLeave.FlowStatus">
             <summary>
             审批状态
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Proxy.ProxyClient">
+            <summary>
+            内网穿透隧道
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Proxy.ProxyClient.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Proxy.ProxyClient.ClientToken">
+            <summary>
+            ClientId
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Proxy.ProxyClient.Description">
+            <summary>
+            详细描述
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Proxy.ProxyTarget">
+            <summary>
+            代理目标
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Proxy.ProxyTarget.OriginMark">
+            <summary>
+            域名标识
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Proxy.ProxyTarget.ProxyClient_Id">
+            <summary>
+            关联:ProxyClient
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Proxy.ProxyTarget.Host">
+            <summary>
+            目标地址URL
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Proxy.ProxyTarget.TargetEnum">
+            <summary>
+            代理方式
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Proxy.ProxyTargetEnum">
+            <summary>
+            代理方式
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Proxy.ProxyTargetEnum.tcp">
+            <summary>
+            TCP
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Proxy.ProxyTargetEnum.udp">
+            <summary>
+            UDP
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Proxy.ProxyTargetEnum.http">
+            <summary>
+            HTTP
             </summary>
         </member>
         <member name="P:FastFrame.Entity.BaseEntity.Id">

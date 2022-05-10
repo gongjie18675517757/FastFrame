@@ -22,6 +22,11 @@ export default {
             childPermission: ['LoginLog.SetTokenFailure']
         },
         {
+            title: '接口访问记录',
+            path: '/ApiRequestLog/list',
+            permission: 'ApiRequestLog.List', 
+        },
+        {
             title: '部门管理',
             path: '/dept/list',
             permission: 'Dept.List',

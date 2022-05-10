@@ -18,7 +18,7 @@ namespace FastFrame.WebHost.Controllers
     }
 
     public abstract class BaseController<TDto> : BaseController
-        where TDto : class, IDto, new()
+        where TDto : class
     {
         private readonly IPageListService<TDto> service;
 
@@ -132,6 +132,11 @@ namespace FastFrame.WebHost.Controllers
             return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{fileName}.xlsx");
         }
 
+        /// <summary>
+        /// 格式化导出的列
+        /// </summary>
+        /// <param name="columns"></param>
+        /// <returns></returns>
         protected Task<List<ExcelColumn<TDto>>> FmtExportColumns(List<ExcelColumn<TDto>> columns)
         {
             return Task.FromResult(columns);

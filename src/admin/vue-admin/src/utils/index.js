@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import $http from '../httpClient'
-import { throttle as _throttle, debounce as _debounce } from 'lodash'
+import { throttle as _throttle, debounce as _debounce, get, set } from 'lodash'
 import { getIcon } from './fileIcons'
 import { getUploadPath } from '../config';
 import _queryBuild from './queryBuild'
@@ -64,6 +64,9 @@ export async function lock(lockObj = {}) {
  * @param {*} fn 
  */
 export function mapMany(arr, fn) {
+    fn = fn || function (v) {
+        return v;
+    }
     let array = []
     for (const item of arr) {
         let brr = fn(item)
@@ -184,16 +187,7 @@ export const randomElement = (arr = []) => {
  * @param {*} prop 
  */
 export function getValue(obj = {}, prop = "") {
-    if (!prop)
-        throw new Error('属性名称配置不正确')
-    let paths = prop.split('.')
-
-    let temp = obj
-    for (let index = 0; index < paths.length - 1; index++) {
-        const path = paths[index];
-        temp = temp[path] || {}
-    }
-    return temp[paths[paths.length - 1]]
+    return get(obj, prop)
 }
 
 
@@ -203,16 +197,7 @@ export function getValue(obj = {}, prop = "") {
  * @param {*} prop 
  */
 export function setValue(obj = {}, prop = "", val = null) {
-    if (!prop)
-        throw new Error('属性名称配置不正确')
-    let paths = prop.split('.')
-    let temp = obj
-    for (let index = 0; index < paths.length - 1; index++) {
-        const path = paths[index];
-        temp = temp[path] || {}
-    }
-    temp[paths[paths.length - 1]] = val
-
+    return set(obj, prop, val)
 }
 
 /**

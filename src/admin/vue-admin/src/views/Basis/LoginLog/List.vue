@@ -27,7 +27,7 @@ export default {
         .then((arr) => {
           return [
             ...arr,
-            (h, { model }) =>
+            function (h, { model }) {
               model.IsEnabled
                 ? h(
                     "permission-facatory",
@@ -72,7 +72,8 @@ export default {
                       ),
                     ]
                   )
-                : null,
+                : null;
+            }.bind(this),
           ];
         });
     },

@@ -1,13 +1,13 @@
 ﻿using FastFrame.Infrastructure;
-using FastFrame.Infrastructure.Interface;
+using FastFrame.Infrastructure.Cache;
 using FastFrame.Infrastructure.Lock;
 using System;
 using System.Threading.Tasks;
 
-namespace FastFrame.WebHost.Privder
+namespace FastFrame.Infrastructure.Cache
 {
 
-    public class CacheProvider : ICacheProvider, ILockFacatory
+    public class CacheProvider : ICacheProvider 
     {
         private readonly StackExchange.Redis.ConnectionMultiplexer redisClient;
         private readonly int defaultDatabase;
@@ -22,7 +22,7 @@ namespace FastFrame.WebHost.Privder
         }
 
 
-        private static T ConvertValue<T>(StackExchange.Redis.RedisValue value)
+        public static T ConvertValue<T>(StackExchange.Redis.RedisValue value)
         {
             if (!value.HasValue)
                 return default;
@@ -30,8 +30,7 @@ namespace FastFrame.WebHost.Privder
             return value.ToString().ToObject<T>();
         }
 
-
-        private string ConvertKey(string key)
+        public static string ConvertKey(string key,string prefix)
         {
             if (prefix.IsNullOrWhiteSpace())
                 return key;
@@ -39,29 +38,27 @@ namespace FastFrame.WebHost.Privder
             return $"{prefix}{key}";
         }
 
-        public async Task<ILockHolder> TryCreateLockAsync(string key, TimeSpan timeSpan)
+        private string ConvertKey(string key)
         {
-            key = ConvertKey(key);
-            var token = Guid.NewGuid().ToString("d");
-            var database = redisClient.GetDatabase(defaultDatabase);
+            return ConvertKey(key, prefix);
+        }
 
-            var exists = await database.LockTakeAsync(key, token, timeSpan);
+       
 
-            if (exists)
-                return new LockHolder(key, token, database);
-
-            return null;
+        private StackExchange.Redis.IDatabase GetDatabase()
+        {
+            return redisClient.GetDatabase(defaultDatabase);
         }
 
         public Task DelAsync(string key)
         {
 
-            return redisClient.GetDatabase(defaultDatabase).KeyDeleteAsync(ConvertKey(key));
+            return GetDatabase().KeyDeleteAsync(ConvertKey(key));
         }
 
         public async Task<T> GetAsync<T>(string key)
         {
-            var value = await redisClient.GetDatabase(defaultDatabase).StringGetAsync(ConvertKey(key));
+            var value = await GetDatabase().StringGetAsync(ConvertKey(key));
             return ConvertValue<T>(value);
         }
 
@@ -69,7 +66,7 @@ namespace FastFrame.WebHost.Privder
         {
             try
             {
-                var value = await redisClient.GetDatabase(defaultDatabase).HashGetAsync(ConvertKey(key), field);
+                var value = await GetDatabase().HashGetAsync(ConvertKey(key), field);
                 return ConvertValue<T>(value);
             }
             catch (Exception)
@@ -80,12 +77,12 @@ namespace FastFrame.WebHost.Privder
 
         public async Task HSetAsync<T>(string key, string field, T val, TimeSpan? expire)
         {
-            await redisClient.GetDatabase(defaultDatabase).HashSetAsync(ConvertKey(key), field, val.ToJson());
+            await GetDatabase().HashSetAsync(ConvertKey(key), field, val.ToJson());
         }
 
         public async Task SetAsync<T>(string key, T val, TimeSpan? expire)
         {
-            await redisClient.GetDatabase(defaultDatabase).StringSetAsync(ConvertKey(key), val?.ToJson(), expire);
+            await GetDatabase().StringSetAsync(ConvertKey(key), val?.ToJson(), expire);
         }
     }
 }

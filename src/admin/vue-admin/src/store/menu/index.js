@@ -1,6 +1,7 @@
 import basis from "./basis";
 import flow from "./flow";
 import oa from "./oa";
+import proxy from "./proxy";
 
 export default [
     {
@@ -8,7 +9,8 @@ export default [
         items: [
             flow,
             basis,
-            oa
+            oa,
+            proxy
         ]
     } 
 ]

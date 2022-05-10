@@ -29,7 +29,7 @@ namespace FastFrame.Infrastructure.Module
         /// <param name="type"></param>
         /// <param name="propName"></param>
         /// <returns></returns>
-        string GetPropertyDescription(Type type,string propName);
+        string GetPropertyDescription(Type type, string propName);
 
         /// <summary>
         /// 获取枚举说明
@@ -38,5 +38,13 @@ namespace FastFrame.Infrastructure.Module
         /// <param name="enumValue"></param>
         /// <returns></returns>
         string GetEnumSummary(Type enumType, string enumValue);
+
+        /// <summary>
+        /// 获取枚举说明
+        /// </summary> 
+        string GetEnumSummary<TEnum>(TEnum @enum) where TEnum : Enum
+        {
+            return GetEnumSummary(typeof(TEnum), @enum?.ToString());
+        }
     }
 }

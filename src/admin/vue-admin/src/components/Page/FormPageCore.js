@@ -14,6 +14,7 @@ import {
 import { FileDetailTable } from "../Table";
 import { makeButtons, makeButtonsInputMode } from './handleFlow'
 import FlowStep from './FlowStep.vue'
+import { calcInputVisible, calcInputItemCols } from '../Inputs'
 
 /**
  * 要注入的方法名
@@ -177,7 +178,43 @@ export let formData = {
   /**
    * 工具按钮
    */
-  toolItems: []
+  toolItems: [],
+
+  /**
+    * 几列式布局
+    */
+  pageFormCols: 2,
+
+  /**
+   * 页面布局
+   */
+  pageFlex: {
+
+    /**
+     * > 1904px*
+     */
+    xl: 10,
+
+    /**
+     * 1264px > < 1904px*
+     */
+    lg: 10,
+
+    /**
+     * 960px > < 1264px*
+     */
+    md: 12,
+
+    /**
+     * 600px > < 960px
+     */
+    sm: 12,
+
+    /**
+     * 列数
+     */
+    cols: 12
+  }
 };
 
 
@@ -281,7 +318,7 @@ export let formMethods = {
             selection: [this.model],
             mode: makeButtonsInputMode.FORM,
             editing: this.canEdit,
-            moduleName:this.name
+            moduleName: this.name
           }).map(v => h(v)))
         }
       }
@@ -326,7 +363,7 @@ export let formMethods = {
           Name: 'StepList',
           Description: '流程步骤',
           GroupNames: ['流程步骤'],
-          template: FlowStep, 
+          template: FlowStep,
         })
       }
       return [
@@ -390,7 +427,7 @@ export let formMethods = {
       if (this.hasFiles) {
         model.Files = model.Files || []
       }
-       
+
       return model;
     })
   },
@@ -572,6 +609,8 @@ export let makeChildProps = function () {
     hasManage: this.hasManage,
     toolItems: this.toolItems,
     isTab: this.isTab,
+    pageFormCols: this.pageFormCols,
+    pageFlex: this.pageFlex,
   };
 };
 
@@ -591,8 +630,7 @@ export let makeChildListeners = function () {
       });
     },
     reload: () => this.init(),
-    close: this.close,
-    toolItemClick: item => item.action.call(this, this.model),
+    close: this.close 
   };
 };
 
@@ -633,22 +671,22 @@ export let formComputed = {
     }
   },
   formGroups() {
+    const model = this.model;
     let opts = this.options || [];
     if (this.hasManage && this.showMamageField && this.model && this.model.Id) {
       opts = [...opts, ...this.manageOptions];
     }
+
     opts = distinct(opts, v => v.Name, (a, b) => ({
       ...a,
       ...b
     }))
-    opts = opts.filter(v => {
-      if (typeof v.visible == 'function')
-        return v.visible.call(this, this.model)
-      else if (typeof v.visible == 'boolean')
-        return v.visible
-      else
-        return true;
-    })
+
+    opts = opts.filter(item => calcInputVisible(item, model))
+
+    for (const item of opts) {
+      item.cols = calcInputItemCols(this.pageFormCols, item)
+    }
 
     let brr = selectMany(opts, r => {
       return (r.GroupNames || ["基础信息"]).map(p => {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace FastFrame.Infrastructure.Interface
+namespace FastFrame.Infrastructure.Cache
 {
     /// <summary>
     /// 缓存

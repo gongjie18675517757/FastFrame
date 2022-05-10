@@ -4,6 +4,11 @@
         <name>FastFrame.Infrastructure</name>
     </assembly>
     <members>
+        <member name="T:FastFrame.Infrastructure.Cache.ICacheProvider">
+            <summary>
+            缓存
+            </summary>
+        </member>
         <member name="T:FastFrame.Infrastructure.Client.Client2ServiceMessage">
             <summary>
             服务端消息
@@ -1071,11 +1076,6 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="T:FastFrame.Infrastructure.Interface.ICacheProvider">
-            <summary>
-            缓存
-            </summary>
-        </member>
         <member name="T:FastFrame.Infrastructure.Interface.IExcelExportProvider">
             <summary>
             EXCEL导出
@@ -1233,6 +1233,16 @@
             标记此类有需要消费消息
             </summary>
         </member>
+        <member name="T:FastFrame.Infrastructure.MessageQueue.MessageQueue">
+            <summary>
+            消息队列
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.MessageQueue.MessageQueue.OnSubscribe(StackExchange.Redis.RedisChannel,StackExchange.Redis.RedisValue)">
+            <summary>
+            触发订阅事件
+            </summary> 
+        </member>
         <member name="P:FastFrame.Infrastructure.MessageQueue.MessageQueueServiceCollectionExtensions.SubscribeMethodList">
             <summary>
             订阅列表
@@ -1323,6 +1333,11 @@
             <param name="enumType"></param>
             <param name="enumValue"></param>
             <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Module.IModuleDesProvider.GetEnumSummary``1(``0)">
+            <summary>
+            获取枚举说明
+            </summary> 
         </member>
         <member name="T:FastFrame.Infrastructure.Module.IModuleExportProvider">
             <summary>

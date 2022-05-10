@@ -14,6 +14,10 @@ namespace FastFrame.Entity.Basis
     [Unique(nameof(Account))]
     public class User : BaseEntity
     {
+        public const int NameLength = 50;
+
+
+
         /// <summary>
         /// 帐号
         /// </summary>
@@ -38,7 +42,7 @@ namespace FastFrame.Entity.Basis
         /// <summary>
         /// 姓名
         /// </summary>
-        [StringLength(50), Required]
+        [StringLength(NameLength), Required]
         public string Name { get; set; }
 
         /// <summary>
@@ -105,5 +109,4 @@ namespace FastFrame.Entity.Basis
             return strResult.Replace("-", "").ToLower();
         }
     }
-     
 }

@@ -156,18 +156,42 @@ html {
   overflow: auto;
 }
 
-.border-input .v-text-field > .v-input__control > .v-input__slot:after {
-  display: none;
-}
+.border-input .v-input {
+  >.v-input__control {
+    >.v-input__slot:after, > .v-input__slot:before {
+      display: none;
+    }
+  }
 
-.border-input .v-text-field > .v-input__control > .v-input__slot:before {
-  display: none;
-}
+  &.v-input {
+    &.v-input__slot_checkbox_container {
+      .v-input__slot {
+        padding: 2px 5px;
 
-.border-input .v-text-field .v-input__slot, .border-input .v-input__slot {
-  border: 1px solid #ababab;
-  border-radius: 1px;
-  padding: 4px 12px;
+        .v-input--dense {
+          padding: 1px;
+        }
+      }
+    }
+
+    &.v-input--selection-controls {
+      .v-input__slot {
+        border: none;
+      }
+    }
+
+    .v-input__slot {
+      padding: 4px 12px;
+      border: 1px solid #ababab;
+      border-radius: 1px;
+    }
+
+    &.v-input-no-border {
+      .v-input__slot {
+        border: none;
+      }
+    }
+  }
 }
 
 .v-sheet.v-card, .no-box-shadow {

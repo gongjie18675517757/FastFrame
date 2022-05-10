@@ -1,6 +1,6 @@
 ﻿using FastFrame.Infrastructure;
+using FastFrame.Infrastructure.Cache;
 using FastFrame.Infrastructure.Client;
-using FastFrame.Infrastructure.Interface;
 using FastFrame.WebHost.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using System.Collections.Generic;

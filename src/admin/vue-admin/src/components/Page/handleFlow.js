@@ -61,7 +61,7 @@ export const makeButtonsInputMode = {
 /**
  * 审核操作
  */
-class handleFlowOperateInput extends makeButtonsInput {
+export class handleFlowOperateInput extends makeButtonsInput {
     constructor() {
         super();
 
@@ -77,7 +77,7 @@ class handleFlowOperateInput extends makeButtonsInput {
     }
 }
 
-new handleFlowOperateInput()
+ 
 
 
 /**

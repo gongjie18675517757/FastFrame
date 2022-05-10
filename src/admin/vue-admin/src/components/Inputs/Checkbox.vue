@@ -1,42 +1,48 @@
 <template>
-  <span>
-    <span v-if="disabled && !isXs">{{value ? "是" : "否"}}</span>
-    <v-checkbox v-else v-bind="childProps" dense v-on="listeners" :value="value"></v-checkbox>
-  </span>
+  <v-input
+    dense
+    class="v-input__slot_checkbox_container v-input-no-border"
+    style="margin-top: 0px"
+  >
+    <template #default>
+      <slot>
+        <v-checkbox
+          :input-value="value"
+          @change="change"
+          :disabled="readonly"
+          hide-details
+          style="margin-top: 0px"
+          dense
+        ></v-checkbox>
+      </slot>
+    </template>
+    <template #prepend>
+      <slot name="prepend"></slot>
+    </template>
+  </v-input>
 </template>
-
+ 
 <script>
 export default {
   // functional:true,
   props: {
     value: Boolean,
-    disabled: Boolean,
+
     readonly: Boolean,
     label: String,
     description: String,
     errorMessages: Array,
-    isXs: Boolean
+    isXs: Boolean,
+    multiple: Boolean,
+    values: Array,
   },
-  computed: {
-    childProps() {
-      return {
-        ...this.$attrs,
-        value: this.value,
-        readonly: this.readonly || this.disabled,
-        label: this.label,
-        placeholder: this.description,
-        errorMessages: this.errorMessages
-      };
+  methods: {
+    change(val) {
+      val = val || false;
+      this.$emit("change", val);
+      this.$emit("input", val);
     },
-    listeners() {
-      return {
-        ...this.$listeners,
-        change: val => {
-          this.$emit("change", val || false);
-          this.$emit("input", val || false);
-        }
-      };
-    }
-  }
+  },
 };
 </script>
+ 

@@ -4,7 +4,7 @@
       <v-flex xs12 :style="{ padding: isTab ? '0px' : null }">
         <v-card tile>
           <v-toolbar flat dense height="30px" color="transparent">
-            <v-toolbar-title>{{ direction }}</v-toolbar-title>
+            <v-toolbar-title v-if="$store.state.singlePageMode || isDialog">{{ direction }}</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items
               class="hidden-sm-and-down btn-group"

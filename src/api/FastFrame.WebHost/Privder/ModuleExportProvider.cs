@@ -47,7 +47,7 @@ namespace FastFrame.WebHost.Privder
 
             var fieldInfoStructs = new List<ModuleFieldStrut>();
 
-            var instance =System.Activator.CreateInstance(type);
+            var instance = System.Activator.CreateInstance(type);
             if (instance is IHasManage hasManage)
             {
                 var curr = appSessionProvider.CurrUser;
@@ -102,7 +102,7 @@ namespace FastFrame.WebHost.Privder
                     IsRequired = requiredAttribute != null,
                     GroupNames = formGroupAttribute?.GroupNames,
                     EnumItemInfo = enumItemAttribute == null ?
-                                    null : 
+                                    null :
                                     new EnumInfo { Name = enumItemAttribute.Name, SuperPropName = enumItemAttribute.SuperPropName }
                 });
             }
@@ -165,27 +165,31 @@ namespace FastFrame.WebHost.Privder
             if (type.IsArray)
                 type = type.GetElementType();
 
+            type = T4Help.GetNullableType(type);
+
             if (!type.IsEnum)
-                yield break;
+                return null;
 
-            foreach (var item in Enum.GetNames(type))
-            {
-                yield return new KeyValuePair<string, string>(
-                    item, descriptionProvider.GetEnumSummary(type, item));
-            }
-
+            return Enum
+                 .GetNames(type)
+                 .Select(item => new KeyValuePair<string, string>(item, descriptionProvider.GetEnumSummary(type, item)));
         }
 
         private IEnumerable<ModuleFieldRule> GetRules(PropertyInfo prop)
         {
             if (TryGetAttribute<RequiredAttribute>(prop, out _))
                 yield return new ModuleFieldRule("required");
+
             if (TryGetAttribute<StringLengthAttribute>(prop, out var stringLengthAttribute))
                 yield return new ModuleFieldRule("stringLength",
                     stringLengthAttribute.MinimumLength.ToString(),
                     stringLengthAttribute.MaximumLength.ToString());
+
             if (TryGetAttribute<UniqueAttribute>(prop, out _))
                 yield return new ModuleFieldRule("unique", prop.DeclaringType.Name, prop.Name);
+
+            if (TryGetAttribute<UniqueAttribute>(prop, out _))
+                yield return new ModuleFieldRule($"is{T4Help.GetNullableType(prop.PropertyType).Name}");
         }
 
         private bool TryGetAttribute<T>(PropertyInfo propertyInfo, out T attr) where T : Attribute

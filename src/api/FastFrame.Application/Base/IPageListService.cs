@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 namespace FastFrame.Application
 {
     public interface IPageListService<TDto> : IService
-        where TDto : class, IDto, new()
+        where TDto : class
     {
         /// <summary>
         /// 获取列表数据

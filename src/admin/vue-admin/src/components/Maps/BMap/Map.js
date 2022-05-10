@@ -28,7 +28,7 @@ export default {
   },
   computed: {
     url() {
-      return `http://api.map.baidu.com/api?v=3.0&ak=${this.ak}`;
+      return `//api.map.baidu.com/api?v=3.0&ak=${this.ak}`;
     }
   },
   mounted() {

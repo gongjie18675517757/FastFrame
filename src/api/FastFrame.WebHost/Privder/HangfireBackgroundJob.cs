@@ -62,8 +62,6 @@ namespace FastFrame.WebHost.Privder
             var parameters = job.Args.ToArray();
             var result = (Task)job.Method.Invoke(instance, parameters);
             await result;
-        }
-
-
+        } 
     }
 }

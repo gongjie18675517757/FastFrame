@@ -39,6 +39,12 @@ export default {
                 title: `登录身份列表`,
             }
         ],
+        ApiRequestLog: [
+            {
+                key: 'List',
+                title: `接口访问记录`,
+            }
+        ],
         NumberOption: [
             ...makeStandardRouteItems('单据编号规则')
         ]

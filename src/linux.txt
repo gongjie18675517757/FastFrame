@@ -1,0 +1,134 @@
+安装mysql:
+apt install mysql-server -y 
+
+查看mysql版本：
+apt install mysql-server -y
+
+使用su登陆mysql
+mysql -u root -p 密码跳过不用管 
+
+mysql,Storage engine 'MyISAM' does not support system tables. [mysql.db] 改不了密码时
+>mysqld --upgrade=FORCE
+
+上传脚本文件：
+scp D:\mysql-5.6.40-winx64\data\all_databases.sql ubuntu@1.117.222.117:all_databases.sql
+
+下载文件
+scp -ubuntu@1.117.222.117:/home/ubuntu/exam.sql exam.sql
+
+执行脚本文件:
+mysql> source /home/ubuntu/all_databases.sql
+
+备份数据库
+mysqldump -u root -p --databases exam >exam.sql
+
+更新表名
+rename table __efmigrationshistory to __EFMigrationsHistory;
+
+安装Redis服务器端
+sudo apt-get install redis-server
+
+安装运行时：
+sudo apt-get update; \
+  sudo apt-get install -y apt-transport-https && \
+  sudo apt-get update && \
+  sudo apt-get install -y aspnetcore-runtime-6.0
+
+如果装不上则：
+sudo apt-get install -y gpg
+wget -O - https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o microsoft.asc.gpg
+sudo mv microsoft.asc.gpg /etc/apt/trusted.gpg.d/
+wget https://packages.microsoft.com/config/ubuntu/{os-version/*20.0.4*/}/prod.list
+sudo mv prod.list /etc/apt/sources.list.d/microsoft-prod.list
+sudo chown root:root /etc/apt/trusted.gpg.d/microsoft.asc.gpg
+sudo chown root:root /etc/apt/sources.list.d/microsoft-prod.list
+sudo apt-get update; \
+  sudo apt-get install -y apt-transport-https && \
+  sudo apt-get update && \
+  sudo apt-get install -y {dotnet-package /*aspnetcore-runtime-6.0*/} 
+
+上传文件夹到用户目录
+scp -r D:\CoreProject\FastFrame\src\api\FastFrame.WebHost\bin\Release\net6.0\publish ubuntu@1.117.222.117:publish 
+
+创建服务
+>sudo vim /etc/systemd/system/myweb.service
+>sudo systemctl enable fast.service
+>sudo systemctl start fast.service
+>sudo systemctl status fast.service
+
+服务的内容：
+[Unit]
+Description=exam
+
+[Service]
+WorkingDirectory=/app/exam/publish
+ExecStart=dotnet Examination.dll --urls=http://0.0.0.0:62455
+Restart=always
+RestartSec=10
+SyslogIdentifier=exam
+User=root
+Environment=ASPNETCORE_ENVIRONMENT=Production
+Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
+
+[Install]
+WantedBy=multi-user.target
+
+安装nginx
+>apt-get install nginx
+查看nginx是否安装成功 
+nginx -v 
+启动nginx 
+service nginx start 
+重启 
+service nginx restart 
+停止 
+service nginx stop
+
+
+配置nginx
+>sudo vim /etc/nginx/conf.d/exam.conf
+##################
+server {
+    listen        80;
+    server_name   exam.devvv.work;
+
+    location / { 
+        root /app/exam/publish/wwwroot; 
+    }
+
+    location /api {
+        proxy_pass         http://127.0.0.1:62456;
+        proxy_http_version 1.1;
+        proxy_set_header   Upgrade $http_upgrade;
+        proxy_set_header   Connection keep-alive;
+        proxy_set_header   Host $host;
+        proxy_cache_bypass $http_upgrade;
+        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto $scheme;
+        #add_header Access-Control-Allow-Origin *;
+        #add_header Access-Control-Allow-Methods 'GET, POST, OPTIONS';
+        #add_header Access-Control-Allow-Headers 'DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization';
+    }
+}
+######################
+>sudo nginx -s reload
+
+
+移动文件到指定目录下
+mv -fv /home/ubuntu/publish/* /app/fast/publish
+
+
+mysql服务：
+sudo service mysql start
+sudo service mysql stop
+sudo service mysql restart
+
+password:Abc.123456
+
+
+
+linux支持gdi
+>sudo curl https://raw.githubusercontent.com/stulzq/awesome-dotnetcore-image/master/install/ubuntu.sh|sh
+
+SSL密码：
+Abc.123456

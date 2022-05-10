@@ -76,6 +76,13 @@
             <param name="fileName"></param>
             <returns></returns>
         </member>
+        <member name="M:FastFrame.WebHost.Controllers.BaseController`1.FmtExportColumns(System.Collections.Generic.List{FastFrame.Infrastructure.Interface.ExcelColumn{`0}})">
+            <summary>
+            格式化导出的列
+            </summary>
+            <param name="columns"></param>
+            <returns></returns>
+        </member>
         <member name="M:FastFrame.WebHost.Controllers.BaseCURDController`1.Delete(System.String)">
             <summary>
             删除
@@ -108,6 +115,11 @@
             <summary>
             验证唯一性
             </summary>      
+        </member>
+        <member name="T:FastFrame.WebHost.Controllers.Basis.ApiRequestLogController">
+            <summary>
+            接口请求记录
+            </summary>
         </member>
         <member name="T:FastFrame.WebHost.Controllers.Basis.DeptController">
             <summary>
@@ -311,6 +323,11 @@
             请假单 
             </summary>
         </member>
+        <member name="T:FastFrame.WebHost.Controllers.Proxy.ProxyClientController">
+            <summary>
+            内网穿透服务 
+            </summary>
+        </member>
         <member name="M:FastFrame.WebHost.Hubs.MessageHub.ClientResponse(System.String)">
             <summary>
             客户端发送给服务端的消息
@@ -409,16 +426,6 @@
             </summary>
             <typeparam name="TDto"></typeparam>
             <returns></returns>
-        </member>
-        <member name="T:FastFrame.WebHost.Privder.MessageQueue">
-            <summary>
-            消息队列
-            </summary>
-        </member>
-        <member name="M:FastFrame.WebHost.Privder.MessageQueue.OnSubscribe(StackExchange.Redis.RedisChannel,StackExchange.Redis.RedisValue)">
-            <summary>
-            触发订阅事件
-            </summary> 
         </member>
         <member name="M:FastFrame.WebHost.Privder.ModuleExportProvider.GetModuleStruts(System.String)">
             <summary>

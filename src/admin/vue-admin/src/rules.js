@@ -3,7 +3,7 @@ import $http from './httpClient'
  * 必填验证
  * @param {*} fieldDescription 
  */
-function required(fieldDescription = '') {
+export function required(fieldDescription = '') {
   return function (value) {
     return !!value || `${fieldDescription}是必填的`
   }
@@ -12,7 +12,7 @@ function required(fieldDescription = '') {
  * 邮箱验证
  * @param {*} fieldDescription 
  */
-function email(fieldDescription = '邮箱地址无效') {
+export function email(fieldDescription = '邮箱地址无效') {
   const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return function (value) {
     return !value || pattern.test(value) || fieldDescription;
@@ -25,7 +25,7 @@ function email(fieldDescription = '邮箱地址无效') {
  * @param {*} min 
  * @param {*} max 
  */
-function stringLength(fieldDescription = '', min, max) {
+export function stringLength(fieldDescription = '', min, max) {
   return function (value) {
     return !value || (value && value.length >= min && value.length < max) || `${fieldDescription}长度要求在[${min},${max}]之间`
   }
@@ -35,7 +35,7 @@ function stringLength(fieldDescription = '', min, max) {
  * 手机号验证
  * @param {*} fieldDescription 
  */
-function phone(fieldDescription = '手机号码无效') {
+export function phone(fieldDescription = '手机号码无效') {
   const pattern = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
   return function (value) {
     return !value || pattern.test(value) || fieldDescription;
@@ -48,7 +48,7 @@ function phone(fieldDescription = '手机号码无效') {
  * @param {*} moduleName 
  * @param {*} name 
  */
-function unique(fieldDescription, moduleName, name) {
+export function unique(fieldDescription, moduleName, name) {
   return function (value) {
     if (!value)
       return true
@@ -73,6 +73,64 @@ function unique(fieldDescription, moduleName, name) {
   }
 }
 
+/**
+ * 是否整数
+ * @param {*} fieldDescription 
+ */
+export function isInt32(fieldDescription) {
+  const err_msg = `${fieldDescription}不是有效的整数`
+  return function (v) {
+    if (isNaN(v))
+      return err_msg;
+
+    if (v) {
+      v = parseFloat(v);
+
+      if (isNaN(v))
+        return err_msg;
+
+      if (v % 1 != 0)
+        return err_msg;
+    }
+
+
+
+    return true;
+  }
+}
+
+/**
+ * 是否整数
+ * @param {*} fieldDescription 
+ */
+export function isDecimal(fieldDescription) {
+  const err_msg = `${fieldDescription}不是有效的数字`
+  return function (v) {
+    if (isNaN(v))
+      return err_msg;
+
+    if (v) {
+      v = parseFloat(v);
+
+      if (isNaN(v))
+        return err_msg;
+    } 
+    return true;
+  }
+}
+
+/**
+ * 是否日期
+ * @param {*} fieldDescription 
+ */
+export function isDateTime(fieldDescription) {
+  const err_msg = `${fieldDescription}不是有效的日期`
+  return function (v) {
+    if (!!v && (new Date(v).getDate() != v.substring(v.length - 2)))
+      return err_msg
+    return true;
+  }
+}
 
 
 export default {
@@ -80,5 +138,7 @@ export default {
   email,
   stringLength,
   phone,
-  unique
+  unique,
+  isInt32,
+  isDecimal
 }

@@ -1,10 +1,5 @@
-﻿using FastFrame.Infrastructure;
-using FastFrame.Infrastructure.Interface;
+﻿using FastFrame.Infrastructure.Interface;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FastFrame.WebHost.Middleware
 {

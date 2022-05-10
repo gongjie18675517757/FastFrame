@@ -1,6 +1,6 @@
 ﻿using FastFrame.Infrastructure;
+using FastFrame.Infrastructure.Cache;
 using FastFrame.Infrastructure.Identity;
-using FastFrame.Infrastructure.Interface;
 using FastFrame.Infrastructure.MessageQueue;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;

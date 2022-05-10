@@ -510,6 +510,19 @@
             <param name="check_entity"></param>
             <returns></returns>
         </member>
+        <member name="M:FastFrame.Application.Basis.ApiRequestLogService.InsertAsync(FastFrame.Entity.Basis.ApiRequestLog)">
+            <summary>
+            插入记录
+            </summary>
+            <param name="apiRequestLog"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.Basis.ApiRequestLogService.BackgroundInsert(FastFrame.Entity.Basis.ApiRequestLog)">
+            <summary>
+            插入记录(立即返回)
+            </summary>
+            <param name="apiRequestLog"></param>
+        </member>
         <member name="T:FastFrame.Application.Basis.DeptService">
             <summary>
             部门 服务实现 
@@ -2369,6 +2382,81 @@
         <member name="T:FastFrame.Application.OA.OaLeaveService">
             <summary>
             请假单 服务实现 
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Proxy.ProxyClientDto">
+            <summary>
+            内网穿透服务 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Proxy.ProxyClientDto.ProxyDic">
+            <summary>
+            代理目标
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Proxy.ProxyClientDto.Name">
+            <summary>
+            名称 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Proxy.ProxyClientDto.ClientToken">
+            <summary>
+            ClientId 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Proxy.ProxyClientDto.Description">
+            <summary>
+            详细描述 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Proxy.ProxyClientDto.Create_User_Id">
+            <summary>
+            创建人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Proxy.ProxyClientDto.Create_User">
+            <summary>
+            创建人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Proxy.ProxyClientDto.CreateTime">
+            <summary>
+            创建时间 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Proxy.ProxyClientDto.Modify_User_Id">
+            <summary>
+            修改人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Proxy.ProxyClientDto.Modify_User">
+            <summary>
+            修改人 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Proxy.ProxyClientDto.ModifyTime">
+            <summary>
+            修改时间 
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Proxy.ProxyClientViewModel">
+            <summary>
+            内网穿透服务 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Proxy.ProxyClientViewModel.Name">
+            <summary>
+            名称 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Proxy.ProxyClientViewModel.Id">
+            <summary>
+            主键 
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.Proxy.ProxyClientService">
+            <summary>
+            内网穿透服务 服务实现 
             </summary>
         </member>
     </members>

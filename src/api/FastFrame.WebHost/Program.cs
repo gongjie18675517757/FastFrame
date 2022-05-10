@@ -1,5 +1,6 @@
 ﻿global using AspectCore.Extensions.DependencyInjection;
 using FastFrame.Application;
+using FastFrame.Infrastructure.Cache;
 using FastFrame.Infrastructure.Client;
 using FastFrame.Infrastructure.EventBus;
 using FastFrame.Infrastructure.Interface;
@@ -74,16 +75,18 @@ var configurationOptions = StackExchange.Redis.ConfigurationOptions.Parse(Config
 var connectionMultiplexer = StackExchange.Redis.ConnectionMultiplexer.Connect(configurationOptions);
 services.AddSingleton(connectionMultiplexer);
 
-services.AddHangfire(configuration =>
-                                   configuration
-                                     .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
-                                     .UseSimpleAssemblyNameTypeSerializer()
-                                     .UseRecommendedSerializerSettings()
-                                     .UseRedisStorage(connectionMultiplexer, new Hangfire.Redis.RedisStorageOptions
-                                     {
-                                         Prefix = configurationOptions.ChannelPrefix,
-                                         Db = configurationOptions.DefaultDatabase ?? -1,
-                                     }));
+services
+    .AddHangfire(configuration =>
+        configuration
+            .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+            .UseSimpleAssemblyNameTypeSerializer()
+            .UseRecommendedSerializerSettings()
+            .UseRedisStorage(connectionMultiplexer, new Hangfire.Redis.RedisStorageOptions
+            {
+                Prefix = configurationOptions.ChannelPrefix,
+                Db = configurationOptions.DefaultDatabase ?? -1,
+            }));
+
 services.AddHangfireServer();
 
 //builder.Services.AddControllers();
@@ -92,7 +95,8 @@ services
     {
         //opts.Filters.Add<GlobalFilter>();
     })
-    .AddJsonOptions(options => {
+    .AddJsonOptions(options =>
+    {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         options.JsonSerializerOptions.PropertyNamingPolicy = null;
         options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
@@ -126,10 +130,17 @@ services
     .AddDbContextPool<FastFrame.Database.DataBase>(o =>
     {
         var conn_str = Configuration.GetConnectionString(ConnectionName);
-        o.UseMySql(conn_str, ServerVersion.Parse("5.6.40"), opt =>
-        {
-            opt.CommandTimeout(60);
-        })
+        o.UseMySql(conn_str,
+                   ServerVersion
+#if DEBUG
+                    .Parse("5.6.40"),
+#else
+                    .Parse("8.0.28"), 
+#endif 
+                   opt =>
+                    {
+                        opt.CommandTimeout(60);
+                    })
         .AddInterceptors(new FastFrame.Database.FmtCommandInterceptor());
     })
     .AddScoped<IModuleExportProvider, ModuleExportProvider>()
@@ -143,7 +154,7 @@ services
     .AddSingleton<IClientManage, ClientMamager>()
     .AddSingleton<IClientConnection, ClientConnection>()
     .AddSingleton<ICacheProvider, CacheProvider>()
-    .AddSingleton<ILockFacatory, CacheProvider>()
+    .AddSingleton<ILockFacatory, LockFacatoryProvider>()
     .AddSingleton<IBackgroundJob, HangfireBackgroundJob>()
     .AddSingleton<IMessageQueue, MessageQueue>()
     .AddSingleton<LockMethodAttribute>()
@@ -153,6 +164,8 @@ services
     .AddRepository()
     .AddIntervalWork(typeof(IService).Assembly, typeof(Program).Assembly, typeof(FastFrame.Infrastructure.Extension).Assembly)
     .AddMessageQueue(typeof(IService).Assembly, typeof(Program).Assembly, typeof(FastFrame.Infrastructure.Extension).Assembly);
+
+ 
 
 /*添加动态代理*/
 services.ConfigureDynamicProxy(config =>
@@ -171,7 +184,7 @@ var areas = typeof(Program)
        .Distinct()
        .ToArray();
 
-#if DEBUG 
+#if DEBUG
 services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
@@ -181,7 +194,7 @@ services.AddSwaggerGen(options =>
         Description = "测试 webapi"
     });
 
- 
+
     var basePath = AppDomain.CurrentDomain.BaseDirectory;
     var xmlPath = Path.Combine(basePath, "FastFrame.WebHost.xml");
     options.IncludeXmlComments(xmlPath);
@@ -226,8 +239,8 @@ var applicationLifetime = app.Lifetime;
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage(); 
-}
+    app.UseDeveloperExceptionPage();
+} 
 
 #if DEBUG
 /*注册swagger*/
@@ -266,18 +279,8 @@ app.UseMiddleware<AppSessionInitMiddleware>();
 /*处理资源文件*/
 app.UseMiddleware<ResourceMiddleware>();
 
-
-
 /*异步处理中间件*/
 app.UseMiddleware<ExceptionMiddleware>();
-
-var xx = (string xx) => { };
-
-app.MapGet("", (string id) => { 
-
-});
-
-
 
 /*注册路由*/
 app.UseRouting();
@@ -294,6 +297,7 @@ app.UseEndpoints(endpoints =>
     endpoints.MapHub<MessageHub>("/hub/message");
     endpoints.MapControllers();
     endpoints.MapHangfireDashboard();
+     
 
     //endpoints.MapControllerRoute(
     //    name: "default",

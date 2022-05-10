@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace FastFrame.WebHost.Privder
+namespace FastFrame.Infrastructure.MessageQueue
 {
     /// <summary>
     /// 消息队列

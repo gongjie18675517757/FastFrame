@@ -29,7 +29,7 @@ export default {
   },
   computed: {
     url() {
-      return `http://maps.google.cn/maps/api/js?key=${this.key}&language=CH&region=CH&libraries=drawing`;
+      return `//maps.google.cn/maps/api/js?key=${this.key}&language=CH&region=CH&libraries=drawing`;
     }
   },
   mounted() {

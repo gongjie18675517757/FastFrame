@@ -1,4 +1,4 @@
-import {makeStandardRouteItems} from './utils'
+import { makeStandardRouteItems } from './utils'
 
 export default {
     areaName: 'Flow',
@@ -6,6 +6,6 @@ export default {
     items: {
         WorkFlow: [
             ...makeStandardRouteItems('流程设计')
-        ] 
+        ]
     }
 }

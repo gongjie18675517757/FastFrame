@@ -90,6 +90,7 @@ namespace FastFrame.WebHost.Middleware
 
                 if (context.Request.Query.TryGetValue("has_down", out var _))
                     context.Response.Headers.TryAdd("Content-Disposition", $"attachment;filename={WebUtility.UrlEncode(resourceStreamInfo.Name)}");
+
                 context.Response.Headers.TryAdd("cache-control", new[] { "public,max-age=31536000" });
                 context.Response.Headers.TryAdd("Expires", new[] { resourceStreamInfo.ModifyTime.AddYears(10).ToString("R") });
                 context.Response.Headers.TryAdd("Last-Modified", resourceStreamInfo.ModifyTime.ToString("R"));

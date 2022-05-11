@@ -9,7 +9,7 @@ namespace FastFrame.Application.Flow
     public partial class DFModuleService
     {
         private async Task HandleItems(string id, IEnumerable<DFModuleGroupModel> groups)
-        {
+        { 
             await Loader
                 .GetService<HandleOne2ManyService<DFModuleGroup, DFModuleGroup>>()
                 .UpdateManyAsync(

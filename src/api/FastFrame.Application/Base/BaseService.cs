@@ -78,13 +78,8 @@ namespace FastFrame.Application
         /// <summary>
         /// 新增
         /// </summary>  
-        public virtual async Task<string> AddAsync(TDto input)
+        public virtual async Task<string> AddAsync(TDto input!!)
         {
-            if (input == null)
-            {
-                throw new ArgumentNullException(nameof(input));
-            }
-
             var entity = input.MapTo<TDto, TEntity>();
 
             /*写审计字段*/
@@ -197,12 +192,8 @@ namespace FastFrame.Application
         /// <summary>
         /// 更新
         /// </summary>  
-        public virtual async Task UpdateAsync(TDto input)
+        public virtual async Task UpdateAsync(TDto input!!)
         {
-            if (input == null)
-            {
-                throw new ArgumentNullException(nameof(input));
-            }
             var entity = await repository.GetAsync(input.Id);
             var prev = entity.MapTo<TEntity, TEntity>();
             //await repository.BeginTransactionAsync(IsolationLevel.ReadCommitted);
@@ -248,8 +239,7 @@ namespace FastFrame.Application
 
         /// <summary>
         /// 获取单条数据
-        /// </summary>  
-        [AutoCacheInterceptor(AutoCacheOperate.Get)]
+        /// </summary>   
         public virtual async Task<TDto> GetAsync(string id)
         {
             if (id.IsNullOrWhiteSpace())

@@ -1,0 +1,7 @@
+﻿[*.cs]
+
+# IDE1006: 命名样式
+dotnet_diagnostic.IDE1006.severity = none
+
+# CA2254: 模板应为静态表达式
+dotnet_diagnostic.CA2254.severity = none

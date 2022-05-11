@@ -24,7 +24,7 @@ namespace HttpMouse.Implementions
         /// <summary>
         /// 客户端变化后事件
         /// </summary>
-        public event Action<IHttpMouseClient[]>? ClientsChanged;
+        public event Action<IHttpMouseClient[]> ClientsChanged;
 
         /// <summary>
         /// 客户端处理者
@@ -68,12 +68,13 @@ namespace HttpMouse.Implementions
             }
 
             await webSocket.SendCommandAsync(ICommand.CONFIG_CHANGE, Encoding.UTF8.GetBytes(proxyConfig.TargetAddress),new System.Threading.CancellationToken());
-            this.logger.LogInformation($"{client}连接过来");
-            this.ClientsChanged?.Invoke(this.clients.Values.ToArray()); 
+            var client_string = client.ToString();
+            logger.LogInformation("{client_string}连接过来", client_string);
+            ClientsChanged?.Invoke(clients.Values.ToArray()); 
             await client.WaitingCloseAsync(); 
-            this.logger.LogInformation($"{client}断开连接");
-            this.clients.TryRemove(proxyConfig.AppToken, out _);
-            this.ClientsChanged?.Invoke(this.clients.Values.ToArray());
+            logger.LogInformation("{client_string}断开连接", client_string);
+            clients.TryRemove(proxyConfig.AppToken, out _);
+            ClientsChanged?.Invoke(clients.Values.ToArray());
         }
 
         /// <summary>

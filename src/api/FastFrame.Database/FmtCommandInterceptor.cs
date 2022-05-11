@@ -27,19 +27,19 @@ namespace FastFrame.Database
         public override InterceptionResult<DbDataReader> ReaderExecuting(DbCommand command, CommandEventData eventData, InterceptionResult<DbDataReader> result)
         {
             /*优化ＥＦ生成的查询语句*/
-            command.CommandText = formatterSql(command.CommandText);
+            command.CommandText = FormatterSql(command.CommandText);
             return base.ReaderExecuting(command, eventData, result);
         }
 
         public override ValueTask<InterceptionResult<DbDataReader>> ReaderExecutingAsync(DbCommand command, CommandEventData eventData, InterceptionResult<DbDataReader> result, CancellationToken cancellationToken = default)
         {
             /*优化ＥＦ生成的查询语句*/
-            command.CommandText = formatterSql(command.CommandText);
+            command.CommandText = FormatterSql(command.CommandText);
 
             return base.ReaderExecutingAsync(command, eventData, result, cancellationToken);
         }
 
-        private static string formatterSql(string sql)
+        private static string FormatterSql(string sql)
         {
             foreach (var (regex, replace) in regexArr)
             {

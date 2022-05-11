@@ -38,9 +38,7 @@ app.MapReverseProxy(endpoints =>
 
 applicationLifetime.ApplicationStarted.Register(InitProxyConfig, app);
 
-
-
-void InitProxyConfig(object? app)
+static void InitProxyConfig(object app)
 {
     if (app is IApplicationBuilder builder)
     {

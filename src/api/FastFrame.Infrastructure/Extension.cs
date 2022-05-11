@@ -30,10 +30,10 @@ namespace FastFrame.Infrastructure
                 return;
 
             if (childSelector == null)
-                throw new ArgumentException();
+                throw new ArgumentException(null, nameof(childSelector));
 
             if (eachAction == null)
-                throw new ArgumentException();
+                throw new ArgumentException(null, nameof(eachAction));
 
             foreach (var item in enumerable)
             {
@@ -49,13 +49,13 @@ namespace FastFrame.Infrastructure
         /// <param name="enumerable"></param>
         /// <param name="childSelector"></param>
         /// <returns></returns>
-        public static IEnumerable<T> SelectLoopChild<T>(this IEnumerable<T> enumerable, Func<T, IEnumerable<T>> childSelector)
+        public static IEnumerable<T> SelectLoopChild<T>(this IEnumerable<T> enumerable, Func<T, IEnumerable<T>> childSelector!!)
         {
             if (enumerable == null)
                 yield break;
 
             if (childSelector == null)
-                throw new ArgumentException();
+                throw new ArgumentException(null,nameof(childSelector));
 
             foreach (var item in enumerable)
             {
@@ -80,14 +80,10 @@ namespace FastFrame.Infrastructure
         /// <param name="setChildAction">设置下级</param>
         /// <param name="parent_id">指定当前父节点</param>
         /// <returns></returns>
-        public static IEnumerable<T> SelectLoopChild<T, TKey>(this IEnumerable<T> enumerable, Func<T, TKey> patentFunc, Func<T, TKey> keyFunc, Action<T, IEnumerable<T>> setChildAction, TKey parent_id)
+        public static IEnumerable<T> SelectLoopChild<T, TKey>(this IEnumerable<T> enumerable, Func<T, TKey> patentFunc!!, Func<T, TKey> keyFunc, Action<T, IEnumerable<T>> setChildAction, TKey parent_id)
         {
             if (enumerable is null)
                 yield break;
-
-            if (patentFunc is null)
-                throw new ArgumentNullException(nameof(patentFunc));
-
             foreach (var item in enumerable)
             {
                 if (EqualityComparer<TKey>.Default.Equals(patentFunc(item), parent_id))
@@ -107,11 +103,8 @@ namespace FastFrame.Infrastructure
         /// <param name="dic"></param>
         /// <param name="key"></param>
         /// <returns></returns>
-        public static TVal TryGetValueOrDefault<TKey, TVal>(this IDictionary<TKey, TVal> dic, TKey key)
+        public static TVal TryGetValueOrDefault<TKey, TVal>(this IDictionary<TKey, TVal> dic!!, TKey key)
         {
-            if (dic is null)
-                throw new ArgumentNullException(nameof(dic));
-
             if (dic.TryGetValue(key, out var val))
                 return val;
 
@@ -127,11 +120,8 @@ namespace FastFrame.Infrastructure
         /// <param name="key"></param>
         /// <param name="func"></param>
         /// <returns></returns>
-        public static TVal TryGetValueOrCreate<TKey, TVal>(this IDictionary<TKey, TVal> dic, TKey key, Func<TVal> func)
+        public static TVal TryGetValueOrCreate<TKey, TVal>(this IDictionary<TKey, TVal> dic!!, TKey key, Func<TVal> func)
         {
-            if (dic is null)
-                throw new ArgumentNullException(nameof(dic));
-
             if (dic.TryGetValue(key, out var val))
                 return val;
 
@@ -298,26 +288,22 @@ namespace FastFrame.Infrastructure
             if (@in == null)
                 return null;
 
-            using (var md5 = MD5.Create())
-            {
-                var result = md5.ComputeHash(Encoding.Default.GetBytes(@in));
-                var strResult = BitConverter.ToString(result);
-                return strResult.Replace("-", "").ToLower();
-            }
+            using var md5 = MD5.Create();
+            var result = md5.ComputeHash(Encoding.Default.GetBytes(@in));
+            var strResult = BitConverter.ToString(result);
+            return strResult.Replace("-", "").ToLower();
         }
 
         public static string ToMD5(this Stream @in)
         {
             if (@in == null)
                 return null;
-            using (var md5 = MD5.Create())
-            {
-                @in.Position = 0;
-                var result = md5.ComputeHash(@in);
-                @in.Position = 0;
-                var strResult = BitConverter.ToString(result);
-                return strResult.Replace("-", "").ToLower();
-            }
+            using var md5 = MD5.Create();
+            @in.Position = 0;
+            var result = md5.ComputeHash(@in);
+            @in.Position = 0;
+            var strResult = BitConverter.ToString(result);
+            return strResult.Replace("-", "").ToLower();
         }
 
         /// <summary>

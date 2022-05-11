@@ -175,7 +175,7 @@ namespace FastFrame.CodeGenerate.Build
                 };
             }
 
-            if (TryGetAttribute<RequiredAttribute>(propertyInfo, out var requiredAttribute))
+            if (TryGetAttribute<RequiredAttribute>(propertyInfo, out _))
             {
                 yield return new AttrInfo() { Name = "Required", };
             }
@@ -201,12 +201,12 @@ namespace FastFrame.CodeGenerate.Build
                 };
             }
 
-            if (TryGetAttribute<EmailAddressAttribute>(propertyInfo, out var emailAddressAttribute))
+            if (TryGetAttribute<EmailAddressAttribute>(propertyInfo, out _))
             {
                 yield return new AttrInfo() { Name = "EmailAddress" };
             }
 
-            if (TryGetAttribute<PhoneAttribute>(propertyInfo, out var phoneAttribute))
+            if (TryGetAttribute<PhoneAttribute>(propertyInfo, out _))
             {
                 yield return new AttrInfo() { Name = "Phone" };
             }

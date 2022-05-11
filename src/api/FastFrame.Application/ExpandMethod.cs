@@ -298,13 +298,8 @@ namespace FastFrame.Application
         }
 
 
-        public static IQueryable<T> DynamicSort<T>(this IQueryable<T> query, string name, string mode)
+        public static IQueryable<T> DynamicSort<T>(this IQueryable<T> query!!, string name, string mode)
         {
-            if (query == null)
-            {
-                throw new ArgumentNullException(nameof(query));
-            }
-
             if (string.IsNullOrWhiteSpace(name))
             {
                 name = "Id";
@@ -329,15 +324,8 @@ namespace FastFrame.Application
             return query;
         }
 
-        public static IQueryable<T> DynamicQuery<T>(this IQueryable<T> query, string kw, params KeyValuePair<FilterMode, IEnumerable<IFilter[]>>[] kvsFilter)
+        public static IQueryable<T> DynamicQuery<T>(this IQueryable<T> query!!, string kw, params KeyValuePair<FilterMode, IEnumerable<IFilter[]>>[] kvsFilter)
         {
-            if (query == null)
-            {
-                throw new ArgumentNullException(nameof(query));
-            }
-
-
-
             foreach (var kv in kvsFilter)
             {
                 Expression<Func<T, bool>> mainExpression = null;

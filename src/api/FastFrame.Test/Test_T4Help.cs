@@ -32,12 +32,7 @@ namespace FastFrame.UnitTest
     [TestClass]
     public class Test_Extension
     {
-        private readonly static Random random;
-
-        static Test_Extension()
-        {
-            random = new Random();
-        }
+       
 
         public Test_Extension()
         {

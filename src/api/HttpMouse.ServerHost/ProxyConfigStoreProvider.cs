@@ -10,7 +10,7 @@ namespace HttpMouse.ServerHost
     {
         private readonly ConcurrentBag<Action<IEnumerable<ProxyConfig>>> actions = new();
         private readonly ConcurrentBag<ProxyConfig> proxyConfigs = new();
-        private static object _lock = new();
+        private static readonly object _lock = new();
 
         public void RegisterChangeCallback(Action<IEnumerable<ProxyConfig>> callback)
         {

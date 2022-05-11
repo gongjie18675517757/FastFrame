@@ -8,12 +8,12 @@ namespace FastFrame.Application
     /// </summary>
     public sealed class AutoCacheInterceptor : AbstractInterceptorAttribute
     {
-        private readonly AutoCacheOperate autoCacheOperate;
+        //private readonly AutoCacheOperate autoCacheOperate;
 
-        public AutoCacheInterceptor(AutoCacheOperate autoCacheOperate)
-        {
-            this.autoCacheOperate = autoCacheOperate;
-        }
+        //public AutoCacheInterceptor(AutoCacheOperate autoCacheOperate)
+        //{
+        //    this.autoCacheOperate = autoCacheOperate;
+        //}
         public override async Task Invoke(AspectContext context, AspectDelegate next)
         {
             await next(context);

@@ -102,7 +102,7 @@ namespace HttpMouse.Implementions
             using var reverseConnection = new ReverseConnection(lifetime, transport);
             connectionAwaiter.TrySetResult(reverseConnection);
 
-            using var closedAwaiter = AwaitableCompletionSource.Create<object?>();
+            using var closedAwaiter = AwaitableCompletionSource.Create<object>();
             lifetime.ConnectionClosed.Register(state => ((IAwaitableCompletionSource)state!).TrySetResult(null), closedAwaiter);
             await closedAwaiter.Task;
         }

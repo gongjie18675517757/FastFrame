@@ -9,12 +9,14 @@
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<DocumentationFile>.\FastFrame.Entity.xml</DocumentationFile>
 		<NoWarn>1701;1702;1591;</NoWarn>
+		<LangVersion>preview</LangVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<NoWarn>1701;1702;1591;</NoWarn>
 		<GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
 		<DocumentationFile>.\FastFrame.Entity.xml</DocumentationFile>
+		<LangVersion>preview</LangVersion>
 	</PropertyGroup>
 
 </Project>

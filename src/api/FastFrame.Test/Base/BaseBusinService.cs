@@ -25,7 +25,7 @@ namespace FastFrame.Test
         }
         public override void Dispose()
         { 
-            base.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 }

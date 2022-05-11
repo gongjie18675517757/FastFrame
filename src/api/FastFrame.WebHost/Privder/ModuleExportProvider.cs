@@ -60,7 +60,7 @@ namespace FastFrame.WebHost.Privder
             foreach (var x in type.GetProperties())
             {
                 /*排除标志*/
-                if (TryGetAttribute<ExcludeAttribute>(x, out var excludeAttribute))
+                if (TryGetAttribute<ExcludeAttribute>(x, out _))
                     continue;
 
                 /*隐藏标记*/

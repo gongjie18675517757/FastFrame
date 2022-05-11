@@ -51,11 +51,8 @@ namespace FastFrame.Application.Basis
             return new ResourceStreamModel(info.Name,info.ContentType, info.UploadTime, stream);
         }
 
-        public async Task<IResourceInfo> TrySaveResource(string name, string contentType, Stream stream)
+        public async Task<IResourceInfo> TrySaveResource(string name, string contentType, Stream stream!!)
         {
-            if (stream is null)
-                throw new ArgumentNullException(nameof(stream));
-
             var md5 = stream.ToMD5();
             var path = await GetPathByMd5Async(md5);
 

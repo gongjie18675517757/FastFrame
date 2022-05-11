@@ -267,13 +267,8 @@ namespace FastFrame.Application.Flow
         /// 验证流程节点是否配置正确
         /// </summary>
         /// <param name="workFlow"></param>
-        private void VerifyFlowNodes(WorkFlowDto workFlow)
+        private void VerifyFlowNodes(WorkFlowDto workFlow!!)
         {
-            /*如果下级的审核人是由上级分配的,则上级只能是或签*/
-
-            if (workFlow is null)
-                throw new System.ArgumentNullException(nameof(workFlow));
-
             if (workFlow.Nodes == null || !workFlow.Nodes.Any())
                 throw new MsgException("无有效节点");
 

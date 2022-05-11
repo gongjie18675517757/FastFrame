@@ -23,6 +23,7 @@ export function makePromptPageFacatory(pars) {
                 direction: pars.title,
                 singleLine: typeof (pars.singleLine) == 'boolean' ? pars.singleLine : true,
                 manageOptions: [],
+                pageFormCols:1,
             }
         },
         methods: {

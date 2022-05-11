@@ -71,7 +71,7 @@ namespace FastFrame.WebHost.Middleware
                 }
 
                 provider.TryGetContentType(Path.GetExtension(resourceStreamInfo.Name), out var contentType);
-                contentType = contentType ?? resourceStreamInfo.ContentType;
+                contentType ??= resourceStreamInfo.ContentType;
 
                 /*响应缩略图*/
                 if (contentType != null && contentType.StartsWith("image") && thumbnailPathRegex.IsMatch(path.Value))

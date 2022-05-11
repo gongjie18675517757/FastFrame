@@ -12,7 +12,7 @@ namespace HttpMouse.ClientHost
     {
         private readonly IHttpMouseClientFactory httpMouseClientFactory;
         private readonly ILogger<HttpMouseClientHostedService> logger;
-        private IHttpMouseClient? client;
+        private IHttpMouseClient client;
 
         public HttpMouseClientHostedService(
             IHttpMouseClientFactory httpMouseClientFactory,

@@ -8,11 +8,13 @@
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<DocumentationFile>.\FastFrame.Infrastructure.xml</DocumentationFile>
 		<NoWarn>1701;1702;1591;</NoWarn>
+		<LangVersion>preview</LangVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<NoWarn>1701;1702;1591;</NoWarn>
 		<DocumentationFile>.\FastFrame.Infrastructure.xml</DocumentationFile>
+		<LangVersion>preview</LangVersion>
 	</PropertyGroup>
 
 	<ItemGroup>

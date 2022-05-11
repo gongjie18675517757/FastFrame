@@ -182,7 +182,7 @@
         <member name="M:FastFrame.Application.BaseService`2.GetAsync(System.String)">
             <summary>
             获取单条数据
-            </summary>  
+            </summary>   
         </member>
         <member name="M:FastFrame.Application.BaseService`2.OnGetListing(System.Collections.Generic.IEnumerable{`1})">
             <summary>

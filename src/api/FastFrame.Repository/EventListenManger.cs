@@ -51,6 +51,8 @@
                 item.Value.Clear();
 
             listens.Clear();
+
+            GC.SuppressFinalize(this);
         }
     }
 

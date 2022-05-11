@@ -46,13 +46,13 @@ namespace FastFrame.Test
 
         public IConfigurationRoot Configuration { get; }
 
-        private IServiceScope serviceScope;
+        private readonly IServiceScope serviceScope;
 
         public IServiceProvider ServiceProvider { get; }
 
         public virtual void Dispose()
         {
-            serviceScope.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 }

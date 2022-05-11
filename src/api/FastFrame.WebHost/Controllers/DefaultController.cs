@@ -12,14 +12,12 @@ namespace FastFrame.WebHost.Controllers
     [ApiController]
     public class DefaultController : ControllerBase
     {
-        private readonly IApplicationSession appSession;
-        private readonly ILogger<DefaultController> logger;
+        private readonly IApplicationSession appSession; 
         private readonly IClientManage clientManage;
 
-        public DefaultController(IApplicationSession appSession, ILogger<DefaultController> logger, IClientManage clientManage)
+        public DefaultController(IApplicationSession appSession,  IClientManage clientManage)
         {
-            this.appSession = appSession;
-            this.logger = logger;
+            this.appSession = appSession; 
             this.clientManage = clientManage;
         }
 

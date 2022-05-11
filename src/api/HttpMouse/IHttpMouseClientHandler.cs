@@ -13,7 +13,7 @@ namespace HttpMouse
         /// <summary>
         /// 客户端变化后事件
         /// </summary>
-        event Action<IHttpMouseClient[]>? ClientsChanged;
+        event Action<IHttpMouseClient[]> ClientsChanged;
 
         /// <summary>
         /// 处理客户端连接

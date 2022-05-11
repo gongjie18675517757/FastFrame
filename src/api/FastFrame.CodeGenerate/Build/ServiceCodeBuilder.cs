@@ -97,7 +97,7 @@ namespace FastFrame.CodeGenerate.Build
             };
         }
 
-        public IEnumerable<MethodInfo> GetMethods(Type type)
+        public static IEnumerable<MethodInfo> GetMethods(Type type)
         {
             yield return new MethodInfo()
             {
@@ -127,7 +127,7 @@ namespace FastFrame.CodeGenerate.Build
                 };
         }
 
-        public IEnumerable<string> GetViewModelListCodeBlock(Type type)
+        public static IEnumerable<string> GetViewModelListCodeBlock(Type type)
         {
             string typeName = type.Name.ToFirstLower();
 
@@ -135,7 +135,7 @@ namespace FastFrame.CodeGenerate.Build
             yield return "return query.PageListAsync(page);";
         }
 
-        public IEnumerable<string> GetQueryMainCodeBlock(Type type)
+        public static IEnumerable<string> GetQueryMainCodeBlock(Type type)
         {
             string typeName = type.Name.ToFirstLower();
             var relateProps = type.GetProperties().Select(x => new

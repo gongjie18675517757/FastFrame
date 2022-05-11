@@ -18,8 +18,8 @@ namespace FastFrame.Infrastructure.Lock
             this.key = key;
             this.token = token;
             this.database = database;
-            this.cancellationTokenSource = new System.Threading.CancellationTokenSource();
-            this.delayTask = Task.Factory.StartNew(delay);
+            cancellationTokenSource = new System.Threading.CancellationTokenSource();
+            delayTask = Task.Factory.StartNew(delay);
         }
 
         private async Task delay()
@@ -54,6 +54,7 @@ namespace FastFrame.Infrastructure.Lock
         public void Dispose()
         {
             cancellationTokenSource.Cancel();
+            GC.SuppressFinalize(this);
         }
     }
 }

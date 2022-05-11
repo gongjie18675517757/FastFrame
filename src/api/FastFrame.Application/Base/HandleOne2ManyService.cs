@@ -22,9 +22,9 @@ namespace FastFrame.Application
     {
         private readonly IRepository<TTargetEntity> targetEntities;
         private readonly IEventBus eventBus;
-        private readonly List<(TTargetDto input, TTargetEntity entity)> addedList = new List<(TTargetDto, TTargetEntity)>();
-        private readonly List<(TTargetDto after, TTargetEntity before)> updatedList = new List<(TTargetDto, TTargetEntity)>();
-        private readonly List<TTargetEntity> deletedList = new List<TTargetEntity>();
+        private readonly List<(TTargetDto input, TTargetEntity entity)> addedList = new();
+        private readonly List<(TTargetDto after, TTargetEntity before)> updatedList = new();
+        private readonly List<TTargetEntity> deletedList = new();
 
         /// <summary>
         /// 
@@ -48,13 +48,8 @@ namespace FastFrame.Application
         /// <param name="list">列表</param>
         /// <param name="makeEntiyFunc">生成实体</param>
         /// <returns></returns>
-        public async Task AddManyAsync(IEnumerable<TTargetDto> list, Func<TTargetDto, TTargetEntity> makeEntiyFunc)
+        public async Task AddManyAsync(IEnumerable<TTargetDto> list, Func<TTargetDto, TTargetEntity> makeEntiyFunc!!)
         {
-            if (makeEntiyFunc == null)
-            {
-                throw new ArgumentNullException(nameof(makeEntiyFunc));
-            }
-
             if (list != null)
             {
                 foreach (var item in list)
@@ -80,13 +75,8 @@ namespace FastFrame.Application
         /// </summary>
         /// <param name="expression">表达式</param>
         /// <returns></returns>
-        public async Task DelManyAsync(Expression<Func<TTargetEntity, bool>> expression)
+        public async Task DelManyAsync(Expression<Func<TTargetEntity, bool>> expression!!)
         {
-            if (expression == null)
-            {
-                throw new ArgumentNullException(nameof(expression));
-            }
-
             var befores = await targetEntities.Where(expression).ToListAsync();
             foreach (var item in befores)
             {
@@ -117,27 +107,12 @@ namespace FastFrame.Application
         /// <param name="updateAction">更新方法</param>
         /// <returns></returns>
         public async Task UpdateManyAsync(
-                    Expression<Func<TTargetEntity, bool>> expression,
+                    Expression<Func<TTargetEntity, bool>> expression!!,
                     IEnumerable<TTargetDto> list,
-                    Func<TTargetEntity, TTargetDto, bool> compareFunc,
-                    Func<TTargetDto, TTargetEntity> makeEntiyFunc,
+                    Func<TTargetEntity, TTargetDto, bool> compareFunc!!,
+                    Func<TTargetDto, TTargetEntity> makeEntiyFunc!!,
                     Action<TTargetEntity, TTargetDto> updateAction = null)
         {
-            if (expression == null)
-            {
-                throw new ArgumentNullException(nameof(expression));
-            }
-
-            if (compareFunc == null)
-            {
-                throw new ArgumentNullException(nameof(compareFunc));
-            }
-
-            if (makeEntiyFunc == null)
-            {
-                throw new ArgumentNullException(nameof(makeEntiyFunc));
-            }
-
             var befores = await targetEntities.Where(expression).ToListAsync();
             var comparisonCollection = new ComparisonCollection<TTargetEntity, TTargetDto>(befores, list, compareFunc);
 

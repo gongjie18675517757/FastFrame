@@ -22,7 +22,7 @@ namespace HttpMouse.Client.Implementions
         private readonly HttpMouseClientOptions options;
         private readonly ILogger logger;
         private readonly CancellationTokenSource disposeCancellationTokenSource = new();
-        private string? proxy_target_url;
+        private string proxy_target_url;
 
         /// <summary>
         /// 获取是否连接

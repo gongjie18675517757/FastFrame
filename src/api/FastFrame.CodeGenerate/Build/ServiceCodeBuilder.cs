@@ -14,12 +14,12 @@ namespace FastFrame.CodeGenerate.Build
 {
     public class ServiceCodeBuilder : BaseCShapeCodeBuilder
     {
-        private readonly DtoBuilder dtoBuild;
+        //private readonly DtoBuilder dtoBuild;
 
         public override string BuildName => "服务";
         public ServiceCodeBuilder(string solutionDir, Type baseEntityType) : base(solutionDir, baseEntityType)
         {
-            dtoBuild = new DtoBuilder(solutionDir, baseEntityType);
+            //dtoBuild = new DtoBuilder(solutionDir, baseEntityType);
         }
 
         public override string TargetPath => $"{SolutionDir}\\FastFrame.Application";

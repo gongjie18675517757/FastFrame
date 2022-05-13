@@ -1191,19 +1191,30 @@
             <param name="func"></param>
             <param name="replaceFunc"></param>
         </member>
-        <member name="M:FastFrame.Infrastructure.Lock.ILockFacatory.TryCreateLockAsync(System.String,System.TimeSpan)">
+        <member name="M:FastFrame.Infrastructure.Lock.ILockFacatory.TryCreateLockAsync(System.String,System.TimeSpan,System.Boolean)">
             <summary>
             尝试创建锁,如果资源被占用,则返回NULL
             </summary>
-            <param name="key"></param>
-            <param name="timeSpan"></param>
+            <param name="key">资源键</param>
+            <param name="timeSpan">锁定时长</param>
+            <param name="hasWatchdog">是否需要看门狗</param>
             <returns></returns>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Lock.ILockHolder">
+            <summary>
+            锁的持有者
+            </summary>
         </member>
         <member name="M:FastFrame.Infrastructure.Lock.ILockHolder.LockRelease">
             <summary>
             释放锁
             </summary>
             <returns></returns>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Lock.LockFacatoryProvider.LockHolder">
+            <summary>
+            锁的持有者
+            </summary>
         </member>
         <member name="T:FastFrame.Infrastructure.MessageQueue.IMessageQueue">
             <summary>

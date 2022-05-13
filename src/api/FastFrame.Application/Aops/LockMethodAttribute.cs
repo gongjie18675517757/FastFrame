@@ -40,7 +40,7 @@ namespace FastFrame.Application
             var lockHolder = await context
                 .ServiceProvider
                 .GetService<ILockFacatory>()
-                .TryCreateLockAsync(resource, TimeSpan.FromSeconds(5));
+                .TryCreateLockAsync(resource, TimeSpan.FromSeconds(5), true);
 
             if (lockHolder != null)
             {
@@ -54,7 +54,7 @@ namespace FastFrame.Application
                 }
                 finally
                 {
-                    await lockHolder.LockRelease();
+                    lockHolder.LockRelease();
                 }
             }
             else

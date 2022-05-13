@@ -137,7 +137,7 @@ namespace FastFrame.Application.Flow
                 throw new NotFoundException();
 
             /*加并发锁*/
-            var lockHolder = await loader.GetService<ILockFacatory>().TryCreateLockAsync(bill_Entity.Id, TimeSpan.FromSeconds(3));
+            var lockHolder = await loader.GetService<ILockFacatory>().TryCreateLockAsync(bill_Entity.Id, TimeSpan.FromSeconds(3), true);
             if (lockHolder == null)
                 throw new MsgException("此单据正在进行流程流转,请稍后再试!");
 
@@ -561,7 +561,7 @@ namespace FastFrame.Application.Flow
             }
             finally
             {
-                await lockHolder.LockRelease();
+                lockHolder.LockRelease();
             }
         }
 
@@ -1114,7 +1114,7 @@ namespace FastFrame.Application.Flow
                          join b in flowSteps on a.Id equals b.FlowInstance_Id
                          join c in flowStepCheckers on b.Id equals c.FlowStep_Id
                          join u in users on c.User_Id equals u.Id
-                         where !b.IsFinished  
+                         where !b.IsFinished
                          where ids.Contains(a.Bill_Id)
                          select new
                          {

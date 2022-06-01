@@ -3,13 +3,14 @@
     dense
     class="v-input__slot_checkbox_container v-input-no-border"
     style="margin-top: 0px"
+     :disabled="disabled"
   >
     <template #default>
       <slot>
         <v-checkbox
           :input-value="value"
           @change="change"
-          :disabled="readonly"
+          :disabled="disabled"
           hide-details
           style="margin-top: 0px"
           dense
@@ -28,7 +29,7 @@ export default {
   props: {
     value: Boolean,
 
-    readonly: Boolean,
+    disabled: Boolean,
     label: String,
     description: String,
     errorMessages: Array,

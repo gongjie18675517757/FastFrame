@@ -1,10 +1,8 @@
  <template>
   <v-page v-bind="childProps" v-on="childListeners">
-    <template #test>
-      <h1>
-        测试插槽能力
-      </h1>
-    </template>
+    <!-- <template #test>
+     <input type="datetime" name="" id="" f>
+    </template> -->
   </v-page>
 </template>
 

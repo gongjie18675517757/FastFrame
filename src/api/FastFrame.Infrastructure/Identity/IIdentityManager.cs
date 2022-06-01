@@ -8,41 +8,48 @@ namespace FastFrame.Infrastructure.Identity
     /// </summary>
     public interface IIdentityManager
     {
+        public delegate bool VerifyIdentity(string password, out Exception exception);
+
         /// <summary>
         /// 验证TOKEN是否有效
         /// </summary>
         /// <param name="token"></param>
         /// <param name="address"></param>
         /// <returns></returns>
-        Task<bool> ExistsTokenAsync(string token, IPAddress address);
-
-        /// <summary>
-        /// 生成身份
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="address"></param>
-        /// <returns></returns>
-        Task<IIdentity> GenerateIdentity(string userId, IPAddress address);
+        Task<bool> ExistsTokenAsync(string token, IPAddress address); 
 
         /// <summary>
         /// 刷新TOKEN
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        Task RefreshTokenAsync(string token);
+        void RefreshToken(string token);
 
         /// <summary>
         /// 强制TOKEN失效
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        Task SetTokenFailureAsync(string token);
+        void SetTokenFailure(string token);
 
         /// <summary>
         /// 强制用户所有TOKEN失效
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        Task SetUserAllTokenFailureAsync(string userId);
+        void SetUserAllTokenFailure(string userId);
+
+        /// <summary>
+        /// 尝试生成身份
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="address"></param>
+        /// <param name="password"></param>
+        /// <param name="verifyIdentity"></param> 
+        /// <returns></returns>
+        Task<IIdentity> TryGenerateIdentity(string userId,
+                                 IPAddress address,
+                                 string password,
+                                 VerifyIdentity verifyIdentity); 
     }
 }

@@ -24,22 +24,22 @@ namespace FastFrame.Infrastructure.Interface
         string Tenant_Id { get; }
 
         /// <summary>
-        /// 登陆
+        /// 登录
         /// </summary>
         /// <param name="currUser"></param>
         /// <returns></returns>
-        Task LoginAsync(ICurrUser currUser);
+        void Login(ICurrUser currUser);
 
         /// <summary>
         /// 登出
         /// </summary> 
-        Task LogOutAsync();
+        void LogOut();
 
         /// <summary>
         /// 刷新身份
         /// </summary>
         /// <returns></returns>
-        Task RefreshIdentityAsync();
+        void RefreshIdentity();
 
         /// <summary>
         /// 初始化

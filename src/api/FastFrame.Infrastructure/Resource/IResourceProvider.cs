@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace FastFrame.Infrastructure.Resource
@@ -8,6 +9,47 @@ namespace FastFrame.Infrastructure.Resource
     /// </summary>
     public interface IResourceProvider
     {
+        //OSPlatform.Windows监测运行环境
+        static bool IsWindowRunTime()
+        {
+            return RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+        }
+
+        //OSPlatform.Linux运行环境
+        static bool IsLinuxRunTime()
+        {
+            return RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
+        }
+
+        static string GetLinuxDirectory(string path)
+        {
+            string pathTemp = Path.Combine(path);
+            return pathTemp.Replace("\\", "/");
+        }
+
+        static string GetWindowDirectory(string path)
+        {
+            string pathTemp = Path.Combine(path);
+            return pathTemp.Replace("/", "\\");
+        }
+
+        /// <summary>
+        /// 目录转换
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static string GetRuntimeDirectory(string path)
+        {
+            //ForLinux
+            if (IsLinuxRunTime())
+                return GetLinuxDirectory(path);
+            //ForWindows
+            if (IsWindowRunTime())
+                return GetWindowDirectory(path);
+
+            return path;
+        }
+
         /// <summary>
         /// 保存
         /// </summary> 

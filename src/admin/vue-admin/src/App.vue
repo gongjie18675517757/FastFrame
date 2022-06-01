@@ -125,8 +125,24 @@ html {
   padding: 2px;
 }
 
-.input-container .v-input {
-  font-size: 13px;
+ 
+
+.input-container {
+  .v-text-field {
+    padding-top: 0px;
+
+    .v-input__slot {
+      margin-bottom: 0px;
+
+      input {
+        padding: 0px 5px !important;
+      }
+    }
+  }
+
+  .v-input {
+    font-size: 13px;
+  }
 }
 
 .input-container .theme--light.v-input.v-input--is-readonly {

@@ -31,24 +31,4 @@
         bool IsAdmin { get; set; }
     }
 
-    /// <summary>
-    /// 数据权限
-    /// </summary>
-    public enum DataPermission
-    {
-        /// <summary>
-        /// 本人录入
-        /// </summary>
-        A,
-
-        /// <summary>
-        /// 本部门录入
-        /// </summary>
-        B,
-
-        /// <summary>
-        /// 全部
-        /// </summary>
-        C
-    }
 }

@@ -40,7 +40,7 @@ export function calcInputComponent(props) {
   //长文本
   else if (Length && Length > 200 && Length < 4000) {
     return {
-      colspan: 1,
+      colspan: 2,
       component: inputs.TextArea
     }
   }
@@ -91,7 +91,7 @@ export function calcInputComponent(props) {
       component: inputs.TextInput
     }
 
-  } else if (Type == "DateTime") {
+  } else if (["DateTime",'DateOnly','TimeOnly'].includes(Type)) {
     return {
       colspan: 1,
       component: inputs.DateInput
@@ -128,7 +128,7 @@ const inject = ["get_Vuetify"];
  */
 export function calcInputItemCols(pageFormCols, props) {
   const width = parseInt(12 / pageFormCols);
-  let { colspan = 1 } = props || {};
+  let { colspan = 1 } = props.colspan ? props : calcInputComponent(props);
   return colspan * width;
 }
 
@@ -261,7 +261,7 @@ export function calcInputDisabled({ canEdit, Readonly }, model) {
  * @param {*} model 
  * @returns 
  */
-export function calcInputEnumValues({ EnumValues }, model) { 
+export function calcInputEnumValues({ EnumValues }, model) {
   if (!EnumValues)
     return null;
   else if (Array.isArray(EnumValues))
@@ -387,7 +387,7 @@ export default {
     /**
      * 计算组件
      */
-    const { component } = calcInputComponent(props);
+    const { component } = calcInputComponent(childProps);
     const _h = packComponentFacatory(h, component, { props: childProps, on });
 
     switch (component) {

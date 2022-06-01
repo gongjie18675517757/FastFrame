@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Net;
 
 namespace FastFrame.Entity.Basis
@@ -6,7 +7,7 @@ namespace FastFrame.Entity.Basis
     /// <summary>
     /// 登陆Log
     /// </summary> 
-    public class LoginLog : IEntity, IHasTenant
+    public class LoginLog : IEntity, IHasTenant, INotGenerateKey
     {
         private bool isEnabled;
 
@@ -23,14 +24,25 @@ namespace FastFrame.Entity.Basis
         public DateTime LoginTime { get; set; }
 
         /// <summary>
+        /// 登陆成功
+        /// </summary>
+        public bool IsSuccessful { get; set; }
+
+        /// <summary>
+        /// 失败原因
+        /// </summary>
+        [StringLength(500)]
+        public string FailReason { get; set; }
+
+        /// <summary>
         /// 最后刷新时间
         /// </summary>
-        public DateTime LastTime { get; set; }
+        public DateTime? LastTime { get; set; }
 
         /// <summary>
         /// 过期时间
         /// </summary>
-        public DateTime ExpiredTime { get; set; }
+        public DateTime? ExpiredTime { get; set; }
 
         /// <summary>
         /// IP

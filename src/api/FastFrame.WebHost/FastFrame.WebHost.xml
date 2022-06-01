@@ -21,7 +21,7 @@
         </member>
         <member name="M:FastFrame.WebHost.Controllers.Account.AccountController.Login(FastFrame.Application.Account.LoginInput)">
             <summary>
-            登陆
+            登录
             </summary>
             <param name="input"></param>
             <returns></returns>

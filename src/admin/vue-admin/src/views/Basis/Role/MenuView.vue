@@ -17,7 +17,7 @@
           <v-checkbox
             v-if="item.permission"
             :input-value="hasCheck(item.permission)"
-            :readonly="disabled"
+            :disabled="disabled"
             @change="handleTreeInput(item, $event)"
             hide-details
             dense
@@ -53,7 +53,7 @@
                     :key="v"
                     :label="getPermissionText(v)"
                     :input-value="hasCheck(v)"
-                    :readonly="disabled"
+                    :disabled="disabled"
                     @change="handleInput(v, $event)"
                     hide-details
                     dense

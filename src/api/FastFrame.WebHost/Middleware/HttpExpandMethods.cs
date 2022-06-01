@@ -9,6 +9,8 @@ namespace FastFrame.WebHost.Middleware
         {
             if (obj is string str)
             {
+
+
                 await httpResponse.WriteAsync(str, System.Text.Encoding.UTF8);
             }
             else

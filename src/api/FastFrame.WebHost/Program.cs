@@ -3,6 +3,7 @@ using FastFrame.Application;
 using FastFrame.Infrastructure.Cache;
 using FastFrame.Infrastructure.Client;
 using FastFrame.Infrastructure.EventBus;
+using FastFrame.Infrastructure.Identity;
 using FastFrame.Infrastructure.Interface;
 using FastFrame.Infrastructure.IntervalWork;
 using FastFrame.Infrastructure.Lock;
@@ -10,6 +11,7 @@ using FastFrame.Infrastructure.MessageQueue;
 using FastFrame.Infrastructure.Module;
 using FastFrame.Infrastructure.Permission;
 using FastFrame.Infrastructure.Resource;
+using FastFrame.Infrastructure.RSAOperate;
 using FastFrame.Repository;
 using FastFrame.WebHost.Hubs;
 using FastFrame.WebHost.Middleware;
@@ -121,7 +123,8 @@ services
 
 services.AddLogging(r => r.AddLog4Net());
 services.AddOptions();
-services.Configure<FastFrame.WebHost.Middleware.ResourceOption>(Configuration.GetSection("ResourceOption"));
+services.Configure<ResourceOption>(Configuration.GetSection("ResourceOption"));
+services.Configure<IdentityConfig>(Configuration.GetSection("IdentityConfig"));
 services.AddMemoryCache();
 services.AddSession();
 
@@ -165,6 +168,7 @@ services
     .AddSingleton<IApplicationUnInitialLifetime>(v => v.GetService<MessageQueue>())
     .AddServices()
     .AddRepository()
+    .AddRSAProvider(Configuration.GetSection("rsaConfig"))
     .AddIntervalWork(typeof(IService).Assembly, typeof(Program).Assembly, typeof(FastFrame.Infrastructure.Extension).Assembly)
     .AddMessageQueue(typeof(IService).Assembly, typeof(Program).Assembly, typeof(FastFrame.Infrastructure.Extension).Assembly);
 

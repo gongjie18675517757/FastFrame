@@ -1,6 +1,7 @@
 ﻿using FastFrame.Entity.Basis;
 using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Module;
+using FastFrame.Infrastructure.RSAOperate;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -15,10 +16,12 @@ namespace FastFrame.WebHost.Controllers
     public class CommonController : BaseController
     {
         private readonly IModuleExportProvider moduleExportProvider;
+        private readonly RSAProvider rsaProvider;
 
-        public CommonController(IModuleExportProvider moduleExportProvider)
+        public CommonController(IModuleExportProvider moduleExportProvider, RSAProvider rsaProvider)
         {
             this.moduleExportProvider = moduleExportProvider;
+            this.rsaProvider = rsaProvider;
         }
 
         /// <summary>
@@ -62,7 +65,25 @@ namespace FastFrame.WebHost.Controllers
             return moduleExportProvider.HaveCheckModuleList();
         }
 
- 
-        
+        [AllowAnonymous]
+        [HttpGet]
+        public string getPublicKey()
+        {
+            return rsaProvider.PublicKey;
+        }
+
+        //[AllowAnonymous]
+        //[HttpGet]
+        //public IActionResult Test(string input)
+        //{
+        //    var encrypt = rsaProvider.Encrypt(input);
+        //    var decrypt = rsaProvider.Decrypt(encrypt);
+        //    return Ok(new
+        //    {
+        //        input,
+        //        encrypt,
+        //        decrypt
+        //    });
+        //}
     }
 }

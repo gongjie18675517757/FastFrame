@@ -43,7 +43,7 @@ namespace FastFrame.Repository
         public virtual async Task<T> AddAsync(T entity)
         {
             /*自动生成主键*/
-            if (entity is not INotGenerateableKey || entity.Id.IsNullOrWhiteSpace())
+            if (entity is not INotGenerateKey || entity.Id.IsNullOrWhiteSpace())
                 entity.Id = IdGenerate.NetId();
 
             /*自动填充租户ID*/
@@ -115,6 +115,8 @@ namespace FastFrame.Repository
 
             return entityEntry.Entity;
         }
+
+ 
 
         /// <summary>
         /// 获取单条数据

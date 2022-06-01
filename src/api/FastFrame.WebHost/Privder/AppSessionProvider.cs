@@ -61,7 +61,7 @@ namespace FastFrame.WebHost.Privder
             return host;
         }
 
-        public Task LoginAsync(ICurrUser currUser)
+        public void Login(ICurrUser currUser)
         {
             var base64 = currUser.ToJson().ToBase64();
 
@@ -74,23 +74,21 @@ namespace FastFrame.WebHost.Privder
                 //Domain = ".localhost",
                 Path = "/",
             });
-
-            return Task.CompletedTask;
         }
 
-        public async Task LogOutAsync()
+        public void LogOut()
         {
             if (CurrUser != null)
             {
                 httpContextAccessor.HttpContext.Response.Cookies.Delete(ConstValuePool.Token_Name);
-                await httpContextAccessor.HttpContext.RequestServices.GetService<IIdentityManager>().SetTokenFailureAsync(CurrUser.ToKen);
+                httpContextAccessor.HttpContext.RequestServices.GetService<IIdentityManager>().SetTokenFailure(CurrUser.ToKen);
             }
         }
 
-        public async Task RefreshIdentityAsync()
+        public void RefreshIdentity()
         {
-            await httpContextAccessor.HttpContext.RequestServices.GetService<IIdentityManager>().RefreshTokenAsync(CurrUser.ToKen);
-            await LoginAsync(CurrUser);
+            httpContextAccessor.HttpContext.RequestServices.GetService<IIdentityManager>().RefreshToken(CurrUser.ToKen);
+            Login(CurrUser);
         }
 
         private string GetIdentity()
@@ -129,7 +127,7 @@ namespace FastFrame.WebHost.Privder
             var host = GetHost();
 
             if (memoryCache.TryGetValue<Tenant[]>(ConstValuePool.CacheTenant, out var tenants) &&
-               memoryCache.TryGetValue<TenantHost[]>(ConstValuePool.CacheTenantHost, out var tenantHosts))
+                memoryCache.TryGetValue<TenantHost[]>(ConstValuePool.CacheTenantHost, out var tenantHosts))
             {
                 var tenantHost = tenantHosts.FirstOrDefault(v => v.Host == host);
                 tenantHost ??= tenantHosts.FirstOrDefault(v => v.Host == "*");

@@ -26,6 +26,7 @@ namespace FastFrame.WebHost.Middleware
 
         public async Task Invoke(HttpContext context)
         {
+            context.Items.TryGetValue(Entity.Basis.ApiRequestLog.ListKeyName, out var log_id);
             try
             {
                 await next(context);
@@ -68,12 +69,13 @@ namespace FastFrame.WebHost.Middleware
             catch (Exception ex)
             {
                 context.Response.StatusCode = 500;
-                 
+
 #if DEBUG
                 await context.Response.WriteJsonAsync(new
                 {
                     Message = "出现了点小问题啦。。请联系管理员。。",
-                    Code = -1
+                    Code = -1,
+                    log_id
                 });
 
 #else
@@ -81,10 +83,11 @@ namespace FastFrame.WebHost.Middleware
                 {
                     ex.Message,
                     ex.StackTrace,
-                    Code = -1
+                    Code = -1,
+                    log_id
                 });
 #endif
-                logger.LogError(ex, ex.Message);
+                logger.LogError(ex, $"log_id:{log_id},{ex.Message}");
             }
         }
     }

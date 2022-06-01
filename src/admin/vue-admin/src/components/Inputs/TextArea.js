@@ -8,14 +8,12 @@ export default {
     isXs: Boolean
   },
   render(h) {
-    if (this.disabled && !this.isXs) {
-      return h('span', null, this.value || '无')
-    }
+
     return h('v-textarea', {
       props: {
         ...this.$attrs,
         value: this.value,
-        readonly: this.disabled,
+        disabled: this.disabled,
         label: this.label,
         placeholder: this.description,
         errorMessages: this.errorMessages,

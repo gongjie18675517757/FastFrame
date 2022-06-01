@@ -4,6 +4,30 @@
         <name>FastFrame.Infrastructure</name>
     </assembly>
     <members>
+        <member name="M:FastFrame.Infrastructure.Cache.CacheProvider.ListPushAsync``1(System.String,``0)">
+            <summary>
+            添加到列表末尾
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="key"></param>
+            <param name="val"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Cache.CacheProvider.ListLengthAsync(System.String)">
+            <summary>
+            获取列表长度
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Cache.CacheProvider.ListPopAsync``1(System.String)">
+            <summary>
+            从列头移除一条
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
         <member name="T:FastFrame.Infrastructure.Cache.ICacheProvider">
             <summary>
             缓存
@@ -670,24 +694,24 @@
             是否管理员
             </summary>
         </member>
-        <member name="T:FastFrame.Infrastructure.Identity.DataPermission">
+        <member name="T:FastFrame.Infrastructure.Identity.IdentityConfig">
             <summary>
-            数据权限
+            身份配置
             </summary>
         </member>
-        <member name="F:FastFrame.Infrastructure.Identity.DataPermission.A">
+        <member name="P:FastFrame.Infrastructure.Identity.IdentityConfig.FailCount">
             <summary>
-            本人录入
+            允许连续失败次数
             </summary>
         </member>
-        <member name="F:FastFrame.Infrastructure.Identity.DataPermission.B">
+        <member name="P:FastFrame.Infrastructure.Identity.IdentityConfig.FailTime">
             <summary>
-            本部门录入
+            允许连续失败的时间
             </summary>
         </member>
-        <member name="F:FastFrame.Infrastructure.Identity.DataPermission.C">
+        <member name="P:FastFrame.Infrastructure.Identity.IdentityConfig.TokenEffectiveTime">
             <summary>
-            全部
+            Token有效时间
             </summary>
         </member>
         <member name="T:FastFrame.Infrastructure.Identity.IIdentity">
@@ -698,21 +722,6 @@
         <member name="P:FastFrame.Infrastructure.Identity.IIdentity.IsEnabled">
             <summary>
             是否有效
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Identity.IIdentity.ExpiredTime">
-            <summary>
-            过期时间
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Identity.IIdentity.LastTime">
-            <summary>
-            最后活动时间
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Identity.IIdentity.LoginTime">
-            <summary>
-            登陆时间
             </summary>
         </member>
         <member name="P:FastFrame.Infrastructure.Identity.IIdentity.User_Id">
@@ -739,33 +748,35 @@
             <param name="address"></param>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.Infrastructure.Identity.IIdentityManager.GenerateIdentity(System.String,System.Net.IPAddress)">
-            <summary>
-            生成身份
-            </summary>
-            <param name="userId"></param>
-            <param name="address"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Infrastructure.Identity.IIdentityManager.RefreshTokenAsync(System.String)">
+        <member name="M:FastFrame.Infrastructure.Identity.IIdentityManager.RefreshToken(System.String)">
             <summary>
             刷新TOKEN
             </summary>
             <param name="token"></param>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.Infrastructure.Identity.IIdentityManager.SetTokenFailureAsync(System.String)">
+        <member name="M:FastFrame.Infrastructure.Identity.IIdentityManager.SetTokenFailure(System.String)">
             <summary>
             强制TOKEN失效
             </summary>
             <param name="token"></param>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.Infrastructure.Identity.IIdentityManager.SetUserAllTokenFailureAsync(System.String)">
+        <member name="M:FastFrame.Infrastructure.Identity.IIdentityManager.SetUserAllTokenFailure(System.String)">
             <summary>
             强制用户所有TOKEN失效
             </summary>
             <param name="userId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Identity.IIdentityManager.TryGenerateIdentity(System.String,System.Net.IPAddress,System.String,FastFrame.Infrastructure.Identity.IIdentityManager.VerifyIdentity)">
+            <summary>
+            尝试生成身份
+            </summary>
+            <param name="userId"></param>
+            <param name="address"></param>
+            <param name="password"></param>
+            <param name="verifyIdentity"></param> 
             <returns></returns>
         </member>
         <member name="T:FastFrame.Infrastructure.IFilter">
@@ -836,19 +847,19 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IApplicationSession.LoginAsync(FastFrame.Infrastructure.Identity.ICurrUser)">
+        <member name="M:FastFrame.Infrastructure.Interface.IApplicationSession.Login(FastFrame.Infrastructure.Identity.ICurrUser)">
             <summary>
-            登陆
+            登录
             </summary>
             <param name="currUser"></param>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IApplicationSession.LogOutAsync">
+        <member name="M:FastFrame.Infrastructure.Interface.IApplicationSession.LogOut">
             <summary>
             登出
             </summary> 
         </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IApplicationSession.RefreshIdentityAsync">
+        <member name="M:FastFrame.Infrastructure.Interface.IApplicationSession.RefreshIdentity">
             <summary>
             刷新身份
             </summary>
@@ -1731,6 +1742,13 @@
             附件资源操作提供者
             </summary>
         </member>
+        <member name="M:FastFrame.Infrastructure.Resource.IResourceProvider.GetRuntimeDirectory(System.String)">
+            <summary>
+            目录转换
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
         <member name="M:FastFrame.Infrastructure.Resource.IResourceProvider.WriteAsync(System.IO.Stream)">
             <summary>
             保存
@@ -1804,6 +1822,63 @@
             替换资源
             </summary>
             <param name="input"></param>
+        </member>
+        <member name="M:FastFrame.Infrastructure.RSAOperate.RSAHelper.#ctor(FastFrame.Infrastructure.RSAType,System.Text.Encoding,System.String,System.String)">
+            <summary>
+            实例化RSAHelper
+            </summary>
+            <param name="rsaType">加密算法类型 RSA SHA1;RSA2 SHA256 密钥长度至少为2048</param>
+            <param name="encoding">编码类型</param>
+            <param name="privateKey">私钥</param>
+            <param name="publicKey">公钥</param>
+        </member>
+        <member name="M:FastFrame.Infrastructure.RSAOperate.RSAHelper.Sign(System.String)">
+            <summary>
+            使用私钥签名
+            </summary>
+            <param name="data">原始数据</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.RSAOperate.RSAHelper.Verify(System.String,System.String)">
+            <summary>
+            使用公钥验证签名
+            </summary>
+            <param name="data">原始数据</param>
+            <param name="sign">签名</param>
+            <returns></returns>
+        </member>
+        <member name="P:FastFrame.Infrastructure.RSAOperate.RSAProvider.PublicKey">
+            <summary>
+            公钥
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.RSAOperate.RSAProvider.Encrypt(System.Byte[])">
+            <summary>
+            加密
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.RSAOperate.RSAProvider.Encrypt(System.String)">
+            <summary>
+            加密
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.RSAOperate.RSAProvider.Decrypt(System.Byte[])">
+            <summary>
+            加密
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.RSAOperate.RSAProvider.Decrypt(System.String)">
+            <summary>
+            加密
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
         </member>
         <member name="T:FastFrame.Infrastructure.SlideVerificationCreater">
             <summary>
@@ -2031,6 +2106,22 @@
             <param name="width">宽</param>
             <param name="height">高</param>
             <returns>byte[]</returns>
+        </member>
+        <member name="T:FastFrame.Infrastructure.RSAType">
+            <summary>
+            RSA算法类型
+            </summary>
+        </member>
+        <member name="F:FastFrame.Infrastructure.RSAType.RSA">
+            <summary>
+            SHA1
+            </summary>
+        </member>
+        <member name="F:FastFrame.Infrastructure.RSAType.RSA2">
+            <summary>
+            RSA2 密钥长度至少为2048
+            SHA256
+            </summary>
         </member>
     </members>
 </doc>

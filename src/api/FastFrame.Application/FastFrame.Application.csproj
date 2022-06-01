@@ -25,22 +25,12 @@
 	<ItemGroup>
 		<PackageReference Include="EPPlus" Version="6.0.3" />
 		<PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.18" />
-		<PackageReference Include="AspectCore.Core" Version="2.2.0" />
-		<!--<PackageReference Include="Microsoft.EntityFrameworkCore.DynamicLinq" Version="1.0.23" />-->
-	</ItemGroup>
-
-
-
+		<PackageReference Include="AspectCore.Core" Version="2.2.0" /> 
+	</ItemGroup> 
+	
 	<ItemGroup>
 		<ProjectReference Include="..\FastFrame.Entity\FastFrame.Entity.csproj" />
 		<ProjectReference Include="..\FastFrame.Infrastructure\FastFrame.Infrastructure.csproj" />
 		<ProjectReference Include="..\FastFrame.Repository\FastFrame.Repository.csproj" />
-	</ItemGroup>
-
-
-
-	<ItemGroup>
-	  <Folder Include="Flow\新文件夹\" />
-	</ItemGroup>
-
+	</ItemGroup> 
 </Project>

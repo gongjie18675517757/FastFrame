@@ -4,6 +4,7 @@
     class="v-input__slot_checkbox_container v-input-no-border"
     style="margin-top: 0px"
     v-if="values.length <= 5"
+    :disabled="disabled"
   >
     <template #default>
       <slot>

@@ -17,9 +17,18 @@ namespace FastFrame.Infrastructure.Cache
         Task<T> HGetAsync<T>(string key, string field);
 
 
-        Task HSetAsync<T>(string key, string field, T val, TimeSpan? expire);
+        Task HSetAsync<T>(string key, string field, T val, TimeSpan? expire); 
 
 
         Task DelAsync(string key);
+
+
+        Task ListPushAsync<T>(string key, T val);
+
+
+        Task<long> ListLengthAsync(string key);
+
+
+        Task<T> ListPopAsync<T>(string key);
     }
 }

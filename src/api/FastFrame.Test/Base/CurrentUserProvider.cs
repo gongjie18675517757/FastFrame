@@ -9,7 +9,7 @@ namespace FastFrame.Test
 {
     public class CurrentUserProvider : IApplicationSession
     {
-        public ICurrUser CurrUser => null;
+        public ICurrUser CurrUser { get; private set; }
 
         public string Tenant_Id => "Test";
 
@@ -25,19 +25,19 @@ namespace FastFrame.Test
             return Task.CompletedTask;
         }
 
-        public Task LoginAsync(ICurrUser currUser)
+        public void Login(ICurrUser currUser)
         {
-            return Task.CompletedTask;
+            CurrUser = currUser;
         }
 
-        public Task LogOutAsync()
+        public void LogOut()
         {
-            return Task.CompletedTask;
+            CurrUser = null;
         }
 
-        public Task RefreshIdentityAsync()
+        public void RefreshIdentity()
         {
-            return Task.CompletedTask;
+
         }
     }
 }

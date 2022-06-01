@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.IO;
 using FastFrame.Infrastructure.Identity;
 using FastFrame.Infrastructure.Resource;
+using FastFrame.Infrastructure.RSAOperate;
 
 namespace FastFrame.WebHost.Controllers.Account
 {
@@ -21,6 +22,7 @@ namespace FastFrame.WebHost.Controllers.Account
     {
         private readonly AccountService service;
         private readonly IApplicationSession appSession;
+        private readonly RSAProvider rsaProvider;
 
         /// <summary>
         /// 保存滑动验证的值
@@ -32,14 +34,15 @@ namespace FastFrame.WebHost.Controllers.Account
         /// </summary>
         private static readonly string ExistsSlideVerififySessionKey = $"IsExistsSlideVerififySlideVerifify_{Guid.NewGuid():N}";
 
-        public AccountController(AccountService service, IApplicationSession appSession)
+        public AccountController(AccountService service, IApplicationSession appSession, RSAProvider rsaProvider)
         {
             this.service = service;
             this.appSession = appSession;
+            this.rsaProvider = rsaProvider;
         }
 
         /// <summary>
-        /// 登陆
+        /// 登录
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
@@ -49,6 +52,9 @@ namespace FastFrame.WebHost.Controllers.Account
         {
             if (!ExistsIsVerify())
                 throw new MsgException("行为验证失败！");
+
+            input.Account = rsaProvider.Decrypt(input.Account);
+            input.Password = rsaProvider.Decrypt(input.Password);
 
             return await service.LoginAsync(input);
         }
@@ -74,9 +80,9 @@ namespace FastFrame.WebHost.Controllers.Account
         /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
-        public async Task LogOut()
+        public void LogOut()
         {
-            await appSession.LogOutAsync();
+            appSession.LogOut();
         }
 
         /// <summary>
@@ -129,7 +135,7 @@ namespace FastFrame.WebHost.Controllers.Account
             else
             {
                 bg_path = Path.Combine(AppContext.BaseDirectory, "verify_img");
-                bg_path = Path.Combine(bg_path, "bg.jpg"); 
+                bg_path = Path.Combine(bg_path, "bg.jpg");
             }
 
             using var bgStream = System.IO.File.OpenRead(bg_path);

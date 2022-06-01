@@ -31,28 +31,21 @@ namespace FastFrame.Application.Account
         /// <returns></returns>
         public async Task<CurrUser> LoginAsync(LoginInput input)
         {
-            var user = await userRepository.Queryable.Where(x => x.Account == input.Account).FirstOrDefaultAsync();
-            if (user?.VerificationPassword(input.Password) == true)
+            var user = await userRepository.FirstOrDefaultAsync(x => x.Account == input.Account);
+
+            var ip = appSession.GetIPAddress();
+            var identity = await identityManager.TryGenerateIdentity(user?.Id, appSession.GetIPAddress(), input.Password, user.VerificationPassword);
+            var curr = new CurrUser()
             {
-                if (user.Enable == EnabledMark.disabled)
-                    throw new MsgException("帐号已被停用");
+                IsAdmin = user.IsAdmin,
+                ToKen = identity.GetToken(),
+                Id = user.Id,
+                Name = user.Name,
+                Account = user.Account
+            };
+            appSession.Login(curr);
 
-                var identity = await identityManager.GenerateIdentity(user.Id, appSession.GetIPAddress());
-
-                var curr = new CurrUser()
-                {
-                    IsAdmin = user.IsAdmin,
-                    ToKen = identity.GetToken(),
-                    Id = user.Id,
-                    Name = user.Name,
-                    Account = user.Account
-                };
-
-                await userRepository.CommmitAsync();
-                await appSession.LoginAsync(curr);
-                return curr;
-            }
-            throw new MsgException("登陆失败,帐号或者密码错误!");
+            return curr;
         }
 
         /// <summary>
@@ -93,11 +86,11 @@ namespace FastFrame.Application.Account
                 user.Password = input.Password;
                 user.GeneratePassword();
 
-                await identityManager.SetUserAllTokenFailureAsync(user.Id);
+                identityManager.SetUserAllTokenFailure(user.Id);
             }
             await userRepository.UpdateAsync(user);
             await userRepository.CommmitAsync();
-             
+
             return await GetCurrentAsync();
         }
 
@@ -111,7 +104,7 @@ namespace FastFrame.Application.Account
             if (curr == null)
                 throw new MsgException("未登陆吧!");
             var user = await userRepository.GetAsync(curr?.Id);
-            await appSession.RefreshIdentityAsync();
+            appSession.RefreshIdentity();
             return user.MapTo<User, UserDto>();
         }
     }

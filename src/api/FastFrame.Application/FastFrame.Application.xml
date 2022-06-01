@@ -38,9 +38,27 @@
         <member name="P:FastFrame.Application.Account.LoginInput.Password">
             <summary>
             密码
-            </summary>
+            </summary> 
         </member>
-        <member name="M:FastFrame.Application.Account.IdentityManagerService.RefreshTokenAsync(System.String)">
+        <member name="M:FastFrame.Application.Account.IdentityManagerService.VerifyFailCount(System.String,System.Net.IPAddress)">
+            <summary>
+            验证失败次数
+            </summary>
+            <param name="userId"></param>
+            <param name="address"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.Account.IdentityManagerService.TryGenerateIdentity(System.String,System.Net.IPAddress,System.String,FastFrame.Infrastructure.Identity.IIdentityManager.VerifyIdentity)">
+            <summary>
+            尝试生成身份
+            </summary>
+            <param name="userId"></param>
+            <param name="address"></param>
+            <param name="password"></param>
+            <param name="verifyIdentity"></param> 
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.Account.IdentityManagerService.RefreshToken(System.String)">
             <summary>
             刷新Token
             </summary> 
@@ -732,6 +750,16 @@
             <summary>
             是否有效
             </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.LoginLogModel.IsSuccessful">
+            <summary>
+            登陆成功
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.LoginLogModel.FailReason">
+            <summary>
+            失败原因
+            </summary> 
         </member>
         <member name="T:FastFrame.Application.Basis.MeidiaDto">
             <summary>

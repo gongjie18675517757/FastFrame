@@ -37,6 +37,7 @@ export default {
           Relate: "User",
           Type: "Array",
           requestUrl: "/api/role/userList",
+          colspan:2
         });
         opts.push({
           Name: "Permissions",

@@ -66,6 +66,7 @@
 
 <script>
 import SlideVerififyVue from "../components/SlideVerifify.vue";
+import { RSAEncrypt } from '../utils';
 
 export default {
   components: {
@@ -100,10 +101,14 @@ export default {
     async login() {
       this.loading = true;
       try {
+        const {account,password}=this.model
         /**
          * 登陆
          */
-        await this.$http.post("/api/account/login", this.model);
+        await this.$http.post("/api/account/login", {
+          account:await RSAEncrypt(account),
+          password:await RSAEncrypt(password),
+        });
 
         /**
          * 验证登陆状态

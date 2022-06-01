@@ -54,16 +54,13 @@
 		<PackageReference Include="AwaitableCompletionSource" Version="1.0.0" />
 		<PackageReference Include="Hangfire.AspNetCore" Version="1.7.28" />
 		<PackageReference Include="Hangfire.Core" Version="1.7.28" /> 
-		<PackageReference Include="HangFire.Redis.StackExchange" Version="1.8.5" /> 
-		<PackageReference Condition="'$(Configuration)'=='DEBUG'" Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.4">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
+		<PackageReference Include="HangFire.Redis.StackExchange" Version="1.8.5" />  
 		<PackageReference Include="AspectCore.Extensions.DependencyInjection" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.4" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="6.1.0" />
 		<PackageReference Include="AspectCore.Core" Version="2.2.0" /> 
 		<PackageReference Condition="'$(Configuration)'=='DEBUG'" Include="Swashbuckle.AspNetCore" Version="6.3.0" />
+		<PackageReference Condition="'$(Configuration)'=='DEBUG'" Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.1" />
 		<!--<PackageReference Include="Yarp.ReverseProxy" Version="1.0.1" />-->
 	</ItemGroup>
 
@@ -76,6 +73,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Update="privateKey.key">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="publicKey.key">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<None Update="publish.ps1">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</None>

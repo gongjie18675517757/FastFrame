@@ -206,6 +206,11 @@
             响应状态码
             </summary>
         </member>
+        <member name="P:FastFrame.Entity.Basis.ApiRequestLog.RequestLength">
+            <summary>
+            请求大小
+            </summary>
+        </member>
         <member name="T:FastFrame.Entity.Basis.BillBeDept">
             <summary>
             单据归属部门
@@ -304,6 +309,16 @@
         <member name="P:FastFrame.Entity.Basis.LoginLog.LoginTime">
             <summary>
             登陆时间
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.LoginLog.IsSuccessful">
+            <summary>
+            登陆成功
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.LoginLog.FailReason">
+            <summary>
+            失败原因
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Basis.LoginLog.LastTime">
@@ -721,7 +736,7 @@
             生成密码
             </summary> 
         </member>
-        <member name="M:FastFrame.Entity.Basis.User.VerificationPassword(System.String)">
+        <member name="M:FastFrame.Entity.Basis.User.VerificationPassword(System.String,System.Exception@)">
             <summary>
             验证密码
             </summary> 
@@ -2500,11 +2515,6 @@
         <member name="M:FastFrame.Entity.IHaveNumber.GetModuleName">
             <summary>
             表单名称
-            </summary>
-        </member>
-        <member name="T:FastFrame.Entity.INotGenerateableKey">
-            <summary>
-            不自动生成ID
             </summary>
         </member>
         <member name="T:FastFrame.Entity.INotGenerateKey">

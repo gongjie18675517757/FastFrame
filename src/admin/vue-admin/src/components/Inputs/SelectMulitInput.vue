@@ -7,7 +7,7 @@
     :value="value"
     :clearable="!disabled"
     :label="label"
-    :readonly="disabled"
+    :disabled="disabled"
     :errorMessages="errorMessages"
     :placeholder="description"
     multiple

@@ -4,6 +4,7 @@ import { throttle as _throttle, debounce as _debounce, get, set } from 'lodash'
 import { getIcon } from './fileIcons'
 import { getUploadPath } from '../config';
 import _queryBuild from './queryBuild'
+import JSEncrypt from 'jsencrypt';
 
 export const getIconFunc = getIcon;
 
@@ -384,4 +385,16 @@ export function makeVueContext({
         },
         injections: createObject(inject, v => v, v => this[v])
     }
+}
+
+/**
+ * RSA加密
+ * @param {String} input_string 要加密的字符串 
+ * @param {String} publicKey 公钥，为空时，从后台获取
+ */
+export async function RSAEncrypt(input_string, publicKey) {
+    const encrypt = new JSEncrypt();
+    const PUBLIC_KEY = publicKey || await $http.get('/api/common/getPublicKey')
+    encrypt.setPublicKey(PUBLIC_KEY);
+    return encrypt.encrypt(input_string);
 }

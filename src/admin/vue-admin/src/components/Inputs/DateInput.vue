@@ -1,62 +1,32 @@
 <template>
-  <span>
-    <span v-if="this.disabled && !isXs">{{this.value}}</span>
-    <v-text-field
-      v-else
-      :value="text"
-      readonly
-      :label="label"
-      :errorMessages="errorMessages"
-      :placeholder="description"
-      :dense="!isXs"
-      @click="handleInputClick"
-    >
+  <div>
+    <v-input dense :disabled="disabled" @click="handleInputClick">
       <template #default>
-        <slot></slot>
+        <input type="text" :value="value" readonly :placeholder="description">
       </template>
       <template #prepend>
         <slot name="prepend"></slot>
       </template>
-    </v-text-field>
+    </v-input>
     <v-menu
-      v-model="showDatePicker"
       :close-on-content-click="false"
-      :nudge-right="0"
-      transition="scale-transition"
-      offset-y
-      max-width="290px"
-      min-width="290px"
+      :disabled="disabled" 
+      v-model="menuVisible"
       :position-x="x"
-      :position-y="y"
-      absolute
+      :position-y="y" 
+      
     >
-      <v-date-picker
-        :value="dateValue"
-        @change="dateChange"
-        :header-date-format="format"
-        :month-format="format"
-        :weekday-format="weekdayFrm"
-      ></v-date-picker>
+      <DatePicker :value="value" @input="handleInput"/>
     </v-menu>
-    <v-menu
-      v-model="showTimePicker"
-      :close-on-content-click="false"
-      :nudge-right="0"
-      transition="scale-transition"
-      offset-y
-      max-width="290px"
-      min-width="290px"
-      :position-x="x"
-      :position-y="y"
-      absolute
-    >
-      <v-time-picker :value="timeValue" @change="timeChange" format="24hr"></v-time-picker>
-    </v-menu>
-  </span>
+  </div>
 </template>
 
 <script>
+import DatePicker from "v-calendar/lib/components/date-picker.umd";
 export default {
+  components: {
+    DatePicker,
+  },
   props: {
     value: String,
     disabled: Boolean,
@@ -66,16 +36,14 @@ export default {
     isXs: Boolean,
     type: {
       type: String,
-      default: "date"
-    }
+      default: "date",
+    },
   },
   data() {
     return {
       x: 0,
       y: 0,
-      showDatePicker: false,
-      showTimePicker: false,
-      tempDateValue: null
+      menuVisible:false
     };
   },
   computed: {
@@ -89,7 +57,7 @@ export default {
     timeValue() {
       if (!this.value || this.type != "datetime") {
         return null;
-      } else { 
+      } else {
         return this.value.substring(11, 16);
       }
     },
@@ -98,7 +66,7 @@ export default {
         return `${this.dateValue || ""} ${this.timeValue || ""}`;
       else if (this.value) return this.dateValue;
       else return null;
-    }
+    },
   },
   methods: {
     handleInputClick() {
@@ -108,40 +76,12 @@ export default {
       let e = event;
       this.x = e.clientX;
       this.y = e.clientY;
-      this.showDatePicker = true;
+      this.menuVisible = true;
     },
-    dateChange(val) {
-      this.showDatePicker = false;
-      if (this.type == "date") {
-        this.$emit("input", val);
-        this.$emit("change", val);
-      } else {
-        this.tempDateValue = val;
-        this.showTimePicker = true;
-      }
-    },
-    timeChange(val) {
-      val = `${this.tempDateValue} ${val}`;
-      this.$emit("input", val);
-      this.$emit("change", val);
-      this.showTimePicker = false;
-    },
-    weekdayFrm(v) {
-      v = new Date(v).getDay();
-      return {
-        0: "日",
-        1: "一",
-        2: "二",
-        3: "三",
-        4: "四",
-        5: "五",
-        6: "六"
-      }[v];
-    },
-    format(v) {
-      return v;
+    handleInput(v){
+      console.log(v,typeof(v));
     }
-  }
+  },
 };
 </script>
 

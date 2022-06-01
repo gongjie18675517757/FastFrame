@@ -21,7 +21,7 @@
                 :key="v.Name"
                 :label="v.Text"
                 :input-value="hasCheck(v)"
-                :readonly="disabled"
+                :disabled="disabled"
                 @change="handleInput(v, $event)"
                 hide-details
                 dense

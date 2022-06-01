@@ -6,17 +6,17 @@ using System.Text;
 
 namespace FastFrame.Entity.Basis
 {
+
+
     /// <summary>
     /// 用户
     /// </summary>
     [Export]
-    [RelatedField(nameof(Name), nameof(Account))]
+    [RelatedField(nameof(Name))]
     [Unique(nameof(Account))]
-    public class User : BaseEntity
+    public class User : BaseEntity //, IVerifyIdentity
     {
         public const int NameLength = 50;
-
-
 
         /// <summary>
         /// 帐号
@@ -92,9 +92,22 @@ namespace FastFrame.Entity.Basis
         /// <summary>
         /// 验证密码
         /// </summary> 
-        public bool VerificationPassword(string password = "")
+        public bool VerificationPassword(string password, out Exception exception)
         {
-            return ToMD5($"{EncryptionKey}{password}") == Password;
+            exception = null;
+            if (Enable == EnabledMark.disabled)
+            {
+                exception = new Exception("帐号已禁用");
+                return false;
+            }
+
+            if (ToMD5($"{EncryptionKey}{password}") != Password)
+            {
+                exception = new Exception("帐号密码不正确!");
+                return false;
+            }
+
+            return true;
         }
 
 

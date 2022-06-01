@@ -35,12 +35,12 @@ namespace FastFrame.Application.Basis
         /// <summary>
         /// 最后刷新时间
         /// </summary>
-        public DateTime LastTime { get; set; }
+        public DateTime? LastTime { get; set; }
 
         /// <summary>
         /// 过期时间
         /// </summary>
-        public DateTime ExpiredTime { get; set; }
+        public DateTime? ExpiredTime { get; set; }
 
         /// <summary>
         /// IP
@@ -51,5 +51,16 @@ namespace FastFrame.Application.Basis
         /// 是否有效
         /// </summary>
         public bool IsEnabled { get => isEnabled && ExpiredTime > DateTime.Now; set => isEnabled = value; }
+
+
+        /// <summary>
+        /// 登陆成功
+        /// </summary>
+        public bool IsSuccessful { get; set; }
+
+        /// <summary>
+        /// 失败原因
+        /// </summary> 
+        public string FailReason { get; set; }
     }
 }

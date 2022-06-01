@@ -99,6 +99,7 @@ namespace FastFrame.WebHost.Middleware
                 context.Response.ContentLength = resourceStreamInfo.ResourceBlobStream.Length;
                 resourceStreamInfo.ResourceBlobStream.Position = 0;
                 await resourceStreamInfo.ResourceBlobStream.CopyToAsync(context.Response.Body);
+                
                 await context.Response.Body.FlushAsync();
                 return;
             }

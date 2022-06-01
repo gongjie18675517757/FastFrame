@@ -10,6 +10,6 @@ namespace FastFrame.Entity
         /// <summary>
         ///主键
         /// </summary>
-        string Id { get; set; }
+        string Id { get; set; } 
     }
 }

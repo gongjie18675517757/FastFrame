@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace FastFrame.Infrastructure.Cache
 {
 
-    public class CacheProvider : ICacheProvider 
+    public class CacheProvider : ICacheProvider
     {
         private readonly StackExchange.Redis.ConnectionMultiplexer redisClient;
         private readonly int defaultDatabase;
@@ -30,7 +30,7 @@ namespace FastFrame.Infrastructure.Cache
             return value.ToString().ToObject<T>();
         }
 
-        public static string ConvertKey(string key,string prefix)
+        public static string ConvertKey(string key, string prefix)
         {
             if (prefix.IsNullOrWhiteSpace())
                 return key;
@@ -43,7 +43,7 @@ namespace FastFrame.Infrastructure.Cache
             return ConvertKey(key, prefix);
         }
 
-       
+
 
         private StackExchange.Redis.IDatabase GetDatabase()
         {
@@ -83,6 +83,45 @@ namespace FastFrame.Infrastructure.Cache
         public async Task SetAsync<T>(string key, T val, TimeSpan? expire)
         {
             await GetDatabase().StringSetAsync(ConvertKey(key), val?.ToJson(), expire);
+        }
+
+        /// <summary>
+        /// 添加到列表末尾
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <param name="val"></param>
+        /// <returns></returns>
+        public async Task ListPushAsync<T>(string key, T val)
+        {
+            await GetDatabase().ListRightPushAsync(ConvertKey(key), val?.ToString());
+        }
+
+        /// <summary>
+        /// 获取列表长度
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public async Task<long> ListLengthAsync(string key)
+        {
+            return await GetDatabase().ListLengthAsync(ConvertKey(key));
+        }
+
+        /// <summary>
+        /// 从列头移除一条
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public async Task<T> ListPopAsync<T>(string key)
+        {
+            var database = GetDatabase();
+            key = ConvertKey(key);
+            //var length = await database.ListLengthAsync(key);
+            //if (length == 0) return default;
+
+            var value = await database.ListLeftPopAsync(key);
+            return ConvertValue<T>(value);
         }
     }
 }

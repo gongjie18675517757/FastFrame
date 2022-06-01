@@ -34,7 +34,9 @@ namespace FastFrame.Application.Basis
                             LastTime = a.LastTime,
                             LoginTime = a.LoginTime,
                             Name = b.Name,
-                            User_Id = a.User_Id
+                            User_Id = a.User_Id,
+                            FailReason=a.FailReason,
+                            IsSuccessful=a.IsSuccessful,
                         };
 
             var list=await query.PageListAsync(pageInfo);

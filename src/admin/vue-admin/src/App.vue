@@ -199,7 +199,7 @@ html {
     .v-input__slot {
       padding: 4px 12px;
       border: 1px solid #ababab;
-      border-radius: 1px;
+      border-radius: 4px;
     }
 
     &.v-input-no-border {

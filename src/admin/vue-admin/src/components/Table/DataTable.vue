@@ -22,14 +22,14 @@
     <template slot="item.index" slot-scope="props">{{props.item.index}}</template>
     <template v-for="col in columns" :slot="`item.${col.Name}`" slot-scope="props">
       <component
-        :key="col.Name"
         v-if="col.component"
+        :key="col.Name"
         :is="col.component"
         :info="col"
         :props="props"
         v-on="listeners"
       />
-      <Cell :key="col.Name" v-else :info="col" :model="props.item" :props="props" v-on="listeners" />
+      <Cell v-else :key="`${col.Name}_x`" :info="col" :model="props.item" :props="props" v-on="listeners" />
     </template>
     <template slot="no-data">没有加载数据</template>
     <template v-if="!!expandComponent" v-slot:expanded-item="{ headers, item }">
@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import Cell from "./Cell.vue";
+import Cell from "./Cell";
 export default {
   components: {
     Cell

@@ -28,7 +28,7 @@ export default {
           return [
             ...arr,
             function (h, { model }) {
-              model.IsEnabled
+              return model.IsEnabled
                 ? h(
                     "permission-facatory",
                     {

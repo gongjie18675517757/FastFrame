@@ -1,8 +1,6 @@
- <script>
-import { getValue } from "@/utils";
-import EnumItemInput from "@/components/Inputs/EnumItemInput";
-import SelectInput from "@/components/Inputs/SelectInput.vue";
+import { getValue,makeVueContext } from "../..//utils";
 import { getDownLoadPath } from "../../config";
+import store from "../../store";
 export default {
   functional: true,
   props: {
@@ -15,16 +13,18 @@ export default {
       required: true,
     },
   },
-  
+
   render(h, context) {
-    // console.log(context);
-    const { info, props } = context.props;
+    const { props: attrs } =
+      context || makeVueContext.call(this, { inject: [] });
+    const { info, props } = attrs;
     const { EnumItemInfo, EnumValues, renderFunc } = info;
 
     /**
      * 当前对象值
      */
     const value = getValue(props.item, info.Name);
+    const value_arr = Array.isArray(value) ? value : [value];
 
     /**
      * 是否文件
@@ -96,6 +96,20 @@ export default {
         } else {
           return null;
         }
+      } else if (EnumItemInfo) {
+        store.dispatch("loadEnumValues", EnumItemInfo.Name);
+        return store.getters
+          .getItemValues(EnumItemInfo.Name)
+          .filter((v) => value_arr.includes(v.Id))
+          .map((v) => v.Value)
+          .join(",");
+      } else if (EnumValues) {
+        const values =
+          typeof EnumValues == "function" ? EnumValues(props.item) : EnumValues;
+        return values
+          .filter((v) => value_arr.includes(v.Key))
+          .map((v) => v.Value)
+          .join(",");
       } else {
         return text;
       }
@@ -113,17 +127,6 @@ export default {
       });
     }
 
-    //  else if (IsLink) {
-    //   return h(
-    //     "a",
-    //     {
-    //       on: {
-    //         click: () => this.$emit("toEdit", this.props.item),
-    //       },
-    //     },
-    //     this.text
-    //   );
-    // }
     if (isFile) {
       /**
        * 文件下载
@@ -140,41 +143,8 @@ export default {
         },
         text
       );
-    } else if (EnumItemInfo) {
-      /**
-       * 数据字典
-       */
-      return h(EnumItemInput, {
-        props: {
-          value: value,
-          EnumItemInfo,
-          disabled: true,
-          multiple: info.Type == "Array",
-        },
-      });
-    } else if (
-      /**
-       * 枚举
-       */
-      (Array.isArray(EnumValues) && EnumValues.length > 0) ||
-      typeof EnumValues == "function"
-    ) {
-      return h(SelectInput, {
-        props: {
-          value: value,
-          values:
-            typeof EnumValues == "function"
-              ? EnumValues(props.item)
-              : EnumValues,
-          disabled: true,
-          multiple: info.Type == "Array",
-        },
-      });
     } else {
       return h("span", null, text);
     }
   },
 };
-</script>
-
- 

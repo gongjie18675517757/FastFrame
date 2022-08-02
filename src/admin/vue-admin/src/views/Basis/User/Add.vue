@@ -60,11 +60,7 @@ export default {
               Type: "Array",
               requestUrl: `/api/user/roleList`,
               flex: { xs6: true },
-            },
-            {
-              Name: "test",
-             
-            },
+            }, 
           ];
         });
     },

@@ -719,7 +719,7 @@ export let pageMethods = {
       PageIndex: page,
       PageSize: itemsPerPage,
       SortName: sortBy.join(','),
-      SortMode: sortDesc.length > 0 && !sortDesc[0] ? "asc" : "desc",
+      SortMode: sortDesc.length > 0 && !sortDesc[0] ? "desc" : "asc",
       Filters: qb.build()
     };
 

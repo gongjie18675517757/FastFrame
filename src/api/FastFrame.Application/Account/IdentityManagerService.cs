@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 namespace FastFrame.Application.Account
 {
     public class IdentityManagerService : IService, IIdentityManager
-    { 
+    {
         private readonly IRepository<LoginLog> loginLogRepository;
         private readonly IOptionsMonitor<IdentityConfig> optionsMonitor;
         private readonly IBackgroundJob backgroundJob;
@@ -115,13 +115,13 @@ namespace FastFrame.Application.Account
                     FailReason = msgException?.Message,
                 };
 
-            backgroundJob.SetTimeout<IdentityManagerService>(v => v.InsertLog(identity), null);
+            await InsertLog(identity);
 
             if (msgException != null)
                 throw msgException;
 
             return identity;
-        } 
+        }
 
         public async Task RefreshTokenAsync(string token)
         {

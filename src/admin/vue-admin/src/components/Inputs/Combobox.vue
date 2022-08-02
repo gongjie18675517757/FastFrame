@@ -1,31 +1,27 @@
 <template>
-  <span>
-    <span v-if="this.disabled && !isXs">{{ text }}</span>
-    <v-combobox
-      v-else
-      :value="value"
-      :items="items"
-      :clearable="!disabled"
-      :label="label"
-      :readonly="disabled"
-      :errorMessages="errorMessages"
-      :placeholder="description"
-      :multiple="multiple"
-      :dense="!isXs"
-      :return-object="false"
-      @input="handleChange"
-      item-text="Value"
-      item-value="Key"
-    >
-      <template v-slot:selection="props">{{ getText(props) }}</template>
-      <template #default>
-        <slot></slot>
-      </template>
-      <template #prepend>
-        <slot name="prepend"></slot>
-      </template>
-    </v-combobox>
-  </span>
+  <v-combobox
+    :value="value"
+    :items="items"
+    :clearable="!disabled"
+    :label="label"
+    :disabled="disabled"
+    :errorMessages="errorMessages"
+    :placeholder="description"
+    :multiple="multiple"
+    :dense="!isXs"
+    :return-object="false"
+    @input="handleChange"
+    item-text="Value"
+    item-value="Key"
+  >
+    <template v-slot:selection="props">{{ getText(props) }}</template>
+    <template #default>
+      <slot></slot>
+    </template>
+    <template #prepend>
+      <slot name="prepend"></slot>
+    </template>
+  </v-combobox>
 </template>
 
 <script>
@@ -40,12 +36,12 @@ export default {
     errorMessages: Array,
     isXs: Boolean,
     description: String,
-    multiple: Boolean
+    multiple: Boolean,
   },
   data() {
     return {
       keyword: null,
-      items: []
+      items: [],
     };
   },
   computed: {
@@ -60,28 +56,28 @@ export default {
 
       return (
         this.items
-          .filter(v => val.includes(v.Key))
-          .map(v => v.Value)
+          .filter((v) => val.includes(v.Key))
+          .map((v) => v.Value)
           .join(",") || "无"
       );
-    }
+    },
   },
   watch: {
     keyword: {
       immediate: true,
-      handler: "loadList"
+      handler: "loadList",
     },
     disabled: {
       immediate: true,
-      handler: "loadList"
-    }
+      handler: "loadList",
+    },
   },
   methods: {
     getText({ item, index }) {
       if (item) {
         let txt = this.items
-          .filter(v => v.Key == item)
-          .map(v => v.Value)
+          .filter((v) => v.Key == item)
+          .map((v) => v.Value)
           .join(",");
         if (this.multiple && this.value.length > index) {
           txt = `${txt},`;
@@ -97,21 +93,21 @@ export default {
 
       if (this.multiple) {
         val = val || [];
-        let items = this.items.filter(v => val.includes(v.Key));
+        let items = this.items.filter((v) => val.includes(v.Key));
         this.$emit("change", items);
       } else {
-        let item = this.items.find(v => v.Key == val);
+        let item = this.items.find((v) => v.Key == val);
         this.$emit("change", item);
       }
       this.keyword = null;
     },
-    loadList: debounce(async function() {
+    loadList: debounce(async function () {
       if (this.disabled) return;
       let url = this.requestUrl;
       if (!url.includes("?")) url = `${url}?`;
       url = `${url}&kw=${this.keyword || ""}`;
       this.items = await this.$http.get(url);
-    }, 500)
-  }
+    }, 500),
+  },
 };
 </script>

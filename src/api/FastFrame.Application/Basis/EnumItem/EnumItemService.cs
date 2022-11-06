@@ -14,7 +14,7 @@ namespace FastFrame.Application.Basis
         {
             return await enumItemRepository
                 .Where(v => v.Key == name)
-                .OrderBy(v => v.Order)
+                .OrderBy(v => v.SortVal)
                 .ThenBy(v => v.Value)
                 .Select(v => new EnumItemModel
                 {
@@ -31,7 +31,7 @@ namespace FastFrame.Application.Basis
         {
             return await Query()
                 .Where(v => v.Key == name && v.Super_Id == null)
-                .OrderBy(v => v.Order)
+                .OrderBy(v => v.SortVal)
                 .ThenBy(v => v.Value)
                 .ToListAsync();
         }
@@ -40,7 +40,7 @@ namespace FastFrame.Application.Basis
         {
             return await Query()
                 .Where(v => v.Super_Id == id)
-                .OrderBy(v => v.Order)
+                .OrderBy(v => v.SortVal)
                 .ThenBy(v => v.Value)
                 .ToListAsync();
         }

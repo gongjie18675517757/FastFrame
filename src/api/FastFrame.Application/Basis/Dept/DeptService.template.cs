@@ -38,9 +38,10 @@ namespace FastFrame.Application.Basis
 						from _modify_User_Id in t__modify_User_Id.DefaultIfEmpty()
 						select new DeptDto
 						{
-							EnCode = _dept.EnCode,
-							Name = _dept.Name,
 							Super_Id = _dept.Super_Id,
+							TreeCode = _dept.TreeCode,
+							Name = _dept.Name,
+							Remarks = _dept.Remarks,
 							Id = _dept.Id,
 							Create_User_Id = _dept.Create_User_Id,
 							CreateTime = _dept.CreateTime,

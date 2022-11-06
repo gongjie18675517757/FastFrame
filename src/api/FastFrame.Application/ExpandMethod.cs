@@ -298,7 +298,7 @@ namespace FastFrame.Application
         }
 
 
-        public static IQueryable<T> DynamicSort<T>(this IQueryable<T> query!!, string name, string mode)
+        public static IQueryable<T> DynamicSort<T>(this IQueryable<T> query, string name, string mode)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -324,7 +324,7 @@ namespace FastFrame.Application
             return query;
         }
 
-        public static IQueryable<T> DynamicQuery<T>(this IQueryable<T> query!!, string kw, params KeyValuePair<FilterMode, IEnumerable<IFilter[]>>[] kvsFilter)
+        public static IQueryable<T> DynamicQuery<T>(this IQueryable<T> query, string kw, params KeyValuePair<FilterMode, IEnumerable<IFilter[]>>[] kvsFilter)
         {
             foreach (var kv in kvsFilter)
             {
@@ -486,4 +486,7 @@ namespace FastFrame.Application
             return Expression.Lambda<Func<T, bool>>(Expression.And(expression1.Body, invokedExpression), expression1.Parameters);
         }
     }
+
+
+
 }

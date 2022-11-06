@@ -42,6 +42,7 @@ namespace FastFrame.Application.Basis
 							Name = _meidia.Name,
 							Resource_Id = _meidia.Resource_Id,
 							IsFolder = _meidia.IsFolder,
+							TreeCode = _meidia.TreeCode,
 							Id = _meidia.Id,
 							Create_User_Id = _meidia.Create_User_Id,
 							CreateTime = _meidia.CreateTime,

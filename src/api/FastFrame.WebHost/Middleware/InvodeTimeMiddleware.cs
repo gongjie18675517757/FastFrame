@@ -19,23 +19,23 @@ namespace FastFrame.WebHost.Middleware
         }
 
         public async Task Invoke(HttpContext context)
-        { 
+        {
             var begin_time = DateTime.Now;
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            var curr = context.RequestServices.GetService<Infrastructure.Interface.IApplicationSession>().CurrUser;
+            
             var log = new Entity.Basis.ApiRequestLog
             {
                 IPAddress = context.Connection.RemoteIpAddress?.ToString(),
                 Milliseconds = 0,
                 Path = context.Request.Path,
                 RequestTime = begin_time,
-                StatusCode = context.Response.StatusCode,
-                UserName = curr?.Name ?? "/",
-                User_Id = curr?.Id,
+                StatusCode = 200,
+                UserName = null,
+                User_Id = null,
                 Id = IdGenerate.NetId(),
-                RequestLength= context.Request.ContentLength
-            }; 
+                RequestLength = context.Request.ContentLength
+            };
 
             context.Items.Add(Entity.Basis.ApiRequestLog.ListKeyName, log.Id);
 
@@ -48,12 +48,16 @@ namespace FastFrame.WebHost.Middleware
 
             await next(context);
 
+            var curr = context.RequestServices.GetService<Infrastructure.Interface.IApplicationSession>().CurrUser;
+            log.StatusCode = context.Response.StatusCode;
             log.Milliseconds = stopwatch.ElapsedMilliseconds;
+            log.UserName = curr?.Name ?? "/";
+            log.User_Id = curr?.Id;
 
-            await context
-                .RequestServices
-                .GetService<Infrastructure.Cache.ICacheProvider>()
-                .ListPushAsync(Entity.Basis.ApiRequestLog.ListKeyName, log);
+            context
+              .RequestServices
+              .GetService<ApiRequestLogService>()
+              .BackgroundInsert(log);
         }
     }
 }

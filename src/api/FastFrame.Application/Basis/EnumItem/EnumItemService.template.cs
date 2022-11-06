@@ -39,10 +39,11 @@ namespace FastFrame.Application.Basis
 						select new EnumItemDto
 						{
 							Key = _enumItem.Key,
-							Code = _enumItem.Code,
-							Value = _enumItem.Value,
-							Order = _enumItem.Order,
 							Super_Id = _enumItem.Super_Id,
+							TreeCode = _enumItem.TreeCode,
+							Value = _enumItem.Value,
+							IntKey = _enumItem.IntKey,
+							SortVal = _enumItem.SortVal,
 							Id = _enumItem.Id,
 							Create_User_Id = _enumItem.Create_User_Id,
 							CreateTime = _enumItem.CreateTime,

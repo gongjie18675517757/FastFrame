@@ -49,7 +49,7 @@ namespace FastFrame.Infrastructure
         /// <param name="enumerable"></param>
         /// <param name="childSelector"></param>
         /// <returns></returns>
-        public static IEnumerable<T> SelectLoopChild<T>(this IEnumerable<T> enumerable, Func<T, IEnumerable<T>> childSelector!!)
+        public static IEnumerable<T> SelectLoopChild<T>(this IEnumerable<T> enumerable, Func<T, IEnumerable<T>> childSelector)
         {
             if (enumerable == null)
                 yield break;
@@ -80,7 +80,7 @@ namespace FastFrame.Infrastructure
         /// <param name="setChildAction">设置下级</param>
         /// <param name="parent_id">指定当前父节点</param>
         /// <returns></returns>
-        public static IEnumerable<T> SelectLoopChild<T, TKey>(this IEnumerable<T> enumerable, Func<T, TKey> patentFunc!!, Func<T, TKey> keyFunc, Action<T, IEnumerable<T>> setChildAction, TKey parent_id)
+        public static IEnumerable<T> SelectLoopChild<T, TKey>(this IEnumerable<T> enumerable, Func<T, TKey> patentFunc, Func<T, TKey> keyFunc, Action<T, IEnumerable<T>> setChildAction, TKey parent_id)
         {
             if (enumerable is null)
                 yield break;
@@ -103,7 +103,7 @@ namespace FastFrame.Infrastructure
         /// <param name="dic"></param>
         /// <param name="key"></param>
         /// <returns></returns>
-        public static TVal TryGetValueOrDefault<TKey, TVal>(this IDictionary<TKey, TVal> dic!!, TKey key)
+        public static TVal TryGetValueOrDefault<TKey, TVal>(this IDictionary<TKey, TVal> dic, TKey key)
         {
             if (dic.TryGetValue(key, out var val))
                 return val;
@@ -120,7 +120,7 @@ namespace FastFrame.Infrastructure
         /// <param name="key"></param>
         /// <param name="func"></param>
         /// <returns></returns>
-        public static TVal TryGetValueOrCreate<TKey, TVal>(this IDictionary<TKey, TVal> dic!!, TKey key, Func<TVal> func)
+        public static TVal TryGetValueOrCreate<TKey, TVal>(this IDictionary<TKey, TVal> dic, TKey key, Func<TVal> func)
         {
             if (dic.TryGetValue(key, out var val))
                 return val;

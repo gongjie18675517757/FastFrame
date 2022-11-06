@@ -29,17 +29,7 @@ namespace FastFrame.WebHost.Controllers
 
 
 
-        /// <summary>
-        /// 查看
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [Permission("Get", "查看")]
-        [HttpGet("{id}")]
-        public virtual async Task<TDto> Get(string id)
-        {
-            return await service.GetAsync(id);
-        }
+
 
         /// <summary>
         /// 添加

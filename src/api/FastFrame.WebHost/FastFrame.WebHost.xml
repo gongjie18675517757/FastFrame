@@ -63,6 +63,13 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:FastFrame.WebHost.Controllers.BaseController`1.Get(System.String)">
+            <summary>
+            查看
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
         <member name="M:FastFrame.WebHost.Controllers.BaseController`1.List(System.String)">
             <summary>
             列表
@@ -86,13 +93,6 @@
         <member name="M:FastFrame.WebHost.Controllers.BaseCURDController`1.Delete(System.String)">
             <summary>
             删除
-            </summary>
-            <param name="id"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.WebHost.Controllers.BaseCURDController`1.Get(System.String)">
-            <summary>
-            查看
             </summary>
             <param name="id"></param>
             <returns></returns>
@@ -210,7 +210,7 @@
         </member>
         <member name="T:FastFrame.WebHost.Controllers.Basis.TenantController">
             <summary>
-            组织信息 
+            多租户信息 
             </summary>
         </member>
         <member name="T:FastFrame.WebHost.Controllers.Basis.UserController">
@@ -275,76 +275,6 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.WebHost.Controllers.ExpressionClosureFactory.ParseLambda``2(System.Linq.Expressions.Expression{System.Func{``0,``1}})">
-            <summary>
-            生成取值表达式
-            </summary>
-            <typeparam name="T"></typeparam>
-            <typeparam name="TValue"></typeparam>
-            <param name="expr"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.WebHost.Controllers.ExpressionClosureFactory.ParseLambda``2(System.String,System.String)">
-            <summary>
-            生成取值表达式
-            </summary>
-            <typeparam name="T"></typeparam>
-            <typeparam name="TValue"></typeparam>
-            <param name="field_name"></param>
-            <param name="para_name"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.WebHost.Controllers.ExpressionClosureFactory.BuildCompareExpression``2(System.Func{System.Linq.Expressions.Expression,System.Linq.Expressions.Expression,System.Linq.Expressions.BinaryExpression},System.String,``1)">
-            <summary>
-            生成比较表达式
-            </summary>
-            <typeparam name="TBuild"></typeparam>
-            <typeparam name="TValue"></typeparam>
-            <param name="compare_expression"></param>
-            <param name="field_name"></param>
-            <param name="value"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.WebHost.Controllers.ExpressionClosureFactory.BuildEqualExpression``2(System.Linq.Expressions.Expression{System.Func{``0,``1}},``1)">
-            <summary>
-            生成比较表达式(==)
-            </summary>
-            <typeparam name="TBuild"></typeparam>
-            <typeparam name="TValue"></typeparam>
-            <param name="expression"></param>
-            <param name="value"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.WebHost.Controllers.ExpressionClosureFactory.BuildEqualExpression``2(System.String,``1)">
-            <summary>
-            生成比较表达式(==)
-            </summary>
-            <typeparam name="TBuild"></typeparam>
-            <typeparam name="TValue"></typeparam>
-            <param name="field_name"></param>
-            <param name="value"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.WebHost.Controllers.ExpressionClosureFactory.BuildContainsExpression``2(System.String,System.Linq.IQueryable{``1})">
-            <summary>
-            生成Contains表达式
-            </summary>
-            <typeparam name="TBuild"></typeparam>
-            <typeparam name="TCompareFieldValue"></typeparam>
-            <param name="left_field_name"></param> 
-            <param name="compareFieldValues"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.WebHost.Controllers.ExpressionClosureFactory.BuildContainsExpression``2(System.Linq.Expressions.Expression{System.Func{``0,``1}},System.Linq.IQueryable{``1})">
-            <summary>
-            生成Contains表达式
-            </summary>
-            <typeparam name="TBuild"></typeparam>
-            <typeparam name="TCompareFieldValue"></typeparam>
-            <param name="left_field_expression"></param>
-            <param name="compareFieldValues"></param>
-            <returns></returns>
-        </member>
         <member name="T:FastFrame.WebHost.Controllers.Flow.DFModuleController">
             <summary>
             动态表单模块 
@@ -391,11 +321,6 @@
         <member name="T:FastFrame.WebHost.Controllers.OA.OaLeaveController">
             <summary>
             请假单 
-            </summary>
-        </member>
-        <member name="T:FastFrame.WebHost.Controllers.Proxy.ProxyClientController">
-            <summary>
-            内网穿透服务 
             </summary>
         </member>
         <member name="M:FastFrame.WebHost.Hubs.MessageHub.ClientResponse(System.String)">
@@ -517,6 +442,11 @@
         <member name="T:FastFrame.WebHost.Privder.ResourceProvider">
             <summary>
             资源提供者
+            </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Lock.LockFacatoryProvider.LockHolder">
+            <summary>
+            锁的持有者
             </summary>
         </member>
     </members>

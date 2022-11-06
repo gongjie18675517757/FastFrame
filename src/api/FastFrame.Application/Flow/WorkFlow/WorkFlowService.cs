@@ -267,7 +267,7 @@ namespace FastFrame.Application.Flow
         /// 验证流程节点是否配置正确
         /// </summary>
         /// <param name="workFlow"></param>
-        private void VerifyFlowNodes(WorkFlowDto workFlow!!)
+        private void VerifyFlowNodes(WorkFlowDto workFlow)
         {
             if (workFlow.Nodes == null || !workFlow.Nodes.Any())
                 throw new MsgException("无有效节点");
@@ -388,11 +388,11 @@ namespace FastFrame.Application.Flow
                 case FlowNodeCheckerEnum.dept:
                     return await Loader
                          .GetService<IRepository<Dept>>()
-                         .Where(v => kw == null || v.Name.Contains(kw) || v.EnCode.Contains(kw))
-                         .OrderBy(v => v.EnCode)
+                         .Where(v => kw == null || v.Name.Contains(kw) || v.TreeCode.Contains(kw))
+                         .OrderBy(v => v.TreeCode)
                          .ThenBy(v => v.Name)
                          .Take(200)
-                         .Select(v => new KeyValuePair<string, string>(v.Id, v.EnCode + "[" + v.Name + "]"))
+                         .Select(v => new KeyValuePair<string, string>(v.Id, v.TreeCode + "[" + v.Name + "]"))
                          .ToListAsync();
                 case FlowNodeCheckerEnum.prev_appoint:
                     break;

@@ -1,7 +1,9 @@
 ﻿using FastFrame.Entity.Basis;
 using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Interface;
+using FastFrame.Infrastructure.IntervalWork;
 using FastFrame.Repository;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +12,10 @@ using System.Threading.Tasks;
 
 namespace FastFrame.Application.Basis
 {
-    public class ApiRequestLogService : IService, IPageListService<ApiRequestLog>
+    /// <summary>
+    /// 记录请求日志
+    /// </summary>
+    public class ApiRequestLogService : BaseService<ApiRequestLog>
     {
         private readonly IRepository<ApiRequestLog> repository;
         private readonly IBackgroundJob background;
@@ -19,12 +24,7 @@ namespace FastFrame.Application.Basis
         {
             this.repository = repository;
             this.background = background;
-        }
-
-        public Task<IPageList<ApiRequestLog>> PageListAsync(IPagination pageInfo)
-        {
-            return repository.PageListAsync(pageInfo);
-        }
+        } 
 
         /// <summary>
         /// 插入记录
@@ -44,6 +44,11 @@ namespace FastFrame.Application.Basis
         public void BackgroundInsert(ApiRequestLog apiRequestLog)
         {
             background.SetTimeout<ApiRequestLogService>(v => v.InsertAsync(apiRequestLog), null);
+        }
+
+        protected override IQueryable<ApiRequestLog> QueryMain()
+        {
+            return repository;
         }
     }
 }

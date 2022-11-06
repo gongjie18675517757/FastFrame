@@ -1,4 +1,5 @@
 ﻿using FastFrame.Application;
+using FastFrame.Application.Basis;
 using FastFrame.Entity.Basis;
 
 namespace FastFrame.WebHost.Controllers.Basis
@@ -8,8 +9,8 @@ namespace FastFrame.WebHost.Controllers.Basis
     /// </summary>
     public class ApiRequestLogController : BaseController<ApiRequestLog>
     {
-        public ApiRequestLogController(IPageListService<ApiRequestLog> service) : base(service)
+        public ApiRequestLogController(ApiRequestLogService service) : base(service)
         {
-        } 
+        }
     }
 }

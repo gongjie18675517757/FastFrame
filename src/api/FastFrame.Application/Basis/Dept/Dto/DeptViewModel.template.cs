@@ -14,7 +14,7 @@ namespace FastFrame.Application.Basis
 		}
 		
 		/// <summary>
-		/// 名称 
+		/// 部门名称 
 		/// </summary>
 		public string Name {get;set;}
 		

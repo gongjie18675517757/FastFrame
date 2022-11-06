@@ -48,7 +48,7 @@ namespace FastFrame.Application
         /// <param name="list">列表</param>
         /// <param name="makeEntiyFunc">生成实体</param>
         /// <returns></returns>
-        public async Task AddManyAsync(IEnumerable<TTargetDto> list, Func<TTargetDto, TTargetEntity> makeEntiyFunc!!)
+        public async Task AddManyAsync(IEnumerable<TTargetDto> list, Func<TTargetDto, TTargetEntity> makeEntiyFunc)
         {
             if (list != null)
             {
@@ -75,7 +75,7 @@ namespace FastFrame.Application
         /// </summary>
         /// <param name="expression">表达式</param>
         /// <returns></returns>
-        public async Task DelManyAsync(Expression<Func<TTargetEntity, bool>> expression!!)
+        public async Task DelManyAsync(Expression<Func<TTargetEntity, bool>> expression)
         {
             var befores = await targetEntities.Where(expression).ToListAsync();
             foreach (var item in befores)
@@ -107,10 +107,10 @@ namespace FastFrame.Application
         /// <param name="updateAction">更新方法</param>
         /// <returns></returns>
         public async Task UpdateManyAsync(
-                    Expression<Func<TTargetEntity, bool>> expression!!,
+                    Expression<Func<TTargetEntity, bool>> expression,
                     IEnumerable<TTargetDto> list,
-                    Func<TTargetEntity, TTargetDto, bool> compareFunc!!,
-                    Func<TTargetDto, TTargetEntity> makeEntiyFunc!!,
+                    Func<TTargetEntity, TTargetDto, bool> compareFunc,
+                    Func<TTargetDto, TTargetEntity> makeEntiyFunc,
                     Action<TTargetEntity, TTargetDto> updateAction = null)
         {
             var befores = await targetEntities.Where(expression).ToListAsync();

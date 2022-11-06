@@ -10,22 +10,27 @@ using FastFrame.Infrastructure;
 using FastFrame.Entity.Enums;
 using FastFrame.Infrastructure.EventBus;
 using FastFrame.Repository.Events;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FastFrame.Application
 {
     /// <summary>
     /// 自动编号
     /// </summary>
-    public class AutoNumberService : IService, IAutoNumberService, IEventHandle<EntityAdding<IHaveNumber>>
+    public class AutoNumberService : IService, IAutoNumberService
     {
         private readonly IRepository<NumberOption> numberOptions;
         private readonly IRepository<NumberRecord> numberRecords;
-        private readonly Dictionary<string, NumberRecord> recordDic = new Dictionary<string, NumberRecord>();
+        private readonly IServiceProvider serviceProvider;
+        private readonly Dictionary<string, NumberRecord> recordDic = new();
 
-        public AutoNumberService(IRepository<NumberOption> numberOptions, IRepository<NumberRecord> numberRecords)
+
+
+        public AutoNumberService(IRepository<NumberOption> numberOptions, IRepository<NumberRecord> numberRecords, IServiceProvider serviceProvider)
         {
             this.numberOptions = numberOptions;
             this.numberRecords = numberRecords;
+            this.serviceProvider = serviceProvider;
         }
 
         /// <summary>
@@ -33,17 +38,38 @@ namespace FastFrame.Application
         /// </summary>   
         /// <param name="entitys"></param>
         /// <returns></returns>
-        public async Task MakeNumberAsync(params IHaveNumber[] entitys)
+        public async Task MakeNumberAsync<TEntity>(params TEntity[] entitys) where TEntity : class, IHaveNumber
         {
             if (entitys.Length == 0)
                 return;
 
-            var typeName = entitys[0].GetModuleName();
-            NumberOption opt = await GetNumberOptionAsync(typeName);
-            NumberRecord record = await GetNumberRecordAsync(typeName, opt);
-
             foreach (var item in entitys)
             {
+                var typeName = item.GetModuleName();
+                ITreeEntity treeEntity = null;
+                var is_tree_entity = item is ITreeEntity;
+                if (is_tree_entity)
+                    treeEntity = (ITreeEntity)item;
+
+                /*兼容树编码的场景*/
+                var super_code = string.Empty;
+                if (is_tree_entity)
+                {
+                    var expression = ExpressionClosureFactory.ParseLambda<TEntity, string>(nameof(ITreeEntity.TreeCode));
+                    super_code = await serviceProvider
+                        .GetService<IRepository<TEntity>>()
+                        .Where(v => v.Id == treeEntity.Super_Id)
+                        .Select(expression)
+                        .FirstOrDefaultAsync();
+
+                    if (super_code.IsNullOrWhiteSpace())
+                        typeName = $"{typeName}:{super_code}";
+                }
+
+                NumberOption opt = await GetNumberOptionAsync(typeName);
+                NumberRecord record = await GetNumberRecordAsync(typeName, opt);
+
+
                 /*自增序列号*/
                 record.Serial++;
                 DateTime? dt = DateTime.Now;
@@ -58,7 +84,22 @@ namespace FastFrame.Application
                     dt ??= DateTime.Now;
                     dtTemp = dt.Value.ToString(opt.FmtDate.ToString());
                 }
-                item.Number = $"{opt.Prefix}{dtTemp}{serial}{opt.Suffix}";
+
+                var prefix = opt.Prefix;
+
+                if (is_tree_entity)
+                {
+                    if (super_code != null)
+                        prefix = super_code;
+
+                    var number = $"{prefix}{serial}";
+                    item.SetNumber(number);
+                }
+                else
+                {
+                    var number = $"{prefix}{dtTemp}{serial}{opt.Suffix}";
+                    item.SetNumber(number);
+                }
             }
         }
 
@@ -131,32 +172,19 @@ namespace FastFrame.Application
         private async Task<NumberOption> GetNumberOptionAsync(string typeName)
         {
             var opt = await numberOptions.Where(v => v.BeModule == typeName).FirstOrDefaultAsync();
-            if (opt == null)
+            opt ??= new NumberOption
             {
-                opt = new NumberOption
-                {
-                    BeModule = typeName,
-                    DateField = null,
-                    DateFieldText = null,
-                    FmtDate = FmtDateEnum.yyyyMMdd,
-                    Prefix = null,
-                    Suffix = null,
-                    SerialLength = 3,
-                    TaskDate = true
-                };
-            }
+                BeModule = typeName,
+                DateField = null,
+                DateFieldText = null,
+                FmtDate = FmtDateEnum.yyyyMMdd,
+                Prefix = null,
+                Suffix = null,
+                SerialLength = 3,
+                TaskDate = true
+            };
 
             return opt;
-        }
-
-        /// <summary>
-        /// 新增时自动编号
-        /// </summary>
-        /// <param name="event"></param>
-        /// <returns></returns>
-        public async Task HandleEventAsync(EntityAdding<IHaveNumber> @event)
-        {
-            await MakeNumberAsync(@event.Data);
         }
     }
 }

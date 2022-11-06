@@ -8,23 +8,38 @@ namespace FastFrame.Entity.Basis
     [Export]
     [RelatedField(nameof(Name))]
     public class Dept : BaseEntity, ITreeEntity
-    {
+    { 
         /// <summary>
-        /// 编码
+        /// 上级
         /// </summary>
-        [StringLength(50), Required, Unique]
-        public string EnCode { get; set; }
+        [RelatedTo(typeof(Dept))]
+        public string Super_Id { get; set; } 
 
         /// <summary>
-        /// 名称
+        /// 部门代码
+        /// </summary>
+        [StringLength(50)]
+        [ReadOnly]
+        public string TreeCode { get; set; } = "保存时生成";
+
+        /// <summary>
+        /// 部门名称
         /// </summary>
         [StringLength(50), Required]
         public string Name { get; set; }
 
         /// <summary>
-        /// 上级
+        /// 备注
         /// </summary>
-        [RelatedTo(typeof(Dept))]
-        public string Super_Id { get; set; }
+        [StringLength(200)]
+        public string Remarks { get; set; }
+
+
+        public void SetNumber(string val)
+        {
+            TreeCode = val;
+        }
+
+        public string GetNumber() => TreeCode;
     }
 }

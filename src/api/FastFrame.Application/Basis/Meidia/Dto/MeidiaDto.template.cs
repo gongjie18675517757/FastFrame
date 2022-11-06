@@ -45,6 +45,12 @@ namespace FastFrame.Application.Basis
 		public bool IsFolder {get;set;}
 		
 		/// <summary>
+		/// 树状码 
+		/// </summary>
+		[StringLength(200)]
+		public string TreeCode {get;set;}
+		
+		/// <summary>
 		/// 创建人 
 		/// </summary>
 		[Hide(HideMark.Form)]

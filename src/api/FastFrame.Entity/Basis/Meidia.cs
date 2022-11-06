@@ -8,7 +8,7 @@ namespace FastFrame.Entity.Basis
     [RelatedField(nameof(Name))]
     [Unique(nameof(Super_Id), nameof(Name))]
     [Export(ExportMark.Service, ExportMark.DTO, ExportMark.ViewModel)]
-    public class Meidia : BaseEntity, ITreeEntity
+    public class Meidia : BaseEntity,ITreeEntity
     {
         /// <summary>
         /// 上级
@@ -31,6 +31,20 @@ namespace FastFrame.Entity.Basis
         /// <summary>
         /// 是否文件夹
         /// </summary>
-        public bool IsFolder { get; set; } 
+        public bool IsFolder { get; set; }
+
+        /// <summary>
+        /// 树状码
+        /// </summary>
+        [ReadOnly]
+        [StringLength(200)]
+        public string TreeCode { get; set; } 
+
+        public void SetNumber(string val)
+        {
+            TreeCode = val;
+        }
+
+        public string GetNumber() => TreeCode;
     }
 }

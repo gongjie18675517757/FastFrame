@@ -3,7 +3,7 @@ namespace FastFrame.WebHost.Controllers.Basis
 {
 		
 	/// <summary>
-	/// 组织信息 
+	/// 多租户信息 
 	/// </summary>
 	public partial class TenantController:BaseController<TenantDto>
 	{

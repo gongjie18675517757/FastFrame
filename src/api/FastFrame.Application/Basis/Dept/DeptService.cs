@@ -35,7 +35,7 @@ namespace FastFrame.Application.Basis
         {
             return await Query()
                .Where(v => v.Super_Id == id)
-               .OrderBy(v => v.EnCode)
+               .OrderBy(v => v.TreeCode)
                .ThenBy(v => v.Name)
                .MapTo<DeptDto, TreeModel>()
                .ToListAsync();

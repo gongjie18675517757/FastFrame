@@ -4,7 +4,7 @@ namespace FastFrame.Database.Mapping.Basis
 {
 		
 	/// <summary>
-	/// 组织信息 
+	/// 多租户信息 
 	/// </summary>
 	public partial class TenantMapping:BaseEntityMapping<Tenant>
 	{

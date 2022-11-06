@@ -110,8 +110,10 @@ namespace FastFrame.Application.Basis
                 v => v.Name == nameof(ITreeModel.Super_Id) && !v.Value.IsNullOrWhiteSpace(),
                 f =>
                 {
-                    var treeChildren = Loader.GetService<IRepository<TreeChild>>().Where(v => v.Super_Id == f.Value);
-                    var deptMembers = Loader.GetService<IRepository<DeptMember>>().Where(v => v.Dept_Id == f.Value || treeChildren.Any(x => x.Child_Id == v.Dept_Id));
+                    var depts = Loader.GetService<IRepository<Dept>>();
+                    var treeChildren = depts.Where(v => depts.Any(y => y.Id == f.Value && v.TreeCode.StartsWith(y.TreeCode)));
+
+                    var deptMembers = Loader.GetService<IRepository<DeptMember>>().Where(v => v.Dept_Id == f.Value || treeChildren.Any(x => x.Id == v.Dept_Id));
 
                     return new ExtensionFilter<UserDto>(v => deptMembers.Any(x => x.User_Id == v.Id));
                 });

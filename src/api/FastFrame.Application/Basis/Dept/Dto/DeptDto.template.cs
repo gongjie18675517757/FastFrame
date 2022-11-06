@@ -17,20 +17,6 @@ namespace FastFrame.Application.Basis
 		
 		
 		/// <summary>
-		/// 编码 
-		/// </summary>
-		[StringLength(50)]
-		[Required()]
-		public string EnCode {get;set;}
-		
-		/// <summary>
-		/// 名称 
-		/// </summary>
-		[StringLength(50)]
-		[Required()]
-		public string Name {get;set;}
-		
-		/// <summary>
 		/// 上级 
 		/// </summary>
 		[RelatedTo(typeof(Dept))]
@@ -40,6 +26,25 @@ namespace FastFrame.Application.Basis
 		/// 上级 
 		/// </summary>
 		public DeptViewModel Super {get;set;}
+		
+		/// <summary>
+		/// 部门代码 
+		/// </summary>
+		[StringLength(50)]
+		public string TreeCode {get;set;}
+		
+		/// <summary>
+		/// 部门名称 
+		/// </summary>
+		[StringLength(50)]
+		[Required()]
+		public string Name {get;set;}
+		
+		/// <summary>
+		/// 备注 
+		/// </summary>
+		[StringLength(200)]
+		public string Remarks {get;set;}
 		
 		/// <summary>
 		/// 创建人 

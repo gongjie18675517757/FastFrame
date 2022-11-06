@@ -14,7 +14,7 @@ namespace FastFrame.Application.Basis
 		}
 		
 		/// <summary>
-		/// 值 
+		/// 字典值 
 		/// </summary>
 		public string Value {get;set;}
 		

@@ -19,11 +19,6 @@ namespace FastFrame.Application.Basis
 		public string Name {get;set;}
 		
 		/// <summary>
-		/// 帐号 
-		/// </summary>
-		public string Account {get;set;}
-		
-		/// <summary>
 		/// 主键 
 		/// </summary>
 		public string Id {get;set;}

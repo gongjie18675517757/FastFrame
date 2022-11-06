@@ -2,6 +2,7 @@
 using FastFrame.Entity.Enums;
 using System;
 using System.ComponentModel.DataAnnotations;
+using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 namespace FastFrame.Entity.OA
 {
@@ -9,7 +10,7 @@ namespace FastFrame.Entity.OA
     /// 请假单
     /// </summary>
     [Export]
-    public class OaLeave : BaseEntity, IHaveDept, IHaveCheck, IHaveNumber,IHaveMultiFile
+    public class OaLeave : BaseEntity, IHaveDept, IHaveCheck, IHaveNumber, IHaveMultiFile
     {
         /// <summary>
         /// 请假单号
@@ -97,5 +98,14 @@ namespace FastFrame.Entity.OA
         {
             return $"请假:{Days}天";
         }
+
+ 
+
+        public void SetNumber(string val)
+        {
+            Number = val;
+        }
+
+        public string GetNumber() => Number;
     }
 }

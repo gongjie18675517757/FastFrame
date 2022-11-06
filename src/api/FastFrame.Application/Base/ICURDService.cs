@@ -31,11 +31,6 @@ namespace FastFrame.Application
         /// <returns></returns>
         Task UpdateAsync(TDto input);
 
-        /// <summary>
-        /// 获取单条数据
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        Task<TDto> GetAsync(string id);
+
     } 
 }

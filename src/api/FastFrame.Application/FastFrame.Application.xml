@@ -102,7 +102,7 @@
             自动编号
             </summary>
         </member>
-        <member name="M:FastFrame.Application.AutoNumberService.MakeNumberAsync(FastFrame.Entity.IHaveNumber[])">
+        <member name="M:FastFrame.Application.AutoNumberService.MakeNumberAsync``1(``0[])">
             <summary>
             生成编号
             </summary>   
@@ -124,13 +124,6 @@
             <param name="typeName"></param>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.Application.AutoNumberService.HandleEventAsync(FastFrame.Repository.Events.EntityAdding{FastFrame.Entity.IHaveNumber})">
-            <summary>
-            新增时自动编号
-            </summary>
-            <param name="event"></param>
-            <returns></returns>
-        </member>
         <member name="T:FastFrame.Application.BaseDto">
             <summary>
             基类DTO
@@ -141,6 +134,37 @@
             基类DTO
             </summary>
             <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:FastFrame.Application.BaseService`1.OnGeting(`0)">
+            <summary>
+            返回前
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Application.BaseService`1.GetAsync(System.String)">
+            <summary>
+            获取单条数据
+            </summary>   
+        </member>
+        <member name="M:FastFrame.Application.BaseService`1.OnGetListing(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            返回列表数据时
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Application.BaseService`1.PageListAsync(FastFrame.Infrastructure.IPagination)">
+            <summary>
+            获取分页列表
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Application.BaseService`1.Query">
+            <summary>
+            拼查询表达式
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.BaseService`1.QueryMain">
+            <summary>
+            主查询表达式
+            </summary> 
         </member>
         <member name="T:FastFrame.Application.BaseService`2">
             <summary>
@@ -192,40 +216,14 @@
             更新
             </summary>  
         </member>
-        <member name="M:FastFrame.Application.BaseService`2.OnGeting(`1)">
+        <member name="M:FastFrame.Application.BaseService`2.VerifyUnique(FastFrame.Application.UniqueInput)">
             <summary>
-            返回前
+            验证重复属性
             </summary> 
-        </member>
-        <member name="M:FastFrame.Application.BaseService`2.GetAsync(System.String)">
-            <summary>
-            获取单条数据
-            </summary>   
-        </member>
-        <member name="M:FastFrame.Application.BaseService`2.OnGetListing(System.Collections.Generic.IEnumerable{`1})">
-            <summary>
-            返回列表数据时
-            </summary> 
-        </member>
-        <member name="M:FastFrame.Application.BaseService`2.PageListAsync(FastFrame.Infrastructure.IPagination)">
-            <summary>
-            获取分页列表
-            </summary> 
-        </member>
-        <member name="M:FastFrame.Application.BaseService`2.Query">
-            <summary>
-            拼查询表达式
-            </summary>
-            <returns></returns>
         </member>
         <member name="M:FastFrame.Application.BaseService`2.QueryMain">
             <summary>
             主查询表达式
-            </summary> 
-        </member>
-        <member name="M:FastFrame.Application.BaseService`2.VerifyUnique(FastFrame.Application.UniqueInput)">
-            <summary>
-            验证重复属性
             </summary> 
         </member>
         <member name="T:FastFrame.Application.Events.DoMainAdded`1">
@@ -304,109 +302,12 @@
             <param name="updateAction">更新方法</param>
             <returns></returns>
         </member>
-        <member name="T:FastFrame.Application.HanldeTreeService">
-            <summary>
-            处理树节点
-            </summary>
-        </member>
-        <member name="M:FastFrame.Application.HanldeTreeService.InitialAsync">
-            <summary>
-            项目启动时执行一次检查
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Application.HanldeTreeService.ExistsNotInitAsync">
-            <summary>
-            检查是否未初始化
-            如果没有执行过树结构计算，则直接计算一次
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Application.HanldeTreeService.HandleCompareChildrenAsync">
-            <summary>
-            每天23:59执行
-            比较并更新所有树状节点的递归下级
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Application.HanldeTreeService.HanldTreeLevelBySuperIdAsync``1(System.String[])">
-            <summary>
-            向下计算树层级关联
-            </summary>
-            <typeparam name="TEntity"></typeparam>
-            <param name="treeKeys"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Application.HanldeTreeService.HanldTreeLevelByChildIdAsync``1(System.String[])">
-            <summary>
-            向上计算层次关联
-            </summary>
-            <typeparam name="TEntity"></typeparam>
-            <param name="treeKeys"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Application.HanldeTreeService.HanldTreeLevelByChildIdAsync(System.String,System.String[])">
-            <summary>
-            向上计算层次关联
-            </summary> 
-        </member>
-        <member name="M:FastFrame.Application.HanldeTreeService.TrySaveTreeLevelAsync(System.String,System.String,System.Collections.Generic.IEnumerable{System.String})">
-            <summary>
-            保存
-            </summary>
-            <param name="treeName"></param>
-            <param name="id"></param>
-            <param name="children"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Application.HanldeTreeService.TryMakeChildRelate``1(System.String,System.Boolean)">
-            <summary>
-            尝试建立关系(向下)
-            </summary>
-            <typeparam name="TEntity"></typeparam>
-            <param name="id"></param>
-            <param name="hasLoopChild">是否向下递归</param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Application.HanldeTreeService.GetLoopChildTreeId``1(System.String,System.String,System.Collections.Generic.List{System.String})">
-            <summary>
-            递归全部下级
-            </summary>
-            <typeparam name="TEntity"></typeparam>
-            <param name="rootId"></param>
-            <param name="id"></param>
-            <param name="resultList"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Application.HanldeTreeService.GetLoopSuperId``1(System.String)">
-            <summary>
-            递归取全部上级
-            </summary>
-            <typeparam name="TEntity"></typeparam>
-            <param name="id"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Application.HanldeTreeService.ExistsLoopRef(FastFrame.Entity.ITreeEntity)">
-            <summary>
-            检查循环引用 
-            </summary> 
-        </member>
-        <member name="M:FastFrame.Application.HanldeTreeService.ExistsLoopRefByKey``1(System.String,System.String)">
-            <summary>
-            检查循环引用
-            树节点的上级，不可以是自己，不可以是自己的下级
-            </summary>
-            <typeparam name="TEntity"></typeparam>
-            <param name="rootKey">要检查的树节点</param>
-            <param name="key">当前递归到的节点</param>
-            <returns></returns>
-        </member>
         <member name="T:FastFrame.Application.IAutoNumberService">
             <summary>
             自动编号服务
             </summary>
         </member>
-        <member name="M:FastFrame.Application.IAutoNumberService.MakeNumberAsync(FastFrame.Entity.IHaveNumber[])">
+        <member name="M:FastFrame.Application.IAutoNumberService.MakeNumberAsync``1(``0[])">
             <summary>
             生成编号
             </summary> 
@@ -438,13 +339,6 @@
             更新
             </summary>
             <param name="input"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Application.ICURDService`1.GetAsync(System.String)">
-            <summary>
-            获取单条数据
-            </summary>
-            <param name="id"></param>
             <returns></returns>
         </member>
         <member name="T:FastFrame.Application.IDto">
@@ -485,6 +379,13 @@
             <param name="pageInfo"></param>
             <returns></returns>
         </member>
+        <member name="M:FastFrame.Application.IPageListService`1.GetAsync(System.String)">
+            <summary>
+            获取一条数据
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
         <member name="T:FastFrame.Application.IService">
             <summary>
              服务接口
@@ -493,6 +394,16 @@
         <member name="T:FastFrame.Application.ITreeModel">
             <summary>
             树模型
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.ITreeModel.Super_Id">
+            <summary>
+            上级ID
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.ITreeModel.TreeCode">
+            <summary>
+            树装码
             </summary>
         </member>
         <member name="P:FastFrame.Application.TreeModel.Super_Id">
@@ -508,6 +419,11 @@
         <member name="P:FastFrame.Application.TreeModel.Name">
             <summary>
             名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.TreeModel.TreeCode">
+            <summary>
+            树状码
             </summary>
         </member>
         <member name="M:FastFrame.Application.IVerifyUniqueService.VerifyUnique(FastFrame.Application.UniqueInput)">
@@ -527,6 +443,11 @@
             </summary>
             <param name="check_entity"></param>
             <returns></returns>
+        </member>
+        <member name="T:FastFrame.Application.Basis.ApiRequestLogService">
+            <summary>
+            记录请求日志
+            </summary>
         </member>
         <member name="M:FastFrame.Application.Basis.ApiRequestLogService.InsertAsync(FastFrame.Entity.Basis.ApiRequestLog)">
             <summary>
@@ -551,16 +472,6 @@
             部门 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Basis.DeptDto.EnCode">
-            <summary>
-            编码 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.DeptDto.Name">
-            <summary>
-            名称 
-            </summary>
-        </member>
         <member name="P:FastFrame.Application.Basis.DeptDto.Super_Id">
             <summary>
             上级 
@@ -569,6 +480,21 @@
         <member name="P:FastFrame.Application.Basis.DeptDto.Super">
             <summary>
             上级 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.DeptDto.TreeCode">
+            <summary>
+            部门代码 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.DeptDto.Name">
+            <summary>
+            部门名称 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.DeptDto.Remarks">
+            <summary>
+            备注 
             </summary>
         </member>
         <member name="P:FastFrame.Application.Basis.DeptDto.Create_User_Id">
@@ -613,7 +539,7 @@
         </member>
         <member name="P:FastFrame.Application.Basis.DeptViewModel.Name">
             <summary>
-            名称 
+            部门名称 
             </summary>
         </member>
         <member name="P:FastFrame.Application.Basis.DeptViewModel.Id">
@@ -628,32 +554,37 @@
         </member>
         <member name="P:FastFrame.Application.Basis.EnumItemDto.Key">
             <summary>
-            键 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.EnumItemDto.Code">
-            <summary>
-            编码 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.EnumItemDto.Value">
-            <summary>
-            值 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.EnumItemDto.Order">
-            <summary>
-            排序 
+            字段类别 
             </summary>
         </member>
         <member name="P:FastFrame.Application.Basis.EnumItemDto.Super_Id">
             <summary>
-            上级 
+            上级值 
             </summary>
         </member>
         <member name="P:FastFrame.Application.Basis.EnumItemDto.Super">
             <summary>
-            上级 
+            上级值 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.EnumItemDto.TreeCode">
+            <summary>
+            树状码 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.EnumItemDto.Value">
+            <summary>
+            字典值 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.EnumItemDto.IntKey">
+            <summary>
+            字典键 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.EnumItemDto.SortVal">
+            <summary>
+            排序 
             </summary>
         </member>
         <member name="P:FastFrame.Application.Basis.EnumItemDto.Create_User_Id">
@@ -698,7 +629,7 @@
         </member>
         <member name="P:FastFrame.Application.Basis.EnumItemViewModel.Value">
             <summary>
-            值 
+            字典值 
             </summary>
         </member>
         <member name="P:FastFrame.Application.Basis.EnumItemViewModel.Id">
@@ -789,6 +720,11 @@
         <member name="P:FastFrame.Application.Basis.MeidiaDto.IsFolder">
             <summary>
             是否文件夹 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.MeidiaDto.TreeCode">
+            <summary>
+            树状码 
             </summary>
         </member>
         <member name="P:FastFrame.Application.Basis.MeidiaDto.Create_User_Id">
@@ -1304,7 +1240,7 @@
         </member>
         <member name="T:FastFrame.Application.Basis.TenantDto">
             <summary>
-            组织信息 
+            多租户信息 
             </summary>
         </member>
         <member name="P:FastFrame.Application.Basis.TenantDto.FullName">
@@ -1337,6 +1273,11 @@
             Logo头像 
             </summary>
         </member>
+        <member name="P:FastFrame.Application.Basis.TenantDto.TreeCode">
+            <summary>
+            树状码 
+            </summary>
+        </member>
         <member name="P:FastFrame.Application.Basis.TenantDto.ChildCount">
             <summary>
             下级数量 
@@ -1344,7 +1285,7 @@
         </member>
         <member name="T:FastFrame.Application.Basis.TenantViewModel">
             <summary>
-            组织信息 
+            多租户信息 
             </summary>
         </member>
         <member name="P:FastFrame.Application.Basis.TenantViewModel.FullName">
@@ -1359,7 +1300,7 @@
         </member>
         <member name="T:FastFrame.Application.Basis.TenantService">
             <summary>
-            组织信息 服务实现 
+            多租户信息 服务实现 
             </summary>
         </member>
         <member name="T:FastFrame.Application.Basis.UserDto">
@@ -1450,11 +1391,6 @@
         <member name="P:FastFrame.Application.Basis.UserViewModel.Name">
             <summary>
             姓名 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.UserViewModel.Account">
-            <summary>
-            帐号 
             </summary>
         </member>
         <member name="P:FastFrame.Application.Basis.UserViewModel.Id">
@@ -2410,81 +2346,6 @@
         <member name="T:FastFrame.Application.OA.OaLeaveService">
             <summary>
             请假单 服务实现 
-            </summary>
-        </member>
-        <member name="T:FastFrame.Application.Proxy.ProxyClientDto">
-            <summary>
-            内网穿透服务 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Proxy.ProxyClientDto.ProxyDic">
-            <summary>
-            代理目标
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Proxy.ProxyClientDto.Name">
-            <summary>
-            名称 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Proxy.ProxyClientDto.ClientToken">
-            <summary>
-            ClientId 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Proxy.ProxyClientDto.Description">
-            <summary>
-            详细描述 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Proxy.ProxyClientDto.Create_User_Id">
-            <summary>
-            创建人 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Proxy.ProxyClientDto.Create_User">
-            <summary>
-            创建人 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Proxy.ProxyClientDto.CreateTime">
-            <summary>
-            创建时间 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Proxy.ProxyClientDto.Modify_User_Id">
-            <summary>
-            修改人 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Proxy.ProxyClientDto.Modify_User">
-            <summary>
-            修改人 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Proxy.ProxyClientDto.ModifyTime">
-            <summary>
-            修改时间 
-            </summary>
-        </member>
-        <member name="T:FastFrame.Application.Proxy.ProxyClientViewModel">
-            <summary>
-            内网穿透服务 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Proxy.ProxyClientViewModel.Name">
-            <summary>
-            名称 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Proxy.ProxyClientViewModel.Id">
-            <summary>
-            主键 
-            </summary>
-        </member>
-        <member name="T:FastFrame.Application.Proxy.ProxyClientService">
-            <summary>
-            内网穿透服务 服务实现 
             </summary>
         </member>
     </members>

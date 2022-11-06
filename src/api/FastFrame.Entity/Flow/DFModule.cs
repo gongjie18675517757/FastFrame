@@ -334,7 +334,14 @@ namespace FastFrame.Entity.Flow
         [ReadOnly]
         public string Number { get; set; } = "保存时自动生成";
 
-        public string GetModuleName() => DFModuleName;
+        public string GetModuleName() => DFModuleName; 
+ 
+        public void SetNumber(string val)
+        {
+            Number = val;
+        }
+
+        public string GetNumber() => Number;
     }
 
     /// <summary>

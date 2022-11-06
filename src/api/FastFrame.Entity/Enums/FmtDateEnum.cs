@@ -6,32 +6,32 @@
     public enum FmtDateEnum
     {
         /// <summary>
-        /// 年编(长)
+        /// 年编(长:yyyy)
         /// </summary>
         yyyy,
 
         /// <summary>
-        /// 月编(长)
+        /// 月编(长:yyyyMM)
         /// </summary>
         yyyyMM,
 
         /// <summary>
-        /// 日编(长)
+        /// 日编(长:yyyyMMdd)
         /// </summary>
         yyyyMMdd,
 
         /// <summary>
-        /// 年编(短)
+        /// 年编(短:yy)
         /// </summary>
         yy,
 
         /// <summary>
-        /// 月编(短)
+        /// 月编(短:yyMM)
         /// </summary>
         yyMM,
 
         /// <summary>
-        /// 日编(短)
+        /// 日编(短:yyMMdd)
         /// </summary>
         yyMMdd,
     }

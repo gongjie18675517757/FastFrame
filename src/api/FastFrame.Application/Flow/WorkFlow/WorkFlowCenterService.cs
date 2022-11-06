@@ -137,7 +137,7 @@ namespace FastFrame.Application.Flow
                 throw new NotFoundException();
 
             /*加并发锁*/
-            var lockHolder = await loader.GetService<ILockFacatory>().TryCreateLockAsync(bill_Entity.Id, TimeSpan.FromSeconds(3), true);
+            var lockHolder = await loader.GetService<ILockFacatory>().TryCreateLockAsync(bill_Entity.Id);
             if (lockHolder == null)
                 throw new MsgException("此单据正在进行流程流转,请稍后再试!");
 
@@ -204,7 +204,7 @@ namespace FastFrame.Application.Flow
                                 {
                                     BeModuleName = beModuleName,
                                     BeModuleText = moduleDesProvider.GetClassDescription(typeof(TBillEntity)),
-                                    BillNumber = bill_Entity.Number,
+                                    BillNumber = bill_Entity.GetNumber(),
                                     Bill_Id = bill_Entity.Id,
                                     BillDes = bill_Entity.GetDescription(),
                                     Id = null,
@@ -226,7 +226,7 @@ namespace FastFrame.Application.Flow
                             else
                             {
                                 flowInstance.BillDes = bill_Entity.GetDescription();
-                                flowInstance.BillNumber = bill_Entity.Number;
+                                flowInstance.BillNumber = bill_Entity.GetNumber();
                                 flowInstance.WorkFlow_Id = work_flow_id;
                                 flowInstance.Sponsor_Id = curr?.Id;
                                 flowInstance.SponsorName = curr?.Name;
@@ -561,7 +561,7 @@ namespace FastFrame.Application.Flow
             }
             finally
             {
-                lockHolder.LockRelease();
+                lockHolder.Dispose();
             }
         }
 

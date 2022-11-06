@@ -17,39 +17,44 @@ namespace FastFrame.Application.Basis
 		
 		
 		/// <summary>
-		/// 键 
+		/// 字段类别 
 		/// </summary>
 		[Required()]
 		public EnumName? Key {get;set;}
 		
 		/// <summary>
-		/// 编码 
+		/// 上级值 
 		/// </summary>
-		[StringLength(20)]
-		public string Code {get;set;}
+		[RelatedTo(typeof(EnumItem))]
+		public string Super_Id {get;set;}
 		
 		/// <summary>
-		/// 值 
+		/// 上级值 
+		/// </summary>
+		public EnumItemViewModel Super {get;set;}
+		
+		/// <summary>
+		/// 树状码 
+		/// </summary>
+		[StringLength(20)]
+		public string TreeCode {get;set;}
+		
+		/// <summary>
+		/// 字典值 
 		/// </summary>
 		[StringLength(150)]
 		[Required()]
 		public string Value {get;set;}
 		
 		/// <summary>
+		/// 字典键 
+		/// </summary>
+		public int? IntKey {get;set;}
+		
+		/// <summary>
 		/// 排序 
 		/// </summary>
-		public int Order {get;set;}
-		
-		/// <summary>
-		/// 上级 
-		/// </summary>
-		[RelatedTo(typeof(EnumItem))]
-		public string Super_Id {get;set;}
-		
-		/// <summary>
-		/// 上级 
-		/// </summary>
-		public EnumItemViewModel Super {get;set;}
+		public int SortVal {get;set;}
 		
 		/// <summary>
 		/// 创建人 

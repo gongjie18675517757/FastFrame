@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace FastFrame.Entity.Basis
 {
     /// <summary>
-    /// 组织信息
+    /// 多租户信息
     /// </summary>
     [Export]
     [RelatedField(nameof(FullName))]
@@ -52,6 +52,21 @@ namespace FastFrame.Entity.Basis
         /// <summary>
         /// 主键
         /// </summary>
-        public string Id { get; set; } 
+        public string Id { get; set; }
+
+        /// <summary>
+        /// 树状码
+        /// </summary>
+        [ReadOnly]
+        [StringLength(200)]
+        public string TreeCode { get; set; } 
+
+
+        public void SetNumber(string val)
+        {
+            TreeCode = val;
+        }
+
+        public string GetNumber() => TreeCode;
     }
 }

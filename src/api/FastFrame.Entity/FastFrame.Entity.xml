@@ -231,19 +231,24 @@
             部门
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Basis.Dept.EnCode">
+        <member name="P:FastFrame.Entity.Basis.Dept.Super_Id">
             <summary>
-            编码
+            上级
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.Dept.TreeCode">
+            <summary>
+            部门代码
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Basis.Dept.Name">
             <summary>
-            名称
+            部门名称
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Basis.Dept.Super_Id">
+        <member name="P:FastFrame.Entity.Basis.Dept.Remarks">
             <summary>
-            上级
+            备注
             </summary>
         </member>
         <member name="T:FastFrame.Entity.Basis.DeptMember">
@@ -273,28 +278,33 @@
         </member>
         <member name="P:FastFrame.Entity.Basis.EnumItem.Key">
             <summary>
-            键
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.EnumItem.Code">
-            <summary>
-            编码
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.EnumItem.Value">
-            <summary>
-            值
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.EnumItem.Order">
-            <summary>
-            排序
+            字段类别
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Basis.EnumItem.Super_Id">
             <summary>
-            上级
+            上级值
             </summary>  
+        </member>
+        <member name="P:FastFrame.Entity.Basis.EnumItem.TreeCode">
+            <summary>
+            树状码
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.EnumItem.Value">
+            <summary>
+            字典值
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.EnumItem.IntKey">
+            <summary>
+            字典键
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.EnumItem.SortVal">
+            <summary>
+            排序
+            </summary>
         </member>
         <member name="T:FastFrame.Entity.Basis.LoginLog">
             <summary>
@@ -364,6 +374,11 @@
         <member name="P:FastFrame.Entity.Basis.Meidia.IsFolder">
             <summary>
             是否文件夹
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.Meidia.TreeCode">
+            <summary>
+            树状码
             </summary>
         </member>
         <member name="T:FastFrame.Entity.Basis.Notify">
@@ -608,7 +623,7 @@
         </member>
         <member name="T:FastFrame.Entity.Basis.Tenant">
             <summary>
-            组织信息
+            多租户信息
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Basis.Tenant.FullName">
@@ -646,6 +661,11 @@
             主键
             </summary>
         </member>
+        <member name="P:FastFrame.Entity.Basis.Tenant.TreeCode">
+            <summary>
+            树状码
+            </summary>
+        </member>
         <member name="P:FastFrame.Entity.Basis.TenantHost.Host">
             <summary>
             域名
@@ -659,26 +679,6 @@
         <member name="P:FastFrame.Entity.Basis.TenantHost.Tenant_Id">
             <summary>
             租户
-            </summary>
-        </member>
-        <member name="T:FastFrame.Entity.Basis.TreeChild">
-            <summary>
-            树的递归下级
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.TreeChild.TreeName">
-            <summary>
-            树名称
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.TreeChild.Super_Id">
-            <summary>
-            上级
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Basis.TreeChild.Child_Id">
-            <summary>
-            下级
             </summary>
         </member>
         <member name="T:FastFrame.Entity.Basis.User">
@@ -1033,32 +1033,32 @@
         </member>
         <member name="F:FastFrame.Entity.Enums.FmtDateEnum.yyyy">
             <summary>
-            年编(长)
+            年编(长:yyyy)
             </summary>
         </member>
         <member name="F:FastFrame.Entity.Enums.FmtDateEnum.yyyyMM">
             <summary>
-            月编(长)
+            月编(长:yyyyMM)
             </summary>
         </member>
         <member name="F:FastFrame.Entity.Enums.FmtDateEnum.yyyyMMdd">
             <summary>
-            日编(长)
+            日编(长:yyyyMMdd)
             </summary>
         </member>
         <member name="F:FastFrame.Entity.Enums.FmtDateEnum.yy">
             <summary>
-            年编(短)
+            年编(短:yy)
             </summary>
         </member>
         <member name="F:FastFrame.Entity.Enums.FmtDateEnum.yyMM">
             <summary>
-            月编(短)
+            月编(短:yyMM)
             </summary>
         </member>
         <member name="F:FastFrame.Entity.Enums.FmtDateEnum.yyMMdd">
             <summary>
-            日编(短)
+            日编(短:yyMMdd)
             </summary>
         </member>
         <member name="T:FastFrame.Entity.Enums.GenderMark">
@@ -2316,71 +2316,6 @@
             审批状态
             </summary>
         </member>
-        <member name="T:FastFrame.Entity.Proxy.ProxyClient">
-            <summary>
-            内网穿透隧道
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Proxy.ProxyClient.Name">
-            <summary>
-            名称
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Proxy.ProxyClient.ClientToken">
-            <summary>
-            ClientId
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Proxy.ProxyClient.Description">
-            <summary>
-            详细描述
-            </summary>
-        </member>
-        <member name="T:FastFrame.Entity.Proxy.ProxyTarget">
-            <summary>
-            代理目标
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Proxy.ProxyTarget.OriginMark">
-            <summary>
-            域名标识
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Proxy.ProxyTarget.ProxyClient_Id">
-            <summary>
-            关联:ProxyClient
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Proxy.ProxyTarget.Host">
-            <summary>
-            目标地址URL
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.Proxy.ProxyTarget.TargetEnum">
-            <summary>
-            代理方式
-            </summary>
-        </member>
-        <member name="T:FastFrame.Entity.Proxy.ProxyTargetEnum">
-            <summary>
-            代理方式
-            </summary>
-        </member>
-        <member name="F:FastFrame.Entity.Proxy.ProxyTargetEnum.tcp">
-            <summary>
-            TCP
-            </summary>
-        </member>
-        <member name="F:FastFrame.Entity.Proxy.ProxyTargetEnum.udp">
-            <summary>
-            UDP
-            </summary>
-        </member>
-        <member name="F:FastFrame.Entity.Proxy.ProxyTargetEnum.http">
-            <summary>
-            HTTP
-            </summary>
-        </member>
         <member name="P:FastFrame.Entity.BaseEntity.Id">
             <summary>
             主键
@@ -2507,10 +2442,16 @@
             标识需要编号
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.IHaveNumber.Number">
+        <member name="M:FastFrame.Entity.IHaveNumber.SetNumber(System.String)">
             <summary>
-            编号
+            设置编号
             </summary>
+        </member>
+        <member name="M:FastFrame.Entity.IHaveNumber.GetNumber">
+            <summary>
+            获取编号
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:FastFrame.Entity.IHaveNumber.GetModuleName">
             <summary>
@@ -2535,6 +2476,11 @@
         <member name="P:FastFrame.Entity.ITreeEntity.Super_Id">
             <summary>
             上级ID
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.ITreeEntity.TreeCode">
+            <summary>
+            树装码
             </summary>
         </member>
         <member name="T:FastFrame.Entity.TargetInfo">

@@ -28,6 +28,18 @@ namespace FastFrame.WebHost.Controllers
         }
 
         /// <summary>
+        /// 查看
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Permission("Get", "查看")]
+        [HttpGet("{id}")]
+        public virtual async Task<TDto> Get(string id)
+        {
+            return await service.GetAsync(id);
+        }
+
+        /// <summary>
         /// 列表
         /// </summary> 
         [HttpGet]
@@ -35,84 +47,7 @@ namespace FastFrame.WebHost.Controllers
         public virtual async Task<IPageList<TDto>> List([FromQuery]string qs)
         {
             return await service.PageListAsync(Pagination.FromJson(qs));
-        }
-
-        [HttpGet]
-        public Pagination TestPage()
-        {
-            return new Pagination
-            {
-                Filters = new KeyValuePair<FilterMode, IEnumerable<IFilter[]>>[]
-                {
-                    new KeyValuePair<FilterMode, IEnumerable<IFilter[]>>(FilterMode.and,new IFilter[][]
-                    {
-                        new IFilter[]
-                        {
-                            new Filter
-                            {
-                                Compare="==",
-                                Name="xx",
-                                Value="xx"
-                            },
-                            new Filter
-                            {
-                                Compare="==",
-                                Name="xx",
-                                Value="xx"
-                            },
-                        },
-                        new IFilter[]
-                        {
-                            new Filter
-                            {
-                                Compare="==",
-                                Name="xx",
-                                Value="xx"
-                            },
-                            new Filter
-                            {
-                                Compare="==",
-                                Name="xx",
-                                Value="xx"
-                            },
-                        }
-                    }),
-                    new KeyValuePair<FilterMode, IEnumerable<IFilter[]>>(FilterMode.and,new IFilter[][]
-                    {
-                        new IFilter[]
-                        {
-                            new Filter
-                            {
-                                Compare="==",
-                                Name="xx",
-                                Value="xx"
-                            },
-                            new Filter
-                            {
-                                Compare="==",
-                                Name="xx",
-                                Value="xx"
-                            },
-                        },
-                        new IFilter[]
-                        {
-                            new Filter
-                            {
-                                Compare="==",
-                                Name="xx",
-                                Value="xx"
-                            },
-                            new Filter
-                            {
-                                Compare="==",
-                                Name="xx",
-                                Value="xx"
-                            },
-                        }
-                    })
-                }
-            };
-        }
+        } 
 
         /// <summary>
         /// 导出

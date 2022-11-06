@@ -9,7 +9,7 @@ namespace FastFrame.Application.Basis
 {
 		
 	/// <summary>
-	/// 组织信息 服务实现 
+	/// 多租户信息 服务实现 
 	/// </summary>
 	public partial class TenantService:BaseService<Tenant, TenantDto>
 	{
@@ -36,6 +36,7 @@ namespace FastFrame.Application.Basis
 							Tenant_Id = _tenant.Tenant_Id,
 							HandIcon_Id = _tenant.HandIcon_Id,
 							Id = _tenant.Id,
+							TreeCode = _tenant.TreeCode,
 							ChildCount = repository.Count(c => c.Super_Id == _tenant.Id)
 						};
 			return query;

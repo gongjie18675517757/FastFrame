@@ -5,12 +5,7 @@ namespace FastFrame.Infrastructure.Lock
     /// <summary>
     /// 锁的持有者
     /// </summary>
-    public interface ILockHolder
+    public interface ILockHolder : IDisposable,IAsyncDisposable
     {
-        /// <summary>
-        /// 释放锁
-        /// </summary>
-        /// <returns></returns>
-        void LockRelease();
     }
 }

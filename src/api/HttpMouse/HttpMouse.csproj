@@ -20,7 +20,7 @@
 	<ItemGroup>
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 		<PackageReference Include="AwaitableCompletionSource" Version="1.0.0" />
-		<PackageReference Include="Yarp.ReverseProxy" Version="1.0.0" />
+		<PackageReference Include="Yarp.ReverseProxy" Version="1.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -54,5 +54,6 @@ namespace FastFrame.Infrastructure.Module
         /// 需要流程审核
         /// </summary>
         public bool HaveCheck { get; set; }
+        public bool HaveNumber { get; set; }
     }
 }

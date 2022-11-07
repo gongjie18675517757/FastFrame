@@ -275,6 +275,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:FastFrame.WebHost.Controllers.CommonController.HaveNumberModuleList">
+            <summary>
+            需要审核的模块
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:FastFrame.WebHost.Controllers.Flow.DFModuleController">
             <summary>
             动态表单模块 
@@ -430,6 +436,12 @@
         <member name="M:FastFrame.WebHost.Privder.ModuleExportProvider.HaveCheckModuleList">
             <summary>
             需要审核的模块
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.WebHost.Privder.ModuleExportProvider.HaveNumberModuleList">
+            <summary>
+            需要编码的模块
             </summary>
             <returns></returns>
         </member>

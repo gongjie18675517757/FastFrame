@@ -35,19 +35,12 @@ namespace FastFrame.WebHost.Privder
                 return null;
             }
 
-            if (cacheModuleKvs.TryGetValue(name, out var @struct))
-            {
-                return @struct;
-            }
-
             if (!TypeManger.TryGetType(name, out var type))
             {
                 return null;
             }
 
-            var fieldInfoStructs = new List<ModuleFieldStrut>();
-
-            var instance = System.Activator.CreateInstance(type);
+            var instance = Activator.CreateInstance(type);
             if (instance is IHasManage hasManage)
             {
                 var curr = appSessionProvider.CurrUser;
@@ -56,6 +49,16 @@ namespace FastFrame.WebHost.Privder
                 hasManage.Modify_User_Id = curr?.Id;
                 hasManage.ModifyTime = DateTime.Now;
             }
+
+            if (cacheModuleKvs.TryGetValue(name, out var @struct))
+            {
+                @struct.Form = instance;
+                return @struct;
+            } 
+
+            var fieldInfoStructs = new List<ModuleFieldStrut>();
+
+            
 
             foreach (var x in type.GetProperties())
             {
@@ -121,6 +124,7 @@ namespace FastFrame.WebHost.Privder
                 HasManage = typeof(IHasManage).IsAssignableFrom(type),
                 HasFiles = typeof(IHaveMultiFile).IsAssignableFrom(type),
                 HaveCheck = typeof(IHaveCheck).IsAssignableFrom(type),
+                HaveNumber = typeof(IHaveNumber).IsAssignableFrom(type),
             };
 
             cacheModuleKvs.Add(name, @struct);
@@ -137,6 +141,26 @@ namespace FastFrame.WebHost.Privder
             lock (_lock)
             {
                 var haveCheckType = typeof(IHaveCheck);
+                if (haveCheckModuleList == null)
+                    haveCheckModuleList = TypeManger.RegisterdTypes
+                      .Where(v => haveCheckType.IsAssignableFrom(v) && v.IsClass && !v.IsAbstract)
+                      .Select(v => new KeyValuePair<string, string>(v.Name, descriptionProvider.GetClassDescription(v)))
+                      .Concat(cacheModuleKvs.Values.Where(v => v.HaveCheck).Select(v => new KeyValuePair<string, string>(v.Name, v.Description)))
+                      .Distinct()
+                      .ToList();
+            }
+            return haveCheckModuleList;
+        }
+
+        /// <summary>
+        /// 需要编码的模块
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<KeyValuePair<string, string>> HaveNumberModuleList()
+        {
+            lock (_lock)
+            {
+                var haveCheckType = typeof(IHaveNumber);
                 if (haveCheckModuleList == null)
                     haveCheckModuleList = TypeManger.RegisterdTypes
                       .Where(v => haveCheckType.IsAssignableFrom(v) && v.IsClass && !v.IsAbstract)

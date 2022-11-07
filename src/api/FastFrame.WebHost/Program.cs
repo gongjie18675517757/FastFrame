@@ -1,5 +1,6 @@
 ﻿global using AspectCore.Extensions.DependencyInjection;
 using FastFrame.Application;
+using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Cache;
 using FastFrame.Infrastructure.Client;
 using FastFrame.Infrastructure.EventBus;
@@ -19,6 +20,7 @@ using FastFrame.WebHost.Privder;
 using Hangfire;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Converters;
 using System.Text.Json.Serialization;
 
@@ -156,8 +158,8 @@ services
     .AddScoped<IEventBus, EventBus>()
     .AddSingleton<IClientManage, ClientMamager>()
     .AddSingleton<IClientConnection, ClientConnection>()
-    .AddSingleton<ICacheProvider, CacheProvider>() 
-    .AddSingleton<ILockFacatory, LockFacatoryProvider>() 
+    .AddSingleton<ICacheProvider, CacheProvider>()
+    .AddSingleton<ILockFacatory, LockFacatoryProvider>()
     .AddSingleton<IBackgroundJob, HangfireBackgroundJob>()
     .AddSingleton<MessageQueue>()
     .AddSingleton<IMessageQueue>(s => s.GetService<MessageQueue>())
@@ -170,7 +172,7 @@ services
     .AddIntervalWork(typeof(IService).Assembly, typeof(Program).Assembly, typeof(FastFrame.Infrastructure.Extension).Assembly)
     .AddMessageQueue(typeof(IService).Assembly, typeof(Program).Assembly, typeof(FastFrame.Infrastructure.Extension).Assembly);
 
- 
+
 
 /*添加动态代理*/
 services.ConfigureDynamicProxy(config =>
@@ -181,12 +183,18 @@ services.ConfigureDynamicProxy(config =>
 //#if DEBUG
 builder.Services.AddEndpointsApiExplorer();
 
+var basePath = AppDomain.CurrentDomain.BaseDirectory;
 var areas = typeof(Program)
        .Assembly
        .GetTypes()
        .Where(v => v.IsClass && !v.IsAbstract && typeof(Microsoft.AspNetCore.Mvc.ControllerBase).IsAssignableFrom(v))
-       .Select(v => v.Namespace.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries).LastOrDefault())
-       .Distinct()
+       .Select(v => new
+       {
+           name = v.Namespace.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries).LastOrDefault(),
+           text = T4Help.GetClassSummary(v, basePath)
+       })
+       .GroupBy(v => v.name)
+       .Select(v => v.FirstOrDefault())
        .ToArray();
 
 #if DEBUG
@@ -200,7 +208,7 @@ services.AddSwaggerGen(options =>
     });
 
 
-    var basePath = AppDomain.CurrentDomain.BaseDirectory;
+
     var xmlPath = Path.Combine(basePath, "FastFrame.WebHost.xml");
     options.IncludeXmlComments(xmlPath);
     xmlPath = Path.Combine(basePath, "FastFrame.Infrastructure.xml");
@@ -215,11 +223,11 @@ services.AddSwaggerGen(options =>
 
     foreach (var item in areas)
     {
-        options.SwaggerDoc(item, new Microsoft.OpenApi.Models.OpenApiInfo
+        options.SwaggerDoc(item.name, new Microsoft.OpenApi.Models.OpenApiInfo
         {
-            Title = item,
+            Title = item.text,
             Version = "v1",
-            Description = item
+            Description = item.text
         });
     }
 
@@ -228,10 +236,32 @@ services.AddSwaggerGen(options =>
         if (apiDescription.ActionDescriptor is Microsoft.AspNetCore.Mvc.Controllers.ControllerActionDescriptor caDescriptor)
         {
             var area = caDescriptor.ControllerTypeInfo.Namespace.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries).LastOrDefault();
-            return docName == area || !areas.Contains(docName);
+            return docName == area || !areas.Any(v => v.name == docName);
         }
 
         return true;
+    });
+
+    options.AddSecurityDefinition(ConstValuePool.Token_Name, new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        Description = "登录后返回的token",
+        Name = ConstValuePool.Token_Name,
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Scheme = "Scheme",
+
+    });
+    options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement() {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference=new OpenApiReference
+                {
+                    Type=ReferenceType.SecurityScheme,
+                    Id=ConstValuePool.Token_Name
+                }
+            },
+            new string[]{ }
+        }
     });
 });
 #endif
@@ -245,7 +275,7 @@ var applicationLifetime = app.Lifetime;
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
-} 
+}
 
 #if DEBUG
 /*注册swagger*/
@@ -302,7 +332,7 @@ app.UseEndpoints(endpoints =>
     endpoints.MapHub<MessageHub>("/hub/message");
     endpoints.MapControllers();
     endpoints.MapHangfireDashboard();
-     
+
 
     //endpoints.MapControllerRoute(
     //    name: "default",

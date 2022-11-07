@@ -25,5 +25,11 @@ namespace FastFrame.Infrastructure.Module
         /// </summary>
         /// <returns></returns>
         IEnumerable<KeyValuePair<string, string>> HaveCheckModuleList();
+
+        /// <summary>
+        /// 需要编码的模块
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<KeyValuePair<string, string>> HaveNumberModuleList();
     }
 }

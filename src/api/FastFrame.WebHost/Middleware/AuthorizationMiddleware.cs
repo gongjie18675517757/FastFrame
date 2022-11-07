@@ -1,5 +1,6 @@
 ﻿using FastFrame.Infrastructure.Interface;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FastFrame.WebHost.Middleware
 {
@@ -18,7 +19,7 @@ namespace FastFrame.WebHost.Middleware
         public async Task Invoke(HttpContext context)
         {
             var endpoint = context.GetEndpoint();
-            if (endpoint != null)
+            if (endpoint != null && endpoint.Metadata.GetMetadata<ControllerAttribute>() != null)
             {
                 /*是否允许匿名访问*/
                 var isAnonymous = endpoint.Metadata.GetMetadata<AllowAnonymousAttribute>() != null;

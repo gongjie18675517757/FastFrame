@@ -3,7 +3,9 @@ using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Interface;
 using FastFrame.Infrastructure.IntervalWork;
 using FastFrame.Repository;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,13 +20,13 @@ namespace FastFrame.Application.Basis
     public class ApiRequestLogService : BaseService<ApiRequestLog>
     {
         private readonly IRepository<ApiRequestLog> repository;
-        private readonly IBackgroundJob background;
+        private readonly ILogger<ApiRequestLogService> logger;
 
-        public ApiRequestLogService(IRepository<ApiRequestLog> repository, IBackgroundJob background)
+        public ApiRequestLogService(IRepository<ApiRequestLog> repository, ILogger<ApiRequestLogService> logger)
         {
             this.repository = repository;
-            this.background = background;
-        } 
+            this.logger = logger;
+        }
 
         /// <summary>
         /// 插入记录
@@ -41,9 +43,19 @@ namespace FastFrame.Application.Basis
         /// 插入记录(立即返回)
         /// </summary>
         /// <param name="apiRequestLog"></param>
-        public void BackgroundInsert(ApiRequestLog apiRequestLog)
+        public async void BackgroundInsert(ApiRequestLog apiRequestLog)
         {
-            background.SetTimeout<ApiRequestLogService>(v => v.InsertAsync(apiRequestLog), null);
+            using (var serviceScope = Loader.CreateScope())
+            {
+                try
+                {
+                    await serviceScope.ServiceProvider.GetService<ApiRequestLogService>().InsertAsync(apiRequestLog);
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "写入Log失败");
+                }
+            }
         }
 
         protected override IQueryable<ApiRequestLog> QueryMain()

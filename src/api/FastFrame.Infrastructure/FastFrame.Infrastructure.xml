@@ -1442,6 +1442,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:FastFrame.Infrastructure.Module.IModuleExportProvider.HaveNumberModuleList">
+            <summary>
+            需要编码的模块
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:FastFrame.Infrastructure.Module.ModuleFieldRule">
             <summary>
             模块字段验证规则

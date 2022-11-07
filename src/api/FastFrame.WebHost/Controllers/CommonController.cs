@@ -67,16 +67,25 @@ namespace FastFrame.WebHost.Controllers
             return moduleExportProvider.HaveCheckModuleList();
         }
 
+        /// <summary>
+        /// 需要审核的模块
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public IEnumerable<KeyValuePair<string, string>> HaveNumberModuleList()
+        {
+            return moduleExportProvider.HaveNumberModuleList();
+        }
+
         [AllowAnonymous]
         [HttpGet]
-        public string getPublicKey()
+        public string GetPublicKey()
         {
             return rsaProvider.PublicKey;
         }
 
 
-
-
+#if DEBUG 
         [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> Test(string input)
@@ -147,9 +156,6 @@ namespace FastFrame.WebHost.Controllers
 
             return Ok();
         }
-
-
-    }
-
-    
+#endif
+    } 
 }

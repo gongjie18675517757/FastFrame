@@ -42,8 +42,8 @@
 
 <script>
 import draggable from "vuedraggable";
- 
 
+ 
 export default {
   name: "functional",
   display: "Functional third party",

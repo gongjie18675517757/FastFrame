@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "FastFrame.Application": {
+      "commandName": "Project",
+      "hotReloadEnabled": false
+    }
+  }
+}

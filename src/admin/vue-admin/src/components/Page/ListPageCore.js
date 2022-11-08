@@ -253,7 +253,7 @@ export let pageMethods = {
    * @returns 
    */
   getPageTitle() {
-    return this.direction 
+    return this.direction
   },
   /**
    * 初始化
@@ -925,6 +925,42 @@ export let ListPageMixin = {
     this.$eventBus.$off(`${this.name}_update`, this.loadList);
   }
 };
+
+// console.log(JSON.stringify(Object.fromEntries(Object.entries(pageMethods).map(([k]) => [k,k]))));
+
+/**
+ * 页面所有方法的定义
+ */
+export
+  const PageMethodsDefinds = {
+    getPageTitle: "getPageTitle",
+    init: "init",
+    resetQuery: "resetQuery",
+    getModuleStrut: "getModuleStrut",
+    fmtModuleStrut: "fmtModuleStrut",
+    getColumns: "getColumns",
+    fmtColumns: "fmtColumns",
+    getToolItems: "getToolItems",
+    getRowOperateItems: "getRowOperateItems",
+    getFormPageParsBySelectedTreeItem: "getFormPageParsBySelectedTreeItem",
+    getFormPagePars: "getFormPagePars",
+    toEdit: "toEdit",
+    remove: "remove",
+    getQueryOptions: "getQueryOptions",
+    queryDialog: "queryDialog",
+    getRequestUrl: "getRequestUrl",
+    getRequedtMethod: "getRequedtMethod",
+    getTreeKey: "getTreeKey",
+    getRequestParsBySelectedTreeItem: "getRequestParsBySelectedTreeItem",
+    buildQueryFilter: "buildQueryFilter",
+    getRequestPars: "getRequestPars",
+    getExportListUrl: "getExportListUrl",
+    loadMoreList: "loadMoreList",
+    loadList: "loadList",
+    exportList: "exportList",
+    close: "close",
+    handleTreeItemActived: "handleTreeItemActived",
+  };
 
 /**
  * 导出基础组件

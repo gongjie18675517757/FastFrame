@@ -4,7 +4,59 @@ import {
 import $http from './httpClient'
 import rules from './rules'
 import store from './store'
-let moduleStruts = {}
+
+const moduleStruts = {}
+const cache_dic = {
+  hasNumberModules: {
+    is_init: false,
+    values: []
+  },
+  hasCheckModules: {
+    is_init: false,
+    values: []
+  },
+}
+
+/**
+ * 需要编码的模块
+ * @returns 
+ */
+export async function getHasCheckModules() {
+  let localLock = await lock(cache_dic.hasCheckModules);
+  try {
+    if (!cache_dic.hasCheckModules.is_init) {
+      const res = await $http.get(`/api/common/HaveNumberModuleList`);
+      cache_dic.hasCheckModules.is_init = true;
+      cache_dic.hasCheckModules.values = res;
+    }
+
+    return cache_dic.hasCheckModules.values;
+
+  } finally {
+    localLock.freed()
+  }
+}
+
+/**
+ * 需要编码的模块
+ * @returns 
+ */
+export async function getHasNumberModules() {
+  let localLock = await lock(cache_dic.hasNumberModules);
+  try {
+    if (!cache_dic.hasNumberModules.is_init) {
+      const res = await $http.get(`/api/common/HaveNumberModuleList`);
+      cache_dic.hasNumberModules.is_init = true;
+      cache_dic.hasNumberModules.values = res;
+    }
+
+    return cache_dic.hasNumberModules.values;
+
+  } finally {
+    localLock.freed()
+  }
+}
+
 
 /**
  * 获取模块结构
@@ -14,13 +66,11 @@ export async function getModuleStrut(name = '') {
   name = name.toLowerCase()
   let localLock = await lock(name)
   try {
-    if (moduleStruts[name]) {
-      return moduleStruts[name]
-    } else {
-      let request = await $http.get(`/api/common/moduleStruts/${name}`)
-      moduleStruts[name] = request
-      return request
+    if (!moduleStruts[name]) {
+      moduleStruts[name] = await $http.get(`/api/common/moduleStruts/${name}`)
     }
+
+    return moduleStruts[name]
   } finally {
     localLock.freed()
   }

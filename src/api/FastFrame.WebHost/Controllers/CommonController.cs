@@ -68,7 +68,7 @@ namespace FastFrame.WebHost.Controllers
         }
 
         /// <summary>
-        /// 需要审核的模块
+        /// 需要编码的模块
         /// </summary>
         /// <returns></returns>
         [HttpGet]

@@ -85,12 +85,12 @@ namespace FastFrame.Infrastructure.Client
                 /*客户端的确认响应*/
                 case IClientManage.ClientConfirm:
                     var clientConfirmResult = msg.MsgContent.ToObject<ClientConfirmResult>();
-                    TaskCompletionSourceCenter<bool>.SetTaskCompletionSource(clientConfirmResult.Id, t => t.SetResult(clientConfirmResult.Result));
+                    TaskCompletionSourceCenter<bool>.SetTaskCompletionSource(clientConfirmResult.Id, t => t.TrySetResult(clientConfirmResult.Result));
                     break;
                 /*客户端的选择响应*/
                 case IClientManage.ClientChoose:
                     var clientChooseResult = msg.MsgContent.ToObject<ClientChooseResult>();
-                    TaskCompletionSourceCenter<string[]>.SetTaskCompletionSource(clientChooseResult.Id, t => t.SetResult(clientChooseResult.Result));
+                    TaskCompletionSourceCenter<string[]>.SetTaskCompletionSource(clientChooseResult.Id, t => t.TrySetResult(clientChooseResult.Result));
                     break;
                 default:
                     break;

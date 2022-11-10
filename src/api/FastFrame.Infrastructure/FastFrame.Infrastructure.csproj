@@ -27,7 +27,8 @@
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 		<PackageReference Include="StackExchange.Redis" Version="2.6.70" />
 		<PackageReference Include="ZKWeb.System.Drawing" Version="4.0.1" />
-
+		<PackageReference Include="AwaitableCompletionSource" Version="1.0.0" />
+		
 		<!--<PackageReference Include="AspectCore.Extensions.DependencyInjection" Version="2.2.0" />
     <PackageReference Include="AspectCore.Core" Version="2.2.0" />
 

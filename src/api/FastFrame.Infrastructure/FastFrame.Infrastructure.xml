@@ -2117,7 +2117,7 @@
             <param name="timeoutErrorMsg"></param>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.Infrastructure.TaskCompletionSourceCenter`1.SetTaskCompletionSource(System.String,System.Action{System.Threading.Tasks.TaskCompletionSource{`0}})">
+        <member name="M:FastFrame.Infrastructure.TaskCompletionSourceCenter`1.SetTaskCompletionSource(System.String,System.Action{System.Threading.Tasks.IAwaitableCompletionSource{`0}})">
             <summary>
             设置任务完成
             </summary>

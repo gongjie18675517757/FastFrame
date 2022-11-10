@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -10,8 +11,7 @@ namespace FastFrame.Infrastructure
     /// <typeparam name="TResult"></typeparam>
     public static class TaskCompletionSourceCenter<TResult>
     {
-        private static readonly IDictionary<string, TaskCompletionSource<TResult>> dic
-           = new Dictionary<string, TaskCompletionSource<TResult>>(100);
+        private static readonly ConcurrentDictionary<string, IAwaitableCompletionSource<TResult>> dic = new();
 
         /// <summary>
         /// 创建任务
@@ -20,11 +20,8 @@ namespace FastFrame.Infrastructure
         /// <returns></returns>
         public static void MakeTaskCompletionSource(string id)
         {
-            var taskCompletionSource = new TaskCompletionSource<TResult>();
-            lock (dic)
-            {
-                dic.Add(id, taskCompletionSource);
-            }
+            var taskCompletionSource = AwaitableCompletionSource.Create<TResult>();
+            dic.TryAdd(id, taskCompletionSource);
         }
 
         /// <summary>
@@ -36,31 +33,25 @@ namespace FastFrame.Infrastructure
         /// <returns></returns>
         public static async Task<TResult> DelayTaskCompletionSource(string id, int? millisecondsDelay, string timeoutErrorMsg)
         {
-            Task<TResult> task = null;
-            lock (dic)
+            if (dic.TryGetValue(id, out var taskCompletionSource))
             {
-                if (dic.TryGetValue(id, out var taskCompletionSource))
-                    task = taskCompletionSource.Task;
+                if (millisecondsDelay != null)
+                    taskCompletionSource.TrySetExceptionAfter(new MsgException(timeoutErrorMsg), TimeSpan.FromSeconds(millisecondsDelay.Value));
             }
-
-            if (task == null)
-                throw new MsgException("任务丢失");
-
-            /*判断超时*/
-            var any_task = millisecondsDelay == null ?
-                            task :
-                            await Task.WhenAny(task, Task.Delay(millisecondsDelay.Value));
-
-            lock (dic)
-            {
-                if (dic.TryGetValue(id, out _))
-                    dic.Remove(id);
-            }
-
-            if (any_task == task)
-                return await task;
             else
-                throw new MsgException(timeoutErrorMsg);
+            {
+                throw new MsgException("任务丢失");
+            }
+
+            var result = await taskCompletionSource.Task;
+
+            if (dic.TryGetValue(id, out _))
+            {
+                dic.Remove(id, out var awaitable);
+                awaitable.Dispose();
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -69,15 +60,13 @@ namespace FastFrame.Infrastructure
         /// <param name="id"></param>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static void SetTaskCompletionSource(string id, Action<TaskCompletionSource<TResult>> action)
+        public static void SetTaskCompletionSource(string id, Action<IAwaitableCompletionSource<TResult>> action)
         {
-            lock (dic)
+            if (dic.TryGetValue(id, out var task))
             {
-                if (dic.TryGetValue(id, out var task))
-                {
-                    action(task);
-                    dic.Remove(id);
-                }
+                action(task);
+                dic.Remove(id, out var awaitable);
+                awaitable.Dispose();
             }
         }
     }

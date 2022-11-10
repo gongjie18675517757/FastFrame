@@ -100,6 +100,7 @@ function mergeVueComponentInstance(base_vue_instance, child_vue_instance) {
   };
 }
 
+
 export default mergeVueComponentInstance(Page, {
   data() {
     return {

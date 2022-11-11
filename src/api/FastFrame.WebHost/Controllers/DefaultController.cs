@@ -64,8 +64,5 @@ namespace FastFrame.WebHost.Controllers
         public void Delete(int id)
         {
         }
-    }
-
-
-
+    } 
 }

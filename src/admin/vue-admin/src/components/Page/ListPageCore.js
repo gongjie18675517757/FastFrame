@@ -14,7 +14,7 @@ import { makeButtons, makeButtonsInputMode } from './handleFlow'
 /**
  * 按钮组1
  */
-export let makeToolItems = function () {
+export const makeToolItems = function () {
   return [{
     title: "新增",
     color: "success",
@@ -79,127 +79,213 @@ export let makeToolItems = function () {
 /**
  * 要导入的依赖
  */
-export let pageInjects = []
+export const pageInjects = []
 
 /**
  * 生成参数
  */
-export let pageProps = {
+export const pageProps = {
+  /**
+   * 过滤参数
+   */
   queryFilter: Array,
+
+  /**
+   * 是否单选
+   */
   single: Boolean,
+
+  /**
+   * 是否弹窗
+   */
   isDialog: Boolean,
+
+  /**
+   * 是否多页签下
+   */
   isTab: Boolean,
+
+  /**
+   * 上级ID
+   */
   superId: String,
-  hideToolitem: Boolean,
+
+  /**
+   * 隐藏工具条按钮
+   */
+  hideToolItems: Boolean,
+
+  /**
+   * 请求地址
+   */
   requestUrl: String
 };
 
+/**
+ * 页面数据的名称定义
+ */
+export const PageDataDefines = {
+  /**
+   * 模块名称，影响：请求地址
+   */
+  name: 'name',
+
+  /**
+   * 页面结构名：影响：获取列，获取查询方式
+   */
+  strutName: 'strutName',
+
+  /**
+   * 权限名称：影响页面权限定义
+   */
+  permissionName: 'permissionName',
+
+  /**
+   * 操作按钮
+   */
+  toolItems: 'toolItems',
+
+  /**
+   * 操作按钮摆放数据
+   */
+  toolSpliceCount: 'toolSpliceCount',
+
+  /**
+   * 表格列
+   */
+  columns: 'columns',
+  /**
+   * 表格行
+   */
+  rows: 'rows',
+  /**
+   * 选中行
+   */
+  selection: 'selection',
+  /**
+   * 所有行数
+   */
+  total: 'total',
+  /**
+   * 加载中
+   */
+  loading: 'loading',
+  /**
+   * 表格类名
+   */
+  tableClassArr: 'tableClassArr',
+  /**
+   * 表格样式
+   */
+  tableStyleObj: 'tableStyleObj',
+  /**
+   * 模块结构
+   */
+  ModuleStrut: 'ModuleStrut',
+  /**
+   * 分页属性
+   */
+  pager: 'pager',
+  /**
+   * 隐藏分页
+   */
+  hidePager: 'hidePager',
+  /**
+   * 显示审计字段
+   */
+  showMamageField: 'showMamageField',
+  /**
+   * 查询条件
+   */
+  query: 'query',
+  /**
+   * 树表格子级组件
+   */
+  treeChildComponent: 'treeChildComponent',
+
+  /**
+   * 是否初始化完成
+   */
+  isInited: 'isInited',
+
+  /**
+   * 选中的树结点
+   */
+  treeSelectedItem: 'treeSelectedItem',
+
+  /**
+   * 树组件
+   */
+  treeComponent:'treeComponent'
+}
 
 /**
  * 数据
  */
-export let makePageData = function () {
+export const makePageData = function () {
   return {
-    /**
-     * 模块名称，影响：请求地址
-     */
-    name: null,
-
-    /**
-     * 页面结构名：影响：获取列，获取查询方式
-     */
-    strutName: null,
-
-    /**
-     * 权限名称：影响页面权限定义
-     */
-    permissionName: null,
-
-    /**
-     * 操作按钮
-     */
-    toolItems: [],
-
-    /**
-     * 操作按钮摆放数据
-     */
-    toolSpliceCount: 6,
-
-    /**
-     * 表格列
-     */
-    columns: [],
-    /**
-     * 表格行
-     */
-    rows: [],
-    /**
-     * 选中行
-     */
-    selection: [],
-    /**
-     * 所有行数
-     */
-    total: 0,
-    /**
-     * 加载中
-     */
-    loading: false,
-    /**
-     * 表格类名
-     */
-    tableClassArr: [],
-    /**
-     * 表格样式
-     */
-    tableStyleObj: {
-
-    },
-    /**
-     * 模块结构
-     */
-    ModuleStrut: {},
-    /**
-     * 分页属性
-     */
-    pager: null,
-    /**
-     * 隐藏分布
-     */
-    hidePager: false,
-    /**
-     * 显示审计字段
-     */
-    showMamageField: false,
-    /**
-     * 查询条件
-     */
-    query: [],
-    /**
-     * 树表格子级组件
-     */
-    treeChildComponent: null,
-
-    /**
-     * 是否初始化完成
-     */
-    isInited: false,
-
-    /**
-     * 选中的树结点
-     */
-    treeSelectedItem: null,
+    [PageDataDefines.name]: null,
+    [PageDataDefines.strutName]: null,
+    [PageDataDefines.permissionName]: null,
+    [PageDataDefines.toolItems]: [],
+    [PageDataDefines.toolSpliceCount]: 6,
+    [PageDataDefines.columns]: [],
+    [PageDataDefines.rows]: [],
+    [PageDataDefines.selection]: [],
+    [PageDataDefines.total]: 0,
+    [PageDataDefines.loading]: false,
+    [PageDataDefines.tableClassArr]: [],
+    [PageDataDefines.tableStyleObj]: {},
+    [PageDataDefines.ModuleStrut]: {},
+    [PageDataDefines.pager]: null,
+    [PageDataDefines.hidePager]: false,
+    [PageDataDefines.showMamageField]: false,
+    [PageDataDefines.query]: [],
+    [PageDataDefines.treeChildComponent]: null,
+    [PageDataDefines.isInited]: false,
+    [PageDataDefines.treeSelectedItem]: null,
+    [PageDataDefines.treeComponent]: null,
   };
+}
+
+/**
+ * 页面计算属性的名称定义
+ */
+export const PageComputedDefines = {
+  /**
+   * 是否弹窗模式
+   */
+  dialogMode: 'dialogMode',
+
+  /**
+   * 计算要显示的列
+   */
+  dynamicColumns: 'dynamicColumns',
+
+  /**
+   * 计算个个表格高度
+   */
+  tableHeight: 'tableHeight',
+
+  /**
+   * 传递给布局页的内容
+   */
+  childProps: 'childProps',
+
+  /**
+   * 监听布局页的内容
+   */
+  childListeners: 'childListeners',
 }
 
 /**
  * 计算属性
  */
 export let pageComputed = {
-  dialogMode() {
+  [PageComputedDefines.dialogMode]() {
     return this.$store.state.dialogMode;
   },
-  dynamicColumns() {
+  [PageComputedDefines.dynamicColumns]() {
     return [...this.columns, ...(this.showMamageField && this.ModuleStrut.HasManage ? [{
       Name: 'Create_User.Name',
       Description: '录入人',
@@ -224,7 +310,7 @@ export let pageComputed = {
     }
     ] : [])]
   },
-  tableHeight() {
+  [PageComputedDefines.tableHeight]() {
     if (this.superId) {
       return null;
     }
@@ -236,29 +322,163 @@ export let pageComputed = {
       return `calc(100vh - 160px)`
     }
   },
-  childProps() {
+  [PageComputedDefines.childProps]() {
     return makeChildProps.call(this)
   },
-  childListeners() {
+  [PageComputedDefines.childListeners]() {
     return makeChildListeners.call(this)
   }
 }
+
+
+/**
+ * 页面所有方法的名称定义
+ */
+export const PageMethodsDefines = {
+  /**
+   * 获取列表的标题
+   */
+  getPageTitle: "getPageTitle",
+
+  /**
+   * 初始化
+   */
+  init: "init",
+
+  /**
+   * 重置查询条件
+   */
+  resetQuery: "resetQuery",
+
+  /**
+   * 获取当前模块结构
+   */
+  getModuleStrut: "getModuleStrut",
+
+  /**
+   * 格式化模块结构
+   */
+  fmtModuleStrut: "fmtModuleStrut",
+
+  /**
+   * 获取当前模块列表列
+   */
+  getColumns: "getColumns",
+
+  /**
+   * 格式化列
+   */
+  fmtColumns: "fmtColumns",
+
+  /**
+   * 获取操作按钮
+   */
+  getToolItems: "getToolItems",
+
+  /**
+   * 获取行操作按钮
+   */
+  getRowOperateItems: "getRowOperateItems",
+
+  /**
+   * 传递给表单页的参数
+   */
+  getFormPageParsBySelectedTreeItem: "getFormPageParsBySelectedTreeItem",
+
+  /**
+   * 传递给表单页的参数
+   */
+  getFormPagePars: "getFormPagePars",
+
+  /**
+   * 跳转编辑页
+   */
+  toEdit: "toEdit",
+
+  /**
+   * 删除操作
+   */
+  remove: "remove",
+
+  /**
+   * 获取查询条件
+   */
+  getQueryOptions: "getQueryOptions",
+
+  /**
+   * 弹窗查询
+   */
+  queryDialog: "queryDialog",
+
+  /**
+   * 获取查询地址
+   */
+  getRequestUrl: "getRequestUrl",
+
+  /**
+   * 获取请求方法
+   */
+  getRequedtMethod: "getRequedtMethod",
+
+  /**
+   * 获取树键名
+   */
+  getTreeKey: "getTreeKey",
+
+  /**
+   * 根据选中的树结点，生成查询参数
+   */
+  getRequestParsBySelectedTreeItem: "getRequestParsBySelectedTreeItem",
+
+  /**
+   * 构造查询参数
+   */
+  buildQueryFilter: "buildQueryFilter",
+
+  /**
+   * 获取请求参数
+   */
+  getRequestPars: "getRequestPars",
+
+  /**
+   * 导出EXCEL的地址
+   */
+  getExportListUrl: "getExportListUrl",
+
+  /**
+   * 加载更新数据(移动端无限翻页时)
+   */
+  loadMoreList: "loadMoreList",
+
+  /**
+   * 加载列表数据
+   */
+  loadList: "loadList",
+
+  /**
+   * 导出
+   */
+  exportList: "exportList",
+
+  /**
+   * 关闭
+   */
+  close: "close",
+
+  /**
+   * 树节点被选中
+   */
+  handleTreeItemActived: "handleTreeItemActived",
+};
 
 /**
  * 页面方法
  */
 export let pageMethods = {
-  /**
-   * 获取列表的标题
-   * @returns 
-   */
-  getPageTitle() {
+  [PageMethodsDefines.getPageTitle]() {
     return this.direction
   },
-  /**
-   * 初始化
-   */
-  async init() {
+  async [PageMethodsDefines.init]() {
     /**
      * 未单独定义结构名时
      */
@@ -306,10 +526,7 @@ export let pageMethods = {
      */
     this.isInited = true;
   },
-  /**
-   * 重置查询条件
-   */
-  resetQuery() {
+  [PageMethodsDefines.resetQuery]() {
     this.query = {
       Key: 'and',
       Value: [
@@ -320,32 +537,16 @@ export let pageMethods = {
       ]
     }
   },
-
-  /**
-   * 获取当前模块结构
-   */
-  getModuleStrut() {
+  [PageMethodsDefines.getModuleStrut]() {
     return getModuleStrut(this.strutName)
   },
-
-  /**
-   * 格式化模块结构
-   */
-  fmtModuleStrut(v) {
+  [PageMethodsDefines.fmtModuleStrut](v) {
     return Promise.resolve(v);
   },
-
-  /**
-   * 获取当前模块列表列
-   */
-  getColumns() {
+  [PageMethodsDefines.getColumns]() {
     return getColumns(this.strutName)
   },
-
-  /**
-   * 格式化列
-   */
-  async fmtColumns(arr) {
+  async [PageMethodsDefines.fmtColumns](arr) {
     let items = await this.getRowOperateItems();
 
     for (const c of arr) {
@@ -412,11 +613,7 @@ export let pageMethods = {
       ] : [])
     ]
   },
-
-  /**
-   * 获取操作按钮
-   */
-  async getToolItems() {
+  async [PageMethodsDefines.getToolItems]() {
     let arr = await makeToolItems.call(this);
     let brr = this.ModuleStrut.HaveCheck ? [
       {
@@ -451,11 +648,7 @@ export let pageMethods = {
     }
     );
   },
-
-  /**
-   * 获取行操作按钮
-   */
-  getRowOperateItems() {
+  [PageMethodsDefines.getRowOperateItems]() {
     const arr = [];
     if (this.ModuleStrut.HasManage && !this.columns.some(v => v.IsLink)) {
       arr.push((function (h, { model }) {
@@ -507,22 +700,12 @@ export let pageMethods = {
 
     return Promise.resolve(arr)
   },
-
-  /**
-   * 传递给表单页的参数
-   * @returns 
-   */
-  getFormPageParsBySelectedTreeItem(v) {
+  [PageMethodsDefines.getFormPageParsBySelectedTreeItem](v) {
     return {
       super_id: v.Id || ""
     };
   },
-
-  /**
-   * 传递给表单页的参数
-   * @returns 
-   */
-  getFormPagePars() {
+  [PageMethodsDefines.getFormPagePars]() {
     if (this.treeSelectedItem) {
       return this.getFormPageParsBySelectedTreeItem(this.treeSelectedItem);
     }
@@ -530,12 +713,7 @@ export let pageMethods = {
       return Promise.resolve({})
     }
   },
-
-  /**
-   * 跳转编辑页
-   * @param {*} model 
-   */
-  async toEdit(model) {
+  async [PageMethodsDefines.toEdit](model) {
     let pars = await this.getFormPagePars() || {};
     model = model || {};
     let Id = model.Id || ''
@@ -564,12 +742,7 @@ export let pageMethods = {
         this.$router.push(`/${this.name}/Add?${urlPars}`);
     }
   },
-
-  /**
-   * 删除操作
-   * @param {*} arr 
-   */
-  async remove(arr = []) {
+  async [PageMethodsDefines.remove](arr = []) {
     await this.$message.confirm({
       title: "提示",
       content: "确认要删除吗?"
@@ -584,18 +757,10 @@ export let pageMethods = {
       this.rows.splice(index, 1);
     }
   },
-
-  /**
-   * 获取查询条件
-   */
-  getQueryOptions() {
+  [PageMethodsDefines.getQueryOptions]() {
     return getQueryOptions(this.dynamicColumns)
   },
-
-  /**
-   * 弹窗查询
-   */
-  queryDialog() {
+  [PageMethodsDefines.queryDialog]() {
     this.$message
       .dialog(() => import('../Dialog/SearchDialog.vue'), {
         title: `查询${this.direction}列表`,
@@ -610,18 +775,10 @@ export let pageMethods = {
         this.loadList();
       });
   },
-
-  /**
-   * 获取查询地址
-   */
-  getRequestUrl() {
+  [PageMethodsDefines.getRequestUrl]() {
     return this.requestUrl || `/api/${this.name}/list`
   },
-
-  /**
-   * 获取请求方法
-   */
-  getRequedtMethod() {
+  [PageMethodsDefines.getRequedtMethod]() {
     return (url, pageProps, pars) => {
 
       let qs = JSON.stringify(pageProps, fmtRequestPars);
@@ -633,20 +790,10 @@ export let pageMethods = {
       return this.$http.get(`${url}?qs=${qs}&${parsQueryString}`);
     }
   },
-
-  /**
-   * 获取树键名
-   * @returns 
-   */
-  getTreeKey() {
+  [PageMethodsDefines.getTreeKey]() {
     return 'Super_Id'
   },
-
-  /**
-   * 根据选中的树结点，生成查询参数
-   * @returns 
-   */
-  async getRequestParsBySelectedTreeItem(v) {
+  async [PageMethodsDefines.getRequestParsBySelectedTreeItem](v) {
     let treeKey = await this.getTreeKey(v);
     return [
       {
@@ -656,12 +803,7 @@ export let pageMethods = {
       },
     ]
   },
-
-  /**
-   * 构造查询参数
-   * @returns {queryBuild}
-   */
-  async buildQueryFilter() {
+  async [PageMethodsDefines.buildQueryFilter]() {
     let qb = new queryBuild()
     /**
      * 外部传入的条件
@@ -696,13 +838,7 @@ export let pageMethods = {
 
     return qb;
   },
-
-  /**
-   * 获取请求参数
-   * @param {}} pager 
-   * @returns {{PageIndex:1,PageSize:20,SortName:'Id',SortMode:'asc',Filters:[]}}
-   */
-  async getRequestPars(pager) {
+  async [PageMethodsDefines.getRequestPars](pager) {
     if (pager) this.pager = pager;
     else pager = this.pager;
 
@@ -725,18 +861,10 @@ export let pageMethods = {
 
     return pageInfo;
   },
-
-  /**
-   * 导出EXCEL的地址
-   */
-  getExportListUrl() {
+  [PageMethodsDefines.getExportListUrl]() {
     return `/api/${this.name}/ExportList`
   },
-
-  /**
-   * 加载更新数据(移动端无限翻页时)
-   */
-  loadMoreList: throttle(function (pager) {
+  [PageMethodsDefines.loadMoreList]: throttle(function (pager) {
     this.loading = true;
     this.loading = true;
     if (pager.page) {
@@ -760,11 +888,7 @@ export let pageMethods = {
         this.loading = false;
       })
   }),
-
-  /**
-   * 加载列表数据
-   */
-  loadList: throttle(async function (pager) {
+  [PageMethodsDefines.loadList]: throttle(async function (pager) {
     this.loading = true;
     this.rows = [];
 
@@ -781,11 +905,7 @@ export let pageMethods = {
       this.loading = false;
     }
   }, 500),
-
-  /**
-   * 导出
-   */
-  exportList: throttle(function () {
+  [PageMethodsDefines.exportList]: throttle(function () {
     this.loading = true;
     Promise.resolve(null)
       .then(this.getRequestPars)
@@ -804,11 +924,7 @@ export let pageMethods = {
         this.loading = false;
       })
   }),
-
-  /**
-   * 关闭
-   */
-  close() {
+  [PageMethodsDefines.close]() {
     if (this.isTab) {
       this.$emit('close')
     }
@@ -818,14 +934,8 @@ export let pageMethods = {
       this.$router.got(-1)
     }
   },
-
-  /**
-   * 树节点被选中
-   * @param {*} val 
-   */
-  handleTreeItemActived(val) {
+  [PageMethodsDefines.handleTreeItemActived](val) {
     this.treeSelectedItem = val;
-
     this.$nextTick(this.loadList)
   }
 }
@@ -863,7 +973,7 @@ export let makeChildProps = function () {
         return h('v-tree-child', {
           props: {
             superId: this.model.Id,
-            hideToolitem: true,
+            hideToolItems: true,
             single: true,
           }
 
@@ -883,7 +993,7 @@ export let makeChildProps = function () {
         })
       }
     } : null,
-    hideToolitem: this.hideToolitem,
+    hideToolItems: this.hideToolItems,
   };
 };
 
@@ -928,39 +1038,6 @@ export let ListPageMixin = {
 
 // console.log(JSON.stringify(Object.fromEntries(Object.entries(pageMethods).map(([k]) => [k,k]))));
 
-/**
- * 页面所有方法的定义
- */
-export
-  const PageMethodsDefinds = {
-    getPageTitle: "getPageTitle",
-    init: "init",
-    resetQuery: "resetQuery",
-    getModuleStrut: "getModuleStrut",
-    fmtModuleStrut: "fmtModuleStrut",
-    getColumns: "getColumns",
-    fmtColumns: "fmtColumns",
-    getToolItems: "getToolItems",
-    getRowOperateItems: "getRowOperateItems",
-    getFormPageParsBySelectedTreeItem: "getFormPageParsBySelectedTreeItem",
-    getFormPagePars: "getFormPagePars",
-    toEdit: "toEdit",
-    remove: "remove",
-    getQueryOptions: "getQueryOptions",
-    queryDialog: "queryDialog",
-    getRequestUrl: "getRequestUrl",
-    getRequedtMethod: "getRequedtMethod",
-    getTreeKey: "getTreeKey",
-    getRequestParsBySelectedTreeItem: "getRequestParsBySelectedTreeItem",
-    buildQueryFilter: "buildQueryFilter",
-    getRequestPars: "getRequestPars",
-    getExportListUrl: "getExportListUrl",
-    loadMoreList: "loadMoreList",
-    loadList: "loadList",
-    exportList: "exportList",
-    close: "close",
-    handleTreeItemActived: "handleTreeItemActived",
-  };
 
 /**
  * 导出基础组件

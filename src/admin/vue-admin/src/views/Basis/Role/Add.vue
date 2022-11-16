@@ -5,48 +5,44 @@ let pageInfo = {
   direction: "角色",
 };
 
-import Page from "@/components/Page/FormPageCore.js";
+import {
+  FormPageDefines,
+  makeFormPageInheritedFromBaseFormPage,
+} from "../../../components/Page";
 import RolePermissionVue from "./RolePermission.vue";
 
-export default {
-  ...Page,
+export default makeFormPageInheritedFromBaseFormPage({
   data() {
     return {
-      ...Page.data.call(this),
       ...pageInfo,
     };
   },
   methods: {
-    ...Page.methods,
-    fmtModelObject() {
-      return Page.methods.fmtModelObject
-        .call(this, ...arguments)
-        .then((model) => {
-          return {
-            ...model,
-            Permissions: model.Permissions || [],
-            Members: model.Members || [],
-          };
-        });
+    [FormPageDefines.MethodsDefines.fmtModelObject](model) {
+      return {
+        Permissions: [],
+        Members: [],
+        ...model,
+      };
     },
-    getModelObjectItems(opts) {
-      return Page.methods.getModelObjectItems.call(this, opts).then((opts) => {
-        opts.push({
+    [FormPageDefines.MethodsDefines.fmtModelObjectItems](arr) {
+      return [
+        ...arr,
+        {
           Name: "Members",
           Description: "角色成员",
           Relate: "User",
           Type: "Array",
           requestUrl: "/api/role/userList",
-          colspan:2
-        });
-        opts.push({
+          colspan: 2,
+        },
+        {
           Name: "Permissions",
           GroupNames: ["角色权限"],
           template: RolePermissionVue,
-        });
-        return opts;
-      });
+        },
+      ];
     },
   },
-};
+});
 </script> 

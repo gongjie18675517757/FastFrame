@@ -303,7 +303,7 @@ export default {
     labelWidth: String,
     ModuleName: String,
     Relate: String,
-    requestUrl: String,
+    requestUrl: [String,Function],
     EnumItemInfo: Object,
     component: Object,
     Type: {

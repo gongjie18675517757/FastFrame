@@ -20,7 +20,19 @@ connection.onclose(function () {
  */
 export async function start() {
     try {
-        connection.stop();
+        switch (connection.state) {
+            case signalR.HubConnectionState.Connected:
+                await connection.stop();
+                break;
+            case signalR.HubConnectionState.Connecting: 
+            case signalR.HubConnectionState.Disconnecting:
+            case signalR.HubConnectionState.Reconnecting:
+            case signalR.HubConnectionState.Disconnected:
+                return 
+            default:
+                break;
+        }
+
     } catch (err) {
         window.console.error(err)
     }

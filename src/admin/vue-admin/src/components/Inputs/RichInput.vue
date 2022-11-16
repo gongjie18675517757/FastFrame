@@ -55,7 +55,7 @@ export default {
   },
   beforeDestroy() {
     // 调用销毁 API 对当前编辑器实例进行销毁
-    if (this.editor) this.editor.destroy();
+    if (this.editor && this.editor.destroy) this.editor.destroy();
     this.editor = null;
   },
   methods: {

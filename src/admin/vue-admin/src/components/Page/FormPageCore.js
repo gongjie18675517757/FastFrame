@@ -11,6 +11,7 @@ import {
   getRules,
   getModuleStrut
 } from "../../generate";
+
 import { FileDetailTable } from "../Table";
 import { makeButtons, makeButtonsInputMode } from './handleFlow'
 import FlowStep from './FlowStep.vue'
@@ -19,7 +20,7 @@ import { calcInputVisible, calcInputItemCols } from '../Inputs'
 /**
  * 要注入的方法名
  */
-export let formInject = []
+export const formInject = []
 
 /**
  * 生成工具按钮
@@ -64,7 +65,7 @@ export function makeToolItems() {
 /**
  * 生成参数
  */
-export let formProps = {
+export const formProps = {
   pars: Object,
   isDialog: Boolean,
   isTab: Boolean,
@@ -73,53 +74,113 @@ export let formProps = {
 };
 
 /**
- * 生成数据
+ * 所有data的定义
  */
-export let formData = {
+export const FormPageDataDefines = {
   /**
- * 模块名称，影响：请求地址
- */
-  name: null,
+  * 模块名称，影响：请求地址
+  */
+  name: 'name',
 
   /**
    * 页面结构名：影响：获取表单相关
    */
-  strutName: null,
+  strutName: 'strutName',
 
   /**
    * 权限名称：影响页面权限定义
    */
-  permissionName: null,
+  permissionName: 'permissionName',
 
   /**
    * 是否可编辑
    */
-  canEdit: false,
+  canEdit: 'canEdit',
 
   /**
    * 表单模型实体
    */
-  model: {},
+  model: 'model',
 
   /**
    * 表单验证异常信息
    */
-  formErrorMessages: {},
+  formErrorMessages: 'formErrorMessages',
 
   /**
    * 页面表单项
    */
-  options: [],
+  options: 'options',
 
   /**
    * 表单验证规则
    */
-  rules: {},
+  rules: 'rules',
 
   /**
    * 审计字段
    */
-  manageOptions: [{
+  manageOptions: 'manageOptions',
+
+  /**
+   * 是否提交中
+   */
+  submiting: 'submiting',
+
+  /**
+   * 是否单选布局
+   */
+  singleLine: 'singleLine',
+
+  /**
+   * 是否显示管理字段
+   */
+  showMamageField: 'showMamageField',
+
+  /**
+   * 页面是否有改动过
+   */
+  changed: 'changed',
+
+  /**
+   * 是否有审核字段
+   */
+  hasManage: 'hasManage',
+
+  /**
+   * 是否有附件
+   */
+  hasFiles: 'hasFiles',
+
+  /**
+   * 工具按钮
+   */
+  toolItems: 'toolItems',
+
+  /**
+    * 几列式布局
+    */
+  pageFormCols: 'pageFormCols',
+
+  /**
+   * 页面布局
+   */
+  pageFlex: 'pageFlex'
+}
+
+/**
+ * 生成数据
+ */
+export const formData = {
+  [FormPageDataDefines.name]: null,
+  [FormPageDataDefines.strutName]: null,
+  [FormPageDataDefines.permissionName]: null,
+  [FormPageDataDefines.canEdit]: false,
+  [FormPageDataDefines.model]: {},
+  [FormPageDataDefines.formErrorMessages]: {},
+  [FormPageDataDefines.options]: [],
+  [FormPageDataDefines.rules]: {},
+  [FormPageDataDefines.manageOptions]: [{
     Name: "Create_User.Name",
     Description: "创建人"
   },
@@ -144,51 +205,15 @@ export let formData = {
       GroupNames: ["管理字段"]
     };
   }),
-
-  /**
-   * 是否提交中
-   */
-  submiting: false,
-
-  /**
-   * 是否单选布局
-   */
-  singleLine: false,
-
-  /**
-   * 是否显示管理字段
-   */
-  showMamageField: false,
-
-  /**
-   * 页面是否有改动过
-   */
-  changed: false,
-
-  /**
-   * 是否有审核字段
-   */
-  hasManage: false,
-
-  /**
-   * 是否有附件
-   */
-  hasFiles: false,
-
-  /**
-   * 工具按钮
-   */
-  toolItems: [],
-
-  /**
-    * 几列式布局
-    */
-  pageFormCols: 2,
-
-  /**
-   * 页面布局
-   */
-  pageFlex: {
+  [FormPageDataDefines.submiting]: false,
+  [FormPageDataDefines.singleLine]: false,
+  [FormPageDataDefines.showMamageField]: false,
+  [FormPageDataDefines.changed]: false,
+  [FormPageDataDefines.hasManage]: false,
+  [FormPageDataDefines.hasFiles]: false,
+  [FormPageDataDefines.toolItems]: [],
+  [FormPageDataDefines.pageFormCols]: 2,
+  [FormPageDataDefines.pageFlex]: {
 
     /**
      * > 1904px*
@@ -218,15 +243,131 @@ export let formData = {
 };
 
 
+/**
+ * 页面所有方法的定义
+ */
+export const FormPageMethodsDefines = {
+  /**
+   * 页面初始化
+   */
+  init: "init",
+
+  /**
+   * 加载模块信息
+   */
+  getModuleStrut: "getModuleStrut",
+
+  /**
+   * 格式化模块信息
+   */
+  fmtModuleStrut: "fmtModuleStrut",
+
+  /**
+   * 加载表单验证信息
+   */
+  getRules: "getRules",
+
+  /**
+   * 格式化表单验证信息
+   */
+  fmtRules: "fmtRules",
+
+  /**
+   * 加载表单项
+   */
+  getModelObjectItems: "getModelObjectItems",
+
+  /**
+   * 加载工具条
+   */
+  getToolItems: "getToolItems",
+
+  /**
+   * 格式化表单
+   */
+  fmtModelObjectItems: "fmtModelObjectItems",
+
+  /**
+   * 点击编辑按钮时
+   */
+  handleEdit: "handleEdit",
+
+  /**
+   * 当前内容被更新时
+   */
+  DataUpdated: "DataUpdated",
+
+  /**
+   * 当前内容被删除时
+   */
+  DataDeleted: "DataDeleted",
+
+  /**
+   * 获取请求数据的URL
+   */
+  getRequestUrl: "getRequestUrl",
+
+  /**
+   * 获取页面模型
+   */
+  getModelObject: "getModelObject",
+
+  /**
+   * 格式化页面模型
+   */
+  fmtModelObject: "fmtModelObject",
+
+  /**
+   * 验证规则
+   */
+  evalRule: "evalRule",
+
+  /**
+   * 验证全部规则
+   */
+  evalRules: "evalRules",
+
+  /**
+   * 获取提交方法
+   */
+  getPostMethod: "getPostMethod",
+
+  /**
+   * 获取提交地址
+   */
+  getPostUrl: "getPostUrl",
+
+  /**
+   * 获取提交数据
+   */
+  getPostData: "getPostData",
+
+  /**
+   * submit
+   */
+  submit: "submit",
+
+  /**
+   * onSaveAfter
+   */
+  onSaveAfter: "onSaveAfter",
+
+  /**
+   * 返回列表
+   */
+  goList: "goList",
+
+  /**
+   * 关闭页面
+   */
+  close: "close",
+}
 
 /**
  * 页面方法
  */
-export let formMethods = {
-  /**
-   * 页面初始化
-   */
-  async init() {
+export const formMethods = {
+  async [FormPageMethodsDefines.init]() {
     this.canEdit = false;
     /**
    * 未单独定义结构名时
@@ -258,42 +399,19 @@ export let formMethods = {
     this.changed = false;
     this.canEdit = !this.model.Id;
   },
-
-  /**
-   * 加载模块信息
-   * @param {*} name 
-   */
-  getModuleStrut(name) {
+  [FormPageMethodsDefines.getModuleStrut](name) {
     return getModuleStrut(name);
   },
-
-  /**
-   * 格式化模块信息
-   * @param {*} obj 
-   */
-  fmtModuleStrut(obj) {
+  [FormPageMethodsDefines.fmtModuleStrut](obj) {
     return Promise.resolve(obj);
   },
-
-  /**
-   * 加载表单验证信息
-   */
-  getRules() {
+  [FormPageMethodsDefines.getRules]() {
     return getRules(this.strutName)
   },
-
-  /**
-   * 格式化表单验证信息
-   * @param {*} rules 
-   */
-  fmtRules(rules) {
+  [FormPageMethodsDefines.fmtRules](rules) {
     return Promise.resolve(rules);
   },
-
-  /**
-   * 加载表单项
-   */
-  getModelObjectItems() {
+  [FormPageMethodsDefines.getModelObjectItems]() {
     return getModelObjectItems(this.strutName).then(arr => {
 
       arr.forEach(v => {
@@ -304,11 +422,7 @@ export let formMethods = {
       return arr;
     })
   },
-
-  /**
-   * 加载工具条
-   */
-  async getToolItems() {
+  async [FormPageMethodsDefines.getToolItems]() {
     let arr = await makeToolItems.call(this);
     let brr = this.haveCheck ? [
       {
@@ -341,12 +455,7 @@ export let formMethods = {
       };
     })
   },
-
-  /**
-   * 格式化表单
-   * @param {*} arr 
-   */
-  fmtModelObjectItems(arr) {
+  [FormPageMethodsDefines.fmtModelObjectItems](arr) {
     return Promise.resolve(arr).then(arr => {
       if (this.hasFiles) {
         arr.push({
@@ -371,25 +480,13 @@ export let formMethods = {
       ]
     });
   },
-
-  /**
-   * 点击编辑按钮时
-   */
-  handleEdit() {
+  [FormPageMethodsDefines.handleEdit]() {
     this.canEdit = !this.canEdit
   },
-
-  /**
-   * 当前内容被更新时
-   */
-  DataUpdated() {
+  [FormPageMethodsDefines.DataUpdated]() {
 
   },
-
-  /**
-   * 当前内容被删除时
-   */
-  DataDeleted() {
+  [FormPageMethodsDefines.DataDeleted]() {
     this.$message.alert({
       title: "提示",
       content: "当前内容已被其它人删除!"
@@ -397,19 +494,10 @@ export let formMethods = {
       this.close();
     });
   },
-
-  /**
-   * 获取请求数据的URL
-   * @param {*} id 
-   */
-  getRequestUrl(id) {
+  [FormPageMethodsDefines.getRequestUrl](id) {
     return `/api/${this.name}/get/${id}`
   },
-
-  /**
-   * 获取页面模型
-   */
-  getModelObject() {
+  [FormPageMethodsDefines.getModelObject]() {
     let id = this.id
     if (id) {
       return this.$http.get(this.getRequestUrl(id));
@@ -417,12 +505,7 @@ export let formMethods = {
       return getDefaultModel(this.name)
     }
   },
-
-  /**
-   * 格式化页面模型
-   * @param {*} model 
-   */
-  fmtModelObject(model) {
+  [FormPageMethodsDefines.fmtModelObject](model) {
     return Promise.resolve(model).then(model => {
       if (this.hasFiles) {
         model.Files = model.Files || []
@@ -431,12 +514,7 @@ export let formMethods = {
       return model;
     })
   },
-
-  /**
-   * 验证规则
-   * @param {*} name 
-   */
-  evalRule(name) {
+  [FormPageMethodsDefines.evalRule](name) {
     let rules = this.rules[name] || [];
     let val = this.model[name];
     this.formErrorMessages[name] = [];
@@ -449,55 +527,33 @@ export let formMethods = {
       return errs;
     })
   },
-
-  /**
-   * 验证全部规则
-   */
-  evalRules() {
+  [FormPageMethodsDefines.evalRules]() {
     let promiseArr = Object.keys(this.rules).map(v => this.evalRule(v));
     return Promise.all(promiseArr).then(arr => {
       return arr.filter(v => v.length > 0)
     })
   },
-
-  /**
-   * 获取提交方法
-   * @param {*} id 
-   */
-  getPostMethod(id) {
+  [FormPageMethodsDefines.getPostMethod](id) {
     if (!id) {
       return this.$http.post;
     } else {
       return this.$http.put;
     }
   },
-
-  /**
-   * 获取提交地址
-   * @param {*} id 
-   */
-  getPostUrl(id) {
+  [FormPageMethodsDefines.getPostUrl](id) {
     if (!id) {
       return `/api/${this.name}/post`;
     } else {
       return `/api/${this.name}/put`
     }
   },
-
-  /**
-   * 获取提交数据
-   */
-  getPostData() {
+  [FormPageMethodsDefines.getPostData]() {
     let postData = JSON.parse(JSON.stringify(this.model))
     delete postData.Create_User;
     delete postData.Modify_User;
     return postData
   },
-
-  /**
-   * 提交数据
-   */
-  async submit() {
+  async [FormPageMethodsDefines.submit]() {
     try {
       this.submiting = true;
       let errs = await this.evalRules();
@@ -523,12 +579,7 @@ export let formMethods = {
       this.submiting = false;
     }
   },
-
-  /**
-   * 保存方法调用成功之后
-   * @param {*} res 
-   */
-  onSaveAfter(res) {
+  [FormPageMethodsDefines.onSaveAfter](res) {
     this.$message.toast.success('保存成功');
     this.$eventBus.$emit(`${this.name}_update`)
 
@@ -546,12 +597,7 @@ export let formMethods = {
       }
     }, 150);
   },
-
-  /**
-   * 返回列表
-   * @param {*} data 
-   */
-  goList(data) {
+  [FormPageMethodsDefines.goList](data) {
     if (this.isTab) {
       this.$router.push(`/${this.name}/list`);
     } else if (this.isDialog) {
@@ -560,11 +606,7 @@ export let formMethods = {
       this.$router.push(`/${this.name}/list`);
     }
   },
-
-  /**
-   * 关闭页面
-   */
-  close() {
+  [FormPageMethodsDefines.close]() {
     if (this.isTab) {
       this.$emit("close");
     }
@@ -574,10 +616,12 @@ export let formMethods = {
   }
 }
 
+
+
 /**
  * 页面观察属性
  */
-export let formWatch = {
+export const formWatch = {
   /**
    * ID参数变化时更新加载页面
    * @param {*} val 
@@ -592,7 +636,7 @@ export let formWatch = {
 /**
  * 生成传递给子组件的参数
  */
-export let makeChildProps = function () {
+export const makeChildProps = function () {
   return {
     ...this.$props,
     ...this.$attrs,
@@ -617,7 +661,7 @@ export let makeChildProps = function () {
 /**
  * 生成监听子组件事件
  */
-export let makeChildListeners = function () {
+export const makeChildListeners = function () {
   return {
     ...this.$listeners,
     'tooggle:changed': () => this.changed = true,
@@ -630,14 +674,14 @@ export let makeChildListeners = function () {
       });
     },
     reload: () => this.init(),
-    close: this.close 
+    close: this.close
   };
 };
 
 /**
  * 混入生命周期事件
  */
-export let FormPageMixin = {
+export const FormPageMixin = {
   components: {
     "v-page": () => import("@/components/Page/FormPage.vue")
   },
@@ -658,10 +702,40 @@ export let FormPageMixin = {
 };
 
 /**
+ * 计算属性名称定义
+ */
+export const FormPageComputedDefines = {
+  /**
+   * 页面的标题
+   */
+  title: 'title',
+
+  /**
+   * 页面的分组
+   */
+  formGroups: 'formGroups',
+
+  /**
+   * 更新按钮是否显示
+   */
+  updateBtnVisible: 'updateBtnVisible',
+
+  /**
+   * 布局页的参数
+   */
+  childProps: 'childProps',
+
+  /**
+   * 布局页的事件
+   */
+  childListeners: 'childListeners',
+}
+
+/**
  * 计算属性
  */
-export let formComputed = {
-  title() {
+export const formComputed = {
+  [FormPageComputedDefines.title]() {
     if (this.canEdit && this.id) {
       return `${this.direction}`;
     } else if (this.id) {
@@ -670,7 +744,7 @@ export let formComputed = {
       return `${this.direction}`;
     }
   },
-  formGroups() {
+  [FormPageComputedDefines.formGroups]() {
     const model = this.model;
     let opts = this.options || [];
     if (this.hasManage && this.showMamageField && this.model && this.model.Id) {
@@ -707,14 +781,14 @@ export let formComputed = {
     );
     return arr.filter(v => v.values.length > 0);
   },
-  updateBtnVisible() {
+  [FormPageComputedDefines.updateBtnVisible]() {
     return this.hasManage && this.id && !this.changed && !this.canEdit
   },
-  childProps() {
+  [FormPageComputedDefines.childProps]() {
     let props = makeChildProps.call(this);
     return props;
   },
-  childListeners() {
+  [FormPageComputedDefines.childListeners]() {
     let listeners = makeChildListeners.call(this);
     return listeners
   }

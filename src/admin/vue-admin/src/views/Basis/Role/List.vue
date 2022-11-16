@@ -1,15 +1,13 @@
 <script>
 let pageInfo = { area: "Basis", name: "Role", direction: "角色" };
-import Page from "@/components/Page/ListPageCore.js";
+import { makeListPageInheritedFromBaseListPage } from "../../../components/Page";
 
-export default {
-  ...Page,
+export default makeListPageInheritedFromBaseListPage({
   data() {
     return {
-      ...Page.data.call(this),
-      ...pageInfo
+      ...pageInfo,
     };
-  }
-};
+  },
+});
 </script>
 

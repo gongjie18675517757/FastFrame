@@ -13,57 +13,47 @@ let pageInfo = {
   direction: "用户",
 };
 
-import Page from "../../../components/Page/FormPageCore.js";
- 
-export default {
-  ...Page,
+import {
+  FormPageDefines,
+  makeFormPageInheritedFromBaseFormPage,
+} from "../../../components/Page";
+
+export default makeFormPageInheritedFromBaseFormPage({
   data() {
     return {
-      ...Page.data.call(this),
       ...pageInfo,
     };
   },
   methods: {
-    ...Page.methods,
-
-    fmtModelObject() {
-      return Page.methods.fmtModelObject
-        .call(this, ...arguments)
-        .then((model) => {
-          return {
-            Depts: this.super_id ? [{ Id: this.super_id }] : [],
-            Roles: [],
-            ...model,
-          };
-        });
+    [FormPageDefines.MethodsDefines.fmtModelObject](model) {
+      return {
+        Depts: this.super_id ? [{ Id: this.super_id }] : [],
+        Roles: [],
+        ...model,
+      };
     },
-    getModelObjectItems() {
-      return Page.methods.getModelObjectItems
-        .call(this, ...arguments)
-        .then((opts) => {
-          return [
-            ...opts,
-
-            {
-              Name: "Depts",
-              Description: "用户所在部门",
-              Relate: "Dept",
-              Type: "Array",
-              requestUrl: `/api/user/deptList`,
-              flex: { xs6: true },
-              visible: () => !this.super_id,
-            },
-            {
-              Name: "Roles",
-              Description: "用户拥有角色",
-              Relate: "Role",
-              Type: "Array",
-              requestUrl: `/api/user/roleList`,
-              flex: { xs6: true },
-            }, 
-          ];
-        });
+    [FormPageDefines.MethodsDefines.fmtModelObjectItems](opts) {
+      return [
+        ...opts,
+        {
+          Name: "Depts",
+          Description: "用户所在部门",
+          Relate: "Dept",
+          Type: "Array",
+          requestUrl: `/api/user/deptList`,
+          flex: { xs6: true },
+          visible: () => !this.super_id,
+        },
+        {
+          Name: "Roles",
+          Description: "用户拥有角色",
+          Relate: "Role",
+          Type: "Array",
+          requestUrl: `/api/user/roleList`,
+          flex: { xs6: true },
+        },
+      ];
     },
   },
-};
+});
 </script>  

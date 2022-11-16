@@ -8,7 +8,7 @@
             <v-spacer></v-spacer>
             <v-toolbar-items
               class="hidden-sm-and-down btn-group"
-              v-if="!hideToolitem"
+              v-if="!hideToolItem"
             >
               <permission-facatory
                 v-for="btn in items1"
@@ -32,7 +32,7 @@
             <v-menu
               offset-y
               :close-on-content-click="false"
-              v-if="!hideToolitem"
+              v-if="!hideToolItem"
             >
               <template v-slot:activator="{ on }">
                 <v-btn
@@ -150,7 +150,7 @@ export default {
     isDialog: Boolean,
     isTab: Boolean,
     tableHeight: String,
-    hideToolitem: Boolean,
+    hideToolItem: Boolean,
     columns: {
       type: Array,
       default: () => [],

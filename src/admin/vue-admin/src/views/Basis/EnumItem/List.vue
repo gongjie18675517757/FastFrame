@@ -1,20 +1,21 @@
 <script>
 let pageInfo = { area: "Basis", name: "EnumItem", direction: "数据字典" };
-import Page from "../../../components/Page/ListPageCore.js";
+import {
+  ListPageDefines,
+  makeListPageInheritedFromBaseListPage,
+} from "../../../components/Page";
 import EnumTreeVue from "./EnumTree.vue";
 
-export default {
-  ...Page,
+
+export default makeListPageInheritedFromBaseListPage({
   data() {
     return {
-      ...Page.data.call(this),
       ...pageInfo,
-      treeComponent: EnumTreeVue
+      treeComponent: EnumTreeVue,
     };
   },
   methods: {
-    ...Page.methods,
-    getPageTitle(v) {
+    [ListPageDefines.MethodsDefines.getPageTitle](_,v) {
       if (v == null) {
         return "全部数据字典";
       }
@@ -26,23 +27,20 @@ export default {
           return `${v.name}:下级字典内容`;
       }
     },
-    getTreeKey(v) {
+    [ListPageDefines.MethodsDefines.getTreeKey](title,v) {
       switch (v.type) {
         case "root":
           return "Key";
         default:
-          return Page.methods.getTreeKey.call(
-            this,
-            ...arguments
-          );
+          return title;
       }
     },
-    getFormPageParsBySelectedTreeItem(v) {
+    [ListPageDefines.MethodsDefines.getFormPageParsBySelectedTreeItem](_,v) {
       return {
         key_name: v.Key,
-        super_id: v.Id || ""
+        super_id: v.Id || "",
       };
-    }
-  }
-};
+    },
+  },
+});
 </script>

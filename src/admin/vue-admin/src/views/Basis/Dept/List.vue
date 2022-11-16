@@ -1,39 +1,36 @@
  <script>
 let pageInfo = { area: "Basis", name: "Dept", direction: "部门" };
-import Page from "../../../components/Page/ListPageCore.js";
+import {
+  makeListPageInheritedFromBaseListPage,
+  ListPageDefines,
+} from "../../../components/Page";
 import DeptTreeVue from "../../../components/Trees/DeptTree.vue";
 
-export default {
-  ...Page,
+export default makeListPageInheritedFromBaseListPage({
   data() {
     return {
-      ...Page.data.call(this),
       ...pageInfo,
-      // treeChildComponent: () => import("./List.vue"),
-      treeComponent: DeptTreeVue
+      treeComponent: DeptTreeVue,
     };
   },
   methods: {
-    ...Page.methods,
-    getColumns() {
-      return Page.methods.getColumns.call(this, ...arguments).then(arr => {
-        return [
-          ...arr,
-          {
-            Name: "Members",
-            Description: "部门主管",
-            getValueFunc: ({ value }) => value.map(v => v.Name).join(",")
-          }
-        ];
-      });
+    [ListPageDefines.MethodsDefines.getColumns](arr) {
+      return [
+        ...arr,
+        {
+          Name: "Members",
+          Description: "部门主管",
+          getValueFunc: ({ value }) => value.map((v) => v.Name).join(","),
+        },
+      ];
     },
-    getPageTitle(v) {
+    [ListPageDefines.MethodsDefines.getPageTitle](_,v) {
       if (v == null) {
         return "全部部门";
       }
 
       return `${v.name}:下级部门`;
-    }
-  }
-};
+    },
+  },
+});
 </script>

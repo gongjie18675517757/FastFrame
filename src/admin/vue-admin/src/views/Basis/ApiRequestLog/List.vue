@@ -5,15 +5,13 @@ let pageInfo = {
   direction: "接口访问记录",
 };
 
-import Page from "../../../components/Page/ListPageCore.js";
+import { makeListPageInheritedFromBaseListPage } from "../../../components/Page";
 
-export default {
-  ...Page,
+export default makeListPageInheritedFromBaseListPage({
   data() {
     return {
-      ...Page.data.call(this),
       ...pageInfo,
     };
   },
-};
-</script>
+});
+</script> 

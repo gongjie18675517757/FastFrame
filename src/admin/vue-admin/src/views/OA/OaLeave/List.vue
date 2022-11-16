@@ -1,14 +1,12 @@
 <script>
-    let pageInfo = { area: "OA", name: "OaLeave", direction: "请假单" };
-    import Page from "../../../components/Page/ListPageCore.js";
-    export default {
-        ...Page,
-        data() {
-            let data = Page.data.call(this);
-            return {
-                ...data,
-                ...pageInfo
-            };
-        }
+let pageInfo = { area: "OA", name: "OaLeave", direction: "请假单" };
+import { makeListPageInheritedFromBaseListPage } from "../../../components/Page";
+
+export default makeListPageInheritedFromBaseListPage({
+  data() {
+    return {
+      ...pageInfo,
     };
+  },
+});
 </script>

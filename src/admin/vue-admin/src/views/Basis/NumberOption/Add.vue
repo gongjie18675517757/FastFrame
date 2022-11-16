@@ -1,14 +1,28 @@
 <script>
-    let pageInfo = {area: "Basis",name: "NumberOption",direction: "编号设置"};
-    import Page from "@/components/Page/FormPageCore.js";
-    export default {
-        ...Page,
-        data() {
-            let data = Page.data.call(this);
-            return {
-                ...data,
-                ...pageInfo
-            };
-        }
+let pageInfo = { area: "Basis", name: "NumberOption", direction: "编号设置" };
+import {
+  makeFormPageInheritedFromBaseFormPage,
+  FormPageDefines,
+} from "../../../components/Page";
+import { getHasNumberModules } from "../../../generate.js";
+
+export default makeFormPageInheritedFromBaseFormPage({
+  data() {
+    return {
+      ...pageInfo,
     };
-</script>
+  },
+  methods: {
+    async [FormPageDefines.MethodsDefines.fmtModelObjectItems](arr) {
+      const EnumValues = await getHasNumberModules();
+      return [
+        ...arr,
+        {
+          Name: "BeModule",
+          EnumValues,
+        },
+      ];
+    },
+  },
+});
+</script> 

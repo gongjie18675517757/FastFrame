@@ -5,78 +5,72 @@ let pageInfo = {
   direction: "登录记录",
 };
 
-import Page from "../../../components/Page/ListPageCore.js";
-import { getColumns } from "../../../generate";
+import {
+  makeListPageInheritedFromBaseListPage,
+  ListPageDefines,
+} from "../../../components/Page";
+ 
 
-export default {
-  ...Page,
+export default makeListPageInheritedFromBaseListPage({
   data() {
     return {
-      ...Page.data.call(this),
       ...pageInfo,
+      [ListPageDefines.DataDefines.strutName]: "LoginLogModel",
     };
   },
   methods: {
-    ...Page.methods,
-    getColumns() {
-      return getColumns("LoginLogModel");
-    },
-    getRowOperateItems() {
-      return Page.methods.getRowOperateItems
-        .call(this, ...arguments)
-        .then((arr) => {
-          return [
-            ...arr,
-            function (h, { model }) {
-              return model.IsEnabled
-                ? h(
-                    "permission-facatory",
+    [ListPageDefines.MethodsDefines.getRowOperateItems](arr) {
+      return [
+        ...arr,
+        function (h, { model }) {
+          return model.IsEnabled
+            ? h(
+                "permission-facatory",
+                {
+                  props: {
+                    permission: "LoginLog.SetTokenFailure",
+                  },
+                },
+                [
+                  h(
+                    "v-btn",
                     {
-                      props: {
-                        permission: "LoginLog.SetTokenFailure",
+                      attrs: {
+                        text: true,
+                        small: true,
+                        color: "primary",
+                      },
+                      on: {
+                        click: () => {
+                          event.stopPropagation();
+                          this.$message
+                            .confirm({
+                              title: "提示",
+                              content: "确认要强制失效这个token吗?",
+                            })
+                            .then(() => {
+                              this.$http
+                                .post(
+                                  `/api/${pageInfo.name}/SetTokenFailure/${model.Id}`
+                                )
+                                .then(() => {
+                                  model.IsEnabled = false;
+                                  return this.$message.toast.success(
+                                    "操作成功"
+                                  );
+                                });
+                            });
+                        },
                       },
                     },
-                    [
-                      h(
-                        "v-btn",
-                        {
-                          attrs: {
-                            text: true,
-                            small: true,
-                            color: "primary",
-                          },
-                          on: {
-                            click: () => {
-                              event.stopPropagation();
-                              this.$message
-                                .confirm({
-                                  title: "提示",
-                                  content: "确认要强制失效这个token吗?",
-                                })
-                                .then(() => {
-                                  this.$http
-                                    .post(
-                                      `/api/${pageInfo.name}/SetTokenFailure/${model.Id}`
-                                    )
-                                    .then(() => {
-                                      model.IsEnabled = false;
-                                      return this.$message.toast.success(
-                                        "操作成功"
-                                      );
-                                    });
-                                });
-                            },
-                          },
-                        },
-                        "强制失效"
-                      ),
-                    ]
-                  )
-                : null;
-            }.bind(this),
-          ];
-        });
+                    "强制失效"
+                  ),
+                ]
+              )
+            : null;
+        }.bind(this),
+      ];
     },
   },
-};
+});
 </script>

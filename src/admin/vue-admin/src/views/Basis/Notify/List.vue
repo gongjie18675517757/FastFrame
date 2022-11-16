@@ -1,24 +1,20 @@
  <script>
 let pageInfo = { area: "Basis", name: "Notify", direction: "通知" };
-import Page from "../../../components/Page/ListPageCore.js";
+import {
+  ListPageDefines,
+  makeListPageInheritedFromBaseListPage,
+} from "../../../components/Page";
 
-export default {
-  ...Page,
+export default makeListPageInheritedFromBaseListPage({
   data() {
     return {
-      ...Page.data.call(this),
-      ...pageInfo
+      ...pageInfo,
     };
   },
-  methods:{
-    ...Page.methods,
-    getColumns(){
-      return Page.methods.getColumns.call(this,...arguments).then(arr=>{
-        return [
-          ...arr.filter(v=>!['Content'].includes(v.Name))
-        ]
-      })
-    }
-  }
-};
+  methods: {
+    [ListPageDefines.MethodsDefines.fmtColumns](arr) {
+      return [...arr.filter((v) => !["Content"].includes(v.Name))];
+    },
+  },
+});
 </script> 

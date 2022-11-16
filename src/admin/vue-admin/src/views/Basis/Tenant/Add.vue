@@ -1,17 +1,12 @@
 <script>
-let pageInfo = {
-  area: "Basis",
-  name: "Tenant",
-  direction: "组织信息"
-};
-import Page from "@/components/Page/FormPageCore.js";
-export default {
-  ...Page,
+import { makeFormPageInheritedFromBaseFormPage } from "../../../components/Page";
+export default makeFormPageInheritedFromBaseFormPage({ 
   data() {
     return {
-      ...Page.data.call(this),
-      ...pageInfo
+      area: "Basis",
+      name: "Tenant",
+      direction: "组织信息",
     };
-  }
-};
+  },
+});
 </script>  

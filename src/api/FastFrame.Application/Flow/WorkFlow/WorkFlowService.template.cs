@@ -51,7 +51,7 @@ namespace FastFrame.Application.Flow
 						};
 			return query;
 		}
-		public Task<IPageList<WorkFlowViewModel>> ViewModelListAsync(IPagination page) 
+		public Task<IPageList<WorkFlowViewModel>> ViewModelListAsync(IPagination<WorkFlowViewModel> page) 
 		{
 			var query = workFlowRepository.MapTo<WorkFlow, WorkFlowViewModel>();
 			return query.PageListAsync(page);

@@ -38,7 +38,7 @@ namespace FastFrame.WebHost.Controllers.Flow
         [HttpGet]
         public Task<IPageList<FlowInstance>> PageList(string qs)
         {
-            return service.PageList(Pagination.FromJson(qs));
+            return service.PageList(Pagination<FlowInstance>.FromJson(qs));
         }
     }
 }

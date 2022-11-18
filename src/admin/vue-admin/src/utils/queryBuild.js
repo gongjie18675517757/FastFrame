@@ -74,3 +74,11 @@ class QueryBuild {
 
 
 export default QueryBuild;
+
+
+const xx = {
+    ComposeMode: 'and',
+    QueryFilters:[
+        
+    ]
+}

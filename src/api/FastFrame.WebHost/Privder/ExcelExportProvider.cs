@@ -150,13 +150,16 @@ namespace FastFrame.WebHost.Privder
             }
         }
 
-        public async Task<byte[]> GenerateExcelSteam<TDto>(Func<IPagination, Task<IPageList<TDto>>> pageListFunc,
+        public async Task<byte[]> GenerateExcelSteam<TDto>(Func<IPagination<TDto>, Task<IPageList<TDto>>> pageListFunc,
                                                            IEnumerable<ExcelColumn<TDto>> columns,
-                                                           IPagination pagination)
+                                                           IPagination<TDto> pagination)
         {
-            pagination ??= new Pagination();
-            pagination.PageIndex = 1;
-            pagination.PageSize = 50;
+            pagination ??= new Pagination<TDto>()
+            {
+                PageIndex = 1,
+                PageSize = 50
+            };
+
 
             using var package = new ExcelPackage();
             var sh = package.Workbook.Worksheets.Add("sheet1");

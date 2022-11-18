@@ -1,20 +1,23 @@
 <template>
   <v-input
     dense
-    class="v-input__slot_checkbox_container v-input-no-border"
+    class="v-input__slot_checkbox_container v-text-field"
     style="margin-top: 0px"
-     :disabled="disabled"
+    :disabled="disabled"
   >
     <template #default>
       <slot>
-        <v-checkbox
-          :input-value="value"
+        <v-radio-group
+          :value="value"
           @change="change"
           :disabled="disabled"
           hide-details
-          style="margin-top: 0px"
           dense
-        ></v-checkbox>
+          row
+        >
+          <v-radio dense label="是" :value="true"></v-radio>
+          <v-radio dense label="否" :value="false"></v-radio>
+        </v-radio-group>
       </slot>
     </template>
     <template #prepend>
@@ -39,6 +42,7 @@ export default {
   },
   methods: {
     change(val) {
+      console.log(val);
       val = val || false;
       this.$emit("change", val);
       this.$emit("input", val);

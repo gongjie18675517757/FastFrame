@@ -125,18 +125,30 @@ html {
   padding: 2px;
 }
 
- 
-
 .input-container {
+  .v-input--dense > .v-input__control > .v-input__slot {
+    margin-bottom: 0px;
+  }
+
   .v-text-field {
     padding-top: 0px;
 
-    .v-input__slot {
-      margin-bottom: 0px;
+    .v-input__control {
+      .v-input__slot {
+        margin-bottom: 0px;
 
-      input {
-        padding: 0px 5px !important;
+        input {
+          padding: 0px 5px !important;
+        }
+
+        .v-input__icon {
+          height: 20px;
+        }
       }
+    }
+
+    .v-input__append-outer, .v-input__prepend-outer {
+      margin: 0px;
     }
   }
 
@@ -181,8 +193,19 @@ html {
 
   &.v-input {
     &.v-input__slot_checkbox_container {
+      .v-input--selection-controls {
+        margin-top: 0px;
+        margin: 1px
+      }
+
       .v-input__slot {
-        padding: 2px 5px;
+        padding: 0px;
+
+        .v-input__slot {
+          .v-label {
+            position: static !important;
+          }
+        }
 
         .v-input--dense {
           padding: 1px;
@@ -199,7 +222,6 @@ html {
     .v-input__slot {
       padding: 4px 12px;
       border: 1px solid #ababab;
-      border-radius: 4px;
     }
 
     &.v-input-no-border {

@@ -14,12 +14,12 @@ namespace FastFrame.WebHost.Controllers.OA
         [HttpGet]
         public Task<IPageList<UserViewModel>> UserList(string qs)
             => Request.HttpContext.RequestServices
-                    .GetService<UserService>().ViewModelListAsync(Pagination.FromJson(qs));
+                    .GetService<UserService>().ViewModelListAsync(Pagination<UserViewModel>.FromJson(qs));
 
         [Permission(new string[] { "Add", "Update" })]
         [HttpGet]
         public Task<IPageList<DeptViewModel>> DeptList(string qs)
             => Request.HttpContext.RequestServices
-                    .GetService<DeptService>().ViewModelListAsync(Pagination.FromJson(qs));
+                    .GetService<DeptService>().ViewModelListAsync(Pagination<DeptViewModel>.FromJson(qs));
     }
 }

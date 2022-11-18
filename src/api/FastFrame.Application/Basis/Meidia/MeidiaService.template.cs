@@ -55,7 +55,7 @@ namespace FastFrame.Application.Basis
 						};
 			return query;
 		}
-		public Task<IPageList<MeidiaViewModel>> ViewModelListAsync(IPagination page) 
+		public Task<IPageList<MeidiaViewModel>> ViewModelListAsync(IPagination<MeidiaViewModel> page) 
 		{
 			var query = meidiaRepository.MapTo<Meidia, MeidiaViewModel>();
 			return query.PageListAsync(page);

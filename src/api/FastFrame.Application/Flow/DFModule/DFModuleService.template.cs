@@ -52,7 +52,7 @@ namespace FastFrame.Application.Flow
 						};
 			return query;
 		}
-		public Task<IPageList<DFModuleViewModel>> ViewModelListAsync(IPagination page) 
+		public Task<IPageList<DFModuleViewModel>> ViewModelListAsync(IPagination<DFModuleViewModel> page) 
 		{
 			var query = dFModuleRepository.MapTo<DFModule, DFModuleViewModel>();
 			return query.PageListAsync(page);

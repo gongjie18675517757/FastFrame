@@ -849,22 +849,146 @@
             <param name="verifyIdentity"></param> 
             <returns></returns>
         </member>
-        <member name="T:FastFrame.Infrastructure.IFilter">
+        <member name="T:FastFrame.Infrastructure.IQueryFilter`1">
             <summary>
             查询条件
             </summary>
         </member>
-        <member name="M:FastFrame.Infrastructure.IFilter.MakePredicate``1">
+        <member name="M:FastFrame.Infrastructure.IQueryFilter`1.MakePredicate">
             <summary>
             生成条件
-            </summary>
-            <typeparam name="T"></typeparam>
+            </summary> 
             <returns></returns>
         </member>
-        <member name="T:FastFrame.Infrastructure.FilterMode">
+        <member name="M:FastFrame.Infrastructure.IQueryFilter`1.ExistsIsEnabled">
+            <summary>
+            是否是有效条件
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:FastFrame.Infrastructure.IQueryFilterJSONConvert`1">
+            <summary>
+            查询条件转换器
+            </summary>
+            <typeparam name="TQueryModel"></typeparam>
+        </member>
+        <member name="M:FastFrame.Infrastructure.IQueryFilterJSONConvert`1.TryConvertFromJSON(Newtonsoft.Json.Linq.JObject,FastFrame.Infrastructure.IQueryFilter{`0}@)">
+            <summary>
+            尝试转换
+            </summary>
+            <param name="v"></param>
+            <param name="queryFilter"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastFrame.Infrastructure.ExpressionQueryFilter`1">
+            <summary>
+            表达式条件
+            </summary>
+            <typeparam name="TQueryModel"></typeparam>
+        </member>
+        <member name="T:FastFrame.Infrastructure.ComposeQueryFilter`1">
+            <summary>
+            组合条件
+            </summary>
+            <typeparam name="TQueryModel"></typeparam>
+        </member>
+        <member name="P:FastFrame.Infrastructure.ComposeQueryFilter`1.ComposeMode">
+            <summary>
+            组合
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.ComposeQueryFilter`1.QueryFilters">
+            <summary>
+            所有条件
+            </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.DefaultQueryFilterJSONConvert`1">
+            <summary>
+            缺省转换器
+            </summary>
+            <typeparam name="TQueryModel"></typeparam>
+        </member>
+        <member name="T:FastFrame.Infrastructure.ComposeFilterMode">
             <summary>
             多条件组的查询模式
             </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.IQueryFilterCollection`1">
+            <summary>
+            条件容器
+            </summary>
+            <typeparam name="TQueryModel"></typeparam>
+        </member>
+        <member name="P:FastFrame.Infrastructure.IQueryFilterCollection`1.QueryFilters">
+            <summary>
+            存放条件
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.IQueryFilterCollection`1.RemoveQueryFilter(FastFrame.Infrastructure.IQueryFilter{`0}[])">
+            <summary>
+            移除条件
+            </summary>
+            <param name="queryFilters"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.IQueryFilterCollection`1.AppendQueryFilter(FastFrame.Infrastructure.IQueryFilter{`0}[])">
+            <summary>
+            添加条件
+            </summary>
+            <param name="queryFilters"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.IQueryFilterCollection`1.TryMatchQueryFilter``1(System.Func{``0,System.Boolean},System.Boolean,``0@)">
+            <summary>
+            尝试匹配一个条件
+            </summary>
+            <typeparam name="TQueryFilter"></typeparam>
+            <param name="func"></param>
+            <param name="has_remove_match"></param>
+            <param name="out_queryFilter"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.IQueryFilterCollection`1.TryMatchQueryFilterValue``2(System.Func{``0,System.Boolean},System.Boolean,System.Func{``0,``1},``1@)">
+            <summary>
+            尝试匹配条件，并返回其中的值
+            </summary>
+            <typeparam name="TQueryFilter"></typeparam>
+            <typeparam name="TValue"></typeparam>
+            <param name="func"></param>
+            <param name="has_remove_match"></param>
+            <param name="select_func"></param>
+            <param name="out_val"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastFrame.Infrastructure.DefaultQueryFilterCollection`1">
+            <summary>
+            缺省条件容器
+            </summary>
+            <typeparam name="TQueryModel"></typeparam>
+        </member>
+        <member name="P:FastFrame.Infrastructure.DefaultQueryFilterCollection`1.QueryFilters">
+            <summary>
+            所有条件
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.DefaultQueryFilterCollection`1.AppendQueryFilter(FastFrame.Infrastructure.IQueryFilter{`0}[])">
+            <summary>
+            添加条件
+            </summary>
+            <param name="queryFilters"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastFrame.Infrastructure.FilterJsonConvert`1">
+            <summary>
+            IQueryFilter JSON转换器
+            </summary>
+            <typeparam name="TQueryModel"></typeparam>
+        </member>
+        <member name="T:FastFrame.Infrastructure.FilterCollectionJsonConvert`1">
+            <summary>
+            FilterCollection JSON转换器
+            </summary>
+            <typeparam name="TQueryModel"></typeparam>
         </member>
         <member name="T:FastFrame.Infrastructure.ImageExtended">
             <summary>
@@ -1169,7 +1293,7 @@
             <typeparam name="TDto"></typeparam>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IExcelExportProvider.GenerateExcelSteam``1(System.Func{FastFrame.Infrastructure.IPagination,System.Threading.Tasks.Task{FastFrame.Infrastructure.IPageList{``0}}},System.Collections.Generic.IEnumerable{FastFrame.Infrastructure.Interface.ExcelColumn{``0}},FastFrame.Infrastructure.IPagination)">
+        <member name="M:FastFrame.Infrastructure.Interface.IExcelExportProvider.GenerateExcelSteam``1(System.Func{FastFrame.Infrastructure.IPagination{``0},System.Threading.Tasks.Task{FastFrame.Infrastructure.IPageList{``0}}},System.Collections.Generic.IEnumerable{FastFrame.Infrastructure.Interface.ExcelColumn{``0}},FastFrame.Infrastructure.IPagination{``0})">
             <summary>
             生成EXCEL流
             </summary>
@@ -1234,11 +1358,6 @@
             查询列表参数
             </summary>
         </member>
-        <member name="P:FastFrame.Infrastructure.IPagination.Filters">
-            <summary>
-            条件
-            </summary>
-        </member>
         <member name="P:FastFrame.Infrastructure.IPagination.KeyWord">
             <summary>
             模糊条件
@@ -1264,13 +1383,20 @@
             排序列名称
             </summary>
         </member>
-        <member name="M:FastFrame.Infrastructure.IPagination.TryReplaceFilter``1(System.Func{``0,System.Boolean},System.Func{``0,FastFrame.Infrastructure.IFilter})">
+        <member name="P:FastFrame.Infrastructure.IPagination`1.Filters">
             <summary>
-            尝试替换条件
-            如果返回为null,则删除
+            条件
             </summary>
-            <param name="func"></param>
-            <param name="replaceFunc"></param>
+        </member>
+        <member name="F:FastFrame.Infrastructure.SortModeEnum.asc">
+            <summary>
+            正序
+            </summary>
+        </member>
+        <member name="F:FastFrame.Infrastructure.SortModeEnum.desc">
+            <summary>
+            倒序
+            </summary>
         </member>
         <member name="M:FastFrame.Infrastructure.Lock.ILockFacatory.TryCreateLockAsync(System.String)">
             <summary>
@@ -1639,6 +1765,72 @@
             <summary>
             数据
             </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.PageList`1">
+            <summary>
+            分页返回内容
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Pagination">
+            <summary>
+            分页请求参数
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Pagination.PageIndex">
+            <summary>
+            页码
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Pagination.PageSize">
+            <summary>
+            每页数量
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Pagination.KeyWord">
+            <summary>
+            模糊条件
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Pagination.SortName">
+            <summary>
+            排序列名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Pagination.SortMode">
+            <summary>
+            排序方式
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Pagination.EnumerableFilterConverts">
+            <summary>
+            枚举所有的转换器
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Pagination`1">
+            <summary>
+            分页请求参数
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Pagination`1.Filters">
+            <summary>
+            条件
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Pagination`1.FromJson(System.String)">
+            <summary>
+            反序列化
+            </summary>
+            <param name="json"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Pagination`1.ParseQueryFilter(Newtonsoft.Json.Linq.JObject)">
+            <summary>
+            从JSON转换
+            </summary>
+            <param name="v"></param>
+            <returns></returns>
         </member>
         <member name="T:FastFrame.Infrastructure.Permission.IPermissionChecker">
             <summary>

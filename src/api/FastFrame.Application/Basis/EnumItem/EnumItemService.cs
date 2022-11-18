@@ -53,7 +53,7 @@ namespace FastFrame.Application.Basis
                 .ToListAsync();
         }
 
-        public async Task<IPageList<EnumItemViewModel>> EnumItemList(EnumName? name, IPagination pagination)
+        public async Task<IPageList<EnumItemViewModel>> EnumItemList(EnumName? name, IPagination<EnumItemViewModel> pagination)
         {
             if (name == null)
                 return new PageList<EnumItemViewModel>();

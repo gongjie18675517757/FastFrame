@@ -25,9 +25,9 @@ namespace FastFrame.Infrastructure.Interface
         /// <param name="columns"></param>
         /// <param name="pagination"></param>
         /// <returns></returns>
-        Task<byte[]> GenerateExcelSteam<TDto>(Func<IPagination, Task<IPageList<TDto>>> pageListFunc,
+        Task<byte[]> GenerateExcelSteam<TDto>(Func<IPagination<TDto>, Task<IPageList<TDto>>> pageListFunc,
                                               IEnumerable<ExcelColumn<TDto>> columns,
-                                              IPagination pagination);        
+                                              IPagination<TDto> pagination);        
 
     }
 

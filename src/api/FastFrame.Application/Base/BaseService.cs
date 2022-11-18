@@ -63,7 +63,7 @@ namespace FastFrame.Application
             return dto;
         }
 
-        protected virtual IQueryable<TDto> GetListQueryableing(IQueryable<TDto> query, IPagination pageInfo) => query;
+        protected virtual IQueryable<TDto> GetListQueryableing(IQueryable<TDto> query, IPagination<TDto> pageInfo) => query;
 
         /// <summary>
         /// 返回列表数据时
@@ -104,7 +104,7 @@ namespace FastFrame.Application
         /// <summary>
         /// 获取分页列表
         /// </summary> 
-        public virtual async Task<IPageList<TDto>> PageListAsync(IPagination pageInfo)
+        public virtual async Task<IPageList<TDto>> PageListAsync(IPagination<TDto> pageInfo)
         {
             var query = Query();
             query = GetListQueryableing(query, pageInfo);
@@ -331,13 +331,13 @@ namespace FastFrame.Application
         {
             var filters = input
                 .KeyValues
-                .Select(x => new Filter()
+                .Select(x => new FieldQueryFilter<TEntity>
                 {
                     Compare = "==",
                     Value = x.Value,
                     Name = x.Key
                 })
-                .Append(new Filter()
+                .Append(new FieldQueryFilter<TEntity>
                 {
                     Compare = "!=",
                     Value = input.Id,

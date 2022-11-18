@@ -37,11 +37,11 @@ namespace FastFrame.WebHost.Controllers.Basis
         [Permission(new string[] { "Add", "Update" })]
         [HttpGet]
         public Task<IPageList<RoleViewModel>> RoleList(string qs)
-            => HttpContext.RequestServices.GetService<RoleService>().ViewModelListAsync(Pagination.FromJson(qs));
+            => HttpContext.RequestServices.GetService<RoleService>().ViewModelListAsync(Pagination<RoleViewModel>.FromJson(qs));
 
         [Permission(new string[] { "Add", "Update" })]
         [HttpGet]
         public Task<IPageList<DeptViewModel>> DeptList(string qs)
-            => HttpContext.RequestServices.GetService<DeptService>().ViewModelListAsync(Pagination.FromJson(qs));
+            => HttpContext.RequestServices.GetService<DeptService>().ViewModelListAsync(Pagination<DeptViewModel>.FromJson(qs));
     }
 }

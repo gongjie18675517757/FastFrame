@@ -10,7 +10,7 @@ Vue.component('permission-facatory', {
     render(_, context) {
         const { props } = context;
         let { permission } = props;
-        if (!permission)
+        if (!permission || permission.length==0)
             return context.children;
 
 

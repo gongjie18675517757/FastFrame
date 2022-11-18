@@ -166,7 +166,7 @@ export const labelComponent = {
           width: props.labelWidth || "150px",
           textAlign: "right",
           // 'margin-top': childProps.disabled ? null : '4px',
-          padding: "5px 12px",
+          padding: "7px 12px",
           "padding-top": props.disabled ? "6px" : "7px",
         },
       },
@@ -215,6 +215,10 @@ export function packComponent(h, component, { props, on }) {
       class: ["input-container", "border-input"],
       style: {
         color: props.error ? "red" : null,
+        /**
+         * 选择框老是对不齐，高度差4px,解决不了，强制加一个margin-top
+         */
+        'margin-top':props.Type=='Boolean'?'4px':null
       },
     },
     [

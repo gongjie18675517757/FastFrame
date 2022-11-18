@@ -83,6 +83,11 @@ export const FormPageDataDefines = {
   name: 'name',
 
   /**
+   * 表单名称
+   */
+  direction:"direction",
+
+  /**
    * 页面结构名：影响：获取表单相关
    */
   strutName: 'strutName',
@@ -173,6 +178,7 @@ export const FormPageDataDefines = {
  */
 export const formData = {
   [FormPageDataDefines.name]: null,
+  [FormPageDataDefines.direction]: null,
   [FormPageDataDefines.strutName]: null,
   [FormPageDataDefines.permissionName]: null,
   [FormPageDataDefines.canEdit]: false,
@@ -612,6 +618,9 @@ export const formMethods = {
     }
     else if (this.isDialog) {
       this.$emit("close");
+    }
+    else{
+      this.$router.replace(`/${this.name}/List`)
     }
   }
 }

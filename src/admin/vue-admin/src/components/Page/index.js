@@ -1,5 +1,10 @@
 import ListPage, { PageMethodsDefines as ListMethodsDefines, PageComputedDefines as ListComputedDefines, PageDataDefines as ListDataDefines } from './ListPageCore'
 import FormPage, { FormPageDataDefines, FormPageComputedDefines, FormPageMethodsDefines } from './FormPageCore'
+
+
+export const FormPageCore = FormPage
+export const ListPageCore = ListPage
+
 /**
  * 合并两个vue定义的methods
  */
@@ -29,13 +34,13 @@ export function mergeMethods(obj_source, obj_target) {
              * 异步处理办法
              */
             if (result && typeof result == "object" && result instanceof Promise) {
-                return result.then(r=>target_func.bind(this)(r,...arguments));
+                return result.then(r => target_func.bind(this)(r, ...arguments));
             }
 
             /**
              * 同步时处理办法
              */
-            return target_func.bind(this)(result,...arguments);
+            return target_func.bind(this)(result, ...arguments);
         };
         result_obj[k] = result_func;
     }
@@ -149,6 +154,6 @@ export function makeListPageInheritedFromBaseListPage(instance) {
  * @param {*} instance 传入重写的内容，如果父类有的方法/属性，会把结果作为入参传过来
  * @returns 
  */
- export function makeFormPageInheritedFromBaseFormPage(instance) {
+export function makeFormPageInheritedFromBaseFormPage(instance) {
     return mergeVueComponentInstance(FormPage, instance)
 }

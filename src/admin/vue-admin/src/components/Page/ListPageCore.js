@@ -925,6 +925,7 @@ export let pageMethods = {
       })
   }),
   [PageMethodsDefines.close]() {
+    console.log(1);
     if (this.isTab) {
       this.$emit('close')
     }

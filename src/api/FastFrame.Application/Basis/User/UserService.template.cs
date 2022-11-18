@@ -57,7 +57,7 @@ namespace FastFrame.Application.Basis
 						};
 			return query;
 		}
-		public Task<IPageList<UserViewModel>> ViewModelListAsync(IPagination page) 
+		public Task<IPageList<UserViewModel>> ViewModelListAsync(IPagination<UserViewModel> page) 
 		{
 			var query = userRepository.MapTo<User, UserViewModel>();
 			return query.PageListAsync(page);

@@ -62,7 +62,7 @@ namespace FastFrame.Application.OA
 						};
 			return query;
 		}
-		public Task<IPageList<OaLeaveViewModel>> ViewModelListAsync(IPagination page) 
+		public Task<IPageList<OaLeaveViewModel>> ViewModelListAsync(IPagination<OaLeaveViewModel> page) 
 		{
 			var query = oaLeaveRepository.MapTo<OaLeave, OaLeaveViewModel>();
 			return query.PageListAsync(page);

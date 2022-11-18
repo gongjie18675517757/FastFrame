@@ -59,7 +59,7 @@ namespace FastFrame.Application.Basis
 						};
 			return query;
 		}
-		public Task<IPageList<NotifyViewModel>> ViewModelListAsync(IPagination page) 
+		public Task<IPageList<NotifyViewModel>> ViewModelListAsync(IPagination<NotifyViewModel> page) 
 		{
 			var query = notifyRepository.MapTo<Notify, NotifyViewModel>();
 			return query.PageListAsync(page);

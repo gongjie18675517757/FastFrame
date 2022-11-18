@@ -2,7 +2,7 @@ import Vue from 'vue'
 import store from '../../store'
 import Alert from './Alert.vue'
 import Confirm from './Confirm.vue'
-import FormPageCore from '../Page/FormPageCore'
+import { FormPageDefines, FormPageCore } from '../Page'
 import Choose from './Choose.vue'
 import { guid } from '../../utils'
 
@@ -20,33 +20,33 @@ export function makePromptPageFacatory(pars) {
             const data = FormPageCore.data.call(this);
             return {
                 ...data,
-                direction: pars.title,
-                singleLine: typeof (pars.singleLine) == 'boolean' ? pars.singleLine : true,
-                manageOptions: [],
-                pageFormCols:1,
+                [FormPageDefines.DataDefines.direction]: pars.title,
+                [FormPageDefines.DataDefines.singleLine]: typeof (pars.singleLine) == 'boolean' ? pars.singleLine : true,
+                [FormPageDefines.DataDefines.manageOptions]: [],
+                [FormPageDefines.DataDefines.pageFormCols]: 1,
             }
         },
         methods: {
             ...FormPageCore.methods,
-            async init() {
+            async [FormPageDefines.DataDefines.init]() {
                 await FormPageCore.methods.init.call(this, ...arguments);
                 this.canEdit = true;
             },
-            getModuleStrut() {
+            [FormPageDefines.DataDefines.getModuleStrut]() {
                 return {
                     hasManage: true
                 }
             },
-            getRules() {
+            [FormPageDefines.DataDefines.getRules]() {
                 return pars.rules;
             },
-            getModelObject() {
+            [FormPageDefines.DataDefines.getModelObject]() {
                 return pars.model;
             },
-            getModelObjectItems() {
+            [FormPageDefines.DataDefines.getModelObjectItems]() {
                 return pars.options;
             },
-            getToolItems() {
+            [FormPageDefines.DataDefines.getToolItems]() {
                 return [
                     {
                         title: "确认",
@@ -59,14 +59,14 @@ export function makePromptPageFacatory(pars) {
                     },
                 ]
             },
-            getPostMethod() {
+            [FormPageDefines.DataDefines.getPostMethod]() {
                 if (typeof (pars.submitFunc) == 'function') {
                     return (_url, model) => pars.submitFunc(model);
                 }
 
                 return (_url, model) => model;
             },
-            onSaveAfter(res) {
+            [FormPageDefines.DataDefines.onSaveAfter](res) {
                 let model = this.model;
                 this.$emit('success', { model, res })
             },
@@ -105,10 +105,10 @@ const message = {
                 resolve,
                 reject,
                 _visible: false,
-                key:guid(),
+                key: guid(),
                 pars: {
                     ...pars,
-                    isDialog: true, 
+                    isDialog: true,
                 }
             }
             store.state.dialogs.push(dialogItem)

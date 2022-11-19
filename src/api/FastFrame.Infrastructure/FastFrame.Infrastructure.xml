@@ -872,12 +872,13 @@
             </summary>
             <typeparam name="TQueryModel"></typeparam>
         </member>
-        <member name="M:FastFrame.Infrastructure.IQueryFilterJSONConvert`1.TryConvertFromJSON(Newtonsoft.Json.Linq.JObject,FastFrame.Infrastructure.IQueryFilter{`0}@)">
+        <member name="M:FastFrame.Infrastructure.IQueryFilterJSONConvert`1.TryConvertFromJSON(Newtonsoft.Json.Linq.JObject,Newtonsoft.Json.JsonSerializer,FastFrame.Infrastructure.IQueryFilter{`0}@)">
             <summary>
             尝试转换
             </summary>
             <param name="v"></param>
-            <param name="queryFilter"></param>
+            <param name="jsonSerializer"></param>
+            <param name="queryFilter"></param> 
             <returns></returns>
         </member>
         <member name="T:FastFrame.Infrastructure.ExpressionQueryFilter`1">
@@ -905,6 +906,7 @@
         <member name="T:FastFrame.Infrastructure.DefaultQueryFilterJSONConvert`1">
             <summary>
             缺省转换器
+            此处看上去没有引用数据，但会通过接口反射调用，所以不要删除
             </summary>
             <typeparam name="TQueryModel"></typeparam>
         </member>
@@ -1825,11 +1827,12 @@
             <param name="json"></param>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.Infrastructure.Pagination`1.ParseQueryFilter(Newtonsoft.Json.Linq.JObject)">
+        <member name="M:FastFrame.Infrastructure.Pagination`1.ParseQueryFilter(Newtonsoft.Json.Linq.JObject,Newtonsoft.Json.JsonSerializer)">
             <summary>
             从JSON转换
             </summary>
             <param name="v"></param>
+            <param name="jsonSerializer"></param>
             <returns></returns>
         </member>
         <member name="T:FastFrame.Infrastructure.Permission.IPermissionChecker">

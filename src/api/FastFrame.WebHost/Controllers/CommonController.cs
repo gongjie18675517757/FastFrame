@@ -85,7 +85,16 @@ namespace FastFrame.WebHost.Controllers
         }
 
 
-#if DEBUG 
+#if DEBUG
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> TestPaginationFromJson([FromForm] string input)
+        {
+            await Task.Yield();
+            var pagination = Pagination<User>.FromJson(input);
+            return Ok(pagination);
+        }
+
         [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> Test(string input)
@@ -157,5 +166,5 @@ namespace FastFrame.WebHost.Controllers
             return Ok();
         }
 #endif
-    } 
+    }
 }

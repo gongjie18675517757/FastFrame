@@ -233,7 +233,7 @@ namespace FastFrame.Application
     /// <typeparam name="TQueryModel"></typeparam>
     public class FieldQueryFilterJSONConvert<TQueryModel> : IQueryFilterJSONConvert<TQueryModel>
     {
-        public bool TryConvertFromJSON(JObject v, out IQueryFilter<TQueryModel> queryFilter)
+        public bool TryConvertFromJSON(JObject v, JsonSerializer jsonSerializer, out IQueryFilter<TQueryModel> queryFilter)
         {
             if (v.TryGetValue(nameof(FieldQueryFilter<TQueryModel>.Name), StringComparison.OrdinalIgnoreCase, out _) &&
                 v.TryGetValue(nameof(FieldQueryFilter<TQueryModel>.Value), StringComparison.OrdinalIgnoreCase, out _) &&

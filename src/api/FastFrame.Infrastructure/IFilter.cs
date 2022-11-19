@@ -37,9 +37,10 @@ namespace FastFrame.Infrastructure
         /// 尝试转换
         /// </summary>
         /// <param name="v"></param>
-        /// <param name="queryFilter"></param>
+        /// <param name="jsonSerializer"></param>
+        /// <param name="queryFilter"></param> 
         /// <returns></returns>
-        bool TryConvertFromJSON(JObject v, out IQueryFilter<TQueryModel> queryFilter);
+        bool TryConvertFromJSON(JObject v, JsonSerializer jsonSerializer, out IQueryFilter<TQueryModel> queryFilter);
     }
 
     /// <summary>
@@ -129,22 +130,30 @@ namespace FastFrame.Infrastructure
         /// 所有条件
         /// </summary>
         public IEnumerable<IQueryFilter<TQueryModel>> QueryFilters { get; set; }
-
-
     }
 
     /// <summary>
     /// 缺省转换器
+    /// 此处看上去没有引用数据，但会通过接口反射调用，所以不要删除
     /// </summary>
     /// <typeparam name="TQueryModel"></typeparam>
     public class DefaultQueryFilterJSONConvert<TQueryModel> : IQueryFilterJSONConvert<TQueryModel>
     {
-        public bool TryConvertFromJSON(JObject v, out IQueryFilter<TQueryModel> queryFilter)
+        public bool TryConvertFromJSON(JObject v, JsonSerializer jsonSerializer, out IQueryFilter<TQueryModel> queryFilter)
         {
-            if (v.TryGetValue(nameof(ComposeQueryFilter<TQueryModel>.ComposeMode), StringComparison.OrdinalIgnoreCase, out _) &&
-               v.TryGetValue(nameof(ComposeQueryFilter<TQueryModel>.QueryFilters), StringComparison.OrdinalIgnoreCase, out _))
+            if (v.TryGetValue(nameof(ComposeQueryFilter<TQueryModel>.ComposeMode), StringComparison.OrdinalIgnoreCase, out var composeModeToken) &&
+               v.TryGetValue(nameof(ComposeQueryFilter<TQueryModel>.QueryFilters), StringComparison.OrdinalIgnoreCase, out var queryFiltersToken))
             {
-                queryFilter = v.ToObject<ComposeQueryFilter<TQueryModel>>();
+                var composeFilterMode = composeModeToken.ToObject<ComposeFilterMode>();
+                var jsonReader = queryFiltersToken.CreateReader();
+                var queryFilters = jsonSerializer.Deserialize<IQueryFilter<TQueryModel>[]>(jsonReader);
+
+                queryFilter = new ComposeQueryFilter<TQueryModel>()
+                {
+                    ComposeMode = composeFilterMode,
+                    QueryFilters = queryFilters
+                };
+
                 return true;
             }
 
@@ -283,9 +292,9 @@ namespace FastFrame.Infrastructure
     /// <typeparam name="TQueryModel"></typeparam>
     public class FilterJsonConvert<TQueryModel> : JsonConverter<IQueryFilter<TQueryModel>>
     {
-        private readonly Func<JObject, IQueryFilter<TQueryModel>> parseFunc;
+        private readonly Func<JObject, JsonSerializer, IQueryFilter<TQueryModel>> parseFunc;
 
-        public FilterJsonConvert(Func<JObject, IQueryFilter<TQueryModel>> parseFunc)
+        public FilterJsonConvert(Func<JObject, JsonSerializer, IQueryFilter<TQueryModel>> parseFunc)
         {
             this.parseFunc = parseFunc;
         }
@@ -296,7 +305,8 @@ namespace FastFrame.Infrastructure
                 return null;
 
             var jobj = serializer.Deserialize<JObject>(reader);
-            return parseFunc(jobj);
+            var queryFilter = parseFunc(jobj, serializer);
+            return queryFilter;
         }
 
         public override void WriteJson(JsonWriter writer, IQueryFilter<TQueryModel> value, JsonSerializer serializer)
@@ -316,12 +326,14 @@ namespace FastFrame.Infrastructure
             if (reader.TokenType == JsonToken.Null)
                 return null;
 
-            return serializer.Deserialize<DefaultQueryFilterCollection<TQueryModel>>(reader);
+            var filters = serializer.Deserialize<IQueryFilter<TQueryModel>[]>(reader);
+            var result = new DefaultQueryFilterCollection<TQueryModel>(filters);
+            return result;
         }
 
         public override void WriteJson(JsonWriter writer, IQueryFilterCollection<TQueryModel> value, JsonSerializer serializer)
         {
-            serializer.Serialize(writer, value);
+            serializer.Serialize(writer, value.QueryFilters);
         }
     }
 }

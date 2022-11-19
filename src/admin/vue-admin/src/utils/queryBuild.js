@@ -76,9 +76,40 @@ class QueryBuild {
 export default QueryBuild;
 
 
-const xx = {
-    ComposeMode: 'and',
-    QueryFilters:[
-        
-    ]
-}
+const filters = [
+    {
+        Name: 'a',
+        Compare: '=',
+        Value: 'abc'
+    },
+    {
+        ComposeMode: 'and',
+        QueryFilters: [
+            {
+                Name: 'a',
+                Compare: '=',
+                Value: 'abc'
+            },
+            {
+                Name: 'a',
+                Compare: '=',
+                Value: 'abc'
+            },
+            {
+                ComposeMode: 'and',
+                QueryFilters: [
+                    {
+                        Name: 'a',
+                        Compare: '=',
+                        Value: 'abc'
+                    },
+                    {
+                        Name: 'a',
+                        Compare: '=',
+                        Value: 'abc'
+                    },
+                ]
+            }
+        ]
+    }
+]

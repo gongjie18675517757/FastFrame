@@ -1,5 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+ 
 
 namespace FastFrame.Infrastructure
 {
@@ -143,19 +145,20 @@ namespace FastFrame.Infrastructure
         /// 从JSON转换
         /// </summary>
         /// <param name="v"></param>
+        /// <param name="jsonSerializer"></param>
         /// <returns></returns>
-        private static IQueryFilter<TQueryModel> ParseQueryFilter(JObject v)
+        private static IQueryFilter<TQueryModel> ParseQueryFilter(JObject v, JsonSerializer jsonSerializer)
         {
             lock (_lock)
             {
                 filter_converts ??= EnumerableFilterConverts()
-                        .Select(v => (IQueryFilterJSONConvert<TQueryModel>)v.MakeGenericType(typeof(TQueryModel)))
+                        .Select(v => (IQueryFilterJSONConvert<TQueryModel>)Activator.CreateInstance(v.MakeGenericType(typeof(TQueryModel))))
                         .ToHashSet();
             }
 
             foreach (var queryFilterJSONConvert in filter_converts)
             {
-                if (queryFilterJSONConvert.TryConvertFromJSON(v, out var queryFilter))
+                if (queryFilterJSONConvert.TryConvertFromJSON(v, jsonSerializer, out var queryFilter))
                     return queryFilter;
             }
 

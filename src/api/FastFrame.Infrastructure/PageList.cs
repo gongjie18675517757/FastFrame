@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
- 
+
 
 namespace FastFrame.Infrastructure
 {
@@ -135,7 +135,9 @@ namespace FastFrame.Infrastructure
             filterJsonConvert ??= new FilterJsonConvert<TQueryModel>(ParseQueryFilter);
             filterCollectionJsonConvert ??= new FilterCollectionJsonConvert<TQueryModel>();
 
-            return json.ToObject<Pagination<TQueryModel>>(true, filterJsonConvert, filterCollectionJsonConvert);
+            var pagination = json.ToObject<Pagination<TQueryModel>>(true, filterJsonConvert, filterCollectionJsonConvert);
+            pagination.Filters ??= new DefaultQueryFilterCollection<TQueryModel>();
+            return pagination;
         }
 
         private static HashSet<IQueryFilterJSONConvert<TQueryModel>> filter_converts;

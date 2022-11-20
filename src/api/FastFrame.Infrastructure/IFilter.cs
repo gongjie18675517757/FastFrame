@@ -385,7 +385,7 @@ namespace FastFrame.Infrastructure
         public override IQueryFilterCollection<TQueryModel> ReadJson(JsonReader reader, Type objectType, IQueryFilterCollection<TQueryModel> existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
             if (reader.TokenType == JsonToken.Null)
-                return null;
+                return new DefaultQueryFilterCollection<TQueryModel>();
 
             var filters = serializer.Deserialize<IQueryFilter<TQueryModel>[]>(reader);
             var result = new DefaultQueryFilterCollection<TQueryModel>(filters);

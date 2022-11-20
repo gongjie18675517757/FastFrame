@@ -42,7 +42,8 @@ namespace FastFrame.WebHost.Controllers.Basis
         [HttpGet("{name?}")]
         public async Task<IPageList<EnumItemViewModel>> EnumItemList(EnumName? name, string qs)
         {
-            return await service.EnumItemList(name, Pagination<EnumItemViewModel>.FromJson(qs));
+            var pagination = Pagination<EnumItemViewModel>.FromJson(qs);
+            return await service.EnumItemList(name, pagination);
         }
     }
 }

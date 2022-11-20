@@ -98,12 +98,11 @@ namespace FastFrame.CodeGenerate.Build
                 var summary = T4Help.GetPropertySummary(item, XmlDocDir);
 
                 var defaultValue = instance.GetValue(item.Name)?.ToString();
-                if (defaultValue == null)
-                    defaultValue = "null";
+                defaultValue ??= "null";
+
                 if (T4Help.GetNullableType(item.PropertyType) == typeof(string))
-                    defaultValue = $"\"{defaultValue}\"";
-                if (T4Help.GetNullableType(item.PropertyType) == typeof(string))
-                    defaultValue = $"\"{defaultValue}\"";
+                    defaultValue = $"\"{defaultValue}\""; 
+
                 yield return new PropInfo()
                 {
                     Summary = summary,
@@ -115,12 +114,12 @@ namespace FastFrame.CodeGenerate.Build
 
                 if (TryGetAttribute<RelatedToAttribute>(item, out var relatedToAttribute))
                 {
-                    var relateTypeName = relatedToAttribute.RelatedType.Name;
+                    //var relateTypeName = relatedToAttribute.RelatedType.Name;
                     yield return new PropInfo()
                     {
                         Summary = summary,
-                        TypeName = $"{relateTypeName}ViewModel",
-                        Name = item.Name.Replace("_Id", "")
+                        TypeName = $"string",
+                        Name = item.Name.Replace("_Id", "_Value")
                     };
                 }
             }

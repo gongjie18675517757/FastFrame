@@ -1,5 +1,5 @@
 <template>
-  <v-input dense :disabled="disabled" :errorMessages="errorMessages">
+  <v-input dense :disabled="disabled" :errorMessages="errorMessages" class="v-text-field">
     <template #prepend>
       <slot name="prepend"></slot>
     </template>

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import store from '../../store'
-import Alert from './Alert.vue'
-import Confirm from './Confirm.vue'
+import AlertComponent from './Alert.vue'
+import ConfirmComponent from './Confirm.vue'
 import { FormPageDefines, FormPageCore } from '../Page'
 import Choose from './Choose.vue'
 import { guid } from '../../utils'
@@ -77,13 +77,13 @@ export function makePromptPageFacatory(pars) {
 
 const message = {
     alert(pars) {
-        return this.dialog(Alert, {
+        return this.dialog(AlertComponent, {
             width: '600px',
             ...pars
         })
     },
     confirm(pars) {
-        return this.dialog(Confirm, {
+        return this.dialog(ConfirmComponent, {
             width: '600px',
             ...pars
         })
@@ -104,7 +104,7 @@ const message = {
                 ...pars,
                 resolve,
                 reject,
-                _visible: false,
+                _visible: true,
                 key: guid(),
                 pars: {
                     ...pars,
@@ -113,9 +113,9 @@ const message = {
             }
             store.state.dialogs.push(dialogItem)
 
-            setTimeout(() => {
-                dialogItem._visible = true;
-            }, 100);
+            // setTimeout(() => {
+            //     dialogItem._visible = true;
+            // }, 100);
         })
     },
     toast: {

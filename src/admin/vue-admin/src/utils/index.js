@@ -312,11 +312,13 @@ export function guid() {
  * @param {*} data 
  */
 export function fmtRequestPars(key, value) {
+    if (key != 'value')
+        return value;
     if (!value) {
-        return undefined;
+        return null;
     }
     else if (Array.isArray(value)) {
-        return value.length > 0 ? value : undefined
+        return value.length > 0 ? value.join(',') : null
     } else {
         return value
     }

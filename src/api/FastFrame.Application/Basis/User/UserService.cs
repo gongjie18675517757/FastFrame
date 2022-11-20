@@ -106,17 +106,29 @@ namespace FastFrame.Application.Basis
         {
             query = base.GetListQueryableing(query, pageInfo);
 
-            if (pageInfo.Filters.TryMatchQueryFilterValue<FieldQueryFilter<UserDto>, string>(
-                v => string.Compare(v.Name, nameof(ITreeModel.Super_Id), false) == 0, true, v => v.Value, out var super_id))
-            {
-                var depts = Loader.GetService<IRepository<Dept>>();
-                var treeChildren = depts.Where(v => depts.Any(y => y.Id == super_id && v.TreeCode.StartsWith(y.TreeCode)));
-
-                var deptMembers = Loader.GetService<IRepository<DeptMember>>().Where(v => v.Dept_Id == super_id || treeChildren.Any(x => x.Id == v.Dept_Id));
-                pageInfo.Filters.AppendQueryFilter(new ExpressionQueryFilter<UserDto>(v => deptMembers.Any(x => x.User_Id == v.Id)));
-            }
+            pageInfo
+                .Filters
+                .TryReplaceQueryFilters<FieldQueryFilter<UserDto>>(
+                    v => string.Compare(v.Name, nameof(ITreeModel.Super_Id), true) == 0,
+                    HandleSuperIdFilterQuery); 
 
             return query;
+        }
+
+        /// <summary>
+        /// 处理查询参数:Super_Id
+        /// </summary>
+        /// <param name="v"></param>
+        /// <returns></returns>
+        private IQueryFilter<UserDto> HandleSuperIdFilterQuery(FieldQueryFilter<UserDto> v)
+        {
+            var super_id = v.Value;
+            var depts = Loader.GetService<IRepository<Dept>>();
+            var treeChildren = depts.Where(v => depts.Any(y => y.Id == super_id && v.TreeCode.StartsWith(y.TreeCode)));
+
+            var deptMembers = Loader.GetService<IRepository<DeptMember>>().Where(v => v.Dept_Id == super_id || treeChildren.Any(x => x.Id == v.Dept_Id));
+
+            return new ExpressionQueryFilter<UserDto>(v => deptMembers.Any(x => x.User_Id == v.Id));
         }
     }
 }

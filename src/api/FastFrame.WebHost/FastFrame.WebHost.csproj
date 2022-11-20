@@ -20,12 +20,14 @@
 		<DocumentationFile>.\FastFrame.WebHost.xml</DocumentationFile>
 		<NoWarn>1701;1702;1591;</NoWarn>
 		<LangVersion>preview</LangVersion>
+		<WarningLevel>7</WarningLevel>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<NoWarn>1701;1702;1591;</NoWarn>
 		<DocumentationFile>.\FastFrame.WebHost.xml</DocumentationFile>
 		<LangVersion>preview</LangVersion>
+		<WarningLevel>7</WarningLevel>
 	</PropertyGroup>
 
 	<ItemGroup>

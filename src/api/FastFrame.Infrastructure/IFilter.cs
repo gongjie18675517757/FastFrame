@@ -22,6 +22,122 @@ namespace FastFrame.Infrastructure
         bool ExistsIsEnabled();
     }
 
+    /// <summary>
+    /// 条件匹配器
+    /// </summary>
+    /// <typeparam name="TQueryModel"></typeparam>
+    public interface IQueryFilterMatch<TQueryModel>
+    {
+        IEnumerable<IQueryFilter<TQueryModel>> QueryFilters();
+
+        /// <summary>
+        /// 添加条件
+        /// </summary>
+        /// <param name="queryFilters"></param>
+        void AppendQueryFilter(params IQueryFilter<TQueryModel>[] queryFilters);
+
+        /// <summary>
+        /// 移除条件
+        /// </summary>
+        /// <param name="queryFilters"></param>
+        /// <returns></returns>
+        void RemoveQueryFilter(params IQueryFilter<TQueryModel>[] queryFilters);
+
+
+
+        /// <summary>
+        /// 尝试替换查询项，返回被替换的数量
+        /// </summary>
+        /// <returns></returns>
+        int TryReplaceQueryFilters<TQueryFilter>(Func<TQueryFilter, bool> func, Func<TQueryFilter, IQueryFilter<TQueryModel>> newFilterSelect)
+            where TQueryFilter : IQueryFilter<TQueryModel>
+        {
+            int i = 0;
+            var arr = QueryFilters().Where(v => v != null && v.ExistsIsEnabled()).ToArray();
+            foreach (var queryFilter in arr)
+            {
+                /*计算当前集合*/
+                if (queryFilter is TQueryFilter select_query_filter && func(select_query_filter))
+                {
+                    i++;
+                    RemoveQueryFilter(select_query_filter);
+                    AppendQueryFilter(newFilterSelect(select_query_filter));
+                }
+
+                /*计算下级集合*/
+                if (queryFilter is IQueryFilterMatch<TQueryModel> qfm)
+                {
+                    i += qfm.TryReplaceQueryFilters(func, newFilterSelect);
+                }
+            }
+
+            return i;
+        }
+
+        /// <summary>
+        /// 尝试匹配一个条件
+        /// </summary>
+        /// <typeparam name="TQueryFilter"></typeparam>
+        /// <param name="func"></param>
+        /// <param name="has_remove_match"></param>
+        /// <param name="out_queryFilter"></param>
+        /// <returns></returns>
+        bool TryMatchQueryFilter<TQueryFilter>(Func<TQueryFilter, bool> func, bool has_remove_match, out TQueryFilter out_queryFilter)
+            where TQueryFilter : IQueryFilter<TQueryModel>
+        {
+            var arr = QueryFilters().ToArray();
+            foreach (var queryFilter in arr)
+            {
+                /*计算当前集合*/
+                if (queryFilter.ExistsIsEnabled() && queryFilter is TQueryFilter select_query_filter)
+                    if (func(select_query_filter))
+                    {
+                        if (has_remove_match)
+                            RemoveQueryFilter(select_query_filter);
+
+                        out_queryFilter = select_query_filter;
+                        return true;
+                    }
+
+                /*计算下级集合*/
+                if (queryFilter is IQueryFilterMatch<TQueryModel> qfm && qfm.TryMatchQueryFilter<TQueryFilter>(func, has_remove_match, out var query))
+                {
+                    out_queryFilter = query;
+                    return true;
+                }
+            }
+
+            out_queryFilter = default;
+            return false;
+        }
+
+        /// <summary>
+        /// 尝试匹配条件，并返回其中的值
+        /// </summary>
+        /// <typeparam name="TQueryFilter"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="func"></param>
+        /// <param name="has_remove_match"></param>
+        /// <param name="select_func"></param>
+        /// <param name="out_val"></param>
+        /// <returns></returns>
+        bool TryMatchQueryFilterValue<TQueryFilter, TValue>(Func<TQueryFilter, bool> func,
+                                                            bool has_remove_match,
+                                                            Func<TQueryFilter, TValue> select_func,
+                                                            out TValue out_val)
+         where TQueryFilter : IQueryFilter<TQueryModel>
+        {
+            if (TryMatchQueryFilter(func, has_remove_match, out var queryFilter))
+            {
+                out_val = select_func(queryFilter);
+                return true;
+            }
+
+            out_val = default;
+            return false;
+        }
+    }
+
     public interface IQueryFilterJSONConvert
     {
 
@@ -49,7 +165,7 @@ namespace FastFrame.Infrastructure
     /// <typeparam name="TQueryModel"></typeparam>
     public class ExpressionQueryFilter<TQueryModel> : IQueryFilter<TQueryModel>
     {
-        private readonly Expression<Func<TQueryModel, bool>> expression;
+        private Expression<Func<TQueryModel, bool>> expression;
 
         public ExpressionQueryFilter()
         {
@@ -71,6 +187,7 @@ namespace FastFrame.Infrastructure
             return expression;
         }
 
+
         public static implicit operator ExpressionQueryFilter<TQueryModel>(Expression<Func<TQueryModel, bool>> expression)
         {
             return new ExpressionQueryFilter<TQueryModel>(expression);
@@ -81,13 +198,9 @@ namespace FastFrame.Infrastructure
     /// 组合条件
     /// </summary>
     /// <typeparam name="TQueryModel"></typeparam>
-    public class ComposeQueryFilter<TQueryModel> : IQueryFilter<TQueryModel>
+    public class ComposeQueryFilter<TQueryModel> : IQueryFilter<TQueryModel>, IQueryFilterMatch<TQueryModel>
     {
-        //public ComposeQueryFilter()
-        //{
-        //    Expression<Func<TQueryModel, bool>> expression = v => true;
-        //    ExpressionQueryFilter<TQueryModel> vv = expression;
-        //}
+        private List<IQueryFilter<TQueryModel>> queryFilters;
 
         public Expression<Func<TQueryModel, bool>> MakePredicate()
         {
@@ -118,7 +231,22 @@ namespace FastFrame.Infrastructure
 
         public bool ExistsIsEnabled()
         {
-            return QueryFilters.Any(v => v.ExistsIsEnabled());
+            return queryFilters.Any(v => v.ExistsIsEnabled());
+        }
+
+        IEnumerable<IQueryFilter<TQueryModel>> IQueryFilterMatch<TQueryModel>.QueryFilters()
+        {
+            return queryFilters;
+        }
+
+        public void RemoveQueryFilter(params IQueryFilter<TQueryModel>[] remove_queryFilters)
+        {
+            queryFilters = queryFilters.Where(v => !remove_queryFilters.Any(x => x == v)).ToList();
+        }
+
+        public void AppendQueryFilter(params IQueryFilter<TQueryModel>[] append_queryFilters)
+        {
+            queryFilters.AddRange(append_queryFilters);
         }
 
         /// <summary>
@@ -129,7 +257,7 @@ namespace FastFrame.Infrastructure
         /// <summary>
         /// 所有条件
         /// </summary>
-        public IEnumerable<IQueryFilter<TQueryModel>> QueryFilters { get; set; }
+        public IEnumerable<IQueryFilter<TQueryModel>> QueryFilters { get => queryFilters; set => queryFilters = value.ToList(); }
     }
 
     /// <summary>
@@ -176,81 +304,8 @@ namespace FastFrame.Infrastructure
     /// 条件容器
     /// </summary>
     /// <typeparam name="TQueryModel"></typeparam>
-    public interface IQueryFilterCollection<TQueryModel>
+    public interface IQueryFilterCollection<TQueryModel> : IQueryFilterMatch<TQueryModel>
     {
-        /// <summary>
-        /// 存放条件
-        /// </summary>
-        IEnumerable<IQueryFilter<TQueryModel>> QueryFilters { get; }
-
-        /// <summary>
-        /// 移除条件
-        /// </summary>
-        /// <param name="queryFilters"></param>
-        /// <returns></returns>
-        void RemoveQueryFilter(params IQueryFilter<TQueryModel>[] queryFilters);
-
-        /// <summary>
-        /// 添加条件
-        /// </summary>
-        /// <param name="queryFilters"></param>
-        /// <returns></returns>
-        IQueryFilterCollection<TQueryModel> AppendQueryFilter(params IQueryFilter<TQueryModel>[] queryFilters);
-
-        /// <summary>
-        /// 尝试匹配一个条件
-        /// </summary>
-        /// <typeparam name="TQueryFilter"></typeparam>
-        /// <param name="func"></param>
-        /// <param name="has_remove_match"></param>
-        /// <param name="out_queryFilter"></param>
-        /// <returns></returns>
-        bool TryMatchQueryFilter<TQueryFilter>(Func<TQueryFilter, bool> func, bool has_remove_match, out TQueryFilter out_queryFilter)
-            where TQueryFilter : IQueryFilter<TQueryModel>
-        {
-            var arr = QueryFilters.ToArray();
-            foreach (var queryFilter in arr)
-            {
-                if (queryFilter.ExistsIsEnabled() && queryFilter is TQueryFilter select_query_filter)
-                    if (func(select_query_filter))
-                    {
-                        if (has_remove_match)
-                            RemoveQueryFilter(select_query_filter);
-
-                        out_queryFilter = select_query_filter;
-                        return true;
-                    }
-            }
-
-            out_queryFilter = default;
-            return false;
-        }
-
-        /// <summary>
-        /// 尝试匹配条件，并返回其中的值
-        /// </summary>
-        /// <typeparam name="TQueryFilter"></typeparam>
-        /// <typeparam name="TValue"></typeparam>
-        /// <param name="func"></param>
-        /// <param name="has_remove_match"></param>
-        /// <param name="select_func"></param>
-        /// <param name="out_val"></param>
-        /// <returns></returns>
-        bool TryMatchQueryFilterValue<TQueryFilter, TValue>(Func<TQueryFilter, bool> func,
-                                                            bool has_remove_match,
-                                                            Func<TQueryFilter, TValue> select_func,
-                                                            out TValue out_val)
-         where TQueryFilter : IQueryFilter<TQueryModel>
-        {
-            if (TryMatchQueryFilter<TQueryFilter>(func, has_remove_match, out var queryFilter))
-            {
-                out_val = select_func(queryFilter);
-                return true;
-            }
-
-            out_val = default;
-            return false;
-        }
     }
 
     /// <summary>
@@ -259,6 +314,8 @@ namespace FastFrame.Infrastructure
     /// <typeparam name="TQueryModel"></typeparam>
     public class DefaultQueryFilterCollection<TQueryModel> : IQueryFilterCollection<TQueryModel>
     {
+        private List<IQueryFilter<TQueryModel>> queryFilters;
+
         public DefaultQueryFilterCollection(params IQueryFilter<TQueryModel>[] queryFilters)
         {
             QueryFilters = queryFilters;
@@ -267,22 +324,26 @@ namespace FastFrame.Infrastructure
         /// <summary>
         /// 所有条件
         /// </summary>
-        public IEnumerable<IQueryFilter<TQueryModel>> QueryFilters { get; set; }
+        public IEnumerable<IQueryFilter<TQueryModel>> QueryFilters { get => queryFilters; set => queryFilters = value.ToList(); }
 
         /// <summary>
         /// 添加条件
         /// </summary>
-        /// <param name="queryFilters"></param>
+        /// <param name="append_queryFilters"></param>
         /// <returns></returns>
-        public IQueryFilterCollection<TQueryModel> AppendQueryFilter(params IQueryFilter<TQueryModel>[] queryFilters)
+        public void AppendQueryFilter(params IQueryFilter<TQueryModel>[] append_queryFilters)
         {
-            QueryFilters = QueryFilters.Concat(queryFilters).ToList();
-            return this;
+            queryFilters.AddRange(append_queryFilters);
         }
 
         public void RemoveQueryFilter(params IQueryFilter<TQueryModel>[] queryFilters)
         {
-            QueryFilters = QueryFilters.Where(v => !queryFilters.Any(x => x == v)).ToList();
+            QueryFilters = queryFilters.Where(v => !queryFilters.Any(x => x == v)).ToList();
+        }
+
+        IEnumerable<IQueryFilter<TQueryModel>> IQueryFilterMatch<TQueryModel>.QueryFilters()
+        {
+            return queryFilters;
         }
     }
 
@@ -333,7 +394,7 @@ namespace FastFrame.Infrastructure
 
         public override void WriteJson(JsonWriter writer, IQueryFilterCollection<TQueryModel> value, JsonSerializer serializer)
         {
-            serializer.Serialize(writer, value.QueryFilters);
+            serializer.Serialize(writer, value.QueryFilters());
         }
     }
 }

@@ -1,34 +1,5 @@
 <template>
-  <v-input
-    dense
-    class="v-input__slot_checkbox_container v-input-no-border"
-    style="margin-top: 0px"
-    v-if="values.length <= 5"
-    :disabled="disabled"
-  >
-    <template #default>
-      <slot>
-        <v-checkbox
-          v-for="v in values"
-          :key="v.Key"
-          :value="v.Key"
-          :label="v.Value"
-          :input-value="value"
-          @change="handleChange"
-          :disabled="disabled"
-          hide-details
-          style="margin-top: 0px"
-          dense
-          :multiple="multiple"
-        ></v-checkbox>
-      </slot>
-    </template>
-    <template #prepend>
-      <slot name="prepend"></slot>
-    </template>
-  </v-input>
   <v-combobox
-    v-else
     :value="value"
     :items="items"
     :clearable="!disabled"
@@ -39,7 +10,7 @@
     :multiple="multiple"
     :dense="!isXs"
     :return-object="false"
-    @input="handleChange"
+    @input="handleChange" 
   >
     <template v-slot:selection="props">{{ getText(props) }}</template>
     <template #default>

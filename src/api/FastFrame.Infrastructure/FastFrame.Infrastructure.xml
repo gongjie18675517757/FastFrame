@@ -866,6 +866,53 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:FastFrame.Infrastructure.IQueryFilterMatch`1">
+            <summary>
+            条件匹配器
+            </summary>
+            <typeparam name="TQueryModel"></typeparam>
+        </member>
+        <member name="M:FastFrame.Infrastructure.IQueryFilterMatch`1.AppendQueryFilter(FastFrame.Infrastructure.IQueryFilter{`0}[])">
+            <summary>
+            添加条件
+            </summary>
+            <param name="queryFilters"></param>
+        </member>
+        <member name="M:FastFrame.Infrastructure.IQueryFilterMatch`1.RemoveQueryFilter(FastFrame.Infrastructure.IQueryFilter{`0}[])">
+            <summary>
+            移除条件
+            </summary>
+            <param name="queryFilters"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.IQueryFilterMatch`1.TryReplaceQueryFilters``1(System.Func{``0,System.Boolean},System.Func{``0,FastFrame.Infrastructure.IQueryFilter{`0}})">
+            <summary>
+            尝试替换查询项，返回被替换的数量
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.IQueryFilterMatch`1.TryMatchQueryFilter``1(System.Func{``0,System.Boolean},System.Boolean,``0@)">
+            <summary>
+            尝试匹配一个条件
+            </summary>
+            <typeparam name="TQueryFilter"></typeparam>
+            <param name="func"></param>
+            <param name="has_remove_match"></param>
+            <param name="out_queryFilter"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.IQueryFilterMatch`1.TryMatchQueryFilterValue``2(System.Func{``0,System.Boolean},System.Boolean,System.Func{``0,``1},``1@)">
+            <summary>
+            尝试匹配条件，并返回其中的值
+            </summary>
+            <typeparam name="TQueryFilter"></typeparam>
+            <typeparam name="TValue"></typeparam>
+            <param name="func"></param>
+            <param name="has_remove_match"></param>
+            <param name="select_func"></param>
+            <param name="out_val"></param>
+            <returns></returns>
+        </member>
         <member name="T:FastFrame.Infrastructure.IQueryFilterJSONConvert`1">
             <summary>
             查询条件转换器
@@ -921,47 +968,6 @@
             </summary>
             <typeparam name="TQueryModel"></typeparam>
         </member>
-        <member name="P:FastFrame.Infrastructure.IQueryFilterCollection`1.QueryFilters">
-            <summary>
-            存放条件
-            </summary>
-        </member>
-        <member name="M:FastFrame.Infrastructure.IQueryFilterCollection`1.RemoveQueryFilter(FastFrame.Infrastructure.IQueryFilter{`0}[])">
-            <summary>
-            移除条件
-            </summary>
-            <param name="queryFilters"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Infrastructure.IQueryFilterCollection`1.AppendQueryFilter(FastFrame.Infrastructure.IQueryFilter{`0}[])">
-            <summary>
-            添加条件
-            </summary>
-            <param name="queryFilters"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Infrastructure.IQueryFilterCollection`1.TryMatchQueryFilter``1(System.Func{``0,System.Boolean},System.Boolean,``0@)">
-            <summary>
-            尝试匹配一个条件
-            </summary>
-            <typeparam name="TQueryFilter"></typeparam>
-            <param name="func"></param>
-            <param name="has_remove_match"></param>
-            <param name="out_queryFilter"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Infrastructure.IQueryFilterCollection`1.TryMatchQueryFilterValue``2(System.Func{``0,System.Boolean},System.Boolean,System.Func{``0,``1},``1@)">
-            <summary>
-            尝试匹配条件，并返回其中的值
-            </summary>
-            <typeparam name="TQueryFilter"></typeparam>
-            <typeparam name="TValue"></typeparam>
-            <param name="func"></param>
-            <param name="has_remove_match"></param>
-            <param name="select_func"></param>
-            <param name="out_val"></param>
-            <returns></returns>
-        </member>
         <member name="T:FastFrame.Infrastructure.DefaultQueryFilterCollection`1">
             <summary>
             缺省条件容器
@@ -977,7 +983,7 @@
             <summary>
             添加条件
             </summary>
-            <param name="queryFilters"></param>
+            <param name="append_queryFilters"></param>
             <returns></returns>
         </member>
         <member name="T:FastFrame.Infrastructure.FilterJsonConvert`1">

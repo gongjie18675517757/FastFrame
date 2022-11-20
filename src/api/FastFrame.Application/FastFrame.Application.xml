@@ -1413,6 +1413,13 @@
             切换禁用状态
             </summary> 
         </member>
+        <member name="M:FastFrame.Application.Basis.UserService.HandleSuperIdFilterQuery(FastFrame.Application.FieldQueryFilter{FastFrame.Application.Basis.UserDto})">
+            <summary>
+            处理查询参数:Super_Id
+            </summary>
+            <param name="v"></param>
+            <returns></returns>
+        </member>
         <member name="T:FastFrame.Application.ResourceModel">
             <summary>
             附件

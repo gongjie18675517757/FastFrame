@@ -1,9 +1,9 @@
 <template>
   <v-container grid-list-xl fluid app>
     <v-layout align-center justify-center>
-      <v-flex xs12 md8 xl6>
+      <v-flex xs12 md8>
         <v-card>
-          <v-toolbar flat dense color="transparent" height="30px">
+          <v-toolbar flat dense color="transparent">
             <v-toolbar-title>{{ title }}</v-toolbar-title>
             <v-spacer></v-spacer>
 
@@ -13,57 +13,20 @@
           </v-toolbar>
           <v-divider></v-divider>
 
-          <v-card-text v-if="model" style="min-width: 600px; padding: 0px">
+          <v-card-text  style="min-width: 600px; padding: 0px">
             <VuePerfectScrollbar class="query-dialog-page">
-              <div v-for="(arr, arrIndex) in model.Value" :key="arrIndex">
-                <v-subheader>
-                  查询组{{ arrIndex + 1 }}
-                  <v-btn
-                    icon
-                    v-if="model.Value.length > 1"
-                    @click="removeGroup(i)"
-                  >
-                    <v-icon color="info">clear</v-icon>
-                  </v-btn>
-                </v-subheader>
-                <v-layout wrap style="padding-right: 10px">
-                  <Input
-                    v-for="item in arr"
-                    v-bind="item"
-                    :value="item.value"
-                    :key="item.Description"
-                    :flex="{ xs6: true }"
-                    @input="handleInput(item, $event)"
-                    canEdit
-                  />
-                </v-layout>
-              </div>
-              <br />
-              <br />
-              <v-btn
-                @click="addQueryOption('and')"
-                title="添加组"
-                block
-                tile
-                color="primary"
-              >
-                <v-icon left>add</v-icon>添加查询组
-              </v-btn>
-              <br />
-              <br />
+              <SearchQueryFilterCollection
+                :makeOptionsFunc="makeOptionsFunc"
+                :value="query_arr"
+              />
             </VuePerfectScrollbar>
           </v-card-text>
 
           <v-card-actions>
-            <v-btn text @click="cancel">取消</v-btn>
-            <v-btn @click="refresh" color="warning" text> 重置 </v-btn>
+            <v-btn @click="reset" text> 重置 </v-btn>
+
             <v-spacer></v-spacer>
-            <v-radio-group v-if="model && model.Value.length>1" v-model="model.Key" row label="组合关系">
-              <v-radio value="and" label="且"></v-radio>
-              <v-radio value="or" label="或"></v-radio>
-            </v-radio-group>
-             <v-spacer></v-spacer>
-            <v-btn color="primary" @click="query">查询</v-btn>
+            <v-btn color="primary" @click="success">查询</v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -73,12 +36,12 @@
 
 <script>
 import VuePerfectScrollbar from "vue-perfect-scrollbar";
-import Input from "@/components/Inputs";
+import SearchQueryFilterCollection from "./SearchQueryFilterCollection.vue";
 export default {
-  components: { VuePerfectScrollbar, Input },
+  components: { SearchQueryFilterCollection, VuePerfectScrollbar },
   props: {
     title: String,
-    options: Object,
+    value: Array,
     makeOptionsFunc: Function,
   },
   data() {
@@ -87,44 +50,19 @@ export default {
         and: "且",
         or: "或",
       },
-      model: null,
-      groupValues: this.options.Value.map((_, i) => i),
+      query_arr: this.value,
     };
   },
-  mounted() {
- 
-    this.model = {
-      Key: this.options.Key,
-      Value: this.options.Value.map((v) =>
-        v.map((x) => ({
-          ...x,
-          value: x.value ? JSON.parse(JSON.stringify(x.value)) : null,
-        }))
-      ),
-    };
-  },
+  mounted() {},
   methods: {
-    removeGroup(index) {
-      this.model.Value.splice(index, 1);
-    },
-    addQueryOption() {
-      this.model.Value.push(this.makeOptionsFunc());
-    },
-    handleInput(item, val) {
-      item.value = val;
-    },
-
-    refresh() {
-      this.model = {
-        Key: "and",
-        Value: [this.makeOptionsFunc()],
-      };
-    },
-    query() {
-      this.$emit("success", this.model);
+    success() {
+      this.$emit("success", this.query_arr);
     },
     cancel() {
       this.$emit("close");
+    },
+    reset() {
+      this.query_arr = this.makeOptionsFunc();
     },
   },
 };

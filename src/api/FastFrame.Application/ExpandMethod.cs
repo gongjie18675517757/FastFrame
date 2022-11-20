@@ -22,7 +22,7 @@ namespace FastFrame.Application
         public static async Task<IPageList<T>> PageListAsync<T>(this IQueryable<T> query, IPagination<T> pageInfo)
         {
             pageInfo ??= new Pagination<T>();
-            query = query.DynamicQuery(pageInfo.KeyWord, pageInfo.Filters.QueryFilters.ToArray());
+            query = query.DynamicQuery(pageInfo.KeyWord, pageInfo.Filters.QueryFilters().ToArray());
 
             var list = await query.DynamicSort(pageInfo.SortName, pageInfo.SortMode.ToString())
                     .Skip(pageInfo.PageSize * (pageInfo.PageIndex - 1))
@@ -96,8 +96,7 @@ namespace FastFrame.Application
 
             return !Name.IsNullOrWhiteSpace() &&
                    !Compare.IsNullOrWhiteSpace() &&
-                   !Value.IsNullOrWhiteSpace() &&
-                   fields.Contains(Name.ToLower());
+                   !Value.IsNullOrWhiteSpace();
         }
 
         /// <summary>
@@ -224,7 +223,7 @@ namespace FastFrame.Application
             }
 
             return DynamicExpressionParser.ParseLambda<TQueryModel, bool>(ParsingConfig.Default, false, queryStr, values: values);
-        }
+        } 
     }
 
     /// <summary>

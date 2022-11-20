@@ -6,9 +6,9 @@ import {
   getQueryOptions
 } from "../../generate";
 import {
-  distinct, throttle, fmtRequestPars, saveFile, getIconFunc, toHexString
+  distinct, throttle, fmtRequestPars, saveFile, getIconFunc, toHexString, queryBuild
 } from '../../utils'
-import queryBuild from "../../utils/queryBuild";
+import {cloneDeep} from 'lodash'
 import { makeButtons, makeButtonsInputMode } from './handleFlow'
 
 /**
@@ -216,7 +216,7 @@ export const PageDataDefines = {
   /**
    * 树组件
    */
-  treeComponent:'treeComponent'
+  treeComponent: 'treeComponent'
 }
 
 /**
@@ -527,15 +527,11 @@ export let pageMethods = {
     this.isInited = true;
   },
   [PageMethodsDefines.resetQuery]() {
-    this.query = {
-      Key: 'and',
-      Value: [
-        this.queryOptions.map(v => ({
-          ...v,
-          value: v.value ? JSON.parse(JSON.stringify(v.value)) : null
-        }))
-      ]
-    }
+    this.query = this.queryOptions.map(v => ({
+      ...v,
+      value: v.value ? JSON.parse(JSON.stringify(v.value)) : null
+    }))
+
   },
   [PageMethodsDefines.getModuleStrut]() {
     return getModuleStrut(this.strutName)
@@ -764,11 +760,11 @@ export let pageMethods = {
     this.$message
       .dialog(() => import('../Dialog/SearchDialog.vue'), {
         title: `查询${this.direction}列表`,
-        options: this.query,
-        makeOptionsFunc: () => [...this.queryOptions.map(v => ({
+        value: cloneDeep(this.query),
+        makeOptionsFunc: () => this.queryOptions.map(v => ({
           ...v,
           value: v.value ? JSON.parse(JSON.stringify(v.value)) : null
-        }))]
+        }))
       })
       .then(query => {
         this.query = query;
@@ -804,26 +800,26 @@ export let pageMethods = {
     ]
   },
   async [PageMethodsDefines.buildQueryFilter]() {
-    let qb = new queryBuild()
+    let qb = []
     /**
      * 外部传入的条件
      */
-    qb.add_and(this.queryFilter || [])
+    qb.push(...(this.queryFilter || []))
 
     /**
      * 查询框的条件
      */
-    qb.add(this.query);
+    qb.push(...this.query);
 
     /**
      * 选择树的ID
      */
     if (this.superId)
-      qb.add_and([{
+      qb.push({
         Name: 'super_Id',
         value: this.superId,
         compare: '=='
-      }])
+      })
 
     /**
      * 树条件
@@ -832,11 +828,12 @@ export let pageMethods = {
       let arr = await this.getRequestParsBySelectedTreeItem(this.treeSelectedItem);
 
       if (arr.length > 0) {
-        qb.add_and(arr)
+        qb.push(...arr)
       }
     }
 
-    return qb;
+    const querys = queryBuild(JSON.parse(JSON.stringify(qb)));
+    return querys;
   },
   async [PageMethodsDefines.getRequestPars](pager) {
     if (pager) this.pager = pager;
@@ -856,7 +853,7 @@ export let pageMethods = {
       PageSize: itemsPerPage,
       SortName: sortBy.join(','),
       SortMode: sortDesc.length > 0 && !sortDesc[0] ? "desc" : "asc",
-      Filters: qb.build()
+      Filters: qb
     };
 
     return pageInfo;
@@ -896,6 +893,7 @@ export let pageMethods = {
       const pagePars = await this.getRequestPars(pager);
       let method = this.getRequedtMethod();
       let url = this.getRequestUrl();
+
       let { Total, Data } = await method(url, pagePars);
       this.rows = Data
       this.total = Total;

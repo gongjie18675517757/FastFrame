@@ -17,6 +17,7 @@
         >
           <v-radio dense label="是" :value="true"></v-radio>
           <v-radio dense label="否" :value="false"></v-radio>
+          <v-radio dense label="待定" :value="null"></v-radio>
         </v-radio-group>
       </slot>
     </template>
@@ -41,9 +42,7 @@ export default {
     values: Array,
   },
   methods: {
-    change(val) {
-      console.log(val);
-      val = val || false;
+    change(val) { 
       this.$emit("change", val);
       this.$emit("input", val);
     },

@@ -54,11 +54,11 @@ namespace FastFrame.WebHost.Privder
             {
                 @struct.Form = instance;
                 return @struct;
-            } 
+            }
 
             var fieldInfoStructs = new List<ModuleFieldStrut>();
 
-            
+
 
             foreach (var x in type.GetProperties())
             {
@@ -90,6 +90,9 @@ namespace FastFrame.WebHost.Privder
                 /*数据字典*/
                 TryGetAttribute<EnumItemAttribute>(x, out var enumItemAttribute);
 
+                /*是否主要字段*/
+                TryGetAttribute<IsPrimaryFieldAttribute>(x, out var isPrimaryFieldAttribute);
+
                 /*字段信息*/
                 fieldInfoStructs.Add(new ModuleFieldStrut()
                 {
@@ -104,13 +107,14 @@ namespace FastFrame.WebHost.Privder
                     EnumValues = GetEnumValues(nullableType),
                     IsRequired = requiredAttribute != null,
                     GroupNames = formGroupAttribute?.GroupNames,
+                    IsPrimaryField = isPrimaryFieldAttribute != null,
                     EnumItemInfo = enumItemAttribute == null ?
                                     null :
                                     new EnumInfo { Name = enumItemAttribute.Name, SuperPropName = enumItemAttribute.SuperPropName }
                 });
             }
 
-            TryGetAttribute<RelatedFieldAttribute>(type, out var relatedFieldAttribute);
+
 
             /*模块信息*/
             @struct = new ModuleStruct()
@@ -119,7 +123,6 @@ namespace FastFrame.WebHost.Privder
                 Form = instance,
                 Description = descriptionProvider.GetClassDescription(type),
                 FieldInfoStruts = fieldInfoStructs,
-                RelateFields = relatedFieldAttribute?.FieldNames ?? new[] { type.GetProperties().FirstOrDefault().Name },
                 IsTree = typeof(ITreeEntity).IsAssignableFrom(type),
                 HasManage = typeof(IHasManage).IsAssignableFrom(type),
                 HasFiles = typeof(IHaveMultiFile).IsAssignableFrom(type),

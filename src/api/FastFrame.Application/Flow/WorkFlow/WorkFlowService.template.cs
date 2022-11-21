@@ -25,9 +25,9 @@ namespace FastFrame.Application.Flow
 			this.workFlowRepository=workFlowRepository;
 		}
 		
-		protected override IQueryable<WorkFlowDto> QueryMain() 
+		protected override IQueryable<WorkFlowDto> DefaultQueryable() 
 		{
-			var userQueryable = userRepository.Queryable.MapTo<User,UserViewModel>();
+			var userQueryable = userRepository.Queryable.Select(User.BuildExpression());
 			var repository = workFlowRepository.Queryable;
 			var query = from _workFlow in repository 
 						join _create_User_Id in userQueryable on _workFlow.Create_User_Id equals _create_User_Id.Id into t__create_User_Id
@@ -46,15 +46,10 @@ namespace FastFrame.Application.Flow
 							CreateTime = _workFlow.CreateTime,
 							Modify_User_Id = _workFlow.Modify_User_Id,
 							ModifyTime = _workFlow.ModifyTime,
-							Create_User = _create_User_Id,
-							Modify_User = _modify_User_Id,
+							Create_User_Value = _create_User_Id.Value,
+							Modify_User_Value = _modify_User_Id.Value,
 						};
 			return query;
-		}
-		public Task<IPageList<WorkFlowViewModel>> ViewModelListAsync(IPagination<WorkFlowViewModel> page) 
-		{
-			var query = workFlowRepository.MapTo<WorkFlow, WorkFlowViewModel>();
-			return query.PageListAsync(page);
 		}
 		
 	}

@@ -1,4 +1,6 @@
 ﻿using FastFrame.Entity;
+using FastFrame.Infrastructure;
+using System.Linq.Expressions;
 
 namespace FastFrame.Application
 {
@@ -7,7 +9,7 @@ namespace FastFrame.Application
     /// </summary>
     public interface IDto
     {
-        string Id { get; set; }
+        string Id { get; set; } 
     }
 
     /// <summary>
@@ -17,10 +19,10 @@ namespace FastFrame.Application
     public interface IDto<T> : IDto where T : class, IEntity
     {
 
-    } 
- 
+    }
 
-    public interface IHaveCheckModel: IDto
+
+    public interface IHaveCheckModel : IDto
     {
         /// <summary>
         /// 下一步审核人

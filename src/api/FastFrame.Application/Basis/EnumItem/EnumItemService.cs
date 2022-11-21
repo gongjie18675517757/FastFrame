@@ -1,4 +1,5 @@
-﻿using FastFrame.Entity.Basis;
+﻿using FastFrame.Entity;
+using FastFrame.Entity.Basis;
 using FastFrame.Entity.Enums;
 using FastFrame.Infrastructure;
 using Microsoft.EntityFrameworkCore;
@@ -29,7 +30,7 @@ namespace FastFrame.Application.Basis
 
         public async Task<IEnumerable<ITreeModel>> GetChildren(EnumName name)
         {
-            return await Query()
+            return await BuildQuery()
                 .Where(v => v.Key == name && v.Super_Id == null)
                 .OrderBy(v => v.SortVal)
                 .ThenBy(v => v.Value)
@@ -38,7 +39,7 @@ namespace FastFrame.Application.Basis
 
         public async Task<IEnumerable<ITreeModel>> GetChildren(string id)
         {
-            return await Query()
+            return await BuildQuery()
                 .Where(v => v.Super_Id == id)
                 .OrderBy(v => v.SortVal)
                 .ThenBy(v => v.Value)
@@ -53,12 +54,19 @@ namespace FastFrame.Application.Basis
                 .ToListAsync();
         }
 
-        public async Task<IPageList<EnumItemViewModel>> EnumItemList(EnumName? name, IPagination<EnumItemViewModel> pagination)
+        public async Task<IEnumerable<IViewModel>> EnumItemList(EnumName? name, string kw, int page_index = 1, int page_size = 10)
         {
             if (name == null)
-                return new PageList<EnumItemViewModel>();
+                return Array.Empty<IViewModel>();
 
-            return await enumItemRepository.Where(v => v.Key == name).MapTo<EnumItem, EnumItemViewModel>().PageListAsync(pagination);
+            var query = enumItemRepository.Where(v => v.Key == name).Select(EnumItem.BuildExpression());
+
+            return await query
+                .Where(v => kw == null || v.Value.Contains(kw))
+                .OrderByDescending(v => v.Id)
+                .Skip(page_size * (page_index - 1))
+                .Take(page_size)
+                .ToListAsync();
         }
     }
 }

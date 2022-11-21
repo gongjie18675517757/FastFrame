@@ -67,7 +67,7 @@ namespace FastFrame.Infrastructure
         public SortModeEnum SortMode { get; set; }
 
         private static HashSet<Type> filter_converts;
-        private static object _lock = new object();
+        private static readonly object _lock = new();
 
         /// <summary>
         /// 枚举所有的转换器
@@ -141,7 +141,7 @@ namespace FastFrame.Infrastructure
         }
 
         private static HashSet<IQueryFilterJSONConvert<TQueryModel>> filter_converts;
-        private static object _lock = new();
+        private static readonly object _lock = new();
 
         /// <summary>
         /// 从JSON转换

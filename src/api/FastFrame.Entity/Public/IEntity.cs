@@ -12,4 +12,7 @@ namespace FastFrame.Entity
         /// </summary>
         string Id { get; set; } 
     }
+
+
+
 }

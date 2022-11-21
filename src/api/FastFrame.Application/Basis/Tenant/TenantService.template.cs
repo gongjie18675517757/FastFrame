@@ -23,7 +23,7 @@ namespace FastFrame.Application.Basis
 			this.tenantRepository=tenantRepository;
 		}
 		
-		protected override IQueryable<TenantDto> QueryMain() 
+		protected override IQueryable<TenantDto> DefaultQueryable() 
 		{
 			var repository = tenantRepository.Queryable;
 			var query = from _tenant in repository 
@@ -40,11 +40,6 @@ namespace FastFrame.Application.Basis
 							ChildCount = repository.Count(c => c.Super_Id == _tenant.Id)
 						};
 			return query;
-		}
-		public Task<IPageList<TenantViewModel>> ViewModelListAsync(IPagination<TenantViewModel> page) 
-		{
-			var query = tenantRepository.MapTo<Tenant, TenantViewModel>();
-			return query.PageListAsync(page);
 		}
 		
 	}

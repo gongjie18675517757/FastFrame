@@ -41,13 +41,7 @@ namespace FastFrame.CodeGenerate.Build
             {
                 Name = "Unique",
                 Parameters = x.UniqueNames.Select(y => $"\"{y}\"")
-            }).Union(type.GetCustomAttributes<RelatedFieldAttribute>().Select(x => new AttrInfo()
-            {
-                Name = "RelatedField",
-                Parameters = new[] {
-                    $"\"{x.DefaultName}\""
-                }.Union(x.OtherNames.Select(y => $"\"{y}\""))
-            }));
+            });
 
             return new Info.TargetInfo()
             {
@@ -101,7 +95,7 @@ namespace FastFrame.CodeGenerate.Build
                 defaultValue ??= "null";
 
                 if (T4Help.GetNullableType(item.PropertyType) == typeof(string))
-                    defaultValue = $"\"{defaultValue}\""; 
+                    defaultValue = $"\"{defaultValue}\"";
 
                 yield return new PropInfo()
                 {
@@ -112,7 +106,7 @@ namespace FastFrame.CodeGenerate.Build
                     DefaultValue = defaultValue
                 };
 
-                if (TryGetAttribute<RelatedToAttribute>(item, out var relatedToAttribute))
+                if (TryGetAttribute<RelatedToAttribute>(item, out var _))
                 {
                     //var relateTypeName = relatedToAttribute.RelatedType.Name;
                     yield return new PropInfo()
@@ -177,6 +171,11 @@ namespace FastFrame.CodeGenerate.Build
             if (TryGetAttribute<RequiredAttribute>(propertyInfo, out _))
             {
                 yield return new AttrInfo() { Name = "Required", };
+            }         
+            
+            if (TryGetAttribute<IsPrimaryFieldAttribute>(propertyInfo, out _))
+            {
+                yield return new AttrInfo() { Name = "IsPrimaryField", };
             }
 
             //if (TryGetAttribute<UniqueAttribute>(propertyInfo, out var uniqueAttribute))
@@ -237,16 +236,7 @@ namespace FastFrame.CodeGenerate.Build
                 };
             }
 
-            //if (TryGetAttribute<RelatedFieldAttribute>(propertyInfo, out var relatedFieldAttribute))
-            //{
-            //    yield return new AttrInfo()
-            //    {
-            //        Name = "RelatedField",
-            //        Parameters = new[] { $"\"{relatedFieldAttribute.DefaultName}\"" }
-            //        .Union(
-            //            relatedFieldAttribute.OtherNames.Select(x => $"\"{x}\""))
-            //    };
-            //}
+            
         }
 
         public bool TryGetAttribute<T>(PropertyInfo propertyInfo, out T attr) where T : Attribute

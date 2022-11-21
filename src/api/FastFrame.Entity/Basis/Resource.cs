@@ -1,19 +1,19 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Linq.Expressions;
 
 namespace FastFrame.Entity.Basis
 {
     /// <summary>
     /// 资源
-    /// </summary>     
-    [RelatedField(nameof(Name))]
-    [Export(ExportMark.ViewModel)]
-    public class Resource : IEntity
+    /// </summary>   
+    public class Resource : IEntity, IViewModelable<Resource>
     {
         /// <summary>
         /// 资源名称
         /// </summary>
         [StringLength(150)]
+        [IsPrimaryField]
         public string Name { get; set; }
 
         /// <summary>
@@ -48,6 +48,14 @@ namespace FastFrame.Entity.Basis
         /// </summary>
         public DateTime UploadTime { get; set; }
 
-        public string Id { get; set; } 
+        public string Id { get; set; }
+
+
+        private static Expression<Func<Resource, IViewModel>> vm_expression = v => new DefaultViewModel { Id = v.Id, Value = v.Name };
+
+        public static Expression<Func<Resource, IViewModel>> BuildExpression()
+        {
+            return vm_expression;
+        }
     }
 }

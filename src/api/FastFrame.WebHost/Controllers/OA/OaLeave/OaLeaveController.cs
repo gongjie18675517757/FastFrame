@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using FastFrame.Infrastructure.Permission;
 using Microsoft.AspNetCore.Mvc;
 using FastFrame.Application;
+using FastFrame.Entity;
+using FastFrame.Entity.Basis;
 
 namespace FastFrame.WebHost.Controllers.OA
 {
@@ -12,14 +14,13 @@ namespace FastFrame.WebHost.Controllers.OA
     {
         [Permission(new string[] { "Add", "Update" })]
         [HttpGet]
-        public Task<IPageList<UserViewModel>> UserList(string qs)
-            => Request.HttpContext.RequestServices
-                    .GetService<UserService>().ViewModelListAsync(Pagination<UserViewModel>.FromJson(qs));
+        public Task<IEnumerable<IViewModel>> UserList(string kw, int page_index = 1, int page_size = 10)
+            => service.ViewModelListAsync<User>(kw, page_index, page_size);
+
 
         [Permission(new string[] { "Add", "Update" })]
         [HttpGet]
-        public Task<IPageList<DeptViewModel>> DeptList(string qs)
-            => Request.HttpContext.RequestServices
-                    .GetService<DeptService>().ViewModelListAsync(Pagination<DeptViewModel>.FromJson(qs));
+        public Task<IEnumerable<IViewModel>> DeptList(string kw, int page_index = 1, int page_size = 10)
+            => service.ViewModelListAsync<Dept>(kw, page_index, page_size);
     }
 }

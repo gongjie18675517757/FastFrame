@@ -60,36 +60,7 @@ namespace FastFrame.WebHost.Privder
                                             values.Where(v => model.GetValue(item.Name)?.ToString().Contains(v.Id) == true).Select(v => v.Value))
                         };
                     }
-                }
-
-                /*关联表*/
-                else if (item.Relate != null)
-                {
-                    var relateModuleStruct = moduleExportProvider.GetModuleStruts(item.Relate);
-                    var relateFields = relateModuleStruct.RelateFields;
-
-                    yield return new ExcelColumn<TDto>
-                    {
-                        Title = item.Description,
-                        ValueFunc = model =>
-                        {
-                            if (model == null)
-                                return null;
-
-                            var obj = model.GetValue(item.Name.Replace("_Id", ""));
-
-                            if (obj == null)
-                                return null;
-
-
-                            return string.Join("", relateFields
-                                                 .Select(v => obj.GetValue(v))
-                                                 .Where(v => v != null)
-                                                 .Select((v, i) => i == 0 ? v.ToString() : $"[{v}]"));
-                        }
-
-                    };
-                }
+                } 
 
                 /*预定义枚举*/
                 else if (item.EnumValues.Any())
@@ -106,9 +77,7 @@ namespace FastFrame.WebHost.Privder
                 else if (item.Name.EndsWith("_Id"))
                 {
                     continue;
-                }
-
-
+                } 
 
 
                 /*值类型*/

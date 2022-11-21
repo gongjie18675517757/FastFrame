@@ -102,40 +102,16 @@ namespace FastFrame.CodeGenerate.Build
             yield return new MethodInfo()
             {
                 IsOverride = true,
-                MethodName = "QueryMain",
+                MethodName = "DefaultQueryable",
                 Modifier = "protected",
                 ResultTypeName = $"IQueryable<{type.Name}Dto>",
-                CodeBlock = GetQueryMainCodeBlock(type)
+                CodeBlock = GetDefaultQueryableCodeBlock(type)
             };
-
-            var exportAttr = type.GetCustomAttribute<ExportAttribute>();
-            if (exportAttr?.ExportMarks.Contains(ExportMark.ViewModel) == true)
-                yield return new MethodInfo()
-                {
-                    IsOverride = false,
-                    MethodName = "ViewModelListAsync",
-                    Modifier = "public",
-                    ResultTypeName = $"Task<IPageList<{type.Name}ViewModel>>",
-                    CodeBlock = GetViewModelListCodeBlock(type),
-                    Parms = new ParameterInfo[] {
-                        new ParameterInfo
-                        {
-                            DefineName="page",
-                            TypeName=$"IPagination<{type.Name}ViewModel>"
-                        }
-                    }
-                };
         }
 
-        public static IEnumerable<string> GetViewModelListCodeBlock(Type type)
-        {
-            string typeName = type.Name.ToFirstLower();
 
-            yield return $"var query = {typeName}Repository.MapTo<{type.Name}, {type.Name}ViewModel>();";
-            yield return "return query.PageListAsync(page);";
-        }
 
-        public static IEnumerable<string> GetQueryMainCodeBlock(Type type)
+        public static IEnumerable<string> GetDefaultQueryableCodeBlock(Type type)
         {
             string typeName = type.Name.ToFirstLower();
             var relateProps = type.GetProperties().Select(x => new
@@ -147,7 +123,7 @@ namespace FastFrame.CodeGenerate.Build
             foreach (Type relateType in relateProps.GroupBy(x => x.Attr.RelatedType).Select(v => v.Key))
             {
                 string relatedTypeName = relateType.Name.ToFirstLower();
-                yield return $"var {relatedTypeName}Queryable = {relatedTypeName}Repository.Queryable.MapTo<{relateType.Name},{relateType.Name}ViewModel>();";
+                yield return $"var {relatedTypeName}Queryable = {relatedTypeName}Repository.Queryable.Select({relateType.Name}.BuildExpression());";
             }
 
             yield return $"var repository = {typeName}Repository.Queryable;";
@@ -156,38 +132,9 @@ namespace FastFrame.CodeGenerate.Build
             foreach (var prop in relateProps)
             {
                 string name = "_" + prop.Prop.Name.ToFirstLower();
-                bool isRequired = prop.Prop.GetCustomAttribute<RequiredAttribute>() != null;
                 Type relateType = prop.Attr.RelatedType;
-                yield return $"\t\t\tjoin {name} in {relateType.Name.ToFirstLower()}Queryable on _{typeName}.{prop.Prop.Name} equals {name}.Id "
-                    + (isRequired ? "" : $"into t_{name}");
-                if (!isRequired)
-                {
-                    yield return $"\t\t\tfrom {name} in t_{name}.DefaultIfEmpty()";
-                }
-
-            }
-
-            foreach (var prop in relateProps)
-            {
-                string name = prop.Prop.Name.Replace("_Id", "");
-                Type relateType = prop.Attr.RelatedType;
-                string relatedTypeName = relateType.Name.ToFirstLower();
-
-
-                var fieldNames = relateType.GetCustomAttribute<RelatedFieldAttribute>()?.FieldNames.ToArray();
-                if (fieldNames == null)
-                {
-                    fieldNames = relateType.GetProperties()
-                        //.Where(v => v.PropertyType == typeof(string))
-                        .Select(v => v.Name).ToArray();
-                    string[] baseFieldNames = relateType.BaseType.GetProperties().Select(v => v.Name).ToArray();
-                    fieldNames = fieldNames.Where(v => !baseFieldNames.Any(r => r == v)).ToArray();
-                }
-                string linqTempName = "_" + prop.Prop.Name.ToFirstLower();
-                fieldNames = fieldNames.Concat(new[] { "Id" }).Distinct().Select(v => $"{v} = {linqTempName}.{v}").ToArray();
-                string fieldCtorStr = string.Join(",", fieldNames);
-
-                //yield return $"\t\t\tlet {name} = new {relateType.Name}ViewModel {{{fieldCtorStr}}}";
+                yield return $"\t\t\tjoin {name} in {relateType.Name.ToFirstLower()}Queryable on _{typeName}.{prop.Prop.Name} equals {name}.Id into t_{name}";
+                yield return $"\t\t\tfrom {name} in t_{name}.DefaultIfEmpty()";
             }
 
 
@@ -197,17 +144,15 @@ namespace FastFrame.CodeGenerate.Build
             foreach (PropertyInfo prop in type.GetProperties())
             {
                 if (prop.GetCustomAttribute<ExcludeAttribute>() != null)
-                {
                     continue;
-                }
 
                 yield return $"\t\t\t\t{prop.Name} = _{typeName}.{prop.Name},";
             }
 
             foreach (var prop in relateProps)
             {
-                var linqTempName = "_" + prop.Prop.Name.ToFirstLower();
-                yield return $"\t\t\t\t{prop.Prop.Name.Replace("_Id", "")} = {linqTempName /*prop.Prop.Name.Replace("_Id", "")*/},";
+                string name = "_" + prop.Prop.Name.ToFirstLower();
+                yield return $"\t\t\t\t{prop.Prop.Name.Replace("_Id", "_Value")} = {name}.Value,";
             }
 
             if (typeof(ITreeEntity).IsAssignableFrom(type))

@@ -44,11 +44,6 @@
             全部
             </summary>
         </member>
-        <member name="F:FastFrame.Entity.ExportMark.ViewModel">
-            <summary>
-            视图模型
-            </summary>
-        </member>
         <member name="F:FastFrame.Entity.ExportMark.DTO">
             <summary>
             DTO实体
@@ -100,6 +95,11 @@
             列表
             </summary>
         </member>
+        <member name="T:FastFrame.Entity.IsPrimaryFieldAttribute">
+            <summary>
+            主要字段
+            </summary>
+        </member>
         <member name="T:FastFrame.Entity.ReadOnlyAttribute">
             <summary>
             标记只读
@@ -123,26 +123,6 @@
         <member name="F:FastFrame.Entity.ReadOnlyMark.Edit">
             <summary>
             编辑时
-            </summary>
-        </member>
-        <member name="T:FastFrame.Entity.RelatedFromAttribute">
-            <summary>
-            关联自
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.RelatedFromAttribute.FromPropName">
-            <summary>
-            来源属性名
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.RelatedFromAttribute.RelatedFromPropName">
-            <summary>
-            关联属性名
-            </summary>
-        </member>
-        <member name="P:FastFrame.Entity.RelatedFromAttribute.IsDefault">
-            <summary>
-            是否默认字段
             </summary>
         </member>
         <member name="T:FastFrame.Entity.RelatedToAttribute">
@@ -274,7 +254,7 @@
         <member name="T:FastFrame.Entity.Basis.EnumItem">
             <summary>
             数字字典
-            </summary>
+            </summary> 
         </member>
         <member name="P:FastFrame.Entity.Basis.EnumItem.Key">
             <summary>
@@ -354,7 +334,7 @@
         <member name="T:FastFrame.Entity.Basis.Meidia">
             <summary>
             图片库
-            </summary> 
+            </summary>  
         </member>
         <member name="P:FastFrame.Entity.Basis.Meidia.Super_Id">
             <summary>
@@ -494,7 +474,7 @@
         <member name="T:FastFrame.Entity.Basis.Resource">
             <summary>
             资源
-            </summary>     
+            </summary>   
         </member>
         <member name="P:FastFrame.Entity.Basis.Resource.Name">
             <summary>
@@ -539,7 +519,7 @@
         <member name="T:FastFrame.Entity.Basis.Role">
             <summary>
             角色
-            </summary>
+            </summary> 
         </member>
         <member name="P:FastFrame.Entity.Basis.Role.EnCode">
             <summary>
@@ -573,12 +553,12 @@
         </member>
         <member name="P:FastFrame.Entity.Basis.RoleMember.FKey_Id">
             <summary>
-            角色
+            角色 <see cref="T:FastFrame.Entity.Basis.Role"/>
             </summary> 
         </member>
         <member name="P:FastFrame.Entity.Basis.RoleMember.Value_Id">
             <summary>
-            用户
+            用户 <see cref="T:FastFrame.Entity.Basis.User"/>
             </summary> 
         </member>
         <member name="T:FastFrame.Entity.Basis.RolePermission">
@@ -2481,6 +2461,16 @@
         <member name="P:FastFrame.Entity.ITreeEntity.TreeCode">
             <summary>
             树装码
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.DefaultViewModel">
+            <summary>
+            缺省的viewmodel
+            </summary>
+        </member>
+        <member name="M:FastFrame.Entity.IViewModelable`1.BuildExpression">
+            <summary>
+            构建vm表达式
             </summary>
         </member>
         <member name="T:FastFrame.Entity.TargetInfo">

@@ -27,10 +27,10 @@ namespace FastFrame.Entity
                 this.exportMarks.AddRange(new[] { ExportMark.Service });
             }
 
-            /*有服务器就必然要有DTO和VM*/
+            /*有服务器就必然要有DTO*/
             if (exportMarks.Contains(ExportMark.Service))
             {
-                this.exportMarks.AddRange(new[] { ExportMark.DTO, ExportMark.ViewModel });
+                this.exportMarks.AddRange(new[] { ExportMark.DTO });
             }
         }
 

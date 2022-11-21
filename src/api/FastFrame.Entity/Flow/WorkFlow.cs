@@ -7,8 +7,7 @@ namespace FastFrame.Entity.Flow
     /// <summary>
     /// 工作流    
     /// </summary>
-    [Export]
-    [RelatedField(nameof(BeModule), nameof(Version))]
+    [Export] 
     public class WorkFlow : BaseEntity
     {
         /// <summary>
@@ -23,6 +22,7 @@ namespace FastFrame.Entity.Flow
         /// </summary>
         [ReadOnly]
         [StringLength(150)]
+        [IsPrimaryField]
         public string BeModuleName { get; set; }
 
         /// <summary>

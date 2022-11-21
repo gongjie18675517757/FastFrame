@@ -25,13 +25,14 @@ namespace FastFrame.Application.Basis
 		/// <summary>
 		/// 上级 
 		/// </summary>
-		public MeidiaViewModel Super {get;set;}
+		public string Super_Value {get;set;}
 		
 		/// <summary>
 		/// 名称 
 		/// </summary>
 		[StringLength(50)]
 		[Required()]
+		[IsPrimaryField()]
 		public string Name {get;set;}
 		
 		/// <summary>
@@ -60,7 +61,7 @@ namespace FastFrame.Application.Basis
 		/// <summary>
 		/// 创建人 
 		/// </summary>
-		public UserViewModel Create_User {get;set;}
+		public string Create_User_Value {get;set;}
 		
 		/// <summary>
 		/// 创建时间 
@@ -79,7 +80,7 @@ namespace FastFrame.Application.Basis
 		/// <summary>
 		/// 修改人 
 		/// </summary>
-		public UserViewModel Modify_User {get;set;}
+		public string Modify_User_Value {get;set;}
 		
 		/// <summary>
 		/// 修改时间 

@@ -24,9 +24,9 @@ namespace FastFrame.Application.Basis
 			this.roleRepository=roleRepository;
 		}
 		
-		protected override IQueryable<RoleDto> QueryMain() 
+		protected override IQueryable<RoleDto> DefaultQueryable() 
 		{
-			var userQueryable = userRepository.Queryable.MapTo<User,UserViewModel>();
+			var userQueryable = userRepository.Queryable.Select(User.BuildExpression());
 			var repository = roleRepository.Queryable;
 			var query = from _role in repository 
 						join _create_User_Id in userQueryable on _role.Create_User_Id equals _create_User_Id.Id into t__create_User_Id
@@ -45,15 +45,10 @@ namespace FastFrame.Application.Basis
 							CreateTime = _role.CreateTime,
 							Modify_User_Id = _role.Modify_User_Id,
 							ModifyTime = _role.ModifyTime,
-							Create_User = _create_User_Id,
-							Modify_User = _modify_User_Id,
+							Create_User_Value = _create_User_Id.Value,
+							Modify_User_Value = _modify_User_Id.Value,
 						};
 			return query;
-		}
-		public Task<IPageList<RoleViewModel>> ViewModelListAsync(IPagination<RoleViewModel> page) 
-		{
-			var query = roleRepository.MapTo<Role, RoleViewModel>();
-			return query.PageListAsync(page);
 		}
 		
 	}

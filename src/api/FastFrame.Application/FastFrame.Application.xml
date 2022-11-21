@@ -155,16 +155,26 @@
             获取分页列表
             </summary> 
         </member>
-        <member name="M:FastFrame.Application.BaseService`1.Query">
+        <member name="M:FastFrame.Application.BaseService`1.BuildQuery">
             <summary>
-            拼查询表达式
+            构建主查询表达式
             </summary>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.Application.BaseService`1.QueryMain">
+        <member name="M:FastFrame.Application.BaseService`1.DefaultQueryable">
             <summary>
-            主查询表达式
+            代码生成器生成的查询表达式
             </summary> 
+        </member>
+        <member name="M:FastFrame.Application.BaseService`1.ViewModelListAsync``1(System.String,System.Int32,System.Int32)">
+            <summary>
+            查询view model
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <param name="kw"></param>
+            <param name="page_index"></param>
+            <param name="page_size"></param>
+            <returns></returns>
         </member>
         <member name="T:FastFrame.Application.BaseService`2">
             <summary>
@@ -221,7 +231,7 @@
             验证重复属性
             </summary> 
         </member>
-        <member name="M:FastFrame.Application.BaseService`2.QueryMain">
+        <member name="M:FastFrame.Application.BaseService`2.DefaultQueryable">
             <summary>
             主查询表达式
             </summary> 
@@ -462,6 +472,13 @@
             </summary>
             <param name="apiRequestLog"></param>
         </member>
+        <member name="M:FastFrame.Application.Basis.DeptMemberService.GetUserViewModelsByDeptIds(System.String[])">
+            <summary>
+            根据科室ids,返回人员信息
+            </summary>
+            <param name="keys"></param>
+            <returns></returns>
+        </member>
         <member name="T:FastFrame.Application.Basis.DeptService">
             <summary>
             部门 服务实现 
@@ -477,7 +494,7 @@
             上级 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Basis.DeptDto.Super">
+        <member name="P:FastFrame.Application.Basis.DeptDto.Super_Value">
             <summary>
             上级 
             </summary>
@@ -502,7 +519,7 @@
             创建人 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Basis.DeptDto.Create_User">
+        <member name="P:FastFrame.Application.Basis.DeptDto.Create_User_Value">
             <summary>
             创建人 
             </summary>
@@ -517,7 +534,7 @@
             修改人 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Basis.DeptDto.Modify_User">
+        <member name="P:FastFrame.Application.Basis.DeptDto.Modify_User_Value">
             <summary>
             修改人 
             </summary>
@@ -530,21 +547,6 @@
         <member name="P:FastFrame.Application.Basis.DeptDto.ChildCount">
             <summary>
             下级数量 
-            </summary>
-        </member>
-        <member name="T:FastFrame.Application.Basis.DeptViewModel">
-            <summary>
-            部门 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.DeptViewModel.Name">
-            <summary>
-            部门名称 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.DeptViewModel.Id">
-            <summary>
-            主键 
             </summary>
         </member>
         <member name="T:FastFrame.Application.Basis.EnumItemDto">
@@ -562,7 +564,7 @@
             上级值 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Basis.EnumItemDto.Super">
+        <member name="P:FastFrame.Application.Basis.EnumItemDto.Super_Value">
             <summary>
             上级值 
             </summary>
@@ -592,7 +594,7 @@
             创建人 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Basis.EnumItemDto.Create_User">
+        <member name="P:FastFrame.Application.Basis.EnumItemDto.Create_User_Value">
             <summary>
             创建人 
             </summary>
@@ -607,7 +609,7 @@
             修改人 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Basis.EnumItemDto.Modify_User">
+        <member name="P:FastFrame.Application.Basis.EnumItemDto.Modify_User_Value">
             <summary>
             修改人 
             </summary>
@@ -620,21 +622,6 @@
         <member name="P:FastFrame.Application.Basis.EnumItemDto.ChildCount">
             <summary>
             下级数量 
-            </summary>
-        </member>
-        <member name="T:FastFrame.Application.Basis.EnumItemViewModel">
-            <summary>
-            数字字典 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.EnumItemViewModel.Value">
-            <summary>
-            字典值 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.EnumItemViewModel.Id">
-            <summary>
-            主键 
             </summary>
         </member>
         <member name="T:FastFrame.Application.Basis.EnumItemService">
@@ -702,7 +689,7 @@
             上级 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Basis.MeidiaDto.Super">
+        <member name="P:FastFrame.Application.Basis.MeidiaDto.Super_Value">
             <summary>
             上级 
             </summary>
@@ -732,7 +719,7 @@
             创建人 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Basis.MeidiaDto.Create_User">
+        <member name="P:FastFrame.Application.Basis.MeidiaDto.Create_User_Value">
             <summary>
             创建人 
             </summary>
@@ -747,7 +734,7 @@
             修改人 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Basis.MeidiaDto.Modify_User">
+        <member name="P:FastFrame.Application.Basis.MeidiaDto.Modify_User_Value">
             <summary>
             修改人 
             </summary>
@@ -802,21 +789,6 @@
             创建时间
             </summary>
         </member>
-        <member name="T:FastFrame.Application.Basis.MeidiaViewModel">
-            <summary>
-            图片库 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.MeidiaViewModel.Name">
-            <summary>
-            名称 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.MeidiaViewModel.Id">
-            <summary>
-            主键 
-            </summary>
-        </member>
         <member name="T:FastFrame.Application.Basis.MeidiaService">
             <summary>
             图片库 服务实现 
@@ -842,7 +814,7 @@
             发布人 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Basis.NotifyDto.Publush">
+        <member name="P:FastFrame.Application.Basis.NotifyDto.Publush_Value">
             <summary>
             发布人 
             </summary>
@@ -852,7 +824,7 @@
             附件 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Basis.NotifyDto.Resource">
+        <member name="P:FastFrame.Application.Basis.NotifyDto.Resource_Value">
             <summary>
             附件 
             </summary>
@@ -867,7 +839,7 @@
             创建人 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Basis.NotifyDto.Create_User">
+        <member name="P:FastFrame.Application.Basis.NotifyDto.Create_User_Value">
             <summary>
             创建人 
             </summary>
@@ -882,7 +854,7 @@
             修改人 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Basis.NotifyDto.Modify_User">
+        <member name="P:FastFrame.Application.Basis.NotifyDto.Modify_User_Value">
             <summary>
             修改人 
             </summary>
@@ -890,41 +862,6 @@
         <member name="P:FastFrame.Application.Basis.NotifyDto.ModifyTime">
             <summary>
             修改时间 
-            </summary>
-        </member>
-        <member name="T:FastFrame.Application.Basis.NotifyViewModel">
-            <summary>
-            通知 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.NotifyViewModel.Title">
-            <summary>
-            标题 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.NotifyViewModel.Type_Id">
-            <summary>
-            类型 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.NotifyViewModel.Publush_Id">
-            <summary>
-            发布人 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.NotifyViewModel.Resource_Id">
-            <summary>
-            附件 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.NotifyViewModel.Content">
-            <summary>
-            内容 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.NotifyViewModel.Id">
-            <summary>
-            主键 
             </summary>
         </member>
         <member name="T:FastFrame.Application.Basis.NotifyService">
@@ -982,7 +919,7 @@
             创建人 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Basis.NumberOptionDto.Create_User">
+        <member name="P:FastFrame.Application.Basis.NumberOptionDto.Create_User_Value">
             <summary>
             创建人 
             </summary>
@@ -997,7 +934,7 @@
             修改人 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Basis.NumberOptionDto.Modify_User">
+        <member name="P:FastFrame.Application.Basis.NumberOptionDto.Modify_User_Value">
             <summary>
             修改人 
             </summary>
@@ -1007,74 +944,9 @@
             修改时间 
             </summary>
         </member>
-        <member name="T:FastFrame.Application.Basis.NumberOptionViewModel">
-            <summary>
-            编号设置 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.NumberOptionViewModel.BeModule">
-            <summary>
-            模块名称 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.NumberOptionViewModel.Prefix">
-            <summary>
-            前缀 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.NumberOptionViewModel.TaskDate">
-            <summary>
-            是否取日期 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.NumberOptionViewModel.SerialLength">
-            <summary>
-            流水号长度 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.NumberOptionViewModel.Suffix">
-            <summary>
-            后缀 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.NumberOptionViewModel.DateField">
-            <summary>
-            取日期字段 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.NumberOptionViewModel.DateFieldText">
-            <summary>
-            日期字段名称 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.NumberOptionViewModel.FmtDate">
-            <summary>
-            日期格式方法 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.NumberOptionViewModel.Id">
-            <summary>
-            主键 
-            </summary>
-        </member>
         <member name="T:FastFrame.Application.Basis.NumberOptionService">
             <summary>
             编号设置 服务实现 
-            </summary>
-        </member>
-        <member name="T:FastFrame.Application.Basis.ResourceViewModel">
-            <summary>
-            资源 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.ResourceViewModel.Name">
-            <summary>
-            资源名称 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.ResourceViewModel.Id">
-            <summary>
-             
             </summary>
         </member>
         <member name="T:FastFrame.Application.Basis.RoleDto">
@@ -1112,7 +984,7 @@
             创建人 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Basis.RoleDto.Create_User">
+        <member name="P:FastFrame.Application.Basis.RoleDto.Create_User_Value">
             <summary>
             创建人 
             </summary>
@@ -1127,7 +999,7 @@
             修改人 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Basis.RoleDto.Modify_User">
+        <member name="P:FastFrame.Application.Basis.RoleDto.Modify_User_Value">
             <summary>
             修改人 
             </summary>
@@ -1146,26 +1018,6 @@
             <summary>
             上级权限标记
             </summary> 
-        </member>
-        <member name="T:FastFrame.Application.Basis.RoleViewModel">
-            <summary>
-            角色 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.RoleViewModel.Name">
-            <summary>
-            名称 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.RoleViewModel.EnCode">
-            <summary>
-            编码 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.RoleViewModel.Id">
-            <summary>
-            主键 
-            </summary>
         </member>
         <member name="T:FastFrame.Application.Basis.RoleService">
             <summary>
@@ -1283,21 +1135,6 @@
             下级数量 
             </summary>
         </member>
-        <member name="T:FastFrame.Application.Basis.TenantViewModel">
-            <summary>
-            多租户信息 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.TenantViewModel.FullName">
-            <summary>
-            全称 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.TenantViewModel.Id">
-            <summary>
-            主键 
-            </summary>
-        </member>
         <member name="T:FastFrame.Application.Basis.TenantService">
             <summary>
             多租户信息 服务实现 
@@ -1338,7 +1175,7 @@
             头像 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Basis.UserDto.HandIcon">
+        <member name="P:FastFrame.Application.Basis.UserDto.HandIcon_Value">
             <summary>
             头像 
             </summary>
@@ -1358,7 +1195,7 @@
             创建人 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Basis.UserDto.Create_User">
+        <member name="P:FastFrame.Application.Basis.UserDto.Create_User_Value">
             <summary>
             创建人 
             </summary>
@@ -1373,7 +1210,7 @@
             修改人 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Basis.UserDto.Modify_User">
+        <member name="P:FastFrame.Application.Basis.UserDto.Modify_User_Value">
             <summary>
             修改人 
             </summary>
@@ -1381,21 +1218,6 @@
         <member name="P:FastFrame.Application.Basis.UserDto.ModifyTime">
             <summary>
             修改时间 
-            </summary>
-        </member>
-        <member name="T:FastFrame.Application.Basis.UserViewModel">
-            <summary>
-            用户 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.UserViewModel.Name">
-            <summary>
-            姓名 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.UserViewModel.Id">
-            <summary>
-            主键 
             </summary>
         </member>
         <member name="T:FastFrame.Application.Basis.UserService">
@@ -1671,7 +1493,7 @@
             创建人 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Flow.DFModuleDto.Create_User">
+        <member name="P:FastFrame.Application.Flow.DFModuleDto.Create_User_Value">
             <summary>
             创建人 
             </summary>
@@ -1686,7 +1508,7 @@
             修改人 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Flow.DFModuleDto.Modify_User">
+        <member name="P:FastFrame.Application.Flow.DFModuleDto.Modify_User_Value">
             <summary>
             修改人 
             </summary>
@@ -1714,46 +1536,6 @@
         <member name="P:FastFrame.Application.Flow.DFModuleFieldModel.Rules">
             <summary>
             验证规则 
-            </summary>
-        </member>
-        <member name="T:FastFrame.Application.Flow.DFModuleViewModel">
-            <summary>
-            动态表单模块 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Flow.DFModuleViewModel.Name">
-            <summary>
-            编码 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Flow.DFModuleViewModel.Description">
-            <summary>
-            名称 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Flow.DFModuleViewModel.Version">
-            <summary>
-            版本 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Flow.DFModuleViewModel.IsEnabled">
-            <summary>
-            是否启用 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Flow.DFModuleViewModel.HaveCheck">
-            <summary>
-            是否需要审核 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Flow.DFModuleViewModel.HaveNumber">
-            <summary>
-            是否需要编号 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Flow.DFModuleViewModel.Id">
-            <summary>
-            主键 
             </summary>
         </member>
         <member name="T:FastFrame.Application.Flow.FlowOperateInput">
@@ -1956,7 +1738,7 @@
             创建人 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Flow.WorkFlowDto.Create_User">
+        <member name="P:FastFrame.Application.Flow.WorkFlowDto.Create_User_Value">
             <summary>
             创建人 
             </summary>
@@ -1971,7 +1753,7 @@
             修改人 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Flow.WorkFlowDto.Modify_User">
+        <member name="P:FastFrame.Application.Flow.WorkFlowDto.Modify_User_Value">
             <summary>
             修改人 
             </summary>
@@ -1979,26 +1761,6 @@
         <member name="P:FastFrame.Application.Flow.WorkFlowDto.ModifyTime">
             <summary>
             修改时间 
-            </summary>
-        </member>
-        <member name="T:FastFrame.Application.Flow.WorkFlowViewModel">
-            <summary>
-            工作流 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Flow.WorkFlowViewModel.BeModule">
-            <summary>
-            适用模块 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Flow.WorkFlowViewModel.Version">
-            <summary>
-            版本 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Flow.WorkFlowViewModel.Id">
-            <summary>
-            主键 
             </summary>
         </member>
         <member name="T:FastFrame.Application.Flow.HandleFlowOperatedService`1">
@@ -2146,7 +1908,7 @@
             申请人 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.OA.OaLeaveDto.Create_User">
+        <member name="P:FastFrame.Application.OA.OaLeaveDto.Create_User_Value">
             <summary>
             申请人 
             </summary>
@@ -2161,7 +1923,7 @@
             部门 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.OA.OaLeaveDto.Dept">
+        <member name="P:FastFrame.Application.OA.OaLeaveDto.Dept_Value">
             <summary>
             部门 
             </summary>
@@ -2176,7 +1938,7 @@
             工作代理人 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.OA.OaLeaveDto.Agent">
+        <member name="P:FastFrame.Application.OA.OaLeaveDto.Agent_Value">
             <summary>
             工作代理人 
             </summary>
@@ -2211,7 +1973,7 @@
             修改人 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.OA.OaLeaveDto.Modify_User">
+        <member name="P:FastFrame.Application.OA.OaLeaveDto.Modify_User_Value">
             <summary>
             修改人 
             </summary>
@@ -2234,66 +1996,6 @@
         <member name="P:FastFrame.Application.OA.OaLeaveDto.StepList">
             <summary>
             流程步骤 
-            </summary>
-        </member>
-        <member name="T:FastFrame.Application.OA.OaLeaveViewModel">
-            <summary>
-            请假单 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.OA.OaLeaveViewModel.Number">
-            <summary>
-            请假单号 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.OA.OaLeaveViewModel.Job_Id">
-            <summary>
-            岗位 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.OA.OaLeaveViewModel.Dept_Id">
-            <summary>
-            部门 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.OA.OaLeaveViewModel.LeaveCategory">
-            <summary>
-            请假类型 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.OA.OaLeaveViewModel.Agent_Id">
-            <summary>
-            工作代理人 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.OA.OaLeaveViewModel.StartTime">
-            <summary>
-            开始时间 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.OA.OaLeaveViewModel.EndTime">
-            <summary>
-            结束时间 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.OA.OaLeaveViewModel.Days">
-            <summary>
-            请假天数 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.OA.OaLeaveViewModel.Reasons">
-            <summary>
-            申请事由 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.OA.OaLeaveViewModel.FlowStatus">
-            <summary>
-            审批状态 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.OA.OaLeaveViewModel.Id">
-            <summary>
-            主键 
             </summary>
         </member>
         <member name="T:FastFrame.Application.OA.OaLeaveService">

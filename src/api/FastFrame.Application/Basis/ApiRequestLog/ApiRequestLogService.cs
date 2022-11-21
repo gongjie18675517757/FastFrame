@@ -58,7 +58,7 @@ namespace FastFrame.Application.Basis
             }
         }
 
-        protected override IQueryable<ApiRequestLog> QueryMain()
+        protected override IQueryable<ApiRequestLog> DefaultQueryable()
         {
             return repository;
         }

@@ -24,10 +24,10 @@ namespace FastFrame.Application.Basis
 			this.userRepository=userRepository;
 		}
 		
-		protected override IQueryable<MeidiaDto> QueryMain() 
+		protected override IQueryable<MeidiaDto> DefaultQueryable() 
 		{
-			var meidiaQueryable = meidiaRepository.Queryable.MapTo<Meidia,MeidiaViewModel>();
-			var userQueryable = userRepository.Queryable.MapTo<User,UserViewModel>();
+			var meidiaQueryable = meidiaRepository.Queryable.Select(Meidia.BuildExpression());
+			var userQueryable = userRepository.Queryable.Select(User.BuildExpression());
 			var repository = meidiaRepository.Queryable;
 			var query = from _meidia in repository 
 						join _super_Id in meidiaQueryable on _meidia.Super_Id equals _super_Id.Id into t__super_Id
@@ -48,17 +48,12 @@ namespace FastFrame.Application.Basis
 							CreateTime = _meidia.CreateTime,
 							Modify_User_Id = _meidia.Modify_User_Id,
 							ModifyTime = _meidia.ModifyTime,
-							Super = _super_Id,
-							Create_User = _create_User_Id,
-							Modify_User = _modify_User_Id,
+							Super_Value = _super_Id.Value,
+							Create_User_Value = _create_User_Id.Value,
+							Modify_User_Value = _modify_User_Id.Value,
 							ChildCount = repository.Count(c => c.Super_Id == _meidia.Id)
 						};
 			return query;
-		}
-		public Task<IPageList<MeidiaViewModel>> ViewModelListAsync(IPagination<MeidiaViewModel> page) 
-		{
-			var query = meidiaRepository.MapTo<Meidia, MeidiaViewModel>();
-			return query.PageListAsync(page);
 		}
 		
 	}

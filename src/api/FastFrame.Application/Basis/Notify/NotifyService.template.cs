@@ -26,10 +26,10 @@ namespace FastFrame.Application.Basis
 			this.notifyRepository=notifyRepository;
 		}
 		
-		protected override IQueryable<NotifyDto> QueryMain() 
+		protected override IQueryable<NotifyDto> DefaultQueryable() 
 		{
-			var userQueryable = userRepository.Queryable.MapTo<User,UserViewModel>();
-			var resourceQueryable = resourceRepository.Queryable.MapTo<Resource,ResourceViewModel>();
+			var userQueryable = userRepository.Queryable.Select(User.BuildExpression());
+			var resourceQueryable = resourceRepository.Queryable.Select(Resource.BuildExpression());
 			var repository = notifyRepository.Queryable;
 			var query = from _notify in repository 
 						join _publush_Id in userQueryable on _notify.Publush_Id equals _publush_Id.Id into t__publush_Id
@@ -52,17 +52,12 @@ namespace FastFrame.Application.Basis
 							CreateTime = _notify.CreateTime,
 							Modify_User_Id = _notify.Modify_User_Id,
 							ModifyTime = _notify.ModifyTime,
-							Publush = _publush_Id,
-							Resource = _resource_Id,
-							Create_User = _create_User_Id,
-							Modify_User = _modify_User_Id,
+							Publush_Value = _publush_Id.Value,
+							Resource_Value = _resource_Id.Value,
+							Create_User_Value = _create_User_Id.Value,
+							Modify_User_Value = _modify_User_Id.Value,
 						};
 			return query;
-		}
-		public Task<IPageList<NotifyViewModel>> ViewModelListAsync(IPagination<NotifyViewModel> page) 
-		{
-			var query = notifyRepository.MapTo<Notify, NotifyViewModel>();
-			return query.PageListAsync(page);
 		}
 		
 	}

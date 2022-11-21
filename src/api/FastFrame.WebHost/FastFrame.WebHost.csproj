@@ -1,10 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-	<PropertyGroup>
-		 
-		<TargetFramework>net6.0</TargetFramework>
-		<!--<Nullable>enable</Nullable>-->
+	<PropertyGroup> 
+		<TargetFramework>net7.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<EnablePreviewFeatures>true</EnablePreviewFeatures>
+		<LangVersion>preview</LangVersion>
+		
 		<UserSecretsId>baa687c8-fef2-457d-b3b8-191741af27e2</UserSecretsId>
 		<!--<AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>-->
 	</PropertyGroup>

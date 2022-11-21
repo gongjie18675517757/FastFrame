@@ -24,10 +24,10 @@ namespace FastFrame.Application.Basis
 			this.userRepository=userRepository;
 		}
 		
-		protected override IQueryable<UserDto> QueryMain() 
+		protected override IQueryable<UserDto> DefaultQueryable() 
 		{
-			var resourceQueryable = resourceRepository.Queryable.MapTo<Resource,ResourceViewModel>();
-			var userQueryable = userRepository.Queryable.MapTo<User,UserViewModel>();
+			var resourceQueryable = resourceRepository.Queryable.Select(Resource.BuildExpression());
+			var userQueryable = userRepository.Queryable.Select(User.BuildExpression());
 			var repository = userRepository.Queryable;
 			var query = from _user in repository 
 						join _handIcon_Id in resourceQueryable on _user.HandIcon_Id equals _handIcon_Id.Id into t__handIcon_Id
@@ -51,16 +51,11 @@ namespace FastFrame.Application.Basis
 							CreateTime = _user.CreateTime,
 							Modify_User_Id = _user.Modify_User_Id,
 							ModifyTime = _user.ModifyTime,
-							HandIcon = _handIcon_Id,
-							Create_User = _create_User_Id,
-							Modify_User = _modify_User_Id,
+							HandIcon_Value = _handIcon_Id.Value,
+							Create_User_Value = _create_User_Id.Value,
+							Modify_User_Value = _modify_User_Id.Value,
 						};
 			return query;
-		}
-		public Task<IPageList<UserViewModel>> ViewModelListAsync(IPagination<UserViewModel> page) 
-		{
-			var query = userRepository.MapTo<User, UserViewModel>();
-			return query.PageListAsync(page);
 		}
 		
 	}

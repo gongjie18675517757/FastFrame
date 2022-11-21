@@ -20,7 +20,7 @@ namespace FastFrame.Application.Basis
             this.users = users;
         }
 
-        protected override IQueryable<LoginLogModel> QueryMain()
+        protected override IQueryable<LoginLogModel> DefaultQueryable()
         {
             return from a in loginLogs
                    join b in users on a.User_Id equals b.Id

@@ -1,5 +1,6 @@
 ﻿using FastFrame.Application;
 using FastFrame.Application.Basis;
+using FastFrame.Entity;
 using FastFrame.Entity.Enums;
 using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Permission;
@@ -40,10 +41,9 @@ namespace FastFrame.WebHost.Controllers.Basis
 
         [Permission(new string[] { "Add", "Update" })]
         [HttpGet("{name?}")]
-        public async Task<IPageList<EnumItemViewModel>> EnumItemList(EnumName? name, string qs)
+        public Task<IEnumerable<IViewModel>> EnumItemList(EnumName? name, string kw, int page_index = 1, int page_size = 10)
         {
-            var pagination = Pagination<EnumItemViewModel>.FromJson(qs);
-            return await service.EnumItemList(name, pagination);
+            return service.EnumItemList(name, kw, page_index, page_size);
         }
     }
 }

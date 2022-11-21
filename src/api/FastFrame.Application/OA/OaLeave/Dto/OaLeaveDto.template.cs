@@ -39,7 +39,7 @@ namespace FastFrame.Application.OA
 		/// <summary>
 		/// 申请人 
 		/// </summary>
-		public UserViewModel Create_User {get;set;}
+		public string Create_User_Value {get;set;}
 		
 		/// <summary>
 		/// 岗位 
@@ -58,7 +58,7 @@ namespace FastFrame.Application.OA
 		/// <summary>
 		/// 部门 
 		/// </summary>
-		public DeptViewModel Dept {get;set;}
+		public string Dept_Value {get;set;}
 		
 		/// <summary>
 		/// 请假类型 
@@ -76,7 +76,7 @@ namespace FastFrame.Application.OA
 		/// <summary>
 		/// 工作代理人 
 		/// </summary>
-		public UserViewModel Agent {get;set;}
+		public string Agent_Value {get;set;}
 		
 		/// <summary>
 		/// 开始时间 
@@ -116,7 +116,7 @@ namespace FastFrame.Application.OA
 		/// <summary>
 		/// 修改人 
 		/// </summary>
-		public UserViewModel Modify_User {get;set;}
+		public string Modify_User_Value {get;set;}
 		
 		/// <summary>
 		/// 修改时间 

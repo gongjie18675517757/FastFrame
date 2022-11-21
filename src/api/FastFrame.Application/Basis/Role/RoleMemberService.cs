@@ -1,4 +1,5 @@
 ﻿using FastFrame.Application.Events;
+using FastFrame.Entity;
 using FastFrame.Entity.Basis;
 using FastFrame.Entity.Flow;
 using FastFrame.Infrastructure;
@@ -16,38 +17,35 @@ namespace FastFrame.Application.Basis
         IEventHandle<DoMainAdding<RoleDto>>,
         IEventHandle<DoMainDeleteing<RoleDto>>,
         IEventHandle<DoMainUpdateing<RoleDto>>,
-        IRequestHandle<UserViewModel[], RoleDto>,
 
         IEventHandle<DoMainAdding<UserDto>>,
         IEventHandle<DoMainDeleteing<UserDto>>,
-        IEventHandle<DoMainUpdateing<UserDto>>,
-        IRequestHandle<RoleViewModel[], UserDto>,
-        IRequestHandle<IEnumerable<KeyValuePair<string, RoleViewModel[]>>, UserDto[]>
+        IEventHandle<DoMainUpdateing<UserDto>>
     {
         private readonly IRepository<RoleMember> roleMembers;
         private readonly IRepository<User> users;
-        private readonly IRepository<Role> roles; 
-        private readonly HandleOne2ManyService<UserViewModel, RoleMember> handleRoleMemberService;
-        private readonly HandleOne2ManyService<RoleViewModel, RoleMember> handleUserRoleService;
+        private readonly IRepository<Role> roles;
+        private readonly HandleOne2ManyService<IViewModel, RoleMember> handleRoleMemberService;
+        private readonly HandleOne2ManyService<IViewModel, RoleMember> handleUserRoleService;
 
         public RoleMemberService(
             IRepository<RoleMember> roleMembers,
             IRepository<User> users,
-            IRepository<Role> roles, 
-            HandleOne2ManyService<UserViewModel, RoleMember> handleRoleMemberService,
-            HandleOne2ManyService<RoleViewModel, RoleMember> handleUserRoleService)
+            IRepository<Role> roles,
+            HandleOne2ManyService<IViewModel, RoleMember> handleRoleMemberService,
+            HandleOne2ManyService<IViewModel, RoleMember> handleUserRoleService)
         {
             this.roleMembers = roleMembers;
             this.users = users;
-            this.roles = roles; 
+            this.roles = roles;
             this.handleRoleMemberService = handleRoleMemberService;
             this.handleUserRoleService = handleUserRoleService;
         }
 
         public async Task HandleEventAsync(DoMainDeleteing<RoleDto> @event)
         {
-            await handleRoleMemberService.DelManyAsync(v => v.FKey_Id == @event.Id);  
-            
+            await handleRoleMemberService.DelManyAsync(v => v.FKey_Id == @event.Id);
+
         }
 
         public async Task HandleEventAsync(DoMainUpdateing<RoleDto> @event)
@@ -66,12 +64,7 @@ namespace FastFrame.Application.Basis
 
         }
 
-        public Task<UserViewModel[]> HandleRequestAsync(RoleDto request)
-        {
-            var userQuery = users.MapTo<User, UserViewModel>();
-            return userQuery.Where(v => roleMembers.Any(r => r.Value_Id == v.Id && r.FKey_Id == request.Id))
-                          .ToArrayAsync();
-        }
+
 
         public async Task HandleEventAsync(DoMainAdding<RoleDto> @event)
         {
@@ -116,29 +109,49 @@ namespace FastFrame.Application.Basis
 
         }
 
-        Task<RoleViewModel[]> IRequestHandle<RoleViewModel[], UserDto>.HandleRequestAsync(UserDto request)
+        public async Task<Dictionary<string, IEnumerable<IViewModel>>> GetUserViewModelsByRoleIds(params string[] keys)
         {
-            return roles
-                     .Where(v => roleMembers.Any(r => r.FKey_Id == v.Id && r.Value_Id == request.Id))
-                     .MapTo<Role, RoleViewModel>()
-                     .ToArrayAsync();
+            var userQuery = users.Select(User.BuildExpression());
+            var query = from a in userQuery
+                        join b in roleMembers on a.Id equals b.Value_Id
+                        where keys.Contains(b.FKey_Id)
+                        select new
+                        {
+                            vm = a,
+                            b.FKey_Id
+                        };
+            var list = await query.ToListAsync();
+
+            return keys
+                .Where(v => !v.IsNullOrWhiteSpace())
+                .Distinct()
+                .ToDictionary(
+                    v => v,
+                    v => list.Where(x => x.FKey_Id == v).Select(x => x.vm)
+                );
         }
 
-        public async Task<IEnumerable<KeyValuePair<string, RoleViewModel[]>>> HandleRequestAsync(UserDto[] request)
+        public async Task<Dictionary<string, IEnumerable<IViewModel>>> GetRoleViewModelsByUserIds(params string[] keys)
         {
-            var roleQuery = roles.MapTo<Role, RoleViewModel>();
-            var keys = request.Select(v => v.Id).ToArray();
+            var roleQuery = roles.Select(Role.BuildExpression());
             var query = from a in roleQuery
-                        join b in roleMembers on a.Id equals b.FKey_Id
+                        join b in roleMembers on a.Id equals b.Value_Id
                         where keys.Contains(b.Value_Id)
                         select new
                         {
-                            b.Value_Id,
-                            Role = a
+                            vm = a,
+                            b.Value_Id
                         };
 
-            return (await query.ToListAsync()).GroupBy(v => v.Value_Id)
-                        .Select(v => new KeyValuePair<string, RoleViewModel[]>(v.Key, v.Select(r => r.Role).ToArray()));
+            var list = await query.ToListAsync();
+
+            return keys
+                .Where(v => !v.IsNullOrWhiteSpace())
+                .Distinct()
+                .ToDictionary(
+                    v => v,
+                    v => list.Where(x => x.Value_Id == v).Select(x => x.vm)
+                );
         }
     }
 }

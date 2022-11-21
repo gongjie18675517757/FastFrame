@@ -1,20 +1,21 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq.Expressions;
 
 namespace FastFrame.Entity.Basis
 {
     /// <summary>
     /// 多租户信息
     /// </summary>
-    [Export]
-    [RelatedField(nameof(FullName))]
-    public class Tenant : IEntity, IHasSoftDelete, ITreeEntity
+    [Export] 
+    public class Tenant : IEntity, IHasSoftDelete, ITreeEntity,IViewModelable<Tenant>
     {
         /// <summary>
         /// 全称
         /// </summary>
         [StringLength(50)]
         [Required]
+        [IsPrimaryField]
         public string FullName { get; set; }
 
         /// <summary>
@@ -68,5 +69,10 @@ namespace FastFrame.Entity.Basis
         }
 
         public string GetNumber() => TreeCode;
+
+        private static Expression<Func<Tenant, IViewModel>> vm_expression = 
+            v => new DefaultViewModel { Id = v.Id, Value = v.ShortName + "(" + v.TreeCode + ")" };
+
+        public static Expression<Func<Tenant, IViewModel>> BuildExpression() => vm_expression;
     }
 }

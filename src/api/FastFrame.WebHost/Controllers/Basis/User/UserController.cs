@@ -1,5 +1,7 @@
 ﻿using FastFrame.Application;
 using FastFrame.Application.Basis;
+using FastFrame.Entity;
+using FastFrame.Entity.Basis;
 using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Permission;
 using Microsoft.AspNetCore.Mvc;
@@ -36,12 +38,12 @@ namespace FastFrame.WebHost.Controllers.Basis
 
         [Permission(new string[] { "Add", "Update" })]
         [HttpGet]
-        public Task<IPageList<RoleViewModel>> RoleList(string qs)
-            => HttpContext.RequestServices.GetService<RoleService>().ViewModelListAsync(Pagination<RoleViewModel>.FromJson(qs));
+        public Task<IEnumerable<IViewModel>> RoleList(string kw, int page_index = 1, int page_size = 10)
+            => service.ViewModelListAsync<Role>(kw, page_index, page_size);
 
         [Permission(new string[] { "Add", "Update" })]
         [HttpGet]
-        public Task<IPageList<DeptViewModel>> DeptList(string qs)
-            => HttpContext.RequestServices.GetService<DeptService>().ViewModelListAsync(Pagination<DeptViewModel>.FromJson(qs));
+        public Task<IEnumerable<IViewModel>> DeptList(string kw, int page_index = 1, int page_size = 10)
+            => service.ViewModelListAsync<Dept>(kw, page_index, page_size);
     }
 }

@@ -1,14 +1,14 @@
 ﻿using FastFrame.Entity.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.Linq.Expressions;
 
 namespace FastFrame.Entity.Basis
 {
     /// <summary>
     /// 数字字典
-    /// </summary>
-    [RelatedField(nameof(Value))]
+    /// </summary> 
     [Export]
-    public class EnumItem : BaseEntity, ITreeEntity
+    public class EnumItem : BaseEntity, ITreeEntity, IViewModelable<EnumItem>
     {
         /// <summary>
         /// 字段类别
@@ -28,6 +28,7 @@ namespace FastFrame.Entity.Basis
         /// </summary>
         [StringLength(20)]
         [ReadOnly]
+        [IsPrimaryField]
         public string TreeCode { get; set; } = "保存时生成";
 
         /// <summary>
@@ -45,8 +46,8 @@ namespace FastFrame.Entity.Basis
         /// <summary>
         /// 排序
         /// </summary>
-        public int SortVal { get; set; } 
- 
+        public int SortVal { get; set; }
+
 
         public void SetNumber(string val)
         {
@@ -54,5 +55,10 @@ namespace FastFrame.Entity.Basis
         }
 
         public string GetNumber() => TreeCode;
+
+
+        private static Expression<Func<EnumItem, IViewModel>> vm_expression = v => new DefaultViewModel { Id = v.Id, Value = v.Value + "(" + v.TreeCode + ")" };
+
+        public static Expression<Func<EnumItem, IViewModel>> BuildExpression() => vm_expression;
     }
 }

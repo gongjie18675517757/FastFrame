@@ -8,12 +8,7 @@
         /// <summary>
         /// 全部
         /// </summary>
-        All,
-
-        /// <summary>
-        /// 视图模型
-        /// </summary>
-        ViewModel,
+        All, 
 
         /// <summary>
         /// DTO实体

@@ -38,7 +38,7 @@ namespace FastFrame.Application.Basis
 		/// <summary>
 		/// 发布人 
 		/// </summary>
-		public UserViewModel Publush {get;set;}
+		public string Publush_Value {get;set;}
 		
 		/// <summary>
 		/// 附件 
@@ -49,7 +49,7 @@ namespace FastFrame.Application.Basis
 		/// <summary>
 		/// 附件 
 		/// </summary>
-		public ResourceViewModel Resource {get;set;}
+		public string Resource_Value {get;set;}
 		
 		/// <summary>
 		/// 内容 
@@ -67,7 +67,7 @@ namespace FastFrame.Application.Basis
 		/// <summary>
 		/// 创建人 
 		/// </summary>
-		public UserViewModel Create_User {get;set;}
+		public string Create_User_Value {get;set;}
 		
 		/// <summary>
 		/// 创建时间 
@@ -86,7 +86,7 @@ namespace FastFrame.Application.Basis
 		/// <summary>
 		/// 修改人 
 		/// </summary>
-		public UserViewModel Modify_User {get;set;}
+		public string Modify_User_Value {get;set;}
 		
 		/// <summary>
 		/// 修改时间 

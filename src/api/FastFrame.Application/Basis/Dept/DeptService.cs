@@ -1,5 +1,7 @@
-﻿using FastFrame.Infrastructure;
+﻿using FastFrame.Entity;
+using FastFrame.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,29 +13,27 @@ namespace FastFrame.Application.Basis
         protected override async Task OnGeting(DeptDto dto)
         {
             await base.OnGeting(dto);
-            var (members, manages) = await EventBus.RequestAsync<(UserViewModel[] members, string[] manages), DeptDto>(dto);
-            dto.Members = members;
-            dto.Managers = manages;
+            var dic = await Loader.GetService<DeptMemberService>().GetUserViewModelsByDeptIds(dto.Id);
+            dto.Members = dic.Values.SelectMany(v => v.members);
+            dto.Managers = dic.Values.SelectMany(v => v.mangers);
         }
 
         protected override async Task OnGetListing(IEnumerable<DeptDto> dtos)
         {
             await base.OnGetListing(dtos);
 
-            var keyValuePairs = await EventBus.RequestAsync<IEnumerable<KeyValuePair<string, (UserViewModel[], string[])>>, DeptDto[]>(dtos.ToArray());
+            var dic = await Loader.GetService<DeptMemberService>().GetUserViewModelsByDeptIds(dtos.Select(v => v.Id).ToArray());
             foreach (var item in dtos)
             {
-                item.Managers = keyValuePairs.Where(v => v.Key == item.Id).SelectMany(v => v.Value.Item2);
-                item.Members = keyValuePairs
-                    .Where(v => v.Key == item.Id)
-                    .SelectMany(v => v.Value.Item1)
-                    .Where(v => item.Managers.Contains(v.Id));
+                var (members, mangers) = dic.TryGetValueOrDefault(item.Id);
+                item.Members = members ?? Array.Empty<IViewModel>();
+                item.Managers = mangers ?? Array.Empty<string>();
             }
         }
 
         public async Task<IEnumerable<ITreeModel>> GetChildrenBySuperId(string id)
         {
-            return await Query()
+            return await BuildQuery()
                .Where(v => v.Super_Id == id)
                .OrderBy(v => v.TreeCode)
                .ThenBy(v => v.Name)

@@ -20,6 +20,7 @@ namespace FastFrame.Application.Basis
 		/// </summary>
 		[StringLength(50)]
 		[Required()]
+		[IsPrimaryField()]
 		public string FullName {get;set;}
 		
 		/// <summary>

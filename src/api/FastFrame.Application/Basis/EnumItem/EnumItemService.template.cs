@@ -24,10 +24,10 @@ namespace FastFrame.Application.Basis
 			this.userRepository=userRepository;
 		}
 		
-		protected override IQueryable<EnumItemDto> QueryMain() 
+		protected override IQueryable<EnumItemDto> DefaultQueryable() 
 		{
-			var enumItemQueryable = enumItemRepository.Queryable.MapTo<EnumItem,EnumItemViewModel>();
-			var userQueryable = userRepository.Queryable.MapTo<User,UserViewModel>();
+			var enumItemQueryable = enumItemRepository.Queryable.Select(EnumItem.BuildExpression());
+			var userQueryable = userRepository.Queryable.Select(User.BuildExpression());
 			var repository = enumItemRepository.Queryable;
 			var query = from _enumItem in repository 
 						join _super_Id in enumItemQueryable on _enumItem.Super_Id equals _super_Id.Id into t__super_Id
@@ -49,17 +49,12 @@ namespace FastFrame.Application.Basis
 							CreateTime = _enumItem.CreateTime,
 							Modify_User_Id = _enumItem.Modify_User_Id,
 							ModifyTime = _enumItem.ModifyTime,
-							Super = _super_Id,
-							Create_User = _create_User_Id,
-							Modify_User = _modify_User_Id,
+							Super_Value = _super_Id.Value,
+							Create_User_Value = _create_User_Id.Value,
+							Modify_User_Value = _modify_User_Id.Value,
 							ChildCount = repository.Count(c => c.Super_Id == _enumItem.Id)
 						};
 			return query;
-		}
-		public Task<IPageList<EnumItemViewModel>> ViewModelListAsync(IPagination<EnumItemViewModel> page) 
-		{
-			var query = enumItemRepository.MapTo<EnumItem, EnumItemViewModel>();
-			return query.PageListAsync(page);
 		}
 		
 	}

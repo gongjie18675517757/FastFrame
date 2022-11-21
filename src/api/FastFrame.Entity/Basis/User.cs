@@ -1,20 +1,18 @@
 ﻿using FastFrame.Entity.Enums;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Linq.Expressions;
 using System.Security.Cryptography;
 using System.Text;
 
 namespace FastFrame.Entity.Basis
-{
-
-
+{ 
     /// <summary>
     /// 用户
     /// </summary>
-    [Export]
-    [RelatedField(nameof(Name))]
+    [Export] 
     [Unique(nameof(Account))]
-    public class User : BaseEntity //, IVerifyIdentity
+    public class User : BaseEntity, IViewModelable<User> //, IVerifyIdentity
     {
         public const int NameLength = 50;
 
@@ -23,6 +21,7 @@ namespace FastFrame.Entity.Basis
         /// </summary>
         [StringLength(50), Required, Unique]
         [ReadOnly(ReadOnlyMark.Edit)]
+        [IsPrimaryField]
         public string Account { get; set; }
 
         /// <summary>
@@ -121,5 +120,11 @@ namespace FastFrame.Entity.Basis
             var strResult = BitConverter.ToString(result);
             return strResult.Replace("-", "").ToLower();
         }
+
+
+
+        private static Expression<Func<User, IViewModel>> vm_expression = v => new DefaultViewModel { Id = v.Id, Value = v.Name + "(" + v.Account + ")" };
+
+        public static Expression<Func<User, IViewModel>> BuildExpression() => vm_expression;
     }
 }

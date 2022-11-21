@@ -23,12 +23,7 @@ namespace FastFrame.Infrastructure.Module
         /// <summary>
         /// 字段列表
         /// </summary>
-        public List<ModuleFieldStrut> FieldInfoStruts { get; set; }
-
-        /// <summary>
-        /// 被关联时显示的字段列表
-        /// </summary>
-        public IEnumerable<string> RelateFields { get; set; }
+        public List<ModuleFieldStrut> FieldInfoStruts { get; set; } 
 
         /// <summary>
         /// 树结构

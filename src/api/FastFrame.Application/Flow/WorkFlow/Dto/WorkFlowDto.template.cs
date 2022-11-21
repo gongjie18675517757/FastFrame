@@ -27,6 +27,7 @@ namespace FastFrame.Application.Flow
 		/// 模块名称 
 		/// </summary>
 		[StringLength(150)]
+		[IsPrimaryField()]
 		public string BeModuleName {get;set;}
 		
 		/// <summary>
@@ -55,7 +56,7 @@ namespace FastFrame.Application.Flow
 		/// <summary>
 		/// 创建人 
 		/// </summary>
-		public UserViewModel Create_User {get;set;}
+		public string Create_User_Value {get;set;}
 		
 		/// <summary>
 		/// 创建时间 
@@ -74,7 +75,7 @@ namespace FastFrame.Application.Flow
 		/// <summary>
 		/// 修改人 
 		/// </summary>
-		public UserViewModel Modify_User {get;set;}
+		public string Modify_User_Value {get;set;}
 		
 		/// <summary>
 		/// 修改时间 

@@ -66,7 +66,10 @@ namespace FastFrame.Infrastructure.Module
         /// 数据字典
         /// </summary>
         public EnumInfo EnumItemInfo { get; set; }
-    } 
 
-
+        /// <summary>
+        /// 是否主要字段
+        /// </summary>
+        public bool IsPrimaryField { get; set; }
+    }  
 }

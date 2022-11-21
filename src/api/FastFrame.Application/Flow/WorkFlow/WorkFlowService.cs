@@ -349,7 +349,7 @@ namespace FastFrame.Application.Flow
             });
         }
 
-        public async Task<IEnumerable<KeyValuePair<string, string>>> CheckerList(FlowNodeCheckerEnum checkerEnum, string moduleName, string kw)
+        public async Task<IEnumerable<IViewModel>> CheckerList(FlowNodeCheckerEnum checkerEnum, string moduleName, string kw)
         {
             switch (checkerEnum)
             {
@@ -361,7 +361,7 @@ namespace FastFrame.Application.Flow
                         .OrderBy(v => v.Account)
                         .ThenBy(v => v.Name)
                         .Take(200)
-                        .Select(v => new KeyValuePair<string, string>(v.Id, v.Account + "[" + v.Name + "]"))
+                        .Select(User.BuildExpression())
                         .ToListAsync();
                 case FlowNodeCheckerEnum.role:
                     return await Loader
@@ -371,18 +371,19 @@ namespace FastFrame.Application.Flow
                          .OrderBy(v => v.EnCode)
                          .ThenBy(v => v.Name)
                          .Take(200)
-                         .Select(v => new KeyValuePair<string, string>(v.Id, v.EnCode + "[" + v.Name + "]"))
+                         .Select(Role.BuildExpression())
                          .ToListAsync();
                 case FlowNodeCheckerEnum.field:
                     if (moduleName.IsNullOrWhiteSpace())
-                        return Array.Empty<KeyValuePair<string, string>>();
+                        return Array.Empty<IViewModel>();
+
                     return Loader
-                            .GetService<Infrastructure.Module.IModuleExportProvider>()
+                            .GetService<IModuleExportProvider>()
                             .GetModuleStruts(moduleName)
                             .FieldInfoStruts
                             .Where(v => v.Relate == nameof(User))
                             .Where(v => kw.IsNullOrWhiteSpace() || v.Description.Contains(kw))
-                            .Select(v => new KeyValuePair<string, string>(v.Name, v.Description))
+                            .Select(v => new DefaultViewModel(v.Name, v.Description))
                             .ToList();
                 case FlowNodeCheckerEnum.dept_manage:
                 case FlowNodeCheckerEnum.dept:
@@ -392,7 +393,7 @@ namespace FastFrame.Application.Flow
                          .OrderBy(v => v.TreeCode)
                          .ThenBy(v => v.Name)
                          .Take(200)
-                         .Select(v => new KeyValuePair<string, string>(v.Id, v.TreeCode + "[" + v.Name + "]"))
+                         .Select(Dept.BuildExpression())
                          .ToListAsync();
                 case FlowNodeCheckerEnum.prev_appoint:
                     break;
@@ -406,62 +407,34 @@ namespace FastFrame.Application.Flow
                     break;
             }
 
-            return Array.Empty<KeyValuePair<string, string>>();
+            return Array.Empty<IViewModel>();
         }
 
-        public async Task<IEnumerable<KeyValuePair<string, string>>> RelateKvs(string entityName, string kw)
+        public async Task<IEnumerable<IViewModel>> RelateKvs<TViewModel>(string kw)
+            where TViewModel : class, IEntity, IViewModelable<TViewModel>
         {
-            if (TypeManger.TryGetType(entityName, out var type) && typeof(IEntity).IsAssignableFrom(type))
+            var list = await Loader
+                .GetService<IQueryRepository<TViewModel>>()
+                .Select(TViewModel.BuildExpression())
+                .Where(v => kw == null || v.Value.Contains(kw))
+                .Take(200)
+                .ToListAsync();
+
+            return list;
+        }
+
+        public async Task<IEnumerable<IViewModel>> RelateKvs(string entityName, string kw)
+        {
+            if (TypeManger.TryGetType(entityName, out var type) &&
+                typeof(IEntity).IsAssignableFrom(type) &&
+                typeof(IViewModelable<>).MakeGenericType(type).IsAssignableFrom(type))
             {
-                var repositoryType = typeof(IRepository<>).MakeGenericType(type);
-                var queryable = (IQueryable)Loader.GetService(repositoryType);
-                var fields = Array.Empty<string>();
-                if (type.GetCustomAttribute<RelatedFieldAttribute>() is RelatedFieldAttribute relatedField)
-                    fields = relatedField.FieldNames.ToArray();
-                else
-                    fields = type
-                        .GetProperties()
-                        .Where(v => !v.Name.EndsWith("_Id") && v.PropertyType == typeof(string))
-                        .Select(v => v.Name)
-                        .ToArray();
-
-
-                if (!kw.IsNullOrWhiteSpace())
-                    queryable = queryable
-                        .Where(string.Join(" and ", fields.Select(v => $"{v}.Contains(@0)")), kw);
-
-                var dynamics = await queryable
-                    .Select($"new {{ Id,{string.Join(",", fields)}}}")
-                    .OrderBy(string.Join(",", fields))
-                    .Take(200)
-                    .ToDynamicListAsync();
-
-                var list = dynamics.ToJson().ToObject<Dictionary<string, string>[]>();
-
-                return list
-                    .Select(v =>
-                        new KeyValuePair<string, string>(
-                            v.TryGetValueOrDefault("Id"),
-                            string
-                                .Join(
-                                    "",
-                                    fields
-                                        .Select((f, fIndex) =>
-                                        {
-                                            var val = v.TryGetValueOrDefault(f);
-                                            if (val.IsNullOrWhiteSpace())
-                                                return null;
-
-                                            if (fIndex == 0)
-                                                return val;
-                                            else
-                                                return $"[{val}]";
-                                        })
-                                        .Where(v => !v.IsNullOrWhiteSpace()))));
+                var invoke_result = this.GetType().GetMethod(nameof(RelateKvs)).MakeGenericMethod(type).Invoke(this, new object[] { kw });
+                return await (Task<IEnumerable<IViewModel>>)invoke_result;
             }
             else
             {
-                return Array.Empty<KeyValuePair<string, string>>();
+                return Array.Empty<IViewModel>();
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using FastFrame.Application;
+using FastFrame.Entity;
 using FastFrame.Entity.Flow;
 using FastFrame.Infrastructure.Permission;
 using Microsoft.AspNetCore.Mvc;
@@ -34,14 +35,14 @@ namespace FastFrame.WebHost.Controllers.Flow
 
         [Permission(new[] { "Add", "Update" })]
         [HttpGet]
-        public async Task<IEnumerable<KeyValuePair<string, string>>> CheckerList(FlowNodeCheckerEnum checkerEnum, string moduleName, string kw)
+        public async Task<IEnumerable<IViewModel>> CheckerList(FlowNodeCheckerEnum checkerEnum, string moduleName, string kw)
         {
             return await service.CheckerList(checkerEnum, moduleName, kw);
         }
 
         [Permission(new[] { "Add", "Update" })]
         [HttpGet("{entityName}")]
-        public async Task<IEnumerable<KeyValuePair<string, string>>> RelateKvs(string entityName, string kw)
+        public async Task<IEnumerable<IViewModel>> RelateKvs(string entityName, string kw)
         {
             return await service.RelateKvs(entityName, kw);
         }

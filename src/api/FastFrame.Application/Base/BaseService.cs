@@ -16,6 +16,8 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq.Expressions;
 using static FastFrame.Application.Account.IdentityManagerService;
+using FastFrame.Application.Basis;
+using FastFrame.Entity.Basis;
 
 namespace FastFrame.Application
 {
@@ -54,7 +56,7 @@ namespace FastFrame.Application
                 throw new NotFoundException();
 
             var expression = ExpressionClosureFactory.BuildEqualExpression<TDto, string>("Id", id);
-            var dto = await Query().FirstOrDefaultAsync(expression);
+            var dto = await BuildQuery().FirstOrDefaultAsync(expression);
 
             if (dto == null)
                 throw new NotFoundException();
@@ -106,7 +108,7 @@ namespace FastFrame.Application
         /// </summary> 
         public virtual async Task<IPageList<TDto>> PageListAsync(IPagination<TDto> pageInfo)
         {
-            var query = Query();
+            var query = BuildQuery();
             query = GetListQueryableing(query, pageInfo);
             var pageList = await query.PageListAsync(pageInfo);
 
@@ -115,15 +117,36 @@ namespace FastFrame.Application
         }
 
         /// <summary>
-        /// 拼查询表达式
+        /// 构建主查询表达式
         /// </summary>
         /// <returns></returns>
-        internal virtual IQueryable<TDto> Query() => QueryMain();
+        internal virtual IQueryable<TDto> BuildQuery() => DefaultQueryable();
 
         /// <summary>
-        /// 主查询表达式
+        /// 代码生成器生成的查询表达式
         /// </summary> 
-        protected abstract IQueryable<TDto> QueryMain();
+        protected abstract IQueryable<TDto> DefaultQueryable();
+
+        /// <summary>
+        /// 查询view model
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="kw"></param>
+        /// <param name="page_index"></param>
+        /// <param name="page_size"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<IViewModel>> ViewModelListAsync<TEntity>(string kw, int page_index = 1, int page_size = 10)
+            where TEntity : class, IViewModelable<TEntity>
+        {
+            var query = Loader.GetService<IRepository<TEntity>>().Select(TEntity.BuildExpression());
+
+            return await query
+                .Where(v => kw == null || v.Value.Contains(kw))
+                .OrderByDescending(v => v.Id)
+                .Skip(page_size * (page_index - 1))
+                .Take(page_size)
+                .ToListAsync();
+        }
     }
 
     /// <summary>
@@ -351,7 +374,7 @@ namespace FastFrame.Application
         /// <summary>
         /// 主查询表达式
         /// </summary> 
-        protected override IQueryable<TDto> QueryMain()
+        protected override IQueryable<TDto> DefaultQueryable()
         {
             return repository.Queryable.MapTo<TEntity, TDto>();
         }

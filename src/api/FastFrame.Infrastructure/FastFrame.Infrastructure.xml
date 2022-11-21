@@ -1652,6 +1652,11 @@
             数据字典
             </summary>
         </member>
+        <member name="P:FastFrame.Infrastructure.Module.ModuleFieldStrut.IsPrimaryField">
+            <summary>
+            是否主要字段
+            </summary>
+        </member>
         <member name="T:FastFrame.Infrastructure.Module.ModuleStruct">
             <summary>
             模块结构
@@ -1670,11 +1675,6 @@
         <member name="P:FastFrame.Infrastructure.Module.ModuleStruct.FieldInfoStruts">
             <summary>
             字段列表
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Module.ModuleStruct.RelateFields">
-            <summary>
-            被关联时显示的字段列表
             </summary>
         </member>
         <member name="P:FastFrame.Infrastructure.Module.ModuleStruct.IsTree">

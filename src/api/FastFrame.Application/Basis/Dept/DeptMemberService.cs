@@ -1,4 +1,5 @@
 ﻿using FastFrame.Application.Events;
+using FastFrame.Entity;
 using FastFrame.Entity.Basis;
 using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.EventBus;
@@ -14,27 +15,26 @@ namespace FastFrame.Application.Basis
         IEventHandle<DoMainAdding<DeptDto>>,
         IEventHandle<DoMainDeleteing<DeptDto>>,
         IEventHandle<DoMainUpdateing<DeptDto>>,
-        IRequestHandle<(UserViewModel[], string[]), DeptDto>,
-        IRequestHandle<IEnumerable<KeyValuePair<string, (UserViewModel[], string[])>>, DeptDto[]>,
+
 
         IEventHandle<DoMainAdding<UserDto>>,
         IEventHandle<DoMainDeleteing<UserDto>>,
-        IEventHandle<DoMainUpdateing<UserDto>>,
-        IRequestHandle<DeptViewModel[], UserDto>,
-        IRequestHandle<IEnumerable<KeyValuePair<string, DeptViewModel[]>>, UserDto[]>
+        IEventHandle<DoMainUpdateing<UserDto>>
+
+
     {
         private readonly IRepository<DeptMember> deptMembers;
         private readonly IRepository<User> users;
         private readonly IRepository<Dept> depts;
-        private readonly HandleOne2ManyService<DeptViewModel, DeptMember> handleUserDeptService;
-        private readonly HandleOne2ManyService<UserViewModel, DeptMember> handleDeptMemberService;
+        private readonly HandleOne2ManyService<IViewModel, DeptMember> handleUserDeptService;
+        private readonly HandleOne2ManyService<IViewModel, DeptMember> handleDeptMemberService;
 
         public DeptMemberService(
             IRepository<DeptMember> deptMembers,
             IRepository<User> users,
             IRepository<Dept> depts,
-            HandleOne2ManyService<DeptViewModel, DeptMember> handleUserDeptService,
-            HandleOne2ManyService<UserViewModel, DeptMember> handleDeptMemberService
+            HandleOne2ManyService<IViewModel, DeptMember> handleUserDeptService,
+            HandleOne2ManyService<IViewModel, DeptMember> handleDeptMemberService
             )
         {
             this.deptMembers = deptMembers;
@@ -81,26 +81,16 @@ namespace FastFrame.Application.Basis
                 );
         }
 
-        public async Task<(UserViewModel[], string[])> HandleRequestAsync(DeptDto request)
-        {
-            var userQuery = users.MapTo<User, UserViewModel>();
 
-            return (
-               await userQuery
-                       .Where(v =>
-                           deptMembers.Any(r => r.User_Id == v.Id && r.Dept_Id == request.Id)
-                        ).ToArrayAsync(),
-                await userQuery
-                       .Where(v =>
-                           deptMembers.Any(r => r.User_Id == v.Id && r.Dept_Id == request.Id && r.IsManager)
-                        ).Select(v => v.Id).ToArrayAsync()
-               );
-        }
-
-        public async Task<IEnumerable<KeyValuePair<string, (UserViewModel[], string[])>>> HandleRequestAsync(DeptDto[] request)
+        /// <summary>
+        /// 根据科室ids,返回人员信息
+        /// </summary>
+        /// <param name="keys"></param>
+        /// <returns></returns>
+        public async Task<Dictionary<string, (IEnumerable<IViewModel> members, IEnumerable<string> mangers)>> GetUserViewModelsByDeptIds(params string[] keys)
         {
-            var keys = request.Select(v => v.Id).ToArray();
-            var userQuery = users.MapTo<User, UserViewModel>();
+            var userQuery = users.Select(User.BuildExpression());
+
             var query = from a in userQuery
                         join b in deptMembers on a.Id equals b.User_Id
                         where keys.Contains(b.Dept_Id)
@@ -112,15 +102,19 @@ namespace FastFrame.Application.Basis
                         };
             var list = await query.ToListAsync();
 
-            return list
-                        .GroupBy(v => v.Dept_Id)
-                        .Select(v =>
-                                new KeyValuePair<string, (UserViewModel[], string[])>(
-                                    v.Key,
-                                    (v.Select(v => v.Item).ToArray(),
-                                        v.Where(v => v.IsManager).Select(v => v.Item.Id).ToArray())
-                                ));
+            return keys
+                .Where(v => !v.IsNullOrWhiteSpace())
+                .Distinct()
+                .ToDictionary(
+                    v => v,
+                    v => (
+                       members: list.Where(x => x.Dept_Id == v).Select(v => v.Item),
+                       mangers: list.Where(x => x.Dept_Id == v && x.IsManager).Select(v => v.Item.Id)
+                    )
+                );
         }
+
+
 
 
         public async Task HandleEventAsync(DoMainAdding<UserDto> @event)
@@ -154,19 +148,9 @@ namespace FastFrame.Application.Basis
                 );
         }
 
-        async Task<DeptViewModel[]> IRequestHandle<DeptViewModel[], UserDto>.HandleRequestAsync(UserDto request)
+        public async Task<Dictionary<string, IEnumerable<IViewModel>>> GetDeptViewModelsByUserIds(params string[] keys)
         {
-            var deptQuery = depts.MapTo<Dept, DeptViewModel>();
-            return await deptQuery
-                         .Where(v =>
-                             deptMembers.Any(r => r.Dept_Id == v.Id && r.User_Id == request.Id)) 
-                         .ToArrayAsync();
-        }
-
-        async Task<IEnumerable<KeyValuePair<string, DeptViewModel[]>>> IRequestHandle<IEnumerable<KeyValuePair<string, DeptViewModel[]>>, UserDto[]>.HandleRequestAsync(UserDto[] request)
-        {
-            var deptQuery = depts.MapTo<Dept, DeptViewModel>();
-            var keys = request.Select(v => v.Id).ToArray();
+            var deptQuery = depts.Select(Dept.BuildExpression());
             var query = from a in deptQuery
                         join b in deptMembers on a.Id equals b.Dept_Id
                         where keys.Contains(b.User_Id)
@@ -177,9 +161,14 @@ namespace FastFrame.Application.Basis
                         };
 
             var list = await query.ToListAsync();
-            return list
-                    .GroupBy(v => v.User_Id)
-                    .Select(v => new KeyValuePair<string, DeptViewModel[]>(v.Key, v.Select(r => r.Dept).ToArray()));
-        }
+
+            return keys
+                .Where(v => !v.IsNullOrWhiteSpace())
+                .Distinct()
+                .ToDictionary(
+                    v => v,
+                    v => list.Where(x => x.User_Id == v).Select(x => x.Dept)
+                );
+        } 
     }
 }

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using FastFrame.Database.Mapping.Basis;
 
 namespace FastFrame.Application.Basis
 {
@@ -72,20 +73,25 @@ namespace FastFrame.Application.Basis
         protected override async Task OnGeting(UserDto dto)
         {
             await base.OnGeting(dto);
-            dto.Roles = await EventBus.RequestAsync<RoleViewModel[], UserDto>(dto);
-            dto.Depts = await EventBus.RequestAsync<DeptViewModel[], UserDto>(dto);
+            var role_dic = await Loader.GetService<RoleMemberService>().GetRoleViewModelsByUserIds(dto.Id);
+            dto.Roles = role_dic.SelectMany(v => v.Value);
+
+            var dept_dic = await Loader.GetService<DeptMemberService>().GetDeptViewModelsByUserIds(dto.Id);
+            dto.Depts = dept_dic.SelectMany(v => v.Value);
         }
 
         protected override async Task OnGetListing(IEnumerable<UserDto> dtos)
         {
             await base.OnGetListing(dtos);
 
-            var roleMaps = await EventBus.RequestAsync<IEnumerable<KeyValuePair<string, RoleViewModel[]>>, UserDto[]>(dtos.ToArray());
-            var deptMaps = await EventBus.RequestAsync<IEnumerable<KeyValuePair<string, DeptViewModel[]>>, UserDto[]>(dtos.ToArray());
+            var keys = dtos.Select(v => v.Id).ToArray();
+            var role_dic = await Loader.GetService<RoleMemberService>().GetRoleViewModelsByUserIds(keys);
+            var dept_dic = await Loader.GetService<DeptMemberService>().GetDeptViewModelsByUserIds(keys);
+
             foreach (var item in dtos)
             {
-                item.Roles = roleMaps.Where(v => v.Key == item.Id).SelectMany(v => v.Value);
-                item.Depts = deptMaps.Where(v => v.Key == item.Id).SelectMany(v => v.Value);
+                item.Roles = role_dic.TryGetValueOrDefault(item.Id);
+                item.Depts = dept_dic.TryGetValueOrDefault(item.Id);
             }
         }
 
@@ -110,7 +116,7 @@ namespace FastFrame.Application.Basis
                 .Filters
                 .TryReplaceQueryFilters<FieldQueryFilter<UserDto>>(
                     v => string.Compare(v.Name, nameof(ITreeModel.Super_Id), true) == 0,
-                    HandleSuperIdFilterQuery); 
+                    HandleSuperIdFilterQuery);
 
             return query;
         }

@@ -260,7 +260,7 @@ services.AddSwaggerGen(options =>
                     Id=ConstValuePool.Token_Name
                 }
             },
-            new string[]{ }
+            Array.Empty<string>()
         }
     });
 });
@@ -327,17 +327,21 @@ app.UseMiddleware<AuthorizationMiddleware>();
 app.UseMiddleware<PermissionMiddleware>();
 
 /*注册终结点*/
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapHub<MessageHub>("/hub/message");
-    endpoints.MapControllers();
-    endpoints.MapHangfireDashboard();
+app.MapHub<MessageHub>("/hub/message");
+app.MapControllers();
+app.MapHangfireDashboard();
+
+//app.UseEndpoints(endpoints =>
+//{
+//    endpoints.MapHub<MessageHub>("/hub/message");
+//    endpoints.MapControllers();
+//    endpoints.MapHangfireDashboard();
 
 
-    //endpoints.MapControllerRoute(
-    //    name: "default",
-    //    pattern: "{controller=Home}/{action=Index}/{id?}");
-});
+//    //endpoints.MapControllerRoute(
+//    //    name: "default",
+//    //    pattern: "{controller=Home}/{action=Index}/{id?}");
+//});
 
 var logger = app.Services.GetService<ILogger<Program>>();
 

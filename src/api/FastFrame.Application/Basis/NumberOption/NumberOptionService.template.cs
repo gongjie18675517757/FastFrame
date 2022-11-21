@@ -24,9 +24,9 @@ namespace FastFrame.Application.Basis
 			this.numberOptionRepository=numberOptionRepository;
 		}
 		
-		protected override IQueryable<NumberOptionDto> QueryMain() 
+		protected override IQueryable<NumberOptionDto> DefaultQueryable() 
 		{
-			var userQueryable = userRepository.Queryable.MapTo<User,UserViewModel>();
+			var userQueryable = userRepository.Queryable.Select(User.BuildExpression());
 			var repository = numberOptionRepository.Queryable;
 			var query = from _numberOption in repository 
 						join _create_User_Id in userQueryable on _numberOption.Create_User_Id equals _create_User_Id.Id into t__create_User_Id
@@ -48,15 +48,10 @@ namespace FastFrame.Application.Basis
 							CreateTime = _numberOption.CreateTime,
 							Modify_User_Id = _numberOption.Modify_User_Id,
 							ModifyTime = _numberOption.ModifyTime,
-							Create_User = _create_User_Id,
-							Modify_User = _modify_User_Id,
+							Create_User_Value = _create_User_Id.Value,
+							Modify_User_Value = _modify_User_Id.Value,
 						};
 			return query;
-		}
-		public Task<IPageList<NumberOptionViewModel>> ViewModelListAsync(IPagination<NumberOptionViewModel> page) 
-		{
-			var query = numberOptionRepository.MapTo<NumberOption, NumberOptionViewModel>();
-			return query.PageListAsync(page);
 		}
 		
 	}

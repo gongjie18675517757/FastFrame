@@ -26,8 +26,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="EPPlus" Version="6.1.0" />
-		<PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.21" />
+		<PackageReference Include="EPPlus" Version="6.1.1" />
+		<PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.23" />
 		<PackageReference Include="AspectCore.Core" Version="2.2.0" /> 
 	</ItemGroup> 
 	

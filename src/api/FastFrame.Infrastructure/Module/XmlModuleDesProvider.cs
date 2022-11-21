@@ -8,9 +8,9 @@ namespace FastFrame.Infrastructure.Module
     {
         private readonly string docPath;
 
-        public XmlModuleDesProvider(IApplicationSession appSessionProvider)
+        public XmlModuleDesProvider(string docPath)
         {
-            docPath = appSessionProvider.ApplicationRootPath;
+            this.docPath = docPath;
         }
         public string GetClassDescription(Type type)
         {

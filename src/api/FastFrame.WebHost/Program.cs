@@ -54,8 +54,8 @@ using System.Text.Json.Serialization;
 #region 原Program的内容 
 var builder = WebApplication.CreateBuilder(args);
 /*替换成AspectCore的容器实现，性能更高*/
-builder.Host.UseServiceProviderFactory(new ServiceContextProviderFactory());
-builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+//builder.Host.UseServiceProviderFactory(new ServiceContextProviderFactory());
+//builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 #endregion
 
 #region ConfigureServices 
@@ -152,7 +152,7 @@ services
     .AddScoped<IApplicationSession, AppSessionProvider>()
     .AddTransient<IApplicationInitialLifetime, ApplicationInitialProvider>()
     .AddScoped<IResourceProvider, ResourceProvider>()
-    .AddScoped<IModuleDesProvider, XmlModuleDesProvider>()
+    .AddSingleton<IModuleDesProvider>(s => new XmlModuleDesProvider(AppDomain.CurrentDomain.BaseDirectory))
     .AddScoped<IExcelExportProvider, ExcelExportProvider>()
     .AddScoped<IPermissionDefinitionContext, PermissionDefinitionContext>()
     .AddScoped<IEventBus, EventBus>()

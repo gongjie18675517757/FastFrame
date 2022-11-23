@@ -18,8 +18,8 @@ namespace FastFrame.Application.Flow
 		private readonly IRepository<User> userRepository;
 		private readonly IRepository<WorkFlow> workFlowRepository;
 		
-		public WorkFlowService(IRepository<User> userRepository,IRepository<WorkFlow> workFlowRepository)
-			 : base(workFlowRepository)
+		public WorkFlowService(IRepository<User> userRepository,IRepository<WorkFlow> workFlowRepository,IServiceProvider loader)
+			 : base(loader,workFlowRepository)
 		{
 			this.userRepository=userRepository;
 			this.workFlowRepository=workFlowRepository;

@@ -5,6 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Diagnostics;
+using Microsoft.Extensions.Logging;
+using FastFrame.Infrastructure.Interface;
+using System.Reflection;
+using AspectCore.Extensions.Reflection;
+using AspectCore.Configuration;
+using AspectCore.DependencyInjection;
 
 namespace FastFrame.Application
 {
@@ -26,6 +32,8 @@ namespace FastFrame.Application
             //context.Parameters
             //{ object[0]}
 
+
+
             var sb = new string[] {
                     context.ServiceMethod.DeclaringType.Name,
                     context.ServiceMethod.Name
@@ -35,6 +43,11 @@ namespace FastFrame.Application
 
             /*拼类名+方法名+参数*/
             var resource = string.Join(".", sb);
+
+            var logger = context.ServiceProvider.GetService<ILogger<LockMethodAttribute>>();
+#if DEBUG
+            logger.LogDebug($"进入Lock:{resource}");
+#endif
 
             /*尝试获取锁*/
             var lockHolder = await context
@@ -59,13 +72,33 @@ namespace FastFrame.Application
             }
             else
             {
-                Debug.Print("");
+#if DEBUG
+                logger.LogDebug($"未持有锁:{resource}");
+#endif
             }
 
             if (context.IsAsync())
             {
                 context.ReturnValue = Task.CompletedTask;
             }
+
+#if DEBUG
+            logger.LogDebug($"离开Lock:{resource}");
+#endif
         }
+
     }
+
+
+    public class TestLockMethodService : IService
+    {
+       
+
+        [LockMethod]
+        public virtual async Task TestInvoke()
+        {
+      
+            await Task.Delay(1000);
+        }
+    } 
 }

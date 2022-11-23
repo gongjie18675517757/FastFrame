@@ -12,6 +12,7 @@ namespace FastFrame.Infrastructure.IntervalWork
         {
             this.backgroundJob = backgroundJob;
         }
+
         public async Task InitialAsync()
         {
             await Task.CompletedTask;
@@ -24,6 +25,7 @@ namespace FastFrame.Infrastructure.IntervalWork
                 foreach (var item in methodList)
                 {
                     method.MakeGenericMethod(item.type).Invoke(backgroundJob, new object[] {
+                        item.job_id,
                         item.method,
                         item.cron
                     });

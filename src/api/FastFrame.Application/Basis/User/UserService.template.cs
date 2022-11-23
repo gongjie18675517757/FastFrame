@@ -17,8 +17,8 @@ namespace FastFrame.Application.Basis
 		private readonly IRepository<Resource> resourceRepository;
 		private readonly IRepository<User> userRepository;
 		
-		public UserService(IRepository<Resource> resourceRepository,IRepository<User> userRepository)
-			 : base(userRepository)
+		public UserService(IRepository<Resource> resourceRepository,IRepository<User> userRepository,IServiceProvider loader)
+			 : base(loader,userRepository)
 		{
 			this.resourceRepository=resourceRepository;
 			this.userRepository=userRepository;

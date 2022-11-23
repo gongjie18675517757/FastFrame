@@ -17,8 +17,8 @@ namespace FastFrame.Application.Basis
 		private readonly IRepository<EnumItem> enumItemRepository;
 		private readonly IRepository<User> userRepository;
 		
-		public EnumItemService(IRepository<EnumItem> enumItemRepository,IRepository<User> userRepository)
-			 : base(enumItemRepository)
+		public EnumItemService(IRepository<EnumItem> enumItemRepository,IRepository<User> userRepository,IServiceProvider loader)
+			 : base(loader,enumItemRepository)
 		{
 			this.enumItemRepository=enumItemRepository;
 			this.userRepository=userRepository;

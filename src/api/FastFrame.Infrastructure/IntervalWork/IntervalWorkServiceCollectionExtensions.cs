@@ -9,12 +9,12 @@ namespace FastFrame.Infrastructure.IntervalWork
 {
     public static class IntervalWorkServiceCollectionExtensions
     {
-        private static readonly List<(Type type, MethodInfo method, string cron)> list = new List<(Type type, MethodInfo method, string cron)>();
+        private static readonly List<(Type type, MethodInfo method, string cron, string job_id)> list = new();
 
         /// <summary>
         /// 定时任务列表
         /// </summary>
-        public static IReadOnlyList<(Type type, MethodInfo method, string cron)> IntervalMethodList => list;
+        public static IReadOnlyList<(Type type, MethodInfo method, string cron, string job_id)> IntervalMethodList => list;
 
         /// <summary>
         /// 添加定时任务
@@ -28,7 +28,7 @@ namespace FastFrame.Infrastructure.IntervalWork
                 AddAssembly(assembly);
 
             services.AddScoped<IApplicationInitialLifetime, IntervalWorkServiceInit>();
-             
+
             return services;
         }
 
@@ -42,7 +42,7 @@ namespace FastFrame.Infrastructure.IntervalWork
                 if (typeof(IIntervalWorkHost).IsAssignableFrom(type))
                     foreach (var method in type.GetMethods())
                         if (method.GetCustomAttribute<IntervalWorkAttribute>() is IntervalWorkAttribute attribute)
-                            list.Add((type, method, attribute.CronExperssion));
+                            list.Add((type, method, attribute.CronExperssion, attribute.JobId));
         }
     }
 }

@@ -12,36 +12,29 @@ namespace FastFrame.Infrastructure.Interface
     public interface IBackgroundJob
     {
         /// <summary>
-        /// 定时执行 
-        /// <para>* * * * * *</para>
-        /// <para>- - - - - -</para>
-        /// <para>| | | | | |</para>
-        /// <para>| | | | | +--- day of week (0 - 6) (Sunday=0)</para>
-        /// <para>| | | | +----- month (1 - 12)</para>
-        /// <para>| | | +------- day of month (1 - 31)</para>
-        /// <para>| | +--------- hour (0 - 23)</para>
-        /// <para>| +----------- min (0 - 59)</para>
-        /// <para>+------------- sec (0 - 59)</para>
-        /// </summary> 
+        /// 定时执行
+        /// </summary>
         /// <typeparam name="TService"></typeparam>
+        /// <param name="recurringJobId"></param>
         /// <param name="methodCall"></param>
         /// <param name="cronExperssion"></param>
-        void SetInterval<TService>(Expression<Func<TService, Task>> methodCall, string cronExperssion);
+        void SetInterval<TService>(string recurringJobId, Expression<Func<TService, Task>> methodCall, string cronExperssion);
 
         /// <summary>
         /// 定时执行
         /// </summary>
         /// <typeparam name="T"></typeparam>
+        /// <param name="recurringJobId"></param>
         /// <param name="method"></param>
         /// <param name="cron"></param>
-        void SetIntervalByMethod<T>(MethodInfo method, string cron)
+        void SetIntervalByMethod<T>(string recurringJobId, MethodInfo method, string cron)
         {
             var type = typeof(T);
             var parameterExpression = Expression.Parameter(type, "x");
             var methodCallExpression = Expression.Call(parameterExpression, method);
             var expression = Expression.Lambda<Func<T, Task>>(methodCallExpression, parameterExpression);
 
-            SetInterval(expression, cron);
+            SetInterval(recurringJobId, expression, cron);
         }
 
 
@@ -69,7 +62,7 @@ namespace FastFrame.Infrastructure.Interface
             var methodCallExpression = Expression.Call(parameterExpression, method, arguments);
             var expression = Expression.Lambda<Func<TService, Task>>(methodCallExpression, parameterExpression);
             SetTimeout(expression, timeSpan);
-        }  
+        }
 
         /// <summary>
         /// 每分钟

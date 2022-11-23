@@ -17,8 +17,8 @@ namespace FastFrame.Application.Basis
 		private readonly IRepository<User> userRepository;
 		private readonly IRepository<NumberOption> numberOptionRepository;
 		
-		public NumberOptionService(IRepository<User> userRepository,IRepository<NumberOption> numberOptionRepository)
-			 : base(numberOptionRepository)
+		public NumberOptionService(IRepository<User> userRepository,IRepository<NumberOption> numberOptionRepository,IServiceProvider loader)
+			 : base(loader,numberOptionRepository)
 		{
 			this.userRepository=userRepository;
 			this.numberOptionRepository=numberOptionRepository;

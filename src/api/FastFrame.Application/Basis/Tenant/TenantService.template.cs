@@ -16,8 +16,8 @@ namespace FastFrame.Application.Basis
 		private readonly IRepository<User> userRepository;
 		private readonly IRepository<Tenant> tenantRepository;
 		
-		public TenantService(IRepository<User> userRepository,IRepository<Tenant> tenantRepository)
-			 : base(tenantRepository)
+		public TenantService(IRepository<User> userRepository,IRepository<Tenant> tenantRepository,IServiceProvider loader)
+			 : base(loader,tenantRepository)
 		{
 			this.userRepository=userRepository;
 			this.tenantRepository=tenantRepository;

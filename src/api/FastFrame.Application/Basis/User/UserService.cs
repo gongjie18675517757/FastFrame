@@ -73,10 +73,10 @@ namespace FastFrame.Application.Basis
         protected override async Task OnGeting(UserDto dto)
         {
             await base.OnGeting(dto);
-            var role_dic = await Loader.GetService<RoleMemberService>().GetRoleViewModelsByUserIds(dto.Id);
+            var role_dic = await loader.GetService<RoleMemberService>().GetRoleViewModelsByUserIds(dto.Id);
             dto.Roles = role_dic.SelectMany(v => v.Value);
 
-            var dept_dic = await Loader.GetService<DeptMemberService>().GetDeptViewModelsByUserIds(dto.Id);
+            var dept_dic = await loader.GetService<DeptMemberService>().GetDeptViewModelsByUserIds(dto.Id);
             dto.Depts = dept_dic.SelectMany(v => v.Value);
         }
 
@@ -85,8 +85,8 @@ namespace FastFrame.Application.Basis
             await base.OnGetListing(dtos);
 
             var keys = dtos.Select(v => v.Id).ToArray();
-            var role_dic = await Loader.GetService<RoleMemberService>().GetRoleViewModelsByUserIds(keys);
-            var dept_dic = await Loader.GetService<DeptMemberService>().GetDeptViewModelsByUserIds(keys);
+            var role_dic = await loader.GetService<RoleMemberService>().GetRoleViewModelsByUserIds(keys);
+            var dept_dic = await loader.GetService<DeptMemberService>().GetDeptViewModelsByUserIds(keys);
 
             foreach (var item in dtos)
             {
@@ -129,10 +129,10 @@ namespace FastFrame.Application.Basis
         private IQueryFilter<UserDto> HandleSuperIdFilterQuery(FieldQueryFilter<UserDto> v)
         {
             var super_id = v.Value;
-            var depts = Loader.GetService<IRepository<Dept>>();
+            var depts = loader.GetService<IRepository<Dept>>();
             var treeChildren = depts.Where(v => depts.Any(y => y.Id == super_id && v.TreeCode.StartsWith(y.TreeCode)));
 
-            var deptMembers = Loader.GetService<IRepository<DeptMember>>().Where(v => v.Dept_Id == super_id || treeChildren.Any(x => x.Id == v.Dept_Id));
+            var deptMembers = loader.GetService<IRepository<DeptMember>>().Where(v => v.Dept_Id == super_id || treeChildren.Any(x => x.Id == v.Dept_Id));
 
             return new ExpressionQueryFilter<UserDto>(v => deptMembers.Any(x => x.User_Id == v.Id));
         }

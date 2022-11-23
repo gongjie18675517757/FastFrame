@@ -25,7 +25,7 @@
             从列头移除一条
             </summary>
             <typeparam name="T"></typeparam>
-            <param name="key"></param>
+            <param name="key"></param> 
             <returns></returns>
         </member>
         <member name="T:FastFrame.Infrastructure.Cache.ICacheProvider">
@@ -1101,28 +1101,21 @@
             后台执行任务
             </summary>
         </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IBackgroundJob.SetInterval``1(System.Linq.Expressions.Expression{System.Func{``0,System.Threading.Tasks.Task}},System.String)">
+        <member name="M:FastFrame.Infrastructure.Interface.IBackgroundJob.SetInterval``1(System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Threading.Tasks.Task}},System.String)">
             <summary>
-            定时执行 
-            <para>* * * * * *</para>
-            <para>- - - - - -</para>
-            <para>| | | | | |</para>
-            <para>| | | | | +--- day of week (0 - 6) (Sunday=0)</para>
-            <para>| | | | +----- month (1 - 12)</para>
-            <para>| | | +------- day of month (1 - 31)</para>
-            <para>| | +--------- hour (0 - 23)</para>
-            <para>| +----------- min (0 - 59)</para>
-            <para>+------------- sec (0 - 59)</para>
-            </summary> 
+            定时执行
+            </summary>
             <typeparam name="TService"></typeparam>
+            <param name="recurringJobId"></param>
             <param name="methodCall"></param>
             <param name="cronExperssion"></param>
         </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IBackgroundJob.SetIntervalByMethod``1(System.Reflection.MethodInfo,System.String)">
+        <member name="M:FastFrame.Infrastructure.Interface.IBackgroundJob.SetIntervalByMethod``1(System.String,System.Reflection.MethodInfo,System.String)">
             <summary>
             定时执行
             </summary>
             <typeparam name="T"></typeparam>
+            <param name="recurringJobId"></param>
             <param name="method"></param>
             <param name="cron"></param>
         </member>
@@ -1340,6 +1333,11 @@
         <member name="P:FastFrame.Infrastructure.IntervalWork.IntervalWorkAttribute.CronExperssion">
             <summary>
             Cron表达式
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.IntervalWork.IntervalWorkAttribute.JobId">
+            <summary>
+            任务ID
             </summary>
         </member>
         <member name="P:FastFrame.Infrastructure.IntervalWork.IntervalWorkServiceCollectionExtensions.IntervalMethodList">

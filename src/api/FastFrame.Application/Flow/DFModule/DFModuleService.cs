@@ -10,7 +10,7 @@ namespace FastFrame.Application.Flow
     {
         private async Task HandleItems(string id, IEnumerable<DFModuleGroupModel> groups)
         { 
-            await Loader
+            await loader
                 .GetService<HandleOne2ManyService<DFModuleGroup, DFModuleGroup>>()
                 .UpdateManyAsync(
                     v => v.DFModule_Id == id,
@@ -31,7 +31,7 @@ namespace FastFrame.Application.Flow
                     }
                 );
 
-            await Loader
+            await loader
                .GetService<HandleOne2ManyService<DFModuleField, DFModuleField>>()
                .UpdateManyAsync(
                     v => v.DFModule_Id == id,
@@ -50,7 +50,7 @@ namespace FastFrame.Application.Flow
                     }
                 );
 
-            await Loader
+            await loader
                .GetService<HandleOne2ManyService<DFModuleFieldRule, DFModuleFieldRule>>()
                .UpdateManyAsync(
                     v => v.DFModule_Id == id,
@@ -89,19 +89,19 @@ namespace FastFrame.Application.Flow
 
             var id = output.Id;
 
-            var dFModuleGroupModels = await Loader
+            var dFModuleGroupModels = await loader
                 .GetService<IRepository<DFModuleGroup>>()
                 .Where(v => v.DFModule_Id == id)
                 .MapTo<DFModuleGroup, DFModuleGroupModel>()
                 .ToListAsync();
 
-            var dFModuleFieldModels = await Loader
+            var dFModuleFieldModels = await loader
                 .GetService<IRepository<DFModuleField>>()
                 .Where(v => v.DFModule_Id == id)
                 .MapTo<DFModuleField, DFModuleFieldModel>()
                 .ToListAsync();
 
-            var dFModuleFieldRules = await Loader
+            var dFModuleFieldRules = await loader
                 .GetService<IRepository<DFModuleFieldRule>>()
                 .Where(v => v.DFModule_Id == id)
                 .ToListAsync();

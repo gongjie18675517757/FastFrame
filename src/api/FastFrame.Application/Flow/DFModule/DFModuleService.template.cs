@@ -18,8 +18,8 @@ namespace FastFrame.Application.Flow
 		private readonly IRepository<User> userRepository;
 		private readonly IRepository<DFModule> dFModuleRepository;
 		
-		public DFModuleService(IRepository<User> userRepository,IRepository<DFModule> dFModuleRepository)
-			 : base(dFModuleRepository)
+		public DFModuleService(IRepository<User> userRepository,IRepository<DFModule> dFModuleRepository,IServiceProvider loader)
+			 : base(loader,dFModuleRepository)
 		{
 			this.userRepository=userRepository;
 			this.dFModuleRepository=dFModuleRepository;

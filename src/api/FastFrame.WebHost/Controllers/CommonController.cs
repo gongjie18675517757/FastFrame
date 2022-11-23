@@ -1,4 +1,5 @@
-﻿using FastFrame.Entity.Basis;
+﻿using FastFrame.Application;
+using FastFrame.Entity.Basis;
 using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Module;
 using FastFrame.Infrastructure.RSAOperate;
@@ -87,6 +88,13 @@ namespace FastFrame.WebHost.Controllers
 
 #if DEBUG
         [AllowAnonymous]
+        [HttpGet]
+        public async Task TestLock()
+        {
+            await Request.HttpContext.RequestServices.GetService<TestLockMethodService>().TestInvoke();
+        } 
+        
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> TestPaginationFromJson([FromForm] string input)
         {
@@ -166,5 +174,7 @@ namespace FastFrame.WebHost.Controllers
             return Ok();
         }
 #endif
-    }
+    } 
+     
+
 }

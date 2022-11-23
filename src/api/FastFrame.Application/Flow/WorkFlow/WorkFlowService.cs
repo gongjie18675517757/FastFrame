@@ -34,7 +34,7 @@ namespace FastFrame.Application.Flow
                 return null;
 
             var id = request;
-            var ids = await Loader.GetService<IRepository<FlowNode>>().Where(v => v.WorkFlow_Id == id).Select(v => v.Id).ToArrayAsync();
+            var ids = await loader.GetService<IRepository<FlowNode>>().Where(v => v.WorkFlow_Id == id).Select(v => v.Id).ToArrayAsync();
             var flowNodes = await HandleRequestAsync(ids);
 
             return flowNodes
@@ -46,10 +46,10 @@ namespace FastFrame.Application.Flow
 
         public async Task<FlowNodeModel[]> HandleRequestAsync(string[] request)
         {
-            var flowNodes = await Loader.GetService<IRepository<FlowNode>>().Where(v => request.Contains(v.Id)).MapTo<FlowNode, FlowNodeModel>().ToArrayAsync();
-            var flowNodeConds = await Loader.GetService<IRepository<FlowNodeCond>>().Where(v => request.Contains(v.FlowNode_Id)).ToListAsync();
-            var flowNodeEvents = await Loader.GetService<IRepository<FlowNodeEvent>>().Where(v => request.Contains(v.FlowNode_Id)).ToListAsync();
-            var flowNodeCheckers = await Loader.GetService<IRepository<FlowNodeChecker>>().Where(v => request.Contains(v.FlowNode_Id)).ToListAsync();
+            var flowNodes = await loader.GetService<IRepository<FlowNode>>().Where(v => request.Contains(v.Id)).MapTo<FlowNode, FlowNodeModel>().ToArrayAsync();
+            var flowNodeConds = await loader.GetService<IRepository<FlowNodeCond>>().Where(v => request.Contains(v.FlowNode_Id)).ToListAsync();
+            var flowNodeEvents = await loader.GetService<IRepository<FlowNodeEvent>>().Where(v => request.Contains(v.FlowNode_Id)).ToListAsync();
+            var flowNodeCheckers = await loader.GetService<IRepository<FlowNodeChecker>>().Where(v => request.Contains(v.FlowNode_Id)).ToListAsync();
 
             foreach (var node in flowNodes)
             {
@@ -75,10 +75,10 @@ namespace FastFrame.Application.Flow
         protected override async Task OnBeforeUpdate(WorkFlow before, WorkFlowDto after)
         {
             /*判断流程有没有被使用，有则不允许修改*/
-            if (await Loader.GetService<IRepository<FlowInstance>>().AnyAsync(v => v.WorkFlow_Id == before.Id /*&& !v.IsComlete*/))
+            if (await loader.GetService<IRepository<FlowInstance>>().AnyAsync(v => v.WorkFlow_Id == before.Id /*&& !v.IsComlete*/))
             {
                 /*判断节点是否改变了*/
-                var beforeList = await Loader
+                var beforeList = await loader
                     .GetService<IRepository<FlowNode>>()
                     .Where(v => v.WorkFlow_Id == before.Id)
                     .OrderBy(v => v.OrderVal)
@@ -106,7 +106,7 @@ namespace FastFrame.Application.Flow
             VerifyFlowNodes(input);
 
             if (TypeManger.TryGetType(entity.BeModule, out var type))
-                entity.BeModuleName = Loader.GetService<IModuleDesProvider>().GetClassDescription(type);
+                entity.BeModuleName = loader.GetService<IModuleDesProvider>().GetClassDescription(type);
 
             await base.OnAddOrUpdateing(input, entity);
         }
@@ -116,7 +116,7 @@ namespace FastFrame.Application.Flow
             await base.OnChangeing(input, entity);
 
             var id = entity.Id;
-            var flowNodes = Loader.GetService<IRepository<FlowNode>>();
+            var flowNodes = loader.GetService<IRepository<FlowNode>>();
             var afterNodeList = input?.Nodes.SelectLoopChild(v => v.Nodes).ToArray();
 
             /*更新格式*/
@@ -146,7 +146,7 @@ namespace FastFrame.Application.Flow
                 afterNodeList[i].OrderVal = i + 1;
 
             /*同步更新子节点*/
-            await Loader
+            await loader
                 .GetService<HandleOne2ManyService<FlowNode, FlowNode>>()
                 .UpdateManyAsync(
                     v => v.WorkFlow_Id == id,
@@ -172,7 +172,7 @@ namespace FastFrame.Application.Flow
                        });
 
             /*同步更新条件*/
-            await Loader
+            await loader
                 .GetService<HandleOne2ManyService<FlowNodeCond, FlowNodeCond>>()
                 .UpdateManyAsync(
                     v => v.WorkFlow_Id == id,
@@ -200,7 +200,7 @@ namespace FastFrame.Application.Flow
                 );
 
             /*同步更新事件*/
-            await Loader
+            await loader
                 .GetService<HandleOne2ManyService<FlowNodeEvent, FlowNodeEvent>>()
                 .UpdateManyAsync(
                     v => v.WorkFlow_Id == id,
@@ -224,7 +224,7 @@ namespace FastFrame.Application.Flow
                 );
 
             /*同步更新审核人*/
-            await Loader
+            await loader
                 .GetService<HandleOne2ManyService<FlowNodeChecker, FlowNodeChecker>>()
                 .UpdateManyAsync(
                     v => v.WorkFlow_Id == id,
@@ -251,7 +251,7 @@ namespace FastFrame.Application.Flow
         protected override async Task OnDeleteing(WorkFlow entity)
         {
             /*判断流程有没有被使用，有则不允许删除*/
-            if (await Loader.GetService<IRepository<FlowInstance>>().AnyAsync(v => v.WorkFlow_Id == entity.Id))
+            if (await loader.GetService<IRepository<FlowInstance>>().AnyAsync(v => v.WorkFlow_Id == entity.Id))
                 throw new MsgException("流程使用中，不允许删除,但是你可以禁用该流程！");
 
             await base.OnDeleteing(entity);
@@ -338,7 +338,7 @@ namespace FastFrame.Application.Flow
         public async Task<IEnumerable<ITreeModel>> GetChildrenBySuperId()
         {
             await Task.CompletedTask;
-            var valuePairs = Loader.GetService<Infrastructure.Module.IModuleExportProvider>().HaveCheckModuleList();
+            var valuePairs = loader.GetService<Infrastructure.Module.IModuleExportProvider>().HaveCheckModuleList();
 
             return valuePairs.Select(v => new TreeModel
             {
@@ -354,7 +354,7 @@ namespace FastFrame.Application.Flow
             switch (checkerEnum)
             {
                 case FlowNodeCheckerEnum.user:
-                    return await Loader
+                    return await loader
                         .GetService<IRepository<User>>()
                         .Where(v => v.Enable == Entity.Enums.EnabledMark.enabled)
                         .Where(v => kw == null || v.Name.Contains(kw) || v.Account.Contains(kw))
@@ -364,7 +364,7 @@ namespace FastFrame.Application.Flow
                         .Select(User.BuildExpression())
                         .ToListAsync();
                 case FlowNodeCheckerEnum.role:
-                    return await Loader
+                    return await loader
                          .GetService<IRepository<Role>>()
                          .Where(v => !v.IsDefault)
                          .Where(v => kw == null || v.Name.Contains(kw) || v.EnCode.Contains(kw))
@@ -377,7 +377,7 @@ namespace FastFrame.Application.Flow
                     if (moduleName.IsNullOrWhiteSpace())
                         return Array.Empty<IViewModel>();
 
-                    return Loader
+                    return loader
                             .GetService<IModuleExportProvider>()
                             .GetModuleStruts(moduleName)
                             .FieldInfoStruts
@@ -387,7 +387,7 @@ namespace FastFrame.Application.Flow
                             .ToList();
                 case FlowNodeCheckerEnum.dept_manage:
                 case FlowNodeCheckerEnum.dept:
-                    return await Loader
+                    return await loader
                          .GetService<IRepository<Dept>>()
                          .Where(v => kw == null || v.Name.Contains(kw) || v.TreeCode.Contains(kw))
                          .OrderBy(v => v.TreeCode)
@@ -413,7 +413,7 @@ namespace FastFrame.Application.Flow
         public async Task<IEnumerable<IViewModel>> RelateKvs<TViewModel>(string kw)
             where TViewModel : class, IEntity, IViewModelable<TViewModel>
         {
-            var list = await Loader
+            var list = await loader
                 .GetService<IQueryRepository<TViewModel>>()
                 .Select(TViewModel.BuildExpression())
                 .Where(v => kw == null || v.Value.Contains(kw))

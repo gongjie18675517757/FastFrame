@@ -23,14 +23,16 @@ namespace FastFrame.Application
 {
     public abstract class BaseService<TDto> : IPageListService<TDto> where TDto : class
     {
-        [FromServiceContext]
-        protected IServiceProvider Loader { get; set; }
+        public BaseService(IServiceProvider loader)
+        {
+            this.loader = loader;
+        }
 
-        [FromServiceContext]
-        protected IEventBus EventBus { get; set; }
+        protected virtual IServiceProvider loader { get; set; }
 
-        [FromServiceContext]
-        protected IApplicationSession AppSession { get; set; }
+        protected IEventBus EventBus => loader.GetService<IEventBus>();
+
+        protected IApplicationSession AppSession => loader.GetService<IApplicationSession>();
 
         /// <summary>
         /// 返回前
@@ -138,7 +140,7 @@ namespace FastFrame.Application
         public async Task<IEnumerable<IViewModel>> ViewModelListAsync<TEntity>(string kw, int page_index = 1, int page_size = 10)
             where TEntity : class, IViewModelable<TEntity>
         {
-            var query = Loader.GetService<IRepository<TEntity>>().Select(TEntity.BuildExpression());
+            var query = loader.GetService<IRepository<TEntity>>().Select(TEntity.BuildExpression());
 
             return await query
                 .Where(v => kw == null || v.Value.Contains(kw))
@@ -160,7 +162,7 @@ namespace FastFrame.Application
     {
         private readonly IRepository<TEntity> repository;
 
-        public BaseService(IRepository<TEntity> repository)
+        public BaseService(IServiceProvider loader, IRepository<TEntity> repository) : base(loader)
         {
             this.repository = repository;
         }
@@ -190,7 +192,7 @@ namespace FastFrame.Application
             await OnChangeing(input, entity);
 
             if (entity is IHaveNumber haveNumber)
-                await Loader.GetService<IAutoNumberService>().MakeNumberAsync(haveNumber);
+                await loader.GetService<IAutoNumberService>().MakeNumberAsync(haveNumber);
 
             if (input is IHaveMultiFileDto haveMultiFile)
                 await EventBus.TriggerEventAsync(new DoMainAdding<IHaveMultiFileDto>(haveMultiFile, entity));
@@ -227,7 +229,7 @@ namespace FastFrame.Application
 
 
             var addEvent = new DoMainAdded<TDto> { Id = entity.Id };
-            Loader.GetService<IBackgroundJob>().SetTimeout<IEventBus>(v => v.TriggerEventAsync(addEvent), null);
+            loader.GetService<IBackgroundJob>().SetTimeout<IEventBus>(v => v.TriggerEventAsync(addEvent), null);
 
             return entity.Id;
         }
@@ -271,7 +273,7 @@ namespace FastFrame.Application
             foreach (var entity in entitys)
             {
                 var delEvent = new DoMainDeleted<TDto>() { Id = entity.Id };
-                Loader.GetService<IBackgroundJob>().SetTimeout<IEventBus>(v => v.TriggerEventAsync(delEvent), null);
+                loader.GetService<IBackgroundJob>().SetTimeout<IEventBus>(v => v.TriggerEventAsync(delEvent), null);
 
                 if (entity is ITreeEntity treeEntity)
                 {
@@ -336,7 +338,7 @@ namespace FastFrame.Application
 
                 /*重新编码*/
                 if (treeEntity.Super_Id != prevTreeEntity.Super_Id || treeEntity.TreeCode.IsNullOrWhiteSpace())
-                    await Loader.GetService<IAutoNumberService>().MakeNumberAsync(treeEntity);
+                    await loader.GetService<IAutoNumberService>().MakeNumberAsync(treeEntity);
             }
 
 
@@ -344,7 +346,7 @@ namespace FastFrame.Application
             await repository.CommmitAsync();
 
             var updateEvent = new DoMainUpdated<TDto> { Id = entity.Id };
-            Loader.GetService<IBackgroundJob>().SetTimeout<IEventBus>(v => v.TriggerEventAsync(updateEvent), null);
+            loader.GetService<IBackgroundJob>().SetTimeout<IEventBus>(v => v.TriggerEventAsync(updateEvent), null);
         }
 
         /// <summary>

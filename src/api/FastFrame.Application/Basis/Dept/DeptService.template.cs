@@ -17,8 +17,8 @@ namespace FastFrame.Application.Basis
         private readonly IRepository<Dept> deptRepository;
         private readonly IRepository<User> userRepository;
 
-        public DeptService(IRepository<Dept> deptRepository, IRepository<User> userRepository)
-             : base(deptRepository)
+        public DeptService(IRepository<Dept> deptRepository, IRepository<User> userRepository, IServiceProvider loader)
+             : base(loader, deptRepository)
         {
             this.deptRepository = deptRepository;
             this.userRepository = userRepository;

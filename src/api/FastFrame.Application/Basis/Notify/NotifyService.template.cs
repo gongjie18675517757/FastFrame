@@ -18,8 +18,8 @@ namespace FastFrame.Application.Basis
 		private readonly IRepository<Resource> resourceRepository;
 		private readonly IRepository<Notify> notifyRepository;
 		
-		public NotifyService(IRepository<User> userRepository,IRepository<Resource> resourceRepository,IRepository<Notify> notifyRepository)
-			 : base(notifyRepository)
+		public NotifyService(IRepository<User> userRepository,IRepository<Resource> resourceRepository,IRepository<Notify> notifyRepository,IServiceProvider loader)
+			 : base(loader,notifyRepository)
 		{
 			this.userRepository=userRepository;
 			this.resourceRepository=resourceRepository;

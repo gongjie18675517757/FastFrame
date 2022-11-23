@@ -13,12 +13,12 @@ namespace FastFrame.WebHost.Privder
 
         public HangfireBackgroundJob(IServiceProvider loader)
         {
-            this.loader = loader; 
+            this.loader = loader;
         }
 
-        public void SetInterval<TService>(Expression<Func<TService, Task>> methodCall, string cronExperssion)
+        public void SetInterval<TService>(string recurringJobId, Expression<Func<TService, Task>> methodCall, string cronExperssion)
         {
-            RecurringJob.AddOrUpdate(methodCall, cronExperssion,TimeZoneInfo.Local);
+            RecurringJob.AddOrUpdate(recurringJobId, methodCall, cronExperssion);
         }
 
         public void SetTimeout<TService>(Expression<Func<TService, Task>> methodCall, TimeSpan? timeSpan)
@@ -62,6 +62,6 @@ namespace FastFrame.WebHost.Privder
             var parameters = job.Args.ToArray();
             var result = (Task)job.Method.Invoke(instance, parameters);
             await result;
-        } 
+        }
     }
 }

@@ -40,8 +40,13 @@ namespace FastFrame.Database
                     /*指定主键*/
                     entityTypeBuilder.HasKey("Id");
                     entityTypeBuilder.Property("Id").ValueGeneratedNever();
-                    entityTypeBuilder.ToTable($"{currNameSpace}_{entityType.Name}".ToLower());
-                    entityTypeBuilder.HasComment(T4Help.GetClassSummary(entityType, AppDomain.CurrentDomain.BaseDirectory));
+
+                    var table_description_name = T4Help.GetClassSummary(entityType, AppDomain.CurrentDomain.BaseDirectory);
+                    entityTypeBuilder.ToTable($"{currNameSpace}_{entityType.Name}".ToLower(), t =>
+                    {
+                        t.HasComment(table_description_name);
+                    });
+
                 }
                 /*映射到视图*/
                 else
@@ -91,8 +96,8 @@ namespace FastFrame.Database
                 if (typeof(IEntity).IsAssignableFrom(entityType))
                 {
                     /*加索引*/
-                    if ((property.Name.EndsWith("Id") && property.Name != "Id") || 
-                        propType.IsEnum || 
+                    if ((property.Name.EndsWith("Id") && property.Name != "Id") ||
+                        propType.IsEnum ||
                         propType == typeof(bool))
                     {
                         entityTypeBuilder.HasIndex(property.Name).HasDatabaseName($"Index_{entityType.Name}_{property.Name}");
@@ -132,7 +137,7 @@ namespace FastFrame.Database
                 /*转换枚举*/
                 else if (propType.IsEnum)
                 {
-                    propertyBuilder.HasConversion<string>().HasMaxLength(50); 
+                    propertyBuilder.HasConversion<string>().HasMaxLength(50);
                 }
             }
 

@@ -35,7 +35,7 @@ namespace FastFrame.Application.Basis
 
         private IQueryable<MeidiaModel> MeidiaQuery()
         {
-            var resourceRepository = Loader.GetService<IRepository<Resource>>();
+            var resourceRepository = loader.GetService<IRepository<Resource>>();
             return from a in meidiaRepository
                    join b in resourceRepository on a.Resource_Id equals b.Id into t_b
                    from b in t_b.DefaultIfEmpty()

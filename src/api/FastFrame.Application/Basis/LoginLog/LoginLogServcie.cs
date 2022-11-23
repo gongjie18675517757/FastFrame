@@ -14,11 +14,11 @@ namespace FastFrame.Application.Basis
         private readonly IRepository<LoginLog> loginLogs;
         private readonly IRepository<User> users;
 
-        public LoginLogServcie(IRepository<LoginLog> loginLogs, IRepository<User> users)
+        public LoginLogServcie(IServiceProvider loader, IRepository<LoginLog> loginLogs, IRepository<User> users) : base(loader)
         {
             this.loginLogs = loginLogs;
             this.users = users;
-        }
+        } 
 
         protected override IQueryable<LoginLogModel> DefaultQueryable()
         {

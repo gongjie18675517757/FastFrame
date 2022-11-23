@@ -459,18 +459,10 @@
             记录请求日志
             </summary>
         </member>
-        <member name="M:FastFrame.Application.Basis.ApiRequestLogService.InsertAsync(FastFrame.Entity.Basis.ApiRequestLog)">
+        <member name="M:FastFrame.Application.Basis.ApiRequestLogService.BackgroundInsert">
             <summary>
-            插入记录
-            </summary>
-            <param name="apiRequestLog"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Application.Basis.ApiRequestLogService.BackgroundInsert(FastFrame.Entity.Basis.ApiRequestLog)">
-            <summary>
-            插入记录(立即返回)
-            </summary>
-            <param name="apiRequestLog"></param>
+            定时插入记录
+            </summary> 
         </member>
         <member name="M:FastFrame.Application.Basis.DeptMemberService.GetUserViewModelsByDeptIds(System.String[])">
             <summary>

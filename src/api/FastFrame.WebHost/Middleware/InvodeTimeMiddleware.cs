@@ -1,5 +1,6 @@
 ﻿using FastFrame.Application.Basis;
 using FastFrame.Infrastructure;
+using FastFrame.Infrastructure.Cache;
 using Microsoft.AspNetCore.Http;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -23,7 +24,7 @@ namespace FastFrame.WebHost.Middleware
             var begin_time = DateTime.Now;
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            
+
             var log = new Entity.Basis.ApiRequestLog
             {
                 IPAddress = context.Connection.RemoteIpAddress?.ToString(),
@@ -54,10 +55,10 @@ namespace FastFrame.WebHost.Middleware
             log.UserName = curr?.Name ?? "/";
             log.User_Id = curr?.Id;
 
-            context
+            await context
               .RequestServices
-              .GetService<ApiRequestLogService>()
-              .BackgroundInsert(log);
+              .GetService<ICacheProvider>()
+              .ListPushAsync(Entity.Basis.ApiRequestLog.ListKeyName, log);
         }
     }
 }

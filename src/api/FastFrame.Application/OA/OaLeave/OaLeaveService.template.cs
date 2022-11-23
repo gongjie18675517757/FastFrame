@@ -19,8 +19,8 @@ namespace FastFrame.Application.OA
 		private readonly IRepository<Dept> deptRepository;
 		private readonly IRepository<OaLeave> oaLeaveRepository;
 		
-		public OaLeaveService(IRepository<User> userRepository,IRepository<Dept> deptRepository,IRepository<OaLeave> oaLeaveRepository)
-			 : base(oaLeaveRepository)
+		public OaLeaveService(IRepository<User> userRepository,IRepository<Dept> deptRepository,IRepository<OaLeave> oaLeaveRepository,IServiceProvider loader)
+			 : base(loader,oaLeaveRepository)
 		{
 			this.userRepository=userRepository;
 			this.deptRepository=deptRepository;

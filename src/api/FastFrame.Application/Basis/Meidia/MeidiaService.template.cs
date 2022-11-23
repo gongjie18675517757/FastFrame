@@ -17,8 +17,8 @@ namespace FastFrame.Application.Basis
 		private readonly IRepository<Meidia> meidiaRepository;
 		private readonly IRepository<User> userRepository;
 		
-		public MeidiaService(IRepository<Meidia> meidiaRepository,IRepository<User> userRepository)
-			 : base(meidiaRepository)
+		public MeidiaService(IRepository<Meidia> meidiaRepository,IRepository<User> userRepository,IServiceProvider loader)
+			 : base(loader,meidiaRepository)
 		{
 			this.meidiaRepository=meidiaRepository;
 			this.userRepository=userRepository;

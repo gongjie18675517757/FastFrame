@@ -94,7 +94,7 @@ namespace FastFrame.Infrastructure.Cache
         /// <returns></returns>
         public async Task ListPushAsync<T>(string key, T val)
         {
-            await GetDatabase().ListRightPushAsync(ConvertKey(key), val?.ToString());
+            await GetDatabase().ListRightPushAsync(ConvertKey(key), val?.ToJson());
         }
 
         /// <summary>
@@ -111,14 +111,19 @@ namespace FastFrame.Infrastructure.Cache
         /// 从列头移除一条
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
+        /// <param name="key"></param> 
         /// <returns></returns>
         public async Task<T> ListPopAsync<T>(string key)
         {
             var database = GetDatabase();
             key = ConvertKey(key);
-            //var length = await database.ListLengthAsync(key);
-            //if (length == 0) return default;
+
+            var len = await database.ListLengthAsync(key);
+            if (len == 0)
+                return default;
+
+
+           
 
             var value = await database.ListLeftPopAsync(key);
             return ConvertValue<T>(value);

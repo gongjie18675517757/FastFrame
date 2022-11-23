@@ -1,4 +1,6 @@
 ﻿global using AspectCore.Extensions.DependencyInjection;
+using AspectCore.Configuration;
+using AspectCore.DependencyInjection;
 using FastFrame.Application;
 using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Cache;
@@ -54,8 +56,8 @@ using System.Text.Json.Serialization;
 #region 原Program的内容 
 var builder = WebApplication.CreateBuilder(args);
 /*替换成AspectCore的容器实现，性能更高*/
-//builder.Host.UseServiceProviderFactory(new ServiceContextProviderFactory());
-//builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+builder.Host.UseServiceProviderFactory(new DynamicProxyServiceProviderFactory());
+builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 #endregion
 
 #region ConfigureServices 
@@ -174,11 +176,13 @@ services
 
 
 
-/*添加动态代理*/
+/*添加动态代理*/ 
 services.ConfigureDynamicProxy(config =>
-{
+{ 
+   
     //config.Interceptors.AddTyped<LockMethodAttribute>(Predicates.ForService("*Service"));
 });
+
 
 //#if DEBUG
 builder.Services.AddEndpointsApiExplorer();
@@ -327,21 +331,21 @@ app.UseMiddleware<AuthorizationMiddleware>();
 app.UseMiddleware<PermissionMiddleware>();
 
 /*注册终结点*/
-app.MapHub<MessageHub>("/hub/message");
-app.MapControllers();
-app.MapHangfireDashboard();
+//app.MapHub<MessageHub>("/hub/message");
+//app.MapControllers();
+//app.MapHangfireDashboard();
 
-//app.UseEndpoints(endpoints =>
-//{
-//    endpoints.MapHub<MessageHub>("/hub/message");
-//    endpoints.MapControllers();
-//    endpoints.MapHangfireDashboard();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<MessageHub>("/hub/message");
+    endpoints.MapControllers();
+    endpoints.MapHangfireDashboard();
 
 
-//    //endpoints.MapControllerRoute(
-//    //    name: "default",
-//    //    pattern: "{controller=Home}/{action=Index}/{id?}");
-//});
+    //endpoints.MapControllerRoute(
+    //    name: "default",
+    //    pattern: "{controller=Home}/{action=Index}/{id?}");
+});
 
 var logger = app.Services.GetService<ILogger<Program>>();
 

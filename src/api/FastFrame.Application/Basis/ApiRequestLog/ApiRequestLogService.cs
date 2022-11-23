@@ -1,5 +1,6 @@
 ﻿using FastFrame.Entity.Basis;
 using FastFrame.Infrastructure;
+using FastFrame.Infrastructure.Cache;
 using FastFrame.Infrastructure.Interface;
 using FastFrame.Infrastructure.IntervalWork;
 using FastFrame.Repository;
@@ -17,44 +18,40 @@ namespace FastFrame.Application.Basis
     /// <summary>
     /// 记录请求日志
     /// </summary>
-    public class ApiRequestLogService : BaseService<ApiRequestLog>
+    public class ApiRequestLogService : BaseService<ApiRequestLog>, IIntervalWorkHost
     {
         private readonly IRepository<ApiRequestLog> repository;
-        private readonly ILogger<ApiRequestLogService> logger;
+        private readonly ICacheProvider cacheProvider;
 
-        public ApiRequestLogService(IRepository<ApiRequestLog> repository, ILogger<ApiRequestLogService> logger)
+        public ApiRequestLogService(IServiceProvider loader, IRepository<ApiRequestLog> repository, ICacheProvider cacheProvider) : base(loader)
         {
             this.repository = repository;
-            this.logger = logger;
+            this.cacheProvider = cacheProvider;
         }
 
-        /// <summary>
-        /// 插入记录
-        /// </summary>
-        /// <param name="apiRequestLog"></param>
-        /// <returns></returns>
-        public async Task InsertAsync(ApiRequestLog apiRequestLog)
-        {
-            await repository.AddAsync(apiRequestLog);
-            await repository.CommmitAsync();
-        }
+
 
         /// <summary>
-        /// 插入记录(立即返回)
-        /// </summary>
-        /// <param name="apiRequestLog"></param>
-        public async void BackgroundInsert(ApiRequestLog apiRequestLog)
+        /// 定时插入记录
+        /// </summary> 
+        [IntervalWork("ApiRequestLogService.BackgroundInsert", "0 * * * * ?")]
+        public virtual async Task BackgroundInsert()
         {
-            using (var serviceScope = Loader.CreateScope())
+            while (true)
             {
-                try
+                for (int i = 0; i < 100; i++)
                 {
-                    await serviceScope.ServiceProvider.GetService<ApiRequestLogService>().InsertAsync(apiRequestLog);
+                    var log = await cacheProvider.ListPopAsync<ApiRequestLog>(ApiRequestLog.ListKeyName);
+                    if (log == null)
+                        continue;
+
+                    await repository.AddAsync(log); 
                 }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex, "写入Log失败");
-                }
+
+                var count = await repository.CommmitAsync();
+
+                if (count == 0)
+                    break;
             }
         }
 

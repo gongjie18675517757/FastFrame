@@ -151,7 +151,7 @@ namespace FastFrame.Repository
 
         public string GetDbColumnName(string propName)
         {
-            return context.Set<T>().EntityType.FindProperty(propName).GetColumnBaseName();
+            return context.Set<T>().EntityType.FindProperty(propName).GetColumnName();
         }
     }
 }

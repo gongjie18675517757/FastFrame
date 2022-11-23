@@ -10,20 +10,20 @@ namespace FastFrame.Infrastructure.IntervalWork
     [AttributeUsage(AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
     public sealed class IntervalWorkAttribute : /*AbstractInterceptor*/Attribute
     {
-        public IntervalWorkAttribute(string cronExperssion)
+        public IntervalWorkAttribute(string jobId, string cronExperssion)
         {
             CronExperssion = cronExperssion;
+            JobId = jobId;
         }
 
         /// <summary>
         /// Cron表达式
         /// </summary>
-        public string CronExperssion { get; }  
+        public string CronExperssion { get; }
 
-        //public override async Task Invoke(AspectContext context, AspectDelegate next)
-        //{
-        //    /*此处判断方法是否在执行中*/
-        //    await next(context);
-        //}
+        /// <summary>
+        /// 任务ID
+        /// </summary>
+        public string JobId { get; }
     }
 }

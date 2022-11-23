@@ -13,7 +13,7 @@ namespace FastFrame.Application.Basis
         protected override async Task OnGeting(DeptDto dto)
         {
             await base.OnGeting(dto);
-            var dic = await Loader.GetService<DeptMemberService>().GetUserViewModelsByDeptIds(dto.Id);
+            var dic = await loader.GetService<DeptMemberService>().GetUserViewModelsByDeptIds(dto.Id);
             dto.Members = dic.Values.SelectMany(v => v.members);
             dto.Managers = dic.Values.SelectMany(v => v.mangers);
         }
@@ -22,7 +22,7 @@ namespace FastFrame.Application.Basis
         {
             await base.OnGetListing(dtos);
 
-            var dic = await Loader.GetService<DeptMemberService>().GetUserViewModelsByDeptIds(dtos.Select(v => v.Id).ToArray());
+            var dic = await loader.GetService<DeptMemberService>().GetUserViewModelsByDeptIds(dtos.Select(v => v.Id).ToArray());
             foreach (var item in dtos)
             {
                 var (members, mangers) = dic.TryGetValueOrDefault(item.Id);

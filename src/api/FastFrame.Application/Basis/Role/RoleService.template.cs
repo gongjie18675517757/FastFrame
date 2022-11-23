@@ -17,8 +17,8 @@ namespace FastFrame.Application.Basis
 		private readonly IRepository<User> userRepository;
 		private readonly IRepository<Role> roleRepository;
 		
-		public RoleService(IRepository<User> userRepository,IRepository<Role> roleRepository)
-			 : base(roleRepository)
+		public RoleService(IRepository<User> userRepository,IRepository<Role> roleRepository,IServiceProvider loader)
+			 : base(loader,roleRepository)
 		{
 			this.userRepository=userRepository;
 			this.roleRepository=roleRepository;

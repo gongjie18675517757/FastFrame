@@ -30,6 +30,7 @@ export const inputs = {
  * 计算使用哪个控件
  */
 export function calcInputComponent(props) {
+
   const { component, Length, EnumItemInfo, multiple, Type, EnumValues, Name } = props;
   if (component) {
     return {
@@ -72,7 +73,23 @@ export function calcInputComponent(props) {
       component: inputs.SelectInput
     }
   }
+  /**
+   * 文件
+   */
+  else if (!component && Type == 'File') {
+    return {
+      colspan: 1,
+      component: inputs.FileInput
+    }
+  }
 
+  //远程选择框
+  else if (!component && props.Relate) {
+    return {
+      colspan: multiple ? 2 : 1,
+      component: multiple ? inputs.SelectMulitInput : inputs.SearchInput
+    }
+  }
   //富文本
   else if (Length && Length >= 4000) {
     return {
@@ -91,23 +108,10 @@ export function calcInputComponent(props) {
       component: inputs.TextInput
     }
 
-  } else if (["DateTime",'DateOnly','TimeOnly'].includes(Type)) {
+  } else if (["DateTime", 'DateOnly', 'TimeOnly'].includes(Type)) {
     return {
       colspan: 1,
       component: inputs.DateInput
-    }
-  } else if (!component && props.Relate == "Resource") {
-    return {
-      colspan: 1,
-      component: inputs.FileInput
-    }
-  }
-
-  //远程选择框
-  else if (!component && props.Relate) {
-    return {
-      colspan: multiple ? 2 : 1,
-      component: multiple ? inputs.SelectMulitInput : inputs.SearchInput
     }
   }
 
@@ -218,7 +222,7 @@ export function packComponent(h, component, { props, on }) {
         /**
          * 选择框老是对不齐，高度差4px,解决不了，强制加一个margin-top
          */
-        'margin-top':props.Type=='Boolean'?'4px':null
+        'margin-top': props.Type == 'Boolean' ? '4px' : null
       },
     },
     [
@@ -238,7 +242,7 @@ export function packComponent(h, component, { props, on }) {
  */
 export function packComponentFacatory(h, component, { props, on }) {
   return function (inheritAttrs = {}) {
-    const merge_props = { ...props, ...inheritAttrs };
+    const merge_props = { ...props, ...inheritAttrs }; 
     return packComponent(h, component, { props: merge_props, on })
   }
 }
@@ -305,9 +309,11 @@ export default {
     Length: Number,
     Hide: String,
     labelWidth: String,
-    ModuleName: String,
+    ModuleName: String, 
     Relate: String,
-    requestUrl: [String,Function],
+    RelateKeyFieldName: String,
+    RelateIsTree: Boolean,
+    requestUrl: [String, Function],
     EnumItemInfo: Object,
     component: Object,
     Type: {

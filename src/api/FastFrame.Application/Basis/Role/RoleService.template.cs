@@ -14,29 +14,33 @@ namespace FastFrame.Application.Basis
 	/// </summary>
 	public partial class RoleService:BaseService<Role, RoleDto>
 	{
-		private readonly IRepository<User> userRepository;
 		private readonly IRepository<Role> roleRepository;
+		private readonly IRepository<User> userRepository;
 		
-		public RoleService(IRepository<User> userRepository,IRepository<Role> roleRepository,IServiceProvider loader)
+		public RoleService(IRepository<Role> roleRepository,IRepository<User> userRepository,IServiceProvider loader)
 			 : base(loader,roleRepository)
 		{
-			this.userRepository=userRepository;
 			this.roleRepository=roleRepository;
+			this.userRepository=userRepository;
 		}
 		
 		protected override IQueryable<RoleDto> DefaultQueryable() 
 		{
+			var roleQueryable = roleRepository.Queryable.Select(Role.BuildExpression());
 			var userQueryable = userRepository.Queryable.Select(User.BuildExpression());
 			var repository = roleRepository.Queryable;
 			var query = from _role in repository 
+						join _super_Id in roleQueryable on _role.Super_Id equals _super_Id.Id into t__super_Id
+						from _super_Id in t__super_Id.DefaultIfEmpty()
 						join _create_User_Id in userQueryable on _role.Create_User_Id equals _create_User_Id.Id into t__create_User_Id
 						from _create_User_Id in t__create_User_Id.DefaultIfEmpty()
 						join _modify_User_Id in userQueryable on _role.Modify_User_Id equals _modify_User_Id.Id into t__modify_User_Id
 						from _modify_User_Id in t__modify_User_Id.DefaultIfEmpty()
 						select new RoleDto
 						{
-							EnCode = _role.EnCode,
+							TreeCode = _role.TreeCode,
 							Name = _role.Name,
+							Super_Id = _role.Super_Id,
 							IsDefault = _role.IsDefault,
 							IsAdmin = _role.IsAdmin,
 							Remarks = _role.Remarks,
@@ -45,8 +49,10 @@ namespace FastFrame.Application.Basis
 							CreateTime = _role.CreateTime,
 							Modify_User_Id = _role.Modify_User_Id,
 							ModifyTime = _role.ModifyTime,
+							Super_Value = _super_Id.Value,
 							Create_User_Value = _create_User_Id.Value,
 							Modify_User_Value = _modify_User_Id.Value,
+							ChildCount = repository.Count(c => c.Super_Id == _role.Id)
 						};
 			return query;
 		}

@@ -57,7 +57,12 @@ namespace FastFrame.Entity.Basis
         public string GetNumber() => TreeCode;
 
 
-        private static Expression<Func<EnumItem, IViewModel>> vm_expression = v => new DefaultViewModel { Id = v.Id, Value = v.Value + "(" + v.TreeCode + ")" };
+        private static Expression<Func<EnumItem, IViewModel>> vm_expression =
+                        v => new DefaultViewModel
+                        {
+                            Id = v.Id,
+                            Value = v.Value + (string.IsNullOrWhiteSpace(v.TreeCode) ? "" : "(" + v.TreeCode + ")")
+                        };
 
         public static Expression<Func<EnumItem, IViewModel>> BuildExpression() => vm_expression;
     }

@@ -1622,7 +1622,17 @@
         </member>
         <member name="P:FastFrame.Infrastructure.Module.ModuleFieldStrut.Relate">
             <summary>
-            关联自
+            关联模块
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Module.ModuleFieldStrut.RelateKeyFieldName">
+            <summary>
+            存ID值的字段
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Module.ModuleFieldStrut.RelateIsTree">
+            <summary>
+            关联模块是否树状
             </summary>
         </member>
         <member name="P:FastFrame.Infrastructure.Module.ModuleFieldStrut.EnumValues">
@@ -1650,7 +1660,7 @@
             数据字典
             </summary>
         </member>
-        <member name="P:FastFrame.Infrastructure.Module.ModuleFieldStrut.IsPrimaryField">
+        <member name="P:FastFrame.Infrastructure.Module.ModuleFieldStrut.IsLink">
             <summary>
             是否主要字段
             </summary>

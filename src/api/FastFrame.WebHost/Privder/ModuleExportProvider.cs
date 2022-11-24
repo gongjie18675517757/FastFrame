@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
+using AspectCore.Extensions.Reflection;
 
 namespace FastFrame.WebHost.Privder
 {
@@ -41,6 +42,7 @@ namespace FastFrame.WebHost.Privder
             }
 
             var instance = Activator.CreateInstance(type);
+
             if (instance is IHasManage hasManage)
             {
                 var curr = appSessionProvider.CurrUser;
@@ -50,87 +52,121 @@ namespace FastFrame.WebHost.Privder
                 hasManage.ModifyTime = DateTime.Now;
             }
 
-            if (cacheModuleKvs.TryGetValue(name, out var @struct))
+            if (!cacheModuleKvs.TryGetValue(name, out var @struct))
             {
-                @struct.Form = instance;
-                return @struct;
-            }
+                var fieldInfoStructs = new List<ModuleFieldStrut>();
 
-            var fieldInfoStructs = new List<ModuleFieldStrut>();
-
-
-
-            foreach (var x in type.GetProperties())
-            {
-                /*排除标志*/
-                if (TryGetAttribute<ExcludeAttribute>(x, out _))
-                    continue;
-
-                /*隐藏标记*/
-                TryGetAttribute<HideAttribute>(x, out var hideAttribute);
-
-                /*只读标记*/
-                TryGetAttribute<ReadOnlyAttribute>(x, out var readOnlyAttribute);
-
-                /*关联标记*/
-                TryGetAttribute<RelatedToAttribute>(x, out var relatedToAttribute);
-
-                /*必填*/
-                TryGetAttribute<RequiredAttribute>(x, out var requiredAttribute);
-
-                /*实际类型*/
-                var nullableType = T4Help.GetNullableType(x.PropertyType);
-
-                /*长度*/
-                TryGetAttribute<StringLengthAttribute>(x, out var stringLengthAttribute);
-
-                /*分组*/
-                TryGetAttribute<FormGroupAttribute>(x, out var formGroupAttribute);
-
-                /*数据字典*/
-                TryGetAttribute<EnumItemAttribute>(x, out var enumItemAttribute);
-
-                /*是否主要字段*/
-                TryGetAttribute<IsPrimaryFieldAttribute>(x, out var isPrimaryFieldAttribute);
-
-                /*字段信息*/
-                fieldInfoStructs.Add(new ModuleFieldStrut()
+                foreach (var x in type.GetProperties())
                 {
-                    Name = x.Name,
-                    Type = nullableType.IsArray ? "Array" : nullableType.Name,
-                    Description = descriptionProvider.GetPropertyDescription(x),
-                    Hide = hideAttribute?.HideMark.ToString(),
-                    Readonly = readOnlyAttribute?.ReadOnlyMark.ToString(),
-                    Rules = GetRules(x),
-                    Relate = relatedToAttribute?.RelatedType.Name,
-                    Length = stringLengthAttribute?.MaximumLength,
-                    EnumValues = GetEnumValues(nullableType),
-                    IsRequired = requiredAttribute != null,
-                    GroupNames = formGroupAttribute?.GroupNames,
-                    IsPrimaryField = isPrimaryFieldAttribute != null,
-                    EnumItemInfo = enumItemAttribute == null ?
-                                    null :
-                                    new EnumInfo { Name = enumItemAttribute.Name, SuperPropName = enumItemAttribute.SuperPropName }
-                });
+                    /*排除标志*/
+                    if (TryGetAttribute<ExcludeAttribute>(x, out _))
+                        continue;
+
+                    /*隐藏标记*/
+                    TryGetAttribute<HideAttribute>(x, out var hideAttribute);
+
+                    /*只读标记*/
+                    TryGetAttribute<ReadOnlyAttribute>(x, out var readOnlyAttribute);
+
+                    /*关联标记*/
+                    TryGetAttribute<RelatedToAttribute>(x, out var relatedToAttribute);
+
+                    /*必填*/
+                    TryGetAttribute<RequiredAttribute>(x, out var requiredAttribute);
+
+                    /*实际类型*/
+                    var nullableType = T4Help.GetNullableType(x.PropertyType);
+
+                    /*长度*/
+                    TryGetAttribute<StringLengthAttribute>(x, out var stringLengthAttribute);
+
+                    /*分组*/
+                    TryGetAttribute<FormGroupAttribute>(x, out var formGroupAttribute);
+
+                    /*数据字典*/
+                    TryGetAttribute<EnumItemAttribute>(x, out var enumItemAttribute);
+
+                    /*是否主要字段*/
+                    TryGetAttribute<IsPrimaryFieldAttribute>(x, out var isPrimaryFieldAttribute);
+
+                    /*字段信息*/
+                    if (relatedToAttribute?.RelatedType != null)
+                    {
+
+                        fieldInfoStructs.Add(new ModuleFieldStrut()
+                        {
+                            Name = x.Name.Replace("_Id", "_Value"),
+                            Type = relatedToAttribute?.RelatedType == typeof(Entity.Basis.Resource) ? "File" : "String",
+                            Description = descriptionProvider.GetPropertyDescription(x),
+                            Hide = hideAttribute?.HideMark.ToString(),
+                            Readonly = readOnlyAttribute?.ReadOnlyMark.ToString(),
+                            Rules = GetRules(x),
+                            Relate = relatedToAttribute.RelatedType.Name,
+                            RelateKeyFieldName = x.Name,
+                            RelateIsTree = typeof(ITreeEntity).IsAssignableFrom(relatedToAttribute.RelatedType),
+                            Length = null,
+                            EnumValues = null,
+                            IsRequired = requiredAttribute != null,
+                            GroupNames = formGroupAttribute?.GroupNames,
+                            IsLink = isPrimaryFieldAttribute != null,
+                            EnumItemInfo = null
+                        });
+
+                    }
+                    else
+                    {
+                        fieldInfoStructs.Add(new ModuleFieldStrut()
+                        {
+                            Name = x.Name,
+                            Type = nullableType.IsArray ? "Array" :
+                                nullableType.Name,
+                            Description = descriptionProvider.GetPropertyDescription(x),
+                            Hide = hideAttribute?.HideMark.ToString(),
+                            Readonly = readOnlyAttribute?.ReadOnlyMark.ToString(),
+                            Rules = GetRules(x),
+                            Relate = null,
+                            RelateIsTree = false,
+                            RelateKeyFieldName = x.Name,
+                            Length = stringLengthAttribute?.MaximumLength,
+                            EnumValues = GetEnumValues(nullableType),
+                            IsRequired = requiredAttribute != null,
+                            GroupNames = formGroupAttribute?.GroupNames,
+                            IsLink = isPrimaryFieldAttribute != null,
+                            EnumItemInfo = enumItemAttribute == null ?
+                                        null :
+                                        new EnumInfo { Name = enumItemAttribute.Name, SuperPropName = enumItemAttribute.SuperPropName }
+                        });
+                    }
+                }
+
+                /*模块信息*/
+                @struct = new ModuleStruct()
+                {
+                    Name = type.Name,
+                    Form = null,
+                    Description = descriptionProvider.GetClassDescription(type),
+                    FieldInfoStruts = fieldInfoStructs,
+                    IsTree = typeof(ITreeEntity).IsAssignableFrom(type),
+                    HasManage = typeof(IHasManage).IsAssignableFrom(type),
+                    HasFiles = typeof(IHaveMultiFile).IsAssignableFrom(type),
+                    HaveCheck = typeof(IHaveCheck).IsAssignableFrom(type),
+                    HaveNumber = typeof(IHaveNumber).IsAssignableFrom(type),
+                };
+
+                cacheModuleKvs.Add(name, @struct);
             }
 
+            var dic = instance
+                    .GetType()
+                    .GetProperties()
+                    .ToDictionary(
+                        v => v.Name,
+                        v => v.GetReflector().GetValue(instance)
+                    );
 
-
-            /*模块信息*/
-            @struct = new ModuleStruct()
-            {
-                Name = type.Name,
-                Form = instance,
-                Description = descriptionProvider.GetClassDescription(type),
-                FieldInfoStruts = fieldInfoStructs,
-                IsTree = typeof(ITreeEntity).IsAssignableFrom(type),
-                HasManage = typeof(IHasManage).IsAssignableFrom(type),
-                HasFiles = typeof(IHaveMultiFile).IsAssignableFrom(type),
-                HaveCheck = typeof(IHaveCheck).IsAssignableFrom(type),
-                HaveNumber = typeof(IHaveNumber).IsAssignableFrom(type),
-            };
-
-            cacheModuleKvs.Add(name, @struct);
+            foreach (var item in @struct.FieldInfoStruts)
+                if (!dic.ContainsKey(item.Name))
+                    dic.Add(item.Name, null);
 
             return @struct;
         }

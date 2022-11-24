@@ -6,7 +6,7 @@ namespace FastFrame.Entity.Basis
     /// <summary>
     /// 部门
     /// </summary>
-    [Export] 
+    [Export]
     public class Dept : BaseEntity, ITreeEntity, IViewModelable<Dept>
     {
         /// <summary>
@@ -36,7 +36,12 @@ namespace FastFrame.Entity.Basis
         public string Remarks { get; set; }
 
 
-        private static Expression<Func<Dept, IViewModel>> vm_expression = v => new DefaultViewModel { Id = v.Id, Value = v.Name + "(" + v.TreeCode + ")" };
+        private static Expression<Func<Dept, IViewModel>> vm_expression =
+            v => new DefaultViewModel
+            {
+                Id = v.Id,
+                Value = v.Name + (string.IsNullOrWhiteSpace(v.TreeCode) ? "" : "(" + v.TreeCode + ")")
+            };
 
         public static Expression<Func<Dept, IViewModel>> BuildExpression()
         {

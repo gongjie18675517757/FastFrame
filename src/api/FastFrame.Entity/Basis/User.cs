@@ -58,10 +58,8 @@ namespace FastFrame.Entity.Basis
 
         /// <summary>
         /// 头像
-        /// </summary>
-        [StringLength(200)]
-        [RelatedTo(typeof(Resource))]
-        [Hide(HideMark.Form)]
+        /// </summary> 
+        [RelatedTo(typeof(Resource))] 
         public string HandIcon_Id { get; set; }
 
         /// <summary>
@@ -123,7 +121,8 @@ namespace FastFrame.Entity.Basis
 
 
 
-        private static Expression<Func<User, IViewModel>> vm_expression = v => new DefaultViewModel { Id = v.Id, Value = v.Name + "(" + v.Account + ")" };
+        private static Expression<Func<User, IViewModel>> vm_expression = 
+            v => new DefaultViewModel { Id = v.Id, Value = v.Name + "(" + v.Account + ")" };
 
         public static Expression<Func<User, IViewModel>> BuildExpression() => vm_expression;
     }

@@ -946,7 +946,7 @@
             角色 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Basis.RoleDto.EnCode">
+        <member name="P:FastFrame.Application.Basis.RoleDto.TreeCode">
             <summary>
             编码 
             </summary>
@@ -954,6 +954,16 @@
         <member name="P:FastFrame.Application.Basis.RoleDto.Name">
             <summary>
             名称 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.RoleDto.Super_Id">
+            <summary>
+            上级角色 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.RoleDto.Super_Value">
+            <summary>
+            上级角色 
             </summary>
         </member>
         <member name="P:FastFrame.Application.Basis.RoleDto.IsDefault">
@@ -999,6 +1009,11 @@
         <member name="P:FastFrame.Application.Basis.RoleDto.ModifyTime">
             <summary>
             修改时间 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.RoleDto.ChildCount">
+            <summary>
+            下级数量 
             </summary>
         </member>
         <member name="P:FastFrame.Application.Basis.RolePermissionModel.PermissionKey">

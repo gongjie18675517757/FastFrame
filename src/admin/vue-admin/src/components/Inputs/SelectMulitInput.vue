@@ -14,13 +14,13 @@
     dense
     @change="change"
     key="Id"
-    :item-value="(v) => v.Id"
-    :item-text="getField"
+    item-value="Id"
+    item-text="Value"
     return-object
   >
-    <template #append-item>
+    <template #append-item v-if="!finish">
       <v-lazy>
-        <v-list-item link @show="moreLoad">
+        <v-list-item @click="moreLoad">
           <v-list-item-title>更多</v-list-item-title>
         </v-list-item>
       </v-lazy>
@@ -35,15 +35,13 @@
 </template>
 
 <script>
-import { getModuleStrut } from "../../generate";
-import { distinct, getValue, throttle, fmtRequestPars } from "../../utils";
+import { distinct, throttle } from "../../utils";
 export default {
   props: {
     model: Object,
     value: [Array],
     disabled: Boolean,
     label: String,
-    filter: [Array, Function],
     Name: String,
     errorMessages: Array,
     Relate: {
@@ -58,14 +56,14 @@ export default {
     return {
       loading: false,
       items: [],
-      fields: [],
-      canQueryFields: [],
       search: "",
+      pageIndex: 1,
+      finish: false,
     };
   },
   computed: {
     text() {
-      return this.value.map(this.getField).join(",");
+      return this.value.map(this.Value).join(",");
     },
     allItems() {
       return distinct(
@@ -75,73 +73,41 @@ export default {
       );
     },
   },
-  async mounted() {
-    let { RelateFields, FieldInfoStruts } = await getModuleStrut(this.Relate);
-    this.fields = RelateFields;
-    this.canQueryFields = FieldInfoStruts.filter(
-      (v) => v.Type != "EnumName"
-    ).map((v) => v.Name);
 
+  async mounted() {
     if (!this.disabled) this.querySelections("");
   },
   watch: {
+    disabled(v) {
+      if (!v) {
+        this.querySelections(v);
+      }
+    },
     search(v) {
+      this.pageIndex = 1;
+      this.finish = false;
       v && this.querySelections(v);
     },
   },
   methods: {
-    getField(item) {
-      if (!item) {
-        return null;
-      } else {
-        let values = this.fields.map((r, i) => {
-          let val = getValue(item, r);
-          if (i == 0) {
-            return val;
-          } else {
-            return `[${val}]`;
-          }
-        });
-
-        return values.join("");
-      }
-    },
     querySelections: throttle(async function (v = "") {
       this.loading = true;
-      let filter = this.filter || [];
-      if (typeof filter == "function")
-        filter = await filter.call(this, this.model);
       let url = this.requestUrl;
       if (typeof this.requestUrl == "function")
         url = this.requestUrl.call(this, this.model);
 
-      let qs = {
-        Filters: [
-          {
-            Key: "and",
-            Value: [
-              {
-                Name: this.fields
-                  .filter((v) => this.canQueryFields.includes(v))
-                  .join(";"),
-                Compare: "$",
-                Value: v,
-              },
-              {
-                Name: "Id",
-                Compare: "!=",
-                Value: this.value.join(","),
-              },
-              ...filter,
-            ].filter((v) => v.Value),
-          },
-        ].filter((v) => v.Value.length > 0),
-      };
       try {
-        let { Data } = await this.$http.get(
-          `${url}?qs=${JSON.stringify(qs, fmtRequestPars)}`
+        let res = await this.$http.get(
+          `${url}?kw=${v || ""}&page_index=${this.pageIndex}`
         );
-        this.items = Data;
+        if (this.pageIndex == 1) this.items = res;
+        else this.items.push(...res);
+
+        if (res.length > 0) {
+          this.pageIndex++;
+        } else {
+          this.finish = true;
+        }
         this.loading = false;
       } catch (error) {
         window.console.error(error);
@@ -152,7 +118,7 @@ export default {
       this.$emit("input", $event);
     },
     moreLoad() {
-      console.log(event);
+      this.querySelections(this.search);
     },
   },
 };

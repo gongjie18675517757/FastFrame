@@ -74,12 +74,12 @@ export default {
           {
             Name: "Depts",
             Description: "所属科室",
-            getValueFunc: ({ value }) => value.map(v => v.Name).join(",")
+            getValueFunc: ({ value }) => value.map(v => v.Value).join(",")
           },
           {
             Name: "Roles",
             Description: "拥有角色",
-            getValueFunc: ({ value }) => value.map(v => v.Name).join(",")
+            getValueFunc: ({ value }) => value.map(v => v.Value).join(",")
           }
         ];
       });

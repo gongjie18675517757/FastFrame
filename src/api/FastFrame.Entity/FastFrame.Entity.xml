@@ -521,7 +521,7 @@
             角色
             </summary> 
         </member>
-        <member name="P:FastFrame.Entity.Basis.Role.EnCode">
+        <member name="P:FastFrame.Entity.Basis.Role.TreeCode">
             <summary>
             编码
             </summary>
@@ -529,6 +529,11 @@
         <member name="P:FastFrame.Entity.Basis.Role.Name">
             <summary>
             名称
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.Role.Super_Id">
+            <summary>
+            上级角色
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Basis.Role.IsDefault">
@@ -699,7 +704,7 @@
         <member name="P:FastFrame.Entity.Basis.User.HandIcon_Id">
             <summary>
             头像
-            </summary>
+            </summary> 
         </member>
         <member name="P:FastFrame.Entity.Basis.User.IsAdmin">
             <summary>

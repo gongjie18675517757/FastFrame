@@ -191,11 +191,17 @@ html {
     }
   }
 
+  .v-select__selections {
+    .v-select__selection--comma, .v-select.v-input--dense .v-select__selection--comma {
+      margin: 0px;
+    }
+  }
+
   &.v-input {
     &.v-input__slot_checkbox_container {
       .v-input--selection-controls {
         margin-top: 0px;
-        margin: 1px
+        margin: 1px;
       }
 
       .v-input__slot {

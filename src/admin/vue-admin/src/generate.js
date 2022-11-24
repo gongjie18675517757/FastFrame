@@ -84,14 +84,9 @@ export async function getDefaultModel(name = '') {
   let {
     Form,
     HasManage,
-    FieldInfoStruts
   } = await getModuleStrut(name)
   let model = Form
-  for (const field of FieldInfoStruts) {
-    if (/_Id$/.test(field.Name)) {
-      model[field.Name.replace(/_Id$/, '')] = null
-    }
-  }
+
   if (HasManage) {
     model.Create_User_Id = store.state.currUser.Id
     model.Create_User = store.state.currUser
@@ -110,38 +105,21 @@ export async function getDefaultModel(name = '') {
 export async function getColumns(name = '') {
   let {
     FieldInfoStruts,
-    RelateFields,
     Name: ModuleName,
-    HasManage
   } = await getModuleStrut(name)
-  let columns = FieldInfoStruts.filter(f => {
-    return f.Hide != 'List' && f.Hide != 'All' && (!f.Name.endsWith('Id') || f.Relate || f.EnumItemInfo)
-  }).map(f => {
-    return {
-      ...f,
-      ModuleName,
-      sortable: true
-    }
-  })
-
-  if (RelateFields.length > 0 && HasManage) {
-    let col = columns.find(r => r.Name == RelateFields[0])
-    col.IsLink = true
-  }
-
-  for (const col of columns) {
-    if (col.Relate) {
-      let {
-        RelateFields: fields
-      } = await getModuleStrut(col.Relate)
-      col.Relate = {
-        ModuleName: col.Relate,
-        RelateFields: fields
+  let columns = FieldInfoStruts
+    .filter(v => v.Name != "Id")
+    .filter(f => {
+      return (f.Hide != 'List' && f.Hide != 'All')
+    }).map(f => {
+      return {
+        ...f,
+        ModuleName,
+        sortable: true
       }
-    }
-  }
+    })
 
-  return columns.filter(r => !['Create_User_Id', 'CreateTime', 'Modify_User_Id', 'ModifyTime'].includes(r.Name))
+  return columns.filter(r => !['Create_User_Value', 'CreateTime', 'Modify_User_Value', 'ModifyTime'].includes(r.Name))
 }
 
 /**
@@ -234,20 +212,8 @@ export async function getQueryOptions(columns) {
 
     if (Name.includes("Password") || Relate == "Resource" || !sortable)
       continue;
-    else if (Name.endsWith('_Id') && !!Relate) {
-      let temp = Name.replace('_Id', '')
-      let {
-        RelateFields
-      } = Relate
-      if (RelateFields.length > 0) {
-        arr.push({
-          Type,
-          Description,
-          Name: RelateFields.map(r => `${temp}.${r}`).join(';'),
-          compare: '$',
-        })
-      }
-    } else if (EnumItemInfo) {
+
+    else if (EnumItemInfo) {
       arr.push({
         Description,
         Name,

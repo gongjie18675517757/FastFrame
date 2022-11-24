@@ -38,9 +38,19 @@ namespace FastFrame.Infrastructure.Module
         public IEnumerable<ModuleFieldRule> Rules { get; set; }
 
         /// <summary>
-        /// 关联自
+        /// 关联模块
         /// </summary>
         public string Relate { get; set; }
+
+        /// <summary>
+        /// 存ID值的字段
+        /// </summary>
+        public string RelateKeyFieldName { get; set; }
+
+        /// <summary>
+        /// 关联模块是否树状
+        /// </summary>
+        public bool RelateIsTree { get; set; }
 
         /// <summary>
         /// 枚举项
@@ -70,6 +80,8 @@ namespace FastFrame.Infrastructure.Module
         /// <summary>
         /// 是否主要字段
         /// </summary>
-        public bool IsPrimaryField { get; set; }
-    }  
+        public bool IsLink { get; set; }
+
+
+    }
 }

@@ -367,8 +367,8 @@ namespace FastFrame.Application.Flow
                     return await loader
                          .GetService<IRepository<Role>>()
                          .Where(v => !v.IsDefault)
-                         .Where(v => kw == null || v.Name.Contains(kw) || v.EnCode.Contains(kw))
-                         .OrderBy(v => v.EnCode)
+                         .Where(v => kw == null || v.Name.Contains(kw) || v.TreeCode.Contains(kw))
+                         .OrderBy(v => v.TreeCode)
                          .ThenBy(v => v.Name)
                          .Take(200)
                          .Select(Role.BuildExpression())

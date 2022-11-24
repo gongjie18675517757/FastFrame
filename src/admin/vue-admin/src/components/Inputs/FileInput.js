@@ -5,6 +5,7 @@ import {
   upload
 } from '../../utils'
 export default {
+  name: 'file-input',
   props: {
     model: Object,
     value: String,
@@ -13,44 +14,42 @@ export default {
     Name: String,
     errorMessages: Array,
     description: String,
+    RelateKeyFieldName: String,
     isXs: Boolean
   },
   render(h) {
-    let info = getValue(this.model, this.Name.replace('_Id', ''))
-    if (this.disabled && !this.isXs) {
-      if (this.value) {
-        return h('a', {
-          on: {
-            click: () => {
-              window.open(getDownLoadPath(this.value, info.Name));
-            }
-          }
-        }, info.Name)
-      } else {
-        return h('span', null, '无')
-      }
-    }
+    let file_id = getValue(this.model, this.RelateKeyFieldName)
+    
     return h('v-text-field', {
       props: {
         ...this.props,
         'show-size': false,
         readonly: true,
-        'append-icon': !this.disabled ? 'clear' : '',
-        value: this.value ? info.Name : null,
+        'append-icon': this.value ? 'mdi-download' : '',
+        value: this.value,
         placeholder: this.description,
         dense: true,
         singleLine: !this.isXs,
+        clearable: !this.disabled && this.value
       },
       on: {
         click: () => {
           if (this.disabled)
             return;
           upload().then(([file]) => {
-            this.$emit('input', file.Id);
+            this.$emit('input', file.Name);
             this.$emit('change', file);
-            setValue(this.model, this.Name.replace('_Id', ''), file);
+            setValue(this.model, this.RelateKeyFieldName, file.Id);
           })
-        }
+        },
+        'click:append': () => {
+          window.open(getDownLoadPath(file_id, this.value));
+        },
+        'click:clear': () => {
+          this.$emit('input', null);
+          this.$emit('change', null);
+          setValue(this.model, this.RelateKeyFieldName, null);
+        },
       }
     },
       [

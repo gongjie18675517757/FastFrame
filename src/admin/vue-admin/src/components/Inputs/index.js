@@ -101,7 +101,7 @@ export function calcInputComponent(props) {
   //文本,数字,密码
   else if (
     !Name.endsWith("Id") &&
-    ["Password", "String", "Int32", "Decimal"].includes(Type)
+    ["Password", "String", 'Int32', 'Decimal', 'DateTime','Int64'].includes(Type)
   ) {
     return {
       colspan: 1,
@@ -412,7 +412,7 @@ export default {
           type:
             (props.Name || '').toLowerCase().includes('password')
               ? "password"
-              : ["Int32", "Decimal"].includes(props.Type)
+              : ['Int32', 'Decimal', 'DateTime','Int64'].includes(props.Type)
                 ? "number"
                 : "text",
         });

@@ -41,6 +41,14 @@ namespace FastFrame.Database
 
             base.OnModelCreating(modelBuilder);
         }
+
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    base.OnConfiguring(optionsBuilder);
+
+        //    optionsBuilder.EnableDetailedErrors(true);
+        //    optionsBuilder.EnableSensitiveDataLogging(true);  
+        //}
     }
 
 

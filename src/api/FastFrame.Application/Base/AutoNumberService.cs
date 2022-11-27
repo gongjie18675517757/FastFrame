@@ -38,14 +38,17 @@ namespace FastFrame.Application
         /// </summary>   
         /// <param name="entitys"></param>
         /// <returns></returns>
-        public async Task MakeNumberAsync<TEntity>(params TEntity[] entitys) where TEntity : class, IHaveNumber
+        public async Task TryMakeNumberAsync<TEntity>(params TEntity[] entitys) where TEntity : class,IEntity
         {
             if (entitys.Length == 0)
                 return;
 
             foreach (var item in entitys)
-            {
-                var typeName = item.GetModuleName();
+            { 
+                if(item is not IHaveNumber haveNumber)
+                    continue;
+
+                var typeName = haveNumber.GetModuleName();
                 ITreeEntity treeEntity = null;
                 var is_tree_entity = item is ITreeEntity;
                 if (is_tree_entity)
@@ -93,12 +96,12 @@ namespace FastFrame.Application
                         prefix = super_code;
 
                     var number = $"{prefix}{serial}";
-                    item.SetNumber(number);
+                    haveNumber.SetNumber(number);
                 }
                 else
                 {
                     var number = $"{prefix}{dtTemp}{serial}{opt.Suffix}";
-                    item.SetNumber(number);
+                    haveNumber.SetNumber(number);
                 }
             }
         }

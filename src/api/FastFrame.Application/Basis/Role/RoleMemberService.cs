@@ -135,7 +135,7 @@ namespace FastFrame.Application.Basis
         {
             var roleQuery = roles.Select(Role.BuildExpression());
             var query = from a in roleQuery
-                        join b in roleMembers on a.Id equals b.Value_Id
+                        join b in roleMembers on a.Id equals b.FKey_Id
                         where keys.Contains(b.Value_Id)
                         select new
                         {

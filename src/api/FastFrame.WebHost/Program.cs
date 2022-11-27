@@ -2,6 +2,7 @@
 using AspectCore.Configuration;
 using AspectCore.DependencyInjection;
 using FastFrame.Application;
+using FastFrame.Entity;
 using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Cache;
 using FastFrame.Infrastructure.Client;
@@ -22,7 +23,9 @@ using FastFrame.WebHost.Privder;
 using Hangfire;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.Text.Json.Serialization;
 
@@ -81,6 +84,7 @@ var configurationOptions = StackExchange.Redis.ConfigurationOptions.Parse(Config
 var connectionMultiplexer = StackExchange.Redis.ConnectionMultiplexer.Connect(configurationOptions);
 services.AddSingleton(connectionMultiplexer);
 
+
 services
     .AddHangfire(configuration =>
         configuration
@@ -96,33 +100,31 @@ services
 services.AddHangfireServer();
 
 //builder.Services.AddControllers();
+void JSONSetting(JsonSerializerSettings jsonSerializerSettings)
+{
+    jsonSerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+    jsonSerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver();
+    jsonSerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm";
+    jsonSerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Include;
+    jsonSerializerSettings.Converters.Add(new StringEnumConverter());
+    var vm_convert = new NewtonsoftDefaultInterfaceConvert<IViewModel, DefaultViewModel>();
+    jsonSerializerSettings.Converters.Add(vm_convert);
+}
+
 services
     .AddMvc(opts =>
     {
         //opts.Filters.Add<GlobalFilter>();
-    })
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-        options.JsonSerializerOptions.PropertyNamingPolicy = null;
-        options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-    })
+    }) 
     .AddNewtonsoftJson(options =>
     {
-        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-        options.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver();
-        options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm";
-        options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Include;
-        options.SerializerSettings.Converters.Add(new StringEnumConverter());
+        JSONSetting(options.SerializerSettings); 
     });
 
 services
     .AddSignalR()
-    .AddJsonProtocol(config =>
-    {
-        config.PayloadSerializerOptions.PropertyNamingPolicy = null;
-        config.PayloadSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-        config.PayloadSerializerOptions.Converters.Add(item: new JsonStringEnumConverter());
+    .AddNewtonsoftJsonProtocol(options => {
+        JSONSetting(options.PayloadSerializerSettings); 
     });
 
 services.AddLogging(r => r.AddLog4Net());
@@ -136,6 +138,8 @@ services
     .AddHttpContextAccessor()
     .AddDbContextPool<FastFrame.Database.DataBase>(o =>
     {
+        o.EnableDetailedErrors();
+        o.EnableSensitiveDataLogging();
         var conn_str = Configuration.GetConnectionString(ConnectionName);
         o.UseMySql(conn_str,
                    ServerVersion
@@ -176,10 +180,10 @@ services
 
 
 
-/*添加动态代理*/ 
+/*添加动态代理*/
 services.ConfigureDynamicProxy(config =>
-{ 
-   
+{
+
     //config.Interceptors.AddTyped<LockMethodAttribute>(Predicates.ForService("*Service"));
 });
 
@@ -331,21 +335,23 @@ app.UseMiddleware<AuthorizationMiddleware>();
 app.UseMiddleware<PermissionMiddleware>();
 
 /*注册终结点*/
-//app.MapHub<MessageHub>("/hub/message");
-//app.MapControllers();
-//app.MapHangfireDashboard();
+app.MapHub<MessageHub>("/hub/message");
+app.MapControllers();
+app.MapHangfireDashboard();
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapHub<MessageHub>("/hub/message");
-    endpoints.MapControllers();
-    endpoints.MapHangfireDashboard();
+ 
+
+//app.UseEndpoints(endpoints =>
+//{
+//    endpoints.MapHub<MessageHub>("/hub/message");
+//    endpoints.MapControllers();
+//    endpoints.MapHangfireDashboard();
 
 
-    //endpoints.MapControllerRoute(
-    //    name: "default",
-    //    pattern: "{controller=Home}/{action=Index}/{id?}");
-});
+//    //endpoints.MapControllerRoute(
+//    //    name: "default",
+//    //    pattern: "{controller=Home}/{action=Index}/{id?}");
+//});
 
 var logger = app.Services.GetService<ILogger<Program>>();
 

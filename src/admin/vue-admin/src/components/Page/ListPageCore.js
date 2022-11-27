@@ -287,7 +287,7 @@ export let pageComputed = {
   },
   [PageComputedDefines.dynamicColumns]() {
     return [...this.columns, ...(this.showMamageField && this.ModuleStrut.HasManage ? [{
-      Name: 'Create_User.Name',
+      Name: 'Create_User_Value',
       Description: '录入人',
       Type: 'String',
       sortable: true
@@ -298,7 +298,7 @@ export let pageComputed = {
       Type: 'DateTime',
     },
     {
-      Name: 'Modify_User.Name',
+      Name: 'Modify_User_Value',
       Description: '修改人',
       sortable: true,
       Type: 'String',

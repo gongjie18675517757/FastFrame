@@ -55,7 +55,7 @@ namespace FastFrame.Infrastructure
                 yield break;
 
             if (childSelector == null)
-                throw new ArgumentException(null,nameof(childSelector));
+                throw new ArgumentException(null, nameof(childSelector));
 
             foreach (var item in enumerable)
             {
@@ -330,7 +330,7 @@ namespace FastFrame.Infrastructure
             return sources.Select(expression);
         }
 
- 
+
 
         /// <summary>
         /// 属性映射
@@ -388,7 +388,7 @@ namespace FastFrame.Infrastructure
         /// <param name="haveHexDencode"></param>
         /// <param name="converters"></param>
         /// <returns></returns>
-        public static T ToObject<T>(this string @in, bool haveHexDencode = false,params JsonConverter[] converters)
+        public static T ToObject<T>(this string @in, bool haveHexDencode = false, params JsonConverter[] converters)
         {
             if (@in.IsNullOrWhiteSpace())
             {

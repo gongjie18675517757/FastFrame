@@ -1,6 +1,7 @@
-import { getValue,makeVueContext } from "../..//utils";
+import { convertHtmlToText, getValue, makeVueContext } from "../..//utils";
 import { getDownLoadPath } from "../../config";
 import store from "../../store";
+import { existsIsImage } from "../../utils/fileIcons";
 export default {
   functional: true,
   props: {
@@ -18,7 +19,7 @@ export default {
     const { props: attrs } =
       context || makeVueContext.call(this, { inject: [] });
     const { info, props } = attrs;
-    const { EnumItemInfo, EnumValues, renderFunc } = info;
+    const { EnumItemInfo, EnumValues, renderFunc, RelateKeyFieldName } = info;
 
     /**
      * 当前对象值
@@ -29,15 +30,14 @@ export default {
     /**
      * 是否文件
      */
-    const isFile = info.Relate && info.Relate.ModuleName == "Resource";
+    const isFile = info.Type == 'File';
 
     /**
      * 外键对象
      */
-    const fkObject = (function () {
-      if (info.Relate && info.Relate.ModuleName && value) {
-        let tempName = info.Name.replace(/_Id$/, "");
-        return getValue(props.item, tempName);
+    const fkObject_Key = (function () {
+      if (RelateKeyFieldName) {
+        return getValue(props.item, RelateKeyFieldName);
       } else {
         return null;
       }
@@ -47,7 +47,7 @@ export default {
      * 文本
      */
     const text = (function () {
-      let { getValueFunc, Type, Relate, Name } = info;
+      let { getValueFunc, Type, Name } = info;
       let text = value;
       let length = info.Length || 0;
 
@@ -64,7 +64,7 @@ export default {
         /**
          * 富文本
          */
-        return text.replace(/<[^>]+>/g, "").substring(0, 200);
+        return convertHtmlToText(text).substring(0, 200);
       } else if (Type == "Boolean") {
         /**
          * 布尔值
@@ -72,18 +72,6 @@ export default {
         if (text == true) return "是";
         else if (text == false) return "否";
         else return "";
-      } else if (Relate) {
-        /**
-         * 外键
-         */
-        let obj = fkObject;
-        if (obj) {
-          return info.Relate.RelateFields.map((v) => obj[v])
-            .map((v, i) => (i > 0 ? `[${v}]` : v))
-            .join("");
-        } else {
-          return null;
-        }
       } else if (Type == "DateTime") {
         /**
          * 日期
@@ -128,21 +116,48 @@ export default {
     }
 
     if (isFile) {
-      /**
+      let src = getDownLoadPath(fkObject_Key, value);
+      if (existsIsImage(value)) {
+        /**
+        * 图片下载
+        */
+        return h(
+          "img",
+          {
+            attrs: {
+              src,
+              title:`${value} 点击打开`
+            },
+            style: {
+              maxWidth: '100%',
+              maxHeight: '100%',
+              borderRadius: '50%',
+              padding: '2px'
+            },
+            on: {
+              click: () => {
+                window.open(src);
+              },
+            },
+          }
+        );
+      }
+
+      else {
+        /**
        * 文件下载
        */
-      return h(
-        "a",
-        {
-          on: {
-            click: () => {
-              let url = getDownLoadPath(value, fkObject ? fkObject.Name : "");
-              window.open(url);
-            },
+        return h(
+          "a",
+          {
+            attrs: {
+              href: src,
+              target: '_blank'
+            }
           },
-        },
-        text
-      );
+          text
+        );
+      }
     } else {
       return h("span", null, text);
     }

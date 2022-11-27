@@ -102,7 +102,7 @@
             自动编号
             </summary>
         </member>
-        <member name="M:FastFrame.Application.AutoNumberService.MakeNumberAsync``1(``0[])">
+        <member name="M:FastFrame.Application.AutoNumberService.TryMakeNumberAsync``1(``0[])">
             <summary>
             生成编号
             </summary>   
@@ -317,7 +317,7 @@
             自动编号服务
             </summary>
         </member>
-        <member name="M:FastFrame.Application.IAutoNumberService.MakeNumberAsync``1(``0[])">
+        <member name="M:FastFrame.Application.IAutoNumberService.TryMakeNumberAsync``1(``0[])">
             <summary>
             生成编号
             </summary> 

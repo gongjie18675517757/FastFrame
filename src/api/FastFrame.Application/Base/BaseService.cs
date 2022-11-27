@@ -142,12 +142,14 @@ namespace FastFrame.Application
         {
             var query = loader.GetService<IRepository<TEntity>>().Select(TEntity.BuildExpression());
 
-            return await query
+            var list= await query
                 .Where(v => kw == null || v.Value.Contains(kw))
                 .OrderByDescending(v => v.Id)
                 .Skip(page_size * (page_index - 1))
                 .Take(page_size)
                 .ToListAsync();
+
+            return list;
         }
     }
 
@@ -192,7 +194,7 @@ namespace FastFrame.Application
             await OnChangeing(input, entity);
 
             if (entity is IHaveNumber haveNumber)
-                await loader.GetService<IAutoNumberService>().MakeNumberAsync(haveNumber);
+                await loader.GetService<IAutoNumberService>().TryMakeNumberAsync(entity);
 
             if (input is IHaveMultiFileDto haveMultiFile)
                 await EventBus.TriggerEventAsync(new DoMainAdding<IHaveMultiFileDto>(haveMultiFile, entity));
@@ -338,7 +340,7 @@ namespace FastFrame.Application
 
                 /*重新编码*/
                 if (treeEntity.Super_Id != prevTreeEntity.Super_Id || treeEntity.TreeCode.IsNullOrWhiteSpace())
-                    await loader.GetService<IAutoNumberService>().MakeNumberAsync(treeEntity);
+                    await loader.GetService<IAutoNumberService>().TryMakeNumberAsync(entity);
             }
 
 

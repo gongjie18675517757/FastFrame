@@ -89,9 +89,9 @@ export async function getDefaultModel(name = '') {
 
   if (HasManage) {
     model.Create_User_Id = store.state.currUser.Id
-    model.Create_User = store.state.currUser
+    model.Create_User_Value = store.state.currUser
     model.Modify_User_Id = store.state.currUser.Id
-    model.Modify_User = store.state.currUser
+    model.Modify_User_Value = store.state.currUser.Id 
   }
   return {
     ...model
@@ -109,6 +109,7 @@ export async function getColumns(name = '') {
   } = await getModuleStrut(name)
   let columns = FieldInfoStruts
     .filter(v => v.Name != "Id")
+    .filter(v => !v.Name.endsWith('_Id') || v.EnumItemInfo)
     .filter(f => {
       return (f.Hide != 'List' && f.Hide != 'All')
     }).map(f => {
@@ -242,7 +243,7 @@ export async function getQueryOptions(columns) {
         compare: '==',
         Type
       })
-    } else if (['Int32', 'Decimal', 'DateTime'].includes(Type)) {
+    } else if (['Int32', 'Decimal', 'DateTime','Int64'].includes(Type)) {
       arr.push({
         Description: `${Description}起`,
         Name,

@@ -364,6 +364,13 @@
             缓存租户HOST信息键
             </summary>
         </member>
+        <member name="T:FastFrame.Infrastructure.NewtonsoftDefaultInterfaceConvert`2">
+            <summary>
+            默认接口JSON转换器
+            </summary>
+            <typeparam name="TInterface"></typeparam>
+            <typeparam name="TClass"></typeparam>
+        </member>
         <member name="M:FastFrame.Infrastructure.DescriptionHelp.GetDescription(System.Type,System.String)">
             <summary>
             返回类型的注释说明

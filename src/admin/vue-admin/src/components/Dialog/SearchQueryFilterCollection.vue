@@ -13,7 +13,7 @@
           >
             <v-list-item-title>
               {{ append_item.Description }}
-              {{ compare_dic[append_item.compare] || append_item.compare }}
+              <!-- {{ compare_dic[append_item.compare] || append_item.compare }} -->
             </v-list-item-title>
           </v-list-item>
         </v-list>

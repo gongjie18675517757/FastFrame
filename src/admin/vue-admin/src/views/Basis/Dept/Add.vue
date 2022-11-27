@@ -28,7 +28,7 @@ export default makeFormPageInheritedFromBaseFormPage({
         ...arr,
         {
           Name: "Super_Id",
-          visible: () => !this.super_id,
+          visible: () => !this.super_id, 
         },
         {
           Name: "Members",
@@ -42,7 +42,7 @@ export default makeFormPageInheritedFromBaseFormPage({
           Description: "部门主管",
           Type: "Array",
           EnumValues: (model) =>
-            model.Members.map((v) => ({ Key: v.Id, Value: v.Name })),
+            model.Members.map((v) => ({ Key: v.Id, Value: v.Value })),
         },
       ];
     },

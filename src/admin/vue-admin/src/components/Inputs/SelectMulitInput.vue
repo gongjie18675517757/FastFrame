@@ -86,7 +86,7 @@ export default {
     search(v) {
       this.pageIndex = 1;
       this.finish = false;
-      v && this.querySelections(v);
+      this.querySelections(v);
     },
   },
   methods: {

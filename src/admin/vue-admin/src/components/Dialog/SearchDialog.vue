@@ -77,7 +77,7 @@ export default {
   padding: 12px;
   min-width: 500px;
 
-  .v-text-field__details {
+  .v-text-field__details,.v-messages {
     display: none;
   }
 }

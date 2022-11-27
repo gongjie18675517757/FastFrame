@@ -139,7 +139,7 @@ namespace FastFrame.Application.Basis
             await handleUserDeptService.UpdateManyAsync(
                      v => v.User_Id == input.Id,
                      input.Depts,
-                     (a, b) => a.User_Id == input.Id,
+                     (a, b) => a.Dept_Id == b.Id,
                      v => new DeptMember
                      {
                          Dept_Id = v.Id,

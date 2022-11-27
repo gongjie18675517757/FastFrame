@@ -61,6 +61,7 @@
 		<PackageReference Include="HangFire.Redis.StackExchange" Version="1.9.1-beta" />  
 		<PackageReference Include="AspectCore.Extensions.DependencyInjection" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="7.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="6.1.0" />
 		<PackageReference Include="AspectCore.Core" Version="2.2.0" /> 
 		<PackageReference Condition="'$(Configuration)'=='DEBUG'" Include="Swashbuckle.AspNetCore" Version="6.4.0" />

@@ -17,6 +17,25 @@ export default {
 }
 
 
+/**
+ * 根据文件名判断是否是图片
+ * @param {*} name 
+ */
+export function existsIsImage(name) {
+    if (!name)
+        return false;
+    const strFilter = ".jpeg|.gif|.jpg|.png|.bmp|.pic|"
+    if (name.indexOf(".") > -1) {
+        const p = name.lastIndexOf(".");
+        let strPostfix = name.substring(p, name.length) + '|';
+        strPostfix = strPostfix.toLowerCase();
+        if (strFilter.indexOf(strPostfix) > -1) {
+            return true;
+        }
+    }
+    return false;
+}
+
 
 /**
  * 获取图标类型

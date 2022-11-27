@@ -400,3 +400,17 @@ export async function RSAEncrypt(input_string, publicKey) {
     encrypt.setPublicKey(PUBLIC_KEY);
     return encrypt.encrypt(input_string);
 }
+
+/**
+ * 将HTML转换为text
+ * @param {*} html 
+ * @returns 
+ */
+export function convertHtmlToText(html) {
+    if (!html)
+        return html;
+    const el = document.createElement('div');
+    el.innerHTML = html;
+    const txt = el.textContent;
+    return txt;
+}

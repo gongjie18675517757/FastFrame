@@ -13,6 +13,6 @@ namespace FastFrame.Application
         /// </summary> 
         /// <param name="entitys"></param>
         /// <returns></returns>
-        Task MakeNumberAsync<TEntity>(params TEntity[] entitys) where TEntity: class,IHaveNumber;
+        Task TryMakeNumberAsync<TEntity>(params TEntity[] entitys) where TEntity: class,IEntity;
     }
 }

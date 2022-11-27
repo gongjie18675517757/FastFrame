@@ -1,5 +1,5 @@
 ﻿namespace FastFrame.Entity
-{
+{ 
     public interface IViewModel
     {
         string Id { get; }

@@ -516,6 +516,16 @@
             资源映射
             </summary>
         </member>
+        <member name="P:FastFrame.Entity.Basis.ResourceMap.FKey_Id">
+            <summary>
+            外键ID
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.ResourceMap.Value_Id">
+            <summary>
+            关联到<see cref="T:FastFrame.Entity.Basis.Resource"/>
+            </summary>
+        </member>
         <member name="T:FastFrame.Entity.Basis.Role">
             <summary>
             角色

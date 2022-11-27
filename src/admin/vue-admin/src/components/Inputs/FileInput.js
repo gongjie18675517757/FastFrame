@@ -30,7 +30,7 @@ export default {
         placeholder: this.description,
         dense: true,
         singleLine: !this.isXs,
-        clearable: !this.disabled && this.value
+        clearable: !this.disabled && !!this.value
       },
       on: {
         click: () => {

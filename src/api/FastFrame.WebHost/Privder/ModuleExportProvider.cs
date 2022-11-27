@@ -41,16 +41,7 @@ namespace FastFrame.WebHost.Privder
                 return null;
             }
 
-            var instance = Activator.CreateInstance(type);
 
-            if (instance is IHasManage hasManage)
-            {
-                var curr = appSessionProvider.CurrUser;
-                hasManage.Create_User_Id = curr?.Id;
-                hasManage.CreateTime = DateTime.Now;
-                hasManage.Modify_User_Id = curr?.Id;
-                hasManage.ModifyTime = DateTime.Now;
-            }
 
             if (!cacheModuleKvs.TryGetValue(name, out var @struct))
             {
@@ -156,17 +147,35 @@ namespace FastFrame.WebHost.Privder
                 cacheModuleKvs.Add(name, @struct);
             }
 
+            var instance = Activator.CreateInstance(type);
+
+            if (instance is IHasManage hasManage)
+            {
+                var curr = appSessionProvider.CurrUser;
+                hasManage.Create_User_Id = curr?.Id;
+                hasManage.CreateTime = DateTime.Now;
+                hasManage.Modify_User_Id = curr?.Id;
+                hasManage.ModifyTime = DateTime.Now;
+            }
+
+            if (instance is IHaveNumber haveNumber)
+                haveNumber.SetNumber("保存时自动生成");
+
             var dic = instance
-                    .GetType()
-                    .GetProperties()
-                    .ToDictionary(
-                        v => v.Name,
-                        v => v.GetReflector().GetValue(instance)
-                    );
+                .GetType()
+                .GetProperties()
+                .ToDictionary(
+                    v => v.Name,
+                    v => v.GetReflector().GetValue(instance)
+                );
 
             foreach (var item in @struct.FieldInfoStruts)
                 if (!dic.ContainsKey(item.Name))
                     dic.Add(item.Name, null);
+
+
+
+
 
             return @struct;
         }

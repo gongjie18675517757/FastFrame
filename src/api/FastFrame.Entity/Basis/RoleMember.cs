@@ -8,11 +8,11 @@
         /// <summary>
         /// 角色 <see cref="Role"/>
         /// </summary> 
-        public override string FKey_Id { get; set; }
+        public override string FKey_Id { get => base.FKey_Id; set => base.FKey_Id = value; }
 
         /// <summary>
         /// 用户 <see cref="User"/>
         /// </summary> 
-        public override string Value_Id { get; set; } 
+        public override string Value_Id { get => base.Value_Id; set => base.Value_Id = value; }
     }
 }

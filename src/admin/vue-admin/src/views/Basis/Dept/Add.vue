@@ -23,11 +23,11 @@ export default makeFormPageInheritedFromBaseFormPage({
         Super_Id: model.Super_Id || this.super_id,
       };
     },
-    [FormPageDefines.MethodsDefines.getModelObjectItems](arr) {
+    [FormPageDefines.MethodsDefines.fmtModelObjectItems](arr) {
       return [
         ...arr,
         {
-          Name: "Super_Id",
+          Name: "Super_Value",
           visible: () => !this.super_id, 
         },
         {

@@ -174,7 +174,7 @@ namespace FastFrame.WebHost.Privder
                     dic.Add(item.Name, null);
 
 
-
+            @struct.Form = dic;
 
 
             return @struct;

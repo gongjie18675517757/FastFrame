@@ -54,6 +54,11 @@ namespace FastFrame.Entity.Basis
             TreeCode = val;
         }
 
+        public string GetModuleName()
+        {
+            return $"nameof(EnumItem):{Key}";
+        }
+
         public string GetNumber() => TreeCode;
 
 

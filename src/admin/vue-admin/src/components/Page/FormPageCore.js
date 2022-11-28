@@ -85,7 +85,7 @@ export const FormPageDataDefines = {
   /**
    * 表单名称
    */
-  direction:"direction",
+  direction: "direction",
 
   /**
    * 页面结构名：影响：获取表单相关
@@ -399,7 +399,10 @@ export const formMethods = {
     this.formErrorMessages = formErrs;
     this.model = model;
 
-    this.options = distinct(await this.fmtModelObjectItems(await this.getModelObjectItems()), v => v.Name, (a, b) => ({ ...a, ...b }));
+    const form_items = await this.getModelObjectItems();
+ 
+    const formattered_items = await this.fmtModelObjectItems(form_items);
+     this.options = distinct(formattered_items, v => v.Name, (a, b) => ({ ...a, ...b }));
     this.toolItems = await this.getToolItems();
 
     this.changed = false;
@@ -619,7 +622,7 @@ export const formMethods = {
     else if (this.isDialog) {
       this.$emit("close");
     }
-    else{
+    else {
       this.$router.replace(`/${this.name}/List`)
     }
   }

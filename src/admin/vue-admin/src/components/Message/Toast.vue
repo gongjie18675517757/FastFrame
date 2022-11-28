@@ -57,9 +57,10 @@ export default {
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    left: 35vw;
 
     .alert-item {
-      min-width: 500px;
+      min-width: 30vw;
     }
   }
 

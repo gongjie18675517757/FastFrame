@@ -14,8 +14,8 @@
     :item-value="itemValue"
     @input="handleChange"
     @click:clear="handleChange(null)"
+    @update:search-input="keyword = $event"
   >
-    
     <template #default>
       <slot></slot>
     </template>
@@ -27,16 +27,19 @@
 
 <script>
 import { debounce } from "../../utils";
+
 export default {
+  name:'v-combobox-input',
   props: {
     model: Object,
-    requestUrl: String,
+    requestUrl: [String, Function],
     value: [String, Array],
     disabled: Boolean,
     label: String,
     errorMessages: Array,
     isXs: Boolean,
     description: String,
+    Name: String,
     multiple: Boolean,
     itemText: {
       type: String,
@@ -53,9 +56,20 @@ export default {
       items: [],
     };
   },
- 
+  computed: {
+    url() {
+      let url =
+        typeof this.requestUrl == "function"
+          ? this.requestUrl(this.model)
+          : this.requestUrl;
+
+      if (!url.includes("?")) url = `${url}?`;
+      url = `${url}&kw=${this.keyword || ""}`;
+      return url;
+    },
+  },
   watch: {
-    keyword: {
+    url: {
       immediate: true,
       handler: "loadList",
     },
@@ -64,8 +78,10 @@ export default {
       handler: "loadList",
     },
   },
+  created() {
+    this.loadList = debounce(this.loadList, 500).bind(this);
+  },
   methods: {
- 
     handleChange(val) {
       val = val || null;
       this.$emit("input", val);
@@ -80,13 +96,11 @@ export default {
       }
       this.keyword = null;
     },
-    loadList: debounce(async function () {
+    async loadList() {
       if (this.disabled) return;
-      let url = this.requestUrl;
-      if (!url.includes("?")) url = `${url}?`;
-      url = `${url}&kw=${this.keyword || ""}`;
-      this.items = await this.$http.get(url);
-    }, 500),
+
+      this.items = await this.$http.get(this.url);
+    },
   },
 };
 </script>

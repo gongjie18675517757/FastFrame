@@ -56,14 +56,14 @@
 	<ItemGroup>
 	
 		<PackageReference Include="DistributedLock.Redis" Version="1.0.2" />
-		<PackageReference Include="Hangfire.AspNetCore" Version="1.8.0-rc1" />
-		<PackageReference Include="Hangfire.Core" Version="1.8.0-rc1" /> 
+		<PackageReference Include="Hangfire.AspNetCore" Version="1.8.0-rc2" />
+		<PackageReference Include="Hangfire.Core" Version="1.8.0-rc2" /> 
 		<PackageReference Include="HangFire.Redis.StackExchange" Version="1.9.1-beta" />  
-		<PackageReference Include="AspectCore.Extensions.DependencyInjection" Version="2.2.0" />
+		<PackageReference Include="AspectCore.Extensions.DependencyInjection" Version="2.3.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="7.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="6.1.0" />
-		<PackageReference Include="AspectCore.Core" Version="2.2.0" /> 
+		<PackageReference Include="AspectCore.Core" Version="2.3.0" /> 
 		<PackageReference Condition="'$(Configuration)'=='DEBUG'" Include="Swashbuckle.AspNetCore" Version="6.4.0" />
 		<PackageReference Condition="'$(Configuration)'=='DEBUG'" Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.0">
 		  <PrivateAssets>all</PrivateAssets>

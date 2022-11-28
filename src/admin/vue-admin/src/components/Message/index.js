@@ -127,7 +127,7 @@ const message = {
         show({
             type = "success",
             msg = "",
-            timeout = 5000,
+            timeout = 50000,
             color
         }) {
             let id = new Date().getTime().toString();

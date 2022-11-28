@@ -27,7 +27,8 @@ export default makeFormPageInheritedFromBaseFormPage({
         Super_Id: model.Super_Id || this.super_id || null,
       };
     },
-    [FormPageDefines.MethodsDefines.getModelObjectItems](arr) {
+    [FormPageDefines.MethodsDefines.fmtModelObjectItems](arr) {
+  
       return [
         ...arr,
         {
@@ -35,9 +36,11 @@ export default makeFormPageInheritedFromBaseFormPage({
           Readonly: () => !!this.model.Id || !!this.super_id || !!this.key_name,
         },
         {
-          Name: "Super_Id",
+          Name: "Super_Value",
           visible: !!this.model.Id || !this.super_id,
-          requestUrl: (v) => `/api/EnumItem/EnumItemList/${v.Key || ""}`,
+          requestUrl: (v) => { 
+            return `/api/EnumItem/EnumItemList/${v.Key || ""}`
+          }
         },
       ];
     },

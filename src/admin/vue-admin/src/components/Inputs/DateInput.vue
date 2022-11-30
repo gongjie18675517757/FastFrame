@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="v-text-field">
     <v-input dense :disabled="disabled" @click="handleInputClick">
       <template #default>
         <input type="text" :value="value" readonly :placeholder="description">
@@ -24,6 +24,7 @@
 <script>
 import DatePicker from "v-calendar/lib/components/date-picker.umd";
 export default {
+  name:'v-date-input',
   components: {
     DatePicker,
   },

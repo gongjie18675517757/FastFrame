@@ -48,7 +48,8 @@ export default {
   position: fixed;
   /* top: 10px; */
   /* left: 50%; */
-  width: 100%;
+  // width: 100%;
+  left: 35vw;
   padding: 10px;
   z-index: 99999999;
 
@@ -57,7 +58,7 @@ export default {
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    left: 35vw;
+    
 
     .alert-item {
       min-width: 30vw;

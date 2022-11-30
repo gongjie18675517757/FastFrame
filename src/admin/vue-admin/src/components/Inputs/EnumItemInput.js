@@ -127,12 +127,7 @@ export default {
     }
   },
   render(h) { 
-    /**
-     * 不在小屏下,且只读时,显示一个文本就好了
-     */
-    if (this.disabled && !this.isXs) {
-      return h('span', null, this.text)
-    }
+ 
 
     let noData = h('v-list-item', {
       slot: 'no-data'

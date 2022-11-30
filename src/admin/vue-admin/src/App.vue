@@ -185,6 +185,10 @@ html {
 }
 
 .border-input .v-input {
+ .v-input__prepend-outer {
+    margin-right: 0px;
+  }
+
   >.v-input__control {
     >.v-input__slot:after, > .v-input__slot:before {
       display: none;

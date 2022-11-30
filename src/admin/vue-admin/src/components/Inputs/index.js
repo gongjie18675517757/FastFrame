@@ -101,7 +101,7 @@ export function calcInputComponent(props) {
   //文本,数字,密码
   else if (
     !Name.endsWith("Id") &&
-    ["Password", "String", 'Int32', 'Decimal', 'DateTime','Int64'].includes(Type)
+    ["Password", "String", 'Int32', 'Decimal','Int64'].includes(Type)
   ) {
     return {
       colspan: 1,
@@ -222,7 +222,7 @@ export function packComponent(h, component, { props, on }) {
         /**
          * 选择框老是对不齐，高度差4px,解决不了，强制加一个margin-top
          */
-        'margin-top': props.Type == 'Boolean' ? '4px' : null
+        'margin-top':['Boolean','DateTime'].includes(props.Type) ? '4px' : null
       },
     },
     [

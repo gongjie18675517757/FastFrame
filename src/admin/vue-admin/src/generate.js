@@ -89,7 +89,7 @@ export async function getDefaultModel(name = '') {
 
   if (HasManage) {
     model.Create_User_Id = store.state.currUser.Id
-    model.Create_User_Value = store.state.currUser
+    model.Create_User_Value = store.state.currUser.Name
     model.Modify_User_Id = store.state.currUser.Id
     model.Modify_User_Value = store.state.currUser.Id 
   }

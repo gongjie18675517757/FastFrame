@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { distinct, throttle } from "../../utils";
+import { debounce, distinct } from "../../utils";
 export default {
   props: {
     model: Object,
@@ -73,7 +73,9 @@ export default {
       );
     },
   },
-
+  created() {
+    this.querySelections = debounce(this.querySelections, 500).bind(this);
+  },
   async mounted() {
     if (!this.disabled) this.querySelections("");
   },
@@ -90,7 +92,7 @@ export default {
     },
   },
   methods: {
-    querySelections: throttle(async function (v = "") {
+    async querySelections(v = "") {
       this.loading = true;
       let url = this.requestUrl;
       if (typeof this.requestUrl == "function")
@@ -112,7 +114,7 @@ export default {
       } catch (error) {
         window.console.error(error);
       }
-    }, 1000),
+    },
     change($event = []) {
       this.$emit("change", $event);
       this.$emit("input", $event);

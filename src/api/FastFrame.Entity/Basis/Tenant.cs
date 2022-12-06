@@ -58,21 +58,15 @@ namespace FastFrame.Entity.Basis
         /// <summary>
         /// 树状码
         /// </summary>
-        [ReadOnly]
-        [StringLength(200)]
+        [Exclude]
         public string TreeCode { get; set; } 
 
 
-        public void SetNumber(string val)
-        {
-            TreeCode = val;
-        }
-
-        public string GetNumber() => TreeCode;
-
-        private static Expression<Func<Tenant, IViewModel>> vm_expression = 
+        private static readonly Expression<Func<Tenant, IViewModel>> vm_expression = 
             v => new DefaultViewModel { Id = v.Id, Value = v.ShortName + "(" + v.TreeCode + ")" };
 
         public static Expression<Func<Tenant, IViewModel>> BuildExpression() => vm_expression;
+
+        public Expression<Func<Tenant, IViewModel>> GetBuildExpression() => vm_expression;
     }
 }

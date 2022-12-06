@@ -5,7 +5,7 @@ namespace FastFrame.Application
     /// <summary>
     /// 树模型
     /// </summary>
-    public interface ITreeModel : IDto
+    public interface ITreeModel : IDto, IViewModel
     {
         /// <summary>
         /// 上级ID
@@ -13,12 +13,20 @@ namespace FastFrame.Application
         string Super_Id { get; }
 
         /// <summary>
-        /// 树装码
+        /// 直接下级数量
         /// </summary>
-        string TreeCode { get; }
+        int ChildCount { get; set; }
+
+        /// <summary>
+        /// 所有下级数量
+        /// </summary>
+        int TotalChildCount { get; set; }
     }
 
-    public class TreeModel : ITreeModel
+    /// <summary>
+    /// 默认树
+    /// </summary>
+    public class TreeModel : ITreeModel, IViewModel
     {
         public string Id { get; set; }
 
@@ -28,18 +36,18 @@ namespace FastFrame.Application
         public string Super_Id { get; set; }
 
         /// <summary>
-        /// 下级数量
+        /// 直接下级数量
         /// </summary>
         public int ChildCount { get; set; }
 
         /// <summary>
-        /// 名称
+        /// 所有下级数量
         /// </summary>
-        public string Name { get; set; }
+        public int TotalChildCount { get; set; }
 
         /// <summary>
-        /// 树状码
+        /// 树的文本
         /// </summary>
-        public string TreeCode { get; set; }
+        public string Value { get; set; }
     }
 }

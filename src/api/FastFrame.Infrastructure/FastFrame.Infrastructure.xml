@@ -1411,11 +1411,12 @@
             倒序
             </summary>
         </member>
-        <member name="M:FastFrame.Infrastructure.Lock.ILockFacatory.TryCreateLockAsync(System.String)">
+        <member name="M:FastFrame.Infrastructure.Lock.ILockFacatory.TryCreateLockAsync(System.String,System.TimeSpan)">
             <summary>
             尝试创建锁,如果资源被占用,则返回NULL
             </summary>
-            <param name="key">资源键</param> 
+            <param name="key">资源键</param>
+            <param name="delayTime">等待时长,为NULL时，则一直等待</param> 
             <returns></returns>
         </member>
         <member name="T:FastFrame.Infrastructure.Lock.ILockHolder">

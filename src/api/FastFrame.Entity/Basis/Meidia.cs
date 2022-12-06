@@ -37,23 +37,16 @@ namespace FastFrame.Entity.Basis
         /// <summary>
         /// 树状码
         /// </summary>
-        [ReadOnly]
-        [StringLength(200)]
+        [Exclude]
         public string TreeCode { get; set; }
 
-        public void SetNumber(string val)
-        {
-            TreeCode = val;
-        }
-
-        public string GetNumber() => TreeCode;
 
 
-        private static Expression<Func<Meidia, IViewModel>> vm_expression = v => new DefaultViewModel { Id = v.Id, Value = v.Name + "(" + v.TreeCode + ")" };
 
-        public static Expression<Func<Meidia, IViewModel>> BuildExpression()
-        {
-            return vm_expression;
-        }
+        private static Expression<Func<Meidia, IViewModel>> vm_expression = v => new DefaultViewModel { Id = v.Id, Value = v.Name };
+
+        public static Expression<Func<Meidia, IViewModel>> BuildExpression() => vm_expression;
+
+        public Expression<Func<Meidia, IViewModel>> GetBuildExpression() => vm_expression;
     }
 }

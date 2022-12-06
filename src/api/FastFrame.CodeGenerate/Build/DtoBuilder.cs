@@ -66,7 +66,7 @@ namespace FastFrame.CodeGenerate.Build
                 Name = $"{type.Name}Dto",
                 BaseNames = new string[] { $"BaseDto<{type.Name}>" }
                                 .Concat(typeof(IHaveMultiFile).IsAssignableFrom(type) ? new[] { "IHaveMultiFileDto" } : Array.Empty<string>())
-                                .Concat(typeof(ITreeEntity).IsAssignableFrom(type) ? new[] { "ITreeModel" } : Array.Empty<string>())
+                                //.Concat(typeof(ITreeEntity).IsAssignableFrom(type) ? new[] { "ITreeModel" } : Array.Empty<string>())
                                 .Concat(typeof(IHaveCheck).IsAssignableFrom(type) ? new[] { "IHaveCheckModel" } : Array.Empty<string>())
                                 ,
                 Path = $"{TargetPath}\\{areaNameSpace}\\{type.Name}\\Dto\\{type.Name}Dto.template.cs",
@@ -118,14 +118,14 @@ namespace FastFrame.CodeGenerate.Build
                 }
             }
 
-            if (typeof(ITreeEntity).IsAssignableFrom(type))
-                yield return new PropInfo
-                {
-                    Name = "ChildCount",
-                    DefaultValue = "0",
-                    Summary = "下级数量",
-                    TypeName = "int"
-                };
+            //if (typeof(ITreeEntity).IsAssignableFrom(type))
+            //    yield return new PropInfo
+            //    {
+            //        Name = "ChildCount",
+            //        DefaultValue = "0",
+            //        Summary = "下级数量",
+            //        TypeName = "int"
+            //    };
 
             if (typeof(IHaveMultiFile).IsAssignableFrom(type))
                 yield return new PropInfo

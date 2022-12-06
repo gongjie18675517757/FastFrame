@@ -94,11 +94,11 @@
           <v-divider></v-divider>
           <v-card-text class="pa-0">
             <v-row class="pa-4" justify="space-between">
-              <v-col cols="3" style="padding: 0px" v-if="treeComponent">
+              <v-col cols="2" style="padding: 0px" v-if="treeComponent">
                 <component :is="treeComponent" :height="tableHeight"/>
               </v-col>
               <v-divider vertical v-if="treeComponent"></v-divider>
-              <v-col :cols="treeComponent?9:null" class="d-flex text-center" style="padding: 0px;padding-left:5px;">
+              <v-col :cols="treeComponent?10:null" class="d-flex text-center" style="padding: 0px;padding-left:5px;">
                 <v-scroll-y-transition mode="out-in">
                   <Table
                     :items="rows"

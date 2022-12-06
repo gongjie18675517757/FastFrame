@@ -19,8 +19,8 @@ namespace FastFrame.Entity.Basis
         /// 部门代码
         /// </summary>
         [StringLength(50)]
-        [ReadOnly]
-        public string TreeCode { get; set; } = "保存时生成";
+        [Required]
+        public string EnCode { get; set; }  
 
         /// <summary>
         /// 部门名称
@@ -35,24 +35,22 @@ namespace FastFrame.Entity.Basis
         [StringLength(200)]
         public string Remarks { get; set; }
 
+        /// <summary>
+        /// 树状码
+        /// </summary>
+        [Exclude]
+        public string TreeCode { get; set; }
 
-        private static Expression<Func<Dept, IViewModel>> vm_expression =
+
+        private static readonly Expression<Func<Dept, IViewModel>> vm_expression =
             v => new DefaultViewModel
             {
                 Id = v.Id,
-                Value = v.Name + (string.IsNullOrWhiteSpace(v.TreeCode) ? "" : "(" + v.TreeCode + ")")
+                Value = v.Name + (string.IsNullOrWhiteSpace(v.EnCode) ? "" : "(" + v.EnCode + ")")
             };
 
-        public static Expression<Func<Dept, IViewModel>> BuildExpression()
-        {
-            return vm_expression;
-        }
+        public static Expression<Func<Dept, IViewModel>> BuildExpression() => vm_expression;
 
-        public void SetNumber(string val)
-        {
-            TreeCode = val;
-        }
-
-        public string GetNumber() => TreeCode;
+        public Expression<Func<Dept, IViewModel>> GetBuildExpression() => vm_expression;
     }
 }

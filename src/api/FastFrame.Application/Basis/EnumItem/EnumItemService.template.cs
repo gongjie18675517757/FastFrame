@@ -40,7 +40,6 @@ namespace FastFrame.Application.Basis
 						{
 							Key = _enumItem.Key,
 							Super_Id = _enumItem.Super_Id,
-							TreeCode = _enumItem.TreeCode,
 							Value = _enumItem.Value,
 							IntKey = _enumItem.IntKey,
 							SortVal = _enumItem.SortVal,
@@ -52,9 +51,25 @@ namespace FastFrame.Application.Basis
 							Super_Value = _super_Id.Value,
 							Create_User_Value = _create_User_Id.Value,
 							Modify_User_Value = _modify_User_Id.Value,
-							ChildCount = repository.Count(c => c.Super_Id == _enumItem.Id)
 						};
 			return query;
+		}
+		protected override IQueryable<Entity.IViewModel> DefaultViewModelQueryable() 
+		{
+			return repository.Select(EnumItem.BuildExpression());
+		}
+		protected override IQueryable<ITreeModel> DefaultTreeModelQueryable() 
+		{
+			return from a in repository
+					join b in repository.Select(EnumItem.BuildExpression()) on a.Id equals b.Id
+					select new TreeModel
+					{
+					Id = a.Id,
+					Super_Id = a.Super_Id,
+					Value = b.Value,
+					ChildCount = repository.Count(v => v.Super_Id == a.Id),
+					TotalChildCount = repository.Count(v => v.Id != a.Id && v.TreeCode.StartsWith(a.TreeCode)),
+				};
 		}
 		
 	}

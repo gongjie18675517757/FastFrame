@@ -97,6 +97,11 @@
             要求返回Task,或者void
             </summary>
         </member>
+        <member name="T:FastFrame.Application.LockMethodParameterAttribute">
+            <summary>
+            方法锁参数
+            </summary>
+        </member>
         <member name="T:FastFrame.Application.AutoNumberService">
             <summary>
             自动编号
@@ -236,33 +241,15 @@
             主查询表达式
             </summary> 
         </member>
-        <member name="T:FastFrame.Application.Events.DoMainAdded`1">
-            <summary>
-            添加后
-            </summary>
-            <typeparam name="T"></typeparam>
-        </member>
         <member name="T:FastFrame.Application.Events.DoMainAdding`1">
             <summary>
             添加前
             </summary>
             <typeparam name="T"></typeparam>
         </member>
-        <member name="T:FastFrame.Application.Events.DoMainDeleted`1">
-            <summary>
-            删除后
-            </summary>
-            <typeparam name="T"></typeparam>
-        </member>
         <member name="T:FastFrame.Application.Events.DoMainDeleteing`1">
             <summary>
             删除前
-            </summary>
-            <typeparam name="T"></typeparam>
-        </member>
-        <member name="T:FastFrame.Application.Events.DoMainUpdated`1">
-            <summary>
-            更新后
             </summary>
             <typeparam name="T"></typeparam>
         </member>
@@ -401,6 +388,35 @@
              服务接口
             </summary>
         </member>
+        <member name="T:FastFrame.Application.ITreeHandleService">
+            <summary>
+            树处理
+            </summary>
+        </member>
+        <member name="M:FastFrame.Application.ITreeHandleService.VerifyLoopRefByViewModelableAsync``1(``0)">
+            <summary>
+            验证循环引用
+            </summary>
+            <param name="treeEntity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.ITreeHandleService.VerifyLoopRefAsync``1(``0,System.Linq.Expressions.Expression{System.Func{``0,FastFrame.Entity.IViewModel}})">
+            <summary>
+            验证循环引用
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="treeEntity"></param>
+            <param name="value_func"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.ITreeHandleService.MakeTreeCodeAsync(System.String,System.String)">
+            <summary>
+            重新编树状码
+            </summary>
+            <param name="tree_type"></param>
+            <param name="super_id"></param>
+            <returns></returns>
+        </member>
         <member name="T:FastFrame.Application.ITreeModel">
             <summary>
             树模型
@@ -452,6 +468,37 @@
             返回单据摘要
             </summary>
             <param name="check_entity"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastFrame.Application.TreeHandleService">
+            <summary>
+            处理树关系
+            </summary>
+        </member>
+        <member name="M:FastFrame.Application.TreeHandleService.MakeTreeCodeAsync(System.String,System.String)">
+            <summary>
+            生成树状码
+            </summary>
+            <param name="tree_type_name"></param>
+            <param name="super_id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.TreeHandleService.VerifyLoopRefAsync``1(``0,System.Linq.Expressions.Expression{System.Func{``0,FastFrame.Entity.IViewModel}})">
+            <summary>
+            检测循环引用
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="treeEntity"></param>
+            <param name="value_func"></param>
+            <returns></returns>
+            <exception cref="T:FastFrame.Infrastructure.MsgException"></exception>
+        </member>
+        <member name="M:FastFrame.Application.TreeHandleService.VerifyLoopRefByViewModelableAsync``1(``0)">
+            <summary>
+            检测循环引用
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="treeEntity"></param>
             <returns></returns>
         </member>
         <member name="T:FastFrame.Application.Basis.ApiRequestLogService">

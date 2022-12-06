@@ -57,6 +57,10 @@ namespace FastFrame.Application.Basis
 						};
 			return query;
 		}
+		protected override IQueryable<Entity.IViewModel> DefaultViewModelQueryable() 
+		{
+			return repository.Select(User.BuildExpression());
+		}
 		
 	}
 }

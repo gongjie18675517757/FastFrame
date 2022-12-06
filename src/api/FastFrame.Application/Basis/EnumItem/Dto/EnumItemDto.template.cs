@@ -12,7 +12,7 @@ namespace FastFrame.Application.Basis
 	/// <summary>
 	/// 数字字典 
 	/// </summary>
-	public partial class EnumItemDto:BaseDto<EnumItem>,ITreeModel
+	public partial class EnumItemDto:BaseDto<EnumItem>
 	{
 		
 		
@@ -34,13 +34,6 @@ namespace FastFrame.Application.Basis
 		public string Super_Value {get;set;}
 		
 		/// <summary>
-		/// 树状码 
-		/// </summary>
-		[StringLength(20)]
-		[IsPrimaryField()]
-		public string TreeCode {get;set;}
-		
-		/// <summary>
 		/// 字典值 
 		/// </summary>
 		[StringLength(150)]
@@ -50,6 +43,7 @@ namespace FastFrame.Application.Basis
 		/// <summary>
 		/// 字典键 
 		/// </summary>
+		[Required()]
 		public int? IntKey {get;set;}
 		
 		/// <summary>
@@ -93,11 +87,6 @@ namespace FastFrame.Application.Basis
 		/// </summary>
 		[Hide(HideMark.Form)]
 		public DateTime ModifyTime {get;set;}
-		
-		/// <summary>
-		/// 下级数量 
-		/// </summary>
-		public int ChildCount {get;set;}
 		
 		
 	}

@@ -30,15 +30,5 @@ namespace FastFrame.Application.Basis
                 item.Managers = mangers ?? Array.Empty<string>();
             }
         }
-
-        public async Task<IEnumerable<ITreeModel>> GetChildrenBySuperId(string id)
-        {
-            return await BuildQuery()
-               .Where(v => v.Super_Id == id)
-               .OrderBy(v => v.TreeCode)
-               .ThenBy(v => v.Name)
-               .MapTo<DeptDto, TreeModel>()
-               .ToListAsync();
-        }
     }
 }

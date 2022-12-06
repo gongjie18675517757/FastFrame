@@ -216,7 +216,7 @@
             上级
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.Basis.Dept.TreeCode">
+        <member name="P:FastFrame.Entity.Basis.Dept.EnCode">
             <summary>
             部门代码
             </summary>
@@ -229,6 +229,11 @@
         <member name="P:FastFrame.Entity.Basis.Dept.Remarks">
             <summary>
             备注
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.Dept.TreeCode">
+            <summary>
+            树状码
             </summary>
         </member>
         <member name="T:FastFrame.Entity.Basis.DeptMember">
@@ -266,11 +271,6 @@
             上级值
             </summary>  
         </member>
-        <member name="P:FastFrame.Entity.Basis.EnumItem.TreeCode">
-            <summary>
-            树状码
-            </summary>
-        </member>
         <member name="P:FastFrame.Entity.Basis.EnumItem.Value">
             <summary>
             字典值
@@ -284,6 +284,11 @@
         <member name="P:FastFrame.Entity.Basis.EnumItem.SortVal">
             <summary>
             排序
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.EnumItem.TreeCode">
+            <summary>
+            树状码
             </summary>
         </member>
         <member name="T:FastFrame.Entity.Basis.LoginLog">
@@ -531,7 +536,7 @@
             角色
             </summary> 
         </member>
-        <member name="P:FastFrame.Entity.Basis.Role.TreeCode">
+        <member name="P:FastFrame.Entity.Basis.Role.EnCode">
             <summary>
             编码
             </summary>
@@ -559,6 +564,11 @@
         <member name="P:FastFrame.Entity.Basis.Role.Remarks">
             <summary>
             备注
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.Role.TreeCode">
+            <summary>
+            树状码
             </summary>
         </member>
         <member name="T:FastFrame.Entity.Basis.RoleMember">
@@ -2476,6 +2486,7 @@
         <member name="P:FastFrame.Entity.ITreeEntity.TreeCode">
             <summary>
             树装码
+            ps:此码是会变的,不可用于关联存储
             </summary>
         </member>
         <member name="T:FastFrame.Entity.DefaultViewModel">
@@ -2487,6 +2498,12 @@
             <summary>
             构建vm表达式
             </summary>
+        </member>
+        <member name="M:FastFrame.Entity.IViewModelable`1.GetBuildExpression">
+            <summary>
+            构建vm表达式
+            </summary>
+            <returns></returns>
         </member>
         <member name="T:FastFrame.Entity.TargetInfo">
             <summary>

@@ -42,7 +42,6 @@ namespace FastFrame.Application.Basis
 							Name = _meidia.Name,
 							Resource_Id = _meidia.Resource_Id,
 							IsFolder = _meidia.IsFolder,
-							TreeCode = _meidia.TreeCode,
 							Id = _meidia.Id,
 							Create_User_Id = _meidia.Create_User_Id,
 							CreateTime = _meidia.CreateTime,
@@ -51,9 +50,25 @@ namespace FastFrame.Application.Basis
 							Super_Value = _super_Id.Value,
 							Create_User_Value = _create_User_Id.Value,
 							Modify_User_Value = _modify_User_Id.Value,
-							ChildCount = repository.Count(c => c.Super_Id == _meidia.Id)
 						};
 			return query;
+		}
+		protected override IQueryable<Entity.IViewModel> DefaultViewModelQueryable() 
+		{
+			return repository.Select(Meidia.BuildExpression());
+		}
+		protected override IQueryable<ITreeModel> DefaultTreeModelQueryable() 
+		{
+			return from a in repository
+					join b in repository.Select(Meidia.BuildExpression()) on a.Id equals b.Id
+					select new TreeModel
+					{
+					Id = a.Id,
+					Super_Id = a.Super_Id,
+					Value = b.Value,
+					ChildCount = repository.Count(v => v.Super_Id == a.Id),
+					TotalChildCount = repository.Count(v => v.Id != a.Id && v.TreeCode.StartsWith(a.TreeCode)),
+				};
 		}
 		
 	}

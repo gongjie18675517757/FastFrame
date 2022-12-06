@@ -11,7 +11,7 @@ namespace FastFrame.Application.Basis
 	/// <summary>
 	/// 多租户信息 
 	/// </summary>
-	public partial class TenantDto:BaseDto<Tenant>,ITreeModel
+	public partial class TenantDto:BaseDto<Tenant>
 	{
 		
 		
@@ -50,17 +50,6 @@ namespace FastFrame.Application.Basis
 		/// Logo头像 
 		/// </summary>
 		public string HandIcon_Id {get;set;}
-		
-		/// <summary>
-		/// 树状码 
-		/// </summary>
-		[StringLength(200)]
-		public string TreeCode {get;set;}
-		
-		/// <summary>
-		/// 下级数量 
-		/// </summary>
-		public int ChildCount {get;set;}
 		
 		
 	}

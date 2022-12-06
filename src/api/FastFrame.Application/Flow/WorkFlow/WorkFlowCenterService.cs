@@ -137,7 +137,7 @@ namespace FastFrame.Application.Flow
                 throw new NotFoundException();
 
             /*加并发锁*/
-            var lockHolder = await loader.GetService<ILockFacatory>().TryCreateLockAsync(bill_Entity.Id);
+            var lockHolder = await loader.GetService<ILockFacatory>().TryCreateLockAsync(bill_Entity.Id,default);
             if (lockHolder == null)
                 throw new MsgException("此单据正在进行流程流转,请稍后再试!");
 

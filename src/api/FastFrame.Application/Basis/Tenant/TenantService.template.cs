@@ -36,10 +36,25 @@ namespace FastFrame.Application.Basis
 							Tenant_Id = _tenant.Tenant_Id,
 							HandIcon_Id = _tenant.HandIcon_Id,
 							Id = _tenant.Id,
-							TreeCode = _tenant.TreeCode,
-							ChildCount = repository.Count(c => c.Super_Id == _tenant.Id)
 						};
 			return query;
+		}
+		protected override IQueryable<Entity.IViewModel> DefaultViewModelQueryable() 
+		{
+			return repository.Select(Tenant.BuildExpression());
+		}
+		protected override IQueryable<ITreeModel> DefaultTreeModelQueryable() 
+		{
+			return from a in repository
+					join b in repository.Select(Tenant.BuildExpression()) on a.Id equals b.Id
+					select new TreeModel
+					{
+					Id = a.Id,
+					Super_Id = a.Super_Id,
+					Value = b.Value,
+					ChildCount = repository.Count(v => v.Super_Id == a.Id),
+					TotalChildCount = repository.Count(v => v.Id != a.Id && v.TreeCode.StartsWith(a.TreeCode)),
+				};
 		}
 		
 	}

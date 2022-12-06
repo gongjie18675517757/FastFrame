@@ -136,8 +136,7 @@ namespace FastFrame.Application.Basis
         public async Task<SettingModel> GetAsync()
         {
             var model = await loader.GetService<IRepository<Setting>>().MapTo<Setting, SettingModel>().FirstOrDefaultAsync();
-            if (model == null)
-                model = new SettingModel();
+            model ??= new SettingModel();
 
             model.VerifyImageList = await GetVerifyImageListAsync();
             model.VerifyImageList2 = await GetVerifyImageList2Async();
@@ -169,10 +168,7 @@ namespace FastFrame.Application.Basis
             await SetVerifyImageList2Async(input.VerifyImageList2);
 
             await loader.GetService<IEventBus>().TriggerEventAsync(new Events.DoMainUpdateing<SettingModel>(input, entity));
-            await settings.CommmitAsync();
-
-            var updateEvent = new Events.DoMainUpdated<SettingModel> { Id = entity.Id };
-            loader.GetService<Infrastructure.Interface.IBackgroundJob>().SetTimeout<IEventBus>(v => v.TriggerEventAsync(updateEvent), null);
+            await settings.CommmitAsync(); 
         }
     }
 }

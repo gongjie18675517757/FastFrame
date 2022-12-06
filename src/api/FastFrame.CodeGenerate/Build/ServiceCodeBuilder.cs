@@ -89,7 +89,7 @@ namespace FastFrame.CodeGenerate.Build
                 {
                     Parms = depends
                         .Select(x => new ParameterInfo() { TypeName = x.type, DefineName = x.name })
-                        .Concat(new [] {
+                        .Concat(new[] {
                             new  ParameterInfo {
                                 TypeName="IServiceProvider",
                                 DefineName="loader"
@@ -114,6 +114,40 @@ namespace FastFrame.CodeGenerate.Build
                 ResultTypeName = $"IQueryable<{type.Name}Dto>",
                 CodeBlock = GetDefaultQueryableCodeBlock(type)
             };
+
+
+            if (typeof(IViewModelable<>).MakeGenericType(type).IsAssignableFrom(type))
+                yield return new MethodInfo()
+                {
+                    IsOverride = true,
+                    MethodName = "DefaultViewModelQueryable",
+                    Modifier = "protected",
+                    ResultTypeName = $"IQueryable<Entity.IViewModel>",
+                    CodeBlock = new[] {
+                        $"return repository.Select({type.Name}.BuildExpression());"
+                    }
+                };
+
+            if (typeof(ITreeEntity).IsAssignableFrom(type))
+                yield return new MethodInfo()
+                {
+                    IsOverride = true,
+                    MethodName = "DefaultTreeModelQueryable",
+                    Modifier = "protected",
+                    ResultTypeName = $"IQueryable<ITreeModel>",
+                    CodeBlock = new[] {
+                        $"return from a in repository",
+                        $"\t\tjoin b in repository.Select({type.Name}.BuildExpression()) on a.Id equals b.Id",
+                        $"\t\tselect new TreeModel",
+                        $"\t\t{{",
+                        $"\t\tId = a.Id,",
+                        $"\t\tSuper_Id = a.Super_Id,",
+                        $"\t\tValue = b.Value,",
+                        $"\t\tChildCount = repository.Count(v => v.Super_Id == a.Id),",
+                        $"\t\tTotalChildCount = repository.Count(v => v.Id != a.Id && v.TreeCode.StartsWith(a.TreeCode)),",
+                        $"\t}};",
+                    }
+                };
         }
 
 
@@ -162,8 +196,8 @@ namespace FastFrame.CodeGenerate.Build
                 yield return $"\t\t\t\t{prop.Prop.Name.Replace("_Id", "_Value")} = {name}.Value,";
             }
 
-            if (typeof(ITreeEntity).IsAssignableFrom(type))
-                yield return $"\t\t\t\tChildCount = repository.Count(c => c.Super_Id == _{typeName}.Id)";
+            //if (typeof(ITreeEntity).IsAssignableFrom(type))
+            //    yield return $"\t\t\t\tChildCount = repository.Count(c => c.Super_Id == _{typeName}.Id)";
 
             yield return "\t\t\t};";
             yield return "return query;";

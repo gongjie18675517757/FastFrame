@@ -24,21 +24,21 @@ namespace FastFrame.Application
     {
         public override async Task Invoke(AspectContext context, AspectDelegate next)
         {
-            /*此处判断当前是否有在执行*/
-            //context.ServiceMethod.Name
-            //"ExistsNotInitAsync"
-            //context.ServiceMethod.DeclaringType.Name
-            //"HanldeTreeService"
-            //context.Parameters
-            //{ object[0]}
-
-
+            var parameterInfos = context
+                .ServiceMethod
+                .GetParameters()
+                .Select((v,i)=>new { 
+                    index=i,
+                    has_pars= v.GetCustomAttribute<LockMethodParameterAttribute>() != null
+                })
+                .Where(v=>v.has_pars)
+                .Select(v=> context.Parameters[v.index]?.ToString());
 
             var sb = new string[] {
                     context.ServiceMethod.DeclaringType.Name,
                     context.ServiceMethod.Name
                 }
-                .Concat(context.Parameters.Select(v => v?.ToString()))
+                .Concat(parameterInfos)
                 .Where(v => !string.IsNullOrWhiteSpace(v));
 
             /*拼类名+方法名+参数*/
@@ -53,7 +53,7 @@ namespace FastFrame.Application
             var lockHolder = await context
                 .ServiceProvider
                 .GetService<ILockFacatory>()
-                .TryCreateLockAsync(resource);
+                .TryCreateLockAsync(resource,default);
 
             if (lockHolder != null)
             {
@@ -89,6 +89,14 @@ namespace FastFrame.Application
 
     }
 
+    /// <summary>
+    /// 方法锁参数
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Parameter, Inherited = false, AllowMultiple = false)]
+    public sealed class LockMethodParameterAttribute : Attribute
+    {
+         
+    }
 
     public class TestLockMethodService : IService
     {

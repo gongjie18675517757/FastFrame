@@ -12,7 +12,7 @@ namespace FastFrame.Application.Basis
 	/// <summary>
 	/// 图片库 
 	/// </summary>
-	public partial class MeidiaDto:BaseDto<Meidia>,ITreeModel
+	public partial class MeidiaDto:BaseDto<Meidia>
 	{
 		
 		
@@ -44,12 +44,6 @@ namespace FastFrame.Application.Basis
 		/// 是否文件夹 
 		/// </summary>
 		public bool IsFolder {get;set;}
-		
-		/// <summary>
-		/// 树状码 
-		/// </summary>
-		[StringLength(200)]
-		public string TreeCode {get;set;}
 		
 		/// <summary>
 		/// 创建人 
@@ -87,11 +81,6 @@ namespace FastFrame.Application.Basis
 		/// </summary>
 		[Hide(HideMark.Form)]
 		public DateTime ModifyTime {get;set;}
-		
-		/// <summary>
-		/// 下级数量 
-		/// </summary>
-		public int ChildCount {get;set;}
 		
 		
 	}

@@ -53,9 +53,8 @@ namespace FastFrame.Entity.Basis
 
         private static Expression<Func<Resource, IViewModel>> vm_expression = v => new DefaultViewModel { Id = v.Id, Value = v.Name };
 
-        public static Expression<Func<Resource, IViewModel>> BuildExpression()
-        {
-            return vm_expression;
-        }
+        public static Expression<Func<Resource, IViewModel>> BuildExpression() => vm_expression;
+
+        public Expression<Func<Resource, IViewModel>> GetBuildExpression() => vm_expression;
     }
 }

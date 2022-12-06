@@ -12,7 +12,7 @@ namespace FastFrame.Application.Basis
 	/// <summary>
 	/// 部门 
 	/// </summary>
-	public partial class DeptDto:BaseDto<Dept>,ITreeModel
+	public partial class DeptDto:BaseDto<Dept>
 	{
 		
 		
@@ -31,7 +31,8 @@ namespace FastFrame.Application.Basis
 		/// 部门代码 
 		/// </summary>
 		[StringLength(50)]
-		public string TreeCode {get;set;}
+		[Required()]
+		public string EnCode {get;set;}
 		
 		/// <summary>
 		/// 部门名称 
@@ -83,11 +84,6 @@ namespace FastFrame.Application.Basis
 		/// </summary>
 		[Hide(HideMark.Form)]
 		public DateTime ModifyTime {get;set;}
-		
-		/// <summary>
-		/// 下级数量 
-		/// </summary>
-		public int ChildCount {get;set;}
 		
 		
 	}

@@ -8,6 +8,8 @@ namespace FastFrame.Entity.Basis
     /// 数字字典
     /// </summary> 
     [Export]
+    [Unique(nameof(Key), nameof(IntKey))]
+    [Unique(nameof(Key), nameof(Super_Id), nameof(Value))]
     public class EnumItem : BaseEntity, ITreeEntity, IViewModelable<EnumItem>
     {
         /// <summary>
@@ -24,14 +26,6 @@ namespace FastFrame.Entity.Basis
         public string Super_Id { get; set; }
 
         /// <summary>
-        /// 树状码
-        /// </summary>
-        [StringLength(20)]
-        [ReadOnly]
-        [IsPrimaryField]
-        public string TreeCode { get; set; } = "保存时生成";
-
-        /// <summary>
         /// 字典值
         /// </summary>
         [StringLength(150)]
@@ -41,6 +35,7 @@ namespace FastFrame.Entity.Basis
         /// <summary>
         /// 字典键
         /// </summary>
+        [Required]
         public int? IntKey { get; set; }
 
         /// <summary>
@@ -48,27 +43,21 @@ namespace FastFrame.Entity.Basis
         /// </summary>
         public int SortVal { get; set; }
 
-
-        public void SetNumber(string val)
-        {
-            TreeCode = val;
-        }
-
-        public string GetModuleName()
-        {
-            return $"nameof(EnumItem):{Key}";
-        }
-
-        public string GetNumber() => TreeCode;
-
-
         private static Expression<Func<EnumItem, IViewModel>> vm_expression =
                         v => new DefaultViewModel
                         {
                             Id = v.Id,
-                            Value = v.Value + (string.IsNullOrWhiteSpace(v.TreeCode) ? "" : "(" + v.TreeCode + ")")
+                            Value = v.Value
                         };
 
         public static Expression<Func<EnumItem, IViewModel>> BuildExpression() => vm_expression;
+
+        public Expression<Func<EnumItem, IViewModel>> GetBuildExpression() => vm_expression;
+
+        /// <summary>
+        /// 树状码
+        /// </summary>
+        [Exclude]
+        public string TreeCode { get; set; }
     }
 }

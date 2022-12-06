@@ -11,6 +11,7 @@ using FastFrame.Entity.Enums;
 using FastFrame.Infrastructure.EventBus;
 using FastFrame.Repository.Events;
 using Microsoft.Extensions.DependencyInjection;
+using System.Text.RegularExpressions;
 
 namespace FastFrame.Application
 {
@@ -38,14 +39,14 @@ namespace FastFrame.Application
         /// </summary>   
         /// <param name="entitys"></param>
         /// <returns></returns>
-        public async Task TryMakeNumberAsync<TEntity>(params TEntity[] entitys) where TEntity : class,IEntity
+        public async Task TryMakeNumberAsync<TEntity>(params TEntity[] entitys) where TEntity : class, IEntity
         {
             if (entitys.Length == 0)
                 return;
 
             foreach (var item in entitys)
-            { 
-                if(item is not IHaveNumber haveNumber)
+            {
+                if (item is not IHaveNumber haveNumber)
                     continue;
 
                 var typeName = haveNumber.GetModuleName();

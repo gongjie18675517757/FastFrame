@@ -38,7 +38,7 @@ namespace FastFrame.Application.Basis
 						from _modify_User_Id in t__modify_User_Id.DefaultIfEmpty()
 						select new RoleDto
 						{
-							TreeCode = _role.TreeCode,
+							EnCode = _role.EnCode,
 							Name = _role.Name,
 							Super_Id = _role.Super_Id,
 							IsDefault = _role.IsDefault,
@@ -52,9 +52,25 @@ namespace FastFrame.Application.Basis
 							Super_Value = _super_Id.Value,
 							Create_User_Value = _create_User_Id.Value,
 							Modify_User_Value = _modify_User_Id.Value,
-							ChildCount = repository.Count(c => c.Super_Id == _role.Id)
 						};
 			return query;
+		}
+		protected override IQueryable<Entity.IViewModel> DefaultViewModelQueryable() 
+		{
+			return repository.Select(Role.BuildExpression());
+		}
+		protected override IQueryable<ITreeModel> DefaultTreeModelQueryable() 
+		{
+			return from a in repository
+					join b in repository.Select(Role.BuildExpression()) on a.Id equals b.Id
+					select new TreeModel
+					{
+					Id = a.Id,
+					Super_Id = a.Super_Id,
+					Value = b.Value,
+					ChildCount = repository.Count(v => v.Super_Id == a.Id),
+					TotalChildCount = repository.Count(v => v.Id != a.Id && v.TreeCode.StartsWith(a.TreeCode)),
+				};
 		}
 		
 	}

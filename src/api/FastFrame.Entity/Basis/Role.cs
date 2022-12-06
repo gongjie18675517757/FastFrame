@@ -15,7 +15,7 @@ namespace FastFrame.Entity.Basis
         [StringLength(50)]
         [ReadOnly]
         [IsPrimaryField]
-        public string TreeCode { get; set; }
+        public string EnCode { get; set; }
 
         /// <summary>
         /// 名称
@@ -50,19 +50,17 @@ namespace FastFrame.Entity.Basis
             v => new DefaultViewModel
             {
                 Id = v.Id,
-                Value = v.Name + (string.IsNullOrWhiteSpace(v.TreeCode) ? "" : "(" + v.TreeCode + ")")
+                Value = v.Name + (string.IsNullOrWhiteSpace(v.EnCode) ? "" : "(" + v.EnCode + ")")
             };
 
         public static Expression<Func<Role, IViewModel>> BuildExpression() => vm_expression;
 
-        public void SetNumber(string val)
-        {
-            TreeCode = val;
-        }
+        public Expression<Func<Role, IViewModel>> GetBuildExpression() => vm_expression;
 
-        public string GetNumber()
-        {
-            return TreeCode;
-        }
+        /// <summary>
+        /// 树状码
+        /// </summary>
+        [Exclude]
+        public string TreeCode { get; set; }
     }
 }

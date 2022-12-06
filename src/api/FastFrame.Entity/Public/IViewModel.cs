@@ -36,5 +36,11 @@
         /// 构建vm表达式
         /// </summary>
         abstract static System.Linq.Expressions.Expression<Func<TEntity, IViewModel>> BuildExpression();
+
+        /// <summary>
+        /// 构建vm表达式
+        /// </summary>
+        /// <returns></returns>
+        System.Linq.Expressions.Expression<Func<TEntity, IViewModel>> GetBuildExpression();
     }
 }

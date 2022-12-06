@@ -18,6 +18,8 @@ using System.Linq.Expressions;
 using static FastFrame.Application.Account.IdentityManagerService;
 using FastFrame.Application.Basis;
 using FastFrame.Entity.Basis;
+using AspectCore.Extensions.Reflection;
+using static Dapper.SqlMapper;
 
 namespace FastFrame.Application
 {
@@ -119,37 +121,99 @@ namespace FastFrame.Application
         }
 
         /// <summary>
-        /// 构建主查询表达式
-        /// </summary>
-        /// <returns></returns>
-        internal virtual IQueryable<TDto> BuildQuery() => DefaultQueryable();
-
-        /// <summary>
         /// 代码生成器生成的查询表达式
         /// </summary> 
         protected abstract IQueryable<TDto> DefaultQueryable();
 
         /// <summary>
-        /// 查询view model
+        /// 构建主查询表达式
         /// </summary>
-        /// <typeparam name="TEntity"></typeparam>
+        /// <returns></returns>
+        internal virtual IQueryable<TDto> BuildQuery() => DefaultQueryable();
+
+
+
+        /// <summary>
+        /// 代码生成器生成的vm查询表达式
+        /// </summary>
+        /// <returns></returns> 
+        protected virtual IQueryable<IViewModel> DefaultViewModelQueryable()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <summary>
+        /// 构建vm查询表达式
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="System.NotImplementedException"></exception>
+        protected virtual IQueryable<IViewModel> BuildViewModelList()
+        {
+            return DefaultViewModelQueryable();
+        }
+
+        /// <summary>
+        /// vm列表
+        /// </summary>
         /// <param name="kw"></param>
         /// <param name="page_index"></param>
         /// <param name="page_size"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<IViewModel>> ViewModelListAsync<TEntity>(string kw, int page_index = 1, int page_size = 10)
-            where TEntity : class, IViewModelable<TEntity>
+        public virtual IAsyncEnumerable<IViewModel> ViewModelListAsync(string kw, int page_index = 1, int page_size = 10)
         {
-            var query = loader.GetService<IRepository<TEntity>>().Select(TEntity.BuildExpression());
+            var query = BuildViewModelList();
 
-            var list= await query
-                .Where(v => kw == null || v.Value.Contains(kw))
-                .OrderByDescending(v => v.Id)
-                .Skip(page_size * (page_index - 1))
-                .Take(page_size)
-                .ToListAsync();
+            var list = query
+               .Where(v => kw == null || v.Value.Contains(kw))
+               .OrderByDescending(v => v.Value)
+               .Skip(page_size * (page_index - 1))
+               .Take(page_size)
+               .AsAsyncEnumerable();
 
             return list;
+        }
+
+        /// <summary>
+        /// 代码生成器生成的tree_model查询表达式
+        /// </summary>
+        /// <returns></returns> 
+        protected virtual IQueryable<ITreeModel> DefaultTreeModelQueryable()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <summary>
+        /// 构建tree_model查询表达式
+        /// </summary>
+        /// <returns></returns> 
+        protected virtual IQueryable<ITreeModel> BuildTreeModelQueryable()
+        {
+            return DefaultTreeModelQueryable();
+        }
+
+        /// <summary>
+        /// 树层次查询
+        /// </summary>
+        /// <param name="super_id"></param>
+        /// <returns></returns>
+        public virtual IAsyncEnumerable<ITreeModel> TreeModelListAsync(string super_id)
+        {
+            //var repository = loader.GetService<IRepository<TTreeEntity>>();
+            //var main_query = repository.Where(expression);
+            //var value_query = repository.Select(TTreeEntity.BuildExpression());
+
+            //var query = from a in main_query
+            //            join b in value_query on a.Id equals b.Id
+            //            select new TreeModel
+            //            {
+            //                Id = a.Id,
+            //                Super_Id = a.Super_Id,
+            //                Value = b.Value,
+            //                ChildCount = repository.Count(v => v.Super_Id == a.Id),
+            //                TotalChildCount = repository.Count(v => v.Id != a.Id && v.TreeCode.StartsWith(a.TreeCode)),
+            //            };
+
+            return BuildTreeModelQueryable().Where(v => v.Super_Id == super_id).AsAsyncEnumerable();
         }
     }
 
@@ -162,7 +226,7 @@ namespace FastFrame.Application
         where TEntity : class, IEntity, new()
         where TDto : class, IDto<TEntity>, new()
     {
-        private readonly IRepository<TEntity> repository;
+        protected readonly IRepository<TEntity> repository;
 
         public BaseService(IServiceProvider loader, IRepository<TEntity> repository) : base(loader)
         {
@@ -199,8 +263,20 @@ namespace FastFrame.Application
             if (input is IHaveMultiFileDto haveMultiFile)
                 await EventBus.TriggerEventAsync(new DoMainAdding<IHaveMultiFileDto>(haveMultiFile, entity));
 
+            /*验证循环引用*/
+            if (entity is ITreeEntity && entity is IViewModelable<TEntity>)
+            {
+                var handler = loader.GetService<ITreeHandleService>();
+                var method = handler.GetType().GetMethod(nameof(ITreeHandleService.VerifyLoopRefByViewModelableAsync))
+                                    .MakeGenericMethod(typeof(TEntity)).GetReflector();
+                var task = (Task)method.Invoke(handler, new object[] { entity });
+                await task;
+            }
+
             await EventBus?.TriggerEventAsync(new DoMainAdding<TDto>(input));
         }
+
+
 
         /// <summary>
         /// 新增
@@ -229,9 +305,12 @@ namespace FastFrame.Application
             await OnAdding(input, entity);
             await repository.CommmitAsync();
 
-
-            var addEvent = new DoMainAdded<TDto> { Id = entity.Id };
-            loader.GetService<IBackgroundJob>().SetTimeout<IEventBus>(v => v.TriggerEventAsync(addEvent), null);
+            if (entity is ITreeEntity treeEntity)
+            {
+                var type_name = typeof(TEntity).Name;
+                var super_id = treeEntity.Super_Id;
+                loader.GetService<IBackgroundJob>().SetTimeout<ITreeHandleService>(v => v.MakeTreeCodeAsync(type_name, super_id), null);
+            }
 
             return entity.Id;
         }
@@ -269,13 +348,6 @@ namespace FastFrame.Application
 
                 if (entity is IHaveCheck haveCheck)
                     await EventBus.TriggerEventAsync(new DoMainDeleteing<IHaveCheckModel>(entity.Id, entity));
-            }
-            await repository.CommmitAsync();
-
-            foreach (var entity in entitys)
-            {
-                var delEvent = new DoMainDeleted<TDto>() { Id = entity.Id };
-                loader.GetService<IBackgroundJob>().SetTimeout<IEventBus>(v => v.TriggerEventAsync(delEvent), null);
 
                 if (entity is ITreeEntity treeEntity)
                 {
@@ -285,6 +357,7 @@ namespace FastFrame.Application
                         throw new MsgException($"{treeEntity}不可删除,因为他还有下级");
                 }
             }
+            await repository.CommmitAsync();
         }
 
         /// <summary>
@@ -299,6 +372,18 @@ namespace FastFrame.Application
 
             if (input is IHaveMultiFileDto haveMultiFile)
                 await EventBus.TriggerEventAsync(new DoMainUpdateing<IHaveMultiFileDto>(haveMultiFile, entity));
+
+            /*验证循环引用*/
+            if (entity is ITreeEntity)
+            {
+                var handler = loader.GetService<ITreeHandleService>();
+
+                var method = handler.GetType().GetMethod(nameof(ITreeHandleService.VerifyLoopRefByViewModelableAsync));
+                var methodReflector = method.MakeGenericMethod(typeof(TEntity));
+
+                var task = (Task)methodReflector.Invoke(handler, new object[] { entity });
+                await task;
+            }
         }
 
         /// <summary>
@@ -328,27 +413,15 @@ namespace FastFrame.Application
             input.MapSet(entity);
             await OnUpdateing(input, entity);
 
-            if (entity is ITreeEntity treeEntity && prev is ITreeEntity prevTreeEntity)
-            {
-                /*有下级，则不可修改上级关系*/
-                if (treeEntity.Super_Id != prevTreeEntity.Super_Id)
-                {
-                    var expression = ExpressionClosureFactory.BuildEqualExpression<TEntity, string>(nameof(ITreeEntity.Super_Id), entity.Id);
-                    if (await repository.AnyAsync(expression))
-                        throw new MsgException($"{treeEntity}不可修改上级关系,因为他还有下级");
-                }
-
-                /*重新编码*/
-                if (treeEntity.Super_Id != prevTreeEntity.Super_Id || treeEntity.TreeCode.IsNullOrWhiteSpace())
-                    await loader.GetService<IAutoNumberService>().TryMakeNumberAsync(entity);
-            }
-
-
             await repository.UpdateAsync(entity);
             await repository.CommmitAsync();
 
-            var updateEvent = new DoMainUpdated<TDto> { Id = entity.Id };
-            loader.GetService<IBackgroundJob>().SetTimeout<IEventBus>(v => v.TriggerEventAsync(updateEvent), null);
+            if (entity is ITreeEntity treeEntity)
+            {
+                var type_name = typeof(TEntity).Name;
+                var super_id = treeEntity.Super_Id;
+                loader.GetService<IBackgroundJob>().SetTimeout<ITreeHandleService>(v => v.MakeTreeCodeAsync(type_name, super_id), null);
+            }
         }
 
         /// <summary>

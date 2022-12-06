@@ -112,18 +112,18 @@ namespace FastFrame.Entity.Basis
         {
             if (@in == null)
                 return null;
-
-            using var md5 = MD5.Create();
-            var result = md5.ComputeHash(Encoding.Default.GetBytes(@in));
+            var result = MD5.HashData(Encoding.Default.GetBytes(@in));
             var strResult = BitConverter.ToString(result);
             return strResult.Replace("-", "").ToLower();
         }
 
 
 
-        private static Expression<Func<User, IViewModel>> vm_expression = 
+        private static readonly Expression<Func<User, IViewModel>> vm_expression = 
             v => new DefaultViewModel { Id = v.Id, Value = v.Name + "(" + v.Account + ")" };
 
         public static Expression<Func<User, IViewModel>> BuildExpression() => vm_expression;
+
+        public Expression<Func<User, IViewModel>> GetBuildExpression() => vm_expression;
     }
 }

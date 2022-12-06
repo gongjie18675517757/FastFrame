@@ -12,7 +12,7 @@ namespace FastFrame.Application.Basis
 	/// <summary>
 	/// 角色 
 	/// </summary>
-	public partial class RoleDto:BaseDto<Role>,ITreeModel
+	public partial class RoleDto:BaseDto<Role>
 	{
 		
 		
@@ -21,7 +21,7 @@ namespace FastFrame.Application.Basis
 		/// </summary>
 		[StringLength(50)]
 		[IsPrimaryField()]
-		public string TreeCode {get;set;}
+		public string EnCode {get;set;}
 		
 		/// <summary>
 		/// 名称 
@@ -93,11 +93,6 @@ namespace FastFrame.Application.Basis
 		/// </summary>
 		[Hide(HideMark.Form)]
 		public DateTime ModifyTime {get;set;}
-		
-		/// <summary>
-		/// 下级数量 
-		/// </summary>
-		public int ChildCount {get;set;}
 		
 		
 	}

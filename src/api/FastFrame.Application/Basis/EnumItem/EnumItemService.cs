@@ -26,33 +26,9 @@ namespace FastFrame.Application.Basis
                 })
 
                 .ToListAsync();
-        }
+        } 
 
-        public async Task<IEnumerable<ITreeModel>> GetChildren(EnumName name)
-        {
-            return await BuildQuery()
-                .Where(v => v.Key == name && v.Super_Id == null)
-                .OrderBy(v => v.SortVal)
-                .ThenBy(v => v.Value)
-                .ToListAsync();
-        }
-
-        public async Task<IEnumerable<ITreeModel>> GetChildren(string id)
-        {
-            return await BuildQuery()
-                .Where(v => v.Super_Id == id)
-                .OrderBy(v => v.SortVal)
-                .ThenBy(v => v.Value)
-                .ToListAsync();
-        }
-
-        public async Task<IEnumerable<EnumName?>> GetHasChildrenNames()
-        {
-            return await enumItemRepository
-                .Select(v => v.Key)
-                .Distinct()
-                .ToListAsync();
-        }
+   
 
         public async Task<IEnumerable<IViewModel>> EnumItemList(EnumName? name, string kw, int page_index = 1, int page_size = 10)
         {
@@ -67,6 +43,13 @@ namespace FastFrame.Application.Basis
                 .Skip(page_size * (page_index - 1))
                 .Take(page_size)
                 .ToListAsync();
+        }
+
+        public override IAsyncEnumerable<ITreeModel> TreeModelListAsync(string super_id)
+        {
+
+
+            return base.TreeModelListAsync(super_id);
         }
     }
 }

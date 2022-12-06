@@ -14,9 +14,9 @@ namespace FastFrame.Infrastructure.Lock
             distributedLockProvider = new RedisDistributedSynchronizationProvider(multiplexer.GetDatabase());
         }
 
-        public async Task<ILockHolder> TryCreateLockAsync(string key)
+        public async Task<ILockHolder> TryCreateLockAsync(string key, TimeSpan delayTime)
         {
-            var redisDistributedLockHandle = await distributedLockProvider.TryAcquireLockAsync(key);
+            var redisDistributedLockHandle = await distributedLockProvider.TryAcquireLockAsync(key, delayTime);
             if (redisDistributedLockHandle == null) return null;
 
             return new LockHolder(redisDistributedLockHandle);

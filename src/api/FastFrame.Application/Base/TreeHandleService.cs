@@ -30,14 +30,26 @@ namespace FastFrame.Application
         /// <param name="super_id"></param>
         /// <returns></returns>
         [LockMethod]
-        public virtual async Task MakeTreeCodeAsync(string tree_type_name, [LockMethodParameter] string super_id)
+        public virtual async Task CalcTreeCodeAsync(string tree_type_name, [LockMethodParameter] string super_id)
         {
             if (!TypeManger.TryGetType(tree_type_name, out var type) ||
                 !typeof(ITreeEntity).IsAssignableFrom(type))
                 return;
 
+            await CalcTreeCodeAsync(type, super_id, false);
+        }
+
+        /// <summary>
+        /// 更新树状码
+        /// </summary>
+        /// <param name="tree_type">类型</param>
+        /// <param name="super_id">上级id</param>
+        /// <param name="force_update">是否强制更新</param>
+        /// <returns></returns>
+        private async Task CalcTreeCodeAsync(Type tree_type, string super_id, bool force_update = false)
+        {
             var db = loader.GetService<Database.DataBase>();
-            var entityType = db.Model.FindEntityType(type);
+            var entityType = db.Model.FindEntityType(tree_type);
             var table_name = entityType.GetTableName();
             var conn = db.Database.GetDbConnection();
 
@@ -60,11 +72,11 @@ namespace FastFrame.Application
                 var tree_item = children[i];
                 var tree_code = $"{super.treecode}{(i + 1).ToString().PadLeft(number_length, '0')}";
 
-                if (tree_item.treecode == tree_code)
-                    continue;
-
-                tree_item.treecode = tree_code;
-                has_update_list.Add(tree_item);
+                if (tree_item.treecode != tree_code || force_update)
+                {
+                    tree_item.treecode = tree_code;
+                    has_update_list.Add(tree_item);
+                }
             }
 
             if (has_update_list.Any())
@@ -74,7 +86,7 @@ namespace FastFrame.Application
 
                 /*更新他的下级*/
                 foreach (var item in children)
-                    loader.GetService<IBackgroundJob>().SetTimeout<ITreeHandleService>(v => v.MakeTreeCodeAsync(tree_type_name, item.id), null);
+                    await CalcTreeCodeAsync(tree_type, item.id, force_update);
             }
         }
 
@@ -130,6 +142,22 @@ namespace FastFrame.Application
                 return VerifyLoopRefAsync(treeEntity, vv.GetBuildExpression());
 
             return VerifyLoopRefAsync(treeEntity, v => new DefaultViewModel { Id = v.Id, Value = v.Id });
+        }
+
+        /// <summary>
+        /// 重算全部树状码
+        /// </summary>
+        /// <returns></returns>
+        [LockMethod]
+        public virtual async Task ReCalcTreeCodeAsync()
+        {
+            var tree_type = typeof(ITreeEntity);
+            var tree_types = TypeManger.RegisterdTypes.Where(v => v.IsClass && !v.IsAbstract && tree_type.IsAssignableFrom(v));
+
+            foreach (var type in tree_types)
+            {
+                await this.CalcTreeCodeAsync(type.Name, null);
+            }
         }
     }
 }

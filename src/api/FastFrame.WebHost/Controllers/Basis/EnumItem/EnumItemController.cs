@@ -16,28 +16,7 @@ namespace FastFrame.WebHost.Controllers.Basis
         public async Task<IEnumerable<EnumItemModel>> GetValues(EnumName name)
         {
             return await service.GetValues(name);
-        }
-
-        [Permission("Get", "查看")]
-        [HttpGet("{name}")]
-        public async Task<IEnumerable<ITreeModel>> GetChildrenByName(EnumName name)
-        {
-            return await service.GetChildren(name);
-        }
-
-        [Permission(new string[] { "List" })]
-        [HttpGet("{id}")]
-        public async Task<IEnumerable<ITreeModel>> GetChildrenBySuperId(string id)
-        {
-            return await service.GetChildren(id);
-        }
-
-        [Permission("Get", "查看")]
-        [HttpGet]
-        public async Task<IEnumerable<EnumName?>> GetHasChildrenNames()
-        {
-            return await service.GetHasChildrenNames();
-        }
+        }  
 
         [Permission(new string[] { "Add", "Update" })]
         [HttpGet("{name?}")]

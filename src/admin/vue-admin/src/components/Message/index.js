@@ -75,13 +75,47 @@ export function makePromptPageFacatory(pars) {
     }
 }
 
+/**
+ * 确认弹窗的参数
+ */
+export function confirmPars(){}
+
+/**
+ * 提示标题
+ */
+confirmPars.prototype.title=null;
+
+/**
+ * 提示内容
+ */
+confirmPars.prototype.content=null;
+
+/**
+ * 自动关闭的时间
+ */
+confirmPars.prototype.timeoute=0;
+ 
+
+/**
+ * 几个消息方法
+ */
 const message = {
+    /**
+     * 提示
+     * @param {confirmPars} pars 
+     * @returns 
+     */
     alert(pars) {
         return this.dialog(AlertComponent, {
             width: '600px',
             ...pars
         })
     },
+    /**
+     * 确认
+     * @param {confirmPars} pars 
+     * @returns 
+     */
     confirm(pars) {
         return this.dialog(ConfirmComponent, {
             width: '600px',

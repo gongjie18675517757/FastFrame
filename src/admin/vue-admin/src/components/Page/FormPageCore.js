@@ -71,6 +71,7 @@ export const formProps = {
   isTab: Boolean,
   id: String,
   super_id: String,
+  super_name: String,
 };
 
 /**
@@ -96,6 +97,11 @@ export const FormPageDataDefines = {
    * 权限名称：影响页面权限定义
    */
   permissionName: 'permissionName',
+
+  /**
+   * 页面结构定义
+   */
+  pageModuleStrut: 'pageModuleStrut',
 
   /**
    * 是否可编辑
@@ -181,6 +187,7 @@ export const formData = {
   [FormPageDataDefines.direction]: null,
   [FormPageDataDefines.strutName]: null,
   [FormPageDataDefines.permissionName]: null,
+  [FormPageDataDefines.pageModuleStrut]: {},
   [FormPageDataDefines.canEdit]: false,
   [FormPageDataDefines.model]: {},
   [FormPageDataDefines.formErrorMessages]: {},
@@ -386,6 +393,7 @@ export const formMethods = {
     this.permissionName = this.permissionName || this.name;
 
     let obj = await this.getModuleStrut(this.strutName)
+    this.pageModuleStrut = obj;
     this.hasManage = obj.HasManage;
     this.hasFiles = obj.HasFiles;
     this.haveCheck = obj.HaveCheck;
@@ -400,9 +408,9 @@ export const formMethods = {
     this.model = model;
 
     const form_items = await this.getModelObjectItems();
- 
+
     const formattered_items = await this.fmtModelObjectItems(form_items);
-     this.options = distinct(formattered_items, v => v.Name, (a, b) => ({ ...a, ...b }));
+    this.options = distinct(formattered_items, v => v.Name, (a, b) => ({ ...a, ...b }));
     this.toolItems = await this.getToolItems();
 
     this.changed = false;
@@ -464,30 +472,34 @@ export const formMethods = {
       };
     })
   },
-  [FormPageMethodsDefines.fmtModelObjectItems](arr) {
-    return Promise.resolve(arr).then(arr => {
-      if (this.hasFiles) {
-        arr.push({
-          Name: 'Files',
-          Description: '附件列表',
-          GroupNames: ['附件列表'],
-          template: FileDetailTable(),
-          fileKey: null,
-        })
-      }
-
-      if (this.haveCheck) {
-        arr.push({
-          Name: 'StepList',
-          Description: '流程步骤',
-          GroupNames: ['流程步骤'],
-          template: FlowStep,
-        })
-      }
-      return [
-        ...arr
-      ]
-    });
+  async [FormPageMethodsDefines.fmtModelObjectItems](arr) {
+    await Promise.resolve(arr);
+    if (this.hasFiles) {
+      arr.push({
+        Name: 'Files',
+        Description: '附件列表',
+        GroupNames: ['附件列表'],
+        template: FileDetailTable(),
+        fileKey: null
+      });
+    }
+    if (this.haveCheck) {
+      arr.push({
+        Name: 'StepList',
+        Description: '流程步骤',
+        GroupNames: ['流程步骤'],
+        template: FlowStep
+      });
+    }
+    if (this.super_id && !this.model.Id && this.pageModuleStrut.IsTree) {
+      arr.push({
+        Name: 'Super_Value',
+        Readonly: 'All'
+      });
+    }
+    return [
+      ...arr
+    ];
   },
   [FormPageMethodsDefines.handleEdit]() {
     this.canEdit = !this.canEdit
@@ -514,14 +526,16 @@ export const formMethods = {
       return getDefaultModel(this.name)
     }
   },
-  [FormPageMethodsDefines.fmtModelObject](model) {
-    return Promise.resolve(model).then(model => {
-      if (this.hasFiles) {
-        model.Files = model.Files || []
-      }
-
-      return model;
-    })
+  async [FormPageMethodsDefines.fmtModelObject](model) {
+    await Promise.resolve(model);
+    if (this.hasFiles) {
+      model.Files = model.Files || [];
+    }
+    if (this.super_id && !model.Id && this.pageModuleStrut.IsTree) {
+      model.Super_Id = this.super_id;
+      model.Super_Value = this.super_name;
+    }
+    return model;
   },
   [FormPageMethodsDefines.evalRule](name) {
     let rules = this.rules[name] || [];

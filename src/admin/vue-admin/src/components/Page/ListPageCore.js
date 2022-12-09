@@ -698,7 +698,8 @@ export let pageMethods = {
   },
   [PageMethodsDefines.getFormPageParsBySelectedTreeItem](v) {
     return {
-      super_id: v.Id || ""
+      super_id: v.Id || "",
+      super_name:v.Value || ''
     };
   },
   [PageMethodsDefines.getFormPagePars]() {

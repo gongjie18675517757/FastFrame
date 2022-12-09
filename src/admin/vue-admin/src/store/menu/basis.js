@@ -10,6 +10,12 @@ export default {
             childPermission: ['Setting.Update']
         },
         {
+            title: '系统工具',
+            path: '/SystemTools',
+            permission: 'SystemTools.View',
+            childPermission: ['SystemTools.ReCalcTreeCode']
+        },
+        {
             title: '用户管理',
             path: '/user/list',
             permission: 'User.List',

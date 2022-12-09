@@ -2,8 +2,11 @@
 using FastFrame.Entity.Basis;
 using FastFrame.Entity.Enums;
 using FastFrame.Infrastructure;
+using FastFrame.Infrastructure.Module;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -26,9 +29,9 @@ namespace FastFrame.Application.Basis
                 })
 
                 .ToListAsync();
-        } 
+        }
 
-   
+
 
         public async Task<IEnumerable<IViewModel>> EnumItemList(EnumName? name, string kw, int page_index = 1, int page_size = 10)
         {
@@ -45,11 +48,63 @@ namespace FastFrame.Application.Basis
                 .ToListAsync();
         }
 
+
+        public async IAsyncEnumerable<ITreeModel> TreeModelListAsync()
+        {
+            var desProvider = loader.GetService<IModuleDesProvider>();
+            var total_dic = await enumItemRepository
+                  .GroupBy(v => v.Key)
+                  .Select(v => new { v.Key, Count = v.Count() })
+                  .ToDictionaryAsync(v => v.Key, v => v.Count);
+
+            var child_dic = await enumItemRepository
+                  .Where(v => string.IsNullOrWhiteSpace(v.Super_Id))
+                  .GroupBy(v => v.Key)
+                  .Select(v => new { v.Key, Count = v.Count() })
+                  .ToDictionaryAsync(v => v.Key, v => v.Count);
+
+            foreach (var enumName in Enum.GetValues<EnumName>())
+            {
+                yield return new EnumItemModel
+                {
+                    ChildCount = child_dic.TryGetValueOrDefault(enumName),
+                    Id = enumName.ToString(),
+                    Key = enumName,
+                    Super_Id = null,
+                    TotalChildCount = total_dic.TryGetValueOrDefault(enumName),
+                    Value = desProvider.GetEnumSummary(enumName)
+                };
+            }
+        }
+
+
         public override IAsyncEnumerable<ITreeModel> TreeModelListAsync(string super_id)
         {
+            if (super_id == null)
+            {
+                return TreeModelListAsync();
+            }
+            else if (Enum.TryParse<EnumName>(super_id, true, out var val))
+            {
+                return BuildTreeModelQueryable().Where(v => v.Super_Id == null && v.Key == val).AsAsyncEnumerable();
+            }
+            else
+            {
+                return base.TreeModelListAsync(super_id);
+            }
+        }
 
-
-            return base.TreeModelListAsync(super_id);
+        protected override IQueryable<EnumItemModel> BuildTreeModelQueryable()
+        {
+            return enumItemRepository.Select(v => new EnumItemModel
+            {
+                Id = v.Id,
+                Super_Id = v.Super_Id,
+                Key = v.Key,
+                ChildCount = enumItemRepository.Count(x => x.Super_Id == v.Id),
+                TotalChildCount = enumItemRepository.Count(x => x.TreeCode.StartsWith(v.TreeCode)),
+                Value = v.Value
+            });
         }
     }
 }

@@ -30,7 +30,7 @@ namespace FastFrame.Application
             this.loader = loader;
         }
 
-        protected virtual IServiceProvider loader { get; set; }
+        public virtual IServiceProvider loader { get; set; }
 
         protected IEventBus EventBus => loader.GetService<IEventBus>();
 
@@ -173,11 +173,12 @@ namespace FastFrame.Application
             return list;
         }
 
+
         /// <summary>
         /// 代码生成器生成的tree_model查询表达式
         /// </summary>
         /// <returns></returns> 
-        protected virtual IQueryable<ITreeModel> DefaultTreeModelQueryable()
+        protected virtual IQueryable<ITreeModel> DefaultTreeModelQueryable(string kw)
         {
             throw new System.NotImplementedException();
         }
@@ -186,34 +187,20 @@ namespace FastFrame.Application
         /// 构建tree_model查询表达式
         /// </summary>
         /// <returns></returns> 
-        protected virtual IQueryable<ITreeModel> BuildTreeModelQueryable()
+        protected virtual IQueryable<ITreeModel> BuildTreeModelQueryable(string kw)
         {
-            return DefaultTreeModelQueryable();
+            return DefaultTreeModelQueryable(kw);
         }
 
         /// <summary>
         /// 树层次查询
         /// </summary>
         /// <param name="super_id"></param>
+        /// <param name="kw"></param>
         /// <returns></returns>
-        public virtual IAsyncEnumerable<ITreeModel> TreeModelListAsync(string super_id)
-        {
-            //var repository = loader.GetService<IRepository<TTreeEntity>>();
-            //var main_query = repository.Where(expression);
-            //var value_query = repository.Select(TTreeEntity.BuildExpression());
-
-            //var query = from a in main_query
-            //            join b in value_query on a.Id equals b.Id
-            //            select new TreeModel
-            //            {
-            //                Id = a.Id,
-            //                Super_Id = a.Super_Id,
-            //                Value = b.Value,
-            //                ChildCount = repository.Count(v => v.Super_Id == a.Id),
-            //                TotalChildCount = repository.Count(v => v.Id != a.Id && v.TreeCode.StartsWith(a.TreeCode)),
-            //            };
-
-            return BuildTreeModelQueryable().Where(v => v.Super_Id == super_id).AsAsyncEnumerable();
+        public virtual IAsyncEnumerable<ITreeModel> TreeListAsync(string super_id, string kw)
+        { 
+            return BuildTreeModelQueryable(kw).Where(v => v.Super_Id == super_id).AsAsyncEnumerable();
         }
     }
 
@@ -309,7 +296,7 @@ namespace FastFrame.Application
             {
                 var type_name = typeof(TEntity).Name;
                 var super_id = treeEntity.Super_Id;
-                loader.GetService<IBackgroundJob>().SetTimeout<ITreeHandleService>(v => v.MakeTreeCodeAsync(type_name, super_id), null);
+                loader.GetService<IBackgroundJob>().SetTimeout<ITreeHandleService>(v => v.CalcTreeCodeAsync(type_name, super_id), null);
             }
 
             return entity.Id;
@@ -420,7 +407,7 @@ namespace FastFrame.Application
             {
                 var type_name = typeof(TEntity).Name;
                 var super_id = treeEntity.Super_Id;
-                loader.GetService<IBackgroundJob>().SetTimeout<ITreeHandleService>(v => v.MakeTreeCodeAsync(type_name, super_id), null);
+                loader.GetService<IBackgroundJob>().SetTimeout<ITreeHandleService>(v => v.CalcTreeCodeAsync(type_name, super_id), null);
             }
         }
 

@@ -15,20 +15,19 @@ namespace FastFrame.WebHost.Controllers.Basis
     {
         [Permission(new string[] { "Add", "Update" })]
         [HttpGet]
-        public Task<IEnumerable<IViewModel>> UserList(string kw, int page_index = 1, int page_size = 10)
-            => service.ViewModelListAsync<User>(kw, page_index, page_size);
+        public IAsyncEnumerable<IViewModel> UserList(string kw, int page_index = 1, int page_size = 10)
+            => service.loader.GetService<UserService>().ViewModelListAsync(kw, page_index, page_size);
 
 
         [Permission(new string[] { "Add", "Update" })]
         [HttpGet]
-        public Task<IEnumerable<IViewModel>> DeptList(string kw, int page_index = 1, int page_size = 10)
-            => service.ViewModelListAsync<Dept>(kw, page_index, page_size);
-
-
-        [HttpGet("{id?}")]
-        public async Task<IEnumerable<ITreeModel>> GetChildrenBySuperId(string id)
-        {
-            return await service.GetChildrenBySuperId(id);
-        }
+        public IAsyncEnumerable<IViewModel> DeptList(string kw, int page_index = 1, int page_size = 10)
+            => service.loader.GetService<DeptService>().ViewModelListAsync(kw, page_index, page_size); 
+         
+        //[HttpGet("{id?}")]
+        //public IAsyncEnumerable<ITreeModel> TreeList(string id)
+        //{
+        //    return service.TreeModelListAsync(id);
+        //}
     }
 }

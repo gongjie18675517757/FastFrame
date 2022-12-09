@@ -13,7 +13,7 @@ namespace FastFrame.Application
         /// <param name="treeEntity"></param>
         /// <returns></returns>
         Task VerifyLoopRefByViewModelableAsync<T>(T treeEntity) where T : class, ITreeEntity;
-       
+
 
         /// <summary>
         /// 验证循环引用
@@ -26,11 +26,17 @@ namespace FastFrame.Application
 
 
         /// <summary>
-        /// 重新编树状码
+        /// 重算树状码
         /// </summary>
         /// <param name="tree_type"></param>
         /// <param name="super_id"></param>
         /// <returns></returns>
-        Task MakeTreeCodeAsync(string tree_type, string super_id);
+        Task CalcTreeCodeAsync(string tree_type, string super_id);
+
+        /// <summary>
+        /// 重算树状码
+        /// </summary>
+        /// <returns></returns>
+        public Task ReCalcTreeCodeAsync();
     }
 }

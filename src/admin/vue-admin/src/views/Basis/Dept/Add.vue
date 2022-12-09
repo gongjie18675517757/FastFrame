@@ -19,17 +19,12 @@ export default makeFormPageInheritedFromBaseFormPage({
       return {
         Members: [],
         Managers: [],
-        ...model,
-        Super_Id: model.Super_Id || this.super_id,
+        ...model, 
       };
     },
     [FormPageDefines.MethodsDefines.fmtModelObjectItems](arr) {
       return [
-        ...arr,
-        {
-          Name: "Super_Value",
-          visible: () => !this.super_id, 
-        },
+        ...arr, 
         {
           Name: "Members",
           Description: "部门成员",

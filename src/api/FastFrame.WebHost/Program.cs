@@ -100,7 +100,7 @@ services
 services.AddHangfireServer();
 
 //builder.Services.AddControllers();
-void JSONSetting(JsonSerializerSettings jsonSerializerSettings)
+static void JSONSetting(JsonSerializerSettings jsonSerializerSettings)
 {
     jsonSerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
     jsonSerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver();

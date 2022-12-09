@@ -4,13 +4,14 @@ import {
   makeListPageInheritedFromBaseListPage,
   ListPageDefines,
 } from "../../../components/Page";
-import DeptTreeVue from "../../../components/Trees/DeptTree.vue";
+import { makeTree } from "../../../components/Trees";
+const TreeComponent = makeTree({ type_name: "Dept" });
 
 export default makeListPageInheritedFromBaseListPage({
   data() {
     return {
       ...pageInfo,
-      treeComponent: DeptTreeVue,
+      treeComponent: TreeComponent,
     };
   },
   methods: {
@@ -24,7 +25,7 @@ export default makeListPageInheritedFromBaseListPage({
         },
       ];
     },
-    [ListPageDefines.MethodsDefines.getPageTitle](_,v) {
+    [ListPageDefines.MethodsDefines.getPageTitle](_, v) {
       if (v == null) {
         return "全部部门";
       }

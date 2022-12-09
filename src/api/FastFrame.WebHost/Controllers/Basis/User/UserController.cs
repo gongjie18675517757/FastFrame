@@ -34,16 +34,16 @@ namespace FastFrame.WebHost.Controllers.Basis
         public async Task<UserDto> ToogleDisabled(string id)
         {
             return await service.ToogleDisabled(id);
-        } 
+        }
 
         [Permission(new string[] { "Add", "Update" })]
         [HttpGet]
-        public Task<IEnumerable<IViewModel>> RoleList(string kw, int page_index = 1, int page_size = 10)
-            => service.ViewModelListAsync<Role>(kw, page_index, page_size);
+        public IAsyncEnumerable<IViewModel> RoleList(string kw, int page_index = 1, int page_size = 10)
+            => service.loader.GetService<RoleService>().ViewModelListAsync(kw, page_index, page_size);
 
         [Permission(new string[] { "Add", "Update" })]
         [HttpGet]
-        public Task<IEnumerable<IViewModel>> DeptList(string kw, int page_index = 1, int page_size = 10)
-            => service.ViewModelListAsync<Dept>(kw, page_index, page_size);
+        public IAsyncEnumerable<IViewModel> DeptList(string kw, int page_index = 1, int page_size = 10)
+            => service.loader.GetService<DeptService>().ViewModelListAsync(kw, page_index, page_size);
     }
 }

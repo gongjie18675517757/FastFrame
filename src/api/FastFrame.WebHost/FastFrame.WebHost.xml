@@ -208,6 +208,11 @@
             系统设置
             </summary>
         </member>
+        <member name="T:FastFrame.WebHost.Controllers.Basis.SystemToolsController">
+            <summary>
+            系统工具
+            </summary>
+        </member>
         <member name="T:FastFrame.WebHost.Controllers.Basis.TenantController">
             <summary>
             多租户信息 
@@ -318,7 +323,7 @@
             <param name="moduleName"></param>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.WebHost.Controllers.Flow.WorkFlowController.GetChildrenBySuperId">
+        <member name="M:FastFrame.WebHost.Controllers.Flow.WorkFlowController.TreeList">
             <summary>
             获取树形视图
             </summary>

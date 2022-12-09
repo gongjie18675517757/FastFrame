@@ -142,6 +142,11 @@ namespace FastFrame.CodeGenerate.Build
             //write.WriteCodeLine("/*方法*/", 2);
             foreach (var method in target.MethodInfos)
             {
+                foreach (var attr in method.AttrInfos)
+                {
+                    write.WriteCodeLine($"[{attr.Name}({string.Join(",", attr.Parameters)})]", 2);
+                }
+
                 write.WriteCodeLine($"{method.Modifier}{(method.IsOverride ? " override " : " ")}{method.ResultTypeName} {method.MethodName}({string.Join(",", method.Parms.Select(x => $"{x.TypeName} {x.DefineName}"))}) ", 2);
                 /*方法开始*/
                 write.WriteCodeLine($"{{", 2);

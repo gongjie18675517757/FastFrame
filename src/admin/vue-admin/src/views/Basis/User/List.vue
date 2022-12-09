@@ -5,7 +5,8 @@ let pageInfo = {
   direction: "用户"
 };
 import Page from "../../../components/Page/ListPageCore.js";
-import DeptTreeVue from "../../../components/Trees/DeptTree.vue";
+import { makeTree } from "../../../components/Trees";
+const TreeComponent = makeTree({ type_name: "Dept" });
 
 export default {
   ...Page,
@@ -15,7 +16,7 @@ export default {
       ...data,
       ...pageInfo,
       toolItems: data.toolItems.concat(pageInfo.toolItems),
-      treeComponent: DeptTreeVue
+      treeComponent: TreeComponent
     };
   },
   methods: {

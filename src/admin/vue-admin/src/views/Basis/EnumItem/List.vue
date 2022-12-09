@@ -4,18 +4,18 @@ import {
   ListPageDefines,
   makeListPageInheritedFromBaseListPage,
 } from "../../../components/Page";
-import EnumTreeVue from "./EnumTree.vue";
-
+import { makeTree } from "../../../components/Trees";
+const TreeComponent = makeTree({ type_name: "EnumItem" });
 
 export default makeListPageInheritedFromBaseListPage({
   data() {
     return {
       ...pageInfo,
-      treeComponent: EnumTreeVue,
+      treeComponent: TreeComponent,
     };
   },
   methods: {
-    [ListPageDefines.MethodsDefines.getPageTitle](_,v) {
+    [ListPageDefines.MethodsDefines.getPageTitle](_, v) {
       if (v == null) {
         return "全部数据字典";
       }
@@ -27,18 +27,14 @@ export default makeListPageInheritedFromBaseListPage({
           return `${v.name}:下级字典内容`;
       }
     },
-    [ListPageDefines.MethodsDefines.getTreeKey](title,v) {
-      switch (v.type) {
-        case "root":
-          return "Key";
-        default:
-          return title;
-      }
-    },
-    [ListPageDefines.MethodsDefines.getFormPageParsBySelectedTreeItem](_,v) {
+
+    [ListPageDefines.MethodsDefines.getFormPageParsBySelectedTreeItem](
+      v,
+      tree
+    ) {
       return {
-        key_name: v.Key,
-        super_id: v.Id || "",
+        ...v,
+        key_name: tree.Key,
       };
     },
   },

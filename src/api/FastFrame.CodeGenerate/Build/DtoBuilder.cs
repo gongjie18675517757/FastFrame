@@ -155,7 +155,7 @@ namespace FastFrame.CodeGenerate.Build
                 };
         }
 
-        public IEnumerable<AttrInfo> GetAttrInfos(PropertyInfo propertyInfo)
+        public static IEnumerable<AttrInfo> GetAttrInfos(PropertyInfo propertyInfo)
         {
             if (TryGetAttribute<StringLengthAttribute>(propertyInfo, out var stringLengthAttribute))
             {
@@ -239,7 +239,7 @@ namespace FastFrame.CodeGenerate.Build
             
         }
 
-        public bool TryGetAttribute<T>(PropertyInfo propertyInfo, out T attr) where T : Attribute
+        public static bool TryGetAttribute<T>(PropertyInfo propertyInfo, out T attr) where T : Attribute
         {
             attr = propertyInfo.GetCustomAttribute<T>();
             if (attr != null)
@@ -247,7 +247,7 @@ namespace FastFrame.CodeGenerate.Build
             return false;
         }
 
-        public bool TryGetAttribute<T>(Type type, out T attr) where T : Attribute
+        public static bool TryGetAttribute<T>(Type type, out T attr) where T : Attribute
         {
             attr = type.GetCustomAttribute<T>();
             if (attr != null)
@@ -255,7 +255,7 @@ namespace FastFrame.CodeGenerate.Build
             return false;
         }
 
-        public bool TryGetAttributes<T>(PropertyInfo propertyInfo, out IEnumerable<T> attrs) where T : Attribute
+        public static bool TryGetAttributes<T>(PropertyInfo propertyInfo, out IEnumerable<T> attrs) where T : Attribute
         {
             attrs = propertyInfo.GetCustomAttributes<T>();
             if (attrs.Any())

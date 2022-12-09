@@ -20,13 +20,16 @@ namespace FastFrame.Entity.Basis
         /// </summary>
         [StringLength(50)]
         [Required]
-        public string EnCode { get; set; }  
+        [Unique]
+        public string EnCode { get; set; }
 
         /// <summary>
         /// 部门名称
         /// </summary>
-        [StringLength(50), Required]
+        [StringLength(50)]
         [IsPrimaryField]
+        [Unique]
+        [Required]
         public string Name { get; set; }
 
         /// <summary>
@@ -46,7 +49,7 @@ namespace FastFrame.Entity.Basis
             v => new DefaultViewModel
             {
                 Id = v.Id,
-                Value = v.Name + (string.IsNullOrWhiteSpace(v.EnCode) ? "" : "(" + v.EnCode + ")")
+                Value = v.Name //+ (string.IsNullOrWhiteSpace(v.EnCode) ? "" : "(" + v.EnCode + ")")
             };
 
         public static Expression<Func<Dept, IViewModel>> BuildExpression() => vm_expression;

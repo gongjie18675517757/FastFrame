@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using FieldInfo = FastFrame.CodeGenerate.Info.FieldInfo;
+using MethodInfo = FastFrame.CodeGenerate.Info.MethodInfo;
 using ParameterInfo = FastFrame.CodeGenerate.Info.ParameterInfo;
 using TargetInfo = FastFrame.CodeGenerate.Info.TargetInfo;
 
@@ -19,13 +20,13 @@ namespace FastFrame.CodeGenerate.Build
 
         public override string TargetPath => $"{SolutionDir}\\FastFrame.WebHost\\Controllers";
 
-        public override string BuildName => "API控制器"; 
-       
+        public override string BuildName => "API控制器";
+
 
         public override IEnumerable<TargetInfo> GetTargetInfoList()
         {
             foreach (var type in GetTypes())
-            { 
+            {
                 var exportAttr = type.GetCustomAttribute<ExportAttribute>();
 
                 if (exportAttr == null || !exportAttr.ExportMarks.Contains(ExportMark.Controller))
@@ -49,6 +50,8 @@ namespace FastFrame.CodeGenerate.Build
                     ImportNames = new string[] { 
                         //$"FastFrame.Entity.{spaceName}",
                         $"FastFrame.Application.{spaceName}",
+                        $"FastFrame.Application",
+                        $"Microsoft.AspNetCore.Mvc",
                         //"FastFrame.Infrastructure.Permission",
                         //"FastFrame.Infrastructure.Interface"
                     },
@@ -68,6 +71,36 @@ namespace FastFrame.CodeGenerate.Build
                             "this.service = service;"
                         }
                     },
+                    MethodInfos = new MethodInfo[]
+                    {
+                        new MethodInfo()
+                        {
+                            IsOverride=false,
+                            MethodName="TreeList",
+                            Modifier="public",
+                            Parms= new ParameterInfo[]
+                            {
+                                new ParameterInfo
+                                {
+                                    DefineName="super_id",
+                                    TypeName="string"
+                                }
+                            },
+                            ResultTypeName="IAsyncEnumerable<ITreeModel>",
+                            CodeBlock= new string[]
+                            {
+                                "return service.TreeModelListAsync(super_id);"
+                            },
+                            AttrInfos= new AttrInfo[]
+                            {
+                                new AttrInfo
+                                {
+                                    Name="HttpGet",
+                                    Parameters=new []{ "\"{super_id?}\"" }
+                                }, 
+                            }
+                        }
+                    }
                     //AttrInfos = new[] {
                     //    new AttrInfo()
                     //    {
@@ -78,5 +111,5 @@ namespace FastFrame.CodeGenerate.Build
                 };
             }
         }
-    } 
+    }
 }

@@ -1,5 +1,9 @@
 <script>
 import BaseTreeVue from "./BaseTree.vue";
+
+/**
+ * 弃用了,使用工厂函数生成
+ */
 export default {
   extends: BaseTreeVue,
   methods: {
@@ -7,15 +11,12 @@ export default {
       this.items = await this.requestData(null);
     },
     async requestData(id) {
-      let arr = await this.$http.get(`/api/Dept/GetChildrenBySuperId/${id || ""}`);
+      let arr = await this.$http.get(`/api/Dept/TreeList/${id || ""}`);
 
       return arr.map(v => ({
         ...v,
         id: v.Id,
-        name: [v.Name, v.EnCode]
-          .filter(v => v)
-          .map((v, i) => (i > 0 ? `(${v})` : v))
-          .join(""),
+        name:v.Value,
         ...(v.ChildCount > 0 ? { children: [] } : {}),
         type: "node"
       }));

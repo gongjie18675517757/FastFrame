@@ -267,7 +267,7 @@ namespace FastFrame.Application.Flow
         /// 验证流程节点是否配置正确
         /// </summary>
         /// <param name="workFlow"></param>
-        private void VerifyFlowNodes(WorkFlowDto workFlow)
+        private static void VerifyFlowNodes(WorkFlowDto workFlow)
         {
             if (workFlow.Nodes == null || !workFlow.Nodes.Any())
                 throw new MsgException("无有效节点");
@@ -310,7 +310,7 @@ namespace FastFrame.Application.Flow
         /// 验证节点配置是否正确
         /// </summary>
         /// <param name="node"></param>
-        private void VerifyFlowNode(FlowNodeModel node)
+        private static void VerifyFlowNode(FlowNodeModel node)
         {
             switch (node.NodeEnum)
             {
@@ -344,7 +344,7 @@ namespace FastFrame.Application.Flow
             {
                 ChildCount = 0,
                 Id = v.Key,
-                Name = v.Value,
+                Value = v.Value,
                 Super_Id = v.Key
             });
         }

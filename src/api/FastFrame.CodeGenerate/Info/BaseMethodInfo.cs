@@ -15,6 +15,11 @@ namespace FastFrame.CodeGenerate.Info
         public IEnumerable<ParameterInfo> Parms { get; set; } = new ParameterInfo[] { };
 
         /// <summary>
+        /// 特性
+        /// </summary>
+        public IEnumerable<AttrInfo> AttrInfos { get; set; } = new AttrInfo[] { };
+
+        /// <summary>
         /// 代码块
         /// </summary>
         public IEnumerable<string> CodeBlock { get; set; } = new string[] { };

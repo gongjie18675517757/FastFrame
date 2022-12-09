@@ -138,6 +138,18 @@ export const pages = [{
   component: () =>
     import(`@/views/Basis/Setting.vue`)
 },
+{
+  path: '/SystemTools',
+  name: 'SystemTools',
+  meta: {
+    title: '系统设置',
+    keepAlive: false,
+    moduleName: 'SystemTools',
+    permission: `SystemTools.View`,
+  },
+  component: () =>
+    import(`@/views/Basis/SystemTools.vue`)
+},
 ...childs,
 ].map(v => ({
   ...v,

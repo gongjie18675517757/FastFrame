@@ -135,17 +135,36 @@ namespace FastFrame.CodeGenerate.Build
                     MethodName = "DefaultTreeModelQueryable",
                     Modifier = "protected",
                     ResultTypeName = $"IQueryable<ITreeModel>",
+                    Parms = new[] {
+                        new ParameterInfo{
+                            DefineName="kw",
+                            TypeName="string"
+                        }
+                    },
                     CodeBlock = new[] {
-                        $"return from a in repository",
-                        $"\t\tjoin b in repository.Select({type.Name}.BuildExpression()) on a.Id equals b.Id",
-                        $"\t\tselect new TreeModel",
-                        $"\t\t{{",
-                        $"\t\tId = a.Id,",
-                        $"\t\tSuper_Id = a.Super_Id,",
-                        $"\t\tValue = b.Value,",
-                        $"\t\tChildCount = repository.Count(v => v.Super_Id == a.Id),",
-                        $"\t\tTotalChildCount = repository.Count(v => v.Id != a.Id && v.TreeCode.StartsWith(a.TreeCode)),",
-                        $"\t}};",
+                       $$"""
+                       var vm_query = repository.Select({{type.Name}}.BuildExpression());
+                       var main_query = repository.Queryable;
+                       if (!kw.IsNullOrWhiteSpace())
+                       {
+                           main_query = main_query
+                               .Where(a => 
+                                        vm_query.Any(v => 
+                                           v.Value.Contains(kw) &&
+                                           repository.Any(x => x.Id == v.Id && x.TreeCode.StartsWith(a.TreeCode))));
+                       }
+
+                       return from a in main_query
+                              join b in repository.Select(Dept.BuildExpression()) on a.Id equals b.Id 
+                              select new TreeModel
+                              {
+                                  Id = a.Id,
+                                  Super_Id = a.Super_Id,
+                                  Value = b.Value,
+                                  ChildCount = main_query.Count(v => v.Super_Id == a.Id),
+                                  TotalChildCount = main_query.Count(v => v.Id != a.Id && v.TreeCode.StartsWith(a.TreeCode)),
+                              };
+                       """
                     }
                 };
         }

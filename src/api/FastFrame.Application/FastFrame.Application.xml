@@ -160,25 +160,56 @@
             获取分页列表
             </summary> 
         </member>
+        <member name="M:FastFrame.Application.BaseService`1.DefaultQueryable">
+            <summary>
+            代码生成器生成的查询表达式
+            </summary> 
+        </member>
         <member name="M:FastFrame.Application.BaseService`1.BuildQuery">
             <summary>
             构建主查询表达式
             </summary>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.Application.BaseService`1.DefaultQueryable">
+        <member name="M:FastFrame.Application.BaseService`1.DefaultViewModelQueryable">
             <summary>
-            代码生成器生成的查询表达式
-            </summary> 
-        </member>
-        <member name="M:FastFrame.Application.BaseService`1.ViewModelListAsync``1(System.String,System.Int32,System.Int32)">
-            <summary>
-            查询view model
+            代码生成器生成的vm查询表达式
             </summary>
-            <typeparam name="TEntity"></typeparam>
+            <returns></returns> 
+        </member>
+        <member name="M:FastFrame.Application.BaseService`1.BuildViewModelList">
+            <summary>
+            构建vm查询表达式
+            </summary>
+            <returns></returns>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="M:FastFrame.Application.BaseService`1.ViewModelListAsync(System.String,System.Int32,System.Int32)">
+            <summary>
+            vm列表
+            </summary>
             <param name="kw"></param>
             <param name="page_index"></param>
             <param name="page_size"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.BaseService`1.DefaultTreeModelQueryable">
+            <summary>
+            代码生成器生成的tree_model查询表达式
+            </summary>
+            <returns></returns> 
+        </member>
+        <member name="M:FastFrame.Application.BaseService`1.BuildTreeModelQueryable">
+            <summary>
+            构建tree_model查询表达式
+            </summary>
+            <returns></returns> 
+        </member>
+        <member name="M:FastFrame.Application.BaseService`1.TreeModelListAsync(System.String)">
+            <summary>
+            树层次查询
+            </summary>
+            <param name="super_id"></param>
             <returns></returns>
         </member>
         <member name="T:FastFrame.Application.BaseService`2">
@@ -409,12 +440,18 @@
             <param name="value_func"></param>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.Application.ITreeHandleService.MakeTreeCodeAsync(System.String,System.String)">
+        <member name="M:FastFrame.Application.ITreeHandleService.CalcTreeCodeAsync(System.String,System.String)">
             <summary>
-            重新编树状码
+            重算树状码
             </summary>
             <param name="tree_type"></param>
             <param name="super_id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.ITreeHandleService.ReCalcTreeCodeAsync">
+            <summary>
+            重算树状码
+            </summary>
             <returns></returns>
         </member>
         <member name="T:FastFrame.Application.ITreeModel">
@@ -427,9 +464,19 @@
             上级ID
             </summary>
         </member>
-        <member name="P:FastFrame.Application.ITreeModel.TreeCode">
+        <member name="P:FastFrame.Application.ITreeModel.ChildCount">
             <summary>
-            树装码
+            直接下级数量
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.ITreeModel.TotalChildCount">
+            <summary>
+            所有下级数量
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.TreeModel">
+            <summary>
+            默认树
             </summary>
         </member>
         <member name="P:FastFrame.Application.TreeModel.Super_Id">
@@ -439,17 +486,17 @@
         </member>
         <member name="P:FastFrame.Application.TreeModel.ChildCount">
             <summary>
-            下级数量
+            直接下级数量
             </summary>
         </member>
-        <member name="P:FastFrame.Application.TreeModel.Name">
+        <member name="P:FastFrame.Application.TreeModel.TotalChildCount">
             <summary>
-            名称
+            所有下级数量
             </summary>
         </member>
-        <member name="P:FastFrame.Application.TreeModel.TreeCode">
+        <member name="P:FastFrame.Application.TreeModel.Value">
             <summary>
-            树状码
+            树的文本
             </summary>
         </member>
         <member name="M:FastFrame.Application.IVerifyUniqueService.VerifyUnique(FastFrame.Application.UniqueInput)">
@@ -475,12 +522,21 @@
             处理树关系
             </summary>
         </member>
-        <member name="M:FastFrame.Application.TreeHandleService.MakeTreeCodeAsync(System.String,System.String)">
+        <member name="M:FastFrame.Application.TreeHandleService.CalcTreeCodeAsync(System.String,System.String)">
             <summary>
             生成树状码
             </summary>
             <param name="tree_type_name"></param>
             <param name="super_id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.TreeHandleService.CalcTreeCodeAsync(System.Type,System.String,System.Boolean)">
+            <summary>
+            更新树状码
+            </summary>
+            <param name="tree_type">类型</param>
+            <param name="super_id">上级id</param>
+            <param name="force_update">是否强制更新</param>
             <returns></returns>
         </member>
         <member name="M:FastFrame.Application.TreeHandleService.VerifyLoopRefAsync``1(``0,System.Linq.Expressions.Expression{System.Func{``0,FastFrame.Entity.IViewModel}})">
@@ -499,6 +555,12 @@
             </summary>
             <typeparam name="T"></typeparam>
             <param name="treeEntity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.TreeHandleService.ReCalcTreeCodeAsync">
+            <summary>
+            重算全部树状码
+            </summary>
             <returns></returns>
         </member>
         <member name="T:FastFrame.Application.Basis.ApiRequestLogService">
@@ -538,7 +600,7 @@
             上级 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Basis.DeptDto.TreeCode">
+        <member name="P:FastFrame.Application.Basis.DeptDto.EnCode">
             <summary>
             部门代码 
             </summary>
@@ -583,11 +645,6 @@
             修改时间 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Basis.DeptDto.ChildCount">
-            <summary>
-            下级数量 
-            </summary>
-        </member>
         <member name="T:FastFrame.Application.Basis.EnumItemDto">
             <summary>
             数字字典 
@@ -606,11 +663,6 @@
         <member name="P:FastFrame.Application.Basis.EnumItemDto.Super_Value">
             <summary>
             上级值 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.EnumItemDto.TreeCode">
-            <summary>
-            树状码 
             </summary>
         </member>
         <member name="P:FastFrame.Application.Basis.EnumItemDto.Value">
@@ -656,11 +708,6 @@
         <member name="P:FastFrame.Application.Basis.EnumItemDto.ModifyTime">
             <summary>
             修改时间 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.EnumItemDto.ChildCount">
-            <summary>
-            下级数量 
             </summary>
         </member>
         <member name="T:FastFrame.Application.Basis.EnumItemService">
@@ -748,11 +795,6 @@
             是否文件夹 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Basis.MeidiaDto.TreeCode">
-            <summary>
-            树状码 
-            </summary>
-        </member>
         <member name="P:FastFrame.Application.Basis.MeidiaDto.Create_User_Id">
             <summary>
             创建人 
@@ -781,11 +823,6 @@
         <member name="P:FastFrame.Application.Basis.MeidiaDto.ModifyTime">
             <summary>
             修改时间 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.MeidiaDto.ChildCount">
-            <summary>
-            下级数量 
             </summary>
         </member>
         <member name="P:FastFrame.Application.Basis.MeidiaModel.Super_Id">
@@ -993,7 +1030,7 @@
             角色 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Basis.RoleDto.TreeCode">
+        <member name="P:FastFrame.Application.Basis.RoleDto.EnCode">
             <summary>
             编码 
             </summary>
@@ -1056,11 +1093,6 @@
         <member name="P:FastFrame.Application.Basis.RoleDto.ModifyTime">
             <summary>
             修改时间 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.RoleDto.ChildCount">
-            <summary>
-            下级数量 
             </summary>
         </member>
         <member name="P:FastFrame.Application.Basis.RolePermissionModel.PermissionKey">
@@ -1177,16 +1209,6 @@
         <member name="P:FastFrame.Application.Basis.TenantDto.HandIcon_Id">
             <summary>
             Logo头像 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.TenantDto.TreeCode">
-            <summary>
-            树状码 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.TenantDto.ChildCount">
-            <summary>
-            下级数量 
             </summary>
         </member>
         <member name="T:FastFrame.Application.Basis.TenantService">

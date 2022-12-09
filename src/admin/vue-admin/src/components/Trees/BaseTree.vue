@@ -22,38 +22,19 @@
     >
       <v-icon> refresh </v-icon>
     </v-btn>
-    <!-- <v-btn
-      fab
-      small
-      icon
-      style="position: absolute; top: 0px; right: 50px"
-      color="primary"
-      @click="refresh"
-    >
-      <v-icon> mdi-unfold-less-horizontal </v-icon>
-    </v-btn>
-    <v-btn
-      fab
-      small
-      icon
-      style="position: absolute; top: 0px; right: 80px"
-      color="primary"
-      @click="refresh"
-    >
-      <v-icon> mdi-unfold-more-horizontal </v-icon>
-    </v-btn> -->
   </VuePerfectScrollbar>
 </template>
 
 <script>
 import VuePerfectScrollbar from "vue-perfect-scrollbar";
- 
+
 export default {
   components: {
     VuePerfectScrollbar,
   },
   props: {
     height: String,
+    requestUrl: String,
   },
   data() {
     return {
@@ -87,7 +68,28 @@ export default {
       this.open = [];
       this.active = [];
       this.init();
-    }, 
+    },
+    async init() {
+      if (this.requestUrl) {
+        this.items = await this.requestData(null);
+      }
+    },
+    async requestData(id) {
+      let arr = await this.$http.get(`${this.requestUrl}?super_id=${id || ""}`);
+
+      return arr.map((v) => ({
+        ...v,
+        id: v.Id,
+        name: v.Value,
+        ...(v.ChildCount > 0 ? { children: [] } : {}),
+        type: "node",
+      }));
+    },
+    async requestChild(parm) {
+      let { id, children } = parm || {};
+      let arr = await this.requestData(id);
+      if (Array.isArray(children)) children.push(...arr);
+    },
   },
 };
 </script>

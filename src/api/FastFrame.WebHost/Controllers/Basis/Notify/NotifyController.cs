@@ -35,7 +35,7 @@ namespace FastFrame.WebHost.Controllers.Basis
 
         [Permission(new string[] { "Add", "Update" })]
         [HttpGet]
-        public Task<IEnumerable<IViewModel>> UserList(string kw, int page_index = 1, int page_size = 10)
-            => service.ViewModelListAsync<User>(kw, page_index, page_size);
+        public IAsyncEnumerable<IViewModel> UserList(string kw, int page_index = 1, int page_size = 10)
+            => service.loader.GetService<UserService>().ViewModelListAsync(kw, page_index, page_size);
     }
 }

@@ -28,7 +28,7 @@ namespace FastFrame.WebHost.Controllers.Flow
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IEnumerable<ITreeModel>> GetChildrenBySuperId()
+        public async Task<IEnumerable<ITreeModel>> TreeList()
         {
             return await service.GetChildrenBySuperId();
         }

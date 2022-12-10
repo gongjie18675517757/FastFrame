@@ -17,10 +17,10 @@ namespace FastFrame.WebHost.Controllers.Basis
 			this.service = service;
 		}
 		
-		[HttpGet("{super_id?}")]
+		[HttpGet()]
 		public IAsyncEnumerable<ITreeModel> TreeList(string super_id,string kw) 
 		{
-			return service.TreeListAsync(super_id, kw);
+			return service.TreeListAsync(super_id,kw);
 		}
 		
 	}

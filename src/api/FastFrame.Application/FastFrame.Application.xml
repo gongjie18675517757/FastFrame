@@ -193,23 +193,24 @@
             <param name="page_size"></param>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.Application.BaseService`1.DefaultTreeModelQueryable">
+        <member name="M:FastFrame.Application.BaseService`1.DefaultTreeModelQueryable(System.String)">
             <summary>
             代码生成器生成的tree_model查询表达式
             </summary>
             <returns></returns> 
         </member>
-        <member name="M:FastFrame.Application.BaseService`1.BuildTreeModelQueryable">
+        <member name="M:FastFrame.Application.BaseService`1.BuildTreeModelQueryable(System.String)">
             <summary>
             构建tree_model查询表达式
             </summary>
             <returns></returns> 
         </member>
-        <member name="M:FastFrame.Application.BaseService`1.TreeModelListAsync(System.String)">
+        <member name="M:FastFrame.Application.BaseService`1.TreeListAsync(System.String,System.String)">
             <summary>
             树层次查询
             </summary>
             <param name="super_id"></param>
+            <param name="kw"></param>
             <returns></returns>
         </member>
         <member name="T:FastFrame.Application.BaseService`2">

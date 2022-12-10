@@ -59,18 +59,29 @@ namespace FastFrame.Application.Basis
 		{
 			return repository.Select(Role.BuildExpression());
 		}
-		protected override IQueryable<ITreeModel> DefaultTreeModelQueryable() 
+		protected override IQueryable<ITreeModel> DefaultTreeModelQueryable(string kw) 
 		{
-			return from a in repository
-					join b in repository.Select(Role.BuildExpression()) on a.Id equals b.Id
-					select new TreeModel
-					{
-					Id = a.Id,
-					Super_Id = a.Super_Id,
-					Value = b.Value,
-					ChildCount = repository.Count(v => v.Super_Id == a.Id),
-					TotalChildCount = repository.Count(v => v.Id != a.Id && v.TreeCode.StartsWith(a.TreeCode)),
-				};
+			        var main_query = repository.Queryable;
+        if (!kw.IsNullOrWhiteSpace())
+        {
+            var vm_query = repository.Select(Role.BuildExpression());
+            main_query = main_query
+                .Where(a => 
+                         vm_query.Any(v => 
+                            v.Value.Contains(kw) &&
+                            repository.Any(x => x.Id == v.Id && x.TreeCode.StartsWith(a.TreeCode))));
+        }
+
+        return from a in main_query
+               join b in repository.Select(Role.BuildExpression()) on a.Id equals b.Id 
+               select new TreeModel
+               {
+                   Id = a.Id,
+                   Super_Id = a.Super_Id,
+                   Value = b.Value,
+                   ChildCount = main_query.Count(v => v.Super_Id == a.Id),
+                   TotalChildCount = main_query.Count(v => v.Id != a.Id && v.TreeCode.StartsWith(a.TreeCode)),
+               };
 		}
 		
 	}

@@ -78,7 +78,7 @@ namespace FastFrame.Application.Basis
         }
 
 
-        public override IAsyncEnumerable<ITreeModel> TreeModelListAsync(string super_id)
+        public override IAsyncEnumerable<ITreeModel> TreeListAsync(string super_id, string kw)
         {
             if (super_id == null)
             {
@@ -86,25 +86,28 @@ namespace FastFrame.Application.Basis
             }
             else if (Enum.TryParse<EnumName>(super_id, true, out var val))
             {
-                return BuildTreeModelQueryable().Where(v => v.Super_Id == null && v.Key == val).AsAsyncEnumerable();
+                return BuildTreeModelQueryable(kw).Where(v => v.Super_Id == null && v.Key == val).AsAsyncEnumerable();
             }
             else
             {
-                return base.TreeModelListAsync(super_id);
+                return base.TreeListAsync(super_id, kw);
             }
         }
 
-        protected override IQueryable<EnumItemModel> BuildTreeModelQueryable()
+        protected override IQueryable<EnumItemModel> BuildTreeModelQueryable(string kw)
         {
-            return enumItemRepository.Select(v => new EnumItemModel
-            {
-                Id = v.Id,
-                Super_Id = v.Super_Id,
-                Key = v.Key,
-                ChildCount = enumItemRepository.Count(x => x.Super_Id == v.Id),
-                TotalChildCount = enumItemRepository.Count(x => x.TreeCode.StartsWith(v.TreeCode)),
-                Value = v.Value
-            });
+            return enumItemRepository
+                .Where(v => string.IsNullOrWhiteSpace(kw) ||
+                            enumItemRepository.Any(x => x.Value.Contains(kw) || x.TreeCode.StartsWith(v.TreeCode)))
+                .Select(v => new EnumItemModel
+                {
+                    Id = v.Id,
+                    Super_Id = v.Super_Id,
+                    Key = v.Key,
+                    ChildCount = enumItemRepository.Count(x => x.Super_Id == v.Id),
+                    TotalChildCount = enumItemRepository.Count(x => x.TreeCode.StartsWith(v.TreeCode)),
+                    Value = v.Value
+                });
         }
     }
 }

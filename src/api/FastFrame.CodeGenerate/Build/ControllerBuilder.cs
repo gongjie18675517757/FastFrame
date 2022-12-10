@@ -84,20 +84,25 @@ namespace FastFrame.CodeGenerate.Build
                                 {
                                     DefineName="super_id",
                                     TypeName="string"
-                                }
+                                },
+                                new ParameterInfo
+                                {
+                                    DefineName="kw",
+                                    TypeName="string"
+                                },
                             },
                             ResultTypeName="IAsyncEnumerable<ITreeModel>",
                             CodeBlock= new string[]
                             {
-                                "return service.TreeModelListAsync(super_id);"
+                                "return service.TreeListAsync(super_id,kw);"
                             },
                             AttrInfos= new AttrInfo[]
                             {
                                 new AttrInfo
                                 {
                                     Name="HttpGet",
-                                    Parameters=new []{ "\"{super_id?}\"" }
-                                }, 
+                                    Parameters=new []{ "" }
+                                },
                             }
                         }
                     }

@@ -1,5 +1,16 @@
 <template>
   <VuePerfectScrollbar :style="styleObj">
+    <v-text-field
+      append-icon="search"
+      placeholder="搜索"
+      hide-details
+      dense 
+      append-outer-icon="refresh"
+      @click:append-outer="refresh"
+      class="tree-search"
+      single-line
+      v-model="kw"
+    ></v-text-field>
     <v-treeview
       :active.sync="active"
       :items="items"
@@ -12,7 +23,7 @@
       dense
     >
     </v-treeview>
-    <v-btn
+    <!-- <v-btn
       fab
       small
       icon
@@ -21,12 +32,13 @@
       @click="refresh"
     >
       <v-icon> refresh </v-icon>
-    </v-btn>
+    </v-btn> -->
   </VuePerfectScrollbar>
 </template>
 
 <script>
 import VuePerfectScrollbar from "vue-perfect-scrollbar";
+import { debounce } from '../../utils';
 
 export default {
   components: {
@@ -41,6 +53,7 @@ export default {
       active: [],
       items: [],
       open: [],
+      kw: null,
     };
   },
   computed: {
@@ -58,6 +71,13 @@ export default {
     treeSelected(val) {
       this.$emit("input", val);
     },
+    kw() {
+      this.refresh();
+    },
+  },
+  created(){
+  
+    this.init=debounce(this.init,500).bind(this)
   },
   mounted() {
     this.refresh();
@@ -75,7 +95,7 @@ export default {
       }
     },
     async requestData(id) {
-      let arr = await this.$http.get(`${this.requestUrl}?super_id=${id || ""}`);
+      let arr = await this.$http.get(`${this.requestUrl}?super_id=${id || ""}&kw=${this.kw || ''}`);
 
       return arr.map((v) => ({
         ...v,
@@ -94,5 +114,10 @@ export default {
 };
 </script>
 
-<style>
+<style lang="stylus">
+.tree-search{
+  .v-input__append-outer, .v-input__prepend-outer{
+    margin-top:0px;
+  }
+}
 </style>

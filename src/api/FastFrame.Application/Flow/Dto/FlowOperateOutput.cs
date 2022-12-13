@@ -1,4 +1,5 @@
-﻿using FastFrame.Entity.Enums;
+﻿using FastFrame.Entity;
+using FastFrame.Entity.Enums;
 using FastFrame.Entity.Flow;
 using System.Collections.Generic;
 
@@ -31,7 +32,7 @@ namespace FastFrame.Application.Flow
     /// </summary>
     public class FlowOperateSuccessOutput : FlowOperateOutput
     {
-        public FlowOperateSuccessOutput(string key, FlowStatusEnum flowStatus, string billNo, IEnumerable<FlowStep> flowProcesses) : base(key, true)
+        public FlowOperateSuccessOutput(string key, int flowStatus, string billNo, IEnumerable<FlowStep> flowProcesses) : base(key, true)
         {
             FlowStatus = flowStatus;
             BillNumber = billNo;
@@ -41,7 +42,8 @@ namespace FastFrame.Application.Flow
         /// <summary>
         /// 最终状态
         /// </summary>
-        public FlowStatusEnum FlowStatus { get; set; }
+        [EnumItem(EnumName.FlowStatusEnum)]
+        public int FlowStatus { get; set; }
 
         /// <summary>
         /// 单据号码

@@ -54,6 +54,7 @@ namespace FastFrame.Entity.Basis
         /// <summary>
         /// 日期格式方法
         /// </summary> 
-        public FmtDateEnum FmtDate { get; set; } 
+        [EnumItem(EnumName.FmtDateEnum)]
+        public int? FmtDate { get; set; } 
     } 
 }

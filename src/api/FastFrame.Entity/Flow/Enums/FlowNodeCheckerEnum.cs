@@ -8,22 +8,22 @@
         /// <summary>
         /// 指定人
         /// </summary>
-        user,
+        user = 0,
 
         /// <summary>
         /// 指定角色
         /// </summary>
-        role,
+        role = 10,
 
         /// <summary>
         /// 指定字段
         /// </summary>
-        field,
+        field = 20,
 
         /// <summary>
         /// 指定部门人员
         /// </summary>
-        dept,
+        dept = 30,
 
         /// <summary>
         /// 指定部门主管
@@ -33,21 +33,21 @@
         /// <summary>
         /// 上级部门人员
         /// </summary>
-        parent_dept,
+        parent_dept = 40,
 
         /// <summary>
         /// 上级部门主管
         /// </summary>
-        parent_dept_manage,
+        parent_dept_manage = 50,
 
         /// <summary>
         /// 当前部门主管
         /// </summary>
-        cur_dept_manage,
+        cur_dept_manage = 60,
 
         /// <summary>
         /// 上个节点指定
         /// </summary>
-        prev_appoint
+        prev_appoint = 70
     }
 }

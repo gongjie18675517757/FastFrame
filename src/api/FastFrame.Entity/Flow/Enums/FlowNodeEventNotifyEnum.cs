@@ -8,21 +8,21 @@
         /// <summary>
         /// 微信通知
         /// </summary>
-        wx_notify,
+        wx_notify = 0,
 
         /// <summary>
         /// 应用内通知
         /// </summary>
-        app_notify,
+        app_notify = 10,
 
         /// <summary>
         /// 短信通知
         /// </summary>
-        sms_notify,
+        sms_notify = 20,
 
         /// <summary>
         /// 邮箱通知
         /// </summary>
-        email_notify,
+        email_notify = 30,
     }
 }

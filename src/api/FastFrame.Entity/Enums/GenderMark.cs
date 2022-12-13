@@ -17,6 +17,6 @@ namespace FastFrame.Entity.Enums
         /// <summary>
         /// 女
         /// </summary>
-        WoMan = 1
+        WoMan = 10
     }
 }

@@ -8,21 +8,21 @@
         /// <summary>
         /// 待提交
         /// </summary>
-        unsubmitted,
+        unsubmitted = 0,
 
         /// <summary>
         /// 审核中
         /// </summary>
-        processing,
+        processing = 10,
 
         /// <summary>
         /// 审核通过
         /// </summary>
-        pass,
+        pass = 20,
 
         /// <summary>
         /// 审核不通过
         /// </summary>
-        ng,
+        ng = 30,
     }
 }

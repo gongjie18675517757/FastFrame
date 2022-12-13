@@ -1,4 +1,6 @@
-﻿namespace FastFrame.Entity.Flow
+﻿using FastFrame.Entity.Enums;
+
+namespace FastFrame.Entity.Flow
 {
     /// <summary>
     /// 流程节点条件
@@ -30,12 +32,14 @@
         /// <summary>
         /// 条件
         /// </summary>
-        public FlowNodeCondCompareEnum CompareEnum { get; set; }
+        [EnumItem(EnumName.FlowNodeCondCompareEnum)]
+        public int CompareEnum { get; set; }
 
         /// <summary>
         /// 值类型
         /// </summary>
-        public FlowNodeCondValueEnum ValueEnum { get; set; }
+        [EnumItem(EnumName.FlowNodeCondValueEnum)]
+        public int ValueEnum { get; set; }
 
         /// <summary>
         /// 值的ID

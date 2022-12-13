@@ -9,9 +9,9 @@ SET SQL_SAFE_UPDATES = 0;
 dotnet tool update -g dotnet-ef 
  
 //生成迁移
-dotnet ef migrations add 221205.1  --project fastframe.database --startup-project fastframe.webhost
+dotnet ef migrations add db_init  --project fastframe.database --startup-project fastframe.webhost
 dotnet ef database update  --project fastframe.database --startup-project fastframe.webhost
-dotnet ef migrations script   20221124150850_221124.1 --project fastframe.database --startup-project fastframe.webhost  -o migration.sql
+dotnet ef migrations script   20221205153110_221205.1 --project fastframe.database --startup-project fastframe.webhost  -o migration.sql
 
 //发布
 

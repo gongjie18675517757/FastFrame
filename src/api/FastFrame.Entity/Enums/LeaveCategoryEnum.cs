@@ -8,31 +8,31 @@
         /// <summary>
         /// 事假
         /// </summary>
-        A,
+        A = 0,
 
         /// <summary>
         /// 病假
         /// </summary>
-        B,
+        B = 10,
 
         /// <summary>
         /// 年假
         /// </summary>
-        C,
+        C = 20,
 
         /// <summary>
         /// 调休
         /// </summary>
-        D,
+        D = 30,
 
         /// <summary>
         /// 产假
         /// </summary>
-        E,
+        E = 40,
 
         /// <summary>
         /// 其它
         /// </summary>
-        Z
+        Z = 9999
     }
 }

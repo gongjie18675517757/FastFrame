@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using FastFrame.Entity.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace FastFrame.Entity.Flow
 {
@@ -28,7 +29,8 @@ namespace FastFrame.Entity.Flow
         /// <summary>
         /// 节点类型
         /// </summary>
-        public FlowNodeEnum NodeEnum { get; set; }
+        [EnumItem(EnumName.FlowNodeEnum)]
+        public int NodeEnum { get; set; }
 
         /// <summary>
         /// 上级
@@ -48,7 +50,8 @@ namespace FastFrame.Entity.Flow
         /// <summary>
         /// 审批方式(多人时)
         /// </summary>
-        public FlowNodeCheckEnum? CheckEnum { get; set; }
+        [EnumItem(EnumName.FlowNodeCheckEnum)]
+        public int? CheckEnum { get; set; }
 
         /// <summary>
         /// 通过比例(多人审批且审批方式为投票时)

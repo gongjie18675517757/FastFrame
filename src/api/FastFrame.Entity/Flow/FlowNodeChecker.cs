@@ -1,4 +1,6 @@
-﻿namespace FastFrame.Entity.Flow
+﻿using FastFrame.Entity.Enums;
+
+namespace FastFrame.Entity.Flow
 {
     /// <summary>
     /// 流程节点审核人/抄送人
@@ -20,7 +22,8 @@
         /// <summary>
         /// 审核人类型
         /// </summary>
-        public FlowNodeCheckerEnum CheckerEnum { get; set; }
+        [EnumItem(EnumName.FlowNodeCheckerEnum)]
+        public int CheckerEnum { get; set; }
 
         /// <summary>
         /// 审核人

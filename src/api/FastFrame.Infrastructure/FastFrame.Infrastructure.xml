@@ -1492,21 +1492,6 @@
             消息管道
             </summary>
         </member>
-        <member name="T:FastFrame.Infrastructure.Module.EnumInfo">
-            <summary>
-            数据字典信息
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Module.EnumInfo.Name">
-            <summary>
-            键名称
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Module.EnumInfo.SuperPropName">
-            <summary>
-            上级名称
-            </summary>
-        </member>
         <member name="T:FastFrame.Infrastructure.Module.IModuleDefinitionProvider">
             <summary>
             模块定义提供者

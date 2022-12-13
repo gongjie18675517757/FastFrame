@@ -15,6 +15,6 @@ namespace FastFrame.CodeGenerate.Info
         /// <summary>
         /// 参数
         /// </summary>
-        public IEnumerable<string> Parameters { get; set; } = new string[] { };
+        public IEnumerable<string> Parameters { get; set; } = Array.Empty<string>();
     }
 }

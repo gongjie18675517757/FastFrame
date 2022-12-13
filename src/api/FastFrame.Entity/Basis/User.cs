@@ -6,11 +6,11 @@ using System.Security.Cryptography;
 using System.Text;
 
 namespace FastFrame.Entity.Basis
-{ 
+{
     /// <summary>
     /// 用户
     /// </summary>
-    [Export] 
+    [Export]
     [Unique(nameof(Account))]
     public class User : BaseEntity, IViewModelable<User> //, IVerifyIdentity
     {
@@ -59,7 +59,7 @@ namespace FastFrame.Entity.Basis
         /// <summary>
         /// 头像
         /// </summary> 
-        [RelatedTo(typeof(Resource))] 
+        [RelatedTo(typeof(Resource))]
         public string HandIcon_Id { get; set; }
 
         /// <summary>
@@ -72,7 +72,8 @@ namespace FastFrame.Entity.Basis
         /// 启用状态
         /// </summary>
         [ReadOnly]
-        public EnabledMark Enable { get; set; } = EnabledMark.enabled;
+        [EnumItem(EnumName.EnabledMark)]
+        public int Enable { get; set; } = (int)EnabledMark.enabled;
 
         /// <summary>
         /// 生成密码
@@ -92,7 +93,7 @@ namespace FastFrame.Entity.Basis
         public bool VerificationPassword(string password, out Exception exception)
         {
             exception = null;
-            if (Enable == EnabledMark.disabled)
+            if (Enable == (int)EnabledMark.disabled)
             {
                 exception = new Exception("帐号已禁用");
                 return false;
@@ -119,7 +120,7 @@ namespace FastFrame.Entity.Basis
 
 
 
-        private static readonly Expression<Func<User, IViewModel>> vm_expression = 
+        private static readonly Expression<Func<User, IViewModel>> vm_expression =
             v => new DefaultViewModel { Id = v.Id, Value = v.Name + "(" + v.Account + ")" };
 
         public static Expression<Func<User, IViewModel>> BuildExpression() => vm_expression;

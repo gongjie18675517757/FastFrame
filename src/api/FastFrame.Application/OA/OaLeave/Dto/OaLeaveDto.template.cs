@@ -45,8 +45,8 @@ namespace FastFrame.Application.OA
 		/// 岗位 
 		/// </summary>
 		[Required()]
-		[EnumItem("Job")]
-		public string Job_Id {get;set;}
+		[EnumItem(EnumName.Job)]
+		public int? Job_Id {get;set;}
 		
 		/// <summary>
 		/// 部门 
@@ -64,7 +64,8 @@ namespace FastFrame.Application.OA
 		/// 请假类型 
 		/// </summary>
 		[Required()]
-		public LeaveCategoryEnum? LeaveCategory {get;set;}
+		[EnumItem(EnumName.LeaveCategoryEnum)]
+		public int? LeaveCategory {get;set;}
 		
 		/// <summary>
 		/// 工作代理人 
@@ -104,7 +105,8 @@ namespace FastFrame.Application.OA
 		/// <summary>
 		/// 审批状态 
 		/// </summary>
-		public FlowStatusEnum FlowStatus {get;set;}
+		[EnumItem(EnumName.FlowStatusEnum)]
+		public int FlowStatus {get;set;}
 		
 		/// <summary>
 		/// 修改人 

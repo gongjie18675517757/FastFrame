@@ -29,7 +29,7 @@ namespace FastFrame.WebHost.Privder
         public async IAsyncEnumerable<ExcelColumn<TDto>> GenerateExcelColumns<TDto>()
         {
             var moduleStruct = moduleExportProvider.GetModuleStruts(typeof(TDto).Name);
-            var enumValues = new Dictionary<EnumName, IEnumerable<EnumItemModel>>();
+            var enumValues = new Dictionary<int?, IEnumerable<EnumItemModel>>();
 
             foreach (var item in moduleStruct.FieldInfoStruts)
             {
@@ -43,23 +43,20 @@ namespace FastFrame.WebHost.Privder
                     continue;
 
                 /*数据字典*/
-                if (item.EnumItemInfo != null && !item.EnumItemInfo.Name.IsNullOrWhiteSpace())
+                if (item.EnumItemInfo != null)
                 {
-                    if (Enum.TryParse<EnumName>(item.EnumItemInfo.Name, out var enumName))
+                    if (!enumValues.TryGetValue(item.EnumItemInfo, out var values))
                     {
-                        if (!enumValues.TryGetValue(enumName, out var values))
-                        {
-                            values = await enumItemService.GetValues(enumName);
-                            enumValues.Add(enumName, values);
-                        }
-
-                        yield return new ExcelColumn<TDto>
-                        {
-                            Title = item.Description,
-                            ValueFunc = model => string.Join(",",
-                                            values.Where(v => model.GetValue(item.Name)?.ToString().Contains(v.Id) == true).Select(v => v.Value))
-                        };
+                        values = await enumItemService.GetValues(item.EnumItemInfo);
+                        enumValues.Add(item.EnumItemInfo, values);
                     }
+
+                    yield return new ExcelColumn<TDto>
+                    {
+                        Title = item.Description,
+                        ValueFunc = model => string.Join(",",
+                                        values.Where(v => model.GetValue(item.Name)?.ToString().Contains(v.Id) == true).Select(v => v.Value))
+                    };
                 } 
 
                 /*预定义枚举*/

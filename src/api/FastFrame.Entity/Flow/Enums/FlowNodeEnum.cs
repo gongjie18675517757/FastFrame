@@ -8,36 +8,36 @@
         /// <summary>
         /// 开始
         /// </summary>
-        start,
+        start = 0,
 
         /// <summary>
         /// 分支
         /// </summary>
-        branch,
+        branch = 10,
 
         /// <summary>
         /// 子分支
         /// </summary>
-        branch_child,
+        branch_child = 20,
 
         /// <summary>
         /// 审核 
         /// </summary>
-        check,
+        check = 30,
 
         /// <summary>
         /// 抄送
         /// </summary>
-        cc,
+        cc = 40,
 
         /// <summary>
         /// 条件
         /// </summary>
-        cond,
+        cond = 50,
 
         /// <summary>
         /// 结束
         /// </summary>
-        end
+        end = 60
     }
 }

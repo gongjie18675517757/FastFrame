@@ -19,8 +19,8 @@ namespace FastFrame.Entity.Basis
         /// <summary>
         /// 类型
         /// </summary>
-        [EnumItem(nameof(EnumName.NotifyType))]
-        public string Type_Id { get; set; }
+        [EnumItem(EnumName.NotifyType)]
+        public int? Type_Id { get; set; }
 
         /// <summary>
         /// 发布人

@@ -25,7 +25,7 @@
                 CreateTime = DateTime.Parse("2019-6-23"),
                 Create_User_Id = "00fm5yfgq3q893ylku6uzb57i",
                 EncryptionKey = "7d9d7edd6727912ce10b976818dd2856",
-                Enable = EnabledMark.enabled,
+                Enable = (int)EnabledMark.enabled,
                 isdeleted = false,
                 ModifyTime = DateTime.Parse("2019-6-23"),
                 Modify_User_Id = "00fm5yfgq3q893ylku6uzb57i",

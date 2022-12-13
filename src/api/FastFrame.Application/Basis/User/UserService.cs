@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using FastFrame.Database.Mapping.Basis;
+using FastFrame.Entity.Enums;
 
 namespace FastFrame.Application.Basis
 {
@@ -53,13 +54,13 @@ namespace FastFrame.Application.Basis
             var user = await userRepository.GetAsync(id);
             if (user == null)
                 throw new MsgException("用户不存在");
-            switch (user.Enable)
+            switch ((EnabledMark)user.Enable)
             {
-                case Entity.Enums.EnabledMark.enabled:
-                    user.Enable = Entity.Enums.EnabledMark.disabled;
+                case EnabledMark.enabled:
+                    user.Enable = (int)EnabledMark.disabled;
                     break;
-                case Entity.Enums.EnabledMark.disabled:
-                    user.Enable = Entity.Enums.EnabledMark.enabled;
+                case EnabledMark.disabled:
+                    user.Enable = (int)EnabledMark.enabled;
                     break;
                 default:
                     break;

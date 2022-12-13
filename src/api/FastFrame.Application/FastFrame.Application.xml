@@ -716,6 +716,12 @@
             数字字典 服务实现 
             </summary>
         </member>
+        <member name="M:FastFrame.Application.Basis.EnumItemService.InitialAsync">
+            <summary>
+            初始化
+            </summary>
+            <returns></returns> 
+        </member>
         <member name="P:FastFrame.Application.Basis.LoginLogModel.User_Id">
             <summary>
             关联：User

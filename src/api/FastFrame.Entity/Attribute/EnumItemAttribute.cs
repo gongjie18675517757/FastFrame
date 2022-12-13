@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FastFrame.Entity.Enums;
+using System;
 
 namespace FastFrame.Entity
 {
@@ -8,7 +9,7 @@ namespace FastFrame.Entity
     [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
     public sealed class EnumItemAttribute : Attribute
     {
-        public EnumItemAttribute(string name, string superPropName = null)
+        public EnumItemAttribute(EnumName name, string superPropName = null)
         {
             Name = name;
             SuperPropName = superPropName;
@@ -17,7 +18,7 @@ namespace FastFrame.Entity
         /// <summary>
         /// 字典值
         /// </summary>
-        public string Name { get; }
+        public EnumName Name { get; }
 
         /// <summary>
         /// 上级

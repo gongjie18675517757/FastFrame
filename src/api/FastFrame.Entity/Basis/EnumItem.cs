@@ -16,8 +16,8 @@ namespace FastFrame.Entity.Basis
         /// 字段类别
         /// </summary>
         [Required]
-        [ReadOnly(ReadOnlyMark.Edit)]
-        public EnumName? Key { get; set; }
+        [EnumItem(EnumName.EnumNames)]
+        public int? Key { get; set; }
 
         /// <summary>
         /// 上级值

@@ -137,7 +137,7 @@ namespace FastFrame.Application.Flow
                 throw new NotFoundException();
 
             /*加并发锁*/
-            var lockHolder = await loader.GetService<ILockFacatory>().TryCreateLockAsync(bill_Entity.Id,default);
+            var lockHolder = await loader.GetService<ILockFacatory>().TryCreateLockAsync(bill_Entity.Id, default);
             if (lockHolder == null)
                 throw new MsgException("此单据正在进行流程流转,请稍后再试!");
 
@@ -182,7 +182,7 @@ namespace FastFrame.Application.Flow
                     case FlowActionEnum.submit:
                         {
                             if (flowInstance != null &&
-                               !new FlowStatusEnum[] { FlowStatusEnum.unsubmitted, FlowStatusEnum.ng }.Contains(flowInstance.Status))
+                               !new FlowStatusEnum[] { FlowStatusEnum.unsubmitted, FlowStatusEnum.ng }.Contains((FlowStatusEnum)flowInstance.Status))
                                 throw new MsgException("此单据已提交过了，不可重复提交流程!");
 
                             /*当前模块名称*/
@@ -192,7 +192,7 @@ namespace FastFrame.Application.Flow
                             var work_flow_id = await loader
                                 .GetService<IRepository<WorkFlow>>()
                                 .Where(v => v.BeModule == beModuleName)
-                                .Where(v => v.Enabled == EnabledMark.enabled)
+                                .Where(v => v.Enabled == (int)EnabledMark.enabled)
                                 .OrderByDescending(v => v.Version)
                                 .Select(v => v.Id)
                                 .FirstOrDefaultAsync();
@@ -218,7 +218,7 @@ namespace FastFrame.Application.Flow
                                     Sponsor_Id = curr?.Id,
                                     SponsorName = curr?.Name,
                                     StartTime = DateTime.Now,
-                                    Status = FlowStatusEnum.processing,
+                                    Status = (int)FlowStatusEnum.processing,
                                     WorkFlow_Id = work_flow_id,
                                 });
                             }
@@ -231,7 +231,7 @@ namespace FastFrame.Application.Flow
                                 flowInstance.Sponsor_Id = curr?.Id;
                                 flowInstance.SponsorName = curr?.Name;
                                 flowInstance.StartTime = DateTime.Now;
-                                flowInstance.Status = FlowStatusEnum.processing;
+                                flowInstance.Status = (int)FlowStatusEnum.processing;
                                 flowInstance.IsComlete = false;
                                 SetCurrNote(flowInstance, null);
                             }
@@ -244,7 +244,7 @@ namespace FastFrame.Application.Flow
                             /*写入步骤*/
                             await flowSteps.AddAsync(new FlowStep
                             {
-                                Action = FlowActionEnum.submit,
+                                Action = (int)FlowActionEnum.submit,
                                 Desc = input.Desc,
                                 FlowInstance_Id = flowInstance.Id,
                                 FlowNodeName = "提交流程",
@@ -299,7 +299,7 @@ namespace FastFrame.Application.Flow
                             if (flowInstance.Sponsor_Id != curr.Id)
                                 throw new MsgException("流程不是由您提交的,无法撤回!");
 
-                            if (flowInstance.Status != FlowStatusEnum.processing)
+                            if (flowInstance.Status != (int)FlowStatusEnum.processing)
                                 throw new MsgException("审核中的流程才可以撤回!");
 
                             await flowSteps.AddAsync(new FlowStep
@@ -307,7 +307,7 @@ namespace FastFrame.Application.Flow
                                 FlowInstance_Id = flowInstance.Id,
                                 Desc = input.Desc,
                                 BeForm_Id = null,
-                                Action = FlowActionEnum.unsubmit,
+                                Action = (int)FlowActionEnum.unsubmit,
                                 FlowNodeName = await flowNodes
                                     .Where(v => v.Id == flowInstance.CurrNode_Id)
                                     .Select(v => v.Title)
@@ -329,7 +329,7 @@ namespace FastFrame.Application.Flow
                             if (flowInstance == null)
                                 throw new MsgException("流程还未提交!");
 
-                            if (flowInstance.Status != FlowStatusEnum.processing)
+                            if (flowInstance.Status != (int)FlowStatusEnum.processing)
                                 throw new MsgException("流程未在审核中!");
 
                             /*匹配到的流程*/
@@ -351,7 +351,7 @@ namespace FastFrame.Application.Flow
                             /*写入步骤*/
                             await flowSteps.AddAsync(new FlowStep
                             {
-                                Action = input.ActionEnum,
+                                Action = (int)input.ActionEnum,
                                 Desc = input.Desc,
                                 FlowInstance_Id = flowInstance.Id,
                                 FlowNodeName = curr_node.Title,
@@ -370,10 +370,10 @@ namespace FastFrame.Application.Flow
                             flowInstance.LastCheckerName = curr?.Name;
 
                             /*审核模式*/
-                            var check_mode = curr_node.CheckEnum ?? FlowNodeCheckEnum.or;
+                            var check_mode = curr_node.CheckEnum ?? (int)FlowNodeCheckEnum.or;
 
                             /*考虑会签/或签/投票*/
-                            switch (check_mode)
+                            switch ((FlowNodeCheckEnum)check_mode)
                             {
                                 case FlowNodeCheckEnum.or:
                                     {
@@ -415,7 +415,7 @@ namespace FastFrame.Application.Flow
                                                     if (ids
                                                         .Where(v => v != curr?.Id)
                                                         .All(v => checked_steps
-                                                                    .Any(x => x.Action == FlowActionEnum.pass && x.Operater_Id == v)))
+                                                                    .Any(x => x.Action == (int)FlowActionEnum.pass && x.Operater_Id == v)))
                                                     {
                                                         var next_notes = match_nodes.Skip(1).ToArray();
 
@@ -458,12 +458,12 @@ namespace FastFrame.Application.Flow
                                         if (ids
                                             .Where(v => v != curr?.Id)
                                             .All(v => checked_steps
-                                                        .Any(x => x.Action == FlowActionEnum.pass && x.Operater_Id == v)))
+                                                        .Any(x => x.Action == (int)FlowActionEnum.pass && x.Operater_Id == v)))
                                         {
                                             var pass_count = checked_steps
                                                  .Select(v => v.Action)
-                                                 .Append(input.ActionEnum)
-                                                 .Where(v => v != null && v.Value == FlowActionEnum.pass)
+                                                 .Append((int)input.ActionEnum)
+                                                 .Where(v => v != null && v.Value == (int)FlowActionEnum.pass)
                                                  .Count();
 
                                             /*投票结果通过*/
@@ -578,7 +578,7 @@ namespace FastFrame.Application.Flow
 
             /*取最近一次的提交*/
             var last_submit_id = await flowSteps
-                .Where(v => v.FlowInstance_Id == flow_instance_id && v.Action == FlowActionEnum.submit && v.IsFinished)
+                .Where(v => v.FlowInstance_Id == flow_instance_id && v.Action == (int)FlowActionEnum.submit && v.IsFinished)
                 .OrderByDescending(v => v.Id)
                 .Select(v => v.Id)
                 .FirstOrDefaultAsync();
@@ -591,13 +591,13 @@ namespace FastFrame.Application.Flow
                             v.Id.CompareTo(last_submit_id) > 0 &&
                             can_check_user_ids.Contains(v.Operater_Id) &&
                             /*审批动作=通过/退回/拒绝*/
-                            (v.Action == FlowActionEnum.pass || v.Action == FlowActionEnum.ng) &&
+                            (v.Action == (int)FlowActionEnum.pass || v.Action == (int)FlowActionEnum.ng) &&
                             /*没有反审核的*/
                             !flowSteps.Any(x => x.FlowInstance_Id == v.FlowInstance_Id &&
                                                 x.FlowNode_Id == v.FlowNode_Id &&
                                                 x.IsFinished &&
                                                 x.Id.CompareTo(last_submit_id) > 0 &&
-                                                x.Action == FlowActionEnum.uncheck &&
+                                                x.Action == (int)FlowActionEnum.uncheck &&
                                                 v.Operater_Id == v.Operater_Id))
                 .OrderByDescending(v => v.Id)
                 .ToArrayAsync();
@@ -647,7 +647,7 @@ namespace FastFrame.Application.Flow
             {
                 var item = match_nodes[i];
 
-                switch (item.NodeEnum)
+                switch ((FlowNodeEnum)item.NodeEnum)
                 {
                     case FlowNodeEnum.start:
                     case FlowNodeEnum.end:
@@ -678,11 +678,11 @@ namespace FastFrame.Application.Flow
 
 
                         /*指定下级审核人*/
-                        if (i == 0 && nextCheckerIds != null && item.Checkers.Any(v => v.CheckerEnum == FlowNodeCheckerEnum.prev_appoint))
+                        if (i == 0 && nextCheckerIds != null && item.Checkers.Any(v => v.CheckerEnum == (int)FlowNodeCheckerEnum.prev_appoint))
                             checkerIds.AddRange(nextCheckerIds);
 
                         /*要排除指定某些人*/
-                        if (i == 0 && excludeUserIds != null && item.Checkers.Any(v => v.CheckerEnum == FlowNodeCheckerEnum.prev_appoint))
+                        if (i == 0 && excludeUserIds != null && item.Checkers.Any(v => v.CheckerEnum == (int)FlowNodeCheckerEnum.prev_appoint))
                             checkerIds = checkerIds.Where(v => !excludeUserIds.Contains(v)).ToList();
 
                         /*写入待完成的审核人*/
@@ -726,7 +726,7 @@ namespace FastFrame.Application.Flow
         {
             flowInstance.IsComlete = true;
             flowInstance.CompleteTime = DateTime.Now;
-            flowInstance.Status = statusEnum;
+            flowInstance.Status = (int)statusEnum;
             flowInstance.CurrNode_Id = null;
             flowInstance.CurrNodeName = null;
         }
@@ -748,7 +748,7 @@ namespace FastFrame.Application.Flow
 
             foreach (var item in flowNode.Checkers)
             {
-                switch (item.CheckerEnum)
+                switch ((FlowNodeCheckerEnum)item.CheckerEnum)
                 {
                     case FlowNodeCheckerEnum.user:
                         {
@@ -898,7 +898,7 @@ namespace FastFrame.Application.Flow
                 if (item.Id == start_node_id)
                     start_node_id = null;
 
-                switch (item.NodeEnum)
+                switch ((FlowNodeEnum)item.NodeEnum)
                 {
                     case FlowNodeEnum.check:
                     case FlowNodeEnum.cc:
@@ -939,13 +939,13 @@ namespace FastFrame.Application.Flow
         private static bool MatchBrahsh<TBillEntity>(FlowNodeModel flowNode, TBillEntity bill_Entity)
              where TBillEntity : class, IHaveCheck, new()
         {
-            if (flowNode.NodeEnum != FlowNodeEnum.branch_child)
+            if (flowNode.NodeEnum != (int)FlowNodeEnum.branch_child)
                 throw new MsgException("分支的下级类型不正确");
 
             if (flowNode.IsDefault == true)
                 return true;
 
-            var cond_node = flowNode.Nodes.FirstOrDefault(v => v.NodeEnum == FlowNodeEnum.cond);
+            var cond_node = flowNode.Nodes.FirstOrDefault(v => v.NodeEnum == (int)FlowNodeEnum.cond);
             if (cond_node == null)
                 throw new MsgException("未定义条件分支");
 
@@ -973,7 +973,7 @@ namespace FastFrame.Application.Flow
 
                     /*要比较的值*/
                     object value = null;
-                    switch (cond.ValueEnum)
+                    switch ((FlowNodeCondValueEnum)cond.ValueEnum)
                     {
                         case FlowNodeCondValueEnum.input_value:
                             value = cond.Value_Id ?? cond.ValueText;
@@ -985,7 +985,7 @@ namespace FastFrame.Application.Flow
                             break;
                     }
 
-                    switch (cond.CompareEnum)
+                    switch ((FlowNodeCondCompareEnum)cond.CompareEnum)
                     {
                         case FlowNodeCondCompareEnum.gte:
                             query = query.Where($"{cond.FieldName}>=@0", value);
@@ -1020,7 +1020,7 @@ namespace FastFrame.Application.Flow
         public async Task HandleEventAsync(DoMainDeleteing<IHaveCheckModel> @event)
         {
             var data = (IHaveCheck)@event.Data;
-            if (data.FlowStatus != FlowStatusEnum.unsubmitted)
+            if (data.FlowStatus != (int)FlowStatusEnum.unsubmitted)
                 throw new MsgException("单据已提交,不可删除");
 
             var flowInstances = loader.GetService<IRepository<FlowInstance>>();

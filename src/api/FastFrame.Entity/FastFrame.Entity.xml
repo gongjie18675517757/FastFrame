@@ -996,6 +996,76 @@
             字典键
             </summary>
         </member>
+        <member name="F:FastFrame.Entity.Enums.EnumName.EnumNames">
+            <summary>
+            数据字典类型
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.EnumName.EnabledMark">
+            <summary>
+            启用状态
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.EnumName.FlowStatusEnum">
+            <summary>
+            审批状态
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.EnumName.GenderMark">
+            <summary>
+            性别
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.EnumName.FmtDateEnum">
+            <summary>
+            编码方式
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.EnumName.FlowActionEnum">
+            <summary>
+            流程审批动作
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.EnumName.FlowNodeCheckEnum">
+            <summary>
+            流程审批方式
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.EnumName.FlowNodeCheckerEnum">
+            <summary>
+            流程审核人枚举
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.EnumName.FlowNodeCondCompareEnum">
+            <summary>
+            流程条件比较方式
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.EnumName.FlowNodeCondValueEnum">
+            <summary>
+            流程条件比较对象
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.EnumName.FlowNodeEnum">
+            <summary>
+            流程节点类型
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.EnumName.FlowNodeEventNotifyEnum">
+            <summary>
+            审批时事件通知方式
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.EnumName.FlowNodeEventTargetEnum">
+            <summary>
+            审批时事件通知目标
+            </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.EnumName.FlowNodeEventTriggerEnum">
+            <summary>
+            审批时事件触发方式
+            </summary>
+        </member>
         <member name="F:FastFrame.Entity.Enums.EnumName.NotifyType">
             <summary>
             通知类型
@@ -1005,6 +1075,17 @@
             <summary>
             岗位
             </summary>
+        </member>
+        <member name="F:FastFrame.Entity.Enums.EnumName.LeaveCategoryEnum">
+            <summary>
+            请假原因
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Enums.EnumNameForAttribute`1">
+            <summary>
+            枚举映射
+            </summary>
+            <typeparam name="TEnum"></typeparam>
         </member>
         <member name="T:FastFrame.Entity.Enums.FlowStatusEnum">
             <summary>
@@ -1683,12 +1764,12 @@
         </member>
         <member name="F:FastFrame.Entity.Flow.FlowActionEnum.pass">
             <summary>
-            通过
+            同意
             </summary>
         </member>
         <member name="F:FastFrame.Entity.Flow.FlowActionEnum.ng">
             <summary>
-            不通过
+            不同意
             </summary>
         </member>
         <member name="F:FastFrame.Entity.Flow.FlowActionEnum.uncheck">
@@ -1766,6 +1847,11 @@
             上个节点指定
             </summary>
         </member>
+        <member name="T:FastFrame.Entity.Flow.FlowNodeCondCompareEnum">
+            <summary>
+            流程条件比较方式
+            </summary>
+        </member>
         <member name="F:FastFrame.Entity.Flow.FlowNodeCondCompareEnum.gte">
             <summary>
             大于等于
@@ -1794,6 +1880,11 @@
         <member name="F:FastFrame.Entity.Flow.FlowNodeCondCompareEnum.not_like">
             <summary>
             不包含
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.Flow.FlowNodeCondValueEnum">
+            <summary>
+            流程条件比较对象
             </summary>
         </member>
         <member name="F:FastFrame.Entity.Flow.FlowNodeCondValueEnum.input_value">
@@ -2144,7 +2235,7 @@
         <member name="P:FastFrame.Entity.Flow.FlowNodeEvent.EventTarget">
             <summary>
             通知目标
-            </summary>
+            </summary> 
         </member>
         <member name="T:FastFrame.Entity.Flow.FlowStep">
             <summary>

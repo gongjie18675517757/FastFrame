@@ -1,4 +1,6 @@
-﻿namespace FastFrame.Entity.Flow
+﻿using FastFrame.Entity.Enums;
+
+namespace FastFrame.Entity.Flow
 {
     /// <summary>
     /// 节点事件
@@ -20,16 +22,19 @@
         /// <summary>
         /// 触发方式
         /// </summary>
+        [EnumItem(EnumName.FlowNodeEventTriggerEnum)]
         public FlowNodeEventTriggerEnum EventTrigger { get; set; }
 
         /// <summary>
         /// 通知方式
         /// </summary>
+        [EnumItem(EnumName.FlowNodeEventNotifyEnum)]
         public FlowNodeEventNotifyEnum EventNotify { get; set; }
 
         /// <summary>
         /// 通知目标
-        /// </summary>
+        /// </summary> 
+        [EnumItem(EnumName.FlowNodeEventTargetEnum)]
         public FlowNodeEventTargetEnum EventTarget { get; set; }
     }
 }

@@ -232,7 +232,7 @@ namespace FastFrame.CodeGenerate.Build
                 yield return new AttrInfo()
                 {
                     Name = "EnumItem",
-                    Parameters = new string[] { $"\"{enumItemAttribute.Name}\"" }
+                    Parameters = new string[] { $"EnumName.{enumItemAttribute.Name}" }
                 };
             }
 

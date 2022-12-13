@@ -8,11 +8,11 @@
         /// <summary>
         /// 进入时
         /// </summary>
-        enter,
+        enter = 0,
 
         /// <summary>
         /// 离开时
         /// </summary>
-        leave
+        leave = 10
     }
 }

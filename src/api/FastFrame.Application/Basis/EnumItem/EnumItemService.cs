@@ -2,6 +2,7 @@
 using FastFrame.Entity.Basis;
 using FastFrame.Entity.Enums;
 using FastFrame.Infrastructure;
+using FastFrame.Infrastructure.Interface;
 using FastFrame.Infrastructure.Module;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,9 +13,9 @@ using System.Threading.Tasks;
 
 namespace FastFrame.Application.Basis
 {
-    public partial class EnumItemService
+    public partial class EnumItemService : IApplicationInitialLifetime
     {
-        public async Task<IEnumerable<EnumItemModel>> GetValues(EnumName name)
+        public async Task<IEnumerable<EnumItemModel>> GetValues(int? name)
         {
             return await enumItemRepository
                 .Where(v => v.Key == name)
@@ -33,7 +34,7 @@ namespace FastFrame.Application.Basis
 
 
 
-        public async Task<IEnumerable<IViewModel>> EnumItemList(EnumName? name, string kw, int page_index = 1, int page_size = 10)
+        public async Task<IEnumerable<IViewModel>> EnumItemList(int? name, string kw, int page_index = 1, int page_size = 10)
         {
             if (name == null)
                 return Array.Empty<IViewModel>();
@@ -67,11 +68,11 @@ namespace FastFrame.Application.Basis
             {
                 yield return new EnumItemModel
                 {
-                    ChildCount = child_dic.TryGetValueOrDefault(enumName),
+                    ChildCount = child_dic.TryGetValueOrDefault((int)enumName),
                     Id = enumName.ToString(),
-                    Key = enumName,
+                    Key = (int)enumName,
                     Super_Id = null,
-                    TotalChildCount = total_dic.TryGetValueOrDefault(enumName),
+                    TotalChildCount = total_dic.TryGetValueOrDefault((int)enumName),
                     Value = desProvider.GetEnumSummary(enumName)
                 };
             }
@@ -84,7 +85,7 @@ namespace FastFrame.Application.Basis
             {
                 return TreeModelListAsync();
             }
-            else if (Enum.TryParse<EnumName>(super_id, true, out var val))
+            else if (int.TryParse(super_id, out var val))
             {
                 return BuildTreeModelQueryable(kw).Where(v => v.Super_Id == null && v.Key == val).AsAsyncEnumerable();
             }
@@ -108,6 +109,65 @@ namespace FastFrame.Application.Basis
                     TotalChildCount = enumItemRepository.Count(x => x.TreeCode.StartsWith(v.TreeCode)),
                     Value = v.Value
                 });
+        }
+
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <returns></returns> 
+        public async Task InitialAsync()
+        {
+            var attr_type = typeof(EnumNameForAttribute<>);
+            var field_dic = typeof(EnumName)
+                .GetFields()
+                .Where(v => v.GetCustomAttributesData().Any(x => x.AttributeType.IsGenericType && x.AttributeType.GetGenericTypeDefinition() == attr_type))
+                .ToDictionary(v => v.Name, v => v);
+            var enumNames = Enum
+               .GetValues<EnumName>()
+               .Where(v => field_dic.ContainsKey(v.ToString()))
+               .ToList();
+            var moduleDesProvider = loader.GetService<IModuleDesProvider>();
+
+            foreach (var enumName in enumNames)
+            {
+                var prev_list = await enumItemRepository.Where(v => v.Key == (int)enumName).Select(v => v.IntKey).ToArrayAsync();
+
+                var field = field_dic[enumName.ToString()];
+                var attributeData = field
+                    .GetCustomAttributesData()
+                    .FirstOrDefault(x => x.AttributeType.IsGenericType && x.AttributeType.GetGenericTypeDefinition() == attr_type);
+                var name_to = attributeData.AttributeType.GetGenericArguments().FirstOrDefault();
+
+                var names = Enum.GetNames(name_to);
+
+                foreach (var name in names)
+                {
+                    var val = (int)Enum.Parse(name_to, name);
+
+                    if (prev_list.Contains(val))
+                        continue;
+
+                    await enumItemRepository.AddAsync(new EnumItem
+                    {
+                        IntKey = val,
+                        Key = (int)enumName,
+                        SortVal = val,
+                        Value = moduleDesProvider.GetEnumSummary(name_to, name),
+                        CreateTime = DateTime.Now,
+                        Create_User_Id = "00fm5yfgq3q893ylku6uzb57i",
+                        Modify_User_Id = "00fm5yfgq3q893ylku6uzb57i",
+                        ModifyTime = DateTime.Now,
+                        Id = null,
+                        Super_Id = null,
+                        Tenant_Id = null,
+                        TreeCode = null
+                    });
+                }
+            }
+
+            await enumItemRepository.CommmitAsync();
+
+            loader.GetService<IBackgroundJob>().SetTimeout<ITreeHandleService>(v => v.ReCalcTreeCodeAsync(), null);
         }
     }
 }

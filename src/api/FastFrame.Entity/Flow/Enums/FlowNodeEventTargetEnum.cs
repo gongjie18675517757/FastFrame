@@ -8,11 +8,11 @@
         /// <summary>
         /// 待审核人
         /// </summary>
-        checker,
+        checker = 0,
 
         /// <summary>
         /// 申请人
         /// </summary>
-        applyer
+        applyer = 10
     }
 }

@@ -38,7 +38,8 @@ namespace FastFrame.Application.Flow
 		/// <summary>
 		/// 状态 
 		/// </summary>
-		public EnabledMark Enabled {get;set;}
+		[EnumItem(EnumName.EnabledMark)]
+		public int Enabled {get;set;}
 		
 		/// <summary>
 		/// 备注 

@@ -123,9 +123,7 @@ namespace FastFrame.WebHost.Privder
                             IsRequired = requiredAttribute != null,
                             GroupNames = formGroupAttribute?.GroupNames,
                             IsLink = isPrimaryFieldAttribute != null,
-                            EnumItemInfo = enumItemAttribute == null ?
-                                        null :
-                                        new EnumInfo { Name = enumItemAttribute.Name, SuperPropName = enumItemAttribute.SuperPropName }
+                            EnumItemInfo = enumItemAttribute == null ? null : (int)enumItemAttribute.Name
                         });
                     }
                 }

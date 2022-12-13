@@ -8,31 +8,31 @@
         /// <summary>
         /// 年编(长:yyyy)
         /// </summary>
-        yyyy,
+        yyyy = 0,
 
         /// <summary>
         /// 月编(长:yyyyMM)
         /// </summary>
-        yyyyMM,
+        yyyyMM = 10,
 
         /// <summary>
         /// 日编(长:yyyyMMdd)
         /// </summary>
-        yyyyMMdd,
+        yyyyMMdd = 20,
 
         /// <summary>
         /// 年编(短:yy)
         /// </summary>
-        yy,
+        yy = 30,
 
         /// <summary>
         /// 月编(短:yyMM)
         /// </summary>
-        yyMM,
+        yyMM = 40,
 
         /// <summary>
         /// 日编(短:yyMMdd)
         /// </summary>
-        yyMMdd,
+        yyMMdd = 50,
     }
 }

@@ -138,9 +138,9 @@ namespace FastFrame.Application
                     });
                 }
 
-                if (opt.TaskDate)
+                if (opt.TaskDate && opt.FmtDate != null)
                 {
-                    switch (opt.FmtDate)
+                    switch ((FmtDateEnum)opt.FmtDate.Value)
                     {
                         case FmtDateEnum.yyyy:
                         case FmtDateEnum.yy:
@@ -181,7 +181,7 @@ namespace FastFrame.Application
                 BeModule = typeName,
                 DateField = null,
                 DateFieldText = null,
-                FmtDate = FmtDateEnum.yyyyMMdd,
+                FmtDate = (int)FmtDateEnum.yyyyMMdd,
                 Prefix = null,
                 Suffix = null,
                 SerialLength = 3,

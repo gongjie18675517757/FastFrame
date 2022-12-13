@@ -37,8 +37,8 @@ namespace FastFrame.Entity.OA
         /// 岗位
         /// </summary>
         [Required]
-        [EnumItem(nameof(EnumName.Job))]
-        public string Job_Id { get; set; }
+        [EnumItem(EnumName.Job)]
+        public int? Job_Id { get; set; }
 
         /// <summary>
         /// 部门
@@ -50,8 +50,9 @@ namespace FastFrame.Entity.OA
         /// <summary>
         /// 请假类型
         /// </summary>
-        [Required]
-        public LeaveCategoryEnum? LeaveCategory { get; set; }
+        [Required] 
+        [EnumItem(EnumName.LeaveCategoryEnum)]
+        public int? LeaveCategory { get; set; }
 
         /// <summary>
         /// 工作代理人
@@ -87,7 +88,8 @@ namespace FastFrame.Entity.OA
         /// 审批状态
         /// </summary>
         [ReadOnly]
-        public FlowStatusEnum FlowStatus { get; set; }
+        [EnumItem(EnumName.FlowStatusEnum)]
+        public int FlowStatus { get; set; }
 
         public string[] GetBeDeptIds()
         {
@@ -99,7 +101,7 @@ namespace FastFrame.Entity.OA
             return $"请假:{Days}天";
         }
 
- 
+
 
         public void SetNumber(string val)
         {

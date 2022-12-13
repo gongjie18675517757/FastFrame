@@ -307,10 +307,9 @@ namespace FastFrame.Database.Migrations
                         .HasColumnName("intkey")
                         .HasComment("字典键");
 
-                    b.Property<string>("Key")
+                    b.Property<int?>("Key")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("int")
                         .HasColumnName("key")
                         .HasComment("字段类别");
 
@@ -367,9 +366,6 @@ namespace FastFrame.Database.Migrations
 
                     b.HasIndex("Create_User_Id")
                         .HasDatabaseName("Index_EnumItem_Create_User_Id");
-
-                    b.HasIndex("Key")
-                        .HasDatabaseName("Index_EnumItem_Key");
 
                     b.HasIndex("Modify_User_Id")
                         .HasDatabaseName("Index_EnumItem_Modify_User_Id");
@@ -646,10 +642,8 @@ namespace FastFrame.Database.Migrations
                         .HasColumnName("title")
                         .HasComment("标题");
 
-                    b.Property<string>("Type_Id")
-                        .HasMaxLength(25)
-                        .IsUnicode(true)
-                        .HasColumnType("varchar(25)")
+                    b.Property<int?>("Type_Id")
+                        .HasColumnType("int")
                         .HasColumnName("type_id")
                         .HasComment("类型");
 
@@ -728,10 +722,8 @@ namespace FastFrame.Database.Migrations
                         .HasColumnName("datefieldtext")
                         .HasComment("日期字段名称");
 
-                    b.Property<string>("FmtDate")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                    b.Property<int?>("FmtDate")
+                        .HasColumnType("int")
                         .HasColumnName("fmtdate")
                         .HasComment("日期格式方法");
 
@@ -785,9 +777,6 @@ namespace FastFrame.Database.Migrations
 
                     b.HasIndex("Create_User_Id")
                         .HasDatabaseName("Index_NumberOption_Create_User_Id");
-
-                    b.HasIndex("FmtDate")
-                        .HasDatabaseName("Index_NumberOption_FmtDate");
 
                     b.HasIndex("Modify_User_Id")
                         .HasDatabaseName("Index_NumberOption_Modify_User_Id");
@@ -1329,10 +1318,8 @@ namespace FastFrame.Database.Migrations
                         .HasColumnName("email")
                         .HasComment("邮箱");
 
-                    b.Property<string>("Enable")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                    b.Property<int>("Enable")
+                        .HasColumnType("int")
                         .HasColumnName("enable")
                         .HasComment("启用状态");
 
@@ -1406,9 +1393,6 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("Create_User_Id")
                         .HasDatabaseName("Index_User_Create_User_Id");
 
-                    b.HasIndex("Enable")
-                        .HasDatabaseName("Index_User_Enable");
-
                     b.HasIndex("HandIcon_Id")
                         .HasDatabaseName("Index_User_HandIcon_Id");
 
@@ -1437,7 +1421,7 @@ namespace FastFrame.Database.Migrations
                             CreateTime = new DateTime(2019, 6, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreateUserId = "00fm5yfgq3q893ylku6uzb57i",
                             Email = "gongjie@qq.com",
-                            Enable = "enabled",
+                            Enable = 0,
                             EncryptionKey = "7d9d7edd6727912ce10b976818dd2856",
                             IsAdmin = true,
                             ModifyTime = new DateTime(2019, 6, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -2997,10 +2981,8 @@ namespace FastFrame.Database.Migrations
                         .HasColumnName("starttime")
                         .HasComment("发起时间");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                    b.Property<int>("Status")
+                        .HasColumnType("int")
                         .HasColumnName("status")
                         .HasComment("流程状态");
 
@@ -3031,9 +3013,6 @@ namespace FastFrame.Database.Migrations
 
                     b.HasIndex("Sponsor_Id")
                         .HasDatabaseName("Index_FlowInstance_Sponsor_Id");
-
-                    b.HasIndex("Status")
-                        .HasDatabaseName("Index_FlowInstance_Status");
 
                     b.HasIndex("WorkFlow_Id")
                         .HasDatabaseName("Index_FlowInstance_WorkFlow_Id");
@@ -3093,9 +3072,8 @@ namespace FastFrame.Database.Migrations
                         .HasColumnName("id")
                         .HasComment("");
 
-                    b.Property<string>("CheckEnum")
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                    b.Property<int?>("CheckEnum")
+                        .HasColumnType("int")
                         .HasColumnName("checkenum")
                         .HasComment("审批方式(多人时)");
 
@@ -3104,10 +3082,8 @@ namespace FastFrame.Database.Migrations
                         .HasColumnName("isdefault")
                         .HasComment("缺省分支(为分支时)");
 
-                    b.Property<string>("NodeEnum")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                    b.Property<int>("NodeEnum")
+                        .HasColumnType("int")
                         .HasColumnName("nodeenum")
                         .HasComment("节点类型");
 
@@ -3154,14 +3130,8 @@ namespace FastFrame.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CheckEnum")
-                        .HasDatabaseName("Index_FlowNode_CheckEnum");
-
                     b.HasIndex("IsDefault")
                         .HasDatabaseName("Index_FlowNode_IsDefault");
-
-                    b.HasIndex("NodeEnum")
-                        .HasDatabaseName("Index_FlowNode_NodeEnum");
 
                     b.HasIndex("Super_Id")
                         .HasDatabaseName("Index_FlowNode_Super_Id");
@@ -3187,10 +3157,8 @@ namespace FastFrame.Database.Migrations
                         .HasColumnName("id")
                         .HasComment("");
 
-                    b.Property<string>("CheckerEnum")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                    b.Property<int>("CheckerEnum")
+                        .HasColumnType("int")
                         .HasColumnName("checkerenum")
                         .HasComment("审核人类型");
 
@@ -3227,9 +3195,6 @@ namespace FastFrame.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CheckerEnum")
-                        .HasDatabaseName("Index_FlowNodeChecker_CheckerEnum");
-
                     b.HasIndex("Checker_Id")
                         .HasDatabaseName("Index_FlowNodeChecker_Checker_Id");
 
@@ -3257,10 +3222,8 @@ namespace FastFrame.Database.Migrations
                         .HasColumnName("id")
                         .HasComment("");
 
-                    b.Property<string>("CompareEnum")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                    b.Property<int>("CompareEnum")
+                        .HasColumnType("int")
                         .HasColumnName("compareenum")
                         .HasComment("条件");
 
@@ -3283,10 +3246,8 @@ namespace FastFrame.Database.Migrations
                         .HasColumnName("groupindex")
                         .HasComment("条件组号");
 
-                    b.Property<string>("ValueEnum")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                    b.Property<int>("ValueEnum")
+                        .HasColumnType("int")
                         .HasColumnName("valueenum")
                         .HasComment("值类型");
 
@@ -3316,14 +3277,8 @@ namespace FastFrame.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompareEnum")
-                        .HasDatabaseName("Index_FlowNodeCond_CompareEnum");
-
                     b.HasIndex("FlowNode_Id")
                         .HasDatabaseName("Index_FlowNodeCond_FlowNode_Id");
-
-                    b.HasIndex("ValueEnum")
-                        .HasDatabaseName("Index_FlowNodeCond_ValueEnum");
 
                     b.HasIndex("Value_Id")
                         .HasDatabaseName("Index_FlowNodeCond_Value_Id");
@@ -3416,9 +3371,8 @@ namespace FastFrame.Database.Migrations
                         .HasColumnName("id")
                         .HasComment("");
 
-                    b.Property<string>("Action")
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                    b.Property<int?>("Action")
+                        .HasColumnType("int")
                         .HasColumnName("action")
                         .HasComment("动作");
 
@@ -3485,9 +3439,6 @@ namespace FastFrame.Database.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Action")
-                        .HasDatabaseName("Index_FlowStep_Action");
 
                     b.HasIndex("BeForm_Id")
                         .HasDatabaseName("Index_FlowStep_BeForm_Id");
@@ -3611,10 +3562,8 @@ namespace FastFrame.Database.Migrations
                         .HasColumnName("create_user_id")
                         .HasComment("创建人");
 
-                    b.Property<string>("Enabled")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                    b.Property<int>("Enabled")
+                        .HasColumnType("int")
                         .HasColumnName("enabled")
                         .HasComment("状态");
 
@@ -3656,9 +3605,6 @@ namespace FastFrame.Database.Migrations
 
                     b.HasIndex("Create_User_Id")
                         .HasDatabaseName("Index_WorkFlow_Create_User_Id");
-
-                    b.HasIndex("Enabled")
-                        .HasDatabaseName("Index_WorkFlow_Enabled");
 
                     b.HasIndex("Modify_User_Id")
                         .HasDatabaseName("Index_WorkFlow_Modify_User_Id");
@@ -3725,25 +3671,20 @@ namespace FastFrame.Database.Migrations
                         .HasColumnName("endtime")
                         .HasComment("结束时间");
 
-                    b.Property<string>("FlowStatus")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                    b.Property<int>("FlowStatus")
+                        .HasColumnType("int")
                         .HasColumnName("flowstatus")
                         .HasComment("审批状态");
 
-                    b.Property<string>("Job_Id")
+                    b.Property<int?>("Job_Id")
                         .IsRequired()
-                        .HasMaxLength(25)
-                        .IsUnicode(true)
-                        .HasColumnType("varchar(25)")
+                        .HasColumnType("int")
                         .HasColumnName("job_id")
                         .HasComment("岗位");
 
-                    b.Property<string>("LeaveCategory")
+                    b.Property<int?>("LeaveCategory")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("int")
                         .HasColumnName("leavecategory")
                         .HasComment("请假类型");
 
@@ -3800,14 +3741,8 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("Dept_Id")
                         .HasDatabaseName("Index_OaLeave_Dept_Id");
 
-                    b.HasIndex("FlowStatus")
-                        .HasDatabaseName("Index_OaLeave_FlowStatus");
-
                     b.HasIndex("Job_Id")
                         .HasDatabaseName("Index_OaLeave_Job_Id");
-
-                    b.HasIndex("LeaveCategory")
-                        .HasDatabaseName("Index_OaLeave_LeaveCategory");
 
                     b.HasIndex("Modify_User_Id")
                         .HasDatabaseName("Index_OaLeave_Modify_User_Id");

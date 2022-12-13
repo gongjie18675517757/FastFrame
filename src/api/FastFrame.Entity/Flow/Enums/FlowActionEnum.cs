@@ -8,26 +8,26 @@
         /// <summary>
         /// 提交
         /// </summary>
-        submit,
+        submit = 0,
 
         /// <summary>
         /// 撤回
         /// </summary>
-        unsubmit,
+        unsubmit = 10,
 
         /// <summary>
-        /// 通过
+        /// 同意
         /// </summary>
-        pass,
+        pass = 20,
 
         /// <summary>
-        /// 不通过
+        /// 不同意
         /// </summary>
-        ng,
+        ng = 30,
 
         /// <summary>
         /// 反审核
         /// </summary>
-        uncheck, 
+        uncheck = 40,
     }
 }

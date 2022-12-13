@@ -39,7 +39,7 @@ namespace FastFrame.Application.Chat
         {
             var userId = appSession.CurrUser?.Id;
             var list = await repository.Queryable
-                .Where(x => x.Id != userId && x.Enable == Entity.Enums.EnabledMark.enabled)
+                .Where(x => x.Id != userId && x.Enable == (int)Entity.Enums.EnabledMark.enabled)
                 .Select(x => new FriendOutput()
                 {
                     Id = x.Id,

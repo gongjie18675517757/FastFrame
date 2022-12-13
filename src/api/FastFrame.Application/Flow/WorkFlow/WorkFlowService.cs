@@ -123,18 +123,18 @@ namespace FastFrame.Application.Flow
             input?.Nodes.EachLoopChild(v => v.Nodes, null, temp =>
             {
                 var (patent, child) = temp;
-                if (child.NodeEnum == FlowNodeEnum.branch)
+                if (child.NodeEnum == (int)FlowNodeEnum.branch)
                 {
                     foreach (var node in child.Nodes)
                     {
                         node.IsDefault = false;
-                        node.NodeEnum = FlowNodeEnum.branch_child;
+                        node.NodeEnum = (int)FlowNodeEnum.branch_child;
                     }
 
                     child.Nodes.LastOrDefault().IsDefault = true;
                 }
 
-                if (patent?.NodeEnum == FlowNodeEnum.branch_child && child?.NodeEnum == FlowNodeEnum.cond)
+                if (patent?.NodeEnum == (int)FlowNodeEnum.branch_child && child?.NodeEnum == (int)FlowNodeEnum.cond)
                 {
                     child.IsDefault = patent.IsDefault;
 
@@ -272,10 +272,10 @@ namespace FastFrame.Application.Flow
             if (workFlow.Nodes == null || !workFlow.Nodes.Any())
                 throw new MsgException("无有效节点");
 
-            if (!workFlow.Nodes.Any(v => v.NodeEnum == FlowNodeEnum.start))
+            if (!workFlow.Nodes.Any(v => v.NodeEnum == (int)FlowNodeEnum.start))
                 throw new MsgException("无起点");
 
-            if (!workFlow.Nodes.Any(v => v.NodeEnum == FlowNodeEnum.end))
+            if (!workFlow.Nodes.Any(v => v.NodeEnum == (int)FlowNodeEnum.end))
                 throw new MsgException("无终点");
 
             var nodes = workFlow.Nodes.ToArray();
@@ -284,7 +284,7 @@ namespace FastFrame.Application.Flow
             {
                 var node = nodes[i];
 
-                switch (node.NodeEnum)
+                switch ((FlowNodeEnum)node.NodeEnum)
                 {
                     case FlowNodeEnum.start:
                         if (i != 0)
@@ -312,7 +312,7 @@ namespace FastFrame.Application.Flow
         /// <param name="node"></param>
         private static void VerifyFlowNode(FlowNodeModel node)
         {
-            switch (node.NodeEnum)
+            switch ((FlowNodeEnum)node.NodeEnum)
             {
                 case FlowNodeEnum.start:
                     throw new MsgException("起点位置不正确!");
@@ -356,7 +356,7 @@ namespace FastFrame.Application.Flow
                 case FlowNodeCheckerEnum.user:
                     return await loader
                         .GetService<IRepository<User>>()
-                        .Where(v => v.Enable == Entity.Enums.EnabledMark.enabled)
+                        .Where(v => v.Enable == (int)Entity.Enums.EnabledMark.enabled)
                         .Where(v => kw == null || v.Name.Contains(kw) || v.Account.Contains(kw))
                         .OrderBy(v => v.Account)
                         .ThenBy(v => v.Name)
@@ -445,13 +445,13 @@ namespace FastFrame.Application.Flow
             if (entity == null)
                 throw new NotFoundException();
 
-            switch (entity.Enabled)
+            switch ((Entity.Enums.EnabledMark)entity.Enabled)
             {
                 case Entity.Enums.EnabledMark.enabled:
-                    entity.Enabled = Entity.Enums.EnabledMark.disabled;
+                    entity.Enabled = (int)Entity.Enums.EnabledMark.disabled;
                     break;
                 case Entity.Enums.EnabledMark.disabled:
-                    entity.Enabled = Entity.Enums.EnabledMark.enabled;
+                    entity.Enabled = (int)Entity.Enums.EnabledMark.enabled;
                     break;
                 default:
                     break;

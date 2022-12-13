@@ -16,7 +16,8 @@ namespace FastFrame.Entity
         /// <summary>
         /// 流程状态
         /// </summary>
-        FlowStatusEnum FlowStatus { get; set; }
+        [EnumItem(EnumName.FlowStatusEnum)]
+        int FlowStatus { get; set; }
 
         /// <summary>
         /// 获取摘要

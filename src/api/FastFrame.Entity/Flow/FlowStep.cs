@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using FastFrame.Entity.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace FastFrame.Entity.Flow
 {
@@ -33,7 +34,8 @@ namespace FastFrame.Entity.Flow
         /// <summary>
         /// 动作
         /// </summary>
-        public FlowActionEnum? Action { get; set; }
+        [EnumItem(EnumName.FlowActionEnum)]
+        public int? Action { get; set; }
 
         /// <summary>
         /// 是否已办理

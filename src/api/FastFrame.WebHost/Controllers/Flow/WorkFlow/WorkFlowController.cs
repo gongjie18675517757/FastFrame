@@ -23,15 +23,7 @@ namespace FastFrame.WebHost.Controllers.Flow
             return await service.GetLastVersion(moduleName);
         }
 
-        /// <summary>
-        /// 获取树形视图
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        public async Task<IEnumerable<ITreeModel>> TreeList()
-        {
-            return await service.GetChildrenBySuperId();
-        }
+
 
         [Permission(new[] { "Add", "Update" })]
         [HttpGet]

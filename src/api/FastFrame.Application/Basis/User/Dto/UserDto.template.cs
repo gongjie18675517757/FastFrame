@@ -70,7 +70,8 @@ namespace FastFrame.Application.Basis
 		/// <summary>
 		/// 启用状态 
 		/// </summary>
-		public EnabledMark Enable {get;set;}
+		[EnumItem(EnumName.EnabledMark)]
+		public int Enable {get;set;}
 		
 		/// <summary>
 		/// 创建人 

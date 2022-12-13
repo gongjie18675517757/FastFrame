@@ -8,16 +8,16 @@
         /// <summary>
         /// 或签
         /// </summary>
-        or,
+        or = 0,
 
         /// <summary>
         /// 会签
         /// </summary>
-        and,
+        and = 10,
 
         /// <summary>
         /// 投票
         /// </summary>
-        vote,
+        vote=20,
     }
 }

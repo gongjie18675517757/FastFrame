@@ -13,14 +13,14 @@ namespace FastFrame.WebHost.Controllers.Basis
     public partial class EnumItemController
     {
         [HttpGet("{name}")]
-        public async Task<IEnumerable<EnumItemModel>> GetValues(EnumName name)
+        public async Task<IEnumerable<EnumItemModel>> GetValues(int? name)
         {
             return await service.GetValues(name);
         }  
 
         [Permission(new string[] { "Add", "Update" })]
         [HttpGet("{name?}")]
-        public Task<IEnumerable<IViewModel>> EnumItemList(EnumName? name, string kw, int page_index = 1, int page_size = 10)
+        public Task<IEnumerable<IViewModel>> EnumItemList(int? name, string kw, int page_index = 1, int page_size = 10)
         {
             return service.EnumItemList(name, kw, page_index, page_size);
         }

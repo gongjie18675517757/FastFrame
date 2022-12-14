@@ -11,6 +11,7 @@
       single-line
       v-model="kw"
     ></v-text-field>
+    
     <v-treeview
       :active.sync="active"
       :items="items"
@@ -23,16 +24,7 @@
       dense
     >
     </v-treeview>
-    <!-- <v-btn
-      fab
-      small
-      icon
-      style="position: absolute; top: 0; right: 20px"
-      color="primary"
-      @click="refresh"
-    >
-      <v-icon> refresh </v-icon>
-    </v-btn> -->
+    
   </VuePerfectScrollbar>
 </template>
 

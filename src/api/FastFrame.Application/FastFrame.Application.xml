@@ -651,29 +651,34 @@
             数字字典 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.Basis.EnumItemDto.Key">
+        <member name="P:FastFrame.Application.Basis.EnumItemDto.IsSystemEnum">
             <summary>
-            字段类别 
+            是否系统枚举 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.EnumItemDto.KeyEnum">
+            <summary>
+            字典类别 
             </summary>
         </member>
         <member name="P:FastFrame.Application.Basis.EnumItemDto.Super_Id">
             <summary>
-            上级值 
+            上级 
             </summary>
         </member>
         <member name="P:FastFrame.Application.Basis.EnumItemDto.Super_Value">
             <summary>
-            上级值 
-            </summary>
-        </member>
-        <member name="P:FastFrame.Application.Basis.EnumItemDto.Value">
-            <summary>
-            字典值 
+            上级 
             </summary>
         </member>
         <member name="P:FastFrame.Application.Basis.EnumItemDto.IntKey">
             <summary>
-            字典键 
+            字典数字值 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.EnumItemDto.TextValue">
+            <summary>
+            字典文本值 
             </summary>
         </member>
         <member name="P:FastFrame.Application.Basis.EnumItemDto.SortVal">

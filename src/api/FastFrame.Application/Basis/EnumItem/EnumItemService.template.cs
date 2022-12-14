@@ -38,10 +38,11 @@ namespace FastFrame.Application.Basis
 						from _modify_User_Id in t__modify_User_Id.DefaultIfEmpty()
 						select new EnumItemDto
 						{
-							Key = _enumItem.Key,
+							IsSystemEnum = _enumItem.IsSystemEnum,
+							KeyEnum = _enumItem.KeyEnum,
 							Super_Id = _enumItem.Super_Id,
-							Value = _enumItem.Value,
 							IntKey = _enumItem.IntKey,
+							TextValue = _enumItem.TextValue,
 							SortVal = _enumItem.SortVal,
 							Id = _enumItem.Id,
 							Create_User_Id = _enumItem.Create_User_Id,

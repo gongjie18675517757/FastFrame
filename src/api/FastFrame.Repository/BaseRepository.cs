@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Data;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace FastFrame.Repository
@@ -116,13 +117,15 @@ namespace FastFrame.Repository
             return entityEntry.Entity;
         }
 
- 
+     
+
 
         /// <summary>
         /// 获取单条数据
         /// </summary> 
         public virtual async Task<T> GetAsync(string id)
         {
+            
             return await context.Set<T>().FindAsync(id);
         }
 

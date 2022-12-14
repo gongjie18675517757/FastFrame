@@ -1,4 +1,5 @@
-﻿using FastFrame.Entity;
+﻿using Dapper;
+using FastFrame.Entity;
 using FastFrame.Entity.Basis;
 using FastFrame.Entity.Enums;
 using FastFrame.Infrastructure;
@@ -18,15 +19,16 @@ namespace FastFrame.Application.Basis
         public async Task<IEnumerable<EnumItemModel>> GetValues(int? name)
         {
             return await enumItemRepository
-                .Where(v => v.Key == name)
+                .Where(v => v.KeyEnum == name)
                 .OrderBy(v => v.SortVal)
-                .ThenBy(v => v.Value)
+                .ThenBy(v => v.TextValue)
                 .Select(v => new EnumItemModel
                 {
                     Id = v.Id,
-                    Key = v.Key,
-                    Value = v.Value,
-                    Super_Id = v.Super_Id
+                    Key = v.KeyEnum,
+                    Value = v.TextValue,
+                    Super_Id = v.Super_Id,
+
                 })
 
                 .ToListAsync();
@@ -39,7 +41,7 @@ namespace FastFrame.Application.Basis
             if (name == null)
                 return Array.Empty<IViewModel>();
 
-            var query = enumItemRepository.Where(v => v.Key == name).Select(EnumItem.BuildExpression());
+            var query = enumItemRepository.Where(v => v.KeyEnum == name).Select(EnumItem.BuildExpression());
 
             return await query
                 .Where(v => kw == null || v.Value.Contains(kw))
@@ -50,44 +52,16 @@ namespace FastFrame.Application.Basis
         }
 
 
-        public async IAsyncEnumerable<ITreeModel> TreeModelListAsync()
-        {
-            var desProvider = loader.GetService<IModuleDesProvider>();
-            var total_dic = await enumItemRepository
-                  .GroupBy(v => v.Key)
-                  .Select(v => new { v.Key, Count = v.Count() })
-                  .ToDictionaryAsync(v => v.Key, v => v.Count);
 
-            var child_dic = await enumItemRepository
-                  .Where(v => string.IsNullOrWhiteSpace(v.Super_Id))
-                  .GroupBy(v => v.Key)
-                  .Select(v => new { v.Key, Count = v.Count() })
-                  .ToDictionaryAsync(v => v.Key, v => v.Count);
-
-            foreach (var enumName in Enum.GetValues<EnumName>())
-            {
-                yield return new EnumItemModel
-                {
-                    ChildCount = child_dic.TryGetValueOrDefault((int)enumName),
-                    Id = enumName.ToString(),
-                    Key = (int)enumName,
-                    Super_Id = null,
-                    TotalChildCount = total_dic.TryGetValueOrDefault((int)enumName),
-                    Value = desProvider.GetEnumSummary(enumName)
-                };
-            }
-        }
 
 
         public override IAsyncEnumerable<ITreeModel> TreeListAsync(string super_id, string kw)
         {
-            if (super_id == null)
+            if (int.TryParse(super_id, out var int_enumName))
             {
-                return TreeModelListAsync();
-            }
-            else if (int.TryParse(super_id, out var val))
-            {
-                return BuildTreeModelQueryable(kw).Where(v => v.Super_Id == null && v.Key == val).AsAsyncEnumerable();
+                return BuildTreeModelQueryable(kw)
+                    .Where(v => v.Key == int_enumName && enumItemRepository.Any(x => x.Id == v.Super_Id && x.KeyEnum == (int)EnumName.EnumNames))
+                    .AsAsyncEnumerable();
             }
             else
             {
@@ -99,15 +73,15 @@ namespace FastFrame.Application.Basis
         {
             return enumItemRepository
                 .Where(v => string.IsNullOrWhiteSpace(kw) ||
-                            enumItemRepository.Any(x => x.Value.Contains(kw) || x.TreeCode.StartsWith(v.TreeCode)))
+                            enumItemRepository.Any(x => x.TextValue.Contains(kw) || x.TreeCode.StartsWith(v.TreeCode)))
                 .Select(v => new EnumItemModel
                 {
                     Id = v.Id,
                     Super_Id = v.Super_Id,
-                    Key = v.Key,
+                    Key = v.KeyEnum,
                     ChildCount = enumItemRepository.Count(x => x.Super_Id == v.Id),
                     TotalChildCount = enumItemRepository.Count(x => x.TreeCode.StartsWith(v.TreeCode)),
-                    Value = v.Value
+                    Value = v.TextValue
                 });
         }
 
@@ -128,9 +102,10 @@ namespace FastFrame.Application.Basis
                .ToList();
             var moduleDesProvider = loader.GetService<IModuleDesProvider>();
 
+            /*生成系统枚举*/
             foreach (var enumName in enumNames)
             {
-                var prev_list = await enumItemRepository.Where(v => v.Key == (int)enumName).Select(v => v.IntKey).ToArrayAsync();
+                var prev_list = await enumItemRepository.Where(v => v.KeyEnum == (int)enumName).Select(v => v.IntKey).ToArrayAsync();
 
                 var field = field_dic[enumName.ToString()];
                 var attributeData = field
@@ -149,10 +124,11 @@ namespace FastFrame.Application.Basis
 
                     await enumItemRepository.AddAsync(new EnumItem
                     {
+                        IsSystemEnum = true,
                         IntKey = val,
-                        Key = (int)enumName,
+                        KeyEnum = (int)enumName,
                         SortVal = val,
-                        Value = moduleDesProvider.GetEnumSummary(name_to, name),
+                        TextValue = moduleDesProvider.GetEnumSummary(name_to, name),
                         CreateTime = DateTime.Now,
                         Create_User_Id = "00fm5yfgq3q893ylku6uzb57i",
                         Modify_User_Id = "00fm5yfgq3q893ylku6uzb57i",
@@ -167,6 +143,39 @@ namespace FastFrame.Application.Basis
 
             await enumItemRepository.CommmitAsync();
 
+            /*更新上下级关系*/
+            var sql = "update basis_enumitem set super_id=@super_id where id=@id and (super_id<>@super_id or super_id is null)";
+            var db = loader
+                .GetService<Database.DataBase>()
+                .Database
+                .GetDbConnection();
+
+            var super_dic = await enumItemRepository
+                .Where(v => v.KeyEnum == (int)EnumName.EnumNames && v.IsSystemEnum)
+                .Select(v => new { v.IntKey, v.Id })
+                .ToDictionaryAsync(v => v.IntKey, v => v.Id);
+
+            var root_id = super_dic[0];
+            await db.ExecuteAsync(
+                    sql,
+                    super_dic.Where(v => v.Key != 0).Select(v => v.Value).Select(v => new { id = v, super_id = root_id }).ToList()
+                );
+
+            var child_list = await enumItemRepository
+                .Where(v => v.KeyEnum != (int)EnumName.EnumNames && v.IsSystemEnum)
+                .Select(v => new { v.KeyEnum, v.Id })
+                .ToListAsync();
+
+
+
+            var update_list = child_list.Select(v => new { id = v.Id, super_id = super_dic[v.KeyEnum] }).ToList();
+            await db
+                .ExecuteAsync(
+                    sql,
+                    update_list
+                );
+
+            /*生成树状码*/
             loader.GetService<IBackgroundJob>().SetTimeout<ITreeHandleService>(v => v.ReCalcTreeCodeAsync(), null);
         }
     }

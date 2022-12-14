@@ -305,13 +305,18 @@ namespace FastFrame.Database.Migrations
                         .IsRequired()
                         .HasColumnType("int")
                         .HasColumnName("intkey")
-                        .HasComment("字典键");
+                        .HasComment("字典数字值");
 
-                    b.Property<int?>("Key")
+                    b.Property<bool>("IsSystemEnum")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("issystemenum")
+                        .HasComment("是否系统枚举");
+
+                    b.Property<int?>("KeyEnum")
                         .IsRequired()
                         .HasColumnType("int")
-                        .HasColumnName("key")
-                        .HasComment("字段类别");
+                        .HasColumnName("keyenum")
+                        .HasComment("字典类别");
 
                     b.Property<DateTime>("ModifyTime")
                         .HasColumnType("datetime(6)")
@@ -335,7 +340,7 @@ namespace FastFrame.Database.Migrations
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
                         .HasColumnName("super_id")
-                        .HasComment("上级值");
+                        .HasComment("上级");
 
                     b.Property<string>("Tenant_Id")
                         .HasMaxLength(25)
@@ -344,20 +349,20 @@ namespace FastFrame.Database.Migrations
                         .HasColumnName("tenant_id")
                         .HasComment("租户ID");
 
+                    b.Property<string>("TextValue")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .IsUnicode(true)
+                        .HasColumnType("varchar(150)")
+                        .HasColumnName("textvalue")
+                        .HasComment("字典文本值");
+
                     b.Property<string>("TreeCode")
                         .HasMaxLength(200)
                         .IsUnicode(true)
                         .HasColumnType("varchar(200)")
                         .HasColumnName("treecode")
                         .HasComment("树状码");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .IsUnicode(true)
-                        .HasColumnType("varchar(150)")
-                        .HasColumnName("value")
-                        .HasComment("字典值");
 
                     b.Property<bool>("isdeleted")
                         .HasColumnType("tinyint(1)");
@@ -366,6 +371,9 @@ namespace FastFrame.Database.Migrations
 
                     b.HasIndex("Create_User_Id")
                         .HasDatabaseName("Index_EnumItem_Create_User_Id");
+
+                    b.HasIndex("IsSystemEnum")
+                        .HasDatabaseName("Index_EnumItem_IsSystemEnum");
 
                     b.HasIndex("Modify_User_Id")
                         .HasDatabaseName("Index_EnumItem_Modify_User_Id");

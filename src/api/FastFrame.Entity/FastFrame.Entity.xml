@@ -261,24 +261,29 @@
             数字字典
             </summary> 
         </member>
-        <member name="P:FastFrame.Entity.Basis.EnumItem.Key">
+        <member name="P:FastFrame.Entity.Basis.EnumItem.IsSystemEnum">
             <summary>
-            字段类别
+            是否系统枚举
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.EnumItem.KeyEnum">
+            <summary>
+            字典类别
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Basis.EnumItem.Super_Id">
             <summary>
-            上级值
+            上级
             </summary>  
-        </member>
-        <member name="P:FastFrame.Entity.Basis.EnumItem.Value">
-            <summary>
-            字典值
-            </summary>
         </member>
         <member name="P:FastFrame.Entity.Basis.EnumItem.IntKey">
             <summary>
-            字典键
+            字典数字值
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.Basis.EnumItem.TextValue">
+            <summary>
+            字典文本值
             </summary>
         </member>
         <member name="P:FastFrame.Entity.Basis.EnumItem.SortVal">

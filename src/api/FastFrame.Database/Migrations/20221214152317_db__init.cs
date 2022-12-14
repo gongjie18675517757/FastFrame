@@ -6,9 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace FastFrame.Database.Migrations
 {
     /// <inheritdoc />
-#pragma warning disable CS8981 // 该类型名称仅包含小写 ascii 字符。此类名称可能会成为该语言的保留值。
     public partial class dbinit : Migration
-#pragma warning restore CS8981 // 该类型名称仅包含小写 ascii 字符。此类名称可能会成为该语言的保留值。
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -119,12 +117,13 @@ namespace FastFrame.Database.Migrations
                 {
                     id = table.Column<string>(type: "varchar(25)", maxLength: 25, nullable: false, comment: "主键")
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    key = table.Column<int>(type: "int", nullable: false, comment: "字段类别"),
-                    superid = table.Column<string>(name: "super_id", type: "varchar(25)", maxLength: 25, nullable: true, comment: "上级值")
+                    issystemenum = table.Column<bool>(type: "tinyint(1)", nullable: false, comment: "是否系统枚举"),
+                    keyenum = table.Column<int>(type: "int", nullable: false, comment: "字典类别"),
+                    superid = table.Column<string>(name: "super_id", type: "varchar(25)", maxLength: 25, nullable: true, comment: "上级")
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    value = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: false, comment: "字典值")
+                    intkey = table.Column<int>(type: "int", nullable: false, comment: "字典数字值"),
+                    textvalue = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: false, comment: "字典文本值")
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    intkey = table.Column<int>(type: "int", nullable: false, comment: "字典键"),
                     sortval = table.Column<int>(type: "int", nullable: false, comment: "排序"),
                     treecode = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: true, comment: "树状码")
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -1413,6 +1412,11 @@ namespace FastFrame.Database.Migrations
                 name: "Index_EnumItem_isdeleted",
                 table: "basis_enumitem",
                 column: "isdeleted");
+
+            migrationBuilder.CreateIndex(
+                name: "Index_EnumItem_IsSystemEnum",
+                table: "basis_enumitem",
+                column: "issystemenum");
 
             migrationBuilder.CreateIndex(
                 name: "Index_EnumItem_Modify_User_Id",

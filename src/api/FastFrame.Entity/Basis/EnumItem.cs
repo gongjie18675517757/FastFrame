@@ -8,46 +8,53 @@ namespace FastFrame.Entity.Basis
     /// 数字字典
     /// </summary> 
     [Export]
-    [Unique(nameof(Key), nameof(IntKey))]
-    [Unique(nameof(Key), nameof(Super_Id), nameof(Value))]
+    [Unique(nameof(KeyEnum), nameof(IntKey))]
+    [Unique(nameof(KeyEnum), nameof(Super_Id), nameof(TextValue))]
     public class EnumItem : BaseEntity, ITreeEntity, IViewModelable<EnumItem>
     {
         /// <summary>
-        /// 字段类别
+        /// 是否系统枚举
+        /// </summary>
+        [Hide]
+        [ReadOnly]
+        public bool IsSystemEnum { get; set; }
+
+        /// <summary>
+        /// 字典类别
         /// </summary>
         [Required]
         [EnumItem(EnumName.EnumNames)]
-        public int? Key { get; set; }
+        public int? KeyEnum { get; set; }
 
         /// <summary>
-        /// 上级值
+        /// 上级
         /// </summary>  
         [RelatedTo(typeof(EnumItem))]
-        public string Super_Id { get; set; }
+        public string Super_Id { get; set; } 
 
         /// <summary>
-        /// 字典值
-        /// </summary>
-        [StringLength(150)]
-        [Required]
-        public string Value { get; set; }
-
-        /// <summary>
-        /// 字典键
+        /// 字典数字值
         /// </summary>
         [Required]
         public int? IntKey { get; set; }
+
+        /// <summary>
+        /// 字典文本值
+        /// </summary>
+        [StringLength(150)]
+        [Required]
+        public string TextValue { get; set; }
 
         /// <summary>
         /// 排序
         /// </summary>
         public int SortVal { get; set; }
 
-        private static Expression<Func<EnumItem, IViewModel>> vm_expression =
+        private static readonly Expression<Func<EnumItem, IViewModel>> vm_expression =
                         v => new DefaultViewModel
                         {
                             Id = v.Id,
-                            Value = v.Value
+                            Value = v.TextValue
                         };
 
         public static Expression<Func<EnumItem, IViewModel>> BuildExpression() => vm_expression;

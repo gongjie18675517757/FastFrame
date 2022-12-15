@@ -13,9 +13,9 @@ namespace FastFrame.WebHost.Controllers.Basis
     public partial class EnumItemController
     {
         [HttpGet("{name}")]
-        public async Task<IEnumerable<EnumItemModel>> GetValues(int? name)
+        public async Task<IEnumerable<EnumItemModel>> EnumValues(int name)
         {
-            return await service.GetValues(name);
+            return await service.EnumValues(name);
         }  
 
         [Permission(new string[] { "Add", "Update" })]

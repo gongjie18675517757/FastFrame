@@ -49,7 +49,7 @@ export function calcInputComponent(props) {
   /**
    * 数据字典选择
    */
-  else if (EnumItemInfo) {
+  else if (Number.isInteger(EnumItemInfo)) {
     return {
       colspan: multiple ? 2 : 1,
       component: inputs.EnumItemInput
@@ -314,7 +314,7 @@ export default {
     RelateKeyFieldName: String,
     RelateIsTree: Boolean,
     requestUrl: [String, Function],
-    EnumItemInfo: Object,
+    EnumItemInfo: Number,
     component: Object,
     Type: {
       type: String,

@@ -16,10 +16,10 @@ namespace FastFrame.Application.Basis
 {
     public partial class EnumItemService : IApplicationInitialLifetime
     {
-        public async Task<IEnumerable<EnumItemModel>> GetValues(int? name)
+        public async Task<IEnumerable<EnumItemModel>> EnumValues(int enum_key)
         {
-            return await enumItemRepository
-                .Where(v => v.KeyEnum == name)
+            var list = await enumItemRepository
+                .Where(v => v.KeyEnum == enum_key)
                 .OrderBy(v => v.SortVal)
                 .ThenBy(v => v.TextValue)
                 .Select(v => new EnumItemModel
@@ -28,10 +28,31 @@ namespace FastFrame.Application.Basis
                     Key = v.KeyEnum,
                     Value = v.TextValue,
                     Super_Id = v.Super_Id,
-
+                    ChildCount = enumItemRepository.Count(x => x.Super_Id == v.Id),
+                    TotalChildCount = enumItemRepository.Count(x => x.TreeCode.StartsWith(v.TreeCode)),
+                    Children = null,
+                    IntKey = v.IntKey
                 })
-
                 .ToListAsync();
+            return list;
+
+            //IEnumerable<EnumItemModel> loadTree(EnumItemModel item)
+            //{
+            //    var children = list.Where(v => v.Super_Id == item.Id);
+            //    foreach (var child in children)
+            //    {
+            //        child.Children = loadTree(child);
+            //        yield return child;
+            //    }
+            //}
+
+            //return list
+            //     .Where(v => !list.Any(x => x.Id == v.Super_Id))
+            //     .Select(v =>
+            //     {
+            //         v.Children = loadTree(v);
+            //         return v;
+            //     });
         }
 
 
@@ -81,7 +102,9 @@ namespace FastFrame.Application.Basis
                     Key = v.KeyEnum,
                     ChildCount = enumItemRepository.Count(x => x.Super_Id == v.Id),
                     TotalChildCount = enumItemRepository.Count(x => x.TreeCode.StartsWith(v.TreeCode)),
-                    Value = v.TextValue
+                    Value = v.TextValue,
+                    IntKey = v.IntKey,
+                    Children = null,
                 });
         }
 

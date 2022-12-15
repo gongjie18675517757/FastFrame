@@ -108,8 +108,7 @@ export async function getColumns(name = '') {
     Name: ModuleName,
   } = await getModuleStrut(name)
   let columns = FieldInfoStruts
-    .filter(v => v.Name != "Id")
-    .filter(v => !v.Name.endsWith('_Id') || v.EnumItemInfo)
+    .filter(v => v.Name != "Id") 
     .filter(f => {
       return (f.Hide != 'List' && f.Hide != 'All')
     }).map(f => {
@@ -214,7 +213,7 @@ export async function getQueryOptions(columns) {
     if (Name.includes("Password") || Relate == "Resource" || !sortable)
       continue;
 
-    else if (EnumItemInfo) {
+    else if (Number.isInteger(EnumItemInfo)) {
       arr.push({
         Description,
         Name,

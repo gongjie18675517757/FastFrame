@@ -327,7 +327,7 @@ export default new Vuex.Store({
           ...state.enumItemValues,
           ...obj
         }
-        $http.get(`/api/EnumItem/GetValues/${name}`).then((data) => {
+        $http.get(`/api/EnumItem/EnumValues/${name}`).then((data) => {
           state.enumItemValues[name] = data
         })
       }
@@ -365,13 +365,9 @@ export default new Vuex.Store({
       let arr = Array.isArray(permission) ? permission : [permission];
       return !!state.permissionList.some(v => v.Child.some(r => arr.includes(r.Name)));
     },
-    getItemValues: state => (enumKey, superId) => {
+    getItemValues: state => (enumKey) => {
       if (state.enumItemValues[enumKey]) {
-        let items = state.enumItemValues[enumKey]
-        if (superId) {
-          items = items.filter(v => v.Super_Id == superId)
-        }
-        return items;
+        return state.enumItemValues[enumKey];
       } else {
         return []
       }

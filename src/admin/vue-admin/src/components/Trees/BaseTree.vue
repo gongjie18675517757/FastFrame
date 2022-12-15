@@ -1,36 +1,39 @@
 <template>
-  <VuePerfectScrollbar :style="styleObj">
-    <v-text-field
-      append-icon="search"
-      placeholder="搜索"
-      hide-details
-      dense 
-      append-outer-icon="refresh"
-      @click:append-outer="refresh"
-      class="tree-search"
-      single-line
-      v-model="kw"
-    ></v-text-field>
-    
-    <v-treeview
-      :active.sync="active"
-      :items="items"
-      :open.sync="open"
-      :load-children="requestChild"
-      :multiple-active="false"
-      return-object
-      activatable
-      transition
-      dense
-    >
-    </v-treeview>
-    
-  </VuePerfectScrollbar>
+  <div>
+    <div style="padding: 0px 12px;">
+      <v-text-field
+        append-icon="search"
+        placeholder="搜索"
+        hide-details
+        dense
+        append-outer-icon="refresh"
+        @click:append-outer="refresh"
+        class="tree-search"
+        single-line
+        v-model="kw"
+      ></v-text-field>
+    </div>
+
+    <VuePerfectScrollbar :style="styleObj">
+      <v-treeview
+        :active.sync="active"
+        :items="items"
+        :open.sync="open"
+        :load-children="requestChild"
+        :multiple-active="false"
+        return-object
+        activatable
+        transition
+        dense
+      >
+      </v-treeview>
+    </VuePerfectScrollbar>
+  </div>
 </template>
 
 <script>
 import VuePerfectScrollbar from "vue-perfect-scrollbar";
-import { debounce } from '../../utils';
+import { debounce } from "../../utils";
 
 export default {
   components: {
@@ -51,7 +54,7 @@ export default {
   computed: {
     styleObj() {
       return {
-        height: `${this.height.replace("100vh", "100vh + 40px")}`,
+        height: `${this.height.replace("100vh", "100vh - 10px")}`,
         overflow: "auto",
       };
     },
@@ -67,9 +70,8 @@ export default {
       this.refresh();
     },
   },
-  created(){
-  
-    this.init=debounce(this.init,500).bind(this)
+  created() {
+    this.init = debounce(this.init, 500).bind(this);
   },
   mounted() {
     this.refresh();
@@ -87,7 +89,9 @@ export default {
       }
     },
     async requestData(id) {
-      let arr = await this.$http.get(`${this.requestUrl}?super_id=${id || ""}&kw=${this.kw || ''}`);
+      let arr = await this.$http.get(
+        `${this.requestUrl}?super_id=${id || ""}&kw=${this.kw || ""}`
+      );
 
       return arr.map((v) => ({
         ...v,
@@ -107,9 +111,9 @@ export default {
 </script>
 
 <style lang="stylus">
-.tree-search{
-  .v-input__append-outer, .v-input__prepend-outer{
-    margin-top:0px;
+.tree-search {
+  .v-input__append-outer, .v-input__prepend-outer {
+    margin-top: 0px;
   }
 }
 </style>

@@ -22,14 +22,14 @@ export default makeFormPageInheritedFromBaseFormPage({
     [FormPageDefines.MethodsDefines.fmtModelObject](model) {
       return {
         ...model,
-        Key: model.Id ? model.Key : this.key_name,
+        KeyEnum: model.Id ? model.KeyEnum : parseInt(this.key_name),
       };
     },
     [FormPageDefines.MethodsDefines.fmtModelObjectItems](arr) {
       return [
         ...arr,
         {
-          Name: "Key",
+          Name: "KeyEnum",
           Readonly: this.key_name ? "All" : "Edit",
         },
       ];

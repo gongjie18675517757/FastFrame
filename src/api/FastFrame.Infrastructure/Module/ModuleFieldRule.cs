@@ -14,7 +14,5 @@
         public string RuleName { get; }
 
         public string[] RulePars { get; }
-    }
-
-
+    } 
 }

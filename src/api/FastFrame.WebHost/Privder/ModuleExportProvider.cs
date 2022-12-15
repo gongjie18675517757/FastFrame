@@ -128,6 +128,9 @@ namespace FastFrame.WebHost.Privder
                     }
                 }
 
+                var uniqueAttributes = type.GetCustomAttributes<UniqueAttribute>();
+
+
                 /*模块信息*/
                 @struct = new ModuleStruct()
                 {
@@ -255,8 +258,8 @@ namespace FastFrame.WebHost.Privder
                     stringLengthAttribute.MinimumLength.ToString(),
                     stringLengthAttribute.MaximumLength.ToString());
 
-            if (TryGetAttribute<UniqueAttribute>(prop, out _))
-                yield return new ModuleFieldRule("unique", prop.DeclaringType.Name, prop.Name);
+            if (TryGetAttribute<UniqueAttribute>(prop, out var uniqueAttribute))
+                yield return new ModuleFieldRule("unique", new[] { prop.DeclaringType.Name }.Concat(uniqueAttribute.UniqueNames.Append(prop.Name)).ToArray());
 
             if (TryGetAttribute<UniqueAttribute>(prop, out _))
                 yield return new ModuleFieldRule($"is{T4Help.GetNullableType(prop.PropertyType).Name}");

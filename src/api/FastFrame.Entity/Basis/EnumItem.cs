@@ -7,9 +7,7 @@ namespace FastFrame.Entity.Basis
     /// <summary>
     /// 数字字典
     /// </summary> 
-    [Export]
-    [Unique(nameof(KeyEnum), nameof(IntKey))]
-    [Unique(nameof(KeyEnum), nameof(Super_Id), nameof(TextValue))]
+    [Export] 
     public class EnumItem : BaseEntity, ITreeEntity, IViewModelable<EnumItem>
     {
         /// <summary>
@@ -36,6 +34,7 @@ namespace FastFrame.Entity.Basis
         /// 字典数字值
         /// </summary>
         [Required]
+        [Unique(nameof(KeyEnum))]
         public int? IntKey { get; set; }
 
         /// <summary>
@@ -43,6 +42,7 @@ namespace FastFrame.Entity.Basis
         /// </summary>
         [StringLength(150)]
         [Required]
+        [Unique(nameof(KeyEnum), nameof(Super_Id))]
         public string TextValue { get; set; }
 
         /// <summary>

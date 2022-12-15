@@ -2,13 +2,13 @@ export default {
   name:'enum-item-input',
   props: {
     model: Object,
-    value: [String, Array],
+    value: Number,
     disabled: Boolean,
     label: String,
     errorMessages: Array,
     isXs: Boolean,
     description: String,
-    EnumItemInfo: Object,
+    EnumItemInfo: Number,
     multiple: Boolean
   },
   data() {
@@ -21,21 +21,14 @@ export default {
      * 键名
      */
     itemKeyName() {
-      return this.EnumItemInfo.Name
-    },
-
-    /**
-     * 字典上级值
-     */
-    SuperId() {
-      return this.EnumItemInfo.SuperPropName ? this.model[this.EnumItemInfo.SuperPropName] : null
-    },
+      return this.EnumItemInfo
+    }, 
 
     /**
      * 可选值列表
      */
     items() {
-      return this.$store.getters.getItemValues(this.itemKeyName, this.SuperId)
+      return this.$store.getters.getItemValues(this.itemKeyName)
     },
 
     /**
@@ -53,11 +46,11 @@ export default {
       let val = this.value
       if (val) {
         if (!this.multiple) {
-          let item = this.items.find(v => v.Id == val)
+          let item = this.items.find(v => v.IntKey == val)
           if (item) txt = item.Value
         } else {
           val = val || []
-          return this.items.filter(v => val.includes(v.Id)).map(v => v.Value).join(',')
+          return this.items.filter(v => val.includes(v.IntKey)).map(v => v.Value).join(',')
         }
       }
       return txt;
@@ -77,20 +70,21 @@ export default {
           errorMessages: this.errorMessages,
           placeholder: this.description,
           'item-text': 'Value',
-          'item-value': 'Id',
+          'item-value': 'IntKey',
           multiple: this.multiple,
           dense: !this.isXs,
           singleLine: !this.isXs,
         },
         on: {
           input: val => {
+            console.log(val);
             this.$emit('input', val)
             if (!this.multiple) {
-              let item = this.items.find(v => v.Id == val)
+              let item = this.items.find(v => v.IntKey == val)
               this.$emit('change', item)
             } else {
               val = val || []
-              let item = this.items.filter(v => val.includes(v.Id))
+              let item = this.items.filter(v => val.includes(v.IntKey))
               this.$emit('change', item)
             }
             this.keyword = null

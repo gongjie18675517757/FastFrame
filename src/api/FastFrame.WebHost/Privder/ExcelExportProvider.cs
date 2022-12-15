@@ -47,7 +47,7 @@ namespace FastFrame.WebHost.Privder
                 {
                     if (!enumValues.TryGetValue(item.EnumItemInfo, out var values))
                     {
-                        values = await enumItemService.GetValues(item.EnumItemInfo);
+                        values = await enumItemService.EnumValues(item.EnumItemInfo.Value);
                         enumValues.Add(item.EnumItemInfo, values);
                     }
 

@@ -19,8 +19,13 @@ namespace FastFrame.Application.Basis
 		/// <summary>
 		/// 是否系统枚举 
 		/// </summary>
-		[Hide(HideMark.All)]
 		public bool IsSystemEnum {get;set;}
+		
+		/// <summary>
+		/// 启用状态 
+		/// </summary>
+		[EnumItem(EnumName.EnabledMark)]
+		public int Enabled {get;set;}
 		
 		/// <summary>
 		/// 字典类别 

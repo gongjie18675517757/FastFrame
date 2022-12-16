@@ -1,10 +1,14 @@
-import $http from './httpClient'
+import $http from './httpClient' 
+
 /**
  * 必填验证
  * @param {*} fieldDescription 
  */
 export function required(fieldDescription = '') {
   return function (value) {
+    if (value === 0)
+      return true;
+
     return !!value || `${fieldDescription}是必填的`
   }
 }
@@ -48,7 +52,8 @@ export function phone(fieldDescription = '手机号码无效') {
  * @param {*} moduleName 
  * @param {*} name 
  */
-export function unique(fieldDescription, moduleName, name) {
+export function unique(fieldDescription, moduleName, ...field_names) {
+
   return function (value) {
     if (!value)
       return true
@@ -56,10 +61,10 @@ export function unique(fieldDescription, moduleName, name) {
     let postData = {
       Id: this.Id,
       ModuleName: moduleName,
-      KeyValues: [{
-        Key: name,
-        Value: value
-      }]
+      KeyValues: field_names.map(v => ({
+        Key: v,
+        Value: this[v]
+      }))
     }
     return new Promise((resolve, reject) => {
       $http.post(`/api/${moduleName}/VerififyUnique`, postData).then(data => {
@@ -80,6 +85,7 @@ export function unique(fieldDescription, moduleName, name) {
 export function isInt32(fieldDescription) {
   const err_msg = `${fieldDescription}不是有效的整数`
   return function (v) {
+
     if (isNaN(v))
       return err_msg;
 
@@ -114,7 +120,7 @@ export function isDecimal(fieldDescription) {
 
       if (isNaN(v))
         return err_msg;
-    } 
+    }
     return true;
   }
 }

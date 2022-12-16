@@ -32,6 +32,13 @@ export default makeFormPageInheritedFromBaseFormPage({
           Name: "KeyEnum",
           Readonly: this.key_name ? "All" : "Edit",
         },
+        {
+          Name: "Super_Value",
+          requestUrl: ({ KeyEnum }) =>
+            `/api/EnumItem/EnumItemList/${
+              Number.isInteger(KeyEnum) ? KeyEnum : ""
+            }`,
+        },
       ];
     },
   },

@@ -16,6 +16,14 @@ namespace FastFrame.Application.Basis
 {
     public partial class EnumItemService : IApplicationInitialLifetime
     {
+        protected override async Task OnDeleteing(EnumItem entity)
+        {
+            if (entity.IsSystemEnum)
+                throw new MsgException("系统定义的字典不可删除!");
+
+            await base.OnDeleteing(entity);
+        }
+
         public async Task<IEnumerable<EnumItemModel>> EnumValues(int enum_key)
         {
             var list = await enumItemRepository

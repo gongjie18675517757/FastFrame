@@ -286,11 +286,6 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="T:FastFrame.WebHost.Controllers.Flow.DFModuleController">
-            <summary>
-            动态表单模块 
-            </summary>
-        </member>
         <member name="T:FastFrame.WebHost.Controllers.Flow.WorkFlowCenterController">
             <summary>
             流程中心

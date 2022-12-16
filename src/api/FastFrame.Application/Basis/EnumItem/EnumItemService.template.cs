@@ -39,6 +39,7 @@ namespace FastFrame.Application.Basis
 						select new EnumItemDto
 						{
 							IsSystemEnum = _enumItem.IsSystemEnum,
+							Enabled = _enumItem.Enabled,
 							KeyEnum = _enumItem.KeyEnum,
 							Super_Id = _enumItem.Super_Id,
 							IntKey = _enumItem.IntKey,

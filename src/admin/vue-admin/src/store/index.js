@@ -5,6 +5,7 @@ import router from '../router'
 import menuList from './menu'
 import { sleep } from '@/utils'
 import { start, stop } from '../hubs'
+import { lock } from '../utils'
 Vue.use(Vuex)
 
 /**
@@ -317,20 +318,37 @@ export default new Vuex.Store({
      * @param {*} param0 
      * @param {*} name 
      */
-    loadEnumValues({
+    async loadEnumValues({
       state
-    }, name) {
-      if (!state.enumItemValues[name]) {
-        let obj = {}
-        obj[name] = []
-        state.enumItemValues = {
-          ...state.enumItemValues,
-          ...obj
+    }, name, refresh) {
+      if (!Number.isInteger(name))
+        return []
+
+      const locker = await lock(`__loadEnumValues__${name}`)
+      try {
+        if (!state.enumItemValues[name] || refresh) {
+          const arr = []
+          let obj = {
+            [name]: arr
+          }
+
+          state.enumItemValues = {
+            ...state.enumItemValues,
+            ...obj
+          }
+          arr.push(
+            ... await $http.get(`/api/EnumItem/EnumValues/${name}`)
+          )
+
         }
-        $http.get(`/api/EnumItem/EnumValues/${name}`).then((data) => {
-          state.enumItemValues[name] = data
-        })
+      } catch (error) {
+        window.console.error(error)
+      } finally {
+        locker.freed();
       }
+
+      // console.log(name, state.enumItemValues[name]);
+      return state.enumItemValues[name];
     },
 
     /**

@@ -128,7 +128,7 @@ namespace FastFrame.WebHost.Privder
                     }
                 }
 
-                var uniqueAttributes = type.GetCustomAttributes<UniqueAttribute>();
+            
 
 
                 /*模块信息*/

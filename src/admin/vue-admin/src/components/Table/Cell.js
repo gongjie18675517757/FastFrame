@@ -84,11 +84,13 @@ export default {
         } else {
           return null;
         }
-      } else if (EnumItemInfo) {
-        store.dispatch("loadEnumValues", EnumItemInfo.Name);
-        return store.getters
-          .getItemValues(EnumItemInfo.Name)
-          .filter((v) => value_arr.includes(v.Id))
+      }
+      else if (Number.isInteger(EnumItemInfo)) {
+        store.dispatch("loadEnumValues", EnumItemInfo);
+        const arr = store.getters.getItemValues(EnumItemInfo)
+        
+        return arr
+          .filter((v) => value_arr.includes(v.IntKey))
           .map((v) => v.Value)
           .join(",");
       } else if (EnumValues) {
@@ -126,7 +128,7 @@ export default {
           {
             attrs: {
               src,
-              title:`${value} 点击打开`
+              title: `${value} 点击打开`
             },
             style: {
               maxWidth: '100%',

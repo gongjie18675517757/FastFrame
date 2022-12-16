@@ -2,7 +2,7 @@ export default {
   name:'enum-item-input',
   props: {
     model: Object,
-    value: Number,
+    value: [Number,Array],
     disabled: Boolean,
     label: String,
     errorMessages: Array,
@@ -77,7 +77,6 @@ export default {
         },
         on: {
           input: val => {
-            console.log(val);
             this.$emit('input', val)
             if (!this.multiple) {
               let item = this.items.find(v => v.IntKey == val)

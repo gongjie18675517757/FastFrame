@@ -19,9 +19,9 @@ export default makeListPageInheritedFromBaseListPage({
     };
   },
   methods: {
-    [ListPageDefines.MethodsDefines.getRowOperateItems](arr) {
+    async [ListPageDefines.MethodsDefines.getRowOperateItems](super_func) {
       return [
-        ...arr,
+        ...await super_func(),
         function (h, { model }) {
           return model.IsEnabled
             ? h(

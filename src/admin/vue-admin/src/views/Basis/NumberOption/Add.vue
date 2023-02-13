@@ -13,10 +13,10 @@ export default makeFormPageInheritedFromBaseFormPage({
     };
   },
   methods: {
-    async [FormPageDefines.MethodsDefines.fmtModelObjectItems](arr) {
+    async [FormPageDefines.MethodsDefines.fmtModelObjectItems](super_func) {
       const EnumValues = await getHasNumberModules();
       return [
-        ...arr,
+        ...(await super_func()),
         {
           Name: "BeModule",
           EnumValues,

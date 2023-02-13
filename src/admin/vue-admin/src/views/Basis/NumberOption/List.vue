@@ -13,10 +13,10 @@ export default makeListPageInheritedFromBaseListPage({
     };
   },
   methods: {
-    async [ListPageDefines.MethodsDefines.fmtColumns](arr) {
+    async [ListPageDefines.MethodsDefines.fmtColumns](super_func) {
       const EnumValues = await getHasNumberModules();
       return [
-        ...arr,
+        ...(await super_func()),
         {
           Name: "BeModule",
           EnumValues,

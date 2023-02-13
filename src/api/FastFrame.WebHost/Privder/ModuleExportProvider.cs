@@ -96,7 +96,7 @@ namespace FastFrame.WebHost.Privder
                             RelateKeyFieldName = x.Name,
                             RelateIsTree = typeof(ITreeEntity).IsAssignableFrom(relatedToAttribute.RelatedType),
                             Length = null,
-                            EnumValues = null,
+                            EnumValues = Array.Empty<KeyValuePair<string, string>>(),
                             IsRequired = requiredAttribute != null,
                             GroupNames = formGroupAttribute?.GroupNames,
                             IsLink = isPrimaryFieldAttribute != null,
@@ -128,7 +128,7 @@ namespace FastFrame.WebHost.Privder
                     }
                 }
 
-            
+
 
 
                 /*模块信息*/

@@ -18,16 +18,16 @@ export default makeFormPageInheritedFromBaseFormPage({
     };
   },
   methods: {
-    [FormPageDefines.MethodsDefines.fmtModelObject](model) {
+    async [FormPageDefines.MethodsDefines.fmtModelObject](super_func) {
       return {
         Permissions: [],
         Members: [],
-        ...model,
+        ...(await super_func()),
       };
     },
-    [FormPageDefines.MethodsDefines.fmtModelObjectItems](arr) {
+    async [FormPageDefines.MethodsDefines.fmtModelObjectItems](super_func) {
       return [
-        ...arr,
+        ...(await super_func()),
         {
           Name: "Members",
           Description: "角色成员",

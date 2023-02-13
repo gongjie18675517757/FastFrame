@@ -17,9 +17,9 @@ export default makeFormPageInheritedFromBaseFormPage({
     };
   },
   methods: {
-    [FormPageDefines.MethodsDefines.fmtModelObjectItems](arr) {
+    async [FormPageDefines.MethodsDefines.fmtModelObjectItems](super_func) {
       return [
-        ...arr,
+        ...await super_func(),
         {
           Name: "Content",
           GroupNames: ["通知内容"],

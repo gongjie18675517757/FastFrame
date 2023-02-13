@@ -29,7 +29,7 @@ namespace FastFrame.WebHost.Privder
         public async IAsyncEnumerable<ExcelColumn<TDto>> GenerateExcelColumns<TDto>()
         {
             var moduleStruct = moduleExportProvider.GetModuleStruts(typeof(TDto).Name);
-            var enumValues = new Dictionary<int?, IEnumerable<EnumItemModel>>();
+            var enumValues = new Dictionary<int?, IReadOnlyDictionary<int, string>>();
 
             foreach (var item in moduleStruct.FieldInfoStruts)
             {
@@ -54,13 +54,26 @@ namespace FastFrame.WebHost.Privder
                     yield return new ExcelColumn<TDto>
                     {
                         Title = item.Description,
-                        ValueFunc = model => string.Join(",",
-                                        values.Where(v => model.GetValue(item.Name)?.ToString().Contains(v.Id) == true).Select(v => v.Value))
+                        ValueFunc = model =>
+                        {
+                            var value = model.GetValue(item.Name);
+                            if (value != null && value is int int_value)
+                                return values.TryGetValueOrDefault(int_value);
+
+                            if (value != null && value is IEnumerable<int> int_values)
+                                return string.Join(";", int_values.Select(v => values.TryGetValueOrDefault(v)));
+
+                            if (value != null && value is IEnumerable<int?> int_values2)
+                                return string.Join(";", int_values2.Where(v => v != null).Select(v => values.TryGetValueOrDefault(v.Value)));
+
+                            return null;
+                        }
                     };
                 } 
+    
 
                 /*预定义枚举*/
-                else if (item.EnumValues.Any())
+                else if (item.EnumValues != null && item.EnumValues.Any())
                 {
                     yield return new ExcelColumn<TDto>
                     {
@@ -74,7 +87,7 @@ namespace FastFrame.WebHost.Privder
                 else if (item.Name.EndsWith("_Id"))
                 {
                     continue;
-                } 
+                }
 
 
                 /*值类型*/

@@ -25,16 +25,16 @@ export default makeFormPageInheritedFromBaseFormPage({
     };
   },
   methods: {
-    [FormPageDefines.MethodsDefines.fmtModelObject](model) {
+    async [FormPageDefines.MethodsDefines.fmtModelObject](super_func) {
       return {
         Depts: this.super_id ? [{ Id: this.super_id }] : [],
         Roles: [],
-        ...model,
+        ...(await super_func()),
       };
     },
-    [FormPageDefines.MethodsDefines.fmtModelObjectItems](opts) {
+    async [FormPageDefines.MethodsDefines.fmtModelObjectItems](super_func) {
       return [
-        ...opts,
+        ...(await super_func()),
         {
           Name: "Depts",
           Description: "用户所在部门",

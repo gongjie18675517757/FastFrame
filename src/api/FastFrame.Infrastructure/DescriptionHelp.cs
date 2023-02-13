@@ -12,10 +12,7 @@ namespace FastFrame.Infrastructure
 
         private static XmlDocument GetXmlDocument(string path)
         {
-            if (dicXmlDocument == null)
-            {
-                dicXmlDocument = new Dictionary<string, XmlDocument>();
-            }
+            dicXmlDocument ??= new Dictionary<string, XmlDocument>();
 
             if (!dicXmlDocument.TryGetValue(path, out XmlDocument xmlDocument))
             {

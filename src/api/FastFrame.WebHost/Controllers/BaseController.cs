@@ -64,6 +64,7 @@ namespace FastFrame.WebHost.Controllers
             columns = await FmtExportColumns(columns);
 
             var bytes = await excelExportProvider.GenerateExcelSteam(service.PageListAsync, columns, Pagination<TDto>.FromJson(qs));
+
             return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{fileName}.xlsx");
         }
 

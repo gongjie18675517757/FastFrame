@@ -13,7 +13,7 @@ namespace FastFrame.WebHost.Controllers.Basis
     public partial class EnumItemController
     {
         [HttpGet("{name}")]
-        public async Task<IEnumerable<EnumItemModel>> EnumValues(int name)
+        public async Task<IReadOnlyDictionary<int, string>> EnumValues(int name)
         {
             return await service.EnumValues(name);
         }  

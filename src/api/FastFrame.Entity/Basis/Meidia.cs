@@ -43,7 +43,7 @@ namespace FastFrame.Entity.Basis
 
 
 
-        private static Expression<Func<Meidia, IViewModel>> vm_expression = v => new DefaultViewModel { Id = v.Id, Value = v.Name };
+        private static readonly Expression<Func<Meidia, IViewModel>> vm_expression = v => new DefaultViewModel { Id = v.Id, Value = v.Name };
 
         public static Expression<Func<Meidia, IViewModel>> BuildExpression() => vm_expression;
 

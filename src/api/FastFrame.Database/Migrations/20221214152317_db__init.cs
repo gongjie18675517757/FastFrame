@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace FastFrame.Database.Migrations
 {
-    /// <inheritdoc />
+ 
     public partial class dbinit : Migration
     {
-        /// <inheritdoc />
+ 
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterDatabase()

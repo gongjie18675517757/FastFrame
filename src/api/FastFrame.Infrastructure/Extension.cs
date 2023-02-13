@@ -14,8 +14,22 @@ using System.Threading.Tasks;
 
 namespace FastFrame.Infrastructure
 {
-    public static class Extension
+    public static partial class Extension
     {
+        /// <summary>
+        /// 转换
+        /// </summary>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="this"></param>
+        /// <returns></returns>
+        public static TValue? TryConvert<TValue>(this string @this) where TValue : struct, IParsable<TValue>
+        {
+            if (TValue.TryParse(@this, null, out var v))
+                return v;
+
+            return default;
+        }
+
         /// <summary>
         /// 递归子节点
         /// </summary>
@@ -38,7 +52,7 @@ namespace FastFrame.Infrastructure
             foreach (var item in enumerable)
             {
                 eachAction((super, item));
-                EachLoopChild(childSelector(item), childSelector, item, eachAction);
+                childSelector(item).EachLoopChild(childSelector, item, eachAction);
             }
         }
 
@@ -61,7 +75,7 @@ namespace FastFrame.Infrastructure
             {
                 yield return item;
 
-                var children = SelectLoopChild(childSelector(item), childSelector);
+                var children = childSelector(item).SelectLoopChild(childSelector);
 
                 if (children != null && children.Any())
                     foreach (var child in children)
@@ -88,7 +102,7 @@ namespace FastFrame.Infrastructure
             {
                 if (EqualityComparer<TKey>.Default.Equals(patentFunc(item), parent_id))
                 {
-                    var children = SelectLoopChild(enumerable, patentFunc, keyFunc, setChildAction, keyFunc(item));
+                    var children = enumerable.SelectLoopChild(patentFunc, keyFunc, setChildAction, keyFunc(item));
                     setChildAction(item, children);
                     yield return item;
                 }
@@ -105,6 +119,20 @@ namespace FastFrame.Infrastructure
         /// <returns></returns>
         public static TVal TryGetValueOrDefault<TKey, TVal>(this IDictionary<TKey, TVal> dic, TKey key)
         {
+            if (key == null)
+                return default;
+
+            if (dic.TryGetValue(key, out var val))
+                return val;
+
+            return default;
+        }
+
+        public static TVal TryGetValueOrDefault<TKey, TVal>(this IReadOnlyDictionary<TKey, TVal> dic, TKey key)
+        {
+            if (key == null)
+                return default;
+
             if (dic.TryGetValue(key, out var val))
                 return val;
 
@@ -210,22 +238,23 @@ namespace FastFrame.Infrastructure
             if (string.IsNullOrWhiteSpace(@in))
                 return default;
 
-            if (encoding == null)
-                encoding = Encoding.UTF8;
+            encoding ??= Encoding.UTF8;
 
             return BitConverter.ToString(encoding.GetBytes(@in)).Replace("-", "").ToLower();
         }
+
+        [System.Text.RegularExpressions.GeneratedRegex("^[0-9a-f]+$")]
+        private static partial System.Text.RegularExpressions.Regex FromHexStringInputRegex();
 
         public static string FromHexString(this string @in, Encoding encoding = null)
         {
             if (string.IsNullOrWhiteSpace(@in))
                 return default;
 
-            if (!System.Text.RegularExpressions.Regex.IsMatch(@in, "^[0-9a-f]+$"))
+            if (!FromHexStringInputRegex().IsMatch(@in))
                 return @in;
 
-            if (encoding == null)
-                encoding = Encoding.UTF8;
+            encoding ??= Encoding.UTF8;
 
             var bytes = new byte[@in.Length / 2];
 
@@ -287,9 +316,7 @@ namespace FastFrame.Infrastructure
         {
             if (@in == null)
                 return null;
-
-            using var md5 = MD5.Create();
-            var result = md5.ComputeHash(Encoding.Default.GetBytes(@in));
+            var result = MD5.HashData(Encoding.Default.GetBytes(@in));
             var strResult = BitConverter.ToString(result);
             return strResult.Replace("-", "").ToLower();
         }
@@ -426,5 +453,7 @@ namespace FastFrame.Infrastructure
                 return false;
             }
         }
+
+
     }
 }

@@ -7,50 +7,62 @@ export const ListPageCore = ListPage
 
 /**
  * 合并两个vue定义的methods
+ * @param {*} obj_source 父类的methods
+ * @param {*} obj_target 子类的methods
+ * @returns 
  */
 export function mergeMethods(obj_source, obj_target) {
     const source_arr = Object.entries(obj_source);
     const target_arr = Object.entries(obj_target);
 
     const result_obj = {};
+    /**
+     * 存放父类的被子类重写过的方法
+     */
     const merge_arr = source_arr.filter((v) =>
         target_arr.some((x) => x[0] == v[0])
     );
 
     /**
-     * 先处理有合并的
+     * 先处理有重写的
      */
     for (const [k, func] of merge_arr) {
-        const result_func = function () {
-            const result = func.call(this, ...arguments);
-            const target_func = obj_target[k];
+        /**
+         * 定义一个新的工厂函数包装调用
+         * @returns 
+         */
+        result_obj[k] = function () {
 
             /**
-             * 如果没有合并项,则退出
+             * 子类的具体方法
              */
-            if (!target_func) return result;
+            const target_func = obj_target[k].bind(this);
 
             /**
-             * 异步处理办法
+             * 包装父类的具体方法
+             * @returns 返回父类的执行结果
              */
-            if (result && typeof result == "object" && result instanceof Promise) {
-                return result.then(r => target_func.bind(this)(r, ...arguments));
-            }
+            const super_func = () => func.bind(this)(...arguments)
 
             /**
-             * 同步时处理办法
+             * 返回子类的方法，并把父类的方法做为第一个参数传入
              */
-            return target_func.bind(this)(result, ...arguments);
+            return target_func(super_func, ...arguments);
         };
-        result_obj[k] = result_func;
-    }
-
+    } 
+    
+    /**
+     * 父类的方法未被重写过的
+     */
     for (const [k, func] of source_arr) {
         if (obj_target[k]) continue;
 
         result_obj[k] = func;
     }
 
+    /**
+     * 子类自己定义的方法
+     */
     for (const [k, func] of target_arr) {
         if (obj_source[k]) continue;
 

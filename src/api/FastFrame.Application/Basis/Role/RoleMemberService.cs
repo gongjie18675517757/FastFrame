@@ -131,7 +131,7 @@ namespace FastFrame.Application.Basis
                 );
         }
 
-        public async Task<Dictionary<string, IEnumerable<IViewModel>>> GetRoleViewModelsByUserIds(params string[] keys)
+        public async Task<IReadOnlyDictionary<string, IEnumerable<IViewModel>>> GetRoleViewModelsByUserIds(params string[] keys)
         {
             var roleQuery = roles.Select(Role.BuildExpression());
             var query = from a in roleQuery

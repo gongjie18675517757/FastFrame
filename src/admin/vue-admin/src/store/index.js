@@ -23,6 +23,34 @@ const key_dialogMode = "dialogMode"
  */
 const key_themeColor = 'themeColor'
 
+/**
+ * 加载数据字典
+ * @param {*} state 
+ * @param {*} name 
+ * @param {*} refresh 
+ * @returns 
+ */
+async function loadEnumValues(state, name, refresh) {
+  if (!Number.isInteger(name))
+    return {}
+
+  const locker = await lock(`__loadEnumValues__${name}`)
+  try {
+    if (!state.enumItemValues[name] || refresh) {
+      state.enumItemValues = {
+        ...state.enumItemValues,
+        [name]: await $http.get(`/api/EnumItem/EnumValues/${name}`)
+      }
+    }
+  } catch (error) {
+    window.console.error(error)
+  } finally {
+    locker.freed();
+  }
+
+  // console.log(name, state.enumItemValues[name]);
+  return state.enumItemValues[name];
+}
 
 
 
@@ -321,34 +349,7 @@ export default new Vuex.Store({
     async loadEnumValues({
       state
     }, name, refresh) {
-      if (!Number.isInteger(name))
-        return []
-
-      const locker = await lock(`__loadEnumValues__${name}`)
-      try {
-        if (!state.enumItemValues[name] || refresh) {
-          const arr = []
-          let obj = {
-            [name]: arr
-          }
-
-          state.enumItemValues = {
-            ...state.enumItemValues,
-            ...obj
-          }
-          arr.push(
-            ... await $http.get(`/api/EnumItem/EnumValues/${name}`)
-          )
-
-        }
-      } catch (error) {
-        window.console.error(error)
-      } finally {
-        locker.freed();
-      }
-
-      // console.log(name, state.enumItemValues[name]);
-      return state.enumItemValues[name];
+      return loadEnumValues(state, name, refresh);
     },
 
     /**
@@ -383,11 +384,13 @@ export default new Vuex.Store({
       let arr = Array.isArray(permission) ? permission : [permission];
       return !!state.permissionList.some(v => v.Child.some(r => arr.includes(r.Name)));
     },
-    getItemValues: state => (enumKey) => {
+    getItemValues: (state,) => (enumKey) => {
+      loadEnumValues(state, enumKey, false);
+
       if (state.enumItemValues[enumKey]) {
         return state.enumItemValues[enumKey];
       } else {
-        return []
+        return {}
       }
     }
   }

@@ -19,13 +19,16 @@ export default makeFormPageInheritedFromBaseFormPage({
     };
   },
   methods: {
-    [FormPageDefines.MethodsDefines.fmtModelObject](model) {
+    async [FormPageDefines.MethodsDefines.fmtModelObject](super_func) {
+      const model=await super_func();
       return {
         ...model,
         KeyEnum: model.Id ? model.KeyEnum : parseInt(this.key_name),
       };
     },
-    [FormPageDefines.MethodsDefines.fmtModelObjectItems](arr) {
+    async [FormPageDefines.MethodsDefines.fmtModelObjectItems](super_func) {
+      const arr=await super_func();
+
       return [
         ...arr,
         {

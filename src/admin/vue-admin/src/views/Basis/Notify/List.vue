@@ -12,8 +12,10 @@ export default makeListPageInheritedFromBaseListPage({
     };
   },
   methods: {
-    [ListPageDefines.MethodsDefines.fmtColumns](arr) {
-      return [...arr.filter((v) => !["Content"].includes(v.Name))];
+    async [ListPageDefines.MethodsDefines.fmtColumns](super_func) {
+      return [
+        ...(await super_func()).filter((v) => !["Content"].includes(v.Name)),
+      ];
     },
   },
 });

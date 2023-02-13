@@ -29,9 +29,10 @@ export default makeListPageInheritedFromBaseListPage({
     },
 
     [ListPageDefines.MethodsDefines.getFormPageParsBySelectedTreeItem](
-      v,
+      super_func,
       tree
     ) {
+      const v = super_func();
       return {
         ...v,
         key_name: tree.Key,

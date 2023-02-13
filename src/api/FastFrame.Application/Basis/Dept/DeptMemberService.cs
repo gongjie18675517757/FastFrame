@@ -87,7 +87,7 @@ namespace FastFrame.Application.Basis
         /// </summary>
         /// <param name="keys"></param>
         /// <returns></returns>
-        public async Task<Dictionary<string, (IEnumerable<IViewModel> members, IEnumerable<string> mangers)>> GetUserViewModelsByDeptIds(params string[] keys)
+        public async Task<IReadOnlyDictionary<string, (IEnumerable<IViewModel> members, IEnumerable<string> mangers)>> GetUserViewModelsByDeptIds(params string[] keys)
         {
             var userQuery = users.Select(User.BuildExpression());
 
@@ -148,7 +148,7 @@ namespace FastFrame.Application.Basis
                 );
         }
 
-        public async Task<Dictionary<string, IEnumerable<IViewModel>>> GetDeptViewModelsByUserIds(params string[] keys)
+        public async Task<IReadOnlyDictionary<string, IEnumerable<IViewModel>>> GetDeptViewModelsByUserIds(params string[] keys)
         {
             var deptQuery = depts.Select(Dept.BuildExpression());
             var query = from a in deptQuery

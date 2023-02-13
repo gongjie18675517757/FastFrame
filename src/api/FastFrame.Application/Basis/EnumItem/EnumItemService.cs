@@ -24,45 +24,16 @@ namespace FastFrame.Application.Basis
             await base.OnDeleteing(entity);
         }
 
-        public async Task<IEnumerable<EnumItemModel>> EnumValues(int enum_key)
+        public async Task<IReadOnlyDictionary<int, string>> EnumValues(int enum_key)
         {
             var list = await enumItemRepository
-                .Where(v => v.KeyEnum == enum_key)
+                .Where(v => v.KeyEnum == enum_key && v.IntKey != null)
                 .OrderBy(v => v.SortVal)
                 .ThenBy(v => v.TextValue)
-                .Select(v => new EnumItemModel
-                {
-                    Id = v.Id,
-                    Key = v.KeyEnum,
-                    Value = v.TextValue,
-                    Super_Id = v.Super_Id,
-                    ChildCount = enumItemRepository.Count(x => x.Super_Id == v.Id),
-                    TotalChildCount = enumItemRepository.Count(x => x.TreeCode.StartsWith(v.TreeCode)),
-                    Children = null,
-                    IntKey = v.IntKey
-                })
-                .ToListAsync();
+                .ToDictionaryAsync(v => v.IntKey.Value, v => v.TextValue);
+
             return list;
-
-            //IEnumerable<EnumItemModel> loadTree(EnumItemModel item)
-            //{
-            //    var children = list.Where(v => v.Super_Id == item.Id);
-            //    foreach (var child in children)
-            //    {
-            //        child.Children = loadTree(child);
-            //        yield return child;
-            //    }
-            //}
-
-            //return list
-            //     .Where(v => !list.Any(x => x.Id == v.Super_Id))
-            //     .Select(v =>
-            //     {
-            //         v.Children = loadTree(v);
-            //         return v;
-            //     });
-        }
-
+        } 
 
 
         public async Task<IEnumerable<IViewModel>> EnumItemList(int? name, string kw, int page_index = 1, int page_size = 10)

@@ -15,7 +15,8 @@ export default makeListPageInheritedFromBaseListPage({
     };
   },
   methods: {
-    [ListPageDefines.MethodsDefines.getColumns](arr) {
+    async [ListPageDefines.MethodsDefines.fmtColumns](super_func) {
+      const arr = await super_func();
       return [
         ...arr,
         {

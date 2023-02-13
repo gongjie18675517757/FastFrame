@@ -9,7 +9,7 @@ namespace FastFrame.Database
     /// <summary>
     /// 格式化EF生成的语句
     /// </summary>
-    public class FmtCommandInterceptor : DbCommandInterceptor, IDbCommandInterceptor
+    public partial class FmtCommandInterceptor : DbCommandInterceptor, IDbCommandInterceptor
     {
         /*替换掉 mysql 中：LOCATE(CONVERT USING utf8mb4) 中的语句*/
         public static readonly (Regex regex, string replace)[] regexArr;
@@ -18,8 +18,8 @@ namespace FastFrame.Database
         {
             regexArr
                 = new (Regex, string)[] {
-                    (new Regex(@"LOCATE\(CONVERT\('(?<v>.+?)' USING utf8mb4\) COLLATE utf8mb4_bin, (?<k>`.+`?)\) > 0", RegexOptions.Compiled | RegexOptions.IgnoreCase)," ${k} like '%${v}%' "),
-                    (new Regex(@"LOCATE\(CONVERT\(@(?<v>.+?) USING utf8mb4\) COLLATE utf8mb4_bin, (?<k>`.+`?)\) > 0", RegexOptions.Compiled | RegexOptions.IgnoreCase)," ${k} like CONCAT('%',@${v},'%') "),
+                    (MyRegex1()," ${k} like '%${v}%' "),
+                    (MyRegex()," ${k} like CONCAT('%',@${v},'%') "),
                 };
         }
     
@@ -49,5 +49,12 @@ namespace FastFrame.Database
 
             return sql;
         }
+
+        [GeneratedRegex("LOCATE\\(CONVERT\\(@(?<v>.+?) USING utf8mb4\\) COLLATE utf8mb4_bin, (?<k>`.+`?)\\) > 0", RegexOptions.IgnoreCase | RegexOptions.Compiled, "zh-CN")]
+        private static partial Regex MyRegex();
+
+
+        [GeneratedRegex("LOCATE\\(CONVERT\\('(?<v>.+?)' USING utf8mb4\\) COLLATE utf8mb4_bin, (?<k>`.+`?)\\) > 0", RegexOptions.IgnoreCase | RegexOptions.Compiled, "zh-CN")]
+        private static partial Regex MyRegex1();
     }
 }

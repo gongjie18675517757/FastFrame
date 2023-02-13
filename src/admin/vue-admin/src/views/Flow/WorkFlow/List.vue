@@ -13,10 +13,10 @@ export default makeListPageInheritedFromBaseListPage({
     };
   },
   methods: {
-    async [ListPageDefines.MethodsDefines.fmtColumns](arr) {
+    async [ListPageDefines.MethodsDefines.fmtColumns](super_func) {
       let kvs = await this.$http.get(`/api/common/HaveCheckModuleList`);
       return [
-        ...arr,
+        ...(await super_func()),
         {
           Name: "BeModule",
           EnumValues: kvs,

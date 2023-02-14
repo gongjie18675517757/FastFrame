@@ -1370,9 +1370,9 @@
             上传时间 
             </summary>
         </member>
-        <member name="T:FastFrame.Application.ResourceStreamModel">
+        <member name="T:FastFrame.Application.LocalFileResourceStreamModel">
             <summary>
-            文件流信息
+            本地文件流信息
             </summary>
         </member>
         <member name="T:FastFrame.Application.Chat.ChatMessageHandle">

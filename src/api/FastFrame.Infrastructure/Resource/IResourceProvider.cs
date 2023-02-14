@@ -9,25 +9,48 @@ namespace FastFrame.Infrastructure.Resource
     /// </summary>
     public interface IResourceProvider
     {
+        /// <summary>
+        /// 保存
+        /// </summary> 
+        Task<string> WriteAsync(Stream stream, string file_name);
+
+        /// <summary>
+        /// 读取
+        /// </summary> 
+        Task<IResourceReader> ReadAsync(string relativelyPath);
+
+        /// <summary>
+        /// 检查是否存在
+        /// </summary> 
+        Task<bool> ExistsAsync(string relativelyPath);
+
+        /// <summary>
+        /// 获取实际文件路径
+        /// </summary>
+        /// <param name="relativelyPath"></param>
+        /// <returns></returns>
+        string GetFilePath(string relativelyPath);
+
+
         //OSPlatform.Windows监测运行环境
-        static bool IsWindowRunTime()
+        public static bool IsWindowRunTime()
         {
             return RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
         }
 
         //OSPlatform.Linux运行环境
-        static bool IsLinuxRunTime()
+        public static bool IsLinuxRunTime()
         {
             return RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
         }
 
-        static string GetLinuxDirectory(string path)
+        public static string GetLinuxDirectory(string path)
         {
             string pathTemp = Path.Combine(path);
             return pathTemp.Replace("\\", "/");
         }
 
-        static string GetWindowDirectory(string path)
+        public static string GetWindowDirectory(string path)
         {
             string pathTemp = Path.Combine(path);
             return pathTemp.Replace("/", "\\");
@@ -49,27 +72,5 @@ namespace FastFrame.Infrastructure.Resource
 
             return path;
         }
-
-        /// <summary>
-        /// 保存
-        /// </summary> 
-        Task<string> WriteAsync(Stream stream);
-
-        /// <summary>
-        /// 读取
-        /// </summary> 
-        Task<Stream> ReadAsync(string relativelyPath);
-
-        /// <summary>
-        /// 检查是否存在
-        /// </summary> 
-        Task<bool> ExistsAsync(string relativelyPath);
-
-        /// <summary>
-        /// 获取实际文件路径
-        /// </summary>
-        /// <param name="relativelyPath"></param>
-        /// <returns></returns>
-        string GetFilePath(string relativelyPath);
     }
 }

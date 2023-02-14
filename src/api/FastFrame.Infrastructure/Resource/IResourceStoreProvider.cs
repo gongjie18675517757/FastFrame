@@ -22,6 +22,12 @@ namespace FastFrame.Infrastructure.Resource
         /// </summary>
         /// <param name="resourceId"></param>
         /// <returns></returns>
-        Task<IResourceStreamInfo> TryGetResource(string resourceId);
-    }
+        Task<IResourceRedearInfo> TryGetResourceReader(string resourceId); 
+     
+
+        /// <summary>
+        /// 资源
+        /// </summary>
+        public const string ResourceMapKeyName = "__ResourceMapKeyName";
+    } 
 }

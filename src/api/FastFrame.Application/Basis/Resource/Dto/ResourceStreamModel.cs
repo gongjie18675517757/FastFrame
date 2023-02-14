@@ -4,30 +4,29 @@ using System.IO;
 namespace FastFrame.Application
 {
     /// <summary>
-    /// 文件流信息
+    /// 本地文件流信息
     /// </summary>
-    public partial class ResourceStreamModel : IResourceStreamInfo
+    public partial class LocalFileResourceStreamModel : IResourceRedearInfo
     {
-        public ResourceStreamModel(string name, string contentType, DateTime modifyTime, Stream resourceBlobStream)
+        private readonly IResourceReader fileReader;
+
+        public LocalFileResourceStreamModel(string name, string contentType, DateTime modifyTime, IResourceReader fileReader)
         {
             Name = name;
             ModifyTime = modifyTime;
+            this.fileReader = fileReader;
             ContentType = contentType;
-            ResourceBlobStream = resourceBlobStream;
         }
 
         public string Name { get; }
-
-        public Stream ResourceBlobStream { get; private set; }
 
         public DateTime ModifyTime { get; }
 
         public string ContentType { get; }
 
-        public void ReplaceBlobStream(Stream input)
+        public IResourceReader GetResourceReader()
         {
-            input.Position = 0;
-            ResourceBlobStream = input;
+            return fileReader;
         }
     }
 }

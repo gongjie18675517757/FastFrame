@@ -3,9 +3,9 @@
 namespace FastFrame.Infrastructure.Resource
 {
     /// <summary>
-    /// 资源流
+    /// 资源信息
     /// </summary>
-    public interface IResourceStreamInfo
+    public interface IResourceRedearInfo
     {
         /// <summary>
         /// 名称 
@@ -23,14 +23,8 @@ namespace FastFrame.Infrastructure.Resource
         DateTime ModifyTime { get; }
 
         /// <summary>
-        /// 资源流
+        /// 获取资源读取器
         /// </summary>
-        Stream ResourceBlobStream { get; }
-
-        /// <summary>
-        /// 替换资源
-        /// </summary>
-        /// <param name="input"></param>
-        void ReplaceBlobStream(Stream input);
+        IResourceReader GetResourceReader();
     }
 }

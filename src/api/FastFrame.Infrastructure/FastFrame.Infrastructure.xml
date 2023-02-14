@@ -2025,14 +2025,7 @@
             附件资源操作提供者
             </summary>
         </member>
-        <member name="M:FastFrame.Infrastructure.Resource.IResourceProvider.GetRuntimeDirectory(System.String)">
-            <summary>
-            目录转换
-            </summary>
-            <param name="path"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Infrastructure.Resource.IResourceProvider.WriteAsync(System.IO.Stream)">
+        <member name="M:FastFrame.Infrastructure.Resource.IResourceProvider.WriteAsync(System.IO.Stream,System.String)">
             <summary>
             保存
             </summary> 
@@ -2054,6 +2047,44 @@
             <param name="relativelyPath"></param>
             <returns></returns>
         </member>
+        <member name="M:FastFrame.Infrastructure.Resource.IResourceProvider.GetRuntimeDirectory(System.String)">
+            <summary>
+            目录转换
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Resource.IResourceReader">
+            <summary>
+            文件读取器
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Resource.IResourceReader.Exists">
+            <summary>
+            验证资源是否还存在
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Resource.IResourceReader.TryGetStream(System.IO.Stream@)">
+            <summary>
+            获取流
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Resource.IResourceReader.TryGetLocalFileFullName(System.String@)">
+            <summary>
+            尝试获取本地文件名
+            </summary>
+            <param name="file_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Resource.IResourceReader.TryGetRelativelyPath(System.String@)">
+            <summary>
+            尝试获取相对路径
+            </summary>
+            <param name="relativelyPath"></param>
+            <returns></returns>
+        </member>
         <member name="T:FastFrame.Infrastructure.Resource.IResourceStoreProvider">
             <summary>
             资源存储
@@ -2068,43 +2099,42 @@
             <param name="stream"></param>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.Infrastructure.Resource.IResourceStoreProvider.TryGetResource(System.String)">
+        <member name="M:FastFrame.Infrastructure.Resource.IResourceStoreProvider.TryGetResourceReader(System.String)">
             <summary>
             尝试获取资源
             </summary>
             <param name="resourceId"></param>
             <returns></returns>
         </member>
-        <member name="T:FastFrame.Infrastructure.Resource.IResourceStreamInfo">
+        <member name="F:FastFrame.Infrastructure.Resource.IResourceStoreProvider.ResourceMapKeyName">
             <summary>
-            资源流
+            资源
             </summary>
         </member>
-        <member name="P:FastFrame.Infrastructure.Resource.IResourceStreamInfo.Name">
+        <member name="T:FastFrame.Infrastructure.Resource.IResourceRedearInfo">
+            <summary>
+            资源信息
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Resource.IResourceRedearInfo.Name">
             <summary>
             名称 
             </summary> 
         </member>
-        <member name="P:FastFrame.Infrastructure.Resource.IResourceStreamInfo.ContentType">
+        <member name="P:FastFrame.Infrastructure.Resource.IResourceRedearInfo.ContentType">
             <summary>
             资源类型
             </summary>
         </member>
-        <member name="P:FastFrame.Infrastructure.Resource.IResourceStreamInfo.ModifyTime">
+        <member name="P:FastFrame.Infrastructure.Resource.IResourceRedearInfo.ModifyTime">
             <summary>
             最后修改时间
             </summary>
         </member>
-        <member name="P:FastFrame.Infrastructure.Resource.IResourceStreamInfo.ResourceBlobStream">
+        <member name="M:FastFrame.Infrastructure.Resource.IResourceRedearInfo.GetResourceReader">
             <summary>
-            资源流
+            获取资源读取器
             </summary>
-        </member>
-        <member name="M:FastFrame.Infrastructure.Resource.IResourceStreamInfo.ReplaceBlobStream(System.IO.Stream)">
-            <summary>
-            替换资源
-            </summary>
-            <param name="input"></param>
         </member>
         <member name="M:FastFrame.Infrastructure.RSAOperate.RSAHelper.#ctor(FastFrame.Infrastructure.RSAType,System.Text.Encoding,System.String,System.String)">
             <summary>

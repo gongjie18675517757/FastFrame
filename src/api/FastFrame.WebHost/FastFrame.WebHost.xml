@@ -350,6 +350,13 @@
             权限处理中间件
             </summary>
         </member>
+        <member name="M:FastFrame.WebHost.Middleware.ResourceMiddleware.NotFound(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            响应404
+            </summary>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
         <member name="T:FastFrame.WebHost.Middleware.ResourceOption">
             <summary>
             资源配置
@@ -422,6 +429,26 @@
             <typeparam name="TDto"></typeparam>
             <returns></returns>
         </member>
+        <member name="T:FastFrame.WebHost.Privder.LocalResourceProvider">
+            <summary>
+            资源提供者(使用本地文件目录)
+            </summary>
+        </member>
+        <member name="M:FastFrame.WebHost.Privder.LocalResourceProvider.ReadAsync(System.String)">
+            <summary>
+            读取文件
+            </summary>
+            <param name="relativelyPath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.WebHost.Privder.LocalResourceProvider.WriteAsync(System.IO.Stream,System.String)">
+            <summary>
+            写入文件
+            </summary>
+            <param name="stream"></param>
+            <param name="input_file_name"></param>
+            <returns></returns>
+        </member>
         <member name="M:FastFrame.WebHost.Privder.ModuleExportProvider.GetModuleStruts(System.String)">
             <summary>
             获取模块结构
@@ -444,11 +471,6 @@
             注册模块
             </summary>
             <param name="moduleStructs"></param>
-        </member>
-        <member name="T:FastFrame.WebHost.Privder.ResourceProvider">
-            <summary>
-            资源提供者
-            </summary>
         </member>
         <member name="T:FastFrame.Infrastructure.Lock.LockFacatoryProvider.LockHolder">
             <summary>

@@ -31,33 +31,31 @@ namespace FastFrame.Application.Basis
                         .Select(r => r.Path)
                         .FirstOrDefaultAsync();
 
-        public async Task<IResourceStreamInfo> TryGetResource(string resourceId)
+
+        public async Task<IResourceRedearInfo> TryGetResourceReader(string resourceId)
         {
             var info = await resourceRepository
                 .Where(v => v.Id == resourceId)
-                .Select(v => new { v.Name,v.ContentType, v.Path, v.UploadTime })
+                .Select(v => new { v.Name, v.ContentType, v.Path, v.UploadTime })
                 .FirstOrDefaultAsync();
 
             if (info == null)
                 return null;
 
-            if (!await resourceProvider.ExistsAsync(info.Path))
-                return null;
 
-            var stream = await resourceProvider.ReadAsync(info.Path);
-            if (stream == null)
-                return null;
 
-            return new ResourceStreamModel(info.Name,info.ContentType, info.UploadTime, stream);
-        }
+            var resourceReader = await resourceProvider.ReadAsync(info.Path);
 
+            return new LocalFileResourceStreamModel(info.Name, info.ContentType, info.UploadTime, resourceReader);
+        } 
+    
         public async Task<IResourceInfo> TrySaveResource(string name, string contentType, Stream stream)
         {
             var md5 = stream.ToMD5();
             var path = await GetPathByMd5Async(md5);
 
             if (path.IsNullOrWhiteSpace())
-                path = await resourceProvider.WriteAsync(stream);
+                path = await resourceProvider.WriteAsync(stream, name);
 
             var curr = sessionProvider.CurrUser;
             var resource = await resourceRepository.AddAsync(new Resource
@@ -78,6 +76,7 @@ namespace FastFrame.Application.Basis
 
             if (curr != null)
                 model.UploaderName = curr.Name;
+
             return model;
         }
     }

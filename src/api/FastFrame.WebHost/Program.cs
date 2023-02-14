@@ -23,6 +23,7 @@ using FastFrame.WebHost.Privder;
 using Hangfire;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
@@ -115,16 +116,17 @@ services
     .AddMvc(opts =>
     {
         //opts.Filters.Add<GlobalFilter>();
-    }) 
+    })
     .AddNewtonsoftJson(options =>
     {
-        JSONSetting(options.SerializerSettings); 
+        JSONSetting(options.SerializerSettings);
     });
 
 services
     .AddSignalR()
-    .AddNewtonsoftJsonProtocol(options => {
-        JSONSetting(options.PayloadSerializerSettings); 
+    .AddNewtonsoftJsonProtocol(options =>
+    {
+        JSONSetting(options.PayloadSerializerSettings);
     });
 
 services.AddLogging(r => r.AddLog4Net());
@@ -157,7 +159,7 @@ services
     .AddScoped<IModuleExportProvider, ModuleExportProvider>()
     .AddScoped<IApplicationSession, AppSessionProvider>()
     .AddTransient<IApplicationInitialLifetime, ApplicationInitialProvider>()
-    .AddScoped<IResourceProvider, ResourceProvider>()
+    .AddScoped<IResourceProvider, LocalResourceProvider>()
     .AddSingleton<IModuleDesProvider>(s => new XmlModuleDesProvider(AppDomain.CurrentDomain.BaseDirectory))
     .AddScoped<IExcelExportProvider, ExcelExportProvider>()
     .AddScoped<IPermissionDefinitionContext, PermissionDefinitionContext>()
@@ -310,6 +312,19 @@ defaultFilesOptions.DefaultFileNames.Add("index.html");
 app.UseDefaultFiles(defaultFilesOptions);
 app.UseStaticFiles();
 
+var root_dir = new DirectoryInfo(Configuration.GetSection("ResourceOption:BasePath").Value);
+if (!root_dir.Exists)
+    root_dir.Create();
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(root_dir.FullName),
+    RequestPath = "/files",
+    ServeUnknownFileTypes = true,
+    DefaultContentType = "application/octet-stream",
+    HttpsCompression = Microsoft.AspNetCore.Http.Features.HttpsCompressionMode.Default,
+});
+
 /*记录接口请求时间*/
 app.UseMiddleware<InvodeTimeMiddleware>();
 
@@ -339,7 +354,7 @@ app.MapHub<MessageHub>("/hub/message");
 app.MapControllers();
 app.MapHangfireDashboard();
 
- 
+
 
 //app.UseEndpoints(endpoints =>
 //{

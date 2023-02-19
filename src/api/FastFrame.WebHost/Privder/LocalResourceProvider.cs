@@ -85,7 +85,7 @@ namespace FastFrame.WebHost.Privder
 
             public LocalResourceReader(string file_name, string relativelyPath)
             {
-                file_Name = file_name;
+                file_Name = new FileInfo(file_name).FullName;
                 this.relativelyPath = relativelyPath;
             }
 

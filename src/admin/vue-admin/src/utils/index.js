@@ -137,6 +137,7 @@ export function upload(pars) {
             let files = e.target.files
             if (!verifyFileFunc(files)) {
                 reject()
+                return;
             }
             postFiles(files, { onProgress }).then(function (resp) {
                 resolve(resp)
@@ -414,3 +415,4 @@ export function convertHtmlToText(html) {
     const txt = el.textContent;
     return txt;
 }
+ 

@@ -21,14 +21,22 @@ using FastFrame.WebHost.Hubs;
 using FastFrame.WebHost.Middleware;
 using FastFrame.WebHost.Privder;
 using Hangfire;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Rewrite;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System.Text;
 using System.Text.Json.Serialization;
+using tusdotnet;
+using tusdotnet.Interfaces;
+using tusdotnet.Models;
+using tusdotnet.Models.Expiration;
+using tusdotnet.Stores;
 
 #region .NET5的写法 
 //namespace FastFrame.WebHost
@@ -75,10 +83,19 @@ services.Configure<CookiePolicyOptions>(options =>
     options.MinimumSameSitePolicy = SameSiteMode.None;
 });
 
-//services.Configure<IISServerOptions>(options =>
-//{
-//    options.AutomaticAuthentication = false;
-//});
+services.Configure<IISServerOptions>(options =>
+{
+    options.AutomaticAuthentication = false;
+});
+services.Configure<KestrelServerOptions>(options =>
+{
+    options.Limits.MaxRequestBodySize = long.MaxValue;
+});
+services.Configure<FormOptions>(x =>
+{
+    x.ValueLengthLimit = int.MaxValue;
+    x.MultipartBodyLengthLimit = int.MaxValue; // In case of multipart
+});
 
 
 var configurationOptions = StackExchange.Redis.ConfigurationOptions.Parse(Configuration.GetConnectionString("RedisConnection"));
@@ -312,18 +329,7 @@ defaultFilesOptions.DefaultFileNames.Add("index.html");
 app.UseDefaultFiles(defaultFilesOptions);
 app.UseStaticFiles();
 
-var root_dir = new DirectoryInfo(Configuration.GetSection("ResourceOption:BasePath").Value);
-if (!root_dir.Exists)
-    root_dir.Create();
 
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(root_dir.FullName),
-    RequestPath = "/files",
-    ServeUnknownFileTypes = true,
-    DefaultContentType = "application/octet-stream",
-    HttpsCompression = Microsoft.AspNetCore.Http.Features.HttpsCompressionMode.Default,
-});
 
 /*记录接口请求时间*/
 app.UseMiddleware<InvodeTimeMiddleware>();
@@ -334,8 +340,23 @@ app.UseSession();
 /*初始化应用会话状态*/
 app.UseMiddleware<AppSessionInitMiddleware>();
 
+/*创建文件目录用于上传文件*/
+var root_dir = new DirectoryInfo(Configuration.GetSection("ResourceOption:BasePath").Value);
+if (!root_dir.Exists)
+    root_dir.Create(); 
+
 /*处理资源文件*/
 app.UseMiddleware<ResourceMiddleware>();
+
+/*将资源暴露出去*/
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(root_dir.FullName),
+    RequestPath = "/files",
+    ServeUnknownFileTypes = true,
+    DefaultContentType = "application/octet-stream",
+    HttpsCompression = Microsoft.AspNetCore.Http.Features.HttpsCompressionMode.Default,
+});
 
 /*异步处理中间件*/
 app.UseMiddleware<ExceptionMiddleware>();
@@ -412,4 +433,4 @@ applicationLifetime.ApplicationStopped.Register(() =>
 });
 #endregion
 
-app.Run();
+app.Run(); 

@@ -2,7 +2,9 @@
   <v-card tile :loading="loading">
     <v-toolbar dense flat color="transparent" height="30px">
       <v-toolbar-title>{{ title }}</v-toolbar-title>
-      <v-btn small text color="primary" v-if="canEdit" @click="upload"> 上传 </v-btn>
+      <v-btn small text color="primary" v-if="canEdit" @click="upload">
+        上传
+      </v-btn>
       <v-spacer></v-spacer>
       <v-menu offset-y>
         <template v-slot:activator="{ on }">
@@ -73,7 +75,7 @@
           </v-list>
         </v-layout>
       </v-container>
-      <v-container fluid v-else style="height: 100%">
+      <v-container fluid style="height: 100%" v-else-if="canEdit">
         <v-row align="center" justify="center" style="height: 100%">
           <a @click="upload" style="padding-left: 15px">上传图片</a>
         </v-row>
@@ -83,7 +85,7 @@
 </template>
 
 <script>
-import {  getDownLoadPath, getThumbnailPath } from "../../config";
+import { getDownLoadPath, getThumbnailPath } from "../../config";
 import { upload } from "../../utils";
 import GridItem from "./GridItem.vue";
 import ListItem from "./ListItem.vue";
@@ -180,20 +182,22 @@ export default {
         this.loading = false;
       }
     },
-    verifyFile(arr) {
-      if ([...arr].some((x) => !x.type.startsWith("image/"))) {
-        this.$message.toast.error("只允许上传图片类型!");
-        return false;
-      }
+    verifyFile() {
+      // if ([...arr].some((x) => !x.type.startsWith("image/"))) {
+      //   this.$message.toast.error("只允许上传图片类型!");
+      //   return false;
+      // }
 
       return true;
     },
-    upload() {
-      upload({
-        accept: this.accept,
-        onProgress: this.onProgress,
-        verifyFileFunc: this.verifyFile,
-      }).then(([file]) => {
+    async upload() {
+      try {
+        const [file] = await upload({
+          accept: this.accept,
+          onProgress: this.onProgress,
+          verifyFileFunc: this.verifyFile,
+        });
+
         this.value.push({
           Id: file.Id,
           ContentType: file.ContentType,
@@ -205,7 +209,9 @@ export default {
         });
         this.$emit("input", this.value);
         this.$emit("change", this.value);
-      });
+      } finally {
+        this.loading = false;
+      }
     },
   },
 };

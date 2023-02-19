@@ -25,6 +25,7 @@ namespace FastFrame.WebHost.Middleware
         private readonly Regex downloadPathRegex;
         private readonly Regex thumbnailPathRegex;
         private readonly Regex reqPathRegex;
+        private readonly Regex reqBigPathRegex;
         private readonly FileExtensionContentTypeProvider provider;
 
         public ResourceMiddleware(RequestDelegate next, IOptions<ResourceOption> options)
@@ -33,6 +34,7 @@ namespace FastFrame.WebHost.Middleware
             downloadPathRegex = new Regex(options.Value.DownLoadPathRegexText, RegexOptions.IgnoreCase | RegexOptions.Compiled);
             thumbnailPathRegex = new Regex(options.Value.ThumbnailPathRegexText, RegexOptions.IgnoreCase | RegexOptions.Compiled);
             reqPathRegex = new Regex(options.Value.UploadPathRegexText, RegexOptions.IgnoreCase | RegexOptions.Compiled);
+            reqBigPathRegex = new Regex(options.Value.UploadBigFilePathText, RegexOptions.IgnoreCase | RegexOptions.Compiled);
             provider = new FileExtensionContentTypeProvider();
         }
 
@@ -61,7 +63,7 @@ namespace FastFrame.WebHost.Middleware
                 else
                     groups = thumbnailPathRegex.Match(path.Value).Groups;
 
-                var resource_id = groups["resource_id"].Value; ;
+                var resource_id = groups["resource_id"].Value;
                 var resource_name = groups["resource_name"].Value;
 
                 var resourceStreamInfo = await context.RequestServices.GetService<IResourceStoreProvider>().TryGetResourceReader(resource_id);
@@ -92,16 +94,17 @@ namespace FastFrame.WebHost.Middleware
                 if (contentType.IsNullOrWhiteSpace())
                     contentType = "application/octet-stream";
 
-                context.Response.StatusCode = 200;
-                context.Response.ContentType = contentType;
-                context.Response.Headers.TryAdd("cache-control", new[] { "public,max-age=31536000" });
-                context.Response.Headers.TryAdd("Expires", new[] { resourceStreamInfo.ModifyTime.AddYears(10).ToString("R") });
-                context.Response.Headers.TryAdd("Last-Modified", resourceStreamInfo.ModifyTime.ToString("R"));                
-                context.Response.Headers.TryAdd("ETag", resource_id);
 
                 /*响应缩略图*/
                 if (has_thumbnail && contentType.StartsWith("image"))
                 {
+                    context.Response.StatusCode = 200;
+                    context.Response.ContentType = contentType;
+                    context.Response.Headers.TryAdd("cache-control", new[] { "public,max-age=31536000" });
+                    context.Response.Headers.TryAdd("Expires", new[] { resourceStreamInfo.ModifyTime.AddYears(10).ToString("R") });
+                    context.Response.Headers.TryAdd("Last-Modified", resourceStreamInfo.ModifyTime.ToString("R"));
+                    context.Response.Headers.TryAdd("ETag", resource_id);
+
                     int width = 300, height = 300;
                     _ = context.Request.Query.TryGetValue("width", out var widthText) && int.TryParse(widthText, out width);
                     _ = context.Request.Query.TryGetValue("height", out var heightText) && int.TryParse(heightText, out height);
@@ -115,10 +118,11 @@ namespace FastFrame.WebHost.Middleware
                     using (stream)
                     {
                         var newStream = ImageExtended.GetPicThumbnail(stream, height, width, 50);
+                        newStream.Position = 0;
                         await newStream.CopyToAsync(context.Response.Body);
                         return;
                     }
-                } 
+                }
             }
 
             /*响应上传*/
@@ -136,6 +140,12 @@ namespace FastFrame.WebHost.Middleware
                 context.Response.ContentType = "application/json";
                 await context.Response.WriteJsonAsync(resultList.ToJson());
                 return;
+            }
+
+            /*响应大文件上传*/
+            if (path.HasValue && reqBigPathRegex.IsMatch(path.Value))
+            {
+
             }
 
             await next(context);
@@ -158,6 +168,11 @@ namespace FastFrame.WebHost.Middleware
         }
     }
 
+
+    public class BidFileUploadInput
+    {
+
+    }
 
 
 
@@ -187,5 +202,11 @@ namespace FastFrame.WebHost.Middleware
         /// 如：/api/resource/upload
         /// </summary>
         public string UploadPathRegexText { get; set; }
+
+        /// <summary>
+        /// 响应大文件上传的正则
+        /// 如:/api/resources/big_upload/{aabbccddefg}
+        /// </summary>
+        public string UploadBigFilePathText { get; set; }
     }
 }

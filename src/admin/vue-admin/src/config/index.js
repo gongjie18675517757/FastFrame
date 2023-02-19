@@ -25,7 +25,13 @@ export function getThumbnailPath(fileId, fileName) {
  * 上传路径
  */
 export function getUploadPath() {
-    return `${isDev ? '/api' : ''}/resources/upload` 
+    return `${isDev ? '/api' : ''}/resources/upload`
 }
 
- 
+/**
+ * 大文件上传路径
+ */
+export function getBidFileUploadPath(suffix = '') {
+    return `${isDev ? '/api' : ''}/big_files/upload/${suffix}`
+}
+

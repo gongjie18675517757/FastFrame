@@ -2,6 +2,7 @@ import Vue from 'vue'
 import store from '../../store'
 import AlertComponent from './Alert.vue'
 import ConfirmComponent from './Confirm.vue'
+import Uplod from './Uplod.vue'
 import { FormPageDefines, FormPageCore } from '../Page'
 import Choose from './Choose.vue'
 import { guid } from '../../utils'
@@ -78,23 +79,23 @@ export function makePromptPageFacatory(pars) {
 /**
  * 确认弹窗的参数
  */
-export function confirmPars(){}
+export function confirmPars() { }
 
 /**
  * 提示标题
  */
-confirmPars.prototype.title=null;
+confirmPars.prototype.title = null;
 
 /**
  * 提示内容
  */
-confirmPars.prototype.content=null;
+confirmPars.prototype.content = null;
 
 /**
  * 自动关闭的时间
  */
-confirmPars.prototype.timeoute=0;
- 
+confirmPars.prototype.timeoute = 0;
+
 
 /**
  * 几个消息方法
@@ -131,6 +132,12 @@ const message = {
     prompt(pars) {
         return this.dialog(makePromptPageFacatory(pars), pars)
     },
+    upload(pars) {
+        return this.dialog(Uplod, {
+            width: '600px',
+            ...pars
+        })
+    },
     dialog(component, pars) {
         return new Promise((resolve, reject) => {
             const dialogItem = {
@@ -164,7 +171,7 @@ const message = {
             timeout = 2000,
             color
         }) {
-            let id = new Date().getTime().toString();
+            let id = guid();
             store.state.toasts.push({
                 type,
                 msg,

@@ -60,8 +60,7 @@
 </template>
 
 <script>
-import { getUploadPath } from '../../config';
-import { guid } from '../../utils';
+import { upload_bid_file } from "./file_splice";
 /**
  * 定义上传状态
  */
@@ -94,47 +93,6 @@ const upload_state = {
 function make_item_upload_state(file) {
   const { size, name } = file;
 
-  /**
-   * 上传对象实例
-   */
-  const upload_instance_ref = = new tus.Upload(file, {
-     endpoint: getBidFileUploadPath(),
-        retryDelays: [0, 3000, 5000, 10000, 20000],
-        metadata: {
-            filename: file.name,
-            filetype: file.type,
-            file_key:guid()
-        },
-        onError: function(error) {
-            console.log("Failed because: " + error)
-        },
-        onProgress: function(bytesUploaded, bytesTotal) {
-            var percentage = (bytesUploaded / bytesTotal * 100).toFixed(2)
-            console.log(bytesUploaded, bytesTotal, percentage + "%")
-        },
-        onSuccess: function() {
-            console.log("Download %s from %s", upload.file.name, upload.url)
-        }
-  });
-
- 
- 
-    upload_instance_ref.findPreviousUploads().then(function (previousUploads) {
-        // Found previous uploads so we select the first one. 
-        if (previousUploads.length) {
-            upload_instance_ref.resumeFromPreviousUpload(previousUploads[0])
-        }
-
-        // Start the upload
-        upload_instance_ref.start()
-    })
-  /**
-   * 开始上传
-   */
-  function start() {
-
-  }
-
   return {
     /**
      * 文件名称
@@ -161,24 +119,17 @@ function make_item_upload_state(file) {
      */
     upload_size: 0,
 
-    /**
-     * 停止
-     */
-    stop() {},
-
-    /**
-     * 重新开始
-     */
-    re_start() {
-      start();
-    },
-
-    /**
-     * 暂停
-     */
-    pause() {},
+    async start() {
+      /**
+       * 上传对象实例
+       */
+      const upload_instance_ref = await upload_bid_file(file);
+      return upload_instance_ref.start();
+    }, 
   };
 }
+
+make_item_upload_state(new File(['abc'],'aa.bb'));
 
 /**
  * 生成文件项
@@ -239,7 +190,9 @@ export default {
       upload_state,
     };
   },
-  mounted() {},
+  mounted() {
+    window.upload_bid_file=upload_bid_file;
+  },
   methods: {
     cancel() {
       this.$emit("close");

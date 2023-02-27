@@ -343,7 +343,12 @@ app.UseMiddleware<AppSessionInitMiddleware>();
 /*创建文件目录用于上传文件*/
 var root_dir = new DirectoryInfo(Configuration.GetSection("ResourceOption:BasePath").Value);
 if (!root_dir.Exists)
-    root_dir.Create(); 
+    root_dir.Create();
+
+app.MapGet("/a/b/{c}", (int c) =>
+{
+    return Enumerable.Range(0, c);
+});
 
 /*处理资源文件*/
 app.UseMiddleware<ResourceMiddleware>();
@@ -433,4 +438,4 @@ applicationLifetime.ApplicationStopped.Register(() =>
 });
 #endregion
 
-app.Run(); 
+app.Run();

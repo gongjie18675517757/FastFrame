@@ -36,6 +36,35 @@ namespace FastFrame.WebHost.Privder
         }
 
         /// <summary>
+        /// 生成一个目录(相对路径)
+        /// </summary>
+        /// <returns></returns>
+        public string MakeDirectoryAsRelativelyPath()
+        {
+            /*目录的相对路径*/
+            var dir_relativelyPath = Path.Combine($"{DateTime.Now.Year}",
+                                              $"{DateTime.Now.Month}",
+                                              $"{DateTime.Now.Day}",
+                                              IdGenerate.NetLongId().ToString());
+
+            return dir_relativelyPath;
+        }
+
+        /// <summary>
+        /// 生成一个绝对路径
+        /// </summary>
+        /// <returns></returns>
+        public string MakeDirectoryAbsolutePath()
+        {
+            var path = IResourceProvider.GetRuntimeDirectory(Path.Combine(option.CurrentValue.BasePath, MakeDirectoryAsRelativelyPath()));
+
+            var directoryInfo = new DirectoryInfo(path);
+
+            directoryInfo.Create();
+            return directoryInfo.FullName;
+        }
+
+        /// <summary>
         /// 写入文件
         /// </summary>
         /// <param name="stream"></param>
@@ -43,21 +72,20 @@ namespace FastFrame.WebHost.Privder
         /// <returns></returns>
         public async Task<string> WriteAsync(Stream stream, string input_file_name)
         {
-            var relativelyPath = Path.Combine(
-                    $"{DateTime.Now.Year}",
-                    $"{DateTime.Now.Month}",
-                    $"{DateTime.Now.Day}");
-            var dirPath = Path.Combine(option.CurrentValue.BasePath, relativelyPath);
+            /*文件的相对路径*/
+            var file_relativelyPath = Path.Combine(MakeDirectoryAsRelativelyPath(), input_file_name);
 
-            if (!Directory.Exists(dirPath))
-                Directory.CreateDirectory(dirPath);
+            var base_path = option.CurrentValue.BasePath;
 
-            var file_name = $"{IdGenerate.NetLongId()}.{Path.GetExtension(input_file_name)}";
-            relativelyPath = Path.Combine(relativelyPath, file_name);
+            /*文件完整路径*/
+            var file_full_path = IResourceProvider.GetRuntimeDirectory(Path.Combine(base_path, file_relativelyPath));
 
-            var full_file_name = Path.Combine(option.CurrentValue.BasePath, relativelyPath);
+            var file_info = new FileInfo(file_full_path);
 
-            using (var fileStream = File.Create(full_file_name))
+            if (!file_info.Directory.Exists)
+                file_info.Directory.Create();
+
+            using (var fileStream = file_info.Create())
             {
                 stream.Position = 0;
                 await stream.CopyToAsync(fileStream);
@@ -65,9 +93,15 @@ namespace FastFrame.WebHost.Privder
                 await fileStream.FlushAsync();
             }
 
-            return relativelyPath;
+            return file_relativelyPath;
         }
 
+
+        /// <summary>
+        /// 根据相对路径，返回完整路径
+        /// </summary>
+        /// <param name="relativelyPath"></param>
+        /// <returns></returns>
         public string GetFilePath(string relativelyPath)
             => IResourceProvider.GetRuntimeDirectory(Path.Combine(option.CurrentValue.BasePath, relativelyPath));
 
@@ -118,5 +152,7 @@ namespace FastFrame.WebHost.Privder
                 return File.Exists(file_Name);
             }
         }
+
+
     }
 }

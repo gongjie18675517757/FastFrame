@@ -12,5 +12,7 @@ namespace FastFrame.WebHost.Controllers.Basis
         public ApiRequestLogController(ApiRequestLogService service) : base(service)
         {
         }
+
+ 
     }
 }

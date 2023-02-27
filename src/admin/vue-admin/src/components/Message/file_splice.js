@@ -58,16 +58,16 @@ export async function upload_file_metadata(file, size = SLICE_SIZE) {
     const metadata = {
         name: file.name,
         size: file.size,
-        type: file.type,
-        total_files: calc_file_splcie_count(file, size),
+        contentType: file.type,
+        totalChunkFiles: calc_file_splcie_count(file, size),
         md5
     }
 
     /**
      * 支持的分片大小应该由后端定义并返回,这里先由前端定义
      */
-    const file_id = await $http.post(getBidFileUploadPath(), metadata);
-    return file_id
+    const res = await $http.post(getBidFileUploadPath(), metadata);
+    return res
 }
 
 
@@ -87,7 +87,7 @@ export class upload_bid_file_config {
             upload_size
         };
     }
-};
+}
 
 /**
  * 重试次数和延时
@@ -153,18 +153,19 @@ export async function upload_bid_file(file, config, size = SLICE_SIZE) {
     /**
      * 上传元数据后,返回文件id
      */
-    const file_id = await upload_file_metadata(file, size);
+    const file_model = await upload_file_metadata(file, size);
+    const file_id = file_model.Id;
 
     /**
      * 存放分割好的文件
      */
     const upload_item_arr = new Array(total).fill(null).map((_, index) => {
-        const file = get_slice_file_by_index(file, index, size);
+        const _file = get_slice_file_by_index(file, index, size);
         return ({
             index,
             state: upload_state.ready_ing,
             upload_size: 0,
-            file,
+            file:_file,
             total_size: file.size
         })
     });
@@ -203,8 +204,8 @@ export async function upload_bid_file(file, config, size = SLICE_SIZE) {
             const splice_file = upload_item.file;
             const form_data = new FormData();
             form_data.append('file_id', file_id);
-            form_data.append('file', splice_file);
-            form_data.append('index', upload_item_index);
+            form_data.append('chunk_file', splice_file);
+            form_data.append('file_index', upload_item_index);
 
 
             /**
@@ -214,7 +215,7 @@ export async function upload_bid_file(file, config, size = SLICE_SIZE) {
              * 第二次为0,则需要按指定的秒数指定
              */
             let retry_count = -1
-            while (retry <= config.retry_delays.length - 1) {
+            while (retry_count <= config.retry_delays.length - 1) {
                 /**
                  * 重试时等待指定的毫秒数
                  */
@@ -223,7 +224,7 @@ export async function upload_bid_file(file, config, size = SLICE_SIZE) {
                     await sleep(retry_delay);
 
                 try {
-                    await $http.post(getBidFileUploadPath(), form_data, {
+                    await $http.post(getBidFileUploadPath(file_id), form_data, {
                         method: 'post',
                         headers: {
                             'Content-Type': 'multipart/form-data'
@@ -255,14 +256,14 @@ export async function upload_bid_file(file, config, size = SLICE_SIZE) {
                     }
                 }
 
-                retry++;
+                retry_count++;
             }
         }
 
-        if (!is_cancel)
-            window.console.log(`file_id:${file_id},,分片索引:#${upload_item.index},task_index:${task_index},处理完成`)
+        if (file_state == upload_state.finished)
+            window.console.log(`file_id:${file_id},task_index:${task_index},全部处理完成`)
         else
-            window.console.log(`file_id:${file_id},,分片索引:#${upload_item.index},task_index:${task_index},已取消`)
+            window.console.log(`file_id:${file_id},task_index:${task_index},已取消`)
     }
 
     return {
@@ -283,9 +284,9 @@ export async function upload_bid_file(file, config, size = SLICE_SIZE) {
             await Promise.all(tasks)
 
             /**
-             * 请求后台,返回文件信息
+             * 全部上传完成,返回文件
              */
-            return await this.$http.get(getBidFileUploadPath(file_id));
+            return file_model;
         },
         // /**
         //  * 暂停上传

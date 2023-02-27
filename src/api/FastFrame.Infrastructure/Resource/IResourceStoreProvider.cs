@@ -18,6 +18,16 @@ namespace FastFrame.Infrastructure.Resource
         Task<IResourceInfo> TrySaveResource(string name, string contentType, Stream stream);
 
         /// <summary>
+        /// 尝试保存一个空资源
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="contentType"></param>
+        /// <param name="size"></param>
+        /// <param name="md5"></param>
+        /// <returns></returns>
+        Task<IResourceInfo> TrySaveEmptyResource(string name, string contentType, long size, string md5);
+
+        /// <summary>
         /// 尝试获取资源
         /// </summary>
         /// <param name="resourceId"></param>

@@ -350,11 +350,29 @@
             权限处理中间件
             </summary>
         </member>
+        <member name="M:FastFrame.WebHost.Middleware.ResourceMiddleware.TryExistsComplateAndMergeFiles(System.String,System.String,System.Int32,System.String)">
+            <summary>
+            尝试检查文件是否完整并合并分片文件(如果完整)
+            </summary>
+            <param name="file_id"></param>
+            <param name="dir_path"></param>
+            <param name="file_index"></param>
+            <param name="dest_file_name"></param>
+            <returns></returns>
+        </member>
         <member name="M:FastFrame.WebHost.Middleware.ResourceMiddleware.NotFound(Microsoft.AspNetCore.Http.HttpContext)">
             <summary>
             响应404
             </summary>
             <param name="context"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.WebHost.Middleware.ResourceMiddleware.BidRequest(Microsoft.AspNetCore.Http.HttpContext,System.String)">
+            <summary>
+            响应400
+            </summary>
+            <param name="context"></param>
+            <param name="msg"></param>
             <returns></returns>
         </member>
         <member name="T:FastFrame.WebHost.Middleware.ResourceOption">
@@ -382,6 +400,12 @@
             <summary>
             响应上传的正则
             如：/api/resource/upload
+            </summary>
+        </member>
+        <member name="P:FastFrame.WebHost.Middleware.ResourceOption.UploadBigFilePathText">
+            <summary>
+            响应大文件上传的正则
+            如:/api/resources/big_upload/{aabbccddefg}
             </summary>
         </member>
         <member name="T:FastFrame.WebHost.Privder.ApplicationInitialProvider">
@@ -441,12 +465,31 @@
             <param name="relativelyPath"></param>
             <returns></returns>
         </member>
+        <member name="M:FastFrame.WebHost.Privder.LocalResourceProvider.MakeDirectoryAsRelativelyPath">
+            <summary>
+            生成一个目录(相对路径)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.WebHost.Privder.LocalResourceProvider.MakeDirectoryAbsolutePath">
+            <summary>
+            生成一个绝对路径
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:FastFrame.WebHost.Privder.LocalResourceProvider.WriteAsync(System.IO.Stream,System.String)">
             <summary>
             写入文件
             </summary>
             <param name="stream"></param>
             <param name="input_file_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.WebHost.Privder.LocalResourceProvider.GetFilePath(System.String)">
+            <summary>
+            根据相对路径，返回完整路径
+            </summary>
+            <param name="relativelyPath"></param>
             <returns></returns>
         </member>
         <member name="M:FastFrame.WebHost.Privder.ModuleExportProvider.GetModuleStruts(System.String)">

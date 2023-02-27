@@ -31,7 +31,7 @@ export function getUploadPath() {
 /**
  * 大文件上传路径
  */
-export function getBidFileUploadPath(suffix = '') {
-    return `${isDev ? '/api' : ''}/big_files/upload/${suffix}`
+export function getBidFileUploadPath(file_id) {
+    return `${isDev ? '/api' : ''}/resources/big_upload/${file_id || ''}`
 }
 

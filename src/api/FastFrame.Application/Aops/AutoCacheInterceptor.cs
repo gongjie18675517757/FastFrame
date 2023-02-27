@@ -1,5 +1,10 @@
 ﻿using AspectCore.DynamicProxy;
+using FastFrame.Infrastructure.Lock;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using System.Reflection;
 using System.Threading.Tasks;
+
 
 namespace FastFrame.Application
 {
@@ -8,12 +13,72 @@ namespace FastFrame.Application
     /// </summary>
     public sealed class AutoCacheInterceptor : AbstractInterceptorAttribute
     {
-        //private readonly AutoCacheOperate autoCacheOperate;
+//        public override async Task Invoke(AspectContext context, AspectDelegate next)
+//        {
+//            var parameterInfos = context
+//                .ServiceMethod
+//                .GetParameters()
+//                .Select((v, i) => new {
+//                    index = i,
+//                    has_pars = v.GetCustomAttribute<AutoCacheParameterAttribute>() != null
+//                })
+//                .Where(v => v.has_pars)
+//                .Select(v => context.Parameters[v.index]?.ToString());
 
-        //public AutoCacheInterceptor(AutoCacheOperate autoCacheOperate)
-        //{
-        //    this.autoCacheOperate = autoCacheOperate;
-        //}
+//            var sb = new string[] {
+//                    context.ServiceMethod.DeclaringType.Name,
+//                    context.ServiceMethod.Name
+//                }
+//                .Concat(parameterInfos)
+//                .Where(v => !string.IsNullOrWhiteSpace(v));
+
+//            /*拼类名+方法名+参数*/
+//            var resource = string.Join(".", sb);
+
+//            var logger = context.ServiceProvider.GetService<ILogger<AutoCacheInterceptor>>();
+//#if DEBUG
+//            logger.LogDebug($"进入Lock:{resource}");
+//#endif
+
+//            /*尝试获取锁*/
+//            var lockHolder = await context
+//                .ServiceProvider
+//                .GetService<ILockFacatory>()
+//                .TryCreateLockAsync(resource, default);
+
+//            if (lockHolder != null)
+//            {
+//                try
+//                {
+//                    await next(context);
+//                }
+//                catch (Exception)
+//                {
+//                    throw;
+//                }
+//                finally
+//                {
+//                    lockHolder.Dispose();
+//                }
+//            }
+//            else
+//            {
+//#if DEBUG
+//                logger.LogDebug($"未持有锁:{resource}");
+//#endif
+//            }
+
+//            if (context.IsAsync())
+//            {
+//                context.ReturnValue = Task.CompletedTask;
+//            }
+
+//#if DEBUG
+//            logger.LogDebug($"离开Lock:{resource}");
+//#endif
+//        }
+
+
         public override async Task Invoke(AspectContext context, AspectDelegate next)
         {
             await next(context);
@@ -71,5 +136,12 @@ namespace FastFrame.Application
             //        break;
             //}
         }
+    }
+
+
+    [System.AttributeUsage(AttributeTargets.Parameter, Inherited = false, AllowMultiple = false)]
+    public sealed class AutoCacheParameterAttribute : Attribute
+    {
+
     }
 }

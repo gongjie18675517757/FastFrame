@@ -19,6 +19,14 @@ export const queryBuild = _queryBuild;
  */
 export const eventBus = new Vue()
 
+/**
+ * 求和
+ * @param {Array} arr 
+ * @param {Function} func 
+ */
+export function sum(arr, func = v => v) {
+    return arr.map(func).reduce((a, b) => a + b);
+}
 
 /**
  * 生成数组 
@@ -415,4 +423,3 @@ export function convertHtmlToText(html) {
     const txt = el.textContent;
     return txt;
 }
- 

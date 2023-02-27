@@ -72,5 +72,11 @@ namespace FastFrame.Infrastructure.Resource
 
             return path;
         }
+
+        /// <summary>
+        /// 生成一个绝对路径
+        /// </summary>
+        /// <returns></returns>
+        string MakeDirectoryAbsolutePath();
     }
 }

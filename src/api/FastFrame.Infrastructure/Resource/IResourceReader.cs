@@ -18,7 +18,7 @@
         bool TryGetStream(out Stream stream);
 
         /// <summary>
-        /// 尝试获取本地文件名
+        /// 尝试获取本地文件名(绝对路径)
         /// </summary>
         /// <param name="file_name"></param>
         /// <returns></returns>

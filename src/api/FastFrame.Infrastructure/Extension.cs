@@ -203,6 +203,11 @@ namespace FastFrame.Infrastructure
             return string.IsNullOrWhiteSpace(@in);
         }
 
+        public static string CheckIsNullOrWhiteSpace(this string @in, string replace)
+        {
+            return string.IsNullOrWhiteSpace(@in) ? replace : @in;
+        }
+
         /// <summary>
         /// 分割字符串
         /// </summary>

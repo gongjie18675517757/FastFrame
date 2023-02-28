@@ -75,7 +75,18 @@ export async function upload_file_metadata(file, size = SLICE_SIZE) {
  * 大文件上传之参数
  */
 export class upload_bid_file_config {
-    constructor() { }
+    constructor() {
+
+        /**
+         * 重试次数和延时
+         */
+        this.retry_delays = [0, 3000, 5000, 10000, 20000];
+
+        /**
+         * 同时发起上传的线程数量
+         */
+        this.total_theard_count = 5;
+    }
     /**
      * 同时发起上传的线程数量
      * @param {Number} total_size  总大小
@@ -89,15 +100,8 @@ export class upload_bid_file_config {
     }
 }
 
-/**
- * 重试次数和延时
- */
-upload_bid_file_config.prototype.retry_delays = [0, 3000, 5000, 10000, 20000]
 
-/**
- * 同时发起上传的线程数量
- */
-upload_bid_file_config.prototype.total_theard_count = 5;
+
 
 
 /**
@@ -128,6 +132,11 @@ export const upload_state = {
      * 已完成
      */
     finished: Symbol(),
+
+    /**
+     * 已失败
+     */
+    fail: Symbol()
 };
 
 
@@ -138,8 +147,11 @@ export const upload_state = {
  * @param {Number} size 
  */
 export async function upload_bid_file(file, config, size = SLICE_SIZE) {
-    config = config || new upload_bid_file_config();
-
+    config = {
+        ...new upload_bid_file_config(),
+        ...(config || {})
+    };
+   
     /**
      * 文件的上传状态
      */
@@ -165,7 +177,7 @@ export async function upload_bid_file(file, config, size = SLICE_SIZE) {
             index,
             state: upload_state.ready_ing,
             upload_size: 0,
-            file:_file,
+            file: _file,
             total_size: file.size
         })
     });
@@ -242,7 +254,12 @@ export async function upload_bid_file(file, config, size = SLICE_SIZE) {
                             }
                         }
                     })
-                    window.console.error(`file_id:${file_id},分片索引:#${upload_item.index},task_index:${task_index},第${retry_count + 2}次上传成功`)
+                    window.console.log(`file_id:${file_id},分片索引:#${upload_item.index},task_index:${task_index},第${retry_count + 2}次上传成功`)
+
+                    /**
+                     * 上传成功后,退出死循环
+                     */
+                    break;
                 } catch (error) {
                     window.console.error(error)
                     window.console.error(`file_id:${file_id},分片索引:#${upload_item.index},task_index:${task_index},第${retry_count + 2}次上传失败`)
@@ -260,10 +277,7 @@ export async function upload_bid_file(file, config, size = SLICE_SIZE) {
             }
         }
 
-        if (file_state == upload_state.finished)
-            window.console.log(`file_id:${file_id},task_index:${task_index},全部处理完成`)
-        else
-            window.console.log(`file_id:${file_id},task_index:${task_index},已取消`)
+        window.console.log(`file_id:${file_id},task_index:${task_index},全部处理完成`)
     }
 
     return {
@@ -271,23 +285,44 @@ export async function upload_bid_file(file, config, size = SLICE_SIZE) {
          * 开始上传
          */
         async start() {
-            file_state = upload_state.upload_ing;
+            try {
+                file_state = upload_state.upload_ing;
 
-            /**
-             * 多个上传任务同时上传
-             */
-            const tasks = new Array(config.total_theard_count).fill(null).map((_, index) => start_upload_task(file_id, index, function () {
-                const total = file.size;
-                const upload_size = sum(upload_item_arr, v => v.upload_size)
-                config.on_progress(total, upload_size)
-            }));
-            await Promise.all(tasks)
+                /**
+                 * 重文件分片状态
+                 */
+                for (const upload_item of upload_item_arr) {
+                    if (upload_item.state != upload_state.finished) {
+                        upload_item.state = upload_state.ready_ing;
+                    }
+                }
 
-            /**
-             * 全部上传完成,返回文件
-             */
-            return file_model;
+                /**
+                 * 多个上传任务同时上传
+                 */
+                const tasks = new Array(config.total_theard_count).fill(null).map((_, index) => start_upload_task(file_id, index, function () {
+                    const total = file.size;
+                    const upload_size = sum(upload_item_arr, v => v.upload_size)
+                    config.on_progress(total, upload_size)
+                }));
+                await Promise.all(tasks)
+
+                file_state = upload_state.finished;
+
+                /**
+                 * 全部上传完成,返回文件
+                 */
+                return file_model;
+            } catch (error) {
+                file_state = upload_state.fail;
+                throw error;
+            }
         },
+        file_state: {
+            get() {
+                return file_state
+            }
+        }
         // /**
         //  * 暂停上传
         //  */

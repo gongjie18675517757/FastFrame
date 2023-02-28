@@ -19,6 +19,7 @@ using FastFrame.Infrastructure.Resource;
 using System.IO.Pipes;
 using FastFrame.Infrastructure.Lock;
 using Microsoft.Extensions.Caching.Memory;
+using System.Net.Mime;
 
 namespace FastFrame.WebHost.Middleware
 {
@@ -46,7 +47,7 @@ namespace FastFrame.WebHost.Middleware
         public async Task Invoke(HttpContext context)
         {
             var path = context.Request.Path;
-
+            var contentType = string.Empty;
             /*判断是否下载的请求*/
             bool has_download = downloadPathRegex.IsMatch(path.Value),
 
@@ -82,11 +83,17 @@ namespace FastFrame.WebHost.Middleware
                 /*响应文件下载*/
                 if (has_download)
                 {
-                    if (context.Request.Query.TryGetValue("has_down", out var _))
-                        context.Response.Headers.TryAdd("Content-Disposition", $"attachment;filename={WebUtility.UrlEncode(resource_name)}");
+                    if (context.Request.Query.TryGetValue("has_down", out var _) || resource_name.IsNullOrWhiteSpace())
+                    {
+                        context.Response.Headers
+                            .TryAdd("Content-Disposition",
+                            $"attachment;filename={WebUtility.UrlEncode(resource_name.CheckIsNullOrWhiteSpace(resourceStreamInfo.Name))}");
+                    }
 
                     if (reader.TryGetRelativelyPath(out var relatively_path))
+                    {
                         context.Request.Path = $"/files/{relatively_path.Replace("\\", "/")}";
+                    }
                 }
 
                 /*匹配文件名*/
@@ -94,17 +101,18 @@ namespace FastFrame.WebHost.Middleware
                     resource_name = resourceStreamInfo.Name;
 
                 /*匹配内容类型*/
-                if (!provider.TryGetContentType(Path.GetExtension(resource_name), out var contentType))
+                if (!provider.TryGetContentType(Path.GetExtension(resource_name), out contentType))
                     contentType = resourceStreamInfo.ContentType;
                 if (contentType.IsNullOrWhiteSpace())
                     contentType = "application/octet-stream";
 
+                context.Response.ContentType = contentType;
 
                 /*响应缩略图*/
                 if (has_thumbnail && contentType.StartsWith("image"))
                 {
                     context.Response.StatusCode = 200;
-                    context.Response.ContentType = contentType;
+
                     context.Response.Headers.TryAdd("cache-control", new[] { "public,max-age=31536000" });
                     context.Response.Headers.TryAdd("Expires", new[] { resourceStreamInfo.ModifyTime.AddYears(10).ToString("R") });
                     context.Response.Headers.TryAdd("Last-Modified", resourceStreamInfo.ModifyTime.ToString("R"));
@@ -157,7 +165,7 @@ namespace FastFrame.WebHost.Middleware
                 if (context.Request.Method == HttpMethods.Post && file_id.IsNullOrWhiteSpace())
                 {
                     var fileMetadata = await context.Request.ReadFromJsonAsync<FileMetadata>();
-                    fileMetadata.ComplateIndexs = new bool[fileMetadata.TotalChunkFiles]; 
+                    fileMetadata.ComplateIndexs = new bool[fileMetadata.TotalChunkFiles];
 
                     /*最终文件*/
                     var resourceStoreProvider = context.RequestServices.GetService<IResourceStoreProvider>();
@@ -165,9 +173,9 @@ namespace FastFrame.WebHost.Middleware
                         .TrySaveEmptyResource(fileMetadata.Name, fileMetadata.ContentType, fileMetadata.Size, null);
 
                     /*写入元数据*/
-                    var resourceRedear =await resourceStoreProvider.TryGetResourceReader(resourceInfo.Id);
+                    var resourceRedear = await resourceStoreProvider.TryGetResourceReader(resourceInfo.Id);
                     resourceRedear.GetResourceReader().TryGetLocalFileFullName(out var file_path);
-                    var dir_path=new FileInfo(file_path).Directory.FullName;
+                    var dir_path = new FileInfo(file_path).Directory.FullName;
                     var metadata_file = new FileInfo(Path.Combine(dir_path, "metadata.json"));
                     using var streamWriter = metadata_file.CreateText();
                     await streamWriter.WriteLineAsync(fileMetadata.ToJson());
@@ -219,6 +227,8 @@ namespace FastFrame.WebHost.Middleware
                     using var sourceStream = formFile.OpenReadStream();
                     await sourceStream.CopyToAsync(targetStream);
                     await sourceStream.FlushAsync();
+                    await targetStream.FlushAsync();
+                    targetStream.Close();
 
                     /*更新文件各分片的上传状态*/
                     await TryExistsComplateAndMergeFiles(file_id, dir_path, file_index, file_name);
@@ -229,6 +239,17 @@ namespace FastFrame.WebHost.Middleware
             }
 
             await next(context);
+
+            if (contentType != "application/octet-stream" && context.Response.ContentType == "application/octet-stream")
+            {
+                context.Response.ContentType = contentType;
+
+                context.Response.OnStarting(() =>
+                {
+                    context.Response.ContentType = contentType;
+                    return Task.CompletedTask;
+                });
+            }
         }
 
 

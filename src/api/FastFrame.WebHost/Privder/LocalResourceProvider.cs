@@ -73,7 +73,7 @@ namespace FastFrame.WebHost.Privder
         public async Task<string> WriteAsync(Stream stream, string input_file_name)
         {
             /*文件的相对路径*/
-            var file_relativelyPath = Path.Combine(MakeDirectoryAsRelativelyPath(), input_file_name);
+            var file_relativelyPath = Path.Combine(MakeDirectoryAsRelativelyPath(), Path.GetRandomFileName());
 
             var base_path = option.CurrentValue.BasePath;
 

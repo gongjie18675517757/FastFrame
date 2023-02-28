@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace FastFrame.Application.Basis
@@ -80,8 +81,13 @@ namespace FastFrame.Application.Basis
             return await SaveToDatabase(name, contentType, size, md5, path);
         }
 
+        private static Regex replace_name_regex = file_name_replace_regex();
+
         private async Task<IResourceInfo> SaveToDatabase(string name, string contentType, long size, string md5, string path)
         {
+            if (!name.IsNullOrWhiteSpace())
+                name = replace_name_regex.Replace(name, "_");
+
             var curr = sessionProvider.CurrUser;
             var resource = await resourceRepository.AddAsync(new Resource
             {
@@ -104,5 +110,8 @@ namespace FastFrame.Application.Basis
 
             return model;
         }
+
+        [GeneratedRegex("([^\\u4e00-\\u9fa50-9a-zA-Z\\.])+", RegexOptions.Compiled)]
+        private static partial Regex file_name_replace_regex();
     }
 }

@@ -240,16 +240,10 @@ namespace FastFrame.WebHost.Middleware
 
             await next(context);
 
-            if (contentType != "application/octet-stream" && context.Response.ContentType == "application/octet-stream")
-            {
-                context.Response.ContentType = contentType;
-
-                context.Response.OnStarting(() =>
-                {
-                    context.Response.ContentType = contentType;
-                    return Task.CompletedTask;
-                });
-            }
+            //if (contentType != "application/octet-stream" && context.Response.ContentType == "application/octet-stream")
+            //{
+            //    context.Response.Headers.ContentType = contentType;
+            //}
         }
 
 

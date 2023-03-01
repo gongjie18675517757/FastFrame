@@ -134,7 +134,7 @@ const message = {
     },
     upload(pars) {
         return this.dialog(Uplod, {
-            width: '600px',
+            width: '700px',
             ...pars
         })
     },

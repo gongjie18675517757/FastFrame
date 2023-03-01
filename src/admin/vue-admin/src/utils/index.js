@@ -20,6 +20,23 @@ export const queryBuild = _queryBuild;
 export const eventBus = new Vue()
 
 /**
+ * 格式化文件大小
+ * @param {Number} v 
+ */
+export function formatter_file_size(v) {
+    if (!v)
+        return `0KB`
+    else if (v < 1024)
+        return `${(v / 1024).toFixed(2)}KB`
+    else if (v < 1024 * 1024)
+        return `${(v / 1024).toFixed(2)}KB`
+    else if (v < 1024 * 1024 * 1024)
+        return `${(v / 1024 / 1024).toFixed(2)}MB`
+    else
+        return `${(v / 1024 / 1024 / 1024).toFixed(2)}GB`
+}
+
+/**
  * 求和
  * @param {Array} arr 
  * @param {Function} func 
@@ -73,8 +90,11 @@ export async function lock(lockObj = {}) {
  * @param {*} fn 
  */
 export function mapMany(arr, fn) {
+     
     fn = fn || function (v) {
-        return v;
+        if (Array.isArray(v))
+            return v
+        return [v];
     }
     let array = []
     for (const item of arr) {

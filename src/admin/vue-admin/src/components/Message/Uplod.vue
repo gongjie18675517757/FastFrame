@@ -10,13 +10,13 @@
         <v-file-input
           chips
           counter
-          multiple
+          :multiple="multiple"
           show-size
           small-chips
           truncate-length="15"
           dene
           v-model="arr_files.files"
-          :readonly="uploading"
+          :disabled="uploading"
         ></v-file-input>
         <v-layout
           v-for="(state, stateIndex) in arr_files.status"
@@ -24,73 +24,95 @@
           wrap
         >
           <v-flex xs12>
-            <v-subheader>{{ state.file_name }}:</v-subheader>
+            <v-subheader
+              >{{ state.file_name }}:
+              {{ formatter_file_size(state.upload_size) }}/{{
+                formatter_file_size(state.total_size)
+              }}
+
+              <template v-if="state.upload_state == upload_states.finished">
+                <strong>;上传成功！</strong>
+              </template>
+            </v-subheader>
           </v-flex>
-          <v-flex xs10>
-            <v-progress-linear :value="state.progress" height="25" bottom>
-              <strong>{{ state.progress.toFixed(2) }}%</strong>
-            </v-progress-linear>
-          </v-flex>
-          <v-flex xs2>
-            <v-btn icon small title="开始">
-              <v-icon color="primary">play_arrow</v-icon>
-            </v-btn>
-            <v-btn icon small title="暂停">
-              <v-icon color="primary">pause</v-icon>
-            </v-btn>
-            <v-btn icon small title="停止">
-              <v-icon color="primary">stop</v-icon>
-            </v-btn>
-          </v-flex>
+
+          <template v-if="state.upload_state != upload_states.finished">
+            <v-flex xs10>
+              <v-progress-linear :value="state.progress" height="25" bottom>
+                <strong style="color: #fff">{{ state.progress }}%</strong>
+              </v-progress-linear>
+            </v-flex>
+            <v-flex xs2>
+              <v-btn
+                small
+                text
+                v-if="state.upload_state == upload_states.fail"
+                @click="state.start"
+              >
+                <v-icon color="primary">play_arrow</v-icon>重试
+              </v-btn>
+              <v-btn
+                text
+                small
+                loading
+                v-else-if="state.upload_state == upload_states.upload_ing"
+              >
+              </v-btn>
+            </v-flex>
+          </template>
         </v-layout>
       </div>
+      <v-btn
+        v-if="!uploading && multiple"
+        color="primary"
+        text
+        @click="addInput"
+        >添加组</v-btn
+      >
     </v-card-text>
     <v-card-actions>
-      <v-btn text @click="cancel" color="primary">取消</v-btn>
+      <v-btn text @click="cancel" color="primary">关闭</v-btn>
       <v-spacer></v-spacer>
       <v-btn
         color="primary"
-        text
-        @click="success"
-        :disabled="values.length == 0"
-        >确认
-      </v-btn>
+        :disabled="!files.some((v) => v.files.length > 0) || uploading"
+        @click="startUpload"
+        >开始上传</v-btn
+      >
     </v-card-actions>
   </v-card>
 </template>
 
 <script>
 import { upload_bid_file } from "./file_splice";
+import { formatter_file_size, mapMany } from "../../utils";
+import message from ".";
 /**
  * 定义上传状态
  */
-const upload_state = {
+const upload_states = {
   /**
    * 上传中
    */
-  upload_ing: Symbol(),
+  upload_ing: "UPLOADING",
 
   /**
-   * 暂停中
+   * 失败
    */
-  pause_ing: Symbol(),
-
-  /**
-   * 已停止
-   */
-  stoped: Symbol(),
+  fail: "FAIL",
 
   /**
    * 已完成
    */
-  finished: Symbol(),
+  finished: "FINISHED",
 };
 
 /**
  * 生成文件状态
  * @param {File} file 要上传的文件
+ * @param {Function} on_finished 上传完成的回调
  */
-function make_item_upload_state(file) {
+function make_item_upload_state(file, on_finished) {
   const { size, name } = file;
 
   return {
@@ -107,7 +129,7 @@ function make_item_upload_state(file) {
     /**
      * 上传状态
      */
-    upload_state: upload_state.upload_ing,
+    upload_state: upload_states.upload_ing,
 
     /**
      * 总大小
@@ -119,17 +141,46 @@ function make_item_upload_state(file) {
      */
     upload_size: 0,
 
+    /**
+     * 上传的结果
+     */
+    upload_result: null,
+
+    /**
+     * 上传对象的实例
+     */
+    upload_instance_ref: null,
+
+    /**
+     * 上传完成回调
+     */
+    on_finished,
+
+    /**
+     * 开始上传
+     */
     async start() {
-      /**
-       * 上传对象实例
-       */
-      const upload_instance_ref = await upload_bid_file(file);
-      return upload_instance_ref.start();
-    }, 
+      try {
+        if (!this.upload_instance_ref) {
+          this.upload_instance_ref = await upload_bid_file(file, {
+            on_progress: (total_size, upload_size) => {
+              this.upload_size = upload_size;
+              this.progress = (
+                Math.min(1, upload_size / total_size) * 100
+              ).toFixed(2);
+            },
+          });
+        }
+        this.upload_result = await this.upload_instance_ref.start();
+        this.upload_state = upload_states.finished;
+
+        on_finished && on_finished();
+      } catch (error) {
+        this.upload_state = upload_states.fail;
+      }
+    },
   };
 }
-
-make_item_upload_state(new File(['abc'],'aa.bb'));
 
 /**
  * 生成文件项
@@ -144,36 +195,10 @@ function make_item_arr() {
     /**
      * 存放上传状态
      */
-    status: [
-      {
-        /**
-         * 文件名称
-         */
-        file_name: "xxxx.jpg",
-
-        /**
-         * 上传进度
-         */
-        progress: 0,
-
-        /**
-         * 上传状态
-         */
-        upload_state: upload_state.upload_ing,
-
-        /**
-         * 总大小
-         */
-        total_size: 0,
-
-        /**
-         * 已上传的大小
-         */
-        upload_size: 0,
-      },
-    ],
+    status: [],
   };
 }
+
 export default {
   props: {
     title: {
@@ -185,17 +210,51 @@ export default {
   data() {
     return {
       files: [make_item_arr()],
-      values: [],
       uploading: false,
-      upload_state,
+      upload_states,
     };
   },
   mounted() {
-    window.upload_bid_file=upload_bid_file;
+    window.upload_bid_file = upload_bid_file;
   },
   methods: {
-    cancel() {
+    formatter_file_size,
+    addInput() {
+      this.files.push(make_item_arr());
+    },
+    startUpload() {
+      this.uploading = true;
+
+      for (const arr of this.files) {
+        for (const f of arr.files) {
+          const file_state = make_item_upload_state(f, this.try_check_success);
+          file_state.start();
+          arr.status.push(file_state);
+        }
+      }
+    },
+    async cancel() {
+      if (this.files.some((v) => v.files.length > 0))
+        await message.confirm({
+          title: "提示",
+          content: "确认要取消吗？",
+        });
       this.$emit("close");
+    },
+    try_check_success() {
+      setTimeout(() => {
+        if (
+          this.files.every((v) =>
+            v.status.every((x) => x.upload_state == upload_states.finished)
+          )
+        ) {
+          const arr = mapMany(
+            this.files.map((v) => v.status.map((x) => x.upload_result))
+          );
+
+          this.$emit("success", arr);
+        }
+      }, 200);
     },
     success() {
       this.$emit("success", this.values);

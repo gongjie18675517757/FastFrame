@@ -67,23 +67,30 @@ namespace FastFrame.Application.Basis
         {
             var md5 = stream.ToMD5();
             var path = await GetPathByMd5Async(md5);
+            var has_exists = !path.IsNullOrWhiteSpace() && await resourceProvider.ExistsAsync(path);
 
-            if (path.IsNullOrWhiteSpace())
+            if (!has_exists)
                 path = await resourceProvider.WriteAsync(stream, name, contentType);
 
 
-            return await SaveToDatabase(name, contentType, stream.Length, md5, path);
+            return await SaveToDatabase(name, contentType, stream.Length, md5, path, has_exists);
         }
 
         public async Task<IResourceInfo> TrySaveEmptyResource(string name, string contentType, long size, string md5)
         {
-            var path = await resourceProvider.WriteAsync(new MemoryStream(), name, contentType);
-            return await SaveToDatabase(name, contentType, size, md5, path);
+            var path = await GetPathByMd5Async(md5);
+
+            var has_exists = !path.IsNullOrWhiteSpace() && await resourceProvider.ExistsAsync(path);
+
+            if (!has_exists)
+                path = await resourceProvider.WriteAsync(new MemoryStream(), name, contentType);
+
+            return await SaveToDatabase(name, contentType, size, md5, path, has_exists);
         }
 
-        private static Regex replace_name_regex = file_name_replace_regex();
+        private static readonly Regex replace_name_regex = file_name_replace_regex();
 
-        private async Task<IResourceInfo> SaveToDatabase(string name, string contentType, long size, string md5, string path)
+        private async Task<IResourceInfo> SaveToDatabase(string name, string contentType, long size, string md5, string path, bool has_exists)
         {
             if (!name.IsNullOrWhiteSpace())
                 name = replace_name_regex.Replace(name, "_");
@@ -107,6 +114,8 @@ namespace FastFrame.Application.Basis
 
             if (curr != null)
                 model.UploaderName = curr.Name;
+
+            model.HasUpload = !has_exists;
 
             return model;
         }

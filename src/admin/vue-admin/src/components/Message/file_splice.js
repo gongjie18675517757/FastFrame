@@ -1,3 +1,4 @@
+import SparkMD5 from 'spark-md5'
 import { getBidFileUploadPath } from '../../config';
 import $http from '../../httpClient'
 import { sleep, sum } from '../../utils';
@@ -48,19 +49,13 @@ export function get_slice_file_by_index(file, file_index, size = SLICE_SIZE) {
  * @param {*} f 
  * @param {*} size 
  */
-export async function upload_file_metadata(file, size = SLICE_SIZE) {
-    /**
-     * 要计算它的md5
-     * 后面再实现
-     */
-    const md5 = null;
-
+export async function upload_file_metadata(file, md5, size = SLICE_SIZE) {
     const metadata = {
         name: file.name,
         size: file.size,
         contentType: file.type,
         totalChunkFiles: calc_file_splcie_count(file, size),
-        md5
+        FileMD5:md5
     }
 
     /**
@@ -139,6 +134,33 @@ export const upload_state = {
     fail: Symbol()
 };
 
+/**
+ * 计算文件的md5
+ * @param {File} file 
+ * @param {Number} size 
+ */
+export function calc_file_md5(file, chunkSize = SLICE_SIZE) {
+    return new Promise(resolve => {
+        const fileReader = new FileReader();
+        const md5 = new SparkMD5();
+        let index = 0;
+        const loadFile = () => {
+            const slice = file.slice(index, index + chunkSize);
+            fileReader.readAsBinaryString(slice);
+        }
+        loadFile();
+        fileReader.onload = e => {
+            md5.appendBinary(e.target.result);
+            if (index < file.size) {
+                index += chunkSize;
+                loadFile();
+            } else {
+                resolve(md5.end())
+            }
+        };
+    })
+}
+
 
 /**
  * 上传大文件
@@ -151,7 +173,7 @@ export async function upload_bid_file(file, config, size = SLICE_SIZE) {
         ...new upload_bid_file_config(),
         ...(config || {})
     };
-   
+
     /**
      * 文件的上传状态
      */
@@ -162,11 +184,7 @@ export async function upload_bid_file(file, config, size = SLICE_SIZE) {
      */
     const total = calc_file_splcie_count(file, size);
 
-    /**
-     * 上传元数据后,返回文件id
-     */
-    const file_model = await upload_file_metadata(file, size);
-    const file_id = file_model.Id;
+
 
     /**
      * 存放分割好的文件
@@ -282,37 +300,70 @@ export async function upload_bid_file(file, config, size = SLICE_SIZE) {
 
     return {
         /**
+         * 文件的md5
+         */
+        md5: null,
+
+        /**
+         * 文件上传结果
+         */
+        file_model: null,
+
+        /**
          * 开始上传
          */
         async start() {
             try {
-                file_state = upload_state.upload_ing;
-
                 /**
-                 * 重文件分片状态
+                 * 开始计算md5
                  */
-                for (const upload_item of upload_item_arr) {
-                    if (upload_item.state != upload_state.finished) {
-                        upload_item.state = upload_state.ready_ing;
-                    }
+                if (!this.md5) {
+                    this.md5 = await calc_file_md5(file, size);
                 }
 
                 /**
-                 * 多个上传任务同时上传
+                 * 开始上传元数据
                  */
-                const tasks = new Array(config.total_theard_count).fill(null).map((_, index) => start_upload_task(file_id, index, function () {
-                    const total = file.size;
-                    const upload_size = sum(upload_item_arr, v => v.upload_size)
-                    config.on_progress(total, upload_size)
-                }));
-                await Promise.all(tasks)
+                if (!this.file_model) {
+                    this.file_model = await upload_file_metadata(file, this.md5, size);
+                }
+
+                /**
+                 * 后端未命中缓存
+                 */
+                if (this.file_model.HasUpload) {
+                    file_state = upload_state.upload_ing;
+
+                    /**
+                     * 重置文件分片状态
+                     */
+                    for (const upload_item of upload_item_arr) {
+                        if (upload_item.state != upload_state.finished) {
+                            upload_item.state = upload_state.ready_ing;
+                        }
+                    }
+
+                    /**
+                     * 多个上传任务同时上传
+                     */
+                    const tasks = new Array(config.total_theard_count)
+                        .fill(null)
+                        .map((_, index) => start_upload_task(this.file_model.Id, index, function () {
+                            const total = file.size;
+                            const upload_size = sum(upload_item_arr, v => v.upload_size)
+                            config.on_progress(total, upload_size)
+                        }));
+                    await Promise.all(tasks)
+                }
+
+
 
                 file_state = upload_state.finished;
 
                 /**
                  * 全部上传完成,返回文件
                  */
-                return file_model;
+                return this.file_model;
             } catch (error) {
                 file_state = upload_state.fail;
                 throw error;

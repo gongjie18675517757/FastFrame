@@ -17,6 +17,19 @@
           dene
           v-model="arr_files.files"
           :disabled="uploading"
+          v-if="multiple"
+        ></v-file-input>
+        <v-file-input
+          chips
+          counter
+          :multiple="multiple"
+          show-size
+          small-chips
+          truncate-length="15"
+          dene
+          v-model="arr_files.files[0]"
+          :disabled="uploading"
+          v-else
         ></v-file-input>
         <v-layout
           v-for="(state, stateIndex) in arr_files.status"

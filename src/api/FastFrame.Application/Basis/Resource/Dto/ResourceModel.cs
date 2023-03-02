@@ -45,5 +45,10 @@ namespace FastFrame.Application
         /// 上传时间 
         /// </summary>
         public DateTime UploadTime { get; set; }
+
+        /// <summary>
+        /// 是否命中缓存
+        /// </summary>
+        public bool HasUpload { get; set; }
     }
 }

@@ -33,5 +33,6 @@ namespace FastFrame.Infrastructure.Resource
         /// 上传时间 
         /// </summary>
         public DateTime UploadTime { get; }
+        bool HasUpload { get; set; }
     }
 }

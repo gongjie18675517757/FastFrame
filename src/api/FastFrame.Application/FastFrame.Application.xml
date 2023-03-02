@@ -1380,6 +1380,11 @@
             上传时间 
             </summary>
         </member>
+        <member name="P:FastFrame.Application.ResourceModel.HasUpload">
+            <summary>
+            是否命中缓存
+            </summary>
+        </member>
         <member name="T:FastFrame.Application.LocalFileResourceStreamModel">
             <summary>
             本地文件流信息

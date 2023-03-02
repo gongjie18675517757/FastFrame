@@ -170,22 +170,27 @@ namespace FastFrame.WebHost.Middleware
                     /*最终文件*/
                     var resourceStoreProvider = context.RequestServices.GetService<IResourceStoreProvider>();
                     var resourceInfo = await resourceStoreProvider
-                        .TrySaveEmptyResource(fileMetadata.Name, fileMetadata.ContentType, fileMetadata.Size, null);
+                        .TrySaveEmptyResource(fileMetadata.Name, fileMetadata.ContentType, fileMetadata.Size, fileMetadata.FileMD5);
 
-                    /*写入元数据*/
-                    var resourceRedear = await resourceStoreProvider.TryGetResourceReader(resourceInfo.Id);
-                    resourceRedear.GetResourceReader().TryGetLocalFileFullName(out var file_path);
-                    var dir_path = new FileInfo(file_path).Directory.FullName;
-                    var metadata_file = new FileInfo(Path.Combine(dir_path, "metadata.json"));
-                    using var streamWriter = metadata_file.CreateText();
-                    await streamWriter.WriteLineAsync(fileMetadata.ToJson());
-
-                    /*写入所有分片文件*/
-                    for (int i = 0; i < fileMetadata.TotalChunkFiles; i++)
+                    /*没有命中缓存时*/
+                    if (resourceInfo.HasUpload)
                     {
-                        var chunk_name = Path.Combine(dir_path, $"{i}.chunk");
-                        using var _ = File.Create(chunk_name);
+                        /*写入元数据*/
+                        var resourceRedear = await resourceStoreProvider.TryGetResourceReader(resourceInfo.Id);
+                        resourceRedear.GetResourceReader().TryGetLocalFileFullName(out var file_path);
+                        var dir_path = new FileInfo(file_path).Directory.FullName;
+                        var metadata_file = new FileInfo(Path.Combine(dir_path, "metadata.json"));
+                        using var streamWriter = metadata_file.CreateText();
+                        await streamWriter.WriteLineAsync(fileMetadata.ToJson());
+
+                        /*写入所有分片文件*/
+                        for (int i = 0; i < fileMetadata.TotalChunkFiles; i++)
+                        {
+                            var chunk_name = Path.Combine(dir_path, $"{i}.chunk");
+                            using var _ = File.Create(chunk_name);
+                        }
                     }
+
 
                     /*响应*/
                     context.Response.StatusCode = 200;
@@ -385,6 +390,6 @@ namespace FastFrame.WebHost.Middleware
         /// <summary>
         /// 不需要编码的文件类型
         /// </summary>
-        public string UnwantedEncryptionFileNameRegex { get; set; } 
+        public string UnwantedEncryptionFileNameRegex { get; set; }
     }
 }

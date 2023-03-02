@@ -77,14 +77,14 @@ namespace FastFrame.WebHost.Privder
             var store_file_name = input_file_name;
             store_file_name = store_file_name.CheckIsNullOrWhiteSpace(Path.GetRandomFileName());
             var file_extension = Path.GetExtension(store_file_name);
-            file_extension = file_extension.CheckIsNullOrWhiteSpace(".obj"); 
+            file_extension = file_extension.CheckIsNullOrWhiteSpace(".obj");
 
             /*判断是否对文件名混淆*/
             var has_encryption = true;
 
             /*指定的文件类型不混淆*/
             if (has_encryption && !option.CurrentValue.UnwantedEncryptionFileNameRegex.IsNullOrWhiteSpace())
-                has_encryption = !Regex.IsMatch(file_extension, option.CurrentValue.UnwantedEncryptionFileNameRegex);  
+                has_encryption = !Regex.IsMatch(file_extension, option.CurrentValue.UnwantedEncryptionFileNameRegex);
 
             if (has_encryption)
                 store_file_name = Path.GetRandomFileName();
@@ -120,13 +120,13 @@ namespace FastFrame.WebHost.Privder
         /// <param name="relativelyPath"></param>
         /// <returns></returns>
         public string GetFilePath(string relativelyPath)
-            => IResourceProvider.GetRuntimeDirectory(Path.Combine(option.CurrentValue.BasePath, relativelyPath));
+            => IResourceProvider.GetRuntimeDirectory(Path.Combine(new DirectoryInfo(option.CurrentValue.BasePath).FullName, relativelyPath));
 
         public async Task<bool> ExistsAsync(string relativelyPath)
         {
-            var file_name = GetFilePath(relativelyPath);
-            var resourceReader = await ReadAsync(file_name);
-            return resourceReader.Exists();
+            await Task.CompletedTask;
+            var path = GetFilePath(relativelyPath);
+            return new LocalResourceReader(path, relativelyPath).Exists();
         }
 
         private class LocalResourceReader : IResourceReader

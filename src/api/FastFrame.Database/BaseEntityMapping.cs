@@ -152,6 +152,7 @@ namespace FastFrame.Database
             }
         }
 
+
         public void ConvertEnumArray<TEnum>(EntityTypeBuilder<T> typeBuilder, string name)
         {
             var converter = new ValueConverter<TEnum[], string>(

@@ -381,5 +381,10 @@ namespace FastFrame.WebHost.Middleware
         /// 如:/api/resources/big_upload/{aabbccddefg}
         /// </summary>
         public string UploadBigFilePathText { get; set; }
+
+        /// <summary>
+        /// 不需要编码的文件类型
+        /// </summary>
+        public string UnwantedEncryptionFileNameRegex { get; set; } 
     }
 }

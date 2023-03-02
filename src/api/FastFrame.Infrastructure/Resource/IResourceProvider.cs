@@ -10,9 +10,9 @@ namespace FastFrame.Infrastructure.Resource
     public interface IResourceProvider
     {
         /// <summary>
-        /// 保存
+        /// 保存文件
         /// </summary> 
-        Task<string> WriteAsync(Stream stream, string file_name);
+        Task<string> WriteAsync(Stream stream, string file_name, string content_type);
 
         /// <summary>
         /// 读取

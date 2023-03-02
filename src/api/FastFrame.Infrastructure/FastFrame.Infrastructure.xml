@@ -2060,9 +2060,9 @@
             附件资源操作提供者
             </summary>
         </member>
-        <member name="M:FastFrame.Infrastructure.Resource.IResourceProvider.WriteAsync(System.IO.Stream,System.String)">
+        <member name="M:FastFrame.Infrastructure.Resource.IResourceProvider.WriteAsync(System.IO.Stream,System.String,System.String)">
             <summary>
-            保存
+            保存文件
             </summary> 
         </member>
         <member name="M:FastFrame.Infrastructure.Resource.IResourceProvider.ReadAsync(System.String)">

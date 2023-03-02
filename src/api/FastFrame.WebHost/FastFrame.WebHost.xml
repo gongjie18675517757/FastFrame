@@ -408,6 +408,11 @@
             如:/api/resources/big_upload/{aabbccddefg}
             </summary>
         </member>
+        <member name="P:FastFrame.WebHost.Middleware.ResourceOption.UnwantedEncryptionFileNameRegex">
+            <summary>
+            不需要编码的文件类型
+            </summary>
+        </member>
         <member name="T:FastFrame.WebHost.Privder.ApplicationInitialProvider">
             <summary>
             应用程序初始化服务
@@ -477,12 +482,13 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.WebHost.Privder.LocalResourceProvider.WriteAsync(System.IO.Stream,System.String)">
+        <member name="M:FastFrame.WebHost.Privder.LocalResourceProvider.WriteAsync(System.IO.Stream,System.String,System.String)">
             <summary>
             写入文件
             </summary>
             <param name="stream"></param>
             <param name="input_file_name"></param>
+            <param name="content_type"></param>
             <returns></returns>
         </member>
         <member name="M:FastFrame.WebHost.Privder.LocalResourceProvider.GetFilePath(System.String)">

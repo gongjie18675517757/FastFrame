@@ -69,7 +69,7 @@ namespace FastFrame.Application.Basis
             var path = await GetPathByMd5Async(md5);
 
             if (path.IsNullOrWhiteSpace())
-                path = await resourceProvider.WriteAsync(stream, name);
+                path = await resourceProvider.WriteAsync(stream, name, contentType);
 
 
             return await SaveToDatabase(name, contentType, stream.Length, md5, path);
@@ -77,7 +77,7 @@ namespace FastFrame.Application.Basis
 
         public async Task<IResourceInfo> TrySaveEmptyResource(string name, string contentType, long size, string md5)
         {
-            var path = await resourceProvider.WriteAsync(new MemoryStream(), name);
+            var path = await resourceProvider.WriteAsync(new MemoryStream(), name, contentType);
             return await SaveToDatabase(name, contentType, size, md5, path);
         }
 

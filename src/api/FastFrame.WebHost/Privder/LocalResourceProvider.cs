@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace FastFrame.WebHost.Privder
@@ -69,11 +70,27 @@ namespace FastFrame.WebHost.Privder
         /// </summary>
         /// <param name="stream"></param>
         /// <param name="input_file_name"></param>
+        /// <param name="content_type"></param>
         /// <returns></returns>
-        public async Task<string> WriteAsync(Stream stream, string input_file_name)
+        public async Task<string> WriteAsync(Stream stream, string input_file_name, string content_type)
         {
+            var store_file_name = input_file_name;
+            store_file_name = store_file_name.CheckIsNullOrWhiteSpace(Path.GetRandomFileName());
+            var file_extension = Path.GetExtension(store_file_name);
+            file_extension = file_extension.CheckIsNullOrWhiteSpace(".obj"); 
+
+            /*判断是否对文件名混淆*/
+            var has_encryption = true;
+
+            /*指定的文件类型不混淆*/
+            if (has_encryption && !option.CurrentValue.UnwantedEncryptionFileNameRegex.IsNullOrWhiteSpace())
+                has_encryption = !Regex.IsMatch(file_extension, option.CurrentValue.UnwantedEncryptionFileNameRegex);  
+
+            if (has_encryption)
+                store_file_name = Path.GetRandomFileName();
+
             /*文件的相对路径*/
-            var file_relativelyPath = Path.Combine(MakeDirectoryAsRelativelyPath(), input_file_name/*Path.GetRandomFileName()*/);
+            var file_relativelyPath = Path.Combine(MakeDirectoryAsRelativelyPath(), store_file_name);
 
             var base_path = option.CurrentValue.BasePath;
 

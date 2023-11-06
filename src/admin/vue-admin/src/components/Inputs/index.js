@@ -67,7 +67,7 @@ export function calcInputComponent(props) {
   /**
     * 单选下拉框
     */
-  else if (EnumValues) {
+  else if ((Array.isArray(EnumValues) && EnumValues.length > 0) || typeof (EnumValues) == 'function') {
     return {
       colspan: multiple ? 2 : 1,
       component: inputs.SelectInput
@@ -101,7 +101,7 @@ export function calcInputComponent(props) {
   //文本,数字,密码
   else if (
     !Name.endsWith("Id") &&
-    ["Password", "String", 'Int32', 'Decimal','Int64'].includes(Type)
+    ["Password", "String", 'Int32', 'Decimal', 'Int64'].includes(Type)
   ) {
     return {
       colspan: 1,
@@ -222,7 +222,7 @@ export function packComponent(h, component, { props, on }) {
         /**
          * 选择框老是对不齐，高度差4px,解决不了，强制加一个margin-top
          */
-        'margin-top':['Boolean','DateTime'].includes(props.Type) ? '4px' : null
+        'margin-top': ['Boolean', 'DateTime'].includes(props.Type) ? '4px' : null
       },
     },
     [
@@ -242,7 +242,7 @@ export function packComponent(h, component, { props, on }) {
  */
 export function packComponentFacatory(h, component, { props, on }) {
   return function (inheritAttrs = {}) {
-    const merge_props = { ...props, ...inheritAttrs }; 
+    const merge_props = { ...props, ...inheritAttrs };
     return packComponent(h, component, { props: merge_props, on })
   }
 }
@@ -309,7 +309,7 @@ export default {
     Length: Number,
     Hide: String,
     labelWidth: String,
-    ModuleName: String, 
+    ModuleName: String,
     Relate: String,
     RelateKeyFieldName: String,
     RelateIsTree: Boolean,
@@ -412,7 +412,7 @@ export default {
           type:
             (props.Name || '').toLowerCase().includes('password')
               ? "password"
-              : ['Int32', 'Decimal', 'DateTime','Int64'].includes(props.Type)
+              : ['Int32', 'Decimal', 'DateTime', 'Int64'].includes(props.Type)
                 ? "number"
                 : "text",
         });

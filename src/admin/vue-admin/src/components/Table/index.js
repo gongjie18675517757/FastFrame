@@ -9,7 +9,7 @@ import {
 import {
   distinct
 } from '@/utils'
-import { upload, getIconFunc } from "../../utils";
+import {  getIconFunc } from "../../utils";
 import { getDownLoadPath } from "../../config";
 
 let defArray = {
@@ -419,7 +419,7 @@ export const FileDetailObj = {
       return true;
     },
     upload() {
-      upload({
+      this.$message.upload({
         accept: this.accept,
         onProgress: this.onProgress,
         verifyFileFunc: this.verifyFile

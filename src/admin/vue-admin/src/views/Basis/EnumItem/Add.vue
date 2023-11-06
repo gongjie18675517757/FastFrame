@@ -20,19 +20,29 @@ export default makeFormPageInheritedFromBaseFormPage({
   },
   methods: {
     async [FormPageDefines.MethodsDefines.fmtModelObject](super_func) {
-      const model=await super_func();
+      const model = await super_func();
       return {
         ...model,
-        KeyEnum: model.Id ? model.KeyEnum : parseInt(this.key_name),
+        KeyEnum: model.Id
+          ? model.KeyEnum
+          : this.key_name
+          ? parseInt(this.key_name)
+          : null,
       };
     },
     async [FormPageDefines.MethodsDefines.fmtModelObjectItems](super_func) {
-      const arr=await super_func();
+      const arr = await super_func();
+      const kvs = await this.$http.get(`/api/EnumItem/EnumValues/0`);
 
       return [
         ...arr,
         {
           Name: "KeyEnum",
+          EnumValues: Object.entries(kvs).map(([Key, Value]) => ({
+            Key,
+            Value,
+          })),
+          EnumItemInfo: null,
           Readonly: this.key_name ? "All" : "Edit",
         },
         {

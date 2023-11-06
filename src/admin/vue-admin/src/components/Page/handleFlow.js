@@ -268,7 +268,7 @@ export function makeButtons({ selection, mode, btnAttrs, moduleName, editing }) 
                         h('v-btn', {
                             attrs: {
                                 'x-small': mode == makeButtonsInputMode.CELL,
-                                text: mode == makeButtonsInputMode.CELL,
+                                text: true,// mode == makeButtonsInputMode.CELL,
                                 outlined: mode == makeButtonsInputMode.FORM,
                                 tile: mode == makeButtonsInputMode.FORM,
                                 color: 'primary',
@@ -293,7 +293,7 @@ export function makeButtons({ selection, mode, btnAttrs, moduleName, editing }) 
                     visibleCheck ? h('v-btn', {
                         attrs: {
                             'x-small': mode == makeButtonsInputMode.CELL,
-                            text: mode == makeButtonsInputMode.CELL,
+                            text: true,//mode == makeButtonsInputMode.CELL,
                             outlined: mode == makeButtonsInputMode.FORM,
                             tile: mode == makeButtonsInputMode.FORM,
                             color: 'primary',

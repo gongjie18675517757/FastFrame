@@ -8,13 +8,14 @@
     :errorMessages="errorMessages"
     :placeholder="description"
     :multiple="multiple"
-    :dense="!isXs"
+    dense
     :return-object="false"
     :item-text="itemText"
     :item-value="itemValue"
     @input="handleChange"
     @click:clear="handleChange(null)"
     @update:search-input="keyword = $event"
+
   >
     <template #default>
       <slot></slot>

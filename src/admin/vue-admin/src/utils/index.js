@@ -90,7 +90,7 @@ export async function lock(lockObj = {}) {
  * @param {*} fn 
  */
 export function mapMany(arr, fn) {
-     
+
     fn = fn || function (v) {
         if (Array.isArray(v))
             return v
@@ -442,4 +442,24 @@ export function convertHtmlToText(html) {
     el.innerHTML = html;
     const txt = el.textContent;
     return txt;
+}
+
+
+Array.prototype.groupBy = function () {
+    const arr = this;
+    return groupBy(arr, ...arguments);
+}
+
+Array.prototype.createObject = function () {
+    const arr = this;
+    return createObject(arr, ...arguments);
+}
+
+Array.prototype.take = function () {
+    const arr = this;
+    return take(arr, ...arguments);
+}
+Array.prototype.skip = function () {
+    const arr = this;
+    return skip(arr, ...arguments);
 }

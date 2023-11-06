@@ -4,8 +4,11 @@
       <v-flex xs12 :style="{ padding: isTab ? '0px' : null }">
         <v-card tile>
           <v-toolbar flat dense height="30px" color="transparent">
-            <v-toolbar-title v-if="$store.state.singlePageMode || isDialog">{{ direction }}</v-toolbar-title>
+            <template v-if="$store.state.singlePageMode || isDialog">
+              <v-toolbar-title>{{ direction }}</v-toolbar-title>
+            </template>
             <v-spacer></v-spacer>
+
             <v-toolbar-items
               class="hidden-sm-and-down btn-group"
               v-if="!hideToolItem"
@@ -17,17 +20,19 @@
               >
                 <component
                   :is="btn.component || 'v-btn'"
-                  @click="evalAction(btn)" 
+                  @click="evalAction(btn)"
                   :disabled="evalDisabled(btn)"
                   tile
                   v-bind="btn"
                   :action="null"
+                  text
                 >
                   <v-icon left v-if="btn.iconName">{{ btn.iconName }}</v-icon>
                   {{ btn.title }}
                 </component>
               </permission-facatory>
             </v-toolbar-items>
+            <!-- <v-spacer></v-spacer> -->
             <!-- <span> -->
             <v-menu
               offset-y
@@ -95,10 +100,14 @@
           <v-card-text class="pa-0">
             <v-row class="pa-4" justify="space-between">
               <v-col cols="2" style="padding: 0px" v-if="treeComponent">
-                <component :is="treeComponent" :height="tableHeight"/>
+                <component :is="treeComponent" :height="tableHeight" />
               </v-col>
               <v-divider vertical v-if="treeComponent"></v-divider>
-              <v-col :cols="treeComponent?10:null" class="d-flex text-center" style="padding: 0px;padding-left:5px;">
+              <v-col
+                :cols="treeComponent ? 10 : null"
+                class="d-flex text-center"
+                style="padding: 0px; padding-left: 5px"
+              >
                 <v-scroll-y-transition mode="out-in">
                   <Table
                     :items="rows"
@@ -114,7 +123,7 @@
                     :height="tableHeight"
                     :expandComponent="expandComponent"
                     v-on="tableListenter"
-                    style="width:100%;"
+                    style="width: 100%"
                   />
                 </v-scroll-y-transition>
               </v-col>
@@ -136,7 +145,6 @@ import Table from "@/components/Table/DataTable.vue";
 import { skip, take } from "../../utils";
 
 export default {
-   
   components: {
     Table,
   },

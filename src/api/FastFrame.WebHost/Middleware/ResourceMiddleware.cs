@@ -293,9 +293,11 @@ namespace FastFrame.WebHost.Middleware
             var read_bytes = 0;
 
             using var write_stream = File.OpenWrite(dest_file_name);
-            foreach (var file in source_files)
+            for (int i = 0; i < metadata.TotalChunkFiles; i++)
             {
-                using var read_stream = file.OpenRead();
+                var chunk_name = Path.Combine(dir_path, $"{i}.chunk");
+                using var read_stream = File.OpenRead(chunk_name);
+
                 while (true)
                 {
                     read_bytes = await read_stream.ReadAsync(buffer.AsMemory(0, 1024));

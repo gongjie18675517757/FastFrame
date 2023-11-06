@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="background: #fff;">
     <div style="padding: 0px 12px;">
       <v-text-field
         append-icon="search"
@@ -42,6 +42,7 @@ export default {
   props: {
     height: String,
     requestUrl: String,
+    init_super_key:String
   },
   data() {
     return {
@@ -85,7 +86,7 @@ export default {
     },
     async init() {
       if (this.requestUrl) {
-        this.items = await this.requestData(null);
+        this.items = await this.requestData(this.init_super_key || '');
       }
     },
     async requestData(id) {

@@ -8,6 +8,7 @@ import './hubs'
 import './httpClient'
 import './components/Message'
 import './components/common'
+import './utils';
 import '@mdi/font/css/materialdesignicons.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import colors from "vuetify/es5/util/colors";
@@ -28,22 +29,22 @@ new Vue({
   router,
   render: h => h(App),
   created() {
-    window.$message=this.$message;
+    window.$message = this.$message;
     this.$http('/api/Tenant/GetCurrent').then(v => {
       this.$store.commit({
         type: 'setTenant',
         info: v
       })
     })
-  }, 
+  },
   mounted() {
     let val = this.$store.state.themeColor
     this.$vuetify.theme.themes.light.primary = colors[val].base;
-    this.$vuetify.theme.themes.dark.primary = colors[val].base; 
+    this.$vuetify.theme.themes.dark.primary = colors[val].base;
   }
 }).$mount('#app')
 
- 
+
 
 /**
  * 1,检查所有方案的返回，不允许返回全对象
@@ -100,7 +101,7 @@ new Vue({
  * 升级typescript 
  * 生成的表名调整 
  * 微信扫码登录
- * 文件上传改为流式大文件上传 
+ 
  * 自动事务
  * 自动生成codeGenerate
  * 富文本组件要升级,富文本的内容单独存放[blobProvider]
@@ -112,4 +113,6 @@ new Vue({
  * 系统设置功能调整
  * 文件下载改为原生下载,并提前生成缩略图
  * 树装选择器
+ * 引入状态机模式
+ * 伪金蝶UI
  */

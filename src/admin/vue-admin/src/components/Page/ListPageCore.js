@@ -8,7 +8,7 @@ import {
 import {
   distinct, throttle, fmtRequestPars, saveFile, getIconFunc, toHexString, queryBuild
 } from '../../utils'
-import {cloneDeep} from 'lodash'
+import { cloneDeep } from 'lodash'
 import { makeButtons, makeButtonsInputMode } from './handleFlow'
 
 /**
@@ -21,7 +21,8 @@ export const makeToolItems = function () {
     name: "Add",
     iconName: "add",
     action: this.toEdit,
-    visible: () => this.ModuleStrut.HasManage
+    visible: () => this.ModuleStrut.HasManage,
+    group: 0
   },
   // {
   //   title: "修改",
@@ -41,7 +42,8 @@ export const makeToolItems = function () {
     name: "List",
     key: "Search",
     iconName: "search",
-    action: this.queryDialog
+    action: this.queryDialog,
+    group: 1,
   },
   // {
   //   title: "删除",
@@ -61,7 +63,8 @@ export const makeToolItems = function () {
     action: () => {
       // this.resetQuery();
       this.loadList()
-    }
+    },
+    group: 1,
   },
   {
     title: "导出",
@@ -69,7 +72,8 @@ export const makeToolItems = function () {
     name: "List",
     key: "export",
     iconName: "mdi-export",
-    action: this.exportList
+    action: this.exportList,
+    group: 1,
   }
   ]
 }
@@ -626,7 +630,7 @@ export let pageMethods = {
       }
     ] : [];
 
-    return [...brr, ...arr].map(v => {
+    return [...arr, ...brr,].map(v => {
       /**
        * 未定义权限，但有定义name值时
        */
@@ -641,8 +645,8 @@ export let pageMethods = {
         ...v,
         permission
       };
-    }
-    );
+    });
+    //.groupBy(v=>v.group).createObject(v=>v.key,v=>v.values);
   },
   [PageMethodsDefines.getRowOperateItems]() {
     const arr = [];
@@ -699,7 +703,7 @@ export let pageMethods = {
   [PageMethodsDefines.getFormPageParsBySelectedTreeItem](v) {
     return {
       super_id: v.Id || "",
-      super_name:v.Value || ''
+      super_name: v.Value || ''
     };
   },
   [PageMethodsDefines.getFormPagePars]() {

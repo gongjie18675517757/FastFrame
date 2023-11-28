@@ -11,28 +11,8 @@ namespace FastFrame.Infrastructure
     /// </summary>
     public sealed class VerifyCodeExtended
     {
-        #region 单例模式
-        //创建私有化静态obj锁  
-        private static readonly object _ObjLock = new object();
-        //创建私有静态字段，接收类的实例化对象  
-        private static VerifyCodeExtended _VerifyCodeHelper = null;
-        //构造函数私有化  
-        private VerifyCodeExtended() { }
-        //创建单利对象资源并返回  
-        public static VerifyCodeExtended GetSingleObj()
-        {
-            if (_VerifyCodeHelper == null)
-            {
-                lock (_ObjLock)
-                {
-                    if (_VerifyCodeHelper == null)
-                        _VerifyCodeHelper = new VerifyCodeExtended();
-                }
-            }
-            return _VerifyCodeHelper;
-        }
-        #endregion
-
+  
+         
         #region 生产验证码
         public enum VerifyCodeType { NumberVerifyCode, AbcVerifyCode, MixVerifyCode };
 
@@ -41,7 +21,7 @@ namespace FastFrame.Infrastructure
         /// </summary>
         /// <param name="length"></param>
         /// <returns></returns>
-        private string CreateNumberVerifyCode(int length)
+        private static string CreateNumberVerifyCode(int length)
         {
             int[] randMembers = new int[length];
             int[] validateNums = new int[length];
@@ -86,7 +66,7 @@ namespace FastFrame.Infrastructure
         /// </summary>
         /// <param name="length">字符长度</param>
         /// <returns>验证码字符</returns>
-        private string CreateAbcVerifyCode(int length)
+        private static string CreateAbcVerifyCode(int length)
         {
             char[] verification = new char[length];
             char[] dictionary = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
@@ -105,7 +85,7 @@ namespace FastFrame.Infrastructure
         /// </summary>
         /// <param name="length">字符长度</param>
         /// <returns>验证码字符</returns>
-        private string CreateMixVerifyCode(int length)
+        private static string CreateMixVerifyCode(int length)
         {
             char[] verification = new char[length];
             char[] dictionary = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
@@ -123,19 +103,19 @@ namespace FastFrame.Infrastructure
         /// <summary>
         /// 产生验证码（随机产生4-6位）
         /// </summary> 
-        public string CreateVerifyCode(VerifyCodeType type, int length = 6)
+        public static string CreateVerifyCode(VerifyCodeType type, int length = 6)
         {
             string verifyCode = string.Empty;
             switch (type)
             {
                 case VerifyCodeType.NumberVerifyCode:
-                    verifyCode = GetSingleObj().CreateNumberVerifyCode(length);
+                    verifyCode = CreateNumberVerifyCode(length);
                     break;
                 case VerifyCodeType.AbcVerifyCode:
-                    verifyCode = GetSingleObj().CreateAbcVerifyCode(length);
+                    verifyCode = CreateAbcVerifyCode(length);
                     break;
                 case VerifyCodeType.MixVerifyCode:
-                    verifyCode = GetSingleObj().CreateMixVerifyCode(length);
+                    verifyCode = CreateMixVerifyCode(length);
                     break;
             }
             return verifyCode;
@@ -146,16 +126,16 @@ namespace FastFrame.Infrastructure
         /// <summary>
         /// 验证码图片 => Bitmap
         /// </summary>  
-        public Bitmap CreateBitmapByImgVerifyCode(string verifyCode, int width, int height, float fontSize = 14)
+        public static Bitmap CreateBitmapByImgVerifyCode(string verifyCode, int width, int height, float fontSize = 14)
         {
-            Font font = new Font("Arial", fontSize, (FontStyle.Bold | FontStyle.Italic));
+            Font font = new("Arial", fontSize, (FontStyle.Bold | FontStyle.Italic));
             Brush brush;
-            Bitmap bitmap = new Bitmap(width, height);
+            Bitmap bitmap = new(width, height);
             Graphics g = Graphics.FromImage(bitmap);
             SizeF totalSizeF = g.MeasureString(verifyCode, font);
             SizeF curCharSizeF;
-            PointF startPointF = new PointF(0, (height - totalSizeF.Height) / 2);
-            Random random = new Random(); //随机数产生器
+            PointF startPointF = new(0, (height - totalSizeF.Height) / 2);
+            Random random = new(); //随机数产生器
             g.Clear(Color.White); //清空图片背景色  
             for (int i = 0; i < verifyCode.Length; i++)
             {
@@ -195,16 +175,16 @@ namespace FastFrame.Infrastructure
         /// <param name="width">宽</param>
         /// <param name="height">高</param>
         /// <returns>byte[]</returns>
-        public byte[] CreateByteByImgVerifyCode(string verifyCode, int width, int height)
+        public static byte[] CreateByteByImgVerifyCode(string verifyCode, int width, int height)
         {
-            Font font = new Font("Arial", 14, (FontStyle.Bold | FontStyle.Italic));
+            Font font = new("Arial", 14, (FontStyle.Bold | FontStyle.Italic));
             Brush brush;
-            Bitmap bitmap = new Bitmap(width, height);
+            Bitmap bitmap = new(width, height);
             Graphics g = Graphics.FromImage(bitmap);
             SizeF totalSizeF = g.MeasureString(verifyCode, font);
             SizeF curCharSizeF;
-            PointF startPointF = new PointF(0, (height - totalSizeF.Height) / 2);
-            Random random = new Random(); //随机数产生器
+            PointF startPointF = new(0, (height - totalSizeF.Height) / 2);
+            Random random = new(); //随机数产生器
             g.Clear(Color.White); //清空图片背景色  
             for (int i = 0; i < verifyCode.Length; i++)
             {
@@ -245,21 +225,21 @@ namespace FastFrame.Infrastructure
         #endregion
     }
 
-	/// <summary>
-	/// RSA算法类型
-	/// </summary>
-	public enum RSAType
-	{
-		/// <summary>
-		/// SHA1
-		/// </summary>
-		RSA = 0,
+    /// <summary>
+    /// RSA算法类型
+    /// </summary>
+    public enum RSAType
+    {
+        /// <summary>
+        /// SHA1
+        /// </summary>
+        RSA = 0,
 
-		/// <summary>
-		/// RSA2 密钥长度至少为2048
-		/// SHA256
-		/// </summary>
-		RSA2
-	}
+        /// <summary>
+        /// RSA2 密钥长度至少为2048
+        /// SHA256
+        /// </summary>
+        RSA2
+    }
 
 }

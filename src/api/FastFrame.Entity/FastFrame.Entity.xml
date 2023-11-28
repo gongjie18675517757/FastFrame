@@ -9,6 +9,11 @@
             数据字典
             </summary>
         </member>
+        <member name="M:FastFrame.Entity.EnumItemAttribute.#ctor(FastFrame.Entity.Enums.EnumName,System.String)">
+            <summary>
+            数据字典
+            </summary>
+        </member>
         <member name="P:FastFrame.Entity.EnumItemAttribute.Name">
             <summary>
             字典值
@@ -73,11 +78,18 @@
             <summary>
             表单分组
             </summary>
+            <remarks>
+            
+            </remarks>
+            <param name="groupNames">归属分组名称</param>
         </member>
         <member name="M:FastFrame.Entity.FormGroupAttribute.#ctor(System.String[])">
             <summary>
-            
+            表单分组
             </summary>
+            <remarks>
+            
+            </remarks>
             <param name="groupNames">归属分组名称</param>
         </member>
         <member name="F:FastFrame.Entity.HideMark.All">
@@ -101,6 +113,11 @@
             </summary>
         </member>
         <member name="T:FastFrame.Entity.ReadOnlyAttribute">
+            <summary>
+            标记只读
+            </summary>
+        </member>
+        <member name="M:FastFrame.Entity.ReadOnlyAttribute.#ctor(FastFrame.Entity.ReadOnlyMark)">
             <summary>
             标记只读
             </summary>
@@ -130,6 +147,11 @@
             关联标记
             </summary>
         </member>
+        <member name="M:FastFrame.Entity.RelatedToAttribute.#ctor(System.Type)">
+            <summary>
+            关联标记
+            </summary>
+        </member>
         <member name="P:FastFrame.Entity.RelatedToAttribute.RelatedType">
             <summary>
             被关联的类型
@@ -139,11 +161,18 @@
             <summary>
             唯一标识
             </summary>
+            <remarks>
+            
+            </remarks>
+            <param name="uniqueNames">需要验证唯一的属性</param>
         </member>
         <member name="M:FastFrame.Entity.UniqueAttribute.#ctor(System.String[])">
             <summary>
-            
+            唯一标识
             </summary>
+            <remarks>
+            
+            </remarks>
             <param name="uniqueNames">需要验证唯一的属性</param>
         </member>
         <member name="T:FastFrame.Entity.Basis.ApiRequestLog">

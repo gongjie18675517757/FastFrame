@@ -10,12 +10,9 @@ using TargetInfo = FastFrame.CodeGenerate.Info.TargetInfo;
 
 namespace FastFrame.CodeGenerate.Build
 {
-    public class DtoBuilder : BaseCShapeCodeBuilder
+    public class DtoBuilder(string solutionDir, Type baseEntityType) : BaseCShapeCodeBuilder(solutionDir, baseEntityType)
     {
         public override string BuildName => "DTO";
-        public DtoBuilder(string solutionDir, Type baseEntityType) : base(solutionDir, baseEntityType)
-        {
-        }
 
         public override string TargetPath => $"{SolutionDir}\\FastFrame.Application";
 
@@ -65,9 +62,9 @@ namespace FastFrame.CodeGenerate.Build
                 Summary = T4Help.GetClassSummary(type, XmlDocDir),
                 Name = $"{type.Name}Dto",
                 BaseNames = new string[] { $"BaseDto<{type.Name}>" }
-                                .Concat(typeof(IHaveMultiFile).IsAssignableFrom(type) ? new[] { "IHaveMultiFileDto" } : Array.Empty<string>())
+                                .Concat(typeof(IHaveMultiFile).IsAssignableFrom(type) ? ["IHaveMultiFileDto"] : Array.Empty<string>())
                                 //.Concat(typeof(ITreeEntity).IsAssignableFrom(type) ? new[] { "ITreeModel" } : Array.Empty<string>())
-                                .Concat(typeof(IHaveCheck).IsAssignableFrom(type) ? new[] { "IHaveCheckModel" } : Array.Empty<string>())
+                                .Concat(typeof(IHaveCheck).IsAssignableFrom(type) ? ["IHaveCheckModel"] : Array.Empty<string>())
                                 ,
                 Path = $"{TargetPath}\\{areaNameSpace}\\{type.Name}\\Dto\\{type.Name}Dto.template.cs",
                 CategoryName = "class",
@@ -77,7 +74,7 @@ namespace FastFrame.CodeGenerate.Build
         }
 
 
-        public IEnumerable<PropInfo> GetPropInfos(Type type)
+        public static IEnumerable<PropInfo> GetPropInfos(Type type)
         {
             var instance = type.Assembly.CreateInstance(type.FullName);
 

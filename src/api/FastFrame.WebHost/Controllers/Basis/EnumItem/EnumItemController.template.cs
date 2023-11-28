@@ -7,15 +7,10 @@ namespace FastFrame.WebHost.Controllers.Basis
 	/// <summary>
 	/// 数字字典 
 	/// </summary>
-	public partial class EnumItemController:BaseCURDController<EnumItemDto>
+	public partial class EnumItemController(EnumItemService service):BaseCURDController<EnumItemDto>(service)
 	{
-		private readonly EnumItemService service;
+		private readonly EnumItemService service=service;
 		
-		public EnumItemController(EnumItemService service)
-			 : base(service)
-		{
-			this.service = service;
-		}
 		
 		[HttpGet()]
 		public IAsyncEnumerable<ITreeModel> TreeList(string super_id,string kw) 
@@ -23,6 +18,5 @@ namespace FastFrame.WebHost.Controllers.Basis
 			return service.TreeListAsync(super_id,kw);
 		}
 		
-
 	}
 }

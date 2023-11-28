@@ -8,6 +8,9 @@ namespace FastFrame.Database.Migrations
     /// <inheritdoc />
     public partial class _2212161 : Migration
     {
+        private static readonly string[] columns = ["create_user_id", "modify_user_id"];
+        private static readonly string[] columnsArray = ["create_user_id", "modify_user_id"];
+
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -68,7 +71,7 @@ namespace FastFrame.Database.Migrations
                 table: "basis_user",
                 keyColumn: "id",
                 keyValue: "00fm5yfgq3q893ylku6uzb57i",
-                columns: new[] { "create_user_id", "modify_user_id" },
+                columns: columns,
                 values: new object[] { "00fm5yfgq3q893ylku6uzb57i", "00fm5yfgq3q893ylku6uzb57i" });
         }
 
@@ -435,7 +438,7 @@ namespace FastFrame.Database.Migrations
                 table: "basis_user",
                 keyColumn: "id",
                 keyValue: "00fm5yfgq3q893ylku6uzb57i",
-                columns: new[] { "create_user_id", "modify_user_id" },
+                columns: columnsArray,
                 values: new object[] { null, null });
 
             migrationBuilder.CreateIndex(

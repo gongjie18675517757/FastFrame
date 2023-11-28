@@ -7,22 +7,17 @@ namespace FastFrame.Entity
     /// 数据字典
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
-    public sealed class EnumItemAttribute : Attribute
+    public sealed class EnumItemAttribute(EnumName name, string superPropName = null) : Attribute
     {
-        public EnumItemAttribute(EnumName name, string superPropName = null)
-        {
-            Name = name;
-            SuperPropName = superPropName;
-        }
 
         /// <summary>
         /// 字典值
         /// </summary>
-        public EnumName Name { get; }
+        public EnumName Name { get; } = name;
 
         /// <summary>
         /// 上级
         /// </summary>
-        public string SuperPropName { get; }
+        public string SuperPropName { get; } = superPropName;
     }
 }

@@ -6,15 +6,11 @@ namespace FastFrame.Entity
     /// 标记只读
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = true)]
-    public sealed class ReadOnlyAttribute : Attribute
+    public sealed class ReadOnlyAttribute(ReadOnlyMark readOnlyMark = ReadOnlyMark.All) : Attribute
     {
-        public ReadOnlyAttribute(ReadOnlyMark readOnlyMark = ReadOnlyMark.All)
-        {
-            ReadOnlyMark = readOnlyMark;
-        }
         /// <summary>
         /// 只读类型
         /// </summary>
-        public ReadOnlyMark ReadOnlyMark { get; }
+        public ReadOnlyMark ReadOnlyMark { get; } = readOnlyMark;
     }
 }

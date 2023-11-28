@@ -10,16 +10,8 @@ using OfficeOpenXml.Style;
 
 namespace FastFrame.WebHost.Privder
 {
-    public class ExcelExportProvider : IExcelExportProvider
+    public class ExcelExportProvider(IModuleExportProvider moduleExportProvider, EnumItemService enumItemService) : IExcelExportProvider
     {
-        private readonly IModuleExportProvider moduleExportProvider;
-        private readonly EnumItemService enumItemService;
-
-        public ExcelExportProvider(IModuleExportProvider moduleExportProvider, EnumItemService enumItemService)
-        {
-            this.moduleExportProvider = moduleExportProvider;
-            this.enumItemService = enumItemService;
-        }
 
         /// <summary>
         /// 生成要导出的列
@@ -39,7 +31,7 @@ namespace FastFrame.WebHost.Privder
                 if (item.Name == "Id")
                     continue;
 
-                if (item.Name.ToLower().Contains("password"))
+                if (item.Name.Contains("password", StringComparison.CurrentCultureIgnoreCase))
                     continue;
 
                 /*数据字典*/
@@ -51,36 +43,14 @@ namespace FastFrame.WebHost.Privder
                         enumValues.Add(item.EnumItemInfo, values);
                     }
 
-                    yield return new ExcelColumn<TDto>
-                    {
-                        Title = item.Description,
-                        ValueFunc = model =>
-                        {
-                            var value = model.GetValue(item.Name);
-                            if (value != null && value is int int_value)
-                                return values.TryGetValueOrDefault(int_value);
+                    yield return new ExcelEnumItemColumn<TDto>(item.Name, item.Description, values);
+                }
 
-                            if (value != null && value is IEnumerable<int> int_values)
-                                return string.Join(";", int_values.Select(v => values.TryGetValueOrDefault(v)));
-
-                            if (value != null && value is IEnumerable<int?> int_values2)
-                                return string.Join(";", int_values2.Where(v => v != null).Select(v => values.TryGetValueOrDefault(v.Value)));
-
-                            return null;
-                        }
-                    };
-                } 
-    
 
                 /*预定义枚举*/
                 else if (item.EnumValues != null && item.EnumValues.Any())
                 {
-                    yield return new ExcelColumn<TDto>
-                    {
-                        Title = item.Description,
-                        ValueFunc = model => string.Join(",",
-                                        item.EnumValues.Where(v => model.GetValue(item.Name)?.ToString() == v.Key).Select(v => v.Value))
-                    };
+                    yield return new ExcelEnumValuesColumn<TDto>(item.Name, item.Description, item.EnumValues);
                 }
 
                 /*未匹配到的ID字段*/
@@ -96,33 +66,18 @@ namespace FastFrame.WebHost.Privder
                     switch (item.Type)
                     {
                         case "Boolean":
-                            yield return new ExcelColumn<TDto>
-                            {
-                                Title = item.Description,
-                                ValueFunc = model => model == null ?
-                                                        null : (bool)model.GetValue(item.Name) ?
-                                                        "是" : "否"
-                            };
+                            yield return new ExcelBooleanColumn<TDto>(item.Name, item.Description);
                             break;
                         case "DateTime":
-                            yield return new ExcelColumn<TDto>
-                            {
-                                Title = item.Description,
-                                ValueFunc = model => model == null ?
-                                                        null : ((DateTime)model.GetValue(item.Name)).ToString(item.Name.EndsWith("Time") ? "yyyy-MM-dd HH:mm" : "yyyy-MM-dd")
-                            };
+                        case "DateOnly":
+                        case "TimeOnly":
+                            yield return new ExcelDateTimeColumn<TDto>(item.Name, item.Description);
                             break;
                         case "Int32":
                         case "String":
                         case "Decimal":
-                            yield return new ExcelColumn<TDto>
-                            {
-                                Title = item.Description,
-                                ValueFunc = model => model?.GetValue(item.Name)
-                            };
-                            break;
                         default:
-
+                            yield return new ValueExcelColumn<TDto>(item.Name, item.Description);
                             break;
                     }
                 }
@@ -159,7 +114,7 @@ namespace FastFrame.WebHost.Privder
                     cIndex = 1;
                     foreach (var column in columns)
                     {
-                        sh.Cells[rIndex, cIndex++].Value = column.ValueFunc(row);
+                        sh.Cells[rIndex, cIndex++].Value = column.GetValue(row);
                     }
                 }
 

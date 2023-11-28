@@ -7,15 +7,9 @@ namespace FastFrame.Repository.Events
     /// 实体被删除时
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class EntityDeleteing<T> : BaseEventData<T> where T : IEntity
+    public class EntityDeleteing<T>(T data, params object[] args) : BaseEventData<T> where T : IEntity
     {
-        public EntityDeleteing(T data, params object[] args) 
-        {
-            Data = data;
-            Args = args;
-        }
-
-        public T Data { get; }
-        public object[] Args { get; }
+        public T Data { get; } = data;
+        public object[] Args { get; } = args;
     }
 }

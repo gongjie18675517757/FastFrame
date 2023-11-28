@@ -13,23 +13,11 @@ using System.Threading.Tasks;
 
 namespace FastFrame.WebHost.Privder
 {
-    public class AppSessionProvider : IApplicationSession
+    public class AppSessionProvider(IHttpContextAccessor httpContextAccessor,
+                                    IMemoryCache memoryCache,
+                                    IHostEnvironment hostEnvironment) : IApplicationSession
     {
-        private readonly IHttpContextAccessor httpContextAccessor;
-        private readonly IMemoryCache memoryCache;
-        private readonly IHostEnvironment hostEnvironment;
-
         private Tenant tenant;
-
-        public AppSessionProvider(IHttpContextAccessor httpContextAccessor,
-                                  IMemoryCache memoryCache,
-                                  IHostEnvironment hostEnvironment)
-        {
-            this.httpContextAccessor = httpContextAccessor;
-
-            this.memoryCache = memoryCache;
-            this.hostEnvironment = hostEnvironment;
-        }
 
         public ICurrUser CurrUser { get; private set; }
 
@@ -39,12 +27,14 @@ namespace FastFrame.WebHost.Privder
                     hostEnvironment?.ContentRootPath ?? AppDomain.CurrentDomain.BaseDirectory :
                     AppDomain.CurrentDomain.BaseDirectory;
 
+        private static readonly string[] stringArray = ["X-ORIGINAL-HOST", "Origin", "Referer"];
+
         private bool TryGetHeaderValue(string[] headerNames, out string host)
         {
             host = string.Empty;
             foreach (var headerName in headerNames)
             {
-                if (httpContextAccessor.HttpContext.Request.Headers.TryGetValue(headerName, out var sv) && sv.Any())
+                if (httpContextAccessor.HttpContext.Request.Headers.TryGetValue(headerName, out var sv) && sv.Count != 0)
                 {
                     var arr = sv.ToArray();
                     host = arr.FirstOrDefault();
@@ -56,7 +46,7 @@ namespace FastFrame.WebHost.Privder
 
         private string GetHost()
         {
-            if (!TryGetHeaderValue(new string[] { "X-ORIGINAL-HOST", "Origin", "Referer" }, out var host))
+            if (!TryGetHeaderValue(stringArray, out var host))
                 host = httpContextAccessor.HttpContext.Request.Host.Value;
             return host;
         }
@@ -65,7 +55,7 @@ namespace FastFrame.WebHost.Privder
         {
             var base64 = currUser.ToJson().ToBase64();
 
-            httpContextAccessor.HttpContext.Response.Headers.Add(ConstValuePool.Token_Name, base64);
+            httpContextAccessor.HttpContext.Response.Headers.Append(ConstValuePool.Token_Name, base64);
             httpContextAccessor.HttpContext.Response.Cookies.Delete(ConstValuePool.Token_Name);
             httpContextAccessor.HttpContext.Response.Cookies.Append(ConstValuePool.Token_Name, base64, new CookieOptions()
             {

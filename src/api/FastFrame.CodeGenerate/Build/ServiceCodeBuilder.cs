@@ -12,15 +12,11 @@ using TargetInfo = FastFrame.CodeGenerate.Info.TargetInfo;
 
 namespace FastFrame.CodeGenerate.Build
 {
-    public class ServiceCodeBuilder : BaseCShapeCodeBuilder
+    public class ServiceCodeBuilder(string solutionDir, Type baseEntityType) : BaseCShapeCodeBuilder(solutionDir, baseEntityType)
     {
         //private readonly DtoBuilder dtoBuild;
 
         public override string BuildName => "服务";
-        public ServiceCodeBuilder(string solutionDir, Type baseEntityType) : base(solutionDir, baseEntityType)
-        {
-            //dtoBuild = new DtoBuilder(solutionDir, baseEntityType);
-        }
 
         public override string TargetPath => $"{SolutionDir}\\FastFrame.Application";
 
@@ -72,7 +68,7 @@ namespace FastFrame.CodeGenerate.Build
             /*要导入的依赖*/
             var depends = relatedTypes
                     .Select(x => x.RelatedType.Name)
-                    .Union(new[] { "User", type.Name })
+                    .Union(new[] { /*"User",*/ type.Name })
                     .Distinct()
                     .Select(x => new { type = $"IRepository<{x}>", name = $"{x.ToFirstLower()}Repository" });
 
@@ -83,7 +79,7 @@ namespace FastFrame.CodeGenerate.Build
                 ImportNames = importNames,
                 Name = $"{type.Name}Service",
                 CategoryName = "class",
-                BaseNames = new string[] { $"BaseService<{type.Name}, {type.Name}Dto>" },
+                BaseNames = new string[] { $"BaseService<{type.Name}, {type.Name}Dto>(loader,{type.Name.ToFirstLower()}Repository)" },
                 FieldInfos = depends.Select(x => new FieldInfo() { FieldName = x.name, TypeName = x.type }),
                 Constructor = new Info.ConstructorInfo()
                 {
@@ -96,7 +92,7 @@ namespace FastFrame.CodeGenerate.Build
                             }
                         }),
                     Super = new string[] { "loader", $"{type.Name.ToFirstLower()}Repository" },
-                    CodeBlock = depends.Select(x => $"this.{x.name}={x.name};")
+                    //CodeBlock = depends.Select(x => $"this.{x.name}={x.name};")
                 },
                 MethodInfos = GetMethods(type),
                 Summary = $"{T4Help.GetClassSummary(type, XmlDocDir)} 服务实现",

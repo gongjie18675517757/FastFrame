@@ -12,17 +12,11 @@ namespace FastFrame.Application.Basis
 	/// <summary>
 	/// 用户 服务实现 
 	/// </summary>
-	public partial class UserService:BaseService<User, UserDto>
+	public partial class UserService(IRepository<Resource> resourceRepository,IRepository<User> userRepository,IServiceProvider loader):BaseService<User, UserDto>(loader,userRepository)
 	{
-		private readonly IRepository<Resource> resourceRepository;
-		private readonly IRepository<User> userRepository;
+		private readonly IRepository<Resource> resourceRepository=resourceRepository;
+		private readonly IRepository<User> userRepository=userRepository;
 		
-		public UserService(IRepository<Resource> resourceRepository,IRepository<User> userRepository,IServiceProvider loader)
-			 : base(loader,userRepository)
-		{
-			this.resourceRepository=resourceRepository;
-			this.userRepository=userRepository;
-		}
 		
 		protected override IQueryable<UserDto> DefaultQueryable() 
 		{

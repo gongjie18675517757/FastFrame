@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<EnablePreviewFeatures>true</EnablePreviewFeatures>
 		<LangVersion>preview</LangVersion>
@@ -15,21 +15,21 @@
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<DocumentationFile>.\FastFrame.Application.xml</DocumentationFile>
-		<NoWarn>1701;1702;1591;</NoWarn>
+		<NoWarn>1701;1702;1591;ASP0023;</NoWarn>
 		<LangVersion>preview</LangVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<DocumentationFile>.\FastFrame.Application.xml</DocumentationFile>
-		<NoWarn>1701;1702;1591;</NoWarn>
+		<NoWarn>1701;1702;1591;ASP0023;</NoWarn>
 		<LangVersion>preview</LangVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Dapper" Version="2.0.123" />
-		<PackageReference Include="EPPlus" Version="6.1.1" />
-		<PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.23" />
-		<PackageReference Include="AspectCore.Core" Version="2.3.0" /> 
+		<PackageReference Include="Dapper" Version="2.1.21" />
+		<PackageReference Include="EPPlus" Version="7.0.1" />
+		<PackageReference Include="System.Linq.Dynamic.Core" Version="1.3.6" />
+		<PackageReference Include="AspectCore.Core" Version="2.4.0" /> 
 	</ItemGroup> 
 	
 	<ItemGroup>

@@ -11,19 +11,8 @@ namespace FastFrame.WebHost.Middleware
     /// <summary>
     /// 异常处理中间件
     /// </summary>
-    public class ExceptionMiddleware
+    public class ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger, IModuleDesProvider moduleDesProvider)
     {
-        private readonly RequestDelegate next;
-        private readonly ILogger<ExceptionMiddleware> logger;
-        private readonly IModuleDesProvider moduleDesProvider;
-
-        public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger, IModuleDesProvider moduleDesProvider)
-        {
-            this.next = next;
-            this.logger = logger;
-            this.moduleDesProvider = moduleDesProvider;
-        }
-
         public async Task Invoke(HttpContext context)
         {
             context.Items.TryGetValue(Entity.Basis.ApiRequestLog.ListKeyName, out var log_id);

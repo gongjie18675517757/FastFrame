@@ -11,12 +11,8 @@ namespace FastFrame.CodeGenerate.Build
     /// <summary>
     /// 生成VUE页面
     /// </summary>
-    public class VueJsCodeBuilder : BaseJsCodeBuilder
+    public class VueJsCodeBuilder(string solutionDir, Type baseEntityType) : BaseJsCodeBuilder(solutionDir, baseEntityType)
     {
-        public VueJsCodeBuilder(string solutionDir, Type baseEntityType) : base(solutionDir, baseEntityType)
-        {
-        }
-
         public override string BuildName => "Vue页面";
 
         public override string TargetPath => $@"{Directory.GetParent(this.SolutionDir).Parent}\admin\vue-admin\src\views";  
@@ -56,11 +52,11 @@ namespace FastFrame.CodeGenerate.Build
             }
         }
 
-        private string ReplacePlaceholder(string line, Type type)
+        private static string ReplacePlaceholder(string line, Type type)
         {
             return line.Replace("{{AreaName}}", T4Help.GenerateNameSpace(type, ""))
                 .Replace("{{ModuleName}}", type.Name)
-                .Replace("{{Description}}", T4Help.GetClassSummary(type, this.XmlDocDir));
+                .Replace("{{Description}}", T4Help.GetClassSummary(type, XmlDocDir));
         }
     }
 }

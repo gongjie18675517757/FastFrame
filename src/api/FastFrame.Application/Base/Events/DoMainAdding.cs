@@ -6,15 +6,10 @@ namespace FastFrame.Application.Events
     /// 添加前
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class DoMainAdding<T> : BaseEventData<T>  
+    public class DoMainAdding<T>(T data, params object[] args) : BaseEventData<T>  
     {
-        public DoMainAdding(T data, params object[] args)
-        {
-            Data = data;
-            Args = args;
-        }
+        public T Data { get; } = data;
 
-        public T Data { get; }
-        public object[] Args { get; }
+        public object[] Args { get; } = args;
     }
 }

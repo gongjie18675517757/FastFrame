@@ -13,19 +13,12 @@ namespace FastFrame.Application.OA
 	/// <summary>
 	/// 请假单 服务实现 
 	/// </summary>
-	public partial class OaLeaveService:BaseService<OaLeave, OaLeaveDto>
+	public partial class OaLeaveService(IRepository<User> userRepository,IRepository<Dept> deptRepository,IRepository<OaLeave> oaLeaveRepository,IServiceProvider loader):BaseService<OaLeave, OaLeaveDto>(loader,oaLeaveRepository)
 	{
-		private readonly IRepository<User> userRepository;
-		private readonly IRepository<Dept> deptRepository;
-		private readonly IRepository<OaLeave> oaLeaveRepository;
+		private readonly IRepository<User> userRepository=userRepository;
+		private readonly IRepository<Dept> deptRepository=deptRepository;
+		private readonly IRepository<OaLeave> oaLeaveRepository=oaLeaveRepository;
 		
-		public OaLeaveService(IRepository<User> userRepository,IRepository<Dept> deptRepository,IRepository<OaLeave> oaLeaveRepository,IServiceProvider loader)
-			 : base(loader,oaLeaveRepository)
-		{
-			this.userRepository=userRepository;
-			this.deptRepository=deptRepository;
-			this.oaLeaveRepository=oaLeaveRepository;
-		}
 		
 		protected override IQueryable<OaLeaveDto> DefaultQueryable() 
 		{

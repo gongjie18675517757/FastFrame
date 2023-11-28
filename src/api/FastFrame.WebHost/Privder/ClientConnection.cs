@@ -12,18 +12,9 @@ namespace FastFrame.WebHost.Privder
     /// <summary>
     /// 客户端连接抽象实现
     /// </summary>
-    public class ClientConnection : IClientConnection
+    public class ClientConnection(IHubContext<MessageHub> hubContext,
+                                  ICacheProvider cacheProvider) : IClientConnection
     {
-        private readonly IHubContext<MessageHub> hubContext;
-        private readonly ICacheProvider cacheProvider;
-
-        public ClientConnection(IHubContext<MessageHub> hubContext,
-                                ICacheProvider cacheProvider)
-        {
-            this.hubContext = hubContext;
-            this.cacheProvider = cacheProvider;
-        }
-
         public string Name => "后台网页";
 
         /// <summary>
@@ -57,7 +48,7 @@ namespace FastFrame.WebHost.Privder
         public async Task<bool> ExistsIsOnLine(string userId)
         {
             var clientIds = await cacheProvider.HGetAsync<List<string>>(ConstValuePool.CacheUserMapKey, userId);
-            return clientIds.Any();
+            return clientIds.Count != 0;
         }
     }
 }

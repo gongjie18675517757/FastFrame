@@ -12,17 +12,11 @@ namespace FastFrame.Application.Basis
 	/// <summary>
 	/// 数字字典 服务实现 
 	/// </summary>
-	public partial class EnumItemService:BaseService<EnumItem, EnumItemDto>
+	public partial class EnumItemService(IRepository<EnumItem> enumItemRepository,IRepository<User> userRepository,IServiceProvider loader):BaseService<EnumItem, EnumItemDto>(loader,enumItemRepository)
 	{
-		private readonly IRepository<EnumItem> enumItemRepository;
-		private readonly IRepository<User> userRepository;
+		private readonly IRepository<EnumItem> enumItemRepository=enumItemRepository;
+		private readonly IRepository<User> userRepository=userRepository;
 		
-		public EnumItemService(IRepository<EnumItem> enumItemRepository,IRepository<User> userRepository,IServiceProvider loader)
-			 : base(loader,enumItemRepository)
-		{
-			this.enumItemRepository=enumItemRepository;
-			this.userRepository=userRepository;
-		}
 		
 		protected override IQueryable<EnumItemDto> DefaultQueryable() 
 		{

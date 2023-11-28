@@ -13,20 +13,12 @@ using System.Threading.Tasks;
 
 namespace FastFrame.Repository
 {
-    internal class BaseRepository<T> : BaseQueryable<T>, IRepository<T> where T : class, IEntity
+    internal class BaseRepository<T>(DataBase context,
+                          EventListenManger eventListenManger,
+                          IServiceProvider loader,
+                          IApplicationSession appSession) : BaseQueryable<T>(context, appSession), IRepository<T> where T : class, IEntity
     {
         private const string TranCommitSuccessEventKey = "TranCommitSuccessEventKey";
-        private readonly EventListenManger eventListenManger;
-        private readonly IServiceProvider loader;
-
-        public BaseRepository(DataBase context,
-                              EventListenManger eventListenManger,
-                              IServiceProvider loader,
-                              IApplicationSession appSession) : base(context, appSession)
-        {
-            this.eventListenManger = eventListenManger;
-            this.loader = loader;
-        }
 
         /// <summary>
         /// 添加事务提交后的事件

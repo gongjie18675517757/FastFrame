@@ -10,12 +10,8 @@ namespace FastFrame.CodeGenerate.Build
     /// <summary>
     /// 后台代码生成
     /// </summary>
-    public abstract class BaseCShapeCodeBuilder : BaseCodeBuilder
+    public abstract class BaseCShapeCodeBuilder(string solutionDir, Type baseEntityType) : BaseCodeBuilder(solutionDir, baseEntityType)
     {
-        public BaseCShapeCodeBuilder(string solutionDir, Type baseEntityType) : base(solutionDir, baseEntityType)
-        {
-        }
-
         public override bool Forcibly => true;
 
         /// <summary>
@@ -62,7 +58,7 @@ namespace FastFrame.CodeGenerate.Build
             /*命名空间开始*/
             write.WriteCodeLine($"{{", 0);
 
-           
+
 
             /*空行*/
             write.WriteCodeLine($"", 2);
@@ -79,7 +75,14 @@ namespace FastFrame.CodeGenerate.Build
             }
 
             /*类定义*/
-            write.WriteCodeLine($"public partial {target.CategoryName} {target.Name}:{string.Join(",", target.BaseNames)}", 1);
+            if (target.Constructor?.Parms?.Any()==true)
+            {
+                write.WriteCodeLine($"public partial {target.CategoryName} {target.Name}({string.Join(",", target.Constructor?.Parms?.Select(x => $"{x.TypeName} {x.DefineName}"))}):{string.Join(",", target.BaseNames)}", 1);
+            }
+            else
+            {
+                write.WriteCodeLine($"public partial {target.CategoryName} {target.Name}:{string.Join(",", target.BaseNames)}", 1);
+            }
 
             /*类开始*/
             write.WriteCodeLine($"{{", 1);
@@ -88,30 +91,30 @@ namespace FastFrame.CodeGenerate.Build
             //write.WriteCodeLine("/*字段*/", 2);
             foreach (var field in target.FieldInfos)
             {
-                write.WriteCodeLine($"private readonly {field.TypeName} {field.FieldName};", 2);
+                write.WriteCodeLine($"private readonly {field.TypeName} {field.FieldName}={field.FieldName};", 2);
             }
             write.WriteCodeLine("", 2);
 
-            /*构造函数*/
-            //write.WriteCodeLine("/*构造函数*/", 2);
-            if (target.Constructor != null)
-            {
-                write.WriteCodeLine($"{target.Constructor.Modifier} {target.Name}({string.Join(",", target.Constructor.Parms.Select(x => $"{x.TypeName} {x.DefineName}"))})", 2);
-                if (target.Constructor.Super.Any())
-                    write.WriteCodeLine($" : base({string.Join(",", target.Constructor.Super)})", 3);
+            ///*构造函数*/
+            ////write.WriteCodeLine("/*构造函数*/", 2);
+            //if (target.Constructor != null)
+            //{
+            //    write.WriteCodeLine($"{target.Constructor.Modifier} {target.Name}({string.Join(",", target.Constructor.Parms.Select(x => $"{x.TypeName} {x.DefineName}"))})", 2);
+            //    if (target.Constructor.Super.Any())
+            //        write.WriteCodeLine($" : base({string.Join(",", target.Constructor.Super)})", 3);
 
-                /*构造函数开始*/
-                write.WriteCodeLine($"{{", 2);
+            //    /*构造函数开始*/
+            //    write.WriteCodeLine($"{{", 2);
 
-                /*构造函数的代码块*/
-                foreach (var block in target.Constructor.CodeBlock)
-                {
-                    write.WriteCodeLine(block, 3);
-                }
+            //    /*构造函数的代码块*/
+            //    foreach (var block in target.Constructor.CodeBlock)
+            //    {
+            //        write.WriteCodeLine(block, 3);
+            //    }
 
-                /*构造函数结束*/
-                write.WriteCodeLine($"}}", 2);
-            }
+            //    /*构造函数结束*/
+            //    write.WriteCodeLine($"}}", 2);
+            //}
 
 
             /*属性列表*/

@@ -29,7 +29,7 @@ namespace FastFrame.Database
             var isInheritTable = entityBaseType.IsClass && !entityBaseType.IsAbstract && typeof(IEntity).IsAssignableFrom(entityBaseType);
 
             /*算命名空间*/
-            var currNameSpace = string.Join(",", entityType.Namespace.Split(new char[] { '.' }).Skip(2));
+            var currNameSpace = string.Join(",", entityType.Namespace.Split(['.']).Skip(2));
 
 
             if (!isInheritTable)
@@ -152,12 +152,13 @@ namespace FastFrame.Database
             }
         }
 
+        private static readonly char[] separator = [',']; 
 
         public void ConvertEnumArray<TEnum>(EntityTypeBuilder<T> typeBuilder, string name)
         {
             var converter = new ValueConverter<TEnum[], string>(
-                   v => string.Join(",", v ?? Array.Empty<TEnum>()),
-                   v => (v ?? "").Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                   v => string.Join(",", v ?? new TEnum[0]),
+                   v => (v ?? "").Split(separator, StringSplitOptions.RemoveEmptyEntries)
                              .Select(r => (TEnum)Enum.Parse(typeof(TEnum), r))
                              .ToArray()
                  );
@@ -173,8 +174,8 @@ namespace FastFrame.Database
         public void ConvertStringArray(EntityTypeBuilder<T> typeBuilder, string name)
         {
             var converter = new ValueConverter<string[], string>(
-                   v => string.Join(",", v ?? Array.Empty<string>()),
-                   v => (v ?? "").Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                   v => string.Join(",", v ?? new string[0]),
+                   v => (v ?? "").Split(separator, StringSplitOptions.RemoveEmptyEntries)
                              .ToArray()
                  );
 

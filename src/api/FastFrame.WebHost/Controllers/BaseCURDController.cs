@@ -5,15 +5,9 @@ using System.Threading.Tasks;
 
 namespace FastFrame.WebHost.Controllers
 {
-    public abstract class BaseCURDController<TDto> : BaseController<TDto>
+    public abstract class BaseCURDController<TDto>(ICURDService<TDto> service) : BaseController<TDto>(service)
          where TDto : class, IDto, new()
     {
-        private readonly ICURDService<TDto> service;
-
-        public BaseCURDController(ICURDService<TDto> service) : base(service)
-        {
-            this.service = service;
-        }
 
         /// <summary>
         /// 删除
@@ -60,7 +54,7 @@ namespace FastFrame.WebHost.Controllers
         /// 验证唯一性
         /// </summary>      
         [HttpPost]
-        [Permission(new string[] { "Add", "Update" })]
+        [Permission(["Add", "Update"])]
         public async Task<bool> VerififyUnique(UniqueInput uniqueInput)
         {
             return await service.VerifyUnique(uniqueInput);

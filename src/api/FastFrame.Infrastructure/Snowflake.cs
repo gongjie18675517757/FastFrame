@@ -16,14 +16,14 @@ namespace FastFrame.Infrastructure
 
         private static readonly long machineIdBits = 5L; //机器码字节数
         private static readonly long datacenterIdBits = 5L;//数据字节数
-        public static long maxMachineId = -1L ^ (-1L << (int)machineIdBits); //最大机器ID
+        public static readonly long maxMachineId = -1L ^ (-1L << (int)machineIdBits); //最大机器ID
         private static readonly long maxDatacenterId = -1L ^ (-1L << (int)datacenterIdBits);//最大数据ID
 
         private static readonly long sequenceBits = 12L; //计数器字节数，12个字节用来保存计数码        
         private static readonly long machineIdShift = sequenceBits; //机器码数据左移位数，就是后面计数器占用的位数
         private static readonly long datacenterIdShift = sequenceBits + machineIdBits;
         private static readonly long timestampLeftShift = sequenceBits + machineIdBits + datacenterIdBits; //时间戳左移动位数就是机器码+计数器总字节数+数据字节数
-        public static long sequenceMask = -1L ^ -1L << (int)sequenceBits; //一微秒内可以产生计数，如果达到该值则等到下一微妙在进行生成
+        public static readonly long sequenceMask = -1L ^ -1L << (int)sequenceBits; //一微秒内可以产生计数，如果达到该值则等到下一微妙在进行生成
         private static long lastTimestamp = -1L;//最后时间戳
 
         private static readonly object syncRoot = new object();//加锁对象
@@ -31,8 +31,7 @@ namespace FastFrame.Infrastructure
 
         public static Snowflake Instance()
         {
-            if (snowflake == null)
-                snowflake = new Snowflake();
+            snowflake ??= new Snowflake();
             return snowflake;
         }
 
@@ -51,7 +50,7 @@ namespace FastFrame.Infrastructure
             Snowflakes(machineId, datacenterId);
         }
 
-        private void Snowflakes(long machineId, long datacenterId)
+        private static void Snowflakes(long machineId, long datacenterId)
         {
             if (machineId >= 0)
             {
@@ -99,7 +98,7 @@ namespace FastFrame.Infrastructure
         /// 获取长整形的ID
         /// </summary>
         /// <returns></returns>
-        public long GetId()
+        public static long GetId()
         {
             lock (syncRoot)
             {

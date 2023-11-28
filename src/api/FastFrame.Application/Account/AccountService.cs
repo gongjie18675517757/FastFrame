@@ -11,18 +11,8 @@ using System.Threading.Tasks;
 
 namespace FastFrame.Application.Account
 {
-    public class AccountService : IService
+    public class AccountService(IRepository<User> userRepository, IIdentityManager identityManager, IApplicationSession appSession) : IService
     {
-        private readonly IRepository<User> userRepository;
-        private readonly IIdentityManager identityManager;
-        private readonly IApplicationSession appSession;
-
-        public AccountService(IRepository<User> userRepository, IIdentityManager identityManager, IApplicationSession appSession)
-        {
-            this.userRepository = userRepository;
-            this.identityManager = identityManager;
-            this.appSession = appSession;
-        }
 
         /// <summary>
         /// 登陆
@@ -35,6 +25,7 @@ namespace FastFrame.Application.Account
 
             var ip = appSession.GetIPAddress();
             var identity = await identityManager.TryGenerateIdentity(user?.Id, appSession.GetIPAddress(), input.Password, user.VerificationPassword);
+
             var curr = new CurrUser()
             {
                 IsAdmin = user.IsAdmin,
@@ -100,9 +91,7 @@ namespace FastFrame.Application.Account
         /// <returns></returns>
         public async Task<UserDto> GetCurrentAsync()
         {
-            var curr = appSession.CurrUser;
-            if (curr == null)
-                throw new MsgException("未登陆吧!");
+            var curr = appSession.CurrUser ?? throw new MsgException("未登陆吧!");
             var user = await userRepository.GetAsync(curr?.Id);
             appSession.RefreshIdentity();
             return user.MapTo<User, UserDto>();

@@ -10,18 +10,8 @@ namespace FastFrame.WebHost.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DefaultController : ControllerBase
+    public class DefaultController(IApplicationSession appSession, IClientManage clientManage) : ControllerBase
     {
-        private readonly IApplicationSession appSession; 
-        private readonly IClientManage clientManage;
-
-        public DefaultController(IApplicationSession appSession,  IClientManage clientManage)
-        {
-            this.appSession = appSession; 
-            this.clientManage = clientManage;
-        }
-
-
         [HttpGet]
         public async Task<string[]> ChooseAsync(string title, string content)
         {
@@ -41,7 +31,7 @@ namespace FastFrame.WebHost.Controllers
 
         // POST: api/Default
         [HttpPost]
-        public async Task<bool> ConfirmAsync([FromForm] string title, [FromForm] string content)
+        public async Task<bool> ConfirmAsync([FromForm] string title)
         {
             return await clientManage
                 .PublishConfirmAsync(new ClientConfirm
@@ -53,16 +43,16 @@ namespace FastFrame.WebHost.Controllers
                 }, appSession.CurrUser?.Id);
         }
 
-        // PUT: api/Default/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
+        //// PUT: api/Default/5
+        //[HttpPut("{id}")]
+        //public void Put(int id, [FromBody] string value)
+        //{
+        //}
 
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+        //// DELETE: api/ApiWithActions/5
+        //[HttpDelete("{id}")]
+        //public void Delete(int id)
+        //{
+        //}
     } 
 }

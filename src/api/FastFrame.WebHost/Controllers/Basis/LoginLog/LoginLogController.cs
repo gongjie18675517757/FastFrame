@@ -9,16 +9,9 @@ namespace FastFrame.WebHost.Controllers.Basis
     /// <summary>
     /// 登录身份
     /// </summary>
-    public class LoginLogController : BaseController<LoginLogModel>
+    public class LoginLogController(LoginLogServcie service, IdentityManagerService identityManagerService) 
+        : BaseController<LoginLogModel>(service)
     {
-        private readonly LoginLogServcie service;
-        private readonly IdentityManagerService identityManagerService;
-
-        public LoginLogController(LoginLogServcie service, IdentityManagerService identityManagerService) : base(service)
-        {
-            this.service = service;
-            this.identityManagerService = identityManagerService;
-        }
 
         /// <summary>
         /// 设置身份失效

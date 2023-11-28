@@ -8,15 +8,8 @@ namespace FastFrame.WebHost.Controllers.Basis
     /// <summary>
     /// 媒体库
     /// </summary>
-    public partial class MeidiaController : BaseController
+    public partial class MeidiaController(MeidiaService service) : BaseController
     {
-        private readonly MeidiaService service;
-
-        public MeidiaController(MeidiaService service)
-        {
-            this.service = service;
-        }
-
         [Permission(nameof(List), "列表")]
         [HttpGet("{id?}")]
         public async Task<MeidiaOutput> List(string id, string kw = "")

@@ -7,15 +7,10 @@ namespace FastFrame.WebHost.Controllers.Flow
 	/// <summary>
 	/// 工作流 
 	/// </summary>
-	public partial class WorkFlowController:BaseCURDController<WorkFlowDto>
+	public partial class WorkFlowController(WorkFlowService service):BaseCURDController<WorkFlowDto>(service)
 	{
-		private readonly WorkFlowService service;
+		private readonly WorkFlowService service=service;
 		
-		public WorkFlowController(WorkFlowService service)
-			 : base(service)
-		{
-			this.service = service;
-		}
 		
 		[HttpGet()]
 		public IAsyncEnumerable<ITreeModel> TreeList(string super_id,string kw) 

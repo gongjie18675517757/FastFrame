@@ -3,6 +3,7 @@ using FastFrame.Infrastructure.Interface;
 using FastFrame.Infrastructure.MessageQueue;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 
 namespace FastFrame.Infrastructure.MessageQueue
@@ -10,29 +11,31 @@ namespace FastFrame.Infrastructure.MessageQueue
     /// <summary>
     /// 消息队列
     /// </summary>
-    public class MessageQueue : IMessageQueue, IApplicationInitialLifetime, IApplicationUnInitialLifetime
+    public class MessageQueue(StackExchange.Redis.ConnectionMultiplexer redisClient, IBackgroundJob backgroundJob) 
+        : IMessageQueue, IApplicationInitialLifetime, IApplicationUnInitialLifetime
     {
-        private readonly StackExchange.Redis.ConnectionMultiplexer redisClient;
-        private readonly IBackgroundJob backgroundJob;
-
-        public MessageQueue(StackExchange.Redis.ConnectionMultiplexer redisClient, IBackgroundJob backgroundJob)
-        {
-            this.redisClient = redisClient;
-            this.backgroundJob = backgroundJob;
-        }
+        private readonly StackExchange.Redis.ConnectionMultiplexer redisClient = redisClient;
+        private readonly IBackgroundJob backgroundJob = backgroundJob;
 
         public async Task InitialAsync()
         {
             /*收集所有订阅的*/
             foreach (var item in MessageQueueServiceCollectionExtensions.SubscribeMethodList)
-                await redisClient.GetSubscriber().SubscribeAsync(item.Key, OnSubscribe);
+            {
+                var k = new StackExchange.Redis.RedisChannel(item.Key, StackExchange.Redis.RedisChannel.PatternMode.Auto);
+                await redisClient.GetSubscriber().SubscribeAsync(k, OnSubscribe);
+            }
 
         }
 
         public async Task UnInitialAsync()
         {
             foreach (var item in MessageQueueServiceCollectionExtensions.SubscribeMethodList)
-                await redisClient.GetSubscriber().UnsubscribeAsync(item.Key, OnSubscribe);
+            {
+                var k = new StackExchange.Redis.RedisChannel(item.Key, StackExchange.Redis.RedisChannel.PatternMode.Auto);
+
+                await redisClient.GetSubscriber().UnsubscribeAsync(k, OnSubscribe);
+            }
         }
 
         /// <summary>
@@ -42,7 +45,9 @@ namespace FastFrame.Infrastructure.MessageQueue
         {
             if (MessageQueueServiceCollectionExtensions.SubscribeMethodList.TryGetValue(channel, out var list))
             {
-                var settimeOutMethod = typeof(IBackgroundJob).GetMethod(nameof(IBackgroundJob.SetTimeoutByMethod), BindingFlags.Instance | BindingFlags.Public);
+                var settimeOutMethod = typeof(IBackgroundJob)
+                    .GetMethod(nameof(IBackgroundJob.SetTimeoutByMethod), BindingFlags.Instance | BindingFlags.Public);
+
                 foreach (var g in list.GroupBy(v => v.type))
                 {
                     /*创建延时方法*/
@@ -74,7 +79,8 @@ namespace FastFrame.Infrastructure.MessageQueue
 
         public async Task<string> PublishAsync(string channel, string msg)
         {
-            var msgId = await redisClient.GetSubscriber().PublishAsync(channel, msg);
+            var k = new StackExchange.Redis.RedisChannel(channel, StackExchange.Redis.RedisChannel.PatternMode.Auto);
+            var msgId = await redisClient.GetSubscriber().PublishAsync(k, msg);
 
             return msgId.ToString();
         }

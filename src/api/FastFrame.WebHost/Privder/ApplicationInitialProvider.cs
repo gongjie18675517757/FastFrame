@@ -20,18 +20,11 @@ namespace FastFrame.WebHost.Privder
     /// <summary>
     /// 应用程序初始化服务
     /// </summary>
-    public class ApplicationInitialProvider : IApplicationInitialLifetime
+    public class ApplicationInitialProvider(IServiceProvider serviceProvider,
+                                            ILogger<ApplicationInitialProvider> logger,
+                                            IMemoryCache memoryCache) 
+        : IApplicationInitialLifetime
     {
-        private readonly IServiceProvider serviceProvider;
-        private readonly ILogger<ApplicationInitialProvider> logger;
-        private readonly IMemoryCache memoryCache;
-
-        public ApplicationInitialProvider(IServiceProvider serviceProvider, ILogger<ApplicationInitialProvider> logger, IMemoryCache memoryCache)
-        {
-            this.serviceProvider = serviceProvider;
-            this.logger = logger;
-            this.memoryCache = memoryCache;
-        }
 
         /// <summary>
         /// 程序初始化
@@ -112,7 +105,7 @@ namespace FastFrame.WebHost.Privder
                             if (permission.IsDefinition)
                             {
                                 var permissionName = permission.PermissionKey;
-                                if (!permissionName.Contains("."))
+                                if (!permissionName.Contains('.'))
                                     permissionName = $"{groupName}.{permissionName}";
 
                                 permissionDefinition.RegisterChildPermission(permissionName, permission.Text);

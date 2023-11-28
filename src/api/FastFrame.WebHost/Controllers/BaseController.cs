@@ -17,15 +17,10 @@ namespace FastFrame.WebHost.Controllers
 
     }
 
-    public abstract class BaseController<TDto> : BaseController
+    public abstract class BaseController<TDto>(IPageListService<TDto> service) : BaseController
         where TDto : class
     {
-        private readonly IPageListService<TDto> service;
-
-        public BaseController(IPageListService<TDto> service)
-        {
-            this.service = service;
-        }
+        private readonly IPageListService<TDto> service = service;
 
         /// <summary>
         /// 查看
@@ -55,7 +50,7 @@ namespace FastFrame.WebHost.Controllers
         /// <param name="qs"></param>
         /// <param name="fileName"></param>
         /// <returns></returns>
-        [Permission(new string[] { "List" })]
+        [Permission(["List"])]
         [HttpGet]
         public virtual async Task<IActionResult> ExportList(string qs, string fileName)
         {

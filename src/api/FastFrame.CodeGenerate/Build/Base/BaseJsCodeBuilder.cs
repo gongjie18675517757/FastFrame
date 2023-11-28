@@ -2,12 +2,8 @@
 
 namespace FastFrame.CodeGenerate.Build
 {
-    public abstract class BaseJsCodeBuilder : BaseCodeBuilder
+    public abstract class BaseJsCodeBuilder(string solutionDir, Type baseEntityType) : BaseCodeBuilder(solutionDir, baseEntityType)
     {
-        public BaseJsCodeBuilder(string solutionDir, Type baseEntityType) : base(solutionDir, baseEntityType)
-        {
-        }
-
         public override bool Forcibly => false;
     }
 }

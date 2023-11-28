@@ -5,14 +5,8 @@ using System.Threading.Tasks;
 
 namespace FastFrame.WebHost.Controllers.Basis
 {
-    public partial class PermissionController : BaseController
+    public partial class PermissionController(IPermissionChecker service) : BaseController
     {
-        private readonly IPermissionChecker service;
-
-        public PermissionController(IPermissionChecker service)  
-        {
-            this.service = service;
-        }  
 
         /// <summary>
         /// 被授予的权限列表

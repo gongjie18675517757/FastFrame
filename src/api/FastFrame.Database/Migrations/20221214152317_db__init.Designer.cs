@@ -12,7 +12,9 @@ namespace FastFrame.Database.Migrations
 {
     [DbContext(typeof(DataBase))]
     [Migration("20221214152317_db__init")]
+#pragma warning disable CS8981 // 该类型名称仅包含小写 ascii 字符。此类名称可能会成为该语言的保留值。
     partial class dbinit
+#pragma warning restore CS8981 // 该类型名称仅包含小写 ascii 字符。此类名称可能会成为该语言的保留值。
     {
  
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

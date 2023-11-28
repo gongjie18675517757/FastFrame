@@ -1,11 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup> 
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<EnablePreviewFeatures>true</EnablePreviewFeatures>
-		<LangVersion>preview</LangVersion>
-		
+		<LangVersion>preview</LangVersion> 
 		<UserSecretsId>baa687c8-fef2-457d-b3b8-191741af27e2</UserSecretsId>
 		<!--<AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>-->
 	</PropertyGroup>
@@ -19,13 +18,13 @@
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<DefineConstants>DEBUG;TRACE</DefineConstants>
 		<DocumentationFile>.\FastFrame.WebHost.xml</DocumentationFile>
-		<NoWarn>1701;1702;1591;</NoWarn>
+		<NoWarn>1701;1702;1591;ASP0023;</NoWarn>
 		<LangVersion>preview</LangVersion>
 		<WarningLevel>7</WarningLevel>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<NoWarn>1701;1702;1591;</NoWarn>
+		<NoWarn>1701;1702;1591;ASP0023;</NoWarn>
 		<DocumentationFile>.\FastFrame.WebHost.xml</DocumentationFile>
 		<LangVersion>preview</LangVersion>
 		<WarningLevel>7</WarningLevel>
@@ -56,20 +55,19 @@
 	<ItemGroup>
 	
 		<PackageReference Include="DistributedLock.Redis" Version="1.0.2" />
-		<PackageReference Include="Hangfire.AspNetCore" Version="1.8.0-rc2" />
-		<PackageReference Include="Hangfire.Core" Version="1.8.0-rc2" /> 
-		<PackageReference Include="HangFire.Redis.StackExchange" Version="1.9.1-beta" />  
-		<PackageReference Include="AspectCore.Extensions.DependencyInjection" Version="2.3.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.3" />
-		<PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="7.0.3" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="6.1.0" />
-		<PackageReference Include="AspectCore.Core" Version="2.3.0" /> 
+		<PackageReference Include="Hangfire.AspNetCore" Version="1.8.6" />
+		<PackageReference Include="Hangfire.Core" Version="1.8.6" /> 
+		<PackageReference Include="HangFire.Redis.StackExchange" Version="1.9.4-beta" />  
+		<PackageReference Include="AspectCore.Extensions.DependencyInjection" Version="2.4.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="7.0.0" />
+		<PackageReference Include="AspectCore.Core" Version="2.4.0" /> 
 		<PackageReference Condition="'$(Configuration)'=='DEBUG'" Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-		<PackageReference Condition="'$(Configuration)'=='DEBUG'" Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.3">
+		<PackageReference Condition="'$(Configuration)'=='DEBUG'" Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="tusdotnet" Version="2.7.0" />
 		<!--<PackageReference Include="Yarp.ReverseProxy" Version="1.0.1" />-->
 	</ItemGroup>
 

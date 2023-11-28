@@ -14,15 +14,8 @@ namespace FastFrame.WebHost.Middleware
     /// <summary>
     /// 权限处理中间件
     /// </summary>
-    public class PermissionMiddleware
+    public class PermissionMiddleware(RequestDelegate next)
     {
-        private readonly RequestDelegate next;
-
-        public PermissionMiddleware(RequestDelegate next)
-        {
-            this.next = next;
-        }
-
         public async Task Invoke(HttpContext context)
         {
             var endpoint = context.GetEndpoint();
@@ -54,7 +47,7 @@ namespace FastFrame.WebHost.Middleware
                             /*应用权限*/
                             var permissionKeys = permissionAttribute
                                 .SelectMany(v => v.PermissionKeys)
-                                .Select(v => v.Contains(".") ? v : $"{groupName}.{v}")
+                                .Select(v => v.Contains('.') ? v : $"{groupName}.{v}")
                                 .ToArray();
 
                             /*是否被授权*/

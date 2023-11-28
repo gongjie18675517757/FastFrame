@@ -12,12 +12,8 @@ using TargetInfo = FastFrame.CodeGenerate.Info.TargetInfo;
 
 namespace FastFrame.CodeGenerate.Build
 {
-    public class ControllerBuilder : BaseCShapeCodeBuilder
+    public class ControllerBuilder(string solutionDir, Type baseEntityType) : BaseCShapeCodeBuilder(solutionDir, baseEntityType)
     {
-        public ControllerBuilder(string solutionDir, Type baseEntityType) : base(solutionDir, baseEntityType)
-        {
-        }
-
         public override string TargetPath => $"{SolutionDir}\\FastFrame.WebHost\\Controllers";
 
         public override string BuildName => "API控制器";
@@ -38,9 +34,9 @@ namespace FastFrame.CodeGenerate.Build
 
                 var baseNames = new List<string>();
                 if (typeof(Entity.IHasManage).IsAssignableFrom(type))
-                    baseNames.Add($"BaseCURDController<{name}Dto>");
+                    baseNames.Add($"BaseCURDController<{name}Dto>(service)");
                 else
-                    baseNames.Add($"BaseController<{name}Dto>");
+                    baseNames.Add($"BaseController<{name}Dto>(service)");
 
                 yield return new TargetInfo()
                 {
@@ -59,51 +55,41 @@ namespace FastFrame.CodeGenerate.Build
                     Name = $"{name}Controller",
                     BaseNames = baseNames,
                     FieldInfos = new FieldInfo[] {
-                        new FieldInfo(){ TypeName=$"{name}Service",FieldName="service"}
+                        new(){ TypeName=$"{name}Service",FieldName="service"}
                     },
                     Constructor = new Info.ConstructorInfo()
                     {
-                        Parms = new ParameterInfo[] {
-                            new ParameterInfo() { TypeName = $"{name}Service", DefineName = "service" }
-                        },
-                        Super = new string[] { "service" },
-                        CodeBlock = new string[] {
-                            "this.service = service;"
-                        }
+                        Parms = [new() { TypeName = $"{name}Service", DefineName = "service" }],
+                        Super = ["service"],
+                        CodeBlock = ["this.service = service;"]
                     },
                     MethodInfos = new MethodInfo[]
                     {
-                        new MethodInfo()
+                        new()
                         {
                             IsOverride=false,
                             MethodName="TreeList",
                             Modifier="public",
-                            Parms= new ParameterInfo[]
-                            {
-                                new ParameterInfo
-                                {
+                            Parms= [
+                                new() {
                                     DefineName="super_id",
                                     TypeName="string"
                                 },
-                                new ParameterInfo
-                                {
+                                new() {
                                     DefineName="kw",
                                     TypeName="string"
                                 },
-                            },
+                            ],
                             ResultTypeName="IAsyncEnumerable<ITreeModel>",
                             CodeBlock= new string[]
                             {
                                 "return service.TreeListAsync(super_id,kw);"
                             },
-                            AttrInfos= new AttrInfo[]
-                            {
-                                new AttrInfo
-                                {
-                                    Name="HttpGet",
-                                    Parameters=new []{ "" }
-                                },
-                            }
+                            AttrInfos=[new() {
+                                Name="HttpGet",
+                                Parameters=new []{ "" }
+                            }]
+
                         }
                     }
                     //AttrInfos = new[] {

@@ -107,6 +107,11 @@
             自动编号
             </summary>
         </member>
+        <member name="M:FastFrame.Application.AutoNumberService.#ctor(FastFrame.Repository.IRepository{FastFrame.Entity.Basis.NumberOption},FastFrame.Repository.IRepository{FastFrame.Entity.Basis.NumberRecord},System.IServiceProvider)">
+            <summary>
+            自动编号
+            </summary>
+        </member>
         <member name="M:FastFrame.Application.AutoNumberService.TryMakeNumberAsync``1(``0[])">
             <summary>
             生成编号
@@ -220,6 +225,13 @@
             <typeparam name="TEntity"></typeparam>
             <typeparam name="TDto"></typeparam>
         </member>
+        <member name="M:FastFrame.Application.BaseService`2.#ctor(System.IServiceProvider,FastFrame.Repository.IRepository{`0})">
+            <summary>
+            服务层基类
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TDto"></typeparam>
+        </member>
         <member name="M:FastFrame.Application.BaseService`2.OnChangeing(`1,`0)">
             <summary>
             新增时/修改时/删除时
@@ -279,13 +291,31 @@
             </summary>
             <typeparam name="T"></typeparam>
         </member>
+        <member name="M:FastFrame.Application.Events.DoMainAdding`1.#ctor(`0,System.Object[])">
+            <summary>
+            添加前
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
         <member name="T:FastFrame.Application.Events.DoMainDeleteing`1">
             <summary>
             删除前
             </summary>
             <typeparam name="T"></typeparam>
         </member>
+        <member name="M:FastFrame.Application.Events.DoMainDeleteing`1.#ctor(System.String,System.Object)">
+            <summary>
+            删除前
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
         <member name="T:FastFrame.Application.Events.DoMainUpdateing`1">
+            <summary>
+            更新前
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:FastFrame.Application.Events.DoMainUpdateing`1.#ctor(`0,System.Object[])">
             <summary>
             更新前
             </summary>
@@ -586,6 +616,11 @@
             部门 服务实现 
             </summary>
         </member>
+        <member name="M:FastFrame.Application.Basis.DeptService.#ctor(FastFrame.Repository.IRepository{FastFrame.Entity.Basis.Dept},FastFrame.Repository.IRepository{FastFrame.Entity.Basis.User},System.IServiceProvider)">
+            <summary>
+            部门 服务实现 
+            </summary>
+        </member>
         <member name="T:FastFrame.Application.Basis.DeptDto">
             <summary>
             部门 
@@ -731,6 +766,11 @@
             初始化
             </summary>
             <returns></returns> 
+        </member>
+        <member name="M:FastFrame.Application.Basis.EnumItemService.#ctor(FastFrame.Repository.IRepository{FastFrame.Entity.Basis.EnumItem},FastFrame.Repository.IRepository{FastFrame.Entity.Basis.User},System.IServiceProvider)">
+            <summary>
+            数字字典 服务实现 
+            </summary>
         </member>
         <member name="P:FastFrame.Application.Basis.LoginLogModel.User_Id">
             <summary>
@@ -887,6 +927,11 @@
             图片库 服务实现 
             </summary>
         </member>
+        <member name="M:FastFrame.Application.Basis.MeidiaService.#ctor(FastFrame.Repository.IRepository{FastFrame.Entity.Basis.Meidia},FastFrame.Repository.IRepository{FastFrame.Entity.Basis.User},System.IServiceProvider)">
+            <summary>
+            图片库 服务实现 
+            </summary>
+        </member>
         <member name="T:FastFrame.Application.Basis.NotifyDto">
             <summary>
             通知 
@@ -958,6 +1003,11 @@
             </summary>
         </member>
         <member name="T:FastFrame.Application.Basis.NotifyService">
+            <summary>
+            通知 服务实现 
+            </summary>
+        </member>
+        <member name="M:FastFrame.Application.Basis.NotifyService.#ctor(FastFrame.Repository.IRepository{FastFrame.Entity.Basis.User},FastFrame.Repository.IRepository{FastFrame.Entity.Basis.Resource},FastFrame.Repository.IRepository{FastFrame.Entity.Basis.Notify},System.IServiceProvider)">
             <summary>
             通知 服务实现 
             </summary>
@@ -1042,9 +1092,18 @@
             编号设置 服务实现 
             </summary>
         </member>
+        <member name="M:FastFrame.Application.Basis.NumberOptionService.#ctor(FastFrame.Repository.IRepository{FastFrame.Entity.Basis.User},FastFrame.Repository.IRepository{FastFrame.Entity.Basis.NumberOption},System.IServiceProvider)">
+            <summary>
+            编号设置 服务实现 
+            </summary>
+        </member>
         <member name="M:FastFrame.Application.Basis.ResourceService.file_name_replace_regex">
             <remarks>
-            Pattern explanation:<br/>
+            Pattern:<br/>
+            <code>([^\\u4e00-\\u9fa50-9a-zA-Z\\.])+</code><br/>
+            Options:<br/>
+            <code>RegexOptions.Compiled</code><br/>
+            Explanation:<br/>
             <code>
             ○ Loop greedily and atomically at least once.<br/>
                 ○ 1st capture group.<br/>
@@ -1133,6 +1192,11 @@
             </summary> 
         </member>
         <member name="T:FastFrame.Application.Basis.RoleService">
+            <summary>
+            角色 服务实现 
+            </summary>
+        </member>
+        <member name="M:FastFrame.Application.Basis.RoleService.#ctor(FastFrame.Repository.IRepository{FastFrame.Entity.Basis.Role},FastFrame.Repository.IRepository{FastFrame.Entity.Basis.User},System.IServiceProvider)">
             <summary>
             角色 服务实现 
             </summary>
@@ -1243,6 +1307,11 @@
             多租户信息 服务实现 
             </summary>
         </member>
+        <member name="M:FastFrame.Application.Basis.TenantService.#ctor(FastFrame.Repository.IRepository{FastFrame.Entity.Basis.Tenant},System.IServiceProvider)">
+            <summary>
+            多租户信息 服务实现 
+            </summary>
+        </member>
         <member name="T:FastFrame.Application.Basis.UserDto">
             <summary>
             用户 
@@ -1344,6 +1413,11 @@
             </summary>
             <param name="v"></param>
             <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.Basis.UserService.#ctor(FastFrame.Repository.IRepository{FastFrame.Entity.Basis.Resource},FastFrame.Repository.IRepository{FastFrame.Entity.Basis.User},System.IServiceProvider)">
+            <summary>
+            用户 服务实现 
+            </summary>
         </member>
         <member name="T:FastFrame.Application.ResourceModel">
             <summary>
@@ -1491,6 +1565,11 @@
             </summary>      
         </member>
         <member name="T:FastFrame.Application.Chat.FriendService">
+            <summary>
+            好友管理
+            </summary>
+        </member>
+        <member name="M:FastFrame.Application.Chat.FriendService.#ctor(FastFrame.Repository.IRepository{FastFrame.Entity.Basis.User},FastFrame.Infrastructure.Interface.IApplicationSession)">
             <summary>
             好友管理
             </summary>
@@ -1787,6 +1866,11 @@
             流程中心
             </summary>
         </member>
+        <member name="M:FastFrame.Application.Flow.WorkFlowCenterService.#ctor(System.IServiceProvider)">
+            <summary>
+            流程中心
+            </summary>
+        </member>
         <member name="M:FastFrame.Application.Flow.WorkFlowCenterService.HandleFlowOperate(System.String,FastFrame.Application.Flow.BatchFlowOperateInput)">
             <summary>
             流程操作[批量]
@@ -1900,6 +1984,11 @@
             验证节点配置是否正确
             </summary>
             <param name="node"></param>
+        </member>
+        <member name="M:FastFrame.Application.Flow.WorkFlowService.#ctor(FastFrame.Repository.IRepository{FastFrame.Entity.Basis.User},FastFrame.Repository.IRepository{FastFrame.Entity.Flow.WorkFlow},System.IServiceProvider)">
+            <summary>
+            工作流 服务实现 
+            </summary>
         </member>
         <member name="T:FastFrame.Application.OA.OaLeaveDto">
             <summary>
@@ -2016,6 +2105,11 @@
             请假单 服务实现 
             </summary>
         </member>
+        <member name="M:FastFrame.Application.OA.OaLeaveService.#ctor(FastFrame.Repository.IRepository{FastFrame.Entity.Basis.User},FastFrame.Repository.IRepository{FastFrame.Entity.Basis.Dept},FastFrame.Repository.IRepository{FastFrame.Entity.OA.OaLeave},System.IServiceProvider)">
+            <summary>
+            请假单 服务实现 
+            </summary>
+        </member>
         <member name="T:System.Text.RegularExpressions.Generated.file_name_replace_regex_0">
             <summary>Custom <see cref="T:System.Text.RegularExpressions.Regex"/>-derived type for the file_name_replace_regex method.</summary>
         </member>
@@ -2057,8 +2151,14 @@
         <member name="F:System.Text.RegularExpressions.Generated.Utilities.s_hasTimeout">
             <summary>Whether <see cref="F:System.Text.RegularExpressions.Generated.Utilities.s_defaultTimeout"/> is non-infinite.</summary>
         </member>
+        <member name="M:System.Text.RegularExpressions.Generated.Utilities.IndexOfNonAsciiOrAny_9381F18F35B40744F6B187098E9ACA91A23549FA289EED455BD4BB2249ED9D09(System.ReadOnlySpan{System.Char})">
+            <summary>Finds the next index of any character that matches a character in the set [^.0-9A-Za-z\u4E00-\u9FA5].</summary>
+        </member>
         <member name="M:System.Text.RegularExpressions.Generated.Utilities.StackPush(System.Int32[]@,System.Int32@,System.Int32,System.Int32)">
             <summary>Pushes 2 values onto the backtracking stack.</summary>
+        </member>
+        <member name="F:System.Text.RegularExpressions.Generated.Utilities.s_ascii_40FF03FEFFFF07FEFFFF07">
+            <summary>Supports searching for characters in or not in ".0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".</summary>
         </member>
     </members>
 </doc>

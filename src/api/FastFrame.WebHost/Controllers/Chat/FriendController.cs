@@ -10,14 +10,8 @@ namespace FastFrame.WebHost.Controllers.Chat
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class FriendController: ControllerBase
+    public class FriendController(FriendService friendService) : ControllerBase
     {
-        private readonly FriendService friendService;
-
-        public FriendController(FriendService friendService)
-        {
-            this.friendService = friendService;
-        }
 
         /// <summary>
         /// 好友列表

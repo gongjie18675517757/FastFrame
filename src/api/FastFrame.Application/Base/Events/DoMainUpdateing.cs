@@ -6,15 +6,9 @@ namespace FastFrame.Application.Events
     /// 更新前
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class DoMainUpdateing<T> : BaseEventData<T>  
+    public class DoMainUpdateing<T>(T data, params object[] args) : BaseEventData<T>  
     {
-        public DoMainUpdateing(T data, params object[] args)  
-        {
-            Data = data;
-            Args = args;
-        }
-
-        public T Data { get; }
-        public object[] Args { get; }
+        public T Data { get; } = data;
+        public object[] Args { get; } = args;
     }
 }

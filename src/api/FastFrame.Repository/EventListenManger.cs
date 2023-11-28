@@ -34,7 +34,7 @@
         {
             if (!listens.TryGetValue(key, out var funcs))
             {
-                funcs = new HashSet<Func<IServiceProvider, Task>>();
+                funcs = [];
                 while (true)
                 {
                     if (listens.TryAdd(key, funcs))

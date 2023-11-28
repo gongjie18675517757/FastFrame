@@ -12,24 +12,10 @@ namespace FastFrame.Application.Chat
     /// <summary>
     /// 好友管理
     /// </summary>
-    public partial class FriendService : IService
+    public partial class FriendService(
+        IRepository<User> repository,  
+        IApplicationSession appSession) : IService
     {
-        private readonly IRepository<User> repository;
-        private readonly IRepository<FriendMessage> messageRepository;
-        private readonly IRepository<MessageTarget> targetRepository;
-        private readonly IApplicationSession appSession;
-
-        public FriendService(
-            IRepository<User> repository,
-            IRepository<FriendMessage> messageRepository,
-            IRepository<MessageTarget> targetRepository,
-            IApplicationSession appSession)
-        {
-            this.repository = repository;
-            this.messageRepository = messageRepository;
-            this.targetRepository = targetRepository;
-            this.appSession = appSession;
-        }
 
         /// <summary>
         /// 好友列表

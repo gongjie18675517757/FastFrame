@@ -9,26 +9,19 @@ namespace FastFrame.Infrastructure
     /// </summary>
     /// <typeparam name="TBefore"></typeparam>
     /// <typeparam name="TAfter"></typeparam>
-    public class ComparisonCollection<TBefore, TAfter>
+    /// <remarks>
+    /// 
+    /// </remarks>
+    /// <param name="befores">修改前</param>
+    /// <param name="afters">修改后</param>
+    /// <param name="compare">比较表达式</param>
+    public class ComparisonCollection<TBefore, TAfter>(IEnumerable<TBefore> befores, IEnumerable<TAfter> afters, Func<TBefore, TAfter, bool> compare)
     {
-        private readonly Func<TBefore, TAfter, bool> compare;
+        private readonly Func<TBefore, TAfter, bool> compare = compare ?? new Func<TBefore, TAfter, bool>((x, y) => x.Equals(y));
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="befores">修改前</param>
-        /// <param name="afters">修改后</param>
-        /// <param name="compare">比较表达式</param>
-        public ComparisonCollection(IEnumerable<TBefore> befores, IEnumerable<TAfter> afters, Func<TBefore, TAfter, bool> compare)
-        {
-            this.Befores = befores ?? new List<TBefore>();
-            this.Afters = afters ?? new List<TAfter>();
-            this.compare = compare ?? new Func<TBefore, TAfter, bool>((x, y) => x.Equals(y));
-        }
+        public IEnumerable<TBefore> Befores { get; } = befores ?? new List<TBefore>();
 
-        public IEnumerable<TBefore> Befores { get; }
-
-        public IEnumerable<TAfter> Afters { get; }
+        public IEnumerable<TAfter> Afters { get; } = afters ?? new List<TAfter>();
 
         /// <summary>
         /// 返回标识为新增的内容

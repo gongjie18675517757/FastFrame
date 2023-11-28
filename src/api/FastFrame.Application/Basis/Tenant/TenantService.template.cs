@@ -11,17 +11,10 @@ namespace FastFrame.Application.Basis
 	/// <summary>
 	/// 多租户信息 服务实现 
 	/// </summary>
-	public partial class TenantService:BaseService<Tenant, TenantDto>
+	public partial class TenantService(IRepository<Tenant> tenantRepository,IServiceProvider loader):BaseService<Tenant, TenantDto>(loader,tenantRepository)
 	{
-		private readonly IRepository<User> userRepository;
-		private readonly IRepository<Tenant> tenantRepository;
+		private readonly IRepository<Tenant> tenantRepository=tenantRepository;
 		
-		public TenantService(IRepository<User> userRepository,IRepository<Tenant> tenantRepository,IServiceProvider loader)
-			 : base(loader,tenantRepository)
-		{
-			this.userRepository=userRepository;
-			this.tenantRepository=tenantRepository;
-		}
 		
 		protected override IQueryable<TenantDto> DefaultQueryable() 
 		{

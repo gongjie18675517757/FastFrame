@@ -12,17 +12,11 @@ namespace FastFrame.Application.Basis
 	/// <summary>
 	/// 编号设置 服务实现 
 	/// </summary>
-	public partial class NumberOptionService:BaseService<NumberOption, NumberOptionDto>
+	public partial class NumberOptionService(IRepository<User> userRepository,IRepository<NumberOption> numberOptionRepository,IServiceProvider loader):BaseService<NumberOption, NumberOptionDto>(loader,numberOptionRepository)
 	{
-		private readonly IRepository<User> userRepository;
-		private readonly IRepository<NumberOption> numberOptionRepository;
+		private readonly IRepository<User> userRepository=userRepository;
+		private readonly IRepository<NumberOption> numberOptionRepository=numberOptionRepository;
 		
-		public NumberOptionService(IRepository<User> userRepository,IRepository<NumberOption> numberOptionRepository,IServiceProvider loader)
-			 : base(loader,numberOptionRepository)
-		{
-			this.userRepository=userRepository;
-			this.numberOptionRepository=numberOptionRepository;
-		}
 		
 		protected override IQueryable<NumberOptionDto> DefaultQueryable() 
 		{

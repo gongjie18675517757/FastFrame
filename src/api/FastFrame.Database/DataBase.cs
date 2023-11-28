@@ -13,13 +13,8 @@ namespace FastFrame.Database
     /// <summary>
     /// 数据库
     /// </summary>
-    public class DataBase : DbContext
+    public class DataBase(DbContextOptions options) : DbContext(options)
     {
-        public DataBase(DbContextOptions options) : base(options)
-        {
-
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             /*循环添加DbSet*/

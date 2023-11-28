@@ -11,19 +11,8 @@ using System.Threading.Tasks;
 
 namespace FastFrame.WebHost.Hubs
 {
-    public class MessageHub : Hub
+    public class MessageHub(ICacheProvider cacheProvider, IMessageQueue messageQueue, IIdentityManager identityManager) : Hub
     {
-        private readonly ICacheProvider cacheProvider; 
-        private readonly IMessageQueue messageQueue;
-        private readonly IIdentityManager identityManager;
-
-        public MessageHub(ICacheProvider cacheProvider, IMessageQueue messageQueue,IIdentityManager identityManager)
-        {
-            this.cacheProvider = cacheProvider;
-
-            this.messageQueue = messageQueue;
-            this.identityManager = identityManager;
-        }
 
         /// <summary>
         /// 客户端发送给服务端的消息
@@ -67,9 +56,7 @@ namespace FastFrame.WebHost.Hubs
 
         private async Task UpdateUserState(string userId, Action<List<string>> action)
         {
-            var values = await cacheProvider.HGetAsync<List<string>>(ConstValuePool.CacheUserMapKey, userId);
-            if (values == null)
-                values = new List<string>();
+            var values = await cacheProvider.HGetAsync<List<string>>(ConstValuePool.CacheUserMapKey, userId) ?? [];
             action(values);
             await cacheProvider.HSetAsync(ConstValuePool.CacheUserMapKey, userId, values, null);
         }

@@ -10,14 +10,9 @@ namespace FastFrame.WebHost.Middleware
     /// <summary>
     /// 写入接口执行时间
     /// </summary>
-    public class InvodeTimeMiddleware
+    public class InvodeTimeMiddleware(RequestDelegate next)
     {
-        private readonly RequestDelegate next;
-
-        public InvodeTimeMiddleware(RequestDelegate next)
-        {
-            this.next = next;
-        }
+        private readonly RequestDelegate next = next;
 
         public async Task Invoke(HttpContext context)
         {
@@ -43,7 +38,7 @@ namespace FastFrame.WebHost.Middleware
             context.Response.OnStarting(() =>
             {
                 stopwatch?.Stop();
-                context.Response.Headers.Add("invoke-elapsed-milliseconds", stopwatch.ElapsedMilliseconds.ToString());
+                context.Response.Headers.Append("invoke-elapsed-milliseconds", stopwatch.ElapsedMilliseconds.ToString());
                 return Task.CompletedTask;
             });
 

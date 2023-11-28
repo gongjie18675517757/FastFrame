@@ -13,17 +13,11 @@ namespace FastFrame.Application.Flow
 	/// <summary>
 	/// 工作流 服务实现 
 	/// </summary>
-	public partial class WorkFlowService:BaseService<WorkFlow, WorkFlowDto>
+	public partial class WorkFlowService(IRepository<User> userRepository,IRepository<WorkFlow> workFlowRepository,IServiceProvider loader):BaseService<WorkFlow, WorkFlowDto>(loader,workFlowRepository)
 	{
-		private readonly IRepository<User> userRepository;
-		private readonly IRepository<WorkFlow> workFlowRepository;
+		private readonly IRepository<User> userRepository=userRepository;
+		private readonly IRepository<WorkFlow> workFlowRepository=workFlowRepository;
 		
-		public WorkFlowService(IRepository<User> userRepository,IRepository<WorkFlow> workFlowRepository,IServiceProvider loader)
-			 : base(loader,workFlowRepository)
-		{
-			this.userRepository=userRepository;
-			this.workFlowRepository=workFlowRepository;
-		}
 		
 		protected override IQueryable<WorkFlowDto> DefaultQueryable() 
 		{

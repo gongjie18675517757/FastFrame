@@ -4,7 +4,7 @@ namespace FastFrame.Infrastructure
 {
     public class IdGenerate
     {
-        private static readonly Base36IdGenerator generator = new Base36IdGenerator(
+        private static readonly Base36IdGenerator generator = new(
                numTimestampCharacters: 12,
                numServerCharacters: 6,
                numRandomCharacters: 7,
@@ -14,7 +14,7 @@ namespace FastFrame.Infrastructure
 
         public static string NetId() => generator.NewId().ToLower();
 
-        public static long NetLongId() => Snowflake.Instance().GetId();
+        public static long NetLongId() => Snowflake.GetId();
     }
 
 }

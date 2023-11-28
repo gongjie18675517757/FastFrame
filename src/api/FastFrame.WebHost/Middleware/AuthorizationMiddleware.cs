@@ -7,15 +7,8 @@ namespace FastFrame.WebHost.Middleware
     /// <summary>
     /// 身份授权验证中间件
     /// </summary>
-    public class AuthorizationMiddleware
+    public class AuthorizationMiddleware(RequestDelegate next)
     {
-        private readonly RequestDelegate next;
-
-        public AuthorizationMiddleware(RequestDelegate next)
-        {
-            this.next = next;
-        }
-
         public async Task Invoke(HttpContext context)
         {
             var endpoint = context.GetEndpoint();

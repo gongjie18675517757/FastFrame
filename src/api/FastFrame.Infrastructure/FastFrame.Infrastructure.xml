@@ -143,6 +143,11 @@
             客户端连接管理
             </summary>
         </member>
+        <member name="M:FastFrame.Infrastructure.Client.ClientMamager.#ctor(System.Collections.Generic.IEnumerable{FastFrame.Infrastructure.Client.IClientConnection},FastFrame.Infrastructure.MessageQueue.IMessageQueue)">
+            <summary>
+            客户端连接管理
+            </summary>
+        </member>
         <member name="M:FastFrame.Infrastructure.Client.ClientMamager.PublishChooseAsync(FastFrame.Infrastructure.Client.ClientChoose,System.String)">
             <summary>
             发布客户端选择
@@ -312,11 +317,22 @@
             </summary>
             <typeparam name="TBefore"></typeparam>
             <typeparam name="TAfter"></typeparam>
+            <remarks>
+            
+            </remarks>
+            <param name="befores">修改前</param>
+            <param name="afters">修改后</param>
+            <param name="compare">比较表达式</param>
         </member>
         <member name="M:FastFrame.Infrastructure.ComparisonCollection`2.#ctor(System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IEnumerable{`1},System.Func{`0,`1,System.Boolean})">
             <summary>
-            
+            比较集合,返回差异
             </summary>
+            <typeparam name="TBefore"></typeparam>
+            <typeparam name="TAfter"></typeparam>
+            <remarks>
+            
+            </remarks>
             <param name="befores">修改前</param>
             <param name="afters">修改后</param>
             <param name="compare">比较表达式</param>
@@ -446,6 +462,11 @@
             </summary>
         </member>
         <member name="T:FastFrame.Infrastructure.UniqueException">
+            <summary>
+            数据重复异常
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.UniqueException.#ctor(System.Type,System.String[])">
             <summary>
             数据重复异常
             </summary>
@@ -671,7 +692,9 @@
         </member>
         <member name="M:FastFrame.Infrastructure.Extension.FromHexStringInputRegex">
             <remarks>
-            Pattern explanation:<br/>
+            Pattern:<br/>
+            <code>^[0-9a-f]+$</code><br/>
+            Explanation:<br/>
             <code>
             ○ Match if at the beginning of the string.<br/>
             ○ Match a character in the set [0-9a-f] atomically at least once.<br/>
@@ -1045,6 +1068,63 @@
             <param name="flag">压缩质量(数字越小压缩率越高) 1-100</param>  
             <returns></returns>  
         </member>
+        <member name="T:FastFrame.Infrastructure.Interface.ExcelColumn`1">
+            <summary>
+            EXCEL列
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.ExcelColumn`1.#ctor(System.String,System.String)">
+            <summary>
+            EXCEL列
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.ExcelColumn`1.Title">
+            <summary>
+            标题
+            </summary>
+        </member>
+        <member name="P:FastFrame.Infrastructure.Interface.ExcelColumn`1.Name">
+            <summary>
+            列名
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.Interface.ExcelColumn`1.GetValue(`0)">
+            <summary>
+            获取值方法
+            </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Interface.ExcelEnumItemColumn`1">
+            <summary>
+            数据字典列
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Interface.ExcelDateTimeColumn`1">
+            <summary>
+            时间日期列
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Interface.ExcelEnumValuesColumn`1">
+            <summary>
+            程序枚举列
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Interface.ExcelBooleanColumn`1">
+            <summary>
+            布尔值列
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Interface.ValueExcelColumn`1">
+            <summary>
+            字面量类型的列
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
         <member name="T:FastFrame.Infrastructure.Interface.IApplicationInitialLifetime">
             <summary>
             应用程序初始化时
@@ -1329,22 +1409,6 @@
             <param name="pagination"></param>
             <returns></returns>
         </member>
-        <member name="T:FastFrame.Infrastructure.Interface.ExcelColumn`1">
-            <summary>
-            EXCEL列
-            </summary>
-            <typeparam name="T"></typeparam>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.ExcelColumn`1.Title">
-            <summary>
-            标题
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.ExcelColumn`1.ValueFunc">
-            <summary>
-            获取值方法
-            </summary>
-        </member>
         <member name="T:FastFrame.Infrastructure.IntervalWork.IIntervalWorkHost">
             <summary>
             标记此类有需要执行定时任务
@@ -1471,6 +1535,11 @@
             </summary>
         </member>
         <member name="T:FastFrame.Infrastructure.MessageQueue.MessageQueue">
+            <summary>
+            消息队列
+            </summary>
+        </member>
+        <member name="M:FastFrame.Infrastructure.MessageQueue.MessageQueue.#ctor(StackExchange.Redis.ConnectionMultiplexer,FastFrame.Infrastructure.Interface.IBackgroundJob)">
             <summary>
             消息队列
             </summary>
@@ -2527,6 +2596,9 @@
         </member>
         <member name="F:System.Text.RegularExpressions.Generated.Utilities.s_hasTimeout">
             <summary>Whether <see cref="F:System.Text.RegularExpressions.Generated.Utilities.s_defaultTimeout"/> is non-infinite.</summary>
+        </member>
+        <member name="F:System.Text.RegularExpressions.Generated.Utilities.s_asciiHexDigitsLower">
+            <summary>Supports searching for characters in or not in "0123456789abcdef".</summary>
         </member>
     </members>
 </doc>

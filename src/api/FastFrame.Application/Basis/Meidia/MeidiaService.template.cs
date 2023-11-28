@@ -12,17 +12,11 @@ namespace FastFrame.Application.Basis
 	/// <summary>
 	/// 图片库 服务实现 
 	/// </summary>
-	public partial class MeidiaService:BaseService<Meidia, MeidiaDto>
+	public partial class MeidiaService(IRepository<Meidia> meidiaRepository,IRepository<User> userRepository,IServiceProvider loader):BaseService<Meidia, MeidiaDto>(loader,meidiaRepository)
 	{
-		private readonly IRepository<Meidia> meidiaRepository;
-		private readonly IRepository<User> userRepository;
+		private readonly IRepository<Meidia> meidiaRepository=meidiaRepository;
+		private readonly IRepository<User> userRepository=userRepository;
 		
-		public MeidiaService(IRepository<Meidia> meidiaRepository,IRepository<User> userRepository,IServiceProvider loader)
-			 : base(loader,meidiaRepository)
-		{
-			this.meidiaRepository=meidiaRepository;
-			this.userRepository=userRepository;
-		}
 		
 		protected override IQueryable<MeidiaDto> DefaultQueryable() 
 		{

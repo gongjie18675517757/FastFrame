@@ -4,11 +4,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 #nullable disable
 
 namespace FastFrame.Database.Migrations
-{
- 
-    public partial class dbinit : Migration
+{ 
+    public partial class dbinit : Migration 
     {
- 
+        private static readonly string[] columns = ["id", "fullname", "handicon_id", "shortname", "super_id", "tenant_id", "treecode", "urlmark", "isdeleted"];
+        private static readonly string[] columnsArray = ["id", "account", "createtime", "create_user_id", "email", "enable", "encryptionkey", "handicon_id", "isadmin", "modifytime", "modify_user_id", "name", "password", "phonenumber", "tenant_id", "isdeleted"];
+
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterDatabase()
@@ -1335,12 +1336,12 @@ namespace FastFrame.Database.Migrations
 
             migrationBuilder.InsertData(
                 table: "basis_tenant",
-                columns: new[] { "id", "fullname", "handicon_id", "shortname", "super_id", "tenant_id", "treecode", "urlmark", "isdeleted" },
+                columns: columns,
                 values: new object[] { "00fm5yfgzpgp93ylkuxshsc73", "默认组织", null, "default", null, null, null, "*", false });
 
             migrationBuilder.InsertData(
                 table: "basis_user",
-                columns: new[] { "id", "account", "createtime", "create_user_id", "email", "enable", "encryptionkey", "handicon_id", "isadmin", "modifytime", "modify_user_id", "name", "password", "phonenumber", "tenant_id", "isdeleted" },
+                columns: columnsArray,
                 values: new object[] { "00fm5yfgq3q893ylku6uzb57i", "admin", new DateTime(2019, 6, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), "00fm5yfgq3q893ylku6uzb57i", "gongjie@qq.com", 0, "7d9d7edd6727912ce10b976818dd2856", null, true, new DateTime(2019, 6, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), "00fm5yfgq3q893ylku6uzb57i", "管理员", "9557847e0632e2f167a143b7ab3d668a", "18675517757", null, false });
 
             migrationBuilder.CreateIndex(

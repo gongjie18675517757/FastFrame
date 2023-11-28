@@ -12,17 +12,11 @@ namespace FastFrame.Application.Basis
 	/// <summary>
 	/// 角色 服务实现 
 	/// </summary>
-	public partial class RoleService:BaseService<Role, RoleDto>
+	public partial class RoleService(IRepository<Role> roleRepository,IRepository<User> userRepository,IServiceProvider loader):BaseService<Role, RoleDto>(loader,roleRepository)
 	{
-		private readonly IRepository<Role> roleRepository;
-		private readonly IRepository<User> userRepository;
+		private readonly IRepository<Role> roleRepository=roleRepository;
+		private readonly IRepository<User> userRepository=userRepository;
 		
-		public RoleService(IRepository<Role> roleRepository,IRepository<User> userRepository,IServiceProvider loader)
-			 : base(loader,roleRepository)
-		{
-			this.roleRepository=roleRepository;
-			this.userRepository=userRepository;
-		}
 		
 		protected override IQueryable<RoleDto> DefaultQueryable() 
 		{

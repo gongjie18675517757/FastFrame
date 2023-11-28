@@ -93,7 +93,7 @@ namespace FastFrame.Entity.OA
 
         public string[] GetBeDeptIds()
         {
-            return new string[] { Dept_Id };
+            return [Dept_Id];
         }
 
         public string GetDescription()

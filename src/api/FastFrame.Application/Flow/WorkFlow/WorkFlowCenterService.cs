@@ -17,20 +17,13 @@ namespace FastFrame.Application.Flow
     /// <summary>
     /// 流程中心
     /// </summary>
-    public partial class WorkFlowCenterService : IService,
+    public partial class WorkFlowCenterService(IServiceProvider loader) : IService,
         IEventHandle<DoMainDeleteing<IHaveCheckModel>>,
         IRequestHandle<IEnumerable<string>, IHaveCheckModel>,
         IRequestHandle<IEnumerable<KeyValuePair<string, IEnumerable<string>>>, IEnumerable<IHaveCheckModel>>,
         IRequestHandle<IEnumerable<Flow.FlowStepModel>, IHaveCheckModel>,
         IRequestHandle<IEnumerable<KeyValuePair<string, IEnumerable<Flow.FlowStepModel>>>, IEnumerable<IHaveCheckModel>>
     {
-        private readonly IServiceProvider loader;
-
-        public WorkFlowCenterService(IServiceProvider loader)
-        {
-            this.loader = loader;
-        }
-
         public Task<IPageList<FlowInstance>> PageList(IPagination<FlowInstance> pagination)
         {
             var applicationSession = loader.GetService<Infrastructure.Interface.IApplicationSession>();
@@ -119,9 +112,8 @@ namespace FastFrame.Application.Flow
         public async Task<FlowInstance> HandleFlowOperate<TBillEntity>(string bill_id, FlowOperateInput input, bool auto_tran = true)
             where TBillEntity : class, IHaveCheck, new()
         {
-            var bill_Entity = await loader.GetService<IRepository<TBillEntity>>().GetAsync(bill_id);
-            if (bill_Entity == null)
-                throw new Infrastructure.NotFoundException();
+            var bill_Entity = await loader.GetService<IRepository<TBillEntity>>().GetAsync(bill_id) ?? 
+                throw new NotFoundException();
 
             return await HandleFlowOperate(bill_Entity, input, auto_tran);
         }
@@ -137,10 +129,8 @@ namespace FastFrame.Application.Flow
                 throw new NotFoundException();
 
             /*加并发锁*/
-            var lockHolder = await loader.GetService<ILockFacatory>().TryCreateLockAsync(bill_Entity.Id, default);
-            if (lockHolder == null)
+            var lockHolder = await loader.GetService<ILockFacatory>().TryCreateLockAsync(bill_Entity.Id, default) ?? 
                 throw new MsgException("此单据正在进行流程流转,请稍后再试!");
-
             try
             {
                 /*生成审批事件[审批前]*/
@@ -517,9 +507,7 @@ namespace FastFrame.Application.Flow
                                 .Where(v => v.FlowNode_Id != null)
                                 .OrderByDescending(v => v.Id)
                                 .Select(v => v.FlowNode_Id)
-                                .FirstOrDefaultAsync();
-
-                            if (prev_note_id == null)
+                                .FirstOrDefaultAsync() ?? 
                                 throw new MsgException("没有可反审核的节点!");
 
 
@@ -945,8 +933,7 @@ namespace FastFrame.Application.Flow
             if (flowNode.IsDefault == true)
                 return true;
 
-            var cond_node = flowNode.Nodes.FirstOrDefault(v => v.NodeEnum == (int)FlowNodeEnum.cond);
-            if (cond_node == null)
+            var cond_node = flowNode.Nodes.FirstOrDefault(v => v.NodeEnum == (int)FlowNodeEnum.cond) ?? 
                 throw new MsgException("未定义条件分支");
 
             if (cond_node.Conds == null || !cond_node.Conds.Any())

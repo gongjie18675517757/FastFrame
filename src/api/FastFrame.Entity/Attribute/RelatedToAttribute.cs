@@ -6,16 +6,12 @@ namespace FastFrame.Entity
     /// 关联标记
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
-    public sealed class RelatedToAttribute : Attribute
+    public sealed class RelatedToAttribute(Type relatedType) : Attribute
     {
-        public RelatedToAttribute(Type relatedType)
-        {
-            RelatedType = relatedType;
-        } 
 
         /// <summary>
         /// 被关联的类型
         /// </summary>
-        public Type RelatedType { get; } 
+        public Type RelatedType { get; } = relatedType;
     }
 }

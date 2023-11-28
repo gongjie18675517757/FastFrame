@@ -16,16 +16,10 @@ using System.Text;
 namespace FastFrame.WebHost.Controllers
 {
     [AllowAnonymous]
-    public class CommonController : BaseController
+    public class CommonController(IModuleExportProvider moduleExportProvider, RSAProvider rsaProvider) : BaseController
     {
-        private readonly IModuleExportProvider moduleExportProvider;
-        private readonly RSAProvider rsaProvider;
-
-        public CommonController(IModuleExportProvider moduleExportProvider, RSAProvider rsaProvider)
-        {
-            this.moduleExportProvider = moduleExportProvider;
-            this.rsaProvider = rsaProvider;
-        }
+        private readonly IModuleExportProvider moduleExportProvider = moduleExportProvider;
+        private readonly RSAProvider rsaProvider = rsaProvider;
 
         /// <summary>
         /// 生成ID
@@ -103,76 +97,76 @@ namespace FastFrame.WebHost.Controllers
             return Ok(pagination);
         }
 
-        [AllowAnonymous]
-        [HttpGet]
-        public async Task<IActionResult> Test(string input)
-        {
-            await Task.CompletedTask;
-            var users = Request.HttpContext.RequestServices.GetService<Database.DataBase>().Set<User>().Where(v => true);
-            IQueryable<string> filter = Request.HttpContext.RequestServices.GetService<Database.DataBase>().Set<DeptMember>().Where(v => true).Select(v => v.User_Id);
+        //[AllowAnonymous]
+        //[HttpGet]
+        //public async Task<IActionResult> Test(string input)
+        //{
+        //    await Task.CompletedTask;
+        //    var users = Request.HttpContext.RequestServices.GetService<Database.DataBase>().Set<User>().Where(v => true);
+        //    IQueryable<string> filter = Request.HttpContext.RequestServices.GetService<Database.DataBase>().Set<DeptMember>().Where(v => true).Select(v => v.User_Id);
 
 
-            //var field_experssion = ExpressionClosureFactory.ParseLambda<User, string>("Id");
+        //    //var field_experssion = ExpressionClosureFactory.ParseLambda<User, string>("Id");
 
-            //var method = typeof(Queryable)
-            //    .GetMethods()
-            //    .Where(v => v.Name == "Contains")
-            //    .Where(v => v.GetParameters().Length == 2)
-            //    .FirstOrDefault()
-            //    ?.MakeGenericMethod(typeof(string));
+        //    //var method = typeof(Queryable)
+        //    //    .GetMethods()
+        //    //    .Where(v => v.Name == "Contains")
+        //    //    .Where(v => v.GetParameters().Length == 2)
+        //    //    .FirstOrDefault()
+        //    //    ?.MakeGenericMethod(typeof(string));
 
-            //var left = ExpressionClosureFactory.GetField(filter);
-            //var methodCallExpression = Expression.Call(method, left, field_experssion.Body);
+        //    //var left = ExpressionClosureFactory.GetField(filter);
+        //    //var methodCallExpression = Expression.Call(method, left, field_experssion.Body);
 
-            //var lambdaExpression = Expression.Lambda<Func<User, bool>>(methodCallExpression, field_experssion.Parameters);
-            //var x = await users.Where(lambdaExpression).ToListAsync();
+        //    //var lambdaExpression = Expression.Lambda<Func<User, bool>>(methodCallExpression, field_experssion.Parameters);
+        //    //var x = await users.Where(lambdaExpression).ToListAsync();
 
-            var xx = ExpressionClosureFactory.BuildContainsExpression<User, string>("Id", filter);
-            var x = await users.Where(xx).ToListAsync();
-            return Ok();
-        }
+        //    var xx = ExpressionClosureFactory.BuildContainsExpression<User, string>("Id", filter);
+        //    var x = await users.Where(xx).ToListAsync();
+        //    return Ok();
+        //}
 
-        [AllowAnonymous]
-        [HttpGet]
-        public async Task<IActionResult> Test2(string input)
-        {
-            await Task.CompletedTask;
-            var users = Request.HttpContext.RequestServices.GetService<Database.DataBase>().Set<User>().Where(v => true);
-            IQueryable<DeptMember> filter = Request.HttpContext.RequestServices.GetService<Database.DataBase>().Set<DeptMember>().Where(v => true);
-
-
-            //Expression<Func<User, bool>> expression = v => filter.Any(x => x.User_Id == v.Id);
-
-            //var user_field_experssion = ExpressionClosureFactory.ParseLambda<User, string>("Id");
-            //var dept_member_field_experssion = ExpressionClosureFactory.ParseLambda<DeptMember, string>(v=>v.User_Id);
-
-            //var method = typeof(Queryable)
-            //    .GetMethods()
-            //    .Where(v => v.Name == "Any")
-            //    .Where(v => v.GetParameters().Length == 2)
-            //    .FirstOrDefault()
-            //    ?.MakeGenericMethod(typeof(DeptMember));
-
-            //var equalExpression = Expression.Equal(user_field_experssion.Body, dept_member_field_experssion.Body);
-            //var equalExpression2 = Expression.Lambda<Func<DeptMember, bool>>(equalExpression, dept_member_field_experssion.Parameters);
-
-            //var left = ExpressionClosureFactory.GetField(filter);
-            //var methodCallExpression = Expression.Call(method, left, equalExpression2);
-
-            //var lambdaExpression = Expression.Lambda<Func<User, bool>>(methodCallExpression, user_field_experssion.Parameters);
-            //var x = await users.Where(lambdaExpression).ToListAsync();
+        //[AllowAnonymous]
+        //[HttpGet]
+        //public async Task<IActionResult> Test2(string input)
+        //{
+        //    await Task.CompletedTask;
+        //    var users = Request.HttpContext.RequestServices.GetService<Database.DataBase>().Set<User>().Where(v => true);
+        //    IQueryable<DeptMember> filter = Request.HttpContext.RequestServices.GetService<Database.DataBase>().Set<DeptMember>().Where(v => true);
 
 
+        //    //Expression<Func<User, bool>> expression = v => filter.Any(x => x.User_Id == v.Id);
+
+        //    //var user_field_experssion = ExpressionClosureFactory.ParseLambda<User, string>("Id");
+        //    //var dept_member_field_experssion = ExpressionClosureFactory.ParseLambda<DeptMember, string>(v=>v.User_Id);
+
+        //    //var method = typeof(Queryable)
+        //    //    .GetMethods()
+        //    //    .Where(v => v.Name == "Any")
+        //    //    .Where(v => v.GetParameters().Length == 2)
+        //    //    .FirstOrDefault()
+        //    //    ?.MakeGenericMethod(typeof(DeptMember));
+
+        //    //var equalExpression = Expression.Equal(user_field_experssion.Body, dept_member_field_experssion.Body);
+        //    //var equalExpression2 = Expression.Lambda<Func<DeptMember, bool>>(equalExpression, dept_member_field_experssion.Parameters);
+
+        //    //var left = ExpressionClosureFactory.GetField(filter);
+        //    //var methodCallExpression = Expression.Call(method, left, equalExpression2);
+
+        //    //var lambdaExpression = Expression.Lambda<Func<User, bool>>(methodCallExpression, user_field_experssion.Parameters);
+        //    //var x = await users.Where(lambdaExpression).ToListAsync();
 
 
-            var lambdaExpression = ExpressionClosureFactory.BuildAnyExpression<User, DeptMember, string>(v => v.Id, v => v.User_Id, filter);
-            var lambdaExpression2 = ExpressionClosureFactory.BuildAnyExpression<User, DeptMember, string>("Id", "User_Id", filter);
-            var x = await users.Where(lambdaExpression).ToListAsync();
-            var x2 = await users.Where(lambdaExpression2).ToListAsync();
 
 
-            return Ok();
-        }
+        //    var lambdaExpression = ExpressionClosureFactory.BuildAnyExpression<User, DeptMember, string>(v => v.Id, v => v.User_Id, filter);
+        //    var lambdaExpression2 = ExpressionClosureFactory.BuildAnyExpression<User, DeptMember, string>("Id", "User_Id", filter);
+        //    var x = await users.Where(lambdaExpression).ToListAsync();
+        //    var x2 = await users.Where(lambdaExpression2).ToListAsync();
+
+
+        //    return Ok();
+        //}
 #endif
     } 
      

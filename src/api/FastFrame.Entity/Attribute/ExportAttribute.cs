@@ -19,18 +19,18 @@ namespace FastFrame.Entity
 
         public ExportAttribute(params ExportMark[] exportMarks)
         {
-            this.exportMarks = exportMarks.ToList();
+            this.exportMarks = [.. exportMarks];
 
             /*有控制器就必然要有服务类*/
             if (exportMarks.Contains(ExportMark.Controller))
             {
-                this.exportMarks.AddRange(new[] { ExportMark.Service });
+                this.exportMarks.AddRange([ExportMark.Service]);
             }
 
             /*有服务器就必然要有DTO*/
             if (exportMarks.Contains(ExportMark.Service))
             {
-                this.exportMarks.AddRange(new[] { ExportMark.DTO });
+                this.exportMarks.AddRange([ExportMark.DTO]);
             }
         }
 

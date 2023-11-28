@@ -7,12 +7,7 @@ namespace FastFrame.WebHost.Controllers.Basis
     /// <summary>
     /// 接口请求记录
     /// </summary>
-    public class ApiRequestLogController : BaseController<ApiRequestLog>
+    public class ApiRequestLogController(ApiRequestLogService service) : BaseController<ApiRequestLog>(service)
     {
-        public ApiRequestLogController(ApiRequestLogService service) : base(service)
-        {
-        }
-
- 
     }
 }

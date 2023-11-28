@@ -7,15 +7,8 @@ namespace FastFrame.WebHost.Controllers.Basis
     /// <summary>
     /// 系统工具
     /// </summary>
-    public class SystemToolsController : BaseController
+    public class SystemToolsController(IServiceProvider serviceProvider) : BaseController
     {
-        private readonly IServiceProvider serviceProvider;
-
-        public SystemToolsController(IServiceProvider serviceProvider)
-        {
-            this.serviceProvider = serviceProvider;
-        }
-
         [Permission("View", "查看系统工具")]
         [HttpPost]
         public void View()

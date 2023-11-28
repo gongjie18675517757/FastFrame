@@ -46,7 +46,7 @@ namespace FastFrame.Entity.Basis
         public string Remarks { get; set; }
 
 
-        private static Expression<Func<Role, IViewModel>> vm_expression =
+        private static readonly Expression<Func<Role, IViewModel>> vm_expression =
             v => new DefaultViewModel
             {
                 Id = v.Id,

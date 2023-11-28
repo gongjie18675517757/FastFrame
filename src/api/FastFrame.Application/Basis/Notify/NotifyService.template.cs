@@ -12,19 +12,12 @@ namespace FastFrame.Application.Basis
 	/// <summary>
 	/// 通知 服务实现 
 	/// </summary>
-	public partial class NotifyService:BaseService<Notify, NotifyDto>
+	public partial class NotifyService(IRepository<User> userRepository,IRepository<Resource> resourceRepository,IRepository<Notify> notifyRepository,IServiceProvider loader):BaseService<Notify, NotifyDto>(loader,notifyRepository)
 	{
-		private readonly IRepository<User> userRepository;
-		private readonly IRepository<Resource> resourceRepository;
-		private readonly IRepository<Notify> notifyRepository;
+		private readonly IRepository<User> userRepository=userRepository;
+		private readonly IRepository<Resource> resourceRepository=resourceRepository;
+		private readonly IRepository<Notify> notifyRepository=notifyRepository;
 		
-		public NotifyService(IRepository<User> userRepository,IRepository<Resource> resourceRepository,IRepository<Notify> notifyRepository,IServiceProvider loader)
-			 : base(loader,notifyRepository)
-		{
-			this.userRepository=userRepository;
-			this.resourceRepository=resourceRepository;
-			this.notifyRepository=notifyRepository;
-		}
 		
 		protected override IQueryable<NotifyDto> DefaultQueryable() 
 		{

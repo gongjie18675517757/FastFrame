@@ -5,15 +5,8 @@ using System.Threading.Tasks;
 
 namespace FastFrame.Infrastructure.EventBus
 {
-    public class EventBus : IEventBus
+    public class EventBus(IServiceProvider serviceProvider) : IEventBus
     {
-        private readonly IServiceProvider serviceProvider;
-
-        public EventBus(IServiceProvider serviceProvider)
-        {
-            this.serviceProvider = serviceProvider;
-        }
-
         public async Task TriggerEventAsync<T>(T @event) where T : IEventData
         {
             var servers = serviceProvider.GetServices<IEventHandle<T>>().OrderByDescending(v => v.Weights);

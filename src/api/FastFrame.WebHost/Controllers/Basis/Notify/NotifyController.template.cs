@@ -7,15 +7,10 @@ namespace FastFrame.WebHost.Controllers.Basis
 	/// <summary>
 	/// 通知 
 	/// </summary>
-	public partial class NotifyController:BaseCURDController<NotifyDto>
+	public partial class NotifyController(NotifyService service):BaseCURDController<NotifyDto>(service)
 	{
-		private readonly NotifyService service;
+		private readonly NotifyService service=service;
 		
-		public NotifyController(NotifyService service)
-			 : base(service)
-		{
-			this.service = service;
-		}
 		
 		[HttpGet()]
 		public IAsyncEnumerable<ITreeModel> TreeList(string super_id,string kw) 

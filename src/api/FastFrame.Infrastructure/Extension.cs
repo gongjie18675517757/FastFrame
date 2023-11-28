@@ -16,6 +16,15 @@ namespace FastFrame.Infrastructure
 {
     public static partial class Extension
     {
+        public static IEnumerable<object> AsEnumerable(this System.Collections.IEnumerable objects)
+        {
+            var enumerator = objects.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                yield return enumerator.Current;
+            }
+        }
+
         /// <summary>
         /// 转换
         /// </summary>
@@ -217,9 +226,9 @@ namespace FastFrame.Infrastructure
         public static string[] ToSplitArray(this string @in, string separator = ",;")
         {
             if (@in.IsNullOrWhiteSpace())
-                return Array.Empty<string>();
+                return [];
 
-            return @in.Split(separator.ToArray());
+            return @in.Split([.. separator]);
         }
 
         /// <summary>
@@ -284,12 +293,74 @@ namespace FastFrame.Infrastructure
         public static string ToBase64(this string @in)
             => @in.IsNullOrWhiteSpace() ? string.Empty : Convert.ToBase64String(Encoding.Default.GetBytes(@in));
 
-        private static readonly char[] base64CodeArray = new char[]
-           {
-                'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-                'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-                '0', '1', '2', '3', '4',  '5', '6', '7', '8', '9', '+', '/', '='
-           };
+        private static readonly char[] base64CodeArray =
+           [
+                'A',
+               'B',
+               'C',
+               'D',
+               'E',
+               'F',
+               'G',
+               'H',
+               'I',
+               'J',
+               'K',
+               'L',
+               'M',
+               'N',
+               'O',
+               'P',
+               'Q',
+               'R',
+               'S',
+               'T',
+               'U',
+               'V',
+               'W',
+               'X',
+               'Y',
+               'Z',
+               'a',
+               'b',
+               'c',
+               'd',
+               'e',
+               'f',
+               'g',
+               'h',
+               'i',
+               'j',
+               'k',
+               'l',
+               'm',
+               'n',
+               'o',
+               'p',
+               'q',
+               'r',
+               's',
+               't',
+               'u',
+               'v',
+               'w',
+               'x',
+               'y',
+               'z',
+               '0',
+               '1',
+               '2',
+               '3',
+               '4',
+               '5',
+               '6',
+               '7',
+               '8',
+               '9',
+               '+',
+               '/',
+               '='
+           ];
 
         /// <summary>
         /// FromBase64
@@ -410,7 +481,10 @@ namespace FastFrame.Infrastructure
         /// <param name="in"></param>
         /// <returns></returns>
         public static JObject ToJObject(this string @in)
-            => @in.IsNullOrWhiteSpace() ? new JObject() : (JObject)JsonConvert.DeserializeObject(@in);
+        {
+            JObject v = [];
+            return @in.IsNullOrWhiteSpace() ? v : (JObject)JsonConvert.DeserializeObject(@in);
+        }
 
         /// <summary>
         /// 反序列化

@@ -7,8 +7,7 @@ namespace FastFrame.Infrastructure.MessageQueue
 {
     public static class MessageQueueServiceCollectionExtensions
     {
-        private static readonly Dictionary<string, List<(Type type, MethodInfo method)>> dic
-            = new Dictionary<string, List<(Type type, MethodInfo method)>>();
+        private static readonly Dictionary<string, List<(Type type, MethodInfo method)>> dic = [];
 
         /// <summary>
         /// 订阅列表
@@ -48,7 +47,7 @@ namespace FastFrame.Infrastructure.MessageQueue
 
         private static List<(Type type, MethodInfo method)> CreateNewItem()
         {
-            return new List<(Type type, MethodInfo method)>();
+            return [];
         }
     }
 }

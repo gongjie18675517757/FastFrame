@@ -165,8 +165,7 @@ namespace FastFrame.Infrastructure
         /// <returns></returns>
         public static Expression<Action<TSource, TTarget>> GetMapSetExpression()
         {
-            if (expressionMapSet == null)
-                expressionMapSet = MapSet<TSource, TTarget>();
+            expressionMapSet ??= MapSet<TSource, TTarget>();
             return expressionMapSet;
         }
         /// <summary>
@@ -175,8 +174,7 @@ namespace FastFrame.Infrastructure
         /// <returns></returns>
         public static Action<TSource, TTarget> GetMapSetDelegate()
         {
-            if (actionMapSet == null)
-                actionMapSet = GetMapSetExpression().Compile();
+            actionMapSet ??= GetMapSetExpression().Compile();
             return actionMapSet;
         }
         /// <summary>
@@ -200,8 +198,7 @@ namespace FastFrame.Infrastructure
         /// <returns></returns>
         public static Expression<Func<TSource, TTarget>> GetMapToExpression()
         {
-            if (expressionMapTo == null)
-                expressionMapTo = MapTo<TSource, TTarget>();
+            expressionMapTo ??= MapTo<TSource, TTarget>();
             return expressionMapTo;
         }
 
@@ -211,8 +208,7 @@ namespace FastFrame.Infrastructure
         /// <returns></returns>
         public static Func<TSource, TTarget> GetMapToDelegate()
         {
-            if (funcMapTo == null)
-                funcMapTo = GetMapToExpression().Compile();
+            funcMapTo ??= GetMapToExpression().Compile();
             return funcMapTo;
         }
         /// <summary>
@@ -271,8 +267,7 @@ namespace FastFrame.Infrastructure
 
         public static Func<TSource, TTarget> GetTearPropDelegate()
         {
-            if (tearPropFunc == null)
-                tearPropFunc = GetTearPropExpression().Compile();
+            tearPropFunc ??= GetTearPropExpression().Compile();
 
             return tearPropFunc;
         }
@@ -323,9 +318,9 @@ namespace FastFrame.Infrastructure
         }
 
         private static Expression<Func<T, bool>> AndAlso<T>(
-        this Expression<Func<T, bool>> expr1,
-        Expression<Func<T, bool>> expr2,
-        Func<Expression, Expression, BinaryExpression> func)
+            this Expression<Func<T, bool>> expr1,
+            Expression<Func<T, bool>> expr2,
+            Func<Expression, Expression, BinaryExpression> func)
         {
             var parameter = Expression.Parameter(typeof(T));
 
@@ -339,17 +334,11 @@ namespace FastFrame.Infrastructure
                 func(left, right), parameter);
         }
 
-        private class ReplaceExpressionVisitor
-            : ExpressionVisitor
+        private class ReplaceExpressionVisitor(Expression oldValue, Expression newValue)
+                        : ExpressionVisitor
         {
-            private readonly Expression _oldValue;
-            private readonly Expression _newValue;
-
-            public ReplaceExpressionVisitor(Expression oldValue, Expression newValue)
-            {
-                _oldValue = oldValue;
-                _newValue = newValue;
-            }
+            private readonly Expression _oldValue = oldValue;
+            private readonly Expression _newValue = newValue;
 
             public override Expression Visit(Expression node)
             {

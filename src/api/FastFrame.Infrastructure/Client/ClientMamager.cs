@@ -7,16 +7,9 @@ namespace FastFrame.Infrastructure.Client
     /// <summary>
     /// 客户端连接管理
     /// </summary>
-    public class ClientMamager : IClientManage, IMessageSubscribeHost
+    public class ClientMamager(IEnumerable<IClientConnection> clientConnections, IMessageQueue messageQueue) : 
+        IClientManage, IMessageSubscribeHost
     {
-        private readonly IEnumerable<IClientConnection> clientConnections;
-        private readonly IMessageQueue messageQueue;
-
-        public ClientMamager(IEnumerable<IClientConnection> clientConnections, IMessageQueue messageQueue)
-        {
-            this.clientConnections = clientConnections;
-            this.messageQueue = messageQueue;
-        }
 
         /// <summary>
         /// 发布客户端选择
@@ -27,7 +20,7 @@ namespace FastFrame.Infrastructure.Client
         public async Task<string[]> PublishChooseAsync(ClientChoose input, string userId)
         {
             TaskCompletionSourceCenter<string[]>.MakeTaskCompletionSource(input.Id);
-            await PublishSendAsync(IClientManage.ClientChoose, input.ToJson(), new string[] { userId });
+            await PublishSendAsync(IClientManage.ClientChoose, input.ToJson(), [userId]);
             return await TaskCompletionSourceCenter<string[]>.DelayTaskCompletionSource(input.Id, input.Timeout * 1000 + 500, "客户端选择超时");
         }
 
@@ -40,7 +33,7 @@ namespace FastFrame.Infrastructure.Client
         public async Task<bool> PublishConfirmAsync(ClientConfirm input, string userId)
         {
             TaskCompletionSourceCenter<bool>.MakeTaskCompletionSource(input.Id);
-            await PublishSendAsync(IClientManage.ClientConfirm, input.ToJson(), new string[] { userId });
+            await PublishSendAsync(IClientManage.ClientConfirm, input.ToJson(), [userId]);
             return await TaskCompletionSourceCenter<bool>.DelayTaskCompletionSource(input.Id, input.Timeout * 1000 + 500, "客户端确认超时");
         }
 
@@ -75,8 +68,8 @@ namespace FastFrame.Infrastructure.Client
         /// <summary>
         /// 订阅通知(客户端发送给服务端的消息)
         /// </summary> 
-        [MessageSubscribe(IMessageQueue.Client2ServiceMessage)]
-        public async Task HandleSubscribeServerMessage(string msg_id, Client2ServiceMessage msg)
+        [MessageSubscribe(IMessageQueue.Client2ServiceMessage)] 
+        public async Task HandleSubscribeServerMessage(string msg_id, Client2ServiceMessage msg) 
         {
             await Task.CompletedTask;
 
@@ -85,12 +78,14 @@ namespace FastFrame.Infrastructure.Client
                 /*客户端的确认响应*/
                 case IClientManage.ClientConfirm:
                     var clientConfirmResult = msg.MsgContent.ToObject<ClientConfirmResult>();
-                    TaskCompletionSourceCenter<bool>.SetTaskCompletionSource(clientConfirmResult.Id, t => t.TrySetResult(clientConfirmResult.Result));
+                    TaskCompletionSourceCenter<bool>
+                        .SetTaskCompletionSource(clientConfirmResult.Id, t => t.TrySetResult(clientConfirmResult.Result));
                     break;
                 /*客户端的选择响应*/
                 case IClientManage.ClientChoose:
                     var clientChooseResult = msg.MsgContent.ToObject<ClientChooseResult>();
-                    TaskCompletionSourceCenter<string[]>.SetTaskCompletionSource(clientChooseResult.Id, t => t.TrySetResult(clientChooseResult.Result));
+                    TaskCompletionSourceCenter<string[]>
+                        .SetTaskCompletionSource(clientChooseResult.Id, t => t.TrySetResult(clientChooseResult.Result));
                     break;
                 default:
                     break;
@@ -100,8 +95,8 @@ namespace FastFrame.Infrastructure.Client
         /// <summary>
         /// 订阅通知(服务端发送给客户端的消息)
         /// </summary> 
-        [MessageSubscribe(IMessageQueue.Service2ClientMessage)]
-        public async Task HandleSubscribeClientMessage(string msg_id, Service2ClientMessage msg)
+        [MessageSubscribe(IMessageQueue.Service2ClientMessage)] 
+        public async Task HandleSubscribeClientMessage(string msg_id, Service2ClientMessage msg) 
         {
             await SendAsync(msg.ToUser, msg.MsgType, msg.MsgContent);
         }

@@ -7,14 +7,8 @@ namespace FastFrame.WebHost.Controllers.Chat
     /// <summary>
     /// 聊天
     /// </summary>
-    public class ChatController:BaseController
+    public class ChatController(ChatService chatService) : BaseController
     {
-        private readonly ChatService chatService;
-
-        public ChatController(ChatService chatService)
-        {
-            this.chatService = chatService;
-        }
 
         /// <summary>
         /// 发送消息给好友

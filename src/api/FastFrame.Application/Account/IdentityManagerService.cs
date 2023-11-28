@@ -14,22 +14,11 @@ using System.Threading.Tasks;
 
 namespace FastFrame.Application.Account
 {
-    public class IdentityManagerService : IService, IIdentityManager
+    public class IdentityManagerService(IRepository<LoginLog> loginLogRepository, IOptionsMonitor<IdentityConfig> optionsMonitor, IBackgroundJob backgroundJob) : IService, IIdentityManager
     {
-        private readonly IRepository<LoginLog> loginLogRepository;
-        private readonly IOptionsMonitor<IdentityConfig> optionsMonitor;
-        private readonly IBackgroundJob backgroundJob;
-
         public class Identity : LoginLog, IIdentity
         {
             public string GetToken() => Id;
-        }
-
-        public IdentityManagerService(IRepository<LoginLog> loginLogRepository, IOptionsMonitor<IdentityConfig> optionsMonitor, IBackgroundJob backgroundJob)
-        {
-            this.loginLogRepository = loginLogRepository;
-            this.optionsMonitor = optionsMonitor;
-            this.backgroundJob = backgroundJob;
         }
 
         /// <summary>
@@ -101,8 +90,7 @@ namespace FastFrame.Application.Account
             }
 
             /*失败log*/
-            if (identity == null)
-                identity = new Identity
+            identity ??= new Identity
                 {
                     IsEnabled = false,
                     ExpiredTime = null,

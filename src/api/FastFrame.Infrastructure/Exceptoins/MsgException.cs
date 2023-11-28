@@ -2,13 +2,8 @@
 
 namespace FastFrame.Infrastructure
 {
-    public class MsgException : Exception
+    public class MsgException(string msg) : Exception(msg)
     {
-        public MsgException(string msg) : base(msg)
-        {
-
-        }
-
         public MsgException(int errCode, string msg) : this(msg)
         {
             Code = errCode;

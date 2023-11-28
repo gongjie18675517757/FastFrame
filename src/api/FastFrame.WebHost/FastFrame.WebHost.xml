@@ -9,6 +9,11 @@
             登陆
             </summary>
         </member>
+        <member name="M:FastFrame.WebHost.Controllers.Account.AccountController.#ctor(FastFrame.Application.Account.AccountService,FastFrame.Infrastructure.Interface.IApplicationSession,FastFrame.Infrastructure.RSAOperate.RSAProvider)">
+            <summary>
+            登陆
+            </summary>
+        </member>
         <member name="F:FastFrame.WebHost.Controllers.Account.AccountController.SlideVerififySessionKey">
             <summary>
             保存滑动验证的值
@@ -121,7 +126,17 @@
             接口请求记录
             </summary>
         </member>
+        <member name="M:FastFrame.WebHost.Controllers.Basis.ApiRequestLogController.#ctor(FastFrame.Application.Basis.ApiRequestLogService)">
+            <summary>
+            接口请求记录
+            </summary>
+        </member>
         <member name="T:FastFrame.WebHost.Controllers.Basis.DeptController">
+            <summary>
+            部门 
+            </summary>
+        </member>
+        <member name="M:FastFrame.WebHost.Controllers.Basis.DeptController.#ctor(FastFrame.Application.Basis.DeptService)">
             <summary>
             部门 
             </summary>
@@ -131,7 +146,17 @@
             数字字典 
             </summary>
         </member>
+        <member name="M:FastFrame.WebHost.Controllers.Basis.EnumItemController.#ctor(FastFrame.Application.Basis.EnumItemService)">
+            <summary>
+            数字字典 
+            </summary>
+        </member>
         <member name="T:FastFrame.WebHost.Controllers.Basis.LoginLogController">
+            <summary>
+            登录身份
+            </summary>
+        </member>
+        <member name="M:FastFrame.WebHost.Controllers.Basis.LoginLogController.#ctor(FastFrame.Application.Basis.LoginLogServcie,FastFrame.Application.Account.IdentityManagerService)">
             <summary>
             登录身份
             </summary>
@@ -144,6 +169,11 @@
             <returns></returns>
         </member>
         <member name="T:FastFrame.WebHost.Controllers.Basis.MeidiaController">
+            <summary>
+            媒体库
+            </summary>
+        </member>
+        <member name="M:FastFrame.WebHost.Controllers.Basis.MeidiaController.#ctor(FastFrame.Application.Basis.MeidiaService)">
             <summary>
             媒体库
             </summary>
@@ -187,7 +217,17 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:FastFrame.WebHost.Controllers.Basis.NotifyController.#ctor(FastFrame.Application.Basis.NotifyService)">
+            <summary>
+            通知 
+            </summary>
+        </member>
         <member name="T:FastFrame.WebHost.Controllers.Basis.NumberOptionController">
+            <summary>
+            编号设置 
+            </summary>
+        </member>
+        <member name="M:FastFrame.WebHost.Controllers.Basis.NumberOptionController.#ctor(FastFrame.Application.Basis.NumberOptionService)">
             <summary>
             编号设置 
             </summary>
@@ -203,7 +243,17 @@
             角色 
             </summary>
         </member>
+        <member name="M:FastFrame.WebHost.Controllers.Basis.RoleController.#ctor(FastFrame.Application.Basis.RoleService)">
+            <summary>
+            角色 
+            </summary>
+        </member>
         <member name="T:FastFrame.WebHost.Controllers.Basis.SettingController">
+            <summary>
+            系统设置
+            </summary>
+        </member>
+        <member name="M:FastFrame.WebHost.Controllers.Basis.SettingController.#ctor(FastFrame.Application.Basis.SettingService)">
             <summary>
             系统设置
             </summary>
@@ -213,7 +263,17 @@
             系统工具
             </summary>
         </member>
+        <member name="M:FastFrame.WebHost.Controllers.Basis.SystemToolsController.#ctor(System.IServiceProvider)">
+            <summary>
+            系统工具
+            </summary>
+        </member>
         <member name="T:FastFrame.WebHost.Controllers.Basis.TenantController">
+            <summary>
+            多租户信息 
+            </summary>
+        </member>
+        <member name="M:FastFrame.WebHost.Controllers.Basis.TenantController.#ctor(FastFrame.Application.Basis.TenantService)">
             <summary>
             多租户信息 
             </summary>
@@ -237,7 +297,17 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:FastFrame.WebHost.Controllers.Basis.UserController.#ctor(FastFrame.Application.Basis.UserService)">
+            <summary>
+            用户 
+            </summary>
+        </member>
         <member name="T:FastFrame.WebHost.Controllers.Chat.ChatController">
+            <summary>
+            聊天
+            </summary>
+        </member>
+        <member name="M:FastFrame.WebHost.Controllers.Chat.ChatController.#ctor(FastFrame.Application.Chat.ChatService)">
             <summary>
             聊天
             </summary>
@@ -248,6 +318,11 @@
             </summary> 
         </member>
         <member name="T:FastFrame.WebHost.Controllers.Chat.FriendController">
+            <summary>
+            好友
+            </summary>
+        </member>
+        <member name="M:FastFrame.WebHost.Controllers.Chat.FriendController.#ctor(FastFrame.Application.Chat.FriendService)">
             <summary>
             好友
             </summary>
@@ -291,6 +366,11 @@
             流程中心
             </summary>
         </member>
+        <member name="M:FastFrame.WebHost.Controllers.Flow.WorkFlowCenterController.#ctor(FastFrame.Application.Flow.WorkFlowCenterService)">
+            <summary>
+            流程中心
+            </summary>
+        </member>
         <member name="M:FastFrame.WebHost.Controllers.Flow.WorkFlowCenterController.FlowOperate(System.String,FastFrame.Application.Flow.BatchFlowOperateInput)">
             <summary>
             流程操作
@@ -318,7 +398,17 @@
             <param name="moduleName"></param>
             <returns></returns>
         </member>
+        <member name="M:FastFrame.WebHost.Controllers.Flow.WorkFlowController.#ctor(FastFrame.Application.Flow.WorkFlowService)">
+            <summary>
+            工作流 
+            </summary>
+        </member>
         <member name="T:FastFrame.WebHost.Controllers.OA.OaLeaveController">
+            <summary>
+            请假单 
+            </summary>
+        </member>
+        <member name="M:FastFrame.WebHost.Controllers.OA.OaLeaveController.#ctor(FastFrame.Application.OA.OaLeaveService)">
             <summary>
             请假单 
             </summary>
@@ -335,7 +425,17 @@
             身份授权验证中间件
             </summary>
         </member>
+        <member name="M:FastFrame.WebHost.Middleware.AuthorizationMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate)">
+            <summary>
+            身份授权验证中间件
+            </summary>
+        </member>
         <member name="T:FastFrame.WebHost.Middleware.ExceptionMiddleware">
+            <summary>
+            异常处理中间件
+            </summary>
+        </member>
+        <member name="M:FastFrame.WebHost.Middleware.ExceptionMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate,Microsoft.Extensions.Logging.ILogger{FastFrame.WebHost.Middleware.ExceptionMiddleware},FastFrame.Infrastructure.Module.IModuleDesProvider)">
             <summary>
             异常处理中间件
             </summary>
@@ -345,7 +445,17 @@
             写入接口执行时间
             </summary>
         </member>
+        <member name="M:FastFrame.WebHost.Middleware.InvodeTimeMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate)">
+            <summary>
+            写入接口执行时间
+            </summary>
+        </member>
         <member name="T:FastFrame.WebHost.Middleware.PermissionMiddleware">
+            <summary>
+            权限处理中间件
+            </summary>
+        </member>
+        <member name="M:FastFrame.WebHost.Middleware.PermissionMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate)">
             <summary>
             权限处理中间件
             </summary>
@@ -418,6 +528,11 @@
             应用程序初始化服务
             </summary>
         </member>
+        <member name="M:FastFrame.WebHost.Privder.ApplicationInitialProvider.#ctor(System.IServiceProvider,Microsoft.Extensions.Logging.ILogger{FastFrame.WebHost.Privder.ApplicationInitialProvider},Microsoft.Extensions.Caching.Memory.IMemoryCache)">
+            <summary>
+            应用程序初始化服务
+            </summary>
+        </member>
         <member name="M:FastFrame.WebHost.Privder.ApplicationInitialProvider.InitialAsync">
             <summary>
             程序初始化
@@ -431,6 +546,11 @@
             <returns></returns>
         </member>
         <member name="T:FastFrame.WebHost.Privder.ClientConnection">
+            <summary>
+            客户端连接抽象实现
+            </summary>
+        </member>
+        <member name="M:FastFrame.WebHost.Privder.ClientConnection.#ctor(Microsoft.AspNetCore.SignalR.IHubContext{FastFrame.WebHost.Hubs.MessageHub},FastFrame.Infrastructure.Cache.ICacheProvider)">
             <summary>
             客户端连接抽象实现
             </summary>

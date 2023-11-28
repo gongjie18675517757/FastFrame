@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace FastFrame.CodeGenerate.Build
 {
-    public abstract class BaseCodeBuilder : IBaseCodeBuilder
+    public abstract class BaseCodeBuilder(string solutionDir, Type baseEntityType) : IBaseCodeBuilder
     {
         /// <summary>
         /// 生成者名称
@@ -20,12 +20,12 @@ namespace FastFrame.CodeGenerate.Build
         /// <summary>
         /// 解决方案目录
         /// </summary>
-        public string SolutionDir { get; }
+        public string SolutionDir { get; } = solutionDir;
 
         /// <summary>
         /// XML文档目录
         /// </summary>
-        public string XmlDocDir => System.IO.Directory.GetCurrentDirectory();
+        public static string XmlDocDir => Directory.GetCurrentDirectory();
 
         /// <summary>
         /// 目标存放路径
@@ -35,14 +35,7 @@ namespace FastFrame.CodeGenerate.Build
         /// <summary>
         /// 基类
         /// </summary>
-        public Type BaseEntityType { get; }
-
-
-        public BaseCodeBuilder(string solutionDir, Type baseEntityType)
-        {
-            this.SolutionDir = solutionDir;
-            this.BaseEntityType = baseEntityType;
-        }
+        public Type BaseEntityType { get; } = baseEntityType;
 
         /// <summary>
         /// 获取所有需要生成的类

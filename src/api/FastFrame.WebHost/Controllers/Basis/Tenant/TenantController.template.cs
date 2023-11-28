@@ -7,15 +7,10 @@ namespace FastFrame.WebHost.Controllers.Basis
 	/// <summary>
 	/// 多租户信息 
 	/// </summary>
-	public partial class TenantController:BaseController<TenantDto>
+	public partial class TenantController(TenantService service):BaseController<TenantDto>(service)
 	{
-		private readonly TenantService service;
+		private readonly TenantService service=service;
 		
-		public TenantController(TenantService service)
-			 : base(service)
-		{
-			this.service = service;
-		}
 		
 		[HttpGet()]
 		public IAsyncEnumerable<ITreeModel> TreeList(string super_id,string kw) 

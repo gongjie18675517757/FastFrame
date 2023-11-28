@@ -18,21 +18,11 @@ namespace FastFrame.Application
     /// <summary>
     /// 自动编号
     /// </summary>
-    public class AutoNumberService : IService, IAutoNumberService
+    public class AutoNumberService(IRepository<NumberOption> numberOptions,
+                                   IRepository<NumberRecord> numberRecords,
+                                   IServiceProvider serviceProvider) : IService, IAutoNumberService
     {
-        private readonly IRepository<NumberOption> numberOptions;
-        private readonly IRepository<NumberRecord> numberRecords;
-        private readonly IServiceProvider serviceProvider;
-        private readonly Dictionary<string, NumberRecord> recordDic = new();
-
-
-
-        public AutoNumberService(IRepository<NumberOption> numberOptions, IRepository<NumberRecord> numberRecords, IServiceProvider serviceProvider)
-        {
-            this.numberOptions = numberOptions;
-            this.numberRecords = numberRecords;
-            this.serviceProvider = serviceProvider;
-        }
+        private readonly Dictionary<string, NumberRecord> recordDic = [];
 
         /// <summary>
         /// 生成编号
@@ -124,9 +114,7 @@ namespace FastFrame.Application
                 var day = dt.Day;
 
                 record = await recordQuery.Where(v => v.Year == year && v.Month == month && v.Day == day).FirstOrDefaultAsync();
-                if (record == null)
-                {
-                    record = await numberRecords.AddAsync(new NumberRecord
+                record ??= await numberRecords.AddAsync(new NumberRecord
                     {
                         Year = year,
                         Day = day,
@@ -136,7 +124,6 @@ namespace FastFrame.Application
                         Serial = 0,
                         PrevSerial = 0
                     });
-                }
 
                 if (opt.TaskDate && opt.FmtDate != null)
                 {

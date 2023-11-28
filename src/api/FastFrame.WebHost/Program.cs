@@ -1,6 +1,4 @@
 ﻿global using AspectCore.Extensions.DependencyInjection;
-using AspectCore.Configuration;
-using AspectCore.DependencyInjection;
 using FastFrame.Application;
 using FastFrame.Entity;
 using FastFrame.Infrastructure;
@@ -21,22 +19,15 @@ using FastFrame.WebHost.Hubs;
 using FastFrame.WebHost.Middleware;
 using FastFrame.WebHost.Privder;
 using Hangfire;
+using Hangfire.Redis.StackExchange;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using System.Text;
-using System.Text.Json.Serialization;
-using tusdotnet;
-using tusdotnet.Interfaces;
-using tusdotnet.Models;
-using tusdotnet.Models.Expiration;
-using tusdotnet.Stores;
 
 #region .NET5的写法 
 //namespace FastFrame.WebHost
@@ -109,7 +100,7 @@ services
             .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
             .UseSimpleAssemblyNameTypeSerializer()
             .UseRecommendedSerializerSettings()
-            .UseRedisStorage(connectionMultiplexer, new Hangfire.Redis.RedisStorageOptions
+            .UseRedisStorage(connectionMultiplexer, new RedisStorageOptions
             {
                 Prefix = configurationOptions.ChannelPrefix,
                 Db = configurationOptions.DefaultDatabase ?? -1,
@@ -217,7 +208,7 @@ var areas = typeof(Program)
        .Where(v => v.IsClass && !v.IsAbstract && typeof(Microsoft.AspNetCore.Mvc.ControllerBase).IsAssignableFrom(v))
        .Select(v => new
        {
-           name = v.Namespace.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries).LastOrDefault(),
+           name = v.Namespace.Split(".", StringSplitOptions.RemoveEmptyEntries).LastOrDefault(),
            text = T4Help.GetClassSummary(v, basePath)
        })
        .GroupBy(v => v.name)
@@ -262,7 +253,7 @@ services.AddSwaggerGen(options =>
     {
         if (apiDescription.ActionDescriptor is Microsoft.AspNetCore.Mvc.Controllers.ControllerActionDescriptor caDescriptor)
         {
-            var area = caDescriptor.ControllerTypeInfo.Namespace.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries).LastOrDefault();
+            var area = caDescriptor.ControllerTypeInfo.Namespace.Split(".", StringSplitOptions.RemoveEmptyEntries).LastOrDefault();
             return docName == area || !areas.Any(v => v.name == docName);
         }
 

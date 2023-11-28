@@ -18,11 +18,8 @@ namespace FastFrame.WebHost.Controllers.Account
     /// <summary>
     /// 登陆
     /// </summary>
-    public class AccountController : BaseController
+    public class AccountController(AccountService service, IApplicationSession appSession, RSAProvider rsaProvider) : BaseController
     {
-        private readonly AccountService service;
-        private readonly IApplicationSession appSession;
-        private readonly RSAProvider rsaProvider;
 
         /// <summary>
         /// 保存滑动验证的值
@@ -33,13 +30,6 @@ namespace FastFrame.WebHost.Controllers.Account
         /// 保存滑动验证的结果
         /// </summary>
         private static readonly string ExistsSlideVerififySessionKey = $"IsExistsSlideVerififySlideVerifify_{Guid.NewGuid():N}";
-
-        public AccountController(AccountService service, IApplicationSession appSession, RSAProvider rsaProvider)
-        {
-            this.service = service;
-            this.appSession = appSession;
-            this.rsaProvider = rsaProvider;
-        }
 
         /// <summary>
         /// 登录

@@ -11,15 +11,8 @@ namespace FastFrame.WebHost.Controllers.Basis
     /// <summary>
     /// 系统设置
     /// </summary>
-    public class SettingController : BaseController
+    public class SettingController(SettingService service) : BaseController
     {
-        private readonly SettingService service;
-
-        public SettingController(SettingService service)
-        {
-            this.service = service;
-        }
-
         [HttpGet]
         [Permission(nameof(Get), "获取设置")]
         public async Task<SettingModel> Get()

@@ -23,31 +23,18 @@ using System.Net.Mime;
 
 namespace FastFrame.WebHost.Middleware
 {
-    public class ResourceMiddleware
+    public class ResourceMiddleware(RequestDelegate next, IOptions<ResourceOption> options, ILockFacatory lockFacatory)
     {
-        private readonly RequestDelegate next;
-        private readonly ILockFacatory lockFacatory;
-        private readonly Regex downloadPathRegex;
-        private readonly Regex thumbnailPathRegex;
-        private readonly Regex reqPathRegex;
-        private readonly Regex reqBigPathRegex;
-        private readonly FileExtensionContentTypeProvider provider;
-
-        public ResourceMiddleware(RequestDelegate next, IOptions<ResourceOption> options, ILockFacatory lockFacatory)
-        {
-            this.next = next;
-            this.lockFacatory = lockFacatory;
-            downloadPathRegex = new Regex(options.Value.DownLoadPathRegexText, RegexOptions.IgnoreCase | RegexOptions.Compiled);
-            thumbnailPathRegex = new Regex(options.Value.ThumbnailPathRegexText, RegexOptions.IgnoreCase | RegexOptions.Compiled);
-            reqPathRegex = new Regex(options.Value.UploadPathRegexText, RegexOptions.IgnoreCase | RegexOptions.Compiled);
-            reqBigPathRegex = new Regex(options.Value.UploadBigFilePathText, RegexOptions.IgnoreCase | RegexOptions.Compiled);
-            provider = new FileExtensionContentTypeProvider();
-        }
+        private readonly Regex downloadPathRegex = new(options.Value.DownLoadPathRegexText, RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private readonly Regex thumbnailPathRegex = new(options.Value.ThumbnailPathRegexText, RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private readonly Regex reqPathRegex = new(options.Value.UploadPathRegexText, RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private readonly Regex reqBigPathRegex = new(options.Value.UploadBigFilePathText, RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private readonly FileExtensionContentTypeProvider provider = new();
+        private static readonly string[] value = ["public,max-age=31536000"];
 
         public async Task Invoke(HttpContext context)
         {
             var path = context.Request.Path;
-            var contentType = string.Empty;
             /*判断是否下载的请求*/
             bool has_download = downloadPathRegex.IsMatch(path.Value),
 
@@ -83,7 +70,7 @@ namespace FastFrame.WebHost.Middleware
                 /*响应文件下载*/
                 if (has_download)
                 {
-                    if (context.Request.Query.TryGetValue("has_down", out var _) || resource_name.IsNullOrWhiteSpace())
+                    if (context.Request.Query.TryGetValue("has_down", out _) || resource_name.IsNullOrWhiteSpace())
                     {
                         context.Response.Headers
                             .TryAdd("Content-Disposition",
@@ -101,8 +88,9 @@ namespace FastFrame.WebHost.Middleware
                     resource_name = resourceStreamInfo.Name;
 
                 /*匹配内容类型*/
-                if (!provider.TryGetContentType(Path.GetExtension(resource_name), out contentType))
+                if (!provider.TryGetContentType(Path.GetExtension(resource_name), out string contentType))
                     contentType = resourceStreamInfo.ContentType;
+
                 if (contentType.IsNullOrWhiteSpace())
                     contentType = "application/octet-stream";
 
@@ -113,7 +101,7 @@ namespace FastFrame.WebHost.Middleware
                 {
                     context.Response.StatusCode = 200;
 
-                    context.Response.Headers.TryAdd("cache-control", new[] { "public,max-age=31536000" });
+                    context.Response.Headers.TryAdd("cache-control", value);
                     context.Response.Headers.TryAdd("Expires", new[] { resourceStreamInfo.ModifyTime.AddYears(10).ToString("R") });
                     context.Response.Headers.TryAdd("Last-Modified", resourceStreamInfo.ModifyTime.ToString("R"));
                     context.Response.Headers.TryAdd("ETag", resource_id);
@@ -187,7 +175,7 @@ namespace FastFrame.WebHost.Middleware
                         for (int i = 0; i < fileMetadata.TotalChunkFiles; i++)
                         {
                             var chunk_name = Path.Combine(dir_path, $"{i}.chunk");
-                            using var _ = File.Create(chunk_name);
+                            _ = File.Create(chunk_name);
                         }
                     }
 
@@ -310,6 +298,14 @@ namespace FastFrame.WebHost.Middleware
 
             foreach (var file in source_files)
                 file.Delete();
+
+#if DEBUG
+            {
+                using var read_stream = File.OpenRead(dest_file_name);
+                if (read_stream.ToMD5() != metadata.FileMD5)
+                    throw new MsgException("MD5不相等！");
+            }
+#endif
         }
 
         /// <summary>

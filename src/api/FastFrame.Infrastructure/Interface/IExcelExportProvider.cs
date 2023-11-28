@@ -27,24 +27,7 @@ namespace FastFrame.Infrastructure.Interface
         /// <returns></returns>
         Task<byte[]> GenerateExcelSteam<TDto>(Func<IPagination<TDto>, Task<IPageList<TDto>>> pageListFunc,
                                               IEnumerable<ExcelColumn<TDto>> columns,
-                                              IPagination<TDto> pagination);        
+                                              IPagination<TDto> pagination);
 
-    }
-
-    /// <summary>
-    /// EXCEL列
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public class ExcelColumn<T>
-    {
-        /// <summary>
-        /// 标题
-        /// </summary>
-        public string Title { get; set; }
-
-        /// <summary>
-        /// 获取值方法
-        /// </summary>
-        public Func<T, object> ValueFunc { get; set; }
     }
 }

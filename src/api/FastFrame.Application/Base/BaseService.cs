@@ -23,14 +23,9 @@ using static Dapper.SqlMapper;
 
 namespace FastFrame.Application
 {
-    public abstract class BaseService<TDto> : IPageListService<TDto> where TDto : class
+    public abstract class BaseService<TDto>(IServiceProvider loader) : IPageListService<TDto> where TDto : class
     {
-        public BaseService(IServiceProvider loader)
-        {
-            this.loader = loader;
-        }
-
-        public virtual IServiceProvider loader { get; set; }
+        public virtual IServiceProvider loader { get; set; } = loader;
 
         protected IEventBus EventBus => loader.GetService<IEventBus>();
 
@@ -60,11 +55,7 @@ namespace FastFrame.Application
                 throw new NotFoundException();
 
             var expression = ExpressionClosureFactory.BuildEqualExpression<TDto, string>("Id", id);
-            var dto = await BuildQuery().FirstOrDefaultAsync(expression);
-
-            if (dto == null)
-                throw new NotFoundException();
-
+            var dto = await BuildQuery().FirstOrDefaultAsync(expression) ?? throw new NotFoundException();
             await OnGeting(dto);
             return dto;
         }
@@ -209,16 +200,12 @@ namespace FastFrame.Application
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TDto"></typeparam>
-    public class BaseService<TEntity, TDto> : BaseService<TDto>, ICURDService<TDto>
+    public class BaseService<TEntity, TDto>(IServiceProvider loader, IRepository<TEntity> repository) 
+        : BaseService<TDto>(loader), ICURDService<TDto>
         where TEntity : class, IEntity, new()
         where TDto : class, IDto<TEntity>, new()
     {
-        protected readonly IRepository<TEntity> repository;
-
-        public BaseService(IServiceProvider loader, IRepository<TEntity> repository) : base(loader)
-        {
-            this.repository = repository;
-        }
+        protected readonly IRepository<TEntity> repository = repository;
 
         /// <summary>
         /// 新增时/修改时/删除时
@@ -256,7 +243,7 @@ namespace FastFrame.Application
                 var handler = loader.GetService<ITreeHandleService>();
                 var method = handler.GetType().GetMethod(nameof(ITreeHandleService.VerifyLoopRefByViewModelableAsync))
                                     .MakeGenericMethod(typeof(TEntity)).GetReflector();
-                var task = (Task)method.Invoke(handler, new object[] { entity });
+                var task = (Task)method.Invoke(handler, [entity]);
                 await task;
             }
 

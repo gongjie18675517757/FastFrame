@@ -13,15 +13,8 @@ using Microsoft.Net.Http.Headers;
 
 namespace FastFrame.WebHost.Middleware
 {
-    public class AppSessionInitMiddleware
+    public class AppSessionInitMiddleware(RequestDelegate next)
     {
-        private readonly RequestDelegate next;
-
-        public AppSessionInitMiddleware(RequestDelegate next)
-        {
-            this.next = next;
-        }
-
         public async Task Invoke(HttpContext context)
         {
             await context.Request.HttpContext.RequestServices.GetService<IApplicationSession>().InitAsync();

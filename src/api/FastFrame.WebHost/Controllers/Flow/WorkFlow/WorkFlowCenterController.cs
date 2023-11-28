@@ -9,14 +9,8 @@ namespace FastFrame.WebHost.Controllers.Flow
     /// <summary>
     /// 流程中心
     /// </summary>
-    public partial class WorkFlowCenterController : BaseController
+    public partial class WorkFlowCenterController(WorkFlowCenterService service) : BaseController
     {
-        private readonly WorkFlowCenterService service;
-
-        public WorkFlowCenterController(WorkFlowCenterService service)
-        {
-            this.service = service;
-        }
 
         /// <summary>
         /// 流程操作

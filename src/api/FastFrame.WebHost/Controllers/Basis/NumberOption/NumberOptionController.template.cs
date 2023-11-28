@@ -7,15 +7,10 @@ namespace FastFrame.WebHost.Controllers.Basis
 	/// <summary>
 	/// 编号设置 
 	/// </summary>
-	public partial class NumberOptionController:BaseCURDController<NumberOptionDto>
+	public partial class NumberOptionController(NumberOptionService service):BaseCURDController<NumberOptionDto>(service)
 	{
-		private readonly NumberOptionService service;
+		private readonly NumberOptionService service=service;
 		
-		public NumberOptionController(NumberOptionService service)
-			 : base(service)
-		{
-			this.service = service;
-		}
 		
 		[HttpGet()]
 		public IAsyncEnumerable<ITreeModel> TreeList(string super_id,string kw) 

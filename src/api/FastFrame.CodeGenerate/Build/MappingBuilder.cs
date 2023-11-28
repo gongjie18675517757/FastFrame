@@ -5,12 +5,9 @@ using System.Collections.Generic;
 
 namespace FastFrame.CodeGenerate.Build
 {
-    public class MappingBuilder : BaseCShapeCodeBuilder
+    public class MappingBuilder(string solutionDir, Type baseEntityType) : BaseCShapeCodeBuilder(solutionDir, baseEntityType)
     {
         public override string BuildName => "数据映射";
-        public MappingBuilder(string solutionDir, Type baseEntityType) : base(solutionDir, baseEntityType)
-        {
-        }
 
         public override string TargetPath => $"{SolutionDir}\\FastFrame.Database\\Mapping";
 

@@ -12,17 +12,17 @@ namespace FastFrame.Infrastructure
     /// </summary>
     public sealed class SlideVerificationCreater
     {
-        private readonly Random random = new Random();
+        private readonly Random random = new();
         private SlideVerificationCreater() { }
 
-        public static readonly Lazy<SlideVerificationCreater> Instance = new Lazy<SlideVerificationCreater>(() => new SlideVerificationCreater());
+        public static readonly Lazy<SlideVerificationCreater> Instance = new(() => new SlideVerificationCreater());
 
         /// <summary>
         /// 创建图片滑动数据
         /// </summary>
         public SlideVerificationOutput Create(SlideVerificationInput pars, out int positionX)
         {
-            SlideVerificationOutput result = new SlideVerificationOutput();
+            SlideVerificationOutput result = new();
 
             using (var side_image = Image.FromStream(pars.SlideStream))
             {
@@ -77,7 +77,7 @@ namespace FastFrame.Infrastructure
             //期望的高度
             int destHeight = (int)(sourceHeight * nPercent);
 
-            Bitmap b = new Bitmap(destWidth, destHeight);
+            Bitmap b = new(destWidth, destHeight);
             using (Graphics g = Graphics.FromImage(b))
             {
                 g.InterpolationMode = InterpolationMode.HighQualityBicubic;
@@ -90,7 +90,7 @@ namespace FastFrame.Infrastructure
         /// <summary>
         /// 画背景图并将滑块画上去
         /// </summary> 
-        private byte[] DrawBackground(Bitmap sourceImage, Bitmap coverImage, int positionX, int positionY)
+        private static byte[] DrawBackground(Bitmap sourceImage, Bitmap coverImage, int positionX, int positionY)
         {
             //背景图片
             using (Graphics graphics = Graphics.FromImage(sourceImage))
@@ -105,7 +105,7 @@ namespace FastFrame.Infrastructure
         /// <summary>
         /// 从大图中根据像素点，生成图片，作为拼图块
         /// </summary> 
-        private byte[] CaptureImage(Bitmap backgroudImage, Bitmap coverImage, int offsetX, int offsetY)
+        private static byte[] CaptureImage(Bitmap backgroudImage, Bitmap coverImage, int offsetX, int offsetY)
         {
             //创建新图位图
             using Bitmap bitmap = new Bitmap(coverImage.Width, coverImage.Height);
@@ -127,7 +127,7 @@ namespace FastFrame.Infrastructure
         /// <summary>
         /// Image转Byte数组
         /// </summary> 
-        private byte[] ImageToByteArr(Image sourceImage, ImageFormat format)
+        private static byte[] ImageToByteArr(Image sourceImage, ImageFormat format)
         {
             using MemoryStream stream = new MemoryStream();
             sourceImage.Save(stream, format);
@@ -142,22 +142,17 @@ namespace FastFrame.Infrastructure
         /// <summary>
         /// Image转base64
         /// </summary>  
-        public string ImageToBase64(byte[] buffer, ImageFormat format)
+        public static string ImageToBase64(byte[] buffer, ImageFormat format)
         {
-            StringBuilder result = new StringBuilder();
+            StringBuilder result = new();
             result.Append($"data:image/{format};base64,");
             result.Append(Convert.ToBase64String(buffer));
             return result.ToString();
         }
     }
 
-    public class SlideVerificationInput
+    public class SlideVerificationInput(Stream backgroundStream, Stream slideStream)
     {
-        public SlideVerificationInput(Stream backgroundStream, Stream slideStream)
-        {
-            BackgroundStream = backgroundStream;
-            SlideStream = slideStream;
-        }
 
         /// <summary>
         /// 背景大小
@@ -172,12 +167,12 @@ namespace FastFrame.Infrastructure
         /// <summary>
         /// 背景内容
         /// </summary>
-        public Stream BackgroundStream { get; }
+        public Stream BackgroundStream { get; } = backgroundStream;
 
         /// <summary>
         /// 滑块内容
         /// </summary>
-        public Stream SlideStream { get; }
+        public Stream SlideStream { get; } = slideStream;
     }
 
     public class SlideVerificationOutput

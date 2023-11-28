@@ -7,15 +7,10 @@ namespace FastFrame.WebHost.Controllers.Basis
 	/// <summary>
 	/// 用户 
 	/// </summary>
-	public partial class UserController:BaseCURDController<UserDto>
+	public partial class UserController(UserService service):BaseCURDController<UserDto>(service)
 	{
-		private readonly UserService service;
+		private readonly UserService service=service;
 		
-		public UserController(UserService service)
-			 : base(service)
-		{
-			this.service = service;
-		}
 		
 		[HttpGet()]
 		public IAsyncEnumerable<ITreeModel> TreeList(string super_id,string kw) 

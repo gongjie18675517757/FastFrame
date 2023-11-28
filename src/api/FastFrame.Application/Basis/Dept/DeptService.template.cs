@@ -12,17 +12,11 @@ namespace FastFrame.Application.Basis
 	/// <summary>
 	/// 部门 服务实现 
 	/// </summary>
-	public partial class DeptService:BaseService<Dept, DeptDto>
+	public partial class DeptService(IRepository<Dept> deptRepository,IRepository<User> userRepository,IServiceProvider loader):BaseService<Dept, DeptDto>(loader,deptRepository)
 	{
-		private readonly IRepository<Dept> deptRepository;
-		private readonly IRepository<User> userRepository;
+		private readonly IRepository<Dept> deptRepository=deptRepository;
+		private readonly IRepository<User> userRepository=userRepository;
 		
-		public DeptService(IRepository<Dept> deptRepository,IRepository<User> userRepository,IServiceProvider loader)
-			 : base(loader,deptRepository)
-		{
-			this.deptRepository=deptRepository;
-			this.userRepository=userRepository;
-		}
 		
 		protected override IQueryable<DeptDto> DefaultQueryable() 
 		{

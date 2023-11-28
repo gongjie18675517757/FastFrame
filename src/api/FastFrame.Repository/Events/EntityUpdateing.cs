@@ -7,15 +7,9 @@ namespace FastFrame.Repository.Events
     /// 实体被更新时
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class EntityUpdateing<T> : BaseEventData<T> where T : IEntity
+    public class EntityUpdateing<T>(T data, params object[] args) : BaseEventData<T> where T : IEntity
     {
-        public EntityUpdateing(T data, params object[] args)  
-        {
-            Data = data;
-            Args = args;
-        }
-
-        public T Data { get; }
-        public object[] Args { get; }
+        public T Data { get; } = data;
+        public object[] Args { get; } = args;
     }
 }

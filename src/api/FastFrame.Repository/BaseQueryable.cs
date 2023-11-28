@@ -12,20 +12,14 @@ using System.Linq.Expressions;
 
 namespace FastFrame.Repository
 {
-    public class BaseQueryable<T> : IQueryRepository<T> where T : class, IQuery
+    public class BaseQueryable<T>(DataBase context, IApplicationSession appSession) : IQueryRepository<T> where T : class, IQuery
     {
-        protected readonly DataBase context;
-        private IQueryable<T> queryable; 
-        
-        protected IApplicationSession AppSession { get; set; }
+        protected readonly DataBase context = context;
+        private IQueryable<T> queryable;
+
+        protected IApplicationSession AppSession { get; set; } = appSession;
 
         protected ICurrUser CurrUser => AppSession?.CurrUser;
-
-        public BaseQueryable(DataBase context, IApplicationSession appSession)
-        {
-            this.context = context;
-            AppSession = appSession;
-        }
 
         /// <summary>
         /// 查询表达式

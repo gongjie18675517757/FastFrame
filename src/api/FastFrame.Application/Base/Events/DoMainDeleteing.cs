@@ -6,15 +6,9 @@ namespace FastFrame.Application.Events
     /// 删除前
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class DoMainDeleteing<T> : BaseEventData<T> 
+    public class DoMainDeleteing<T>(string id, object Data) : BaseEventData<T> 
     {
-        public DoMainDeleteing(string id,object Data)
-        {
-            Id = id;
-            this.Data = Data;
-        }
-
-        public string Id { get; }
-        public object Data { get; }
+        public string Id { get; } = id;
+        public object Data { get; } = Data;
     }
 }

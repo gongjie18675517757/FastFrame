@@ -16,7 +16,7 @@ namespace FastFrame.Database.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.0")
+                .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("FastFrame.Entity.Basis.ApiRequestLog", b =>
@@ -25,55 +25,55 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasComment("");
 
                     b.Property<string>("IPAddress")
                         .HasMaxLength(200)
                         .IsUnicode(true)
                         .HasColumnType("varchar(200)")
-                        .HasColumnName("ipaddress")
+                        .HasColumnName("IPAddress")
                         .HasComment("IP");
 
                     b.Property<long>("Milliseconds")
                         .HasColumnType("bigint")
-                        .HasColumnName("milliseconds")
+                        .HasColumnName("Milliseconds")
                         .HasComment("耗时数(毫秒)");
 
                     b.Property<string>("Path")
                         .HasMaxLength(200)
                         .IsUnicode(true)
                         .HasColumnType("varchar(200)")
-                        .HasColumnName("path")
+                        .HasColumnName("Path")
                         .HasComment("请求地址");
 
                     b.Property<long?>("RequestLength")
                         .HasColumnType("bigint")
-                        .HasColumnName("requestlength")
+                        .HasColumnName("RequestLength")
                         .HasComment("请求大小");
 
                     b.Property<DateTime>("RequestTime")
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("requesttime")
+                        .HasColumnName("RequestTime")
                         .HasComment("请求时间");
 
                     b.Property<int>("StatusCode")
                         .HasColumnType("int")
-                        .HasColumnName("statuscode")
+                        .HasColumnName("StatusCode")
                         .HasComment("响应状态码");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(50)
                         .IsUnicode(true)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("username")
+                        .HasColumnName("UserName")
                         .HasComment("请求人");
 
                     b.Property<string>("User_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("user_id")
+                        .HasColumnName("User_Id")
                         .HasComment("请求人");
 
                     b.HasKey("Id");
@@ -81,7 +81,7 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("User_Id")
                         .HasDatabaseName("Index_ApiRequestLog_User_Id");
 
-                    b.ToTable("basis_apirequestlog", null, t =>
+                    b.ToTable("Basis_ApiRequestLog", null, t =>
                         {
                             t.HasComment("api请求记录");
                         });
@@ -93,21 +93,21 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasComment("");
 
                     b.Property<string>("BeDept_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("bedept_id")
+                        .HasColumnName("BeDept_Id")
                         .HasComment("归属部门");
 
                     b.Property<string>("Bill_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("bill_id")
+                        .HasColumnName("Bill_Id")
                         .HasComment("关联：Bill");
 
                     b.Property<bool>("isdeleted")
@@ -124,7 +124,7 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_BillBeDept_isdeleted");
 
-                    b.ToTable("basis_billbedept", null, t =>
+                    b.ToTable("Basis_BillBeDept", null, t =>
                         {
                             t.HasComment("单据归属部门");
                         });
@@ -136,19 +136,19 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasComment("主键");
 
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("createtime")
+                        .HasColumnName("CreateTime")
                         .HasComment("创建时间");
 
                     b.Property<string>("Create_User_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("create_user_id")
+                        .HasColumnName("Create_User_Id")
                         .HasComment("创建人");
 
                     b.Property<string>("EnCode")
@@ -156,19 +156,19 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(50)
                         .IsUnicode(true)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("encode")
+                        .HasColumnName("EnCode")
                         .HasComment("部门代码");
 
                     b.Property<DateTime>("ModifyTime")
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("modifytime")
+                        .HasColumnName("ModifyTime")
                         .HasComment("修改时间");
 
                     b.Property<string>("Modify_User_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("modify_user_id")
+                        .HasColumnName("Modify_User_Id")
                         .HasComment("修改人");
 
                     b.Property<string>("Name")
@@ -176,35 +176,35 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(50)
                         .IsUnicode(true)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("name")
+                        .HasColumnName("Name")
                         .HasComment("部门名称");
 
                     b.Property<string>("Remarks")
                         .HasMaxLength(200)
                         .IsUnicode(true)
                         .HasColumnType("varchar(200)")
-                        .HasColumnName("remarks")
+                        .HasColumnName("Remarks")
                         .HasComment("备注");
 
                     b.Property<string>("Super_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("super_id")
+                        .HasColumnName("Super_Id")
                         .HasComment("上级");
 
                     b.Property<string>("Tenant_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("tenant_id")
+                        .HasColumnName("Tenant_Id")
                         .HasComment("租户ID");
 
                     b.Property<string>("TreeCode")
                         .HasMaxLength(200)
                         .IsUnicode(true)
                         .HasColumnType("varchar(200)")
-                        .HasColumnName("treecode")
+                        .HasColumnName("TreeCode")
                         .HasComment("树状码");
 
                     b.Property<bool>("isdeleted")
@@ -227,7 +227,7 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_Dept_isdeleted");
 
-                    b.ToTable("basis_dept", null, t =>
+                    b.ToTable("Basis_Dept", null, t =>
                         {
                             t.HasComment("部门");
                         });
@@ -239,7 +239,7 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasComment("");
 
                     b.Property<string>("Dept_Id")
@@ -247,12 +247,12 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("dept_id")
+                        .HasColumnName("Dept_Id")
                         .HasComment("部门");
 
                     b.Property<bool>("IsManager")
                         .HasColumnType("tinyint(1)")
-                        .HasColumnName("ismanager")
+                        .HasColumnName("IsManager")
                         .HasComment("是否管理");
 
                     b.Property<string>("User_Id")
@@ -260,7 +260,7 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("user_id")
+                        .HasColumnName("User_Id")
                         .HasComment("用户");
 
                     b.HasKey("Id");
@@ -274,7 +274,7 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("User_Id")
                         .HasDatabaseName("Index_DeptMember_User_Id");
 
-                    b.ToTable("basis_deptmember", null, t =>
+                    b.ToTable("Basis_DeptMember", null, t =>
                         {
                             t.HasComment("部门成员");
                         });
@@ -286,72 +286,72 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasComment("主键");
 
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("createtime")
+                        .HasColumnName("CreateTime")
                         .HasComment("创建时间");
 
                     b.Property<string>("Create_User_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("create_user_id")
+                        .HasColumnName("Create_User_Id")
                         .HasComment("创建人");
 
                     b.Property<int>("Enabled")
                         .HasColumnType("int")
-                        .HasColumnName("enabled")
+                        .HasColumnName("Enabled")
                         .HasComment("启用状态");
 
                     b.Property<int?>("IntKey")
                         .IsRequired()
                         .HasColumnType("int")
-                        .HasColumnName("intkey")
+                        .HasColumnName("IntKey")
                         .HasComment("字典数字值");
 
                     b.Property<bool>("IsSystemEnum")
                         .HasColumnType("tinyint(1)")
-                        .HasColumnName("issystemenum")
+                        .HasColumnName("IsSystemEnum")
                         .HasComment("是否系统枚举");
 
                     b.Property<int?>("KeyEnum")
                         .IsRequired()
                         .HasColumnType("int")
-                        .HasColumnName("keyenum")
+                        .HasColumnName("KeyEnum")
                         .HasComment("字典类别");
 
                     b.Property<DateTime>("ModifyTime")
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("modifytime")
+                        .HasColumnName("ModifyTime")
                         .HasComment("修改时间");
 
                     b.Property<string>("Modify_User_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("modify_user_id")
+                        .HasColumnName("Modify_User_Id")
                         .HasComment("修改人");
 
                     b.Property<int>("SortVal")
                         .HasColumnType("int")
-                        .HasColumnName("sortval")
+                        .HasColumnName("SortVal")
                         .HasComment("排序");
 
                     b.Property<string>("Super_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("super_id")
+                        .HasColumnName("Super_Id")
                         .HasComment("上级");
 
                     b.Property<string>("Tenant_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("tenant_id")
+                        .HasColumnName("Tenant_Id")
                         .HasComment("租户ID");
 
                     b.Property<string>("TextValue")
@@ -359,14 +359,14 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(150)
                         .IsUnicode(true)
                         .HasColumnType("varchar(150)")
-                        .HasColumnName("textvalue")
+                        .HasColumnName("TextValue")
                         .HasComment("字典文本值");
 
                     b.Property<string>("TreeCode")
                         .HasMaxLength(200)
                         .IsUnicode(true)
                         .HasColumnType("varchar(200)")
-                        .HasColumnName("treecode")
+                        .HasColumnName("TreeCode")
                         .HasComment("树状码");
 
                     b.Property<bool>("isdeleted")
@@ -392,7 +392,7 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_EnumItem_isdeleted");
 
-                    b.ToTable("basis_enumitem", null, t =>
+                    b.ToTable("Basis_EnumItem", null, t =>
                         {
                             t.HasComment("数字字典");
                         });
@@ -404,60 +404,60 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasComment("");
 
                     b.Property<DateTime?>("ExpiredTime")
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("expiredtime")
+                        .HasColumnName("ExpiredTime")
                         .HasComment("过期时间");
 
                     b.Property<string>("FailReason")
                         .HasMaxLength(500)
                         .IsUnicode(true)
                         .HasColumnType("varchar(500)")
-                        .HasColumnName("failreason")
+                        .HasColumnName("FailReason")
                         .HasComment("失败原因");
 
                     b.Property<string>("IPAddress")
                         .HasMaxLength(200)
                         .IsUnicode(true)
                         .HasColumnType("varchar(200)")
-                        .HasColumnName("ipaddress")
+                        .HasColumnName("IPAddress")
                         .HasComment("IP");
 
                     b.Property<bool>("IsEnabled")
                         .HasColumnType("tinyint(1)")
-                        .HasColumnName("isenabled")
+                        .HasColumnName("IsEnabled")
                         .HasComment("是否有效");
 
                     b.Property<bool>("IsSuccessful")
                         .HasColumnType("tinyint(1)")
-                        .HasColumnName("issuccessful")
+                        .HasColumnName("IsSuccessful")
                         .HasComment("登陆成功");
 
                     b.Property<DateTime?>("LastTime")
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("lasttime")
+                        .HasColumnName("LastTime")
                         .HasComment("最后刷新时间");
 
                     b.Property<DateTime>("LoginTime")
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("logintime")
+                        .HasColumnName("LoginTime")
                         .HasComment("登陆时间");
 
                     b.Property<string>("Tenant_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("tenant_id")
+                        .HasColumnName("Tenant_Id")
                         .HasComment("");
 
                     b.Property<string>("User_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("user_id")
+                        .HasColumnName("User_Id")
                         .HasComment("关联：User");
 
                     b.HasKey("Id");
@@ -474,7 +474,7 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("User_Id")
                         .HasDatabaseName("Index_LoginLog_User_Id");
 
-                    b.ToTable("basis_loginlog", null, t =>
+                    b.ToTable("Basis_LoginLog", null, t =>
                         {
                             t.HasComment("登陆Log");
                         });
@@ -486,36 +486,36 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasComment("主键");
 
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("createtime")
+                        .HasColumnName("CreateTime")
                         .HasComment("创建时间");
 
                     b.Property<string>("Create_User_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("create_user_id")
+                        .HasColumnName("Create_User_Id")
                         .HasComment("创建人");
 
                     b.Property<bool>("IsFolder")
                         .HasColumnType("tinyint(1)")
-                        .HasColumnName("isfolder")
+                        .HasColumnName("IsFolder")
                         .HasComment("是否文件夹");
 
                     b.Property<DateTime>("ModifyTime")
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("modifytime")
+                        .HasColumnName("ModifyTime")
                         .HasComment("修改时间");
 
                     b.Property<string>("Modify_User_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("modify_user_id")
+                        .HasColumnName("Modify_User_Id")
                         .HasComment("修改人");
 
                     b.Property<string>("Name")
@@ -523,35 +523,35 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(50)
                         .IsUnicode(true)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("name")
+                        .HasColumnName("Name")
                         .HasComment("名称");
 
                     b.Property<string>("Resource_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("resource_id")
+                        .HasColumnName("Resource_Id")
                         .HasComment("资源");
 
                     b.Property<string>("Super_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("super_id")
+                        .HasColumnName("Super_Id")
                         .HasComment("上级");
 
                     b.Property<string>("Tenant_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("tenant_id")
+                        .HasColumnName("Tenant_Id")
                         .HasComment("租户ID");
 
                     b.Property<string>("TreeCode")
                         .HasMaxLength(200)
                         .IsUnicode(true)
                         .HasColumnType("varchar(200)")
-                        .HasColumnName("treecode")
+                        .HasColumnName("TreeCode")
                         .HasComment("树状码");
 
                     b.Property<bool>("isdeleted")
@@ -580,7 +580,7 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_Meidia_isdeleted");
 
-                    b.ToTable("basis_meidia", null, t =>
+                    b.ToTable("Basis_Meidia", null, t =>
                         {
                             t.HasComment("图片库");
                         });
@@ -592,59 +592,59 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasComment("主键");
 
                     b.Property<string>("Content")
                         .IsRequired()
                         .IsUnicode(true)
                         .HasColumnType("longtext")
-                        .HasColumnName("content")
+                        .HasColumnName("Content")
                         .HasComment("内容");
 
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("createtime")
+                        .HasColumnName("CreateTime")
                         .HasComment("创建时间");
 
                     b.Property<string>("Create_User_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("create_user_id")
+                        .HasColumnName("Create_User_Id")
                         .HasComment("创建人");
 
                     b.Property<DateTime>("ModifyTime")
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("modifytime")
+                        .HasColumnName("ModifyTime")
                         .HasComment("修改时间");
 
                     b.Property<string>("Modify_User_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("modify_user_id")
+                        .HasColumnName("Modify_User_Id")
                         .HasComment("修改人");
 
                     b.Property<string>("Publush_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("publush_id")
+                        .HasColumnName("Publush_Id")
                         .HasComment("发布人");
 
                     b.Property<string>("Resource_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("resource_id")
+                        .HasColumnName("Resource_Id")
                         .HasComment("附件");
 
                     b.Property<string>("Tenant_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("tenant_id")
+                        .HasColumnName("Tenant_Id")
                         .HasComment("租户ID");
 
                     b.Property<string>("Title")
@@ -652,12 +652,12 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(50)
                         .IsUnicode(true)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("title")
+                        .HasColumnName("Title")
                         .HasComment("标题");
 
                     b.Property<int?>("Type_Id")
                         .HasColumnType("int")
-                        .HasColumnName("type_id")
+                        .HasColumnName("Type_Id")
                         .HasComment("类型");
 
                     b.Property<bool>("isdeleted")
@@ -686,7 +686,7 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_Notify_isdeleted");
 
-                    b.ToTable("basis_notify", null, t =>
+                    b.ToTable("Basis_Notify", null, t =>
                         {
                             t.HasComment("通知");
                         });
@@ -698,7 +698,7 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasComment("主键");
 
                     b.Property<string>("BeModule")
@@ -706,81 +706,81 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(100)
                         .IsUnicode(true)
                         .HasColumnType("varchar(100)")
-                        .HasColumnName("bemodule")
+                        .HasColumnName("BeModule")
                         .HasComment("模块名称");
 
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("createtime")
+                        .HasColumnName("CreateTime")
                         .HasComment("创建时间");
 
                     b.Property<string>("Create_User_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("create_user_id")
+                        .HasColumnName("Create_User_Id")
                         .HasComment("创建人");
 
                     b.Property<string>("DateField")
                         .HasMaxLength(50)
                         .IsUnicode(true)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("datefield")
+                        .HasColumnName("DateField")
                         .HasComment("取日期字段");
 
                     b.Property<string>("DateFieldText")
                         .HasMaxLength(50)
                         .IsUnicode(true)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("datefieldtext")
+                        .HasColumnName("DateFieldText")
                         .HasComment("日期字段名称");
 
                     b.Property<int?>("FmtDate")
                         .HasColumnType("int")
-                        .HasColumnName("fmtdate")
+                        .HasColumnName("FmtDate")
                         .HasComment("日期格式方法");
 
                     b.Property<DateTime>("ModifyTime")
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("modifytime")
+                        .HasColumnName("ModifyTime")
                         .HasComment("修改时间");
 
                     b.Property<string>("Modify_User_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("modify_user_id")
+                        .HasColumnName("Modify_User_Id")
                         .HasComment("修改人");
 
                     b.Property<string>("Prefix")
                         .HasMaxLength(10)
                         .IsUnicode(true)
                         .HasColumnType("varchar(10)")
-                        .HasColumnName("prefix")
+                        .HasColumnName("Prefix")
                         .HasComment("前缀");
 
                     b.Property<int>("SerialLength")
                         .HasColumnType("int")
-                        .HasColumnName("seriallength")
+                        .HasColumnName("SerialLength")
                         .HasComment("流水号长度");
 
                     b.Property<string>("Suffix")
                         .HasMaxLength(10)
                         .IsUnicode(true)
                         .HasColumnType("varchar(10)")
-                        .HasColumnName("suffix")
+                        .HasColumnName("Suffix")
                         .HasComment("后缀");
 
                     b.Property<bool>("TaskDate")
                         .HasColumnType("tinyint(1)")
-                        .HasColumnName("taskdate")
+                        .HasColumnName("TaskDate")
                         .HasComment("是否取日期");
 
                     b.Property<string>("Tenant_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("tenant_id")
+                        .HasColumnName("Tenant_Id")
                         .HasComment("租户ID");
 
                     b.Property<bool>("isdeleted")
@@ -803,7 +803,7 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_NumberOption_isdeleted");
 
-                    b.ToTable("basis_numberoption", null, t =>
+                    b.ToTable("Basis_NumberOption", null, t =>
                         {
                             t.HasComment("编号设置");
                         });
@@ -815,46 +815,46 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasComment("");
 
                     b.Property<string>("BeModule")
                         .HasMaxLength(50)
                         .IsUnicode(true)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("bemodule")
+                        .HasColumnName("BeModule")
                         .HasComment("模块名称");
 
                     b.Property<int>("Day")
                         .HasColumnType("int")
-                        .HasColumnName("day")
+                        .HasColumnName("Day")
                         .HasComment("日");
 
                     b.Property<int>("Month")
                         .HasColumnType("int")
-                        .HasColumnName("month")
+                        .HasColumnName("Month")
                         .HasComment("月");
 
                     b.Property<int>("PrevSerial")
                         .HasColumnType("int")
-                        .HasColumnName("prevserial")
+                        .HasColumnName("PrevSerial")
                         .HasComment("上一期流水");
 
                     b.Property<int>("Serial")
                         .HasColumnType("int")
-                        .HasColumnName("serial")
+                        .HasColumnName("Serial")
                         .HasComment("流水");
 
                     b.Property<string>("Tenant_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("tenant_id")
+                        .HasColumnName("Tenant_Id")
                         .HasComment("");
 
                     b.Property<int>("Year")
                         .HasColumnType("int")
-                        .HasColumnName("year")
+                        .HasColumnName("Year")
                         .HasComment("年");
 
                     b.Property<bool>("isdeleted")
@@ -868,7 +868,7 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_NumberRecord_isdeleted");
 
-                    b.ToTable("basis_numberrecord", null, t =>
+                    b.ToTable("Basis_NumberRecord", null, t =>
                         {
                             t.HasComment("编号记录");
                         });
@@ -880,52 +880,52 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasComment("");
 
                     b.Property<string>("ContentType")
                         .HasMaxLength(150)
                         .IsUnicode(true)
                         .HasColumnType("varchar(150)")
-                        .HasColumnName("contenttype")
+                        .HasColumnName("ContentType")
                         .HasComment("资源标识");
 
                     b.Property<string>("MD5")
                         .HasMaxLength(200)
                         .IsUnicode(true)
                         .HasColumnType("varchar(200)")
-                        .HasColumnName("md5")
+                        .HasColumnName("MD5")
                         .HasComment("MD5摘要");
 
                     b.Property<string>("Name")
                         .HasMaxLength(150)
                         .IsUnicode(true)
                         .HasColumnType("varchar(150)")
-                        .HasColumnName("name")
+                        .HasColumnName("Name")
                         .HasComment("资源名称");
 
                     b.Property<string>("Path")
                         .HasMaxLength(150)
                         .IsUnicode(true)
                         .HasColumnType("varchar(150)")
-                        .HasColumnName("path")
+                        .HasColumnName("Path")
                         .HasComment("相对路径");
 
                     b.Property<long>("Size")
                         .HasColumnType("bigint")
-                        .HasColumnName("size")
+                        .HasColumnName("Size")
                         .HasComment("资源大小");
 
                     b.Property<DateTime>("UploadTime")
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("uploadtime")
+                        .HasColumnName("UploadTime")
                         .HasComment("上传时间");
 
                     b.Property<string>("Uploader_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("uploader_id")
+                        .HasColumnName("Uploader_Id")
                         .HasComment("上传人");
 
                     b.HasKey("Id");
@@ -933,7 +933,7 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("Uploader_Id")
                         .HasDatabaseName("Index_Resource_Uploader_Id");
 
-                    b.ToTable("basis_resource", null, t =>
+                    b.ToTable("Basis_Resource", null, t =>
                         {
                             t.HasComment("资源");
                         });
@@ -945,48 +945,48 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasComment("主键");
 
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("createtime")
+                        .HasColumnName("CreateTime")
                         .HasComment("创建时间");
 
                     b.Property<string>("Create_User_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("create_user_id")
+                        .HasColumnName("Create_User_Id")
                         .HasComment("创建人");
 
                     b.Property<string>("EnCode")
                         .HasMaxLength(50)
                         .IsUnicode(true)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("encode")
+                        .HasColumnName("EnCode")
                         .HasComment("编码");
 
                     b.Property<bool>("IsAdmin")
                         .HasColumnType("tinyint(1)")
-                        .HasColumnName("isadmin")
+                        .HasColumnName("IsAdmin")
                         .HasComment("管理员角色");
 
                     b.Property<bool>("IsDefault")
                         .HasColumnType("tinyint(1)")
-                        .HasColumnName("isdefault")
+                        .HasColumnName("IsDefault")
                         .HasComment("缺省角色");
 
                     b.Property<DateTime>("ModifyTime")
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("modifytime")
+                        .HasColumnName("ModifyTime")
                         .HasComment("修改时间");
 
                     b.Property<string>("Modify_User_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("modify_user_id")
+                        .HasColumnName("Modify_User_Id")
                         .HasComment("修改人");
 
                     b.Property<string>("Name")
@@ -994,35 +994,35 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(50)
                         .IsUnicode(true)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("name")
+                        .HasColumnName("Name")
                         .HasComment("名称");
 
                     b.Property<string>("Remarks")
                         .HasMaxLength(500)
                         .IsUnicode(true)
                         .HasColumnType("varchar(500)")
-                        .HasColumnName("remarks")
+                        .HasColumnName("Remarks")
                         .HasComment("备注");
 
                     b.Property<string>("Super_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("super_id")
+                        .HasColumnName("Super_Id")
                         .HasComment("上级角色");
 
                     b.Property<string>("Tenant_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("tenant_id")
+                        .HasColumnName("Tenant_Id")
                         .HasComment("租户ID");
 
                     b.Property<string>("TreeCode")
                         .HasMaxLength(200)
                         .IsUnicode(true)
                         .HasColumnType("varchar(200)")
-                        .HasColumnName("treecode")
+                        .HasColumnName("TreeCode")
                         .HasComment("树状码");
 
                     b.Property<bool>("isdeleted")
@@ -1051,7 +1051,7 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_Role_isdeleted");
 
-                    b.ToTable("basis_role", null, t =>
+                    b.ToTable("Basis_Role", null, t =>
                         {
                             t.HasComment("角色");
                         });
@@ -1063,21 +1063,21 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasComment("");
 
                     b.Property<string>("PermissionKey")
                         .HasMaxLength(100)
                         .IsUnicode(true)
                         .HasColumnType("varchar(100)")
-                        .HasColumnName("permissionkey")
+                        .HasColumnName("PermissionKey")
                         .HasComment("权限标记");
 
                     b.Property<string>("Role_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("role_id")
+                        .HasColumnName("Role_Id")
                         .HasComment("角色ID");
 
                     b.HasKey("Id");
@@ -1087,7 +1087,7 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("Role_Id")
                         .HasDatabaseName("Index_RolePermission_Role_Id");
 
-                    b.ToTable("basis_rolepermission", null, t =>
+                    b.ToTable("Basis_RolePermission", null, t =>
                         {
                             t.HasComment("角色权限");
                         });
@@ -1099,12 +1099,12 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasComment("");
 
                     b.HasKey("Id");
 
-                    b.ToTable("basis_setting", null, t =>
+                    b.ToTable("Basis_Setting", null, t =>
                         {
                             t.HasComment("系统设置");
                         });
@@ -1116,7 +1116,7 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasComment("");
 
                     b.Property<string>("Discriminator")
@@ -1128,21 +1128,21 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("fkey_id")
+                        .HasColumnName("FKey_Id")
                         .HasComment("外键");
 
                     b.Property<string>("KeyName")
                         .HasMaxLength(200)
                         .IsUnicode(true)
                         .HasColumnType("varchar(200)")
-                        .HasColumnName("keyname")
+                        .HasColumnName("KeyName")
                         .HasComment("键名");
 
                     b.Property<string>("Value_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("value_id")
+                        .HasColumnName("Value_Id")
                         .HasComment("键值");
 
                     b.HasKey("Id");
@@ -1156,7 +1156,7 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("Value_Id")
                         .HasDatabaseName("Index_TableMap_Value_Id");
 
-                    b.ToTable("basis_tablemap", null, t =>
+                    b.ToTable("Basis_TableMap", null, t =>
                         {
                             t.HasComment("表映射");
                         });
@@ -1172,7 +1172,7 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasComment("主键");
 
                     b.Property<string>("FullName")
@@ -1180,14 +1180,14 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(50)
                         .IsUnicode(true)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("fullname")
+                        .HasColumnName("FullName")
                         .HasComment("全称");
 
                     b.Property<string>("HandIcon_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("handicon_id")
+                        .HasColumnName("HandIcon_Id")
                         .HasComment("Logo头像");
 
                     b.Property<string>("ShortName")
@@ -1195,35 +1195,35 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(50)
                         .IsUnicode(true)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("shortname")
+                        .HasColumnName("ShortName")
                         .HasComment("简称");
 
                     b.Property<string>("Super_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("super_id")
+                        .HasColumnName("Super_Id")
                         .HasComment("上级");
 
                     b.Property<string>("Tenant_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("tenant_id")
+                        .HasColumnName("Tenant_Id")
                         .HasComment("租户标记");
 
                     b.Property<string>("TreeCode")
                         .HasMaxLength(200)
                         .IsUnicode(true)
                         .HasColumnType("varchar(200)")
-                        .HasColumnName("treecode")
+                        .HasColumnName("TreeCode")
                         .HasComment("树状码");
 
                     b.Property<string>("UrlMark")
                         .HasMaxLength(50)
                         .IsUnicode(true)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("urlmark")
+                        .HasColumnName("UrlMark")
                         .HasComment("URL标识");
 
                     b.Property<bool>("isdeleted")
@@ -1243,7 +1243,7 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_Tenant_isdeleted");
 
-                    b.ToTable("basis_tenant", null, t =>
+                    b.ToTable("Basis_Tenant", null, t =>
                         {
                             t.HasComment("多租户信息");
                         });
@@ -1265,7 +1265,7 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasComment("主键");
 
                     b.Property<string>("Host")
@@ -1273,7 +1273,7 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(200)
                         .IsUnicode(true)
                         .HasColumnType("varchar(200)")
-                        .HasColumnName("host")
+                        .HasColumnName("Host")
                         .HasComment("域名");
 
                     b.Property<string>("Tenant_Id")
@@ -1281,7 +1281,7 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("tenant_id")
+                        .HasColumnName("Tenant_Id")
                         .HasComment("租户");
 
                     b.HasKey("Id");
@@ -1289,7 +1289,7 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("Tenant_Id")
                         .HasDatabaseName("Index_TenantHost_Tenant_Id");
 
-                    b.ToTable("basis_tenanthost", null, t =>
+                    b.ToTable("Basis_TenantHost", null, t =>
                         {
                             t.HasComment("");
                         });
@@ -1301,7 +1301,7 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasComment("主键");
 
                     b.Property<string>("Account")
@@ -1309,31 +1309,31 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(50)
                         .IsUnicode(true)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("account")
+                        .HasColumnName("Account")
                         .HasComment("帐号");
 
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("createtime")
+                        .HasColumnName("CreateTime")
                         .HasComment("创建时间");
 
                     b.Property<string>("Create_User_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("create_user_id")
+                        .HasColumnName("Create_User_Id")
                         .HasComment("创建人");
 
                     b.Property<string>("Email")
                         .HasMaxLength(50)
                         .IsUnicode(true)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("email")
+                        .HasColumnName("Email")
                         .HasComment("邮箱");
 
                     b.Property<int>("Enable")
                         .HasColumnType("int")
-                        .HasColumnName("enable")
+                        .HasColumnName("Enable")
                         .HasComment("启用状态");
 
                     b.Property<string>("EncryptionKey")
@@ -1341,31 +1341,31 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(36)
                         .IsUnicode(true)
                         .HasColumnType("varchar(36)")
-                        .HasColumnName("encryptionkey")
+                        .HasColumnName("EncryptionKey")
                         .HasComment("密钥");
 
                     b.Property<string>("HandIcon_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("handicon_id")
+                        .HasColumnName("HandIcon_Id")
                         .HasComment("头像");
 
                     b.Property<bool>("IsAdmin")
                         .HasColumnType("tinyint(1)")
-                        .HasColumnName("isadmin")
+                        .HasColumnName("IsAdmin")
                         .HasComment("是否管理员");
 
                     b.Property<DateTime>("ModifyTime")
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("modifytime")
+                        .HasColumnName("ModifyTime")
                         .HasComment("修改时间");
 
                     b.Property<string>("Modify_User_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("modify_user_id")
+                        .HasColumnName("Modify_User_Id")
                         .HasComment("修改人");
 
                     b.Property<string>("Name")
@@ -1373,7 +1373,7 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(50)
                         .IsUnicode(true)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("name")
+                        .HasColumnName("Name")
                         .HasComment("姓名");
 
                     b.Property<string>("Password")
@@ -1381,21 +1381,21 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(50)
                         .IsUnicode(true)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("password")
+                        .HasColumnName("Password")
                         .HasComment("密码");
 
                     b.Property<string>("PhoneNumber")
                         .HasMaxLength(20)
                         .IsUnicode(true)
                         .HasColumnType("varchar(20)")
-                        .HasColumnName("phonenumber")
+                        .HasColumnName("PhoneNumber")
                         .HasComment("手机号码");
 
                     b.Property<string>("Tenant_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("tenant_id")
+                        .HasColumnName("Tenant_Id")
                         .HasComment("租户ID");
 
                     b.Property<bool>("isdeleted")
@@ -1421,7 +1421,7 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_User_isdeleted");
 
-                    b.ToTable("basis_user", null, t =>
+                    b.ToTable("Basis_User", null, t =>
                         {
                             t.HasComment("用户");
                         });
@@ -1432,13 +1432,13 @@ namespace FastFrame.Database.Migrations
                             Id = "00fm5yfgq3q893ylku6uzb57i",
                             Account = "admin",
                             CreateTime = new DateTime(2019, 6, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreateUserId = "00fm5yfgq3q893ylku6uzb57i",
+                            Create_User_Id = "00fm5yfgq3q893ylku6uzb57i",
                             Email = "gongjie@qq.com",
                             Enable = 0,
                             EncryptionKey = "7d9d7edd6727912ce10b976818dd2856",
                             IsAdmin = true,
                             ModifyTime = new DateTime(2019, 6, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifyUserId = "00fm5yfgq3q893ylku6uzb57i",
+                            Modify_User_Id = "00fm5yfgq3q893ylku6uzb57i",
                             Name = "管理员",
                             Password = "9557847e0632e2f167a143b7ab3d668a",
                             PhoneNumber = "18675517757",
@@ -1452,21 +1452,21 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasComment("主键");
 
                     b.Property<string>("FromUser_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("fromuser_id")
+                        .HasColumnName("FromUser_Id")
                         .HasComment("发件人");
 
                     b.Property<string>("Replay_Email_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("replay_email_id")
+                        .HasColumnName("Replay_Email_Id")
                         .HasComment("回复自");
 
                     b.Property<string>("Title")
@@ -1474,7 +1474,7 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(50)
                         .IsUnicode(true)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("title")
+                        .HasColumnName("Title")
                         .HasComment("标题");
 
                     b.HasKey("Id");
@@ -1485,7 +1485,7 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("Replay_Email_Id")
                         .HasDatabaseName("Index_Email_Replay_Email_Id");
 
-                    b.ToTable("chat_email", null, t =>
+                    b.ToTable("Chat_Email", null, t =>
                         {
                             t.HasComment("邮件");
                         });
@@ -1497,21 +1497,21 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasComment("主键");
 
                     b.Property<string>("Email_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("email_id")
+                        .HasColumnName("Email_Id")
                         .HasComment("邮件ID");
 
                     b.Property<string>("Resource_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("resource_id")
+                        .HasColumnName("Resource_Id")
                         .HasComment("文件ID");
 
                     b.HasKey("Id");
@@ -1522,7 +1522,7 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("Resource_Id")
                         .HasDatabaseName("Index_EmailAnnex_Resource_Id");
 
-                    b.ToTable("chat_emailannex", null, t =>
+                    b.ToTable("Chat_EmailAnnex", null, t =>
                         {
                             t.HasComment("邮件附件");
                         });
@@ -1534,20 +1534,20 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasComment("主键");
 
                     b.Property<string>("Content")
                         .IsUnicode(true)
                         .HasColumnType("longtext")
-                        .HasColumnName("content")
+                        .HasColumnName("Content")
                         .HasComment("内容");
 
                     b.Property<string>("Email_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("email_id")
+                        .HasColumnName("Email_Id")
                         .HasComment("邮件ID");
 
                     b.HasKey("Id");
@@ -1555,7 +1555,7 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("Email_Id")
                         .HasDatabaseName("Index_EmailContent_Email_Id");
 
-                    b.ToTable("chat_emailcontent", null, t =>
+                    b.ToTable("Chat_EmailContent", null, t =>
                         {
                             t.HasComment("邮件正文");
                         });
@@ -1567,33 +1567,33 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasComment("主键");
 
                     b.Property<string>("Category")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("category")
+                        .HasColumnName("Category")
                         .HasComment("类型");
 
                     b.Property<string>("Email_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("email_id")
+                        .HasColumnName("Email_Id")
                         .HasComment("邮件ID");
 
                     b.Property<bool>("HaveRead")
                         .HasColumnType("tinyint(1)")
-                        .HasColumnName("haveread")
+                        .HasColumnName("HaveRead")
                         .HasComment("已读");
 
                     b.Property<string>("To_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("to_id")
+                        .HasColumnName("To_Id")
                         .HasComment("接收人");
 
                     b.HasKey("Id");
@@ -1610,7 +1610,7 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("To_Id")
                         .HasDatabaseName("Index_EmailTarget_To_Id");
 
-                    b.ToTable("chat_emailtarget", null, t =>
+                    b.ToTable("Chat_EmailTarget", null, t =>
                         {
                             t.HasComment("邮件收件人");
                         });
@@ -1622,47 +1622,47 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasComment("主键");
 
                     b.Property<string>("Category")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("category")
+                        .HasColumnName("Category")
                         .HasComment("消息类型");
 
                     b.Property<string>("Content")
                         .HasMaxLength(500)
                         .IsUnicode(true)
                         .HasColumnType("varchar(500)")
-                        .HasColumnName("content")
+                        .HasColumnName("Content")
                         .HasComment("内容");
 
                     b.Property<string>("From_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("from_id")
+                        .HasColumnName("From_Id")
                         .HasComment("发送人");
 
                     b.Property<DateTime>("MessageTime")
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("messagetime")
+                        .HasColumnName("MessageTime")
                         .HasComment("消息时间");
 
                     b.Property<string>("Resource_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("resource_id")
+                        .HasColumnName("Resource_Id")
                         .HasComment("图片?附件ID");
 
                     b.Property<string>("Tenant_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("tenant_id")
+                        .HasColumnName("Tenant_Id")
                         .HasComment("");
 
                     b.HasKey("Id");
@@ -1679,7 +1679,7 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("Tenant_Id")
                         .HasDatabaseName("Index_FriendMessage_Tenant_Id");
 
-                    b.ToTable("chat_friendmessage", null, t =>
+                    b.ToTable("Chat_FriendMessage", null, t =>
                         {
                             t.HasComment("好友消息");
                         });
@@ -1691,66 +1691,66 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasComment("主键");
 
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("createtime")
+                        .HasColumnName("CreateTime")
                         .HasComment("创建时间");
 
                     b.Property<string>("Create_User_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("create_user_id")
+                        .HasColumnName("Create_User_Id")
                         .HasComment("创建人");
 
                     b.Property<string>("HandIcon_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("handicon_id")
+                        .HasColumnName("HandIcon_Id")
                         .HasComment("图标");
 
                     b.Property<string>("LordUser_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("lorduser_id")
+                        .HasColumnName("LordUser_Id")
                         .HasComment("群主");
 
                     b.Property<DateTime>("ModifyTime")
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("modifytime")
+                        .HasColumnName("ModifyTime")
                         .HasComment("修改时间");
 
                     b.Property<string>("Modify_User_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("modify_user_id")
+                        .HasColumnName("Modify_User_Id")
                         .HasComment("修改人");
 
                     b.Property<string>("Name")
                         .HasMaxLength(50)
                         .IsUnicode(true)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("name")
+                        .HasColumnName("Name")
                         .HasComment("群组名称");
 
                     b.Property<string>("Summary")
                         .HasMaxLength(200)
                         .IsUnicode(true)
                         .HasColumnType("varchar(200)")
-                        .HasColumnName("summary")
+                        .HasColumnName("Summary")
                         .HasComment("简介");
 
                     b.Property<string>("Tenant_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("tenant_id")
+                        .HasColumnName("Tenant_Id")
                         .HasComment("租户ID");
 
                     b.Property<bool>("isdeleted")
@@ -1776,7 +1776,7 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_Group_isdeleted");
 
-                    b.ToTable("chat_group", null, t =>
+                    b.ToTable("Chat_Group", null, t =>
                         {
                             t.HasComment("群组");
                         });
@@ -1788,21 +1788,21 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasComment("主键");
 
                     b.Property<string>("Group_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("group_id")
+                        .HasColumnName("Group_Id")
                         .HasComment("群组");
 
                     b.Property<string>("User_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("user_id")
+                        .HasColumnName("User_Id")
                         .HasComment("管理员");
 
                     b.HasKey("Id");
@@ -1813,7 +1813,7 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("User_Id")
                         .HasDatabaseName("Index_GroupManager_User_Id");
 
-                    b.ToTable("chat_groupmanager", null, t =>
+                    b.ToTable("Chat_GroupManager", null, t =>
                         {
                             t.HasComment("群组管理员");
                         });
@@ -1825,54 +1825,54 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasComment("主键");
 
                     b.Property<string>("Category")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("category")
+                        .HasColumnName("Category")
                         .HasComment("消息类型");
 
                     b.Property<string>("Content")
                         .HasMaxLength(500)
                         .IsUnicode(true)
                         .HasColumnType("varchar(500)")
-                        .HasColumnName("content")
+                        .HasColumnName("Content")
                         .HasComment("内容");
 
                     b.Property<string>("From_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("from_id")
+                        .HasColumnName("From_Id")
                         .HasComment("发送人");
 
                     b.Property<string>("Group_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("group_id")
+                        .HasColumnName("Group_Id")
                         .HasComment("群组ID");
 
                     b.Property<DateTime>("MessageTime")
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("messagetime")
+                        .HasColumnName("MessageTime")
                         .HasComment("消息时间");
 
                     b.Property<string>("Resource_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("resource_id")
+                        .HasColumnName("Resource_Id")
                         .HasComment("图片?附件ID");
 
                     b.Property<string>("Tenant_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("tenant_id")
+                        .HasColumnName("Tenant_Id")
                         .HasComment("");
 
                     b.HasKey("Id");
@@ -1892,7 +1892,7 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("Tenant_Id")
                         .HasDatabaseName("Index_GroupMessage_Tenant_Id");
 
-                    b.ToTable("chat_groupmessage", null, t =>
+                    b.ToTable("Chat_GroupMessage", null, t =>
                         {
                             t.HasComment("群组消息");
                         });
@@ -1904,26 +1904,26 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasComment("主键");
 
                     b.Property<bool>("HaveRead")
                         .HasColumnType("tinyint(1)")
-                        .HasColumnName("haveread")
+                        .HasColumnName("HaveRead")
                         .HasComment("已读");
 
                     b.Property<string>("Message_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("message_id")
+                        .HasColumnName("Message_Id")
                         .HasComment("消息ID");
 
                     b.Property<string>("To_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("to_id")
+                        .HasColumnName("To_Id")
                         .HasComment("接收人");
 
                     b.HasKey("Id");
@@ -1937,7 +1937,7 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("To_Id")
                         .HasDatabaseName("Index_MessageTarget_To_Id");
 
-                    b.ToTable("chat_messagetarget", null, t =>
+                    b.ToTable("Chat_MessageTarget", null, t =>
                         {
                             t.HasComment("消息接收人");
                         });
@@ -1949,7 +1949,7 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasComment("");
 
                     b.Property<string>("BeModuleName")
@@ -1957,28 +1957,28 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(50)
                         .IsUnicode(true)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("bemodulename")
+                        .HasColumnName("BeModuleName")
                         .HasComment("归属模块");
 
                     b.Property<string>("BeModuleText")
                         .HasMaxLength(50)
                         .IsUnicode(true)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("bemoduletext")
+                        .HasColumnName("BeModuleText")
                         .HasComment("单据名称");
 
                     b.Property<string>("BillDes")
                         .HasMaxLength(500)
                         .IsUnicode(true)
                         .HasColumnType("varchar(500)")
-                        .HasColumnName("billdes")
+                        .HasColumnName("BillDes")
                         .HasComment("单据摘要");
 
                     b.Property<string>("BillNumber")
                         .HasMaxLength(50)
                         .IsUnicode(true)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("billnumber")
+                        .HasColumnName("BillNumber")
                         .HasComment("单据编号");
 
                     b.Property<string>("Bill_Id")
@@ -1986,74 +1986,74 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("bill_id")
+                        .HasColumnName("Bill_Id")
                         .HasComment("单据ID");
 
                     b.Property<DateTime?>("CompleteTime")
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("completetime")
+                        .HasColumnName("CompleteTime")
                         .HasComment("完结时间");
 
                     b.Property<string>("CurrNodeName")
                         .HasMaxLength(200)
                         .IsUnicode(true)
                         .HasColumnType("varchar(200)")
-                        .HasColumnName("currnodename")
+                        .HasColumnName("CurrNodeName")
                         .HasComment("当前节点");
 
                     b.Property<string>("CurrNode_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("currnode_id")
+                        .HasColumnName("CurrNode_Id")
                         .HasComment("");
 
                     b.Property<bool>("IsComlete")
                         .HasColumnType("tinyint(1)")
-                        .HasColumnName("iscomlete")
+                        .HasColumnName("IsComlete")
                         .HasComment("是否已完结");
 
                     b.Property<DateTime?>("LastCheckTime")
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("lastchecktime")
+                        .HasColumnName("LastCheckTime")
                         .HasComment("最后审批时间");
 
                     b.Property<string>("LastCheckerName")
                         .HasMaxLength(200)
                         .IsUnicode(true)
                         .HasColumnType("varchar(200)")
-                        .HasColumnName("lastcheckername")
+                        .HasColumnName("LastCheckerName")
                         .HasComment("最后审批人");
 
                     b.Property<string>("LastChecker_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("lastchecker_id")
+                        .HasColumnName("LastChecker_Id")
                         .HasComment("");
 
                     b.Property<string>("SponsorName")
                         .HasMaxLength(200)
                         .IsUnicode(true)
                         .HasColumnType("varchar(200)")
-                        .HasColumnName("sponsorname")
+                        .HasColumnName("SponsorName")
                         .HasComment("流程发起人");
 
                     b.Property<string>("Sponsor_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("sponsor_id")
+                        .HasColumnName("Sponsor_Id")
                         .HasComment("");
 
                     b.Property<DateTime?>("StartTime")
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("starttime")
+                        .HasColumnName("StartTime")
                         .HasComment("发起时间");
 
                     b.Property<int>("Status")
                         .HasColumnType("int")
-                        .HasColumnName("status")
+                        .HasColumnName("Status")
                         .HasComment("流程状态");
 
                     b.Property<string>("WorkFlow_Id")
@@ -2061,7 +2061,7 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("workflow_id")
+                        .HasColumnName("WorkFlow_Id")
                         .HasComment("关联流程");
 
                     b.Property<bool>("isdeleted")
@@ -2090,7 +2090,7 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_FlowInstance_isdeleted");
 
-                    b.ToTable("flow_flowinstance", null, t =>
+                    b.ToTable("Flow_FlowInstance", null, t =>
                         {
                             t.HasComment("流程实例");
                         });
@@ -2102,21 +2102,21 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasComment("");
 
                     b.Property<string>("Checker_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("checker_id")
+                        .HasColumnName("Checker_Id")
                         .HasComment("关联:User");
 
                     b.Property<string>("FlowStep_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("flowstep_id")
+                        .HasColumnName("FlowStep_Id")
                         .HasComment("关联:FlowStep");
 
                     b.HasKey("Id");
@@ -2127,7 +2127,7 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("FlowStep_Id")
                         .HasDatabaseName("Index_FlowNextChecker_FlowStep_Id");
 
-                    b.ToTable("flow_flownextchecker", null, t =>
+                    b.ToTable("Flow_FlowNextChecker", null, t =>
                         {
                             t.HasComment("审批时指定的下一步审核人");
                         });
@@ -2139,60 +2139,60 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasComment("");
 
                     b.Property<int?>("CheckEnum")
                         .HasColumnType("int")
-                        .HasColumnName("checkenum")
+                        .HasColumnName("CheckEnum")
                         .HasComment("审批方式(多人时)");
 
                     b.Property<bool?>("IsDefault")
                         .HasColumnType("tinyint(1)")
-                        .HasColumnName("isdefault")
+                        .HasColumnName("IsDefault")
                         .HasComment("缺省分支(为分支时)");
 
                     b.Property<int>("NodeEnum")
                         .HasColumnType("int")
-                        .HasColumnName("nodeenum")
+                        .HasColumnName("NodeEnum")
                         .HasComment("节点类型");
 
                     b.Property<int>("OrderVal")
                         .HasColumnType("int")
-                        .HasColumnName("orderval")
+                        .HasColumnName("OrderVal")
                         .HasComment("排序");
 
                     b.Property<string>("Super_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("super_id")
+                        .HasColumnName("Super_Id")
                         .HasComment("上级");
 
                     b.Property<string>("Title")
                         .HasMaxLength(200)
                         .IsUnicode(true)
                         .HasColumnType("varchar(200)")
-                        .HasColumnName("title")
+                        .HasColumnName("Title")
                         .HasComment("标题");
 
                     b.Property<decimal?>("VoteScale")
                         .HasPrecision(10, 2)
                         .HasColumnType("decimal(10,2)")
-                        .HasColumnName("votescale")
+                        .HasColumnName("VoteScale")
                         .HasComment("通过比例(多人审批且审批方式为投票时)");
 
                     b.Property<decimal?>("Weight")
                         .HasPrecision(10, 2)
                         .HasColumnType("decimal(10,2)")
-                        .HasColumnName("weight")
+                        .HasColumnName("Weight")
                         .HasComment("条件权重(为分支时)");
 
                     b.Property<string>("WorkFlow_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("workflow_id")
+                        .HasColumnName("WorkFlow_Id")
                         .HasComment("关联:WorkFlow");
 
                     b.Property<bool>("isdeleted")
@@ -2212,7 +2212,7 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_FlowNode_isdeleted");
 
-                    b.ToTable("flow_flownode", null, t =>
+                    b.ToTable("Flow_FlowNode", null, t =>
                         {
                             t.HasComment("流程节点");
                         });
@@ -2224,40 +2224,40 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasComment("");
 
                     b.Property<int>("CheckerEnum")
                         .HasColumnType("int")
-                        .HasColumnName("checkerenum")
+                        .HasColumnName("CheckerEnum")
                         .HasComment("审核人类型");
 
                     b.Property<string>("CheckerName")
                         .HasMaxLength(200)
                         .IsUnicode(true)
                         .HasColumnType("varchar(200)")
-                        .HasColumnName("checkername")
+                        .HasColumnName("CheckerName")
                         .HasComment("审核人名称");
 
                     b.Property<string>("Checker_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("checker_id")
+                        .HasColumnName("Checker_Id")
                         .HasComment("审核人");
 
                     b.Property<string>("FlowNode_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("flownode_id")
+                        .HasColumnName("FlowNode_Id")
                         .HasComment("关联:FlowNode");
 
                     b.Property<string>("WorkFlow_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("workflow_id")
+                        .HasColumnName("WorkFlow_Id")
                         .HasComment("关联:WorkFlow");
 
                     b.Property<bool>("isdeleted")
@@ -2277,7 +2277,7 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_FlowNodeChecker_isdeleted");
 
-                    b.ToTable("flow_flownodechecker", null, t =>
+                    b.ToTable("Flow_FlowNodeChecker", null, t =>
                         {
                             t.HasComment("流程节点审核人/抄送人");
                         });
@@ -2289,57 +2289,57 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasComment("");
 
                     b.Property<int>("CompareEnum")
                         .HasColumnType("int")
-                        .HasColumnName("compareenum")
+                        .HasColumnName("CompareEnum")
                         .HasComment("条件");
 
                     b.Property<string>("FieldName")
                         .HasMaxLength(200)
                         .IsUnicode(true)
                         .HasColumnType("varchar(200)")
-                        .HasColumnName("fieldname")
+                        .HasColumnName("FieldName")
                         .HasComment("字段名称");
 
                     b.Property<string>("FlowNode_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("flownode_id")
+                        .HasColumnName("FlowNode_Id")
                         .HasComment("关联:FlowNode");
 
                     b.Property<int>("GroupIndex")
                         .HasColumnType("int")
-                        .HasColumnName("groupindex")
+                        .HasColumnName("GroupIndex")
                         .HasComment("条件组号");
 
                     b.Property<int>("ValueEnum")
                         .HasColumnType("int")
-                        .HasColumnName("valueenum")
+                        .HasColumnName("ValueEnum")
                         .HasComment("值类型");
 
                     b.Property<string>("ValueText")
                         .HasMaxLength(200)
                         .IsUnicode(true)
                         .HasColumnType("varchar(200)")
-                        .HasColumnName("valuetext")
+                        .HasColumnName("ValueText")
                         .HasComment("值的文本");
 
                     b.Property<string>("Value_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("value_id")
+                        .HasColumnName("Value_Id")
                         .HasComment("值的ID");
 
                     b.Property<string>("WorkFlow_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("workflow_id")
+                        .HasColumnName("WorkFlow_Id")
                         .HasComment("关联:WorkFlow");
 
                     b.Property<bool>("isdeleted")
@@ -2359,7 +2359,7 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_FlowNodeCond_isdeleted");
 
-                    b.ToTable("flow_flownodecond", null, t =>
+                    b.ToTable("Flow_FlowNodeCond", null, t =>
                         {
                             t.HasComment("流程节点条件");
                         });
@@ -2371,42 +2371,42 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasComment("");
 
                     b.Property<string>("EventNotify")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("eventnotify")
+                        .HasColumnName("EventNotify")
                         .HasComment("通知方式");
 
                     b.Property<string>("EventTarget")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("eventtarget")
+                        .HasColumnName("EventTarget")
                         .HasComment("通知目标");
 
                     b.Property<string>("EventTrigger")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("eventtrigger")
+                        .HasColumnName("EventTrigger")
                         .HasComment("触发方式");
 
                     b.Property<string>("FlowNode_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("flownode_id")
+                        .HasColumnName("FlowNode_Id")
                         .HasComment("关联:FlowNode");
 
                     b.Property<string>("WorkFlow_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("workflow_id")
+                        .HasColumnName("WorkFlow_Id")
                         .HasComment("关联:WorkFlow");
 
                     b.HasKey("Id");
@@ -2426,7 +2426,7 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("WorkFlow_Id")
                         .HasDatabaseName("Index_FlowNodeEvent_WorkFlow_Id");
 
-                    b.ToTable("flow_flownodeevent", null, t =>
+                    b.ToTable("Flow_FlowNodeEvent", null, t =>
                         {
                             t.HasComment("节点事件");
                         });
@@ -2438,71 +2438,71 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasComment("");
 
                     b.Property<int?>("Action")
                         .HasColumnType("int")
-                        .HasColumnName("action")
+                        .HasColumnName("Action")
                         .HasComment("动作");
 
                     b.Property<string>("BeForm_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("beform_id")
+                        .HasColumnName("BeForm_Id")
                         .HasComment("关联表单的ID");
 
                     b.Property<string>("Desc")
                         .HasMaxLength(500)
                         .IsUnicode(true)
                         .HasColumnType("varchar(500)")
-                        .HasColumnName("desc")
+                        .HasColumnName("Desc")
                         .HasComment("审批意见");
 
                     b.Property<string>("FlowInstance_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("flowinstance_id")
+                        .HasColumnName("FlowInstance_Id")
                         .HasComment("关联：FlowInstance");
 
                     b.Property<string>("FlowNodeName")
                         .HasMaxLength(200)
                         .IsUnicode(true)
                         .HasColumnType("varchar(200)")
-                        .HasColumnName("flownodename")
+                        .HasColumnName("FlowNodeName")
                         .HasComment("节点名称");
 
                     b.Property<string>("FlowNode_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("flownode_id")
+                        .HasColumnName("FlowNode_Id")
                         .HasComment("关联:FlowNode");
 
                     b.Property<bool>("IsFinished")
                         .HasColumnType("tinyint(1)")
-                        .HasColumnName("isfinished")
+                        .HasColumnName("IsFinished")
                         .HasComment("是否已办理");
 
                     b.Property<DateTime?>("OperateTime")
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("operatetime")
+                        .HasColumnName("OperateTime")
                         .HasComment("时间");
 
                     b.Property<string>("OperaterName")
                         .HasMaxLength(200)
                         .IsUnicode(true)
                         .HasColumnType("varchar(200)")
-                        .HasColumnName("operatername")
+                        .HasColumnName("OperaterName")
                         .HasComment("审批人");
 
                     b.Property<string>("Operater_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("operater_id")
+                        .HasColumnName("Operater_Id")
                         .HasComment("审批人");
 
                     b.Property<bool>("isdeleted")
@@ -2528,7 +2528,7 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_FlowStep_isdeleted");
 
-                    b.ToTable("flow_flowstep", null, t =>
+                    b.ToTable("Flow_FlowStep", null, t =>
                         {
                             t.HasComment("审批步骤");
                         });
@@ -2540,35 +2540,35 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasComment("");
 
                     b.Property<string>("Bill_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("bill_id")
+                        .HasColumnName("Bill_Id")
                         .HasComment("单据ID");
 
                     b.Property<string>("FlowInstance_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("flowinstance_id")
+                        .HasColumnName("FlowInstance_Id")
                         .HasComment("关联：FlowInstance");
 
                     b.Property<string>("FlowStep_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("flowstep_id")
+                        .HasColumnName("FlowStep_Id")
                         .HasComment("关联：FlowStep");
 
                     b.Property<string>("User_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("user_id")
+                        .HasColumnName("User_Id")
                         .HasComment("关联：User");
 
                     b.Property<bool>("isdeleted")
@@ -2591,7 +2591,7 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_FlowStepChecker_isdeleted");
 
-                    b.ToTable("flow_flowstepchecker", null, t =>
+                    b.ToTable("Flow_FlowStepChecker", null, t =>
                         {
                             t.HasComment("流程步骤审核人");
                         });
@@ -2603,69 +2603,69 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasComment("主键");
 
                     b.Property<string>("BeModule")
                         .HasMaxLength(100)
                         .IsUnicode(true)
                         .HasColumnType("varchar(100)")
-                        .HasColumnName("bemodule")
+                        .HasColumnName("BeModule")
                         .HasComment("适用模块");
 
                     b.Property<string>("BeModuleName")
                         .HasMaxLength(150)
                         .IsUnicode(true)
                         .HasColumnType("varchar(150)")
-                        .HasColumnName("bemodulename")
+                        .HasColumnName("BeModuleName")
                         .HasComment("模块名称");
 
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("createtime")
+                        .HasColumnName("CreateTime")
                         .HasComment("创建时间");
 
                     b.Property<string>("Create_User_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("create_user_id")
+                        .HasColumnName("Create_User_Id")
                         .HasComment("创建人");
 
                     b.Property<int>("Enabled")
                         .HasColumnType("int")
-                        .HasColumnName("enabled")
+                        .HasColumnName("Enabled")
                         .HasComment("状态");
 
                     b.Property<DateTime>("ModifyTime")
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("modifytime")
+                        .HasColumnName("ModifyTime")
                         .HasComment("修改时间");
 
                     b.Property<string>("Modify_User_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("modify_user_id")
+                        .HasColumnName("Modify_User_Id")
                         .HasComment("修改人");
 
                     b.Property<string>("Remarks")
                         .HasMaxLength(500)
                         .IsUnicode(true)
                         .HasColumnType("varchar(500)")
-                        .HasColumnName("remarks")
+                        .HasColumnName("Remarks")
                         .HasComment("备注");
 
                     b.Property<string>("Tenant_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("tenant_id")
+                        .HasColumnName("Tenant_Id")
                         .HasComment("租户ID");
 
                     b.Property<int>("Version")
                         .HasColumnType("int")
-                        .HasColumnName("version")
+                        .HasColumnName("Version")
                         .HasComment("版本");
 
                     b.Property<bool>("isdeleted")
@@ -2685,7 +2685,7 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_WorkFlow_isdeleted");
 
-                    b.ToTable("flow_workflow", null, t =>
+                    b.ToTable("Flow_WorkFlow", null, t =>
                         {
                             t.HasComment("工作流");
                         });
@@ -2697,7 +2697,7 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("id")
+                        .HasColumnName("Id")
                         .HasComment("主键");
 
                     b.Property<string>("Agent_Id")
@@ -2705,12 +2705,12 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("agent_id")
+                        .HasColumnName("Agent_Id")
                         .HasComment("工作代理人");
 
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("createtime")
+                        .HasColumnName("CreateTime")
                         .HasComment("申请时间");
 
                     b.Property<string>("Create_User_Id")
@@ -2718,13 +2718,13 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("create_user_id")
+                        .HasColumnName("Create_User_Id")
                         .HasComment("申请人");
 
                     b.Property<decimal?>("Days")
                         .HasPrecision(10, 2)
                         .HasColumnType("decimal(10,2)")
-                        .HasColumnName("days")
+                        .HasColumnName("Days")
                         .HasComment("请假天数");
 
                     b.Property<string>("Dept_Id")
@@ -2732,69 +2732,69 @@ namespace FastFrame.Database.Migrations
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("dept_id")
+                        .HasColumnName("Dept_Id")
                         .HasComment("部门");
 
                     b.Property<DateTime?>("EndTime")
                         .IsRequired()
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("endtime")
+                        .HasColumnName("EndTime")
                         .HasComment("结束时间");
 
                     b.Property<int>("FlowStatus")
                         .HasColumnType("int")
-                        .HasColumnName("flowstatus")
+                        .HasColumnName("FlowStatus")
                         .HasComment("审批状态");
 
                     b.Property<int?>("Job_Id")
                         .IsRequired()
                         .HasColumnType("int")
-                        .HasColumnName("job_id")
+                        .HasColumnName("Job_Id")
                         .HasComment("岗位");
 
                     b.Property<int?>("LeaveCategory")
                         .IsRequired()
                         .HasColumnType("int")
-                        .HasColumnName("leavecategory")
+                        .HasColumnName("LeaveCategory")
                         .HasComment("请假类型");
 
                     b.Property<DateTime>("ModifyTime")
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("modifytime")
+                        .HasColumnName("ModifyTime")
                         .HasComment("修改时间");
 
                     b.Property<string>("Modify_User_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("modify_user_id")
+                        .HasColumnName("Modify_User_Id")
                         .HasComment("修改人");
 
                     b.Property<string>("Number")
                         .HasMaxLength(20)
                         .IsUnicode(true)
                         .HasColumnType("varchar(20)")
-                        .HasColumnName("number")
+                        .HasColumnName("Number")
                         .HasComment("请假单号");
 
                     b.Property<string>("Reasons")
                         .HasMaxLength(500)
                         .IsUnicode(true)
                         .HasColumnType("varchar(500)")
-                        .HasColumnName("reasons")
+                        .HasColumnName("Reasons")
                         .HasComment("申请事由");
 
                     b.Property<DateTime?>("StartTime")
                         .IsRequired()
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("starttime")
+                        .HasColumnName("StartTime")
                         .HasComment("开始时间");
 
                     b.Property<string>("Tenant_Id")
                         .HasMaxLength(25)
                         .IsUnicode(true)
                         .HasColumnType("varchar(25)")
-                        .HasColumnName("tenant_id")
+                        .HasColumnName("Tenant_Id")
                         .HasComment("租户ID");
 
                     b.Property<bool>("isdeleted")
@@ -2823,7 +2823,7 @@ namespace FastFrame.Database.Migrations
                     b.HasIndex("isdeleted")
                         .HasDatabaseName("Index_OaLeave_isdeleted");
 
-                    b.ToTable("oa_oaleave", null, t =>
+                    b.ToTable("OA_OaLeave", null, t =>
                         {
                             t.HasComment("请假单");
                         });

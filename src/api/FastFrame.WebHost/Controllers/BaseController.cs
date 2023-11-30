@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections;
 using System.Collections.Generic;
+using OfficeOpenXml;
 
 namespace FastFrame.WebHost.Controllers
 {
@@ -55,7 +56,7 @@ namespace FastFrame.WebHost.Controllers
         public virtual async Task<IActionResult> ExportList(string qs, string fileName)
         {
             var excelExportProvider = Request.HttpContext.RequestServices.GetService<IExcelExportProvider>();
-            var columns = await excelExportProvider.GenerateExcelColumns<TDto>().ToListAsync();
+            IEnumerable<ExcelColumn<TDto>> columns = await excelExportProvider.GenerateExcelColumns<TDto>().ToListAsync();
             columns = await FmtExportColumns(columns);
 
             var bytes = await excelExportProvider.GenerateExcelSteam(service.PageListAsync, columns, Pagination<TDto>.FromJson(qs));
@@ -68,7 +69,7 @@ namespace FastFrame.WebHost.Controllers
         /// </summary>
         /// <param name="columns"></param>
         /// <returns></returns>
-        protected Task<List<ExcelColumn<TDto>>> FmtExportColumns(List<ExcelColumn<TDto>> columns)
+        protected Task<IEnumerable<ExcelColumn<TDto>>> FmtExportColumns(IEnumerable<ExcelColumn<TDto>> columns)
         {
             return Task.FromResult(columns);
         }

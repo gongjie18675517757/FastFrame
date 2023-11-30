@@ -27,7 +27,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Dapper" Version="2.1.21" />
-		<PackageReference Include="EPPlus" Version="7.0.1" />
+	
 		<PackageReference Include="System.Linq.Dynamic.Core" Version="1.3.6" />
 		<PackageReference Include="AspectCore.Core" Version="2.4.0" /> 
 	</ItemGroup> 

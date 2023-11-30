@@ -42,7 +42,7 @@ namespace FastFrame.Database
                     entityTypeBuilder.Property("Id").ValueGeneratedNever();
 
                     var table_description_name = T4Help.GetClassSummary(entityType, AppDomain.CurrentDomain.BaseDirectory);
-                    entityTypeBuilder.ToTable($"{currNameSpace}_{entityType.Name}".ToLower(), t =>
+                    entityTypeBuilder.ToTable($"{currNameSpace}_{entityType.Name}", t =>
                     {
                         t.HasComment(table_description_name);
                     });
@@ -53,7 +53,7 @@ namespace FastFrame.Database
                 {
                     entityTypeBuilder
                         .HasNoKey()
-                        .ToView($"{currNameSpace}_{entityType.Name}".ToLower());
+                        .ToView($"{currNameSpace}_{entityType.Name}");
                 }
 
                 /*过滤掉软删除的*/
@@ -80,7 +80,7 @@ namespace FastFrame.Database
 
                 var propertyBuilder = entityTypeBuilder
                              .Property(property.Name)
-                             .HasColumnName(property.Name.ToLower());
+                             .HasColumnName(property.Name);
 
                 /*如果父类型有，则跳出*/
                 if (isInheritTable && entityBaseType.GetProperty(property.Name) != null)
@@ -90,8 +90,7 @@ namespace FastFrame.Database
                 var propType = T4Help.GetNullableType(property.PropertyType);
 
                 /*为数据库添加注释*/
-                propertyBuilder.HasComment(T4Help.GetPropertySummary(property, AppDomain.CurrentDomain.BaseDirectory));
-
+                propertyBuilder.HasComment(T4Help.GetPropertySummary(property, AppDomain.CurrentDomain.BaseDirectory)); 
 
                 if (typeof(IEntity).IsAssignableFrom(entityType))
                 {

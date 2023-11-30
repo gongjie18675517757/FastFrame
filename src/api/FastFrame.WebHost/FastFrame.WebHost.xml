@@ -571,13 +571,6 @@
             <param name="userId"></param>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.WebHost.Privder.ExcelExportProvider.GenerateExcelColumns``1">
-            <summary>
-            生成要导出的列
-            </summary>
-            <typeparam name="TDto"></typeparam>
-            <returns></returns>
-        </member>
         <member name="T:FastFrame.WebHost.Privder.LocalResourceProvider">
             <summary>
             资源提供者(使用本地文件目录)

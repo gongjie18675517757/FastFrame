@@ -1119,7 +1119,7 @@
             </summary>
             <typeparam name="T"></typeparam>
         </member>
-        <member name="T:FastFrame.Infrastructure.Interface.ValueExcelColumn`1">
+        <member name="T:FastFrame.Infrastructure.Interface.ExcelRawColumn`1">
             <summary>
             字面量类型的列
             </summary>
@@ -1409,6 +1409,13 @@
             <param name="pagination"></param>
             <returns></returns>
         </member>
+        <member name="M:FastFrame.Infrastructure.Interface.ExcelExportProvider.GenerateExcelColumns``1">
+            <summary>
+            生成要导出的列
+            </summary>
+            <typeparam name="TDto"></typeparam>
+            <returns></returns>
+        </member>
         <member name="T:FastFrame.Infrastructure.IntervalWork.IIntervalWorkHost">
             <summary>
             标记此类有需要执行定时任务
@@ -1577,6 +1584,11 @@
         <member name="P:FastFrame.Infrastructure.MessageQueue.MessageSubscribeAttribute.Channel">
             <summary>
             消息管道
+            </summary>
+        </member>
+        <member name="T:FastFrame.Infrastructure.Module.IEnumItemProvider">
+            <summary>
+            数据字典服务
             </summary>
         </member>
         <member name="T:FastFrame.Infrastructure.Module.IModuleDefinitionProvider">

@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -16,6 +17,16 @@ namespace FastFrame.Infrastructure
 {
     public static partial class Extension
     {
+        public static async IAsyncEnumerable<T> AsAsyncEnumerable<T>(this IEnumerable<T> objects)
+        {
+            await Task.CompletedTask;
+
+            foreach (var item in objects)
+            {
+                yield return item;
+            }
+        }    
+        
         public static IEnumerable<object> AsEnumerable(this System.Collections.IEnumerable objects)
         {
             var enumerator = objects.GetEnumerator();

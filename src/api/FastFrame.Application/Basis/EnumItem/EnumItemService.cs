@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace FastFrame.Application.Basis
 {
-    public partial class EnumItemService : IApplicationInitialLifetime
+    public partial class EnumItemService : IApplicationInitialLifetime, IEnumItemProvider
     {
         protected override async Task OnDeleteing(EnumItem entity)
         {
@@ -33,7 +33,7 @@ namespace FastFrame.Application.Basis
                 .ToDictionaryAsync(v => v.IntKey.Value, v => v.TextValue);
 
             return list;
-        } 
+        }
 
 
         public async Task<IEnumerable<IViewModel>> EnumItemList(int? name, string kw, int page_index = 1, int page_size = 10)

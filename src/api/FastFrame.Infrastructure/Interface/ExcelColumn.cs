@@ -159,9 +159,9 @@ namespace FastFrame.Infrastructure.Interface
     /// 字面量类型的列
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class ValueExcelColumn<T> : ExcelColumn<T>
+    public class ExcelRawColumn<T> : ExcelColumn<T>
     {
-        public ValueExcelColumn(string name, string title) : base(name, title)
+        public ExcelRawColumn(string name, string title) : base(name, title)
         {
             if (string.IsNullOrWhiteSpace(name))
             {

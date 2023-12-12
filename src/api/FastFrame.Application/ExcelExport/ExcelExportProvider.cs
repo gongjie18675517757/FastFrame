@@ -1,8 +1,11 @@
-﻿using FastFrame.Infrastructure.Module;
+﻿using FastFrame.Entity;
+using FastFrame.Infrastructure;
+using FastFrame.Infrastructure.Interface;
+using FastFrame.Infrastructure.Module;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 
-namespace FastFrame.Infrastructure.Interface
+namespace FastFrame.Application.ExcelExport
 {
     public class ExcelExportProvider(IModuleExportProvider moduleExportProvider, IEnumItemProvider enumItemService) : IExcelExportProvider
     {
@@ -19,7 +22,10 @@ namespace FastFrame.Infrastructure.Interface
 
             foreach (var item in moduleStruct.FieldInfoStruts)
             {
-                if (item.Hide == "List" || item.Hide == "All")
+                if (((string[])([nameof(HideMark.List), nameof(HideMark.List)])).Contains(item.Hide))
+                    continue;
+
+                if (item.Description.IsNullOrWhiteSpace())
                     continue;
 
                 if (item.Name == "Id")
@@ -45,6 +51,11 @@ namespace FastFrame.Infrastructure.Interface
                 else if (item.EnumValues != null && item.EnumValues.Any())
                 {
                     yield return new ExcelEnumValuesColumn<TDto>(item.Name, item.Description, item.EnumValues);
+                }
+
+                else if (item.Type == nameof(Array))
+                {
+                    yield return new ExcelArrayColumn<TDto>(item.Name, item.Description);
                 }
 
                 /*未匹配到的ID字段*/

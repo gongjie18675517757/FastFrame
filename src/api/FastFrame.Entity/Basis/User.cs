@@ -59,7 +59,7 @@ namespace FastFrame.Entity.Basis
         /// <summary>
         /// 头像
         /// </summary> 
-        [RelatedTo(typeof(Resource))]
+        [RelatedTo<Resource>]
         public string HandIcon_Id { get; set; }
 
         /// <summary>

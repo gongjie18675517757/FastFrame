@@ -12,6 +12,8 @@ namespace FastFrame.CodeGenerate.Info
         /// </summary>
         public string Name { get; set; }
 
+
+
         /// <summary>
         /// 参数
         /// </summary>

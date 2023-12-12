@@ -1,6 +1,9 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using FastFrame.Entity;
+using FastFrame.Infrastructure;
+using Newtonsoft.Json.Linq;
+using System.Collections;
 
-namespace FastFrame.Infrastructure.Interface
+namespace FastFrame.Application.ExcelExport
 {
     /// <summary>
     /// EXCEL列
@@ -172,6 +175,46 @@ namespace FastFrame.Infrastructure.Interface
         public override object GetValue(T model)
         {
             return model?.GetValue(Name);
+        }
+    }
+
+    /// <summary>
+    /// 字面量类型的列
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class ExcelArrayColumn<T> : ExcelColumn<T>
+    {
+        public ExcelArrayColumn(string name, string title) : base(name, title)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentException($"“{nameof(name)}”不能为 null 或空白。", nameof(name));
+            }
+        }
+
+        public override object GetValue(T model)
+        {
+            var value = model?.GetValue(Name);
+
+            if (value == null)
+                return null;
+
+            if (value is IEnumerable enumerable)
+            {
+                var list = enumerable.AsEnumerable();
+                var str_values = new List<string>();
+                foreach (var item in list)
+                {
+                    if (item is IViewModel viewModel)
+                        str_values.Add(viewModel.Value);
+                    else
+                        str_values.Add(item.ToString());
+                }
+
+                return string.Join(",", str_values);
+            }
+
+            return null;
         }
     }
 }

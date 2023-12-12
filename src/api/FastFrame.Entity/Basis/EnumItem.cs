@@ -32,7 +32,7 @@ namespace FastFrame.Entity.Basis
         /// <summary>
         /// 上级
         /// </summary>  
-        [RelatedTo(typeof(EnumItem))]
+        [RelatedTo<EnumItem>]
         public string Super_Id { get; set; } 
 
         /// <summary>

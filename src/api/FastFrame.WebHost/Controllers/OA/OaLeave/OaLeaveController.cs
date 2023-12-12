@@ -11,14 +11,14 @@ using FastFrame.Entity.Basis;
 namespace FastFrame.WebHost.Controllers.OA
 {
     public partial class OaLeaveController
-    {
-        [Permission(new string[] { "Add", "Update" })]
+    { 
+        [Permission(["Add", "Update"])]
         [HttpGet]
         public IAsyncEnumerable<IViewModel> UserList(string kw, int page_index = 1, int page_size = 10)
             => service.loader.GetService<UserService>().ViewModelListAsync(kw, page_index, page_size);
 
 
-        [Permission(new string[] { "Add", "Update" })]
+        [Permission(["Add", "Update"])]
         [HttpGet]
         public IAsyncEnumerable<IViewModel> DeptList(string kw, int page_index = 1, int page_size = 10)
             => service.loader.GetService<DeptService>().ViewModelListAsync(kw, page_index, page_size);

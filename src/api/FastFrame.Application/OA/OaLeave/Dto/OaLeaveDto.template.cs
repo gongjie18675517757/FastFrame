@@ -21,24 +21,28 @@ namespace FastFrame.Application.OA
 		/// 请假单号 
 		/// </summary>
 		[StringLength(20)]
+		[ReadOnly(ReadOnlyMark.All)]
 		public string Number {get;set;}
 		
 		/// <summary>
 		/// 申请时间 
 		/// </summary>
 		[Required()]
+		[ReadOnly(ReadOnlyMark.All)]
 		public DateTime CreateTime {get;set;}
 		
 		/// <summary>
 		/// 申请人 
 		/// </summary>
 		[Required()]
-		[RelatedTo(typeof(User))]
+		[ReadOnly(ReadOnlyMark.All)]
+		[RelatedTo<User>()]
 		public string Create_User_Id {get;set;}
 		
 		/// <summary>
 		/// 申请人 
 		/// </summary>
+		[ValueRelateFor(nameof(Create_User_Id),typeof(User))]
 		public string Create_User_Value {get;set;}
 		
 		/// <summary>
@@ -52,12 +56,13 @@ namespace FastFrame.Application.OA
 		/// 部门 
 		/// </summary>
 		[Required()]
-		[RelatedTo(typeof(Dept))]
+		[RelatedTo<Dept>()]
 		public string Dept_Id {get;set;}
 		
 		/// <summary>
 		/// 部门 
 		/// </summary>
+		[ValueRelateFor(nameof(Dept_Id),typeof(Dept))]
 		public string Dept_Value {get;set;}
 		
 		/// <summary>
@@ -71,12 +76,13 @@ namespace FastFrame.Application.OA
 		/// 工作代理人 
 		/// </summary>
 		[Required()]
-		[RelatedTo(typeof(User))]
+		[RelatedTo<User>()]
 		public string Agent_Id {get;set;}
 		
 		/// <summary>
 		/// 工作代理人 
 		/// </summary>
+		[ValueRelateFor(nameof(Agent_Id),typeof(User))]
 		public string Agent_Value {get;set;}
 		
 		/// <summary>
@@ -105,6 +111,7 @@ namespace FastFrame.Application.OA
 		/// <summary>
 		/// 审批状态 
 		/// </summary>
+		[ReadOnly(ReadOnlyMark.All)]
 		[EnumItem(EnumName.FlowStatusEnum)]
 		public int FlowStatus {get;set;}
 		
@@ -112,18 +119,21 @@ namespace FastFrame.Application.OA
 		/// 修改人 
 		/// </summary>
 		[Hide(HideMark.Form)]
-		[RelatedTo(typeof(User))]
+		[ReadOnly(ReadOnlyMark.All)]
+		[RelatedTo<User>()]
 		public string Modify_User_Id {get;set;}
 		
 		/// <summary>
 		/// 修改人 
 		/// </summary>
+		[ValueRelateFor(nameof(Modify_User_Id),typeof(User))]
 		public string Modify_User_Value {get;set;}
 		
 		/// <summary>
 		/// 修改时间 
 		/// </summary>
 		[Hide(HideMark.Form)]
+		[ReadOnly(ReadOnlyMark.All)]
 		public DateTime ModifyTime {get;set;}
 		
 		/// <summary>

@@ -26,7 +26,7 @@ namespace FastFrame.Entity.Basis
         /// <summary>
         /// 上级角色
         /// </summary>
-        [RelatedTo(typeof(Role))]
+        [RelatedTo<Role>]
         public string Super_Id { get; set; }
 
         /// <summary>

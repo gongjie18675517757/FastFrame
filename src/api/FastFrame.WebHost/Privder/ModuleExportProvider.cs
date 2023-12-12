@@ -83,7 +83,6 @@ namespace FastFrame.WebHost.Privder
                     /*字段信息*/
                     if (relatedToAttribute?.RelatedType != null)
                     {
-
                         fieldInfoStructs.Add(new ModuleFieldStrut()
                         {
                             Name = x.Name.Replace("_Id", "_Value"),
@@ -106,11 +105,26 @@ namespace FastFrame.WebHost.Privder
                     }
                     else
                     {
+                        var type_is_array = nullableType != typeof(string) && 
+                            nullableType
+                            .GetInterfaces()
+                            .Any(v => v.IsGenericType && v.GetGenericTypeDefinition() == typeof(IEnumerable<>)); 
+
+                         if (nullableType!=typeof(string) && 
+                            !type_is_array &&
+                            nullableType.IsGenericType &&
+                            nullableType.IsInterface &&
+                            nullableType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+                        {
+                            type_is_array = true;
+                        }
+
+
+
                         fieldInfoStructs.Add(new ModuleFieldStrut()
                         {
                             Name = x.Name,
-                            Type = nullableType.IsArray ? "Array" :
-                                nullableType.Name,
+                            Type = type_is_array ? "Array" : nullableType.Name,
                             Description = descriptionProvider.GetPropertyDescription(x),
                             Hide = hideAttribute?.HideMark.ToString(),
                             Readonly = readOnlyAttribute?.ReadOnlyMark.ToString(),

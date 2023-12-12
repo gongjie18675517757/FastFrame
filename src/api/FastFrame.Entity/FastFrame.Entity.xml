@@ -147,14 +147,34 @@
             关联标记
             </summary>
         </member>
-        <member name="M:FastFrame.Entity.RelatedToAttribute.#ctor(System.Type)">
-            <summary>
-            关联标记
-            </summary>
-        </member>
         <member name="P:FastFrame.Entity.RelatedToAttribute.RelatedType">
             <summary>
             被关联的类型
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.RelatedToAttribute`1">
+            <summary>
+            关联标记
+            </summary> 
+        </member>
+        <member name="T:FastFrame.Entity.ValueRelateFor">
+            <summary>
+            标记属性为关联出来的值
+            </summary> 
+        </member>
+        <member name="M:FastFrame.Entity.ValueRelateFor.#ctor(System.String,System.Type)">
+            <summary>
+            标记属性为关联出来的值
+            </summary> 
+        </member>
+        <member name="P:FastFrame.Entity.ValueRelateFor.FieldName">
+            <summary>
+            类型字段
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.ValueRelateFor.RelatedType">
+            <summary>
+            关联类型
             </summary>
         </member>
         <member name="T:FastFrame.Entity.UniqueAttribute">

@@ -15,7 +15,7 @@ namespace FastFrame.CodeGenerate.Info
         /// <summary>
         /// 特性列表
         /// </summary>
-        public IEnumerable<AttrInfo> AttrInfos { get; set; } = new AttrInfo[] { };
+        public IEnumerable<AttrInfo> AttrInfos { get; set; } = [];
 
         /// <summary>
         /// 类型名称

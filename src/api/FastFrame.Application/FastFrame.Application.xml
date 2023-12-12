@@ -1317,6 +1317,16 @@
             用户 
             </summary>
         </member>
+        <member name="P:FastFrame.Application.Basis.UserDto.Depts">
+            <summary>
+            所属科室
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.Basis.UserDto.Roles">
+            <summary>
+            所属角色
+            </summary>
+        </member>
         <member name="P:FastFrame.Application.Basis.UserDto.Account">
             <summary>
             帐号 
@@ -1578,6 +1588,108 @@
             <summary>
             好友列表
             </summary>
+            <returns></returns>
+        </member>
+        <member name="T:FastFrame.Application.ExcelExport.ExcelColumn`1">
+            <summary>
+            EXCEL列
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:FastFrame.Application.ExcelExport.ExcelColumn`1.#ctor(System.String,System.String)">
+            <summary>
+            EXCEL列
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:FastFrame.Application.ExcelExport.ExcelColumn`1.Title">
+            <summary>
+            标题
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.ExcelExport.ExcelColumn`1.Name">
+            <summary>
+            列名
+            </summary>
+        </member>
+        <member name="M:FastFrame.Application.ExcelExport.ExcelColumn`1.GetValue(`0)">
+            <summary>
+            获取值方法
+            </summary>
+        </member>
+        <member name="T:FastFrame.Application.ExcelExport.ExcelEnumItemColumn`1">
+            <summary>
+            数据字典列
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:FastFrame.Application.ExcelExport.ExcelDateTimeColumn`1">
+            <summary>
+            时间日期列
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:FastFrame.Application.ExcelExport.ExcelEnumValuesColumn`1">
+            <summary>
+            程序枚举列
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:FastFrame.Application.ExcelExport.ExcelBooleanColumn`1">
+            <summary>
+            布尔值列
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:FastFrame.Application.ExcelExport.ExcelRawColumn`1">
+            <summary>
+            字面量类型的列
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:FastFrame.Application.ExcelExport.ExcelArrayColumn`1">
+            <summary>
+            字面量类型的列
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:FastFrame.Application.ExcelExport.ExcelExportProvider.GenerateExcelColumns``1">
+            <summary>
+            生成要导出的列
+            </summary>
+            <typeparam name="TDto"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="T:FastFrame.Application.ExcelExport.IExcelExportProvider">
+            <summary>
+            EXCEL导出
+            </summary>
+        </member>
+        <member name="M:FastFrame.Application.ExcelExport.IExcelExportProvider.GenerateExcelColumns``1">
+            <summary>
+            生成要导出的列
+            </summary>
+            <typeparam name="TDto"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.ExcelExport.IExcelExportProvider.GenerateExcelSteam``1(System.Func{FastFrame.Infrastructure.IPagination{``0},System.Threading.Tasks.Task{FastFrame.Infrastructure.IPageList{``0}}},System.Collections.Generic.IEnumerable{FastFrame.Application.ExcelExport.ExcelColumn{``0}},FastFrame.Infrastructure.IPagination{``0})">
+            <summary>
+            生成EXCEL流
+            </summary>
+            <typeparam name="TDto"></typeparam>
+            <param name="pageListFunc"></param>
+            <param name="columns"></param>
+            <param name="pagination"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FastFrame.Application.ExcelExport.IExcelExportProvider.GenerateExcelSteam``1(System.Func{FastFrame.Infrastructure.IPagination{``0},System.Threading.Tasks.Task{FastFrame.Infrastructure.IPageList{``0}}},System.Collections.Generic.IAsyncEnumerable{FastFrame.Application.ExcelExport.ExcelColumn{``0}},FastFrame.Infrastructure.IPagination{``0})">
+            <summary>
+            生成EXCEL流
+            </summary>
+            <typeparam name="TDto"></typeparam>
+            <param name="pageListFunc"></param>
+            <param name="columns"></param>
+            <param name="pagination"></param>
             <returns></returns>
         </member>
         <member name="T:FastFrame.Application.ExpandMethod">

@@ -28,7 +28,7 @@ namespace FastFrame.Entity.OA
         /// <summary>
         /// 申请人
         /// </summary>
-        [RelatedTo(typeof(User))]
+        [RelatedTo<User>]
         [Required]
         [ReadOnly]
         public override string Create_User_Id { get => base.Create_User_Id; set => base.Create_User_Id = value; }
@@ -44,13 +44,13 @@ namespace FastFrame.Entity.OA
         /// 部门
         /// </summary>
         [Required]
-        [RelatedTo(typeof(Dept))]
+        [RelatedTo<Dept>]
         public string Dept_Id { get; set; }
 
         /// <summary>
         /// 请假类型
         /// </summary>
-        [Required] 
+        [Required]
         [EnumItem(EnumName.LeaveCategoryEnum)]
         public int? LeaveCategory { get; set; }
 
@@ -58,20 +58,32 @@ namespace FastFrame.Entity.OA
         /// 工作代理人
         /// </summary>
         [Required]
-        [RelatedTo(typeof(User))]
+        [RelatedTo<User>]
         public string Agent_Id { get; set; }
 
         /// <summary>
-        /// 开始时间
+        /// 请假日期时间
         /// </summary>
         [Required]
-        public DateTime? StartTime { get; set; }
+        public ValueRange<DateTime> DateTimeRange { get; set; } = default;
 
         /// <summary>
-        /// 结束时间
+        /// 请假日期
         /// </summary>
         [Required]
-        public DateTime? EndTime { get; set; }
+        public ValueRange<DateOnly> DateRange { get; set; } = default;
+
+        /// <summary>
+        /// 请假日期
+        /// </summary>
+        [Required]
+        public ValueRange<TimeOnly> TimeRange { get; set; } = default;
+
+        /// <summary>
+        /// 请假天数
+        /// </summary>
+        [Required]
+        public ValueRange<int> DaysRange { get; set; } = default; 
 
         /// <summary>
         /// 请假天数

@@ -1068,63 +1068,6 @@
             <param name="flag">压缩质量(数字越小压缩率越高) 1-100</param>  
             <returns></returns>  
         </member>
-        <member name="T:FastFrame.Infrastructure.Interface.ExcelColumn`1">
-            <summary>
-            EXCEL列
-            </summary>
-            <typeparam name="T"></typeparam>
-        </member>
-        <member name="M:FastFrame.Infrastructure.Interface.ExcelColumn`1.#ctor(System.String,System.String)">
-            <summary>
-            EXCEL列
-            </summary>
-            <typeparam name="T"></typeparam>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.ExcelColumn`1.Title">
-            <summary>
-            标题
-            </summary>
-        </member>
-        <member name="P:FastFrame.Infrastructure.Interface.ExcelColumn`1.Name">
-            <summary>
-            列名
-            </summary>
-        </member>
-        <member name="M:FastFrame.Infrastructure.Interface.ExcelColumn`1.GetValue(`0)">
-            <summary>
-            获取值方法
-            </summary>
-        </member>
-        <member name="T:FastFrame.Infrastructure.Interface.ExcelEnumItemColumn`1">
-            <summary>
-            数据字典列
-            </summary>
-            <typeparam name="T"></typeparam>
-        </member>
-        <member name="T:FastFrame.Infrastructure.Interface.ExcelDateTimeColumn`1">
-            <summary>
-            时间日期列
-            </summary>
-            <typeparam name="T"></typeparam>
-        </member>
-        <member name="T:FastFrame.Infrastructure.Interface.ExcelEnumValuesColumn`1">
-            <summary>
-            程序枚举列
-            </summary>
-            <typeparam name="T"></typeparam>
-        </member>
-        <member name="T:FastFrame.Infrastructure.Interface.ExcelBooleanColumn`1">
-            <summary>
-            布尔值列
-            </summary>
-            <typeparam name="T"></typeparam>
-        </member>
-        <member name="T:FastFrame.Infrastructure.Interface.ExcelRawColumn`1">
-            <summary>
-            字面量类型的列
-            </summary>
-            <typeparam name="T"></typeparam>
-        </member>
         <member name="T:FastFrame.Infrastructure.Interface.IApplicationInitialLifetime">
             <summary>
             应用程序初始化时
@@ -1385,35 +1328,6 @@
             <summary>
             从不执行
             </summary>
-            <returns></returns>
-        </member>
-        <member name="T:FastFrame.Infrastructure.Interface.IExcelExportProvider">
-            <summary>
-            EXCEL导出
-            </summary>
-        </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IExcelExportProvider.GenerateExcelColumns``1">
-            <summary>
-            生成要导出的列
-            </summary>
-            <typeparam name="TDto"></typeparam>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Infrastructure.Interface.IExcelExportProvider.GenerateExcelSteam``1(System.Func{FastFrame.Infrastructure.IPagination{``0},System.Threading.Tasks.Task{FastFrame.Infrastructure.IPageList{``0}}},System.Collections.Generic.IEnumerable{FastFrame.Infrastructure.Interface.ExcelColumn{``0}},FastFrame.Infrastructure.IPagination{``0})">
-            <summary>
-            生成EXCEL流
-            </summary>
-            <typeparam name="TDto"></typeparam>
-            <param name="pageListFunc"></param>
-            <param name="columns"></param>
-            <param name="pagination"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FastFrame.Infrastructure.Interface.ExcelExportProvider.GenerateExcelColumns``1">
-            <summary>
-            生成要导出的列
-            </summary>
-            <typeparam name="TDto"></typeparam>
             <returns></returns>
         </member>
         <member name="T:FastFrame.Infrastructure.IntervalWork.IIntervalWorkHost">

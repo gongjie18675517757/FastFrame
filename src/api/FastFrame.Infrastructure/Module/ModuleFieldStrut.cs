@@ -80,8 +80,9 @@ namespace FastFrame.Infrastructure.Module
         /// <summary>
         /// 是否主要字段
         /// </summary>
-        public bool IsLink { get; set; }
-
-
+        public bool IsLink { get; set; } 
     }
+
+
+
 }

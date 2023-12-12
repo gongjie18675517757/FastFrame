@@ -10,6 +10,7 @@ import {
 } from '../../utils'
 import { cloneDeep } from 'lodash'
 import { makeButtons, makeButtonsInputMode } from './handleFlow'
+import message from "../Message";
 
 /**
  * 按钮组1
@@ -908,24 +909,27 @@ export let pageMethods = {
       this.loading = false;
     }
   }, 500),
-  [PageMethodsDefines.exportList]: throttle(function () {
-    this.loading = true;
-    Promise.resolve(null)
-      .then(this.getRequestPars)
-      .then(pagePars => {
-        let qs = JSON.stringify(pagePars, fmtRequestPars)
-        let url = this.getExportListUrl()
-        let func = () => this.$http({
-          method: "get",
-          url: `${url}?qs=${qs}&fileName=${this.direction}`,
-          responseType: "blob",
-        })
-        saveFile(func, `${this.direction}列表.xlsx`, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-      }).then(() => {
-        this.loading = false;
-      }).catch(() => {
-        this.loading = false;
+  [PageMethodsDefines.exportList]: throttle(async function () {
+    await message.confirm({
+      title:'提示',
+      content:'导出可能会耗时较多,是否继续?'
+    })
+    try {
+      this.loading = true;
+      const pagePars = await this.getRequestPars();
+      let qs = JSON.stringify(pagePars, fmtRequestPars)
+      let url = await this.getExportListUrl()
+      let func = () => this.$http({
+        method: "get",
+        url: `${url}?qs=${qs}&fileName=${this.direction}`,
+        responseType: "blob",
       })
+      saveFile(func, `${this.direction}列表.xlsx`, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    } catch (error) {
+      window.console.error(error)
+    } finally {
+      this.loading = false;
+    }
   }),
   [PageMethodsDefines.close]() {
     console.log(1);

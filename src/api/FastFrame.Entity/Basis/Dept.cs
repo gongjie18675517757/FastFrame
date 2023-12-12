@@ -12,7 +12,7 @@ namespace FastFrame.Entity.Basis
         /// <summary>
         /// 上级
         /// </summary>
-        [RelatedTo(typeof(Dept))]
+        [RelatedTo<Dept>]
         public string Super_Id { get; set; }
 
         /// <summary>

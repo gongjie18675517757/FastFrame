@@ -25,13 +25,13 @@ namespace FastFrame.Entity.Basis
         /// <summary>
         /// 发布人
         /// </summary>
-        [RelatedTo(typeof(User))]
+        [RelatedTo<User>]
         public string Publush_Id { get; set; }
 
         /// <summary>
         /// 附件
         /// </summary>
-        [RelatedTo(typeof(Resource))]
+        [RelatedTo<Resource>]
         public string Resource_Id { get; set; }
 
         /// <summary>

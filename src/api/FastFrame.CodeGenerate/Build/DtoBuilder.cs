@@ -103,14 +103,20 @@ namespace FastFrame.CodeGenerate.Build
                     DefaultValue = defaultValue
                 };
 
-                if (TryGetAttribute<RelatedToAttribute>(item, out var _))
+                if (TryGetAttribute<RelatedToAttribute>(item, out var relatedToAttribute))
                 {
-                    //var relateTypeName = relatedToAttribute.RelatedType.Name;
+                    var relateTypeName = relatedToAttribute.RelatedType.Name;
                     yield return new PropInfo()
                     {
                         Summary = summary,
                         TypeName = $"string",
-                        Name = item.Name.Replace("_Id", "_Value")
+                        Name = item.Name.Replace("_Id", "_Value"),
+                        AttrInfos = [new AttrInfo
+                        {
+                            //Name = $"{nameof(ValueRelateFor)}<{relateTypeName}>",
+                            Name = nameof(ValueRelateFor),
+                            Parameters = [$"nameof({item.Name})",$"typeof({relateTypeName})"]
+                        }]
                     };
                 }
             }
@@ -168,21 +174,21 @@ namespace FastFrame.CodeGenerate.Build
             if (TryGetAttribute<RequiredAttribute>(propertyInfo, out _))
             {
                 yield return new AttrInfo() { Name = "Required", };
-            }         
-            
+            }
+
             if (TryGetAttribute<IsPrimaryFieldAttribute>(propertyInfo, out _))
             {
                 yield return new AttrInfo() { Name = "IsPrimaryField", };
             }
 
-            //if (TryGetAttribute<UniqueAttribute>(propertyInfo, out var uniqueAttribute))
-            //{
-            //    yield return new AttrInfo()
-            //    {
-            //        Name = "Unique",
-            //        Parameters = uniqueAttribute.UniqueNames.Select(x => $"\"{x}\"")
-            //    };
-            //}
+            if (TryGetAttribute<UniqueAttribute>(propertyInfo, out var uniqueAttribute))
+            {
+                yield return new AttrInfo()
+                {
+                    Name = "Unique",
+                    Parameters = uniqueAttribute.UniqueNames.Select(x => $"\"{x}\"")
+                };
+            }
 
             if (TryGetAttribute<HideAttribute>(propertyInfo, out var hideAttribute))
             {
@@ -206,21 +212,21 @@ namespace FastFrame.CodeGenerate.Build
                 yield return new AttrInfo() { Name = "Phone" };
             }
 
-            //if (TryGetAttribute<ReadOnlyAttribute>(propertyInfo, out var readOnlyAttribute))
-            //{
-            //    yield return new AttrInfo()
-            //    {
-            //        Name = "ReadOnly",
-            //        Parameters = new string[] { $"ReadOnlyMark.{readOnlyAttribute.ReadOnlyMark.ToString()}" }
-            //    };
-            //}
+            if (TryGetAttribute<ReadOnlyAttribute>(propertyInfo, out var readOnlyAttribute))
+            {
+                yield return new AttrInfo()
+                {
+                    Name = "ReadOnly",
+                    Parameters = new string[] { $"ReadOnlyMark.{readOnlyAttribute.ReadOnlyMark.ToString()}" }
+                };
+            }
 
             if (TryGetAttribute<RelatedToAttribute>(propertyInfo, out var relatedToAttribute))
             {
                 yield return new AttrInfo()
                 {
-                    Name = "RelatedTo",
-                    Parameters = new string[] { $"typeof({relatedToAttribute.RelatedType.Name})" }
+                    Name = $"RelatedTo<{relatedToAttribute.RelatedType.Name}>",
+                    Parameters = []
                 };
             }
 
@@ -233,7 +239,7 @@ namespace FastFrame.CodeGenerate.Build
                 };
             }
 
-            
+
         }
 
         public static bool TryGetAttribute<T>(PropertyInfo propertyInfo, out T attr) where T : Attribute

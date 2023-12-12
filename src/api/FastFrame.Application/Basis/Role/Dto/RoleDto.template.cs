@@ -21,6 +21,7 @@ namespace FastFrame.Application.Basis
 		/// </summary>
 		[StringLength(50)]
 		[IsPrimaryField()]
+		[ReadOnly(ReadOnlyMark.All)]
 		public string EnCode {get;set;}
 		
 		/// <summary>
@@ -33,12 +34,13 @@ namespace FastFrame.Application.Basis
 		/// <summary>
 		/// 上级角色 
 		/// </summary>
-		[RelatedTo(typeof(Role))]
+		[RelatedTo<Role>()]
 		public string Super_Id {get;set;}
 		
 		/// <summary>
 		/// 上级角色 
 		/// </summary>
+		[ValueRelateFor(nameof(Super_Id),typeof(Role))]
 		public string Super_Value {get;set;}
 		
 		/// <summary>
@@ -61,12 +63,14 @@ namespace FastFrame.Application.Basis
 		/// 创建人 
 		/// </summary>
 		[Hide(HideMark.Form)]
-		[RelatedTo(typeof(User))]
+		[ReadOnly(ReadOnlyMark.All)]
+		[RelatedTo<User>()]
 		public string Create_User_Id {get;set;}
 		
 		/// <summary>
 		/// 创建人 
 		/// </summary>
+		[ValueRelateFor(nameof(Create_User_Id),typeof(User))]
 		public string Create_User_Value {get;set;}
 		
 		/// <summary>
@@ -74,24 +78,28 @@ namespace FastFrame.Application.Basis
 		/// </summary>
 		[Required()]
 		[Hide(HideMark.Form)]
+		[ReadOnly(ReadOnlyMark.All)]
 		public DateTime CreateTime {get;set;}
 		
 		/// <summary>
 		/// 修改人 
 		/// </summary>
 		[Hide(HideMark.Form)]
-		[RelatedTo(typeof(User))]
+		[ReadOnly(ReadOnlyMark.All)]
+		[RelatedTo<User>()]
 		public string Modify_User_Id {get;set;}
 		
 		/// <summary>
 		/// 修改人 
 		/// </summary>
+		[ValueRelateFor(nameof(Modify_User_Id),typeof(User))]
 		public string Modify_User_Value {get;set;}
 		
 		/// <summary>
 		/// 修改时间 
 		/// </summary>
 		[Hide(HideMark.Form)]
+		[ReadOnly(ReadOnlyMark.All)]
 		public DateTime ModifyTime {get;set;}
 		
 		

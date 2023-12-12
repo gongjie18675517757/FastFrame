@@ -1,6 +1,7 @@
 ﻿using FastFrame.Entity.Basis;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Numerics;
 
 namespace FastFrame.Entity
 {
@@ -14,7 +15,7 @@ namespace FastFrame.Entity
         /// <summary>
         /// 创建人
         /// </summary>        
-        [RelatedTo(typeof(User))]
+        [RelatedTo<User>]
         [ReadOnly]
         [Hide(HideMark.Form)]
         public virtual string Create_User_Id { get; set; }
@@ -30,7 +31,7 @@ namespace FastFrame.Entity
         /// <summary>
         /// 修改人
         /// </summary>
-        [RelatedTo(typeof(User))]
+        [RelatedTo<User>]
         [ReadOnly]
         [Hide(HideMark.Form)]
         public virtual string Modify_User_Id { get; set; }

@@ -34,16 +34,19 @@ namespace FastFrame.Application.Basis
 		/// URL标识 
 		/// </summary>
 		[StringLength(50)]
+		[Unique()]
 		public string UrlMark {get;set;}
 		
 		/// <summary>
 		/// 上级 
 		/// </summary>
+		[ReadOnly(ReadOnlyMark.All)]
 		public string Super_Id {get;set;}
 		
 		/// <summary>
 		/// 租户标记 
 		/// </summary>
+		[ReadOnly(ReadOnlyMark.All)]
 		public string Tenant_Id {get;set;}
 		
 		/// <summary>

@@ -88,7 +88,7 @@
             <param name="fileName"></param>
             <returns></returns>
         </member>
-        <member name="M:FastFrame.WebHost.Controllers.BaseController`1.FmtExportColumns(System.Collections.Generic.List{FastFrame.Infrastructure.Interface.ExcelColumn{`0}})">
+        <member name="M:FastFrame.WebHost.Controllers.BaseController`1.FmtExportColumns(System.Collections.Generic.IEnumerable{FastFrame.Application.ExcelExport.ExcelColumn{`0}})">
             <summary>
             格式化导出的列
             </summary>

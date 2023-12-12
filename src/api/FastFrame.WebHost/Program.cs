@@ -1,5 +1,6 @@
 ﻿global using AspectCore.Extensions.DependencyInjection;
 using FastFrame.Application;
+using FastFrame.Application.ExcelExport;
 using FastFrame.Entity;
 using FastFrame.Infrastructure;
 using FastFrame.Infrastructure.Cache;

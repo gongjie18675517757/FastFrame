@@ -13,7 +13,9 @@ namespace FastFrame.Application.Basis
 	/// 部门 
 	/// </summary>
 	public partial class DeptDto:BaseDto<Dept>
-	{ 
+	{
+		
+		
 		/// <summary>
 		/// 上级 
 		/// </summary>

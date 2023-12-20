@@ -112,6 +112,11 @@
             主要字段
             </summary>
         </member>
+        <member name="T:FastFrame.Entity.RangeValueBeginAttribute">
+            <summary>
+            标记与下一个属性组成范围值,生成DTO时会组合在一起
+            </summary>
+        </member>
         <member name="T:FastFrame.Entity.ReadOnlyAttribute">
             <summary>
             标记只读
@@ -1896,14 +1901,34 @@
             工作代理人
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.OA.OaLeave.StartTime">
+        <member name="P:FastFrame.Entity.OA.OaLeave.BeginDateTime">
             <summary>
-            开始时间
+            请假日期起
             </summary>
         </member>
-        <member name="P:FastFrame.Entity.OA.OaLeave.EndTime">
+        <member name="P:FastFrame.Entity.OA.OaLeave.EndDateTime">
             <summary>
-            结束时间
+            请假日期止
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.OA.OaLeave.BeginTimeOnly">
+            <summary>
+            请假日期起
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.OA.OaLeave.EndTimeOnly">
+            <summary>
+            请假日期止
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.OA.OaLeave.BeginDays">
+            <summary>
+            请假天数起
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.OA.OaLeave.EndDays">
+            <summary>
+            请假天数止
             </summary>
         </member>
         <member name="P:FastFrame.Entity.OA.OaLeave.Days">
@@ -2123,6 +2148,38 @@
         <member name="P:FastFrame.Entity.TargetInfo.Id">
             <summary>
             主键
+            </summary>
+        </member>
+        <member name="T:FastFrame.Entity.ValueRange`1">
+            <summary>
+            值区间
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="beginValue"></param>
+            <param name="endValue"></param> 
+        </member>
+        <member name="M:FastFrame.Entity.ValueRange`1.#ctor(System.Nullable{`0},System.Nullable{`0})">
+            <summary>
+            值区间
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="beginValue"></param>
+            <param name="endValue"></param> 
+        </member>
+        <member name="P:FastFrame.Entity.ValueRange`1.beginValue">
+            <summary></summary>
+        </member>
+        <member name="P:FastFrame.Entity.ValueRange`1.endValue">
+            <summary></summary>
+        </member>
+        <member name="P:FastFrame.Entity.ValueRange`1.BeginValue">
+            <summary>
+            起
+            </summary>
+        </member>
+        <member name="P:FastFrame.Entity.ValueRange`1.EndValue">
+            <summary>
+            止
             </summary>
         </member>
     </members>

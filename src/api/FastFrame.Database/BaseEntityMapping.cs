@@ -78,9 +78,21 @@ namespace FastFrame.Database
                 if (property.GetCustomAttribute<NotMappedAttribute>() != null)
                     continue;
 
+
+
+                //if (typeof(ValueRange<>).IsAssignableFrom(property.PropertyType.BaseType.GetGenericTypeDefinition()))
+                //{
+                //    entityTypeBuilder.ComplexProperty(property.Name, build =>
+                //    {
+                         
+                //    });
+
+                //    continue;
+                //}
+
                 var propertyBuilder = entityTypeBuilder
-                             .Property(property.Name)
-                             .HasColumnName(property.Name);
+                            .Property(property.Name)
+                            .HasColumnName(property.Name);
 
                 /*如果父类型有，则跳出*/
                 if (isInheritTable && entityBaseType.GetProperty(property.Name) != null)
@@ -90,7 +102,7 @@ namespace FastFrame.Database
                 var propType = T4Help.GetNullableType(property.PropertyType);
 
                 /*为数据库添加注释*/
-                propertyBuilder.HasComment(T4Help.GetPropertySummary(property, AppDomain.CurrentDomain.BaseDirectory)); 
+                propertyBuilder.HasComment(T4Help.GetPropertySummary(property, AppDomain.CurrentDomain.BaseDirectory));
 
                 if (typeof(IEntity).IsAssignableFrom(entityType))
                 {
@@ -151,7 +163,7 @@ namespace FastFrame.Database
             }
         }
 
-        private static readonly char[] separator = [',']; 
+        private static readonly char[] separator = [','];
 
         public void ConvertEnumArray<TEnum>(EntityTypeBuilder<T> typeBuilder, string name)
         {

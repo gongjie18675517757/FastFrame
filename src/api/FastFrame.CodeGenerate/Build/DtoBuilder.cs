@@ -1,6 +1,7 @@
 ﻿using FastFrame.CodeGenerate.Info;
 using FastFrame.Entity;
 using FastFrame.Infrastructure;
+using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -78,8 +79,12 @@ namespace FastFrame.CodeGenerate.Build
         {
             var instance = type.Assembly.CreateInstance(type.FullName);
 
-            foreach (var item in type.GetProperties())
+            var props = type.GetProperties();
+
+            for (int i = 0; i < props.Length; i++)
             {
+                var item = props[i];
+
                 if (item.Name == "Id")
                     continue;
 
@@ -94,14 +99,51 @@ namespace FastFrame.CodeGenerate.Build
                 if (T4Help.GetNullableType(item.PropertyType) == typeof(string))
                     defaultValue = $"\"{defaultValue}\"";
 
+                var is_range_begin_value = false;
+                var is_range_end_value = false;
+
+                if (TryGetAttribute<RangeValueBeginAttribute>(item, out _))
+                    is_range_begin_value = true;
+
+                if (i > 0 && TryGetAttribute<RangeValueBeginAttribute>(props[i - 1], out _))
+                    is_range_end_value = true;
+
                 yield return new PropInfo()
                 {
                     Summary = summary,
-                    AttrInfos = GetAttrInfos(item),
+                    AttrInfos = (is_range_begin_value || is_range_end_value) ?
+                                    [new AttrInfo
+                                    {
+                                        Name = "Hide",
+                                        Parameters = new string[]
+                                        {
+                                            $"HideMark.{HideMark.All}"
+                                        }
+                                    }] : GetAttrInfos(item),
                     TypeName = T4Help.GetTypeName(item.PropertyType),
                     Name = item.Name,
                     DefaultValue = defaultValue
                 };
+
+                if (is_range_end_value)
+                {
+                    var type_name = $"ValueRange<{T4Help.GetTypeName(T4Help.GetNullableType(item.PropertyType))}>";
+                    yield return new PropInfo()
+                    {
+                        Summary = summary.Replace("止", ""),
+                        AttrInfos = GetAttrInfos(item),
+                        TypeName = type_name,
+                        Name = item.Name.Replace("End", ""),
+                        DefaultValue = defaultValue,
+                        GetCodeBlock = [
+                                $"return new {type_name}({props[i - 1].Name},{item.Name});"
+                            ],
+                        SetCodeBlock = [
+                            $"{props[i - 1].Name}=value.BeginValue;",
+                            $"{item.Name}=value.EndValue;",
+                        ]
+                    };
+                }
 
                 if (TryGetAttribute<RelatedToAttribute>(item, out var relatedToAttribute))
                 {
@@ -115,10 +157,12 @@ namespace FastFrame.CodeGenerate.Build
                         {
                             //Name = $"{nameof(ValueRelateFor)}<{relateTypeName}>",
                             Name = nameof(ValueRelateFor),
-                            Parameters = [$"nameof({item.Name})",$"typeof({relateTypeName})"]
+                            Parameters = [$"nameof({item.Name})", $"typeof({relateTypeName})"]
                         }]
                     };
                 }
+
+
             }
 
             //if (typeof(ITreeEntity).IsAssignableFrom(type))

@@ -31,5 +31,15 @@ namespace FastFrame.CodeGenerate.Info
         /// 默认值
         /// </summary>
         public string DefaultValue { get; set; }
+
+        /// <summary>
+        /// Get的代码块
+        /// </summary>
+        public IEnumerable<string> GetCodeBlock { get; set; } = [];
+
+        /// <summary>
+        /// Set的代码块
+        /// </summary>
+        public IEnumerable<string> SetCodeBlock { get; set; } = [];
     }
 }

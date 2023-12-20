@@ -1,8 +1,6 @@
 ﻿using FastFrame.Entity.Basis;
 using FastFrame.Entity.Enums;
-using System;
 using System.ComponentModel.DataAnnotations;
-using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 namespace FastFrame.Entity.OA
 {
@@ -62,28 +60,43 @@ namespace FastFrame.Entity.OA
         public string Agent_Id { get; set; }
 
         /// <summary>
-        /// 请假日期时间
+        /// 请假日期起
         /// </summary>
         [Required]
-        public ValueRange<DateTime> DateTimeRange { get; set; } = default;
+        [RangeValueBegin]
+        public DateTime? BeginDateTime { get; set; } = default;
 
         /// <summary>
-        /// 请假日期
+        /// 请假日期止
         /// </summary>
         [Required]
-        public ValueRange<DateOnly> DateRange { get; set; } = default;
+        public DateTime? EndDateTime { get; set; } = default;
 
         /// <summary>
-        /// 请假日期
+        /// 请假日期起
         /// </summary>
         [Required]
-        public ValueRange<TimeOnly> TimeRange { get; set; } = default;
+        [RangeValueBegin]
+        public TimeOnly? BeginTimeOnly { get; set; } = default;
 
         /// <summary>
-        /// 请假天数
+        /// 请假日期止
         /// </summary>
         [Required]
-        public ValueRange<int> DaysRange { get; set; } = default; 
+        public TimeOnly? EndTimeOnly { get; set; } = default;
+
+        /// <summary>
+        /// 请假天数起
+        /// </summary>
+        [Required]
+        [RangeValueBegin]
+        public int? BeginDays { get; set; } = default;
+
+        /// <summary>
+        /// 请假天数止
+        /// </summary>
+        [Required]
+        public int? EndDays { get; set; } = default;
 
         /// <summary>
         /// 请假天数
@@ -101,7 +114,7 @@ namespace FastFrame.Entity.OA
         /// </summary>
         [ReadOnly]
         [EnumItem(EnumName.FlowStatusEnum)]
-        public int FlowStatus { get; set; }
+        public int FlowStatus { get; set; } = (int)FlowStatusEnum.unsubmitted;
 
         public string[] GetBeDeptIds()
         {

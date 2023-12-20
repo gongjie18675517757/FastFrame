@@ -2157,14 +2157,24 @@
             工作代理人 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.OA.OaLeaveDto.StartTime">
+        <member name="P:FastFrame.Application.OA.OaLeaveDto.DateTimeRange">
             <summary>
-            开始时间 
+            请假日期时间 
             </summary>
         </member>
-        <member name="P:FastFrame.Application.OA.OaLeaveDto.EndTime">
+        <member name="P:FastFrame.Application.OA.OaLeaveDto.DateRange">
             <summary>
-            结束时间 
+            请假日期 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.OA.OaLeaveDto.TimeRange">
+            <summary>
+            请假日期 
+            </summary>
+        </member>
+        <member name="P:FastFrame.Application.OA.OaLeaveDto.DaysRange">
+            <summary>
+            请假天数 
             </summary>
         </member>
         <member name="P:FastFrame.Application.OA.OaLeaveDto.Days">

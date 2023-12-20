@@ -1,15 +1,23 @@
-﻿namespace FastFrame.Entity
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace FastFrame.Entity
 {
     /// <summary>
     /// 值区间
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="beginValue"></param>
-    /// <param name="endValue"></param>
-    public record ValueRange<T>(T beginValue, T endValue) where T : struct
+    /// <param name="endValue"></param> 
+    public record ValueRange<T>(T? beginValue, T? endValue) where T : struct
     {
-        public T? BeginValue { get; } = beginValue;
+        /// <summary>
+        /// 起
+        /// </summary>
+        public virtual T? BeginValue { get; } = beginValue;
 
-        public T? EndValue { get; } = endValue;
+        /// <summary>
+        /// 止
+        /// </summary>
+        public virtual T? EndValue { get; } = endValue;
     }
 }

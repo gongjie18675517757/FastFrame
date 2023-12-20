@@ -75,7 +75,7 @@ namespace FastFrame.CodeGenerate.Build
             }
 
             /*类定义*/
-            if (target.Constructor?.Parms?.Any()==true)
+            if (target.Constructor?.Parms?.Any() == true)
             {
                 write.WriteCodeLine($"public partial {target.CategoryName} {target.Name}({string.Join(",", target.Constructor?.Parms?.Select(x => $"{x.TypeName} {x.DefineName}"))}):{string.Join(",", target.BaseNames)}", 1);
             }
@@ -136,7 +136,38 @@ namespace FastFrame.CodeGenerate.Build
                 }
 
                 /*属性定义*/
-                write.WriteCodeLine($"public {prop.TypeName} {prop.Name} {{get;set;}}", 2);
+                if (prop.GetCodeBlock.Any() || prop.SetCodeBlock.Any())
+                {
+                    write.WriteCodeLine($"public {prop.TypeName} {prop.Name}", 2);
+                    write.WriteCodeLine("{", 2);
+                    if (prop.GetCodeBlock.Any())
+                    {
+                        write.WriteCodeLine("get", 3);
+                        write.WriteCodeLine("{", 3);
+                        foreach (var item in prop.GetCodeBlock)
+                        {
+                            write.WriteCodeLine(item, 4);
+                        }
+                        write.WriteCodeLine("}", 3);
+                    }
+
+                    if (prop.SetCodeBlock.Any())
+                    {
+                        write.WriteCodeLine("set", 3);
+                        write.WriteCodeLine("{", 3);
+                        foreach (var item in prop.SetCodeBlock)
+                        {
+                            write.WriteCodeLine(item, 4);
+                        }
+                        write.WriteCodeLine("}", 3);
+                    }
+
+                    write.WriteCodeLine("}", 2);
+                }
+                else
+                {
+                    write.WriteCodeLine($"public {prop.TypeName} {prop.Name} {{get;set;}}", 2);
+                }
             }
             write.WriteCodeLine("", 2);
 

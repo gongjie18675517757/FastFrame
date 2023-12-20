@@ -86,16 +86,91 @@ namespace FastFrame.Application.OA
 		public string Agent_Value {get;set;}
 		
 		/// <summary>
-		/// 开始时间 
+		/// 请假日期起 
 		/// </summary>
-		[Required()]
-		public DateTime? StartTime {get;set;}
+		[Hide(HideMark.All)]
+		public DateTime? BeginDateTime {get;set;}
 		
 		/// <summary>
-		/// 结束时间 
+		/// 请假日期止 
+		/// </summary>
+		[Hide(HideMark.All)]
+		public DateTime? EndDateTime {get;set;}
+		
+		/// <summary>
+		/// 请假日期 
 		/// </summary>
 		[Required()]
-		public DateTime? EndTime {get;set;}
+		public ValueRange<DateTime> DateTime
+		{
+			get
+			{
+				return new ValueRange<DateTime>(BeginDateTime,EndDateTime);
+			}
+			set
+			{
+				BeginDateTime=value.BeginValue;
+				EndDateTime=value.EndValue;
+			}
+		}
+		
+		/// <summary>
+		/// 请假日期起 
+		/// </summary>
+		[Hide(HideMark.All)]
+		public TimeOnly? BeginTimeOnly {get;set;}
+		
+		/// <summary>
+		/// 请假日期止 
+		/// </summary>
+		[Hide(HideMark.All)]
+		public TimeOnly? EndTimeOnly {get;set;}
+		
+		/// <summary>
+		/// 请假日期 
+		/// </summary>
+		[Required()]
+		public ValueRange<TimeOnly> TimeOnly
+		{
+			get
+			{
+				return new ValueRange<TimeOnly>(BeginTimeOnly,EndTimeOnly);
+			}
+			set
+			{
+				BeginTimeOnly=value.BeginValue;
+				EndTimeOnly=value.EndValue;
+			}
+		}
+		
+		/// <summary>
+		/// 请假天数起 
+		/// </summary>
+		[Hide(HideMark.All)]
+		public int? BeginDays {get;set;}
+		
+		/// <summary>
+		/// 请假天数止 
+		/// </summary>
+		[Hide(HideMark.All)]
+		public int? EndDays {get;set;}
+		
+		/// <summary>
+		/// 请假天数 
+		/// </summary>
+		[Required()]
+		public ValueRange<int> Days
+		{
+			get
+			{
+				return new ValueRange<int>(BeginDays,EndDays);
+			}
+			set
+			{
+				BeginDays=value.BeginValue;
+				EndDays=value.EndValue;
+			}
+		}
 		
 		/// <summary>
 		/// 请假天数 
